@@ -1,4 +1,4 @@
-package caplaninnovations.com.looprwallet;
+package caplaninnovations.com.looprwallet.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

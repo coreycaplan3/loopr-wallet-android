@@ -1,4 +1,4 @@
-package caplaninnovations.com.looprwallet;
+package caplaninnovations.com.looprwallet.activities;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -20,6 +20,8 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import java.util.List;
+
+import caplaninnovations.com.looprwallet.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

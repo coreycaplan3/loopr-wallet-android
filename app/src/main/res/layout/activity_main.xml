@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="caplaninnovations.com.looprwallet.MainActivity">
+    tools:context="caplaninnovations.com.looprwallet.activities.MainActivity">
 
     <include layout="@layout/appbar_main" />
 
