@@ -18,7 +18,18 @@
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".activities.IntroActivity"
+            android:label="@string/title_activity_intro"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.SignInActivity"
+            android:label="@string/title_activity_sign_in"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activities.OrdersActivity" />
+        <activity android:name=".activities.TransfersActivity" />
+        <activity android:name=".activities.WalletActivity"></activity>
     </application>
 
 </manifest>
