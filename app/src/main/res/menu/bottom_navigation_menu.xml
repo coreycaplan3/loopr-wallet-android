@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bottom_navigation_markets"
+        android:title="@string/markets" />
+
+    <item
+        android:id="@+id/bottom_navigation_orders"
+        android:title="@string/orders" />
+
+    <item
+        android:id="@+id/bottom_navigation_my_wallet"
+        android:title="@string/my_wallet" />
+
+</menu>
