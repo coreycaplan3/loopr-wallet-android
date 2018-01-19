@@ -9,19 +9,11 @@
     <include layout="@layout/appbar_main" />
 
     <FrameLayout
+        android:id="@+id/mainActivityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/bottom_navigation_height"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <TextView
-            android:foreground="@drawable/white_ripple_effect"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Hello Marketplace!"
-            android:textColor="#000"
-            android:textSize="18sp" />
 
     </FrameLayout>
 

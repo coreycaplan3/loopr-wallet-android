@@ -4,20 +4,27 @@
     <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
 
         <!-- Main Colors -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/lightPrimary</item>
+        <item name="colorPrimaryDark">@color/lightPrimaryDark</item>
+        <item name="colorAccent">@color/lightAccent</item>
 
-        <item name="colorControlHighlight">@color/colorPrimary</item>
-        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/lightPrimary42</item>
+        <item name="colorControlActivated">@color/lightPrimary42</item>
 
         <!-- Text -->
-        <item name="android:textColor">@color/regularTextColor</item>
-        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColor">@color/lightSecondaryText</item>
+        <item name="android:textColorPrimary">@color/lightPrimaryText</item>
+
+        <!-- Overflow Menu -->
+        <item name="actionOverflowButtonStyle">@style/lightCustomOverflow</item>
 
         <!-- Bottom Navigation -->
-        <item name="bottomNavigationBackground">@color/colorPrimary</item>
-        <item name="bottomNavigationTextColor">@color/textColorPrimary</item>
+        <item name="bottomNavigationBackground">@color/lightBottomNavigationBackground</item>
+        <item name="bottomNavigationBackgroundSelected">
+            @color/lightBottomNavigationBackgroundSelected
+        </item>
+        <item name="bottomNavigationTextColor">@color/lightPrimaryText</item>
+        <item name="bottomNavigationTextColorSelected">@color/lightPrimaryTextDisabled</item>
     </style>
 
 </resources>

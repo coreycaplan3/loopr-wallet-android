@@ -17,12 +17,11 @@ class MainActivity : BottomNavigationActivity() {
         super.onCreate(savedInstanceState)
     }
 
+    fun foo() : Boolean {
+        return true
+    }
+
     override val contentView: Int
         get() = R.layout.activity_main
-
-    override val navigationItemReselectedListener: (MenuItem) -> Unit
-        get() = {
-            toolbar.snack(R.string.option_reselected)
-        }
 
 }

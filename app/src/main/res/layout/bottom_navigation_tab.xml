@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:alpha="0.68"
+    android:background="@drawable/white_ripple_effect"
+    android:minWidth="@dimen/bottom_navigation_min_width"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/bottom_navigation_margin_bottom"
+    android:paddingTop="@dimen/bottom_navigation_margin_top">
+
+    <ImageView
+        android:id="@+id/bottomNavigationTabImage"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_show_chart_white_24dp" />
+
+    <TextView
+        android:id="@+id/bottomNavigationTabText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="@dimen/bottom_navigation_margin_horizontal"
+        android:paddingRight="@dimen/bottom_navigation_margin_horizontal"
+        android:text="@string/markets"
+        android:textColor="?attr/bottomNavigationTextColor"
+        android:textSize="12sp" />
+
+</LinearLayout>

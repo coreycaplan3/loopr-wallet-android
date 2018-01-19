@@ -3,12 +3,12 @@
     package="com.caplaninnovations.looprwallet">
 
     <application
+        android:name=".application.LooprWalletApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme.Light">
+        android:supportsRtl="true">
 
         <activity
             android:name="com.caplaninnovations.looprwallet.activities.MainActivity"
@@ -26,23 +26,13 @@
 
         <activity
             android:name="com.caplaninnovations.looprwallet.activities.IntroActivity"
-            android:label="@string/title_activity_intro"
-            android:theme="@style/AppTheme.Light" />
+            android:label="@string/title_activity_intro" />
 
         <activity
             android:name="com.caplaninnovations.looprwallet.activities.SignInActivity"
-            android:label="@string/title_activity_sign_in"
-            android:theme="@style/AppTheme.Light" />
-
-        <activity
-            android:name="com.caplaninnovations.looprwallet.activities.OrdersActivity"
-            android:launchMode="singleTask" />
+            android:label="@string/title_activity_sign_in" />
 
         <activity android:name="com.caplaninnovations.looprwallet.activities.TransfersActivity" />
-
-        <activity
-            android:name="com.caplaninnovations.looprwallet.activities.WalletActivity"
-            android:launchMode="singleTask" />
 
         <activity android:name="com.caplaninnovations.looprwallet.activities.SearchActivity" />
 

@@ -79,4 +79,5 @@
     <string name="orders">Orders</string>
     <string name="my_wallet">My Wallet</string>
     <string name="option_reselected">Reselected!</string>
+    <string name="change_node">Change Node</string>
 </resources>
