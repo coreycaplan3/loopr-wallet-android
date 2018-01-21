@@ -11,12 +11,19 @@ import com.google.firebase.crash.FirebaseCrash
  * <p></p>
  * Purpose of Class:
  */
-class LooprWalletApp: Application() {
+class LooprWalletApp : Application() {
+
+    object App {
+        lateinit var application: LooprWalletApp
+    }
 
     override fun onCreate() {
         super.onCreate()
 
         logi("Creating Application...")
+
+        App.application = this
+
         FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }
 

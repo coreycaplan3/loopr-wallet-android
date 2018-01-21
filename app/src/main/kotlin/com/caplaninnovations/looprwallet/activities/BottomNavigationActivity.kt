@@ -11,13 +11,12 @@ import android.support.v4.app.Fragment
 import android.widget.ImageView
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.MarketFragment
+import com.caplaninnovations.looprwallet.fragments.MarketsParentFragment
 import com.caplaninnovations.looprwallet.fragments.MyWalletFragment
-import com.caplaninnovations.looprwallet.fragments.OrdersFragment
+import com.caplaninnovations.looprwallet.fragments.OrdersParentFragment
 import com.caplaninnovations.looprwallet.models.android.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.FragmentTransactionController
 import com.caplaninnovations.looprwallet.utilities.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
@@ -43,8 +42,8 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
      * A list of pairs that points a fragment tag to a function that will create its fragment
      */
     private val fragmentTagCreationPairs = listOf<Pair<String, () -> Fragment>>(
-            Pair(tagMarkets, { MarketFragment() }),
-            Pair(tagOrders, { OrdersFragment() }),
+            Pair(tagMarkets, { MarketsParentFragment() }),
+            Pair(tagOrders, { OrdersParentFragment() }),
             Pair(tagMyWallet, { MyWalletFragment() })
     )
 
