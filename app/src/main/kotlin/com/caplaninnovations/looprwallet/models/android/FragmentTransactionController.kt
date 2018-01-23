@@ -15,7 +15,9 @@ import com.caplaninnovations.looprwallet.utilities.isAllNonNull
  * <p></p>
  * Purpose of Class:
  */
-class FragmentTransactionController(@IdRes val container: Int, val fragment: Fragment, val tag: String) {
+class FragmentTransactionController(@IdRes private val container: Int,
+                                    private val fragment: Fragment,
+                                    private val tag: String) {
 
     @IntDef(
             FragmentTransaction.TRANSIT_NONE.toLong(),
@@ -63,6 +65,7 @@ class FragmentTransactionController(@IdRes val container: Int, val fragment: Fra
 
         Pair(enterAnimation, exitAnimation).allNonNull { enterExitPair ->
             val popEnterExitPair = Pair(popEnterAnimation, popExitAnimation)
+
             if (popEnterExitPair.isAllNonNull()) {
                 popEnterExitPair.allNonNull {
                     transaction.setCustomAnimations(enterExitPair.first, enterExitPair.second, it.first, it.second)
@@ -70,6 +73,7 @@ class FragmentTransactionController(@IdRes val container: Int, val fragment: Fra
             } else {
                 transaction.setCustomAnimations(enterExitPair.first, enterExitPair.second)
             }
+
         }
 
         transitionStyle?.let { transaction.setTransitionStyle(it) }

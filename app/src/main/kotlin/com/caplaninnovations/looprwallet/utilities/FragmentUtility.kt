@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.utilities
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.util.Log
 
 /**
  * Created by Corey on 1/19/2018.
@@ -13,7 +14,9 @@ fun FragmentManager.findFragmentOrCreate(tag: String, fragmentTagPairs: List<Pai
     return this.findFragmentByTag(tag) ?: createFragmentByTag(tag, fragmentTagPairs)
 }
 
-private fun createFragmentByTag(tag: String, fragmentTagPairs: List<Pair<String, () -> Fragment>>): Fragment {
+fun createFragmentByTag(tag: String, fragmentTagPairs: List<Pair<String, () -> Fragment>>): Fragment {
     // The fragment must be in here, or else it's a developer error
-    return fragmentTagPairs.find { it.first.equals(tag) }!!.second.invoke()
+    Log.d("createFragmentTag", "Creating \"$tag\" fragment")
+    val fragment = fragmentTagPairs.find { it.first == tag }
+    return fragment!!.second.invoke()
 }

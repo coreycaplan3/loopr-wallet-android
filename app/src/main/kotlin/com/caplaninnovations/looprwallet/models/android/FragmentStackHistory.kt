@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.models.android
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.caplaninnovations.looprwallet.utilities.logv
 import java.util.*
 
 /**
@@ -22,9 +23,11 @@ class FragmentStackHistory : ViewModel() {
      */
     fun push(fragmentTag: String) {
         if (!isInStack(fragmentTag)) {
+            logv("Putting $fragmentTag in the front of the  stack")
             stack.push(fragmentTag)
         } else {
             // Remove it, and push it to the front
+            logv("Moving $fragmentTag to the front of the stack")
             stack.remove(fragmentTag)
             stack.push(fragmentTag)
         }

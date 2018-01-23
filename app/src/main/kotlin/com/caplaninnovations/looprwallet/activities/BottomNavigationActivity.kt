@@ -36,8 +36,6 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
     private val tagOrders = "orders"
     private val tagMyWallet = "myWallet"
 
-    private var isInitialized = false
-
     /**
      * A list of pairs that points a fragment tag to a function that will create its fragment
      */
@@ -52,34 +50,43 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        bottomNavigation.addOnTabSelectedListener(this)
-
         fragmentStackHistory = ViewModelProviders.of(this).get(FragmentStackHistory::class.java)
 
         setupTabs()
 
+        var isInitialized = false // Used to prevent a tab from being selected infinite times
         fragmentStackHistory.currentFragment.observe(this, Observer<String?> {
             it?.let {
                 if (!isInitialized && savedInstanceState != null) {
-                    logv("Selecting a new tab from saved instance...")
+                    logd("Selecting \"$it\" tab from saved instance...")
 
                     bottomNavigation.findTabByTag(it)?.select()
                     isInitialized = true
                 } else {
-                    logv("Creating fragment transaction...")
+                    logd("Selecting \"$it\" tab...")
 
                     val fragment = supportFragmentManager.findFragmentOrCreate(it, fragmentTagCreationPairs)
+
                     FragmentTransactionController(R.id.mainActivityContainer, fragment, it)
                             .commitTransactionNow(supportFragmentManager)
+
+                    bottomNavigation.findTabByTag(it)?.let {
+                        if (!it.isSelected) {
+                            it.select()
+                        }
+                    }
                 }
 
             }
         })
 
-        if (savedInstanceState == null) {
-            fragmentStackHistory.push(tagMarkets)
-        } else {
+        bottomNavigation.addOnTabSelectedListener(this)
 
+        if (savedInstanceState == null) {
+            logv("Pushing markets fragment...")
+            fragmentStackHistory.push(tagMarkets)
+
+            updateTab(bottomNavigation.findTabByTag(tagMarkets), true)
         }
 
     }
@@ -93,11 +100,10 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
+        logv("Tag selected: ${tab?.tag}")
         updateTab(tab, true)
 
-        tab?.tag?.let {
-            fragmentStackHistory.push(tab.tag as String)
-        }
+        tab?.tag?.let { fragmentStackHistory.push(it as String) }
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -112,9 +118,6 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
 
         if (fragmentStackHistory.isEmpty()) {
             super.onBackPressed()
-        } else {
-            // Pop triggers a live-data change to our current fragment
-            fragmentStackHistory.pop()
         }
     }
 

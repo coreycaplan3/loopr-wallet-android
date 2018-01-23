@@ -30,7 +30,7 @@ class OrdersParentFragment : BaseFragment(), BottomNavigationActivity.OnBottomNa
         super.onViewCreated(view, savedInstanceState)
 
         ordersViewPager.adapter = OrdersFragmentStatePagerAdapter(childFragmentManager)
-        ordersTabs.setupWithViewPager(marketsViewPager)
+        ordersTabs.setupWithViewPager(ordersViewPager)
     }
 
     override fun onBottomNavigationReselected() {
