@@ -11,8 +11,7 @@
         android:supportsRtl="true">
 
         <activity
-            android:name="com.caplaninnovations.looprwallet.activities.MainActivity"
-            android:launchMode="singleTask">
+            android:name="com.caplaninnovations.looprwallet.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

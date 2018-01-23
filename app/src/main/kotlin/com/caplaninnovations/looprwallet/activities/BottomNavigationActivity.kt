@@ -1,7 +1,5 @@
 package com.caplaninnovations.looprwallet.activities
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.DrawableRes
@@ -15,7 +13,7 @@ import com.caplaninnovations.looprwallet.fragments.MarketsParentFragment
 import com.caplaninnovations.looprwallet.fragments.MyWalletFragment
 import com.caplaninnovations.looprwallet.fragments.OrdersParentFragment
 import com.caplaninnovations.looprwallet.models.android.FragmentStackHistory
-import com.caplaninnovations.looprwallet.models.android.FragmentTransactionController
+import com.caplaninnovations.looprwallet.models.android.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
@@ -50,45 +48,29 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        fragmentStackHistory = ViewModelProviders.of(this).get(FragmentStackHistory::class.java)
+        fragmentStackHistory = FragmentStackHistory(savedInstanceState)
 
         setupTabs()
 
-        var isInitialized = false // Used to prevent a tab from being selected infinite times
-        fragmentStackHistory.currentFragment.observe(this, Observer<String?> {
-            it?.let {
-                if (!isInitialized && savedInstanceState != null) {
-                    logd("Selecting \"$it\" tab from saved instance...")
+        if (fragmentStackHistory.isEmpty()) {
+            val tag = tagMarkets
 
-                    bottomNavigation.findTabByTag(it)?.select()
-                    isInitialized = true
-                } else {
-                    logd("Selecting \"$it\" tab...")
+            logv("Initializing stack with $tag tab...")
+            fragmentStackHistory.push(tag)
 
-                    val fragment = supportFragmentManager.findFragmentOrCreate(it, fragmentTagCreationPairs)
+            onTabSelected(bottomNavigation.findTabByTag(tag))
+        } else {
+            val tag = fragmentStackHistory.peek()!!
+            logv("Re-initializing stack with $tag tab...")
 
-                    FragmentTransactionController(R.id.mainActivityContainer, fragment, it)
-                            .commitTransactionNow(supportFragmentManager)
+            val previousTab = bottomNavigation.findTabByTag(tagMarkets)
+            updateTab(previousTab, false)
 
-                    bottomNavigation.findTabByTag(it)?.let {
-                        if (!it.isSelected) {
-                            it.select()
-                        }
-                    }
-                }
-
-            }
-        })
-
-        bottomNavigation.addOnTabSelectedListener(this)
-
-        if (savedInstanceState == null) {
-            logv("Pushing markets fragment...")
-            fragmentStackHistory.push(tagMarkets)
-
-            updateTab(bottomNavigation.findTabByTag(tagMarkets), true)
+            val currentTab = bottomNavigation.findTabByTag(tag)
+            updateTab(currentTab, true)
         }
 
+        bottomNavigation.addOnTabSelectedListener(this)
     }
 
     /*
@@ -96,14 +78,24 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
      */
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {
+        logv("Tag unselected: ${tab?.tag}")
         updateTab(tab, false)
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         logv("Tag selected: ${tab?.tag}")
+
         updateTab(tab, true)
 
-        tab?.tag?.let { fragmentStackHistory.push(it as String) }
+        (tab?.tag as? String)?.let {
+            val oldFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
+            val newFragment = supportFragmentManager.findFragmentOrCreate(it, fragmentTagCreationPairs)
+
+            FragmentStackTransactionController(R.id.mainActivityContainer, newFragment, it, oldFragment)
+                    .commitTransactionNow(supportFragmentManager)
+
+            fragmentStackHistory.push(it)
+        }
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -114,17 +106,28 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
     }
 
     override fun onBackPressed() {
-        fragmentStackHistory.pop()
+        val tag = fragmentStackHistory.pop()
+
+        logv("Popped $tag tab from stack")
 
         if (fragmentStackHistory.isEmpty()) {
             super.onBackPressed()
+        } else {
+            fragmentStackHistory.peek()?.let {
+                bottomNavigation.findTabByTag(it)?.select()
+            }
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        bottomNavigation.clearOnTabSelectedListeners()
+//        bottomNavigation.clearOnTabSelectedListeners()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        fragmentStackHistory.saveInstanceState(outState)
     }
 
     // MARK - Private Methods
@@ -146,9 +149,15 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
             tabView.findById<ImageView>(R.id.bottomNavigationTabImage)?.setImageResource(iconRes)
             tabView.findById<TextView>(R.id.bottomNavigationTabText)?.setText(textRes)
 
-            return bottomNavigation.newTab()
+            val tab = bottomNavigation.newTab()
                     .setCustomView(tabView)
                     .setTag(tag)
+
+            if(fragmentStackHistory.peek() == tag) {
+                tab.select()
+            }
+
+            return tab
         }
 
         bottomNavigation.addTab(

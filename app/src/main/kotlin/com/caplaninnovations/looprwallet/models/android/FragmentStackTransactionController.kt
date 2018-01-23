@@ -7,6 +7,7 @@ import android.view.View
 import android.support.v4.app.FragmentManager
 import com.caplaninnovations.looprwallet.utilities.allNonNull
 import com.caplaninnovations.looprwallet.utilities.isAllNonNull
+import com.caplaninnovations.looprwallet.utilities.logv
 
 
 /**
@@ -15,9 +16,10 @@ import com.caplaninnovations.looprwallet.utilities.isAllNonNull
  * <p></p>
  * Purpose of Class:
  */
-class FragmentTransactionController(@IdRes private val container: Int,
-                                    private val fragment: Fragment,
-                                    private val tag: String) {
+class FragmentStackTransactionController(@IdRes private val container: Int,
+                                         private val newFragment: Fragment,
+                                         private val newFragmentTag: String,
+                                         private val oldFragment: Fragment? = null) {
 
     @IntDef(
             FragmentTransaction.TRANSIT_NONE.toLong(),
@@ -55,11 +57,25 @@ class FragmentTransactionController(@IdRes private val container: Int,
      * Creates a transaction, replaces the current container & commits it now. This **disallows**
      * saving the back-stack, so it must be maintained manually, using [FragmentStackHistory].
      */
-    fun commitTransactionNow(fragmentManager: FragmentManager, shouldReplace: Boolean = true) {
+    fun commitTransactionNow(fragmentManager: FragmentManager) {
+        if(newFragmentTag == oldFragment?.tag) {
+            return
+        }
+
         val transaction = fragmentManager.beginTransaction()
 
-        if(shouldReplace) transaction.replace(container, fragment, tag)
-        else transaction.add(container, fragment, tag)
+        oldFragment?.let {
+            logv("Detaching ${oldFragment.tag} from container...")
+            transaction.detach(oldFragment)
+        }
+
+        if(newFragment.isDetached) {
+            logv("Attaching $newFragmentTag fragment to container...")
+            transaction.attach(newFragment)
+        } else {
+            logv("Adding $newFragmentTag fragment to container...")
+            transaction.add(container, newFragment, newFragmentTag)
+        }
 
         transaction.setTransition(transition)
 
@@ -80,7 +96,7 @@ class FragmentTransactionController(@IdRes private val container: Int,
 
         sharedElements?.let { it.forEach { transaction.addSharedElement(it.first, it.second) } }
 
-        transaction.commitNow()
+        transaction.commit()
     }
 
 }

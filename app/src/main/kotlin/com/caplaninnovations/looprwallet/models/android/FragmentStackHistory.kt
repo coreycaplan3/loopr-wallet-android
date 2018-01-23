@@ -1,9 +1,8 @@
 package com.caplaninnovations.looprwallet.models.android
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import android.os.Bundle
 import com.caplaninnovations.looprwallet.utilities.logv
-import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Corey on 1/19/2018.
@@ -11,28 +10,40 @@ import java.util.*
  * <p></p>
  * Purpose of Class:
  */
-class FragmentStackHistory : ViewModel() {
+class FragmentStackHistory(savedInstanceState: Bundle?) {
 
-    private val stack: Stack<String> = Stack()
+    private val tagStack = "FragmentStackHistory_stack"
+    private val stack: ArrayList<String>
 
-    val currentFragment: MutableLiveData<String> = MutableLiveData()
+    lateinit var currentTab: String
+
+    init {
+        @Suppress("UNCHECKED_CAST")
+        stack = (savedInstanceState?.get(tagStack) as? ArrayList<String>) ?: ArrayList<String>()
+
+        if(stack.isNotEmpty()) {
+            currentTab = stack[0]
+        }
+    }
 
     /**
      * Pushes the given fragment (represented via Int) onto the stack. If it is already on the
      * stack, it is moved to the front.
      */
     fun push(fragmentTag: String) {
+        if(isEmpty()) {
+            currentTab = fragmentTag
+        }
+
         if (!isInStack(fragmentTag)) {
             logv("Putting $fragmentTag in the front of the  stack")
-            stack.push(fragmentTag)
+            stack.add(0, fragmentTag)
         } else {
             // Remove it, and push it to the front
             logv("Moving $fragmentTag to the front of the stack")
             stack.remove(fragmentTag)
-            stack.push(fragmentTag)
+            stack.add(0, fragmentTag)
         }
-
-        currentFragment.value = fragmentTag
     }
 
     /**
@@ -42,17 +53,9 @@ class FragmentStackHistory : ViewModel() {
     fun pop(): String? {
         if (stack.isEmpty()) return null
 
-        val poppedFragment = stack.pop()
-        currentFragment.value = peek()
+        val poppedFragment = stack.removeAt(0)
 
         return poppedFragment
-    }
-
-    fun remove(fragmentTag: String) {
-        val currentFragmentTag = peek()
-
-        if (fragmentTag.equals(currentFragmentTag)) pop() // we're changing the top of the stack
-        else stack.remove(fragmentTag) // we're not changing the UI directly, just removing something
     }
 
     /**
@@ -60,13 +63,17 @@ class FragmentStackHistory : ViewModel() {
      */
     fun isEmpty() = stack.isEmpty()
 
-    // MARK - Private Methods
-
     /**
      * Peeks the first entry on the stack, and returns the String represented by the fragment. If
      * the stack is empty, null is returned
      */
-    private fun peek(): String? = if (stack.isEmpty()) null else stack.peek()
+    fun peek(): String? = if (stack.isEmpty()) null else stack[0]
+
+    fun saveInstanceState(savedInstanceState: Bundle?) {
+        savedInstanceState?.putStringArrayList(tagStack, stack)
+    }
+
+    // MARK - Private Methods
 
     private fun isInStack(fragment: String): Boolean = stack.contains(fragment)
 
