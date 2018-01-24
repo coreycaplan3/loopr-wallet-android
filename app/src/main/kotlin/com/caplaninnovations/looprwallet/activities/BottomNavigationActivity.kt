@@ -1,7 +1,5 @@
 package com.caplaninnovations.looprwallet.activities
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.DrawableRes
@@ -32,63 +30,54 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
         fun onBottomNavigationReselected()
     }
 
-    private val tagMarkets = "markets"
-    private val tagOrders = "orders"
-    private val tagMyWallet = "myWallet"
+    private val tagMarkets = "_Markets"
+    private val tagOrders = "_Orders"
+    private val tagMyWallet = "_MyWallet"
 
     /**
      * A list of pairs that points a fragment tag to a function that will create its fragment
      */
-    private val fragmentTagCreationPairs = listOf<Pair<String, () -> Fragment>>(
-            Pair(tagMarkets, { MarketsParentFragment() }),
-            Pair(tagOrders, { OrdersParentFragment() }),
-            Pair(tagMyWallet, { MyWalletFragment() })
+    private val fragmentTagPairs = listOf<Pair<String, Fragment>>(
+            Pair(tagMarkets, MarketsParentFragment()),
+            Pair(tagOrders, OrdersParentFragment()),
+            Pair(tagMyWallet, MyWalletFragment())
     )
 
     private lateinit var fragmentStackHistory: FragmentStackHistory
 
+    private var currentFragment: Fragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        fragmentStackHistory = ViewModelProviders.of(this).get(FragmentStackHistory::class.java)
+        fragmentStackHistory = FragmentStackHistory(savedInstanceState)
 
         setupTabs()
 
-        var isInitialized = false // Used to prevent a tab from being selected infinite times
-        fragmentStackHistory.currentFragment.observe(this, Observer<String?> {
-            it?.let {
-                if (!isInitialized && savedInstanceState != null) {
-                    logd("Selecting \"$it\" tab from saved instance...")
-
-                    bottomNavigation.findTabByTag(it)?.select()
-                    isInitialized = true
-                } else {
-                    logd("Selecting \"$it\" tab...")
-
-                    val fragment = supportFragmentManager.findFragmentOrCreate(it, fragmentTagCreationPairs)
-
-                    FragmentTransactionController(R.id.mainActivityContainer, fragment, it)
-                            .commitTransactionNow(supportFragmentManager)
-
-                    bottomNavigation.findTabByTag(it)?.let {
-                        if (!it.isSelected) {
-                            it.select()
-                        }
-                    }
-                }
-
-            }
-        })
-
-        bottomNavigation.addOnTabSelectedListener(this)
-
         if (savedInstanceState == null) {
-            logv("Pushing markets fragment...")
-            fragmentStackHistory.push(tagMarkets)
+            val tag = tagMarkets
+            logv("Initializing $tag fragment...")
 
-            updateTab(bottomNavigation.findTabByTag(tagMarkets), true)
+            onTabSelected(bottomNavigation.findTabByTag(tag))
+        } else {
+            val tag = fragmentStackHistory.peek()!!
+            logv("Pushing $tag fragment...")
+
+            updateTab(bottomNavigation.findTabByTag(tag), true)
+            currentFragment = supportFragmentManager.findFragmentByTag(tag)
         }
 
+        bottomNavigation.addOnTabSelectedListener(this)
+    }
+
+    override fun onBackPressed() {
+        fragmentStackHistory.pop()
+
+        if (fragmentStackHistory.isEmpty()) {
+            finish()
+        } else {
+            bottomNavigation.findTabByTag(fragmentStackHistory.peek()!!)?.select()
+        }
     }
 
     /*
@@ -103,7 +92,16 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
         logv("Tag selected: ${tab?.tag}")
         updateTab(tab, true)
 
-        tab?.tag?.let { fragmentStackHistory.push(it as String) }
+        (tab?.tag as? String)?.let { tag: String ->
+            logv("Pushing $tag onto stack...")
+            fragmentStackHistory.push(tag)
+
+            val newFragment = supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
+            FragmentTransactionController(R.id.mainActivityContainer, newFragment, tag, currentFragment)
+                    .commitTransactionNow(supportFragmentManager)
+
+            currentFragment = newFragment
+        }
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -113,12 +111,10 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
         }
     }
 
-    override fun onBackPressed() {
-        fragmentStackHistory.pop()
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
 
-        if (fragmentStackHistory.isEmpty()) {
-            super.onBackPressed()
-        }
+        fragmentStackHistory.saveState(outState)
     }
 
     override fun onDestroy() {
@@ -128,16 +124,6 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
     }
 
     // MARK - Private Methods
-
-    /**
-     * I'm loving that elvis operator!
-     *
-     * @param tag The tag used to find the fragment
-     * @param creationFunction A function used to create the fragment, if it's not found
-     */
-    private fun getFragmentByTagOrCreate(tag: String, creationFunction: () -> Fragment): Fragment {
-        return supportFragmentManager.findFragmentByTag(tag) ?: creationFunction()
-    }
 
     private fun setupTabs() {
 

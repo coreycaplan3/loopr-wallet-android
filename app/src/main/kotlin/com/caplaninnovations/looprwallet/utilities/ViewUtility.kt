@@ -5,6 +5,7 @@ import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.view.View
+import kotlinx.android.synthetic.main.fragment_markets_parent.*
 
 /**
  * Created by Corey on 1/17/2018.
@@ -17,7 +18,13 @@ fun View.setPaddingTop(value: Int) {
 }
 
 fun <T : View> View.findById(@IdRes id: Int): T? {
-    return findViewById(id) as? T
+    return this.findViewById(id)
+}
+
+fun TabLayout.forEachTab(f: (tab: TabLayout.Tab) -> Void) {
+    for(i in 0.rangeTo(this.tabCount)) {
+        f(getTabAt(i)!!)
+    }
 }
 
 fun TabLayout.findTabByTag(tag: String): TabLayout.Tab? {

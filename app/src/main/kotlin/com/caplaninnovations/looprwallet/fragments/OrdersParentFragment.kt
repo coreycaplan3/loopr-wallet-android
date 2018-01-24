@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.fragments
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -57,6 +58,14 @@ class OrdersParentFragment : BaseFragment(), BottomNavigationActivity.OnBottomNa
             }
         }
 
+        override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
+            // TODO
+        }
+
+        override fun saveState(): Parcelable? {
+            // TODO
+            return null
+        }
     }
 
 }

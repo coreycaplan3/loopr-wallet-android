@@ -6,10 +6,23 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.Toolbar
+        android:elevation="4dp"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="@string/app_name" />
+
+    <android.support.design.widget.TabLayout
+        android:elevation="2dp"
+        android:id="@+id/marketsTabs"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:visibility="gone"
+        app:tabBackground="?attr/colorPrimary"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="?attr/tabIndicatorColor"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed" />
 
 </android.support.design.widget.AppBarLayout>

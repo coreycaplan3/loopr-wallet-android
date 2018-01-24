@@ -18,6 +18,10 @@
         <!-- Overflow Menu -->
         <item name="actionOverflowButtonStyle">@style/lightCustomOverflow</item>
 
+        <!-- Tabs -->
+        <item name="tabWidgetTextColor">@color/light_tabs_text</item>
+        <item name="tabIndicatorColor">@android:color/white</item>
+
         <!-- Bottom Navigation -->
         <item name="bottomNavigationBackground">@color/lightBottomNavigationBackground</item>
         <item name="bottomNavigationBackgroundSelected">
