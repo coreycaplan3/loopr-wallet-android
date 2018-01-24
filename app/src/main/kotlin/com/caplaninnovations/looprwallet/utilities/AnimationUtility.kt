@@ -1,8 +1,13 @@
 package com.caplaninnovations.looprwallet.utilities
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.support.annotation.DimenRes
+import android.support.annotation.IntegerRes
 import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 
@@ -32,6 +37,88 @@ fun TextView.animateTextSizeChange(@DimenRes toValue: Int) {
     animator.duration = resources.getInteger(R.integer.animation_duration_short).toLong()
     animator.start()
 }
+
+/**
+ * Animates the height of a view from the given value to zero
+ */
+fun View.animateToHeight(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration) {
+    val animator = ValueAnimator.ofFloat(0f, resources.getDimension(toValue))
+    animator.interpolator = DecelerateInterpolator()
+    animator.addUpdateListener {
+        this.layoutParams.height = (it.animatedValue as Float).toInt()
+        this.requestLayout()
+    }
+    val view = this
+    animator.addListener(object: AnimatorListenerAdapter() {
+        override fun onAnimationStart(animation: Animator?) {
+//            view.visibility = View.VISIBLE
+        }
+    })
+
+    animator.duration = resources.getInteger(duration).toLong()
+    animator.start()
+}
+
+/**
+ * Animates the height of a view from the given value to zero
+ */
+fun View.animateFromHeight(@DimenRes fromValue: Int, @IntegerRes duration: Int = R.integer.animation_duration): Animator {
+    val animator = ValueAnimator.ofFloat(resources.getDimension(fromValue), 0f)
+    animator.interpolator = DecelerateInterpolator()
+    animator.addUpdateListener {
+        this.layoutParams.height = (it.animatedValue as Float).toInt()
+        this.requestLayout()
+    }
+    val view = this
+    animator.addListener(object: AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator?) {
+//            view.visibility = View.GONE
+        }
+    })
+    animator.duration = resources.getInteger(duration).toLong()
+    animator.start()
+
+    return animator
+}
+
+/**
+ * Animates the translationY of a view from the given value to its original position
+ */
+fun View.animateFromTranslationY(@DimenRes fromValue: Int) {
+    this.translationY = -resources.getDimension(fromValue)
+
+    val view = this
+
+    this.animate()
+            .setDuration(resources.getInteger(R.integer.animation_duration).toLong())
+            .translationY(0F)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator?) {
+                    view.visibility = View.VISIBLE
+                }
+            })
+            .start()
+}
+
+/**
+ * Animates the translationY of a view to the given value from its original position
+ */
+fun View.animateToTranslationY(@DimenRes toValue: Int) {
+    this.translationY = 0f
+
+    val view = this
+
+    this.animate()
+            .setDuration(resources.getInteger(R.integer.animation_duration).toLong())
+            .translationY(-resources.getDimension(toValue))
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    view.visibility = View.GONE
+                }
+            })
+            .start()
+}
+
 
 /**
  * Animates the top padding of a view to the given value

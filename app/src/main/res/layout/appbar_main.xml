@@ -12,4 +12,24 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:title="@string/app_name" />
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/marketsTabs"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:tabBackground="?attr/colorPrimary"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="?attr/tabIndicatorColor"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/ordersTabs"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:tabBackground="?attr/colorPrimary"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="?attr/tabIndicatorColor"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed" />
+
 </android.support.design.widget.AppBarLayout>

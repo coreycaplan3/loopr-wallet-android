@@ -10,13 +10,13 @@ import android.util.Log
  * <p></p>
  * Purpose of Class:
  */
-fun FragmentManager.findFragmentOrCreate(tag: String, fragmentTagPairs: List<Pair<String, () -> Fragment>>): Fragment {
+fun FragmentManager.findFragmentByTagOrCreate(tag: String, fragmentTagPairs: List<Pair<String, Fragment>>): Fragment {
     return this.findFragmentByTag(tag) ?: createFragmentByTag(tag, fragmentTagPairs)
 }
 
-fun createFragmentByTag(tag: String, fragmentTagPairs: List<Pair<String, () -> Fragment>>): Fragment {
+fun createFragmentByTag(tag: String, fragmentTagPairs: List<Pair<String, Fragment>>): Fragment {
     // The fragment must be in here, or else it's a developer error
     Log.i("createFragmentTag", "Creating \"$tag\" fragment")
     val fragment = fragmentTagPairs.find { it.first == tag }
-    return fragment!!.second.invoke()
+    return fragment!!.second
 }

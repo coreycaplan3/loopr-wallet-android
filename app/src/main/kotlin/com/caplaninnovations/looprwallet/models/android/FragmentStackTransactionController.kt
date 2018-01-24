@@ -19,7 +19,7 @@ import com.caplaninnovations.looprwallet.utilities.logv
 class FragmentStackTransactionController(@IdRes private val container: Int,
                                          private val newFragment: Fragment,
                                          private val newFragmentTag: String,
-                                         private val oldFragment: Fragment? = null) {
+                                         private val oldFragment: Fragment?) {
 
     @IntDef(
             FragmentTransaction.TRANSIT_NONE.toLong(),
@@ -58,24 +58,10 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
      * saving the back-stack, so it must be maintained manually, using [FragmentStackHistory].
      */
     fun commitTransactionNow(fragmentManager: FragmentManager) {
-        if(newFragmentTag == oldFragment?.tag) {
-            return
-        }
-
         val transaction = fragmentManager.beginTransaction()
 
-        oldFragment?.let {
-            logv("Detaching ${oldFragment.tag} from container...")
-            transaction.detach(oldFragment)
-        }
-
-        if(newFragment.isDetached) {
-            logv("Attaching $newFragmentTag fragment to container...")
-            transaction.attach(newFragment)
-        } else {
-            logv("Adding $newFragmentTag fragment to container...")
-            transaction.add(container, newFragment, newFragmentTag)
-        }
+        logv("Replacing container with $newFragmentTag fragment...")
+        transaction.replace(container, newFragment, newFragmentTag)
 
         transaction.setTransition(transition)
 
@@ -89,7 +75,10 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
             } else {
                 transaction.setCustomAnimations(enterExitPair.first, enterExitPair.second)
             }
+        }
 
+        if(!Pair(enterAnimation, exitAnimation).isAllNonNull()) {
+            transaction.setCustomAnimations(0, 0)
         }
 
         transitionStyle?.let { transaction.setTransitionStyle(it) }

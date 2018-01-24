@@ -1,5 +1,7 @@
 package com.caplaninnovations.looprwallet.activities
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.DrawableRes
@@ -30,20 +32,22 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
         fun onBottomNavigationReselected()
     }
 
-    private val tagMarkets = "markets"
-    private val tagOrders = "orders"
-    private val tagMyWallet = "myWallet"
+    private val tagMarkets = "_Markets"
+    private val tagOrders = "_Orders"
+    private val tagMyWallet = "_MyWallet"
 
     /**
      * A list of pairs that points a fragment tag to a function that will create its fragment
      */
-    private val fragmentTagCreationPairs = listOf<Pair<String, () -> Fragment>>(
-            Pair(tagMarkets, { MarketsParentFragment() }),
-            Pair(tagOrders, { OrdersParentFragment() }),
-            Pair(tagMyWallet, { MyWalletFragment() })
+    private val fragmentTagPairs = listOf<Pair<String, Fragment>>(
+            Pair(tagMarkets, MarketsParentFragment()),
+            Pair(tagOrders, OrdersParentFragment()),
+            Pair(tagMyWallet, MyWalletFragment())
     )
 
     private lateinit var fragmentStackHistory: FragmentStackHistory
+
+    private var currentFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,25 +56,57 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
 
         setupTabs()
 
-        if (fragmentStackHistory.isEmpty()) {
+        if (savedInstanceState == null) {
             val tag = tagMarkets
-
-            logv("Initializing stack with $tag tab...")
-            fragmentStackHistory.push(tag)
+            logv("Initializing $tag fragment...")
 
             onTabSelected(bottomNavigation.findTabByTag(tag))
         } else {
             val tag = fragmentStackHistory.peek()!!
-            logv("Re-initializing stack with $tag tab...")
+            logv("Pushing $tag fragment...")
 
-            val previousTab = bottomNavigation.findTabByTag(tagMarkets)
-            updateTab(previousTab, false)
-
-            val currentTab = bottomNavigation.findTabByTag(tag)
-            updateTab(currentTab, true)
+            updateTab(bottomNavigation.findTabByTag(tag), true)
+            currentFragment = supportFragmentManager.findFragmentByTag(tag)
         }
 
         bottomNavigation.addOnTabSelectedListener(this)
+    }
+
+    override fun onBackPressed() {
+        fragmentStackHistory.pop()
+
+        if (fragmentStackHistory.isEmpty()) {
+            finish()
+        } else {
+            bottomNavigation.findTabByTag(fragmentStackHistory.peek()!!)?.select()
+        }
+    }
+
+    fun showTabLayout(tabLayout: TabLayout?) {
+
+        fun runAnimation() {
+            tabLayout?.animateToHeight(
+                    getResourceIdFromAttrId(android.R.attr.actionBarSize),
+                    R.integer.tab_layout_animation_duration)
+        }
+
+        if (animatorForHidingTab?.isRunning == true) {
+            animatorForHidingTab?.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    runAnimation()
+                }
+            })
+        } else {
+            runAnimation()
+        }
+    }
+
+    private var animatorForHidingTab: Animator? = null
+    fun hideTabLayout(tabLayout: TabLayout?) {
+        animatorForHidingTab =
+                tabLayout?.animateFromHeight(
+                        getResourceIdFromAttrId(android.R.attr.actionBarSize),
+                        R.integer.tab_layout_animation_duration)
     }
 
     /*
@@ -87,14 +123,15 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
 
         updateTab(tab, true)
 
-        (tab?.tag as? String)?.let {
-            val oldFragment = supportFragmentManager.findFragmentById(R.id.mainActivityContainer)
-            val newFragment = supportFragmentManager.findFragmentOrCreate(it, fragmentTagCreationPairs)
+        (tab?.tag as? String)?.let { tag: String ->
+            logv("Pushing $tag onto stack...")
+            fragmentStackHistory.push(tag)
 
-            FragmentStackTransactionController(R.id.mainActivityContainer, newFragment, it, oldFragment)
+            val newFragment = supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
+            FragmentStackTransactionController(R.id.mainActivityContainer, newFragment, tag, currentFragment)
                     .commitTransactionNow(supportFragmentManager)
 
-            fragmentStackHistory.push(it)
+            currentFragment = newFragment
         }
     }
 
@@ -105,42 +142,20 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
         }
     }
 
-    override fun onBackPressed() {
-        val tag = fragmentStackHistory.pop()
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
 
-        logv("Popped $tag tab from stack")
-
-        if (fragmentStackHistory.isEmpty()) {
-            super.onBackPressed()
-        } else {
-            fragmentStackHistory.peek()?.let {
-                bottomNavigation.findTabByTag(it)?.select()
-            }
-        }
+        fragmentStackHistory.saveState(outState)
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-//        bottomNavigation.clearOnTabSelectedListeners()
+        bottomNavigation.clearOnTabSelectedListeners()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        fragmentStackHistory.saveInstanceState(outState)
-    }
 
     // MARK - Private Methods
-
-    /**
-     * I'm loving that elvis operator!
-     *
-     * @param tag The tag used to find the fragment
-     * @param creationFunction A function used to create the fragment, if it's not found
-     */
-    private fun getFragmentByTagOrCreate(tag: String, creationFunction: () -> Fragment): Fragment {
-        return supportFragmentManager.findFragmentByTag(tag) ?: creationFunction()
-    }
 
     private fun setupTabs() {
 
@@ -153,7 +168,7 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
                     .setCustomView(tabView)
                     .setTag(tag)
 
-            if(fragmentStackHistory.peek() == tag) {
+            if (fragmentStackHistory.peek() == tag) {
                 tab.select()
             }
 

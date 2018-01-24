@@ -1,5 +1,11 @@
 package com.caplaninnovations.looprwallet.fragments
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.caplaninnovations.looprwallet.R
+
 /**
  * Created by Corey Caplan on 1/19/18.
  * Project: loopr-wallet-android
@@ -7,4 +13,9 @@ package com.caplaninnovations.looprwallet.fragments
  * Purpose of Class:
  */
 class ClosedOrdersFragment: BaseFragment() {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_orders_closed, container, false)
+    }
+
 }

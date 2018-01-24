@@ -16,12 +16,12 @@ import com.caplaninnovations.looprwallet.utilities.logd
  */
 class MyWalletFragment: BaseFragment(), BottomNavigationActivity.OnBottomNavigationReselectedLister {
 
-    override fun onBottomNavigationReselected() {
-        logd("Wallet Reselected!")
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_my_wallet, container, false)
+    }
+
+    override fun onBottomNavigationReselected() {
+        logd("Wallet Reselected!")
     }
 
 }
