@@ -56,11 +56,11 @@ dependencies {
     compile "com.github.bumptech.glide:glide:3.7.0"
 
     // Architecture Components
-    ext.androidArchitectureComponentsVesrion = '1.0.0'
+    ext.androidArchitectureComponentsVesrion = '1.1.0'
     implementation "android.arch.lifecycle:extensions:$androidArchitectureComponentsVesrion"
     implementation "android.arch.lifecycle:reactivestreams:$androidArchitectureComponentsVesrion"
     implementation "android.arch.lifecycle:common-java8:$androidArchitectureComponentsVesrion"
-    implementation "android.arch.paging:runtime:$androidArchitectureComponentsVesrion-alpha4-1"
+    implementation "android.arch.paging:runtime:1.0.0-alpha5"
 
     // Firebase
     ext.firebaseVersion = '11.8.0'

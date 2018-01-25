@@ -77,8 +77,8 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
             }
         }
 
-        if(!Pair(enterAnimation, exitAnimation).isAllNonNull()) {
-            transaction.setCustomAnimations(0, 0)
+        if (!Pair(enterAnimation, exitAnimation).isAllNonNull()) {
+            transaction.setCustomAnimations(0, 0, 0, 0)
         }
 
         transitionStyle?.let { transaction.setTransitionStyle(it) }

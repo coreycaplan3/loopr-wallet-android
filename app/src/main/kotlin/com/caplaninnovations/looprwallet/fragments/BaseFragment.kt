@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.utilities.logv
 
+
 /**
  * Created by Corey on 1/14/2018.
  * Project: LooprWallet
@@ -11,7 +12,7 @@ import com.caplaninnovations.looprwallet.utilities.logv
  *
  * Purpose of Class:
  */
-abstract class BaseFragment: Fragment() {
+abstract class BaseFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

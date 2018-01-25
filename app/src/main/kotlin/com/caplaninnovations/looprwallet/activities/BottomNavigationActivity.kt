@@ -39,11 +39,7 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
     /**
      * A list of pairs that points a fragment tag to a function that will create its fragment
      */
-    private val fragmentTagPairs = listOf<Pair<String, Fragment>>(
-            Pair(tagMarkets, MarketsParentFragment()),
-            Pair(tagOrders, OrdersParentFragment()),
-            Pair(tagMyWallet, MyWalletFragment())
-    )
+    private lateinit var fragmentTagPairs: List<Pair<String, Fragment>>
 
     private lateinit var fragmentStackHistory: FragmentStackHistory
 
@@ -51,6 +47,8 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        fragmentTagPairs = getFragmentTagPairs()
 
         fragmentStackHistory = FragmentStackHistory(savedInstanceState)
 
@@ -156,6 +154,18 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
 
 
     // MARK - Private Methods
+
+    private fun getFragmentTagPairs(): List<Pair<String, Fragment>> {
+        val fragmentTagPairs = arrayListOf<Pair<String, Fragment>>(
+                Pair(tagMarkets, MarketsParentFragment()),
+                Pair(tagOrders, OrdersParentFragment()),
+                Pair(tagMyWallet, MyWalletFragment())
+        )
+
+        return fragmentTagPairs.map {
+            Pair(it.first, supportFragmentManager.findFragmentByTag(it.first) ?: it.second)
+        }
+    }
 
     private fun setupTabs() {
 
