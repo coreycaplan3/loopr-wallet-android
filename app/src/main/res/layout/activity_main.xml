@@ -12,10 +12,7 @@
         android:id="@+id/mainActivityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/bottom_navigation_height"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    </FrameLayout>
+        android:layout_marginBottom="@dimen/bottom_navigation_height" />
 
     <include layout="@layout/bottom_navigation" />
 

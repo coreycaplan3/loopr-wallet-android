@@ -81,6 +81,7 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
     }
 
     fun showTabLayout(tabLayout: TabLayout?) {
+        return
 
         fun runAnimation() {
             tabLayout?.animateToHeight(
@@ -101,6 +102,8 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
 
     private var animatorForHidingTab: Animator? = null
     fun hideTabLayout(tabLayout: TabLayout?) {
+        return
+
         animatorForHidingTab =
                 tabLayout?.animateFromHeight(
                         getResourceIdFromAttrId(android.R.attr.actionBarSize),

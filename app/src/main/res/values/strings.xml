@@ -84,4 +84,6 @@
     <string name="favorites">Favorites</string>
     <string name="open">Open</string>
     <string name="closed">Closed</string>
+    <string name="transfer">Transfer</string>
+    <string name="search">Search</string>
 </resources>

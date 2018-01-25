@@ -1,14 +1,7 @@
 package com.caplaninnovations.looprwallet.models.android
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import com.caplaninnovations.looprwallet.fragments.MarketsParentFragment
-import com.caplaninnovations.looprwallet.fragments.MyWalletFragment
-import com.caplaninnovations.looprwallet.fragments.OrdersParentFragment
 import com.caplaninnovations.looprwallet.utilities.logv
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -56,7 +49,7 @@ class FragmentStackHistory(savedInstanceState: Bundle?) {
     fun remove(fragmentTag: String) {
         val currentFragmentTag = peek()
 
-        if (fragmentTag.equals(currentFragmentTag)) pop() // we're changing the top of the stack
+        if (fragmentTag == currentFragmentTag) pop() // we're changing the top of the stack
         else stack.remove(fragmentTag) // we're not changing the UI directly, just removing something
     }
 

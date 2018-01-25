@@ -85,7 +85,7 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
 
         sharedElements?.let { it.forEach { transaction.addSharedElement(it.first, it.second) } }
 
-        transaction.commit()
+        transaction.commitNow()
     }
 
 }
