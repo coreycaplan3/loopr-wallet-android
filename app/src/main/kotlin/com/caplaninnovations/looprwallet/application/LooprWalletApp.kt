@@ -13,7 +13,7 @@ import com.google.firebase.crash.FirebaseCrash
  */
 class LooprWalletApp : MultiDexApplication() {
 
-    object App {
+    companion object {
         lateinit var application: LooprWalletApp
     }
 
@@ -22,7 +22,7 @@ class LooprWalletApp : MultiDexApplication() {
 
         logi("Creating Application...")
 
-        App.application = this
+        application = this
 
         FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }

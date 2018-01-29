@@ -9,4 +9,4 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
  * <p></p>
  * Purpose of Class:
  */
-fun str(@StringRes resource: Int) = LooprWalletApp.App.application.getString(resource)
+fun str(@StringRes resource: Int) = LooprWalletApp.application.getString(resource)

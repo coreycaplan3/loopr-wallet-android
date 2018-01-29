@@ -6,6 +6,10 @@ package com.caplaninnovations.looprwallet.utilities
  * <p></p>
  *  Purpose of Class:
  */
-fun isUserSignedIn(): Boolean {
-    return false
+object WalletUtility {
+
+    fun isUserSignedIn(): Boolean {
+        return false
+    }
+
 }
