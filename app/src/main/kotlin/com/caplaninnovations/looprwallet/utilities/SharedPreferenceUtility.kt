@@ -16,36 +16,24 @@ import android.util.Base64.NO_WRAP
  */
 object SharedPreferenceUtility {
 
-    private const val PREF_NAME = "realm_key"
-    private const val KEY = "iv_and_encrypted_key"
+    private const val KEY_PREFERENCE_NAME = "_LooprWallet"
 
-    fun save(context: Context, ivAndEncryptedKey: ByteArray) {
+    fun get(context: Context, key: String): String? {
+        val sharedPreferences = getPreference(context)
+
+        return sharedPreferences.getString(key, null) ?: return null
+    }
+
+    fun put(context: Context, key: String, value: String) {
         getPreference(context).edit()
-                .putString(KEY, encode(ivAndEncryptedKey))
+                .putString(key, value)
                 .apply()
     }
 
-    fun load(context: Context): ByteArray? {
-        val pref = getPreference(context)
-
-        val ivAndEncryptedKey = pref.getString(KEY, null) ?: return null
-
-        return decode(ivAndEncryptedKey)
-    }
-
-    private fun encode(data: ByteArray?): String? {
-        return if (data == null) {
-            null
-        } else Base64.encodeToString(data, Base64.NO_WRAP)
-    }
-
-    private fun decode(encodedData: String?): ByteArray? {
-        return if (encodedData == null) {
-            null
-        } else Base64.decode(encodedData, Base64.DEFAULT)
-    }
+    // MARK - Private Methods
 
     private fun getPreference(context: Context): SharedPreferences {
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        return context.getSharedPreferences(KEY_PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
+
 }
