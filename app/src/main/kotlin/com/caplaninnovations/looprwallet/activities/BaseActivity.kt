@@ -3,10 +3,13 @@ package com.caplaninnovations.looprwallet.activities
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.*
+import android.support.design.widget.CoordinatorLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 
 /**
@@ -17,7 +20,7 @@ import kotlinx.android.synthetic.main.appbar_main.*
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    private var isToolbarCollapseEnabled: Boolean = false
+    var isToolbarCollapseEnabled: Boolean = false
 
     private val tagIsToolbarCollapsed = "_IsToolbarCollapsed"
 
@@ -37,6 +40,12 @@ abstract class BaseActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         isToolbarCollapseEnabled = savedInstanceState?.getBoolean(tagIsToolbarCollapsed) ?: false
+
+        if(isToolbarCollapseEnabled) {
+            enableToolbarCollapsing(null)
+        } else {
+            disableToolbarCollapsing(null)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -49,21 +58,45 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * Enables the toolbar to be collapsed when scrolling
      *
-     * @param view The view to which *scrollingViewBehavior* will be applied
+     * @param container The container to which [AppBarLayout.ScrollingViewBehavior] will be applied
      */
-    fun enableToolbarCollapsing(view: ViewGroup) {
+    fun enableToolbarCollapsing(container: ViewGroup?) {
         val layoutParams = (toolbar?.layoutParams as? AppBarLayout.LayoutParams)
         layoutParams?.scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
+
+        (container?.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
+            it.behavior = AppBarLayout.ScrollingViewBehavior()
+        }
+
+        (activityContainer.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
+            // The container is put "under" the actionBar since it is going to be moved out of the
+            // way after scrolling
+            it.topMargin = 0
+            activityContainer.layoutParams = it
+        }
 
         isToolbarCollapseEnabled = true
     }
 
     /**
-     * Enables the toolbar to be collapsed when scrolling
+     * Disables the toolbar from being collapsed when scrolling
+     *
+     * @param container The container to which [AppBarLayout.ScrollingViewBehavior] will be
+     * **removed**
      */
-    fun disableToolbarCollapsing() {
+    fun disableToolbarCollapsing(container: ViewGroup?) {
         val layoutParams = (toolbar?.layoutParams as? AppBarLayout.LayoutParams)
         layoutParams?.scrollFlags = 0
+
+        (container?.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
+            it.behavior = null
+        }
+
+        (activityContainer.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
+            // The container is "under" the actionBar, so we must add margin so it is below it
+            it.topMargin = resources.getDimension(getResourceIdFromAttrId(android.R.attr.actionBarSize)).toInt()
+            activityContainer.layoutParams = it
+        }
 
         isToolbarCollapseEnabled = true
     }

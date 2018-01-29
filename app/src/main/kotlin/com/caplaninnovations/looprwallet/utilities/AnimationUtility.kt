@@ -6,7 +6,6 @@ import android.animation.ValueAnimator
 import android.support.annotation.DimenRes
 import android.support.annotation.IntegerRes
 import android.view.View
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
@@ -48,12 +47,6 @@ fun View.animateToHeight(@DimenRes toValue: Int, @IntegerRes duration: Int = R.i
         this.layoutParams.height = (it.animatedValue as Float).toInt()
         this.requestLayout()
     }
-    val view = this
-    animator.addListener(object: AnimatorListenerAdapter() {
-        override fun onAnimationStart(animation: Animator?) {
-//            view.visibility = View.VISIBLE
-        }
-    })
 
     animator.duration = resources.getInteger(duration).toLong()
     animator.start()
@@ -69,12 +62,6 @@ fun View.animateFromHeight(@DimenRes fromValue: Int, @IntegerRes duration: Int =
         this.layoutParams.height = (it.animatedValue as Float).toInt()
         this.requestLayout()
     }
-    val view = this
-    animator.addListener(object: AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator?) {
-//            view.visibility = View.GONE
-        }
-    })
     animator.duration = resources.getInteger(duration).toLong()
     animator.start()
 

@@ -6,7 +6,6 @@
 
     <!-- Bottom Navigation -->
     <attr name="bottomNavigationBackground" format="color" />
-    <attr name="bottomNavigationBackgroundSelected" format="color" />
     <attr name="bottomNavigationTextColor" format="color" />
     <attr name="bottomNavigationTextColorSelected" format="color" />
 </resources>

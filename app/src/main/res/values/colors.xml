@@ -4,25 +4,25 @@
     <!-- LIGHT THEME -->
 
     <color name="lightPrimary">#03A9F4</color>
-    <color name="lightPrimary42">#4203A9F4</color>
     <color name="lightPrimaryDark">#01579B</color>
     <color name="lightAccent">#4CAF50</color>
 
-    <color name="lightPrimaryText">#FEFEFE</color>
-    <color name="lightSecondaryText">#0E0E0E</color>
-    <color name="lightPrimaryTextDisabled">#7FFEFEFE</color>
+    <color name="lightPrimaryText">#DE000000</color>
+    <color name="lightSecondaryText">#8A000000</color>
+    <color name="lightPrimaryTextDisabled">#60000000</color>
+
+    <color name="lightBottomNavigationBackground">@color/lightPrimary</color>
 
     <!-- DARK THEME -->
 
-    <color name="lightBottomNavigationBackground">@color/lightPrimary</color>
-    <color name="lightBottomNavigationBackgroundSelected">#0288D1</color>
+    <color name="darkPrimary">#2196F3</color>
+    <color name="darkPrimaryDark">#0D47A1</color>
+    <color name="darkAccent">#43A047</color>
 
-    <color name="darkPrimary">#03A9F4</color>
-    <color name="darkPrimaryDark">#01579B</color>
-    <color name="darkAccent">#4CAF50</color>
-
-    <color name="darkPrimaryText">#FEFEFE</color>
+    <color name="darkPrimaryText">#FFFFFF</color>
     <color name="darkSecondaryText">#B3FFFFFF</color>
-    <color name="darkPrimaryTextDisabled">#80FEFEFE</color>
+    <color name="darkPrimaryTextDisabled">#7FFEFEFE</color>
+
+    <color name="darkBottomNavigationBackground">@color/darkPrimary</color>
 
 </resources>

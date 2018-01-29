@@ -81,8 +81,6 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
     }
 
     fun showTabLayout(tabLayout: TabLayout?) {
-        return
-
         fun runAnimation() {
             tabLayout?.animateToHeight(
                     getResourceIdFromAttrId(android.R.attr.actionBarSize),
@@ -102,8 +100,6 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
 
     private var animatorForHidingTab: Animator? = null
     fun hideTabLayout(tabLayout: TabLayout?) {
-        return
-
         animatorForHidingTab =
                 tabLayout?.animateFromHeight(
                         getResourceIdFromAttrId(android.R.attr.actionBarSize),
@@ -129,7 +125,7 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
             fragmentStackHistory.push(tag)
 
             val newFragment = supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
-            FragmentStackTransactionController(R.id.mainActivityContainer, newFragment, tag, currentFragment)
+            FragmentStackTransactionController(R.id.activityContainer, newFragment, tag, currentFragment)
                     .commitTransactionNow(supportFragmentManager)
 
             currentFragment = newFragment

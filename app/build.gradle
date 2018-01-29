@@ -74,6 +74,9 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:1.0.2"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
+    // Blockchain Dependencies
+    compile 'org.web3j:core:3.1.1-android'
+
     // Testing
     testImplementation "junit:junit:4.12"
     testImplementation "android.arch.core:core-testing:$androidArchitectureComponentsVesrion"
