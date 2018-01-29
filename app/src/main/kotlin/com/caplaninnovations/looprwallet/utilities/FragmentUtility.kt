@@ -14,7 +14,7 @@ fun FragmentManager.findFragmentByTagOrCreate(tag: String, fragmentTagPairs: Lis
     return this.findFragmentByTag(tag) ?: createFragmentByTag(tag, fragmentTagPairs)
 }
 
-fun createFragmentByTag(tag: String, fragmentTagPairs: List<Pair<String, Fragment>>): Fragment {
+private fun createFragmentByTag(tag: String, fragmentTagPairs: List<Pair<String, Fragment>>): Fragment {
     // The fragment must be in here, or else it's a developer error
     Log.i("createFragmentTag", "Creating \"$tag\" fragment")
     val fragment = fragmentTagPairs.find { it.first == tag }

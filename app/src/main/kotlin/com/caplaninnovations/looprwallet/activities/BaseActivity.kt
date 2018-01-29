@@ -5,6 +5,7 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.*
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.app.AppCompatDialog
 import android.view.Menu
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
@@ -20,14 +21,17 @@ import kotlinx.android.synthetic.main.appbar_main.*
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    var isToolbarCollapseEnabled: Boolean = false
+    private var isToolbarCollapseEnabled: Boolean = false
 
     private val tagIsToolbarCollapsed = "_IsToolbarCollapsed"
+    private val tagIsProgressDialogShowing = "_IsProgressDialogShowing"
 
     /**
      * A layout-resource used to set the *contentView* of the current activity
      */
     abstract val contentView: Int
+
+    lateinit var progressDialog: AppCompatDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +45,20 @@ abstract class BaseActivity : AppCompatActivity() {
 
         isToolbarCollapseEnabled = savedInstanceState?.getBoolean(tagIsToolbarCollapsed) ?: false
 
-        if(isToolbarCollapseEnabled) {
+        /*
+         * Progress Dialog Setup
+         */
+        progressDialog = AppCompatDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setCanceledOnTouchOutside(false)
+        if (savedInstanceState?.getBoolean(tagIsProgressDialogShowing) == true) {
+            progressDialog.show()
+        }
+
+        /*
+         * Toolbar Setup
+         */
+        if (isToolbarCollapseEnabled) {
             enableToolbarCollapsing(null)
         } else {
             disableToolbarCollapsing(null)
@@ -105,6 +122,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
 
         outState?.putBoolean(tagIsToolbarCollapsed, isToolbarCollapseEnabled)
+        outState?.putBoolean(tagIsProgressDialogShowing, progressDialog.isShowing)
     }
 
 }

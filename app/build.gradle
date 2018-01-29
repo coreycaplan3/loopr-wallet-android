@@ -6,6 +6,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.caplaninnovations.looprwallet"
+        multiDexEnabled true
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
@@ -33,6 +34,10 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // Android Multidex for apps with more than 65,536 methods
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:multidex:1.0.2'
 
     // Android Native Libraries
     ext.androidNativeVersion = '27.0.2'
@@ -70,12 +75,12 @@ dependencies {
     compile "com.google.firebase:firebase-invites:$firebaseVersion"
     compile "com.google.firebase:firebase-perf:$firebaseVersion"
 
-    // Other
-    implementation "com.android.support.constraint:constraint-layout:1.0.2"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-
     // Blockchain Dependencies
     compile 'org.web3j:core:3.1.1-android'
+
+    // Other
+    compile 'io.realm:android-adapters:2.1.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     // Testing
     testImplementation "junit:junit:4.12"

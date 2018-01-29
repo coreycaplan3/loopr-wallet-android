@@ -19,7 +19,7 @@
     <color name="darkPrimaryDark">#0D47A1</color>
     <color name="darkAccent">#43A047</color>
 
-    <color name="darkPrimaryText">#FFFFFF</color>
+    <color name="darkPrimaryText">#FFFFFFFF</color>
     <color name="darkSecondaryText">#B3FFFFFF</color>
     <color name="darkPrimaryTextDisabled">#7FFEFEFE</color>
 

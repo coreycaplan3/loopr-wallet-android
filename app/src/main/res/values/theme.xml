@@ -12,15 +12,16 @@
         <item name="colorControlActivated">@android:color/white</item>
 
         <!-- Text -->
-        <item name="textColorPrimary">@color/lightPrimaryText</item>
-        <item name="textColorSecondary">@color/lightSecondaryText</item>
+        <item name="android:textColorPrimary">@color/lightPrimaryText</item>
+        <item name="android:textColorSecondary">@color/lightSecondaryText</item>
+        <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
 
         <!-- Overflow Menu -->
-        <item name="actionOverflowButtonStyle">@style/lightCustomOverflow</item>
+        <item name="android:actionOverflowButtonStyle">@style/lightCustomOverflow</item>
 
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/lightPrimary</item>
-        <item name="buttonStyle">@style/buttonStyle</item>
+        <item name="android:buttonStyle">@style/buttonStyle</item>
 
         <!-- Tabs -->
         <item name="tabWidgetTextColor">@color/light_tabs_text</item>
@@ -43,15 +44,16 @@
         <item name="colorControlActivated">@android:color/white</item>
 
         <!-- Text -->
-        <item name="textColorPrimary">@color/darkPrimaryText</item>
-        <item name="textColorSecondary">@color/darkSecondaryText</item>
+        <item name="android:textColorPrimary">@color/darkPrimaryText</item>
+        <item name="android:textColorSecondary">@color/darkSecondaryText</item>
+        <item name="android:textColorSecondaryInverse">@color/lightSecondaryText</item>
 
         <!-- Overflow Menu -->
-        <item name="actionOverflowButtonStyle">@style/darkCustomOverflow</item>
+        <item name="android:actionOverflowButtonStyle">@style/darkCustomOverflow</item>
 
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/darkPrimary</item>
-        <item name="buttonStyle">@style/buttonStyle</item>
+        <item name="android:buttonStyle">@style/buttonStyle</item>
 
         <!-- Tabs -->
         <item name="tabWidgetTextColor">@color/dark_tabs_text</item>

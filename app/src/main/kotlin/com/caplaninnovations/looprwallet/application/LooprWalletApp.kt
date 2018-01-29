@@ -1,6 +1,6 @@
 package com.caplaninnovations.looprwallet.application
 
-import android.app.Application
+import android.support.multidex.MultiDexApplication
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.utilities.logi
 import com.google.firebase.crash.FirebaseCrash
@@ -11,7 +11,7 @@ import com.google.firebase.crash.FirebaseCrash
  * <p></p>
  * Purpose of Class:
  */
-class LooprWalletApp : Application() {
+class LooprWalletApp : MultiDexApplication() {
 
     object App {
         lateinit var application: LooprWalletApp
