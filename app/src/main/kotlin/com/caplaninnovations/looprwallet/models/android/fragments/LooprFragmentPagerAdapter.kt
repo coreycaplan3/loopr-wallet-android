@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.models.android
+package com.caplaninnovations.looprwallet.models.android.fragments
 
 import android.os.Parcelable
 import android.support.v4.app.Fragment

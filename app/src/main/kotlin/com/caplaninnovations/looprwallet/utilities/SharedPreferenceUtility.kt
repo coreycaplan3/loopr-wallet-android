@@ -7,7 +7,6 @@ import android.util.Base64
 import android.util.Base64.NO_WRAP
 
 
-
 /**
  *  Created by Corey on 1/29/2018.
  *  Project: loopr-wallet-android
@@ -18,7 +17,13 @@ object SharedPreferenceUtility {
 
     private const val KEY_PREFERENCE_NAME = "_LooprWallet"
 
-    fun get(context: Context, key: String): String? {
+    fun getLong(context: Context, key: String, defaultValue: Long): Long {
+        val sharedPreferences = getPreference(context)
+
+        return sharedPreferences.getLong(key, defaultValue)
+    }
+
+    fun getString(context: Context, key: String): String? {
         val sharedPreferences = getPreference(context)
 
         return sharedPreferences.getString(key, null) ?: return null

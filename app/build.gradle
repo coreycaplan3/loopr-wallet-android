@@ -16,7 +16,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -36,7 +37,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Android Multidex for apps with more than 65,536 methods
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:multidex:1.0.2'
 
     // Android Native Libraries
@@ -78,8 +78,11 @@ dependencies {
     // Blockchain Dependencies
     compile 'org.web3j:core:3.1.1-android'
 
-    // Other
+    // Realm
     compile 'io.realm:android-adapters:2.1.1'
+    compile 'io.realm:secure-userstore:1.0.1'
+
+    // Other
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     // Testing

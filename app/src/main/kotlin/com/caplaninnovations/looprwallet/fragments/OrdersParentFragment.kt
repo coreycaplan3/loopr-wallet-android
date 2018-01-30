@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BottomNavigationActivity
-import com.caplaninnovations.looprwallet.models.android.LooprFragmentPagerAdapter
+import com.caplaninnovations.looprwallet.models.android.fragments.LooprFragmentPagerAdapter
 import com.caplaninnovations.looprwallet.utilities.logd
 import kotlinx.android.synthetic.main.fragment_orders_parent.*
 

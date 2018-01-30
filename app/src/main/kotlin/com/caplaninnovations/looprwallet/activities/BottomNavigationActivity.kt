@@ -14,8 +14,8 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.MarketsParentFragment
 import com.caplaninnovations.looprwallet.fragments.MyWalletFragment
 import com.caplaninnovations.looprwallet.fragments.OrdersParentFragment
-import com.caplaninnovations.looprwallet.models.android.FragmentStackHistory
-import com.caplaninnovations.looprwallet.models.android.FragmentStackTransactionController
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
