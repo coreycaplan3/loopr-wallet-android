@@ -14,12 +14,23 @@ class LooprSettings(private val context: Context) {
     /*
      * MARK - TAGS
      */
-    private val tagSecurityLockoutTimeMillis = "_SecurityLockoutTimeMillis"
+
+    private object Tags {
+
+        private const val TAG_SECURITY_LOCKOUT_TIME_MILLIS = "_SECURITY_LOCKOUT_TIME_MILLIS"
+
+        private const val TAG_THEME = "_THEME"
+
+    }
 
     /*
      * MARK - DEFAULT VALUES
      */
-    private val defaultLockoutTimeMillis: Long = 1000 * 60
+    private object DefaultValues {
+
+        private const val lockoutTimeMillis = 1000 * 60
+
+    }
 
     /*
      * MARK - Public Methods
@@ -30,7 +41,16 @@ class LooprSettings(private val context: Context) {
      * foreground.
      */
     fun getLockoutTime(): Long {
-        return SharedPreferenceUtility.getLong(context, tagSecurityLockoutTimeMillis, defaultLockoutTimeMillis)
+        return SharedPreferenceUtility.getLong(context, tagSecurityLockoutTimeMillis, lockoutTimeMillis)
+    }
+
+    @LooprTheme
+    fun getTheme(): String {
+        SharedPreferenceUtility.getString(context, )
+    }
+
+    fun saveTheme(@LooprTheme theme: String) {
+        SharedPreferenceUtility.put(context, theme, )
     }
 
 }

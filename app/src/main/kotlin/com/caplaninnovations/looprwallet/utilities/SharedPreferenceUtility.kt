@@ -1,10 +1,7 @@
 package com.caplaninnovations.looprwallet.utilities
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.util.Base64
-import android.util.Base64.NO_WRAP
 
 
 /**
@@ -18,26 +15,27 @@ object SharedPreferenceUtility {
     private const val KEY_PREFERENCE_NAME = "_LooprWallet"
 
     fun getLong(context: Context, key: String, defaultValue: Long): Long {
-        val sharedPreferences = getPreference(context)
+        val sharedPreferences = getSharedPreferences(context)
 
         return sharedPreferences.getLong(key, defaultValue)
     }
 
     fun getString(context: Context, key: String): String? {
-        val sharedPreferences = getPreference(context)
+        val sharedPreferences = getSharedPreferences(context)
 
         return sharedPreferences.getString(key, null) ?: return null
     }
 
     fun put(context: Context, key: String, value: String) {
-        getPreference(context).edit()
+        getSharedPreferences(context)
+                .edit()
                 .putString(key, value)
                 .apply()
     }
 
     // MARK - Private Methods
 
-    private fun getPreference(context: Context): SharedPreferences {
+    private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(KEY_PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 

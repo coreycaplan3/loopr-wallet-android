@@ -9,7 +9,10 @@ import android.support.v7.app.AppCompatDialog
 import android.view.Menu
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.realm.LooprRealmConfiguration
+import com.caplaninnovations.looprwallet.utilities.SharedPreferenceUtility
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 
@@ -33,10 +36,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
     lateinit var progressDialog: AppCompatDialog
 
+    lateinit var realm: Realm
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO set theme dynamically (before call to setContentView)
+        SharedPreferenceUtility.getString()
         applicationContext.setTheme(R.style.AppTheme_Light)
         this.setTheme(R.style.AppTheme_Light)
 
@@ -63,6 +68,12 @@ abstract class BaseActivity : AppCompatActivity() {
         } else {
             disableToolbarCollapsing(null)
         }
+
+        /*
+         * Realm setup
+         */
+        // TODO
+        realm = LooprRealmConfiguration.get("realm-name", ByteArray(1))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -123,6 +134,13 @@ abstract class BaseActivity : AppCompatActivity() {
 
         outState?.putBoolean(tagIsToolbarCollapsed, isToolbarCollapseEnabled)
         outState?.putBoolean(tagIsProgressDialogShowing, progressDialog.isShowing)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        realm.removeAllChangeListeners()
+        realm.close()
     }
 
 }
