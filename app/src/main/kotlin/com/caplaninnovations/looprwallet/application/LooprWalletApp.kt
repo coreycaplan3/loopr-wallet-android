@@ -8,7 +8,7 @@ import android.os.Handler
 import android.support.multidex.MultiDexApplication
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.activities.SignInActivity
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
+import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsManager
 import com.caplaninnovations.looprwallet.utilities.logi
 import com.google.firebase.crash.FirebaseCrash
 
@@ -24,7 +24,7 @@ class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallb
         lateinit var application: LooprWalletApp
     }
 
-    private lateinit var looprSettings: LooprSettings
+    private lateinit var looprSettingsManager: LooprSettingsManager
 
     private val handler = Handler()
 
@@ -35,7 +35,7 @@ class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallb
 
         application = this
 
-        looprSettings = LooprSettings(applicationContext)
+        looprSettingsManager = LooprSettingsManager(applicationContext)
 
         FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }
@@ -45,11 +45,12 @@ class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallb
     }
 
     override fun onActivityPaused(activity: Activity?) {
-        val lockoutTime = looprSettings.getLockoutTime()
+        val lockoutTime = looprSettingsManager.getLockoutTime()
         handler.postDelayed({
             val intent = Intent(applicationContext, SignInActivity::class.java)
             // TODO clear backstack and force sign in to be before everything else.
             // TODO Restore backstack on success
+
             applicationContext.startActivity(intent)
         }, lockoutTime)
     }

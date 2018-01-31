@@ -14,6 +14,10 @@ object SharedPreferenceUtility {
 
     private const val KEY_PREFERENCE_NAME = "_LooprWallet"
 
+    //
+    // GETS
+    //
+
     fun getLong(context: Context, key: String, defaultValue: Long): Long {
         val sharedPreferences = getSharedPreferences(context)
 
@@ -26,7 +30,18 @@ object SharedPreferenceUtility {
         return sharedPreferences.getString(key, null) ?: return null
     }
 
-    fun put(context: Context, key: String, value: String) {
+    //
+    // PUTS
+    //
+
+    fun putLong(context: Context, key: String, value: Long) {
+        getSharedPreferences(context)
+                .edit()
+                .putLong(key, value)
+                .apply()
+    }
+
+    fun putString(context: Context, key: String, value: String) {
         getSharedPreferences(context)
                 .edit()
                 .putString(key, value)
