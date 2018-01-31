@@ -9,13 +9,6 @@ import io.realm.annotations.PrimaryKey
  * <p></p>
  * Purpose of Class:
  */
-class TradingPair : RealmObject {
-
-    @PrimaryKey
-    val ticker: String
-
-    constructor(ticker: String) {
-        this.ticker = ticker
-    }
-
-}
+open class TradingPair(
+        @PrimaryKey var ticker: String? = null
+) : RealmObject()

@@ -9,14 +9,6 @@ import io.realm.annotations.PrimaryKey
  * <p></p>
  * Purpose of Class:
  */
-class LooprOrder: RealmObject {
-
-    @PrimaryKey
-    val id: String
-
-    @Suppress("ConvertSecondaryConstructorToPrimary")
-    constructor(id: String) {
-        this.id = id
-    }
-
-}
+open class LooprOrder(
+        @PrimaryKey var id: String? = null
+) : RealmObject()
