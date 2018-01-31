@@ -8,12 +8,12 @@ import android.support.annotation.StringDef
  * <p></p>
  * Purpose of Class:
  */
-object LooprThemeName {
+object LooprTheme {
+
+    @StringDef(LooprTheme.lightTheme, LooprTheme.darkTheme)
+    annotation class Name
 
     const val lightTheme = "_lightTheme"
     const val darkTheme = "_darkTheme"
 
 }
-
-@StringDef(LooprThemeName.lightTheme, LooprThemeName.darkTheme)
-annotation class LooprTheme

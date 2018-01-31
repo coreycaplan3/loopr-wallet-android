@@ -86,4 +86,6 @@
     <string name="closed">Closed</string>
     <string name="transfer">Transfer</string>
     <string name="search">Search</string>
+    <string name="trading_pair">Trading Pair</string>
+    <string name="welcome">Welcome</string>
 </resources>
