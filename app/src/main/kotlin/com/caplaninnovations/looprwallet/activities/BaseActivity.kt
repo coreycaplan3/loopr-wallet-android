@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDialog
 import android.view.Menu
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.models.android.settings.LooprThemeSettings
 import com.caplaninnovations.looprwallet.realm.LooprRealm
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
 import io.realm.Realm
@@ -40,8 +41,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO add theme
-        this.setTheme(R.style.AppTheme_Light)
+        this.setTheme(LooprThemeSettings(this).getCurrentTheme())
 
         setContentView(contentView)
         setSupportActionBar(toolbar)
@@ -70,7 +70,7 @@ abstract class BaseActivity : AppCompatActivity() {
         /*
          * Realm setup
          */
-        // TODO
+        // TODO find out currently signed-in wallet
         realm = LooprRealm.get("realm-name", ByteArray(1))
     }
 

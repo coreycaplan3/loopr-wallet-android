@@ -81,14 +81,15 @@ dependencies {
     compile "com.google.firebase:firebase-perf:$firebaseVersion"
 
     // Blockchain Dependencies
-    compile 'org.web3j:core:3.1.1-android'
+    compile "org.web3j:core:3.1.1-android"
 
     // Realm
-    compile 'io.realm:android-adapters:2.1.1'
-    compile 'io.realm:secure-userstore:1.0.1'
+    compile "io.realm:android-adapters:2.1.1"
+    compile "io.realm:secure-userstore:1.0.1"
 
     // Other
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    compile "com.google.code.gson:gson:2.8.0"
 
     // Testing
     testImplementation "junit:junit:4.12"

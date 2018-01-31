@@ -1,9 +1,11 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
 import android.content.Context
-import android.support.annotation.StyleRes
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.utilities.SharedPreferenceUtility
+import android.content.SharedPreferences
+import com.caplaninnovations.looprwallet.utilities.fromJson
+import com.google.gson.Gson
+import org.json.JSONArray
+import org.json.JSONTokener
 
 /**
  *  Created by Corey on 1/29/2018.
@@ -11,55 +13,73 @@ import com.caplaninnovations.looprwallet.utilities.SharedPreferenceUtility
  * <p></p>
  *  Purpose of Class:
  */
-class LooprSettingsManager(private val context: Context) {
+abstract class LooprSettingsManager(private val context: Context) {
 
     /*
      * MARK - TAGS
      */
 
-    private object Keys {
+    internal companion object Keys {
 
-        const val SECURITY_LOCKOUT_TIME_MILLIS = "_SECURITY_LOCKOUT_TIME_MILLIS"
+        const val KEY_SECURITY_LOCKOUT_TIME_MILLIS = "_SECURITY_LOCKOUT_TIME_MILLIS"
 
-        const val THEME = "_THEME"
+        const val KEY_THEME = "_THEME"
 
+        private const val KEY_PREFERENCE_NAME = "_LooprWallet"
     }
 
-    /*
-     * MARK - Public Methods
-     */
+    //
+    // GETS
+    //
 
-    /**
-     * @return The time (in millis) from which the application will be locked after leaving the
-     * foreground.
-     */
-    fun getLockoutTime(): Long {
-        return SharedPreferenceUtility.getLong(context, Keys.SECURITY_LOCKOUT_TIME_MILLIS, LooprLockoutSettings.DEFAULT_LOCKOUT_TIME_MILLIS)
+    fun getLong(key: String, defaultValue: Long): Long {
+        val sharedPreferences = getSharedPreferences(context)
+
+        return sharedPreferences.getLong(key, defaultValue)
     }
 
-    /**
-     * @param lockoutTime The time (in millis) from which the application will be locked after leaving the
-     * foreground.
-     */
-    fun putLockoutTime(lockoutTime: Long) {
-        SharedPreferenceUtility.putLong(context, Keys.SECURITY_LOCKOUT_TIME_MILLIS, lockoutTime)
+    fun getString(key: String): String? {
+        val sharedPreferences = getSharedPreferences(context)
+
+        return sharedPreferences.getString(key, null) ?: return null
     }
 
-    /**
-     * The theme for the application
-     */
-    @StyleRes
-    fun getCurrentTheme(): Int {
-        val theme = SharedPreferenceUtility.getString(context, Keys.THEME) ?: LooprTheme.lightTheme
-        return when(theme) {
-            LooprTheme.lightTheme -> R.style.AppTheme_Light
-            LooprTheme.darkTheme -> R.style.AppTheme_Dark
-            else -> throw IllegalStateException("Invalid theme, found: $theme")
-        }
+    fun getStringArray(key: String): Array<String>? {
+        val jsonArray = getSharedPreferences(context).getString(key, null)
+
+        return jsonArray?.let { Gson().fromJson(it) }
     }
 
-    fun saveTheme(@LooprTheme.Name theme: String) {
-        SharedPreferenceUtility.putString(context, Keys.THEME, theme)
+    //
+    // PUTS
+    //
+
+    fun putLong(key: String, value: Long) {
+        getSharedPreferences(context)
+                .edit()
+                .putLong(key, value)
+                .apply()
+    }
+
+    fun putString(key: String, value: String?) {
+        getSharedPreferences(context)
+                .edit()
+                .putString(key, value)
+                .apply()
+    }
+
+    fun putStringArray(key: String, value: Array<String>) {
+        getSharedPreferences(context)
+                .edit()
+                .putString(key, Gson().toJson(value))
+                .apply()
+    }
+
+
+    // MARK - Private Methods
+
+    private fun getSharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences(KEY_PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 
 }
