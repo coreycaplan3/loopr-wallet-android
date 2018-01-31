@@ -9,11 +9,11 @@ import io.realm.RealmMigration
  * <p></p>
  *  Purpose of Class:
  */
-internal class LooprMigration: RealmMigration {
+internal class LooprMigration : RealmMigration {
 
     override fun migrate(realm: DynamicRealm?, oldVersion: Long, newVersion: Long) {
-        for(i in oldVersion.rangeTo(newVersion)) {
-            when(i) {
+        for (i in oldVersion..newVersion) {
+            when (i) {
                 0L -> migrate0To1(realm)
                 else -> throw IllegalStateException("Developer did not create a migration plan!")
             }

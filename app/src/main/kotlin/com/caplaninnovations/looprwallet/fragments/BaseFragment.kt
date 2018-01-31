@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.realm.LooprRealmConfiguration
+import com.caplaninnovations.looprwallet.realm.LooprRealm
 import com.caplaninnovations.looprwallet.utilities.logv
 import io.realm.Realm
 
@@ -23,7 +23,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // TODO
-        realm = LooprRealmConfiguration.get("realm-name", ByteArray(1))
+        realm = LooprRealm.get("realm-name", ByteArray(1))
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }

@@ -22,16 +22,16 @@ fun <T : View> View.findById(@IdRes id: Int): T? {
 }
 
 fun TabLayout.forEachTab(f: (tab: TabLayout.Tab) -> Void) {
-    for(i in 0.rangeTo(this.tabCount)) {
+    for (i in 0..this.tabCount) {
         f(getTabAt(i)!!)
     }
 }
 
 fun TabLayout.findTabByTag(tag: String): TabLayout.Tab? {
-    for (i in 0.rangeTo(this.tabCount)) {
+    for (i in 0..this.tabCount) {
         val tab = this.getTabAt(i)
         val isTabFound = tab?.tag?.equals(tag) ?: false
-        if(isTabFound) return tab
+        if (isTabFound) return tab
     }
 
     return null

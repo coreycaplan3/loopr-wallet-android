@@ -9,8 +9,7 @@ import android.support.v7.app.AppCompatDialog
 import android.view.Menu
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.realm.LooprRealmConfiguration
-import com.caplaninnovations.looprwallet.utilities.SharedPreferenceUtility
+import com.caplaninnovations.looprwallet.realm.LooprRealm
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
@@ -41,8 +40,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        SharedPreferenceUtility.getString()
-        applicationContext.setTheme(R.style.AppTheme_Light)
+        // TODO add theme
         this.setTheme(R.style.AppTheme_Light)
 
         setContentView(contentView)
@@ -73,7 +71,7 @@ abstract class BaseActivity : AppCompatActivity() {
          * Realm setup
          */
         // TODO
-        realm = LooprRealmConfiguration.get("realm-name", ByteArray(1))
+        realm = LooprRealm.get("realm-name", ByteArray(1))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

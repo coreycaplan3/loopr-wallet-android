@@ -9,7 +9,7 @@ import io.realm.RealmConfiguration
  * <p></p>
  * Purpose of Class:
  */
-object LooprRealmConfiguration {
+object LooprRealm {
 
     private const val schemaVersion: Long = 0L
 
