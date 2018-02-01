@@ -2,10 +2,11 @@ package com.caplaninnovations.looprwallet.models.android.settings
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Base64
 import com.caplaninnovations.looprwallet.utilities.fromJson
 import com.google.gson.Gson
-import org.json.JSONArray
-import org.json.JSONTokener
+import io.realm.android.internal.android.crypto.SyncCrypto
+import io.realm.android.internal.android.crypto.SyncCryptoFactory
 
 /**
  *  Created by Corey on 1/29/2018.
@@ -15,9 +16,7 @@ import org.json.JSONTokener
  */
 abstract class LooprSettingsManager(private val context: Context) {
 
-    /*
-     * MARK - TAGS
-     */
+    val crypto: SyncCrypto = SyncCryptoFactory.get(context)
 
     internal companion object Keys {
 
@@ -32,20 +31,23 @@ abstract class LooprSettingsManager(private val context: Context) {
     // GETS
     //
 
-    fun getLong(key: String, defaultValue: Long): Long {
-        val sharedPreferences = getSharedPreferences(context)
+    fun getByteArray(key: String): ByteArray? {
+        return getString(key)?.let { Base64.decode(it, Base64.DEFAULT) }
+    }
 
-        return sharedPreferences.getLong(key, defaultValue)
+    fun getLong(key: String, defaultValue: Long): Long {
+        return getString(key)?.toLong() ?: defaultValue
     }
 
     fun getString(key: String): String? {
-        val sharedPreferences = getSharedPreferences(context)
+        val sharedPreferences = getSharedPreferences()
 
-        return sharedPreferences.getString(key, null) ?: return null
+        return sharedPreferences.getString(key, null)?.let { crypto.decrypt(it) }
+                ?: return null
     }
 
     fun getStringArray(key: String): Array<String>? {
-        val jsonArray = getSharedPreferences(context).getString(key, null)
+        val jsonArray = getString(key)
 
         return jsonArray?.let { Gson().fromJson(it) }
     }
@@ -54,31 +56,32 @@ abstract class LooprSettingsManager(private val context: Context) {
     // PUTS
     //
 
-    fun putLong(key: String, value: Long) {
-        getSharedPreferences(context)
-                .edit()
-                .putLong(key, value)
-                .apply()
+    fun putByteArray(key: String, value: ByteArray?) {
+        putString(key, value?.let { Base64.encodeToString(value, Base64.DEFAULT) })
+    }
+
+    fun putLong(key: String, value: Long?) {
+        putString(key, value.toString())
     }
 
     fun putString(key: String, value: String?) {
-        getSharedPreferences(context)
+        getSharedPreferences()
                 .edit()
-                .putString(key, value)
+                .putString(key, value?.let { crypto.encrypt(it) })
                 .apply()
     }
 
-    fun putStringArray(key: String, value: Array<String>) {
-        getSharedPreferences(context)
+    fun putStringArray(key: String, value: Array<String>?) {
+        getSharedPreferences()
                 .edit()
-                .putString(key, Gson().toJson(value))
+                .putString(key, value?.let { crypto.encrypt(Gson().toJson(it)) })
                 .apply()
     }
 
 
     // MARK - Private Methods
 
-    private fun getSharedPreferences(context: Context): SharedPreferences {
+    private fun getSharedPreferences(): SharedPreferences {
         return context.getSharedPreferences(KEY_PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 

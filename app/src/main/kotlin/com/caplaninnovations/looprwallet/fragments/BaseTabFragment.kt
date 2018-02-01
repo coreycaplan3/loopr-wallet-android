@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BottomNavigationActivity
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.utilities.getAttrColorStateList
 import com.caplaninnovations.looprwallet.utilities.logv
 
@@ -32,14 +32,14 @@ abstract class BaseTabFragment : BaseFragment() {
         super.onResume()
         logv("${this::class.java.simpleName}: Showing tab layout...")
 
-        (activity as? BottomNavigationActivity)?.showTabLayout(tabLayout)
+        (activity as? BottomNavigationHandler.OnTabVisibilityChangeListener)?.onShowTabLayout(tabLayout)
     }
 
     override fun onPause() {
         super.onPause()
 
         logv("${this::class.java.simpleName}: Hiding tab layout...")
-        (activity as? BottomNavigationActivity)?.hideTabLayout(tabLayout)
+        (activity as? BottomNavigationHandler.OnTabVisibilityChangeListener)?.onHideTabLayout(tabLayout)
     }
 
 }

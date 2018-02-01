@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.*
@@ -10,6 +11,7 @@ import android.view.Menu
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.settings.LooprThemeSettings
+import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
 import com.caplaninnovations.looprwallet.realm.LooprRealm
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
 import io.realm.Realm
@@ -17,10 +19,18 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 
 /**
- * Created by Corey on 1/14/2018.
+ * Created by Corey on 1/14/2018
+ *
  * Project: LooprWallet
- * <p></p>
+ *
  * Purpose of Class:
+ *
+ * To run any necessary initialization code before starting a standardized
+ * activity. A standardized activity is an activity that is core to the application and is not one
+ * of the following:
+ * - [SignInActivity]
+ * - [IntroActivity]
+ * - [WelcomeActivity]
  */
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -70,8 +80,17 @@ abstract class BaseActivity : AppCompatActivity() {
         /*
          * Realm setup
          */
-        // TODO find out currently signed-in wallet
-        realm = LooprRealm.get("realm-name", ByteArray(1))
+        val walletSettings = LooprWalletSettings(this)
+        val currentWallet = walletSettings.getCurrentWallet()
+
+        if(currentWallet == null) {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        } else {
+            val walletKey = walletSettings.getRealmKey(currentWallet)
+            // TODO fixme
+            realm = LooprRealm.get(currentWallet, walletKey)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

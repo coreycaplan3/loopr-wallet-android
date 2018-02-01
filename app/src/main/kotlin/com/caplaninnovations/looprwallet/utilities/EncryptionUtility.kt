@@ -1,6 +1,6 @@
 package com.caplaninnovations.looprwallet.utilities
 
-import kotlin.experimental.and
+import java.security.SecureRandom
 
 /**
  * Created by Corey Caplan on 1/29/18.
@@ -10,16 +10,10 @@ import kotlin.experimental.and
  */
 object EncryptionUtility {
 
-    private val hexArray = "0123456789ABCDEF".toCharArray()
-
-    fun bytesToHex(bytes: ByteArray): String {
-        val hexChars = CharArray(bytes.size * 2)
-        for (j in bytes.indices) {
-            val number = (bytes[j] and 0xFF.toByte()).toInt()
-            hexChars[j * 2] = hexArray[number.ushr(4)]
-            hexChars[j * 2 + 1] = hexArray[(number and 0x0F)]
-        }
-        return String(hexChars)
+    fun getNextRandomKey(): ByteArray {
+        val bytes = ByteArray(64)
+        SecureRandom().nextBytes(bytes)
+        return bytes
     }
 
 }

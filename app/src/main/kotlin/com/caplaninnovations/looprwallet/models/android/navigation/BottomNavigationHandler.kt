@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.activities
+package com.caplaninnovations.looprwallet.models.android.navigation
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment
 import android.widget.ImageView
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.fragments.MarketsParentFragment
 import com.caplaninnovations.looprwallet.fragments.MyWalletFragment
 import com.caplaninnovations.looprwallet.fragments.OrdersParentFragment
@@ -20,42 +21,60 @@ import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
- * Created by Corey on 1/17/2018.
- * Project: LooprWallet
- * <p></p>
- * Purpose of Class:
+ *  Created by Corey on 1/31/2018
+ *
+ *  Project: loopr-wallet-android
+ *
+ *  Purpose of Class:
+ *
+ * Handles all activity related to bottom navigation. Note, this class should be cleared out in the
+ * activity's
+ *
+ * This class should be instantiated in the corresponding activity's [BaseActivity.onCreate] method.
  */
-abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelectedListener {
+class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceState: Bundle?) :
+        TabLayout.OnTabSelectedListener {
+
+    interface OnTabVisibilityChangeListener {
+
+        fun onShowTabLayout(tabLayout: TabLayout?)
+        fun onHideTabLayout(tabLayout: TabLayout?)
+    }
 
     interface OnBottomNavigationReselectedLister {
 
         fun onBottomNavigationReselected()
     }
 
-    private val tagMarkets = "_Markets"
-    private val tagOrders = "_Orders"
-    private val tagMyWallet = "_MyWallet"
+    companion object Tags {
+
+        private const val KEY_MARKETS = "_MARKETS"
+        private const val KEY_ORDERS = "_ORDERS"
+        private const val KEY_MY_WALLET = "_MY_WALLET"
+    }
+
+    private val bottomNavigation = activity.bottomNavigation
 
     /**
      * A list of pairs that points a fragment tag to a function that will create its fragment
      */
-    private lateinit var fragmentTagPairs: List<Pair<String, Fragment>>
+    private val fragmentTagPairs: List<Pair<String, Fragment>> = listOf<Pair<String, Fragment>>(
+            Pair(KEY_MARKETS, MarketsParentFragment()),
+            Pair(KEY_ORDERS, OrdersParentFragment()),
+            Pair(KEY_MY_WALLET, MyWalletFragment())
+    )
 
-    private lateinit var fragmentStackHistory: FragmentStackHistory
+    private val fragmentStackHistory = FragmentStackHistory(savedInstanceState)
 
     private var currentFragment: Fragment? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private var animatorForHidingTab: Animator? = null
 
-        fragmentTagPairs = getFragmentTagPairs()
-
-        fragmentStackHistory = FragmentStackHistory(savedInstanceState)
-
+    init {
         setupTabs()
 
         if (savedInstanceState == null) {
-            val tag = tagMarkets
+            val tag = KEY_MARKETS
             logv("Initializing $tag fragment...")
 
             onTabSelected(bottomNavigation.findTabByTag(tag))
@@ -63,70 +82,45 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
             val tag = fragmentStackHistory.peek()!!
             logv("Pushing $tag fragment...")
 
-            updateTab(bottomNavigation.findTabByTag(tag), true)
-            currentFragment = supportFragmentManager.findFragmentByTag(tag)
+            updateTabUi(bottomNavigation.findTabByTag(tag), true)
+            currentFragment = activity.supportFragmentManager.findFragmentByTag(tag)
         }
 
         bottomNavigation.addOnTabSelectedListener(this)
     }
 
-    override fun onBackPressed() {
+    /**
+     * Called when the activity's [BaseActivity.onBackPressed] method is called
+     * @return True if the activity should be finished or false otherwise
+     */
+    fun onBackPressed(): Boolean {
         fragmentStackHistory.pop()
 
         if (fragmentStackHistory.isEmpty()) {
-            finish()
+            return true
         } else {
             bottomNavigation.findTabByTag(fragmentStackHistory.peek()!!)?.select()
+            return false
         }
     }
-
-    fun showTabLayout(tabLayout: TabLayout?) {
-        fun runAnimation() {
-            tabLayout?.animateToHeight(
-                    getResourceIdFromAttrId(android.R.attr.actionBarSize),
-                    R.integer.tab_layout_animation_duration)
-        }
-
-        if (animatorForHidingTab?.isRunning == true) {
-            animatorForHidingTab?.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    runAnimation()
-                }
-            })
-        } else {
-            runAnimation()
-        }
-    }
-
-    private var animatorForHidingTab: Animator? = null
-    fun hideTabLayout(tabLayout: TabLayout?) {
-        animatorForHidingTab =
-                tabLayout?.animateFromHeight(
-                        getResourceIdFromAttrId(android.R.attr.actionBarSize),
-                        R.integer.tab_layout_animation_duration)
-    }
-
-    /*
-     * Tab-Operations
-     */
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {
         logv("Tag unselected: ${tab?.tag}")
-        updateTab(tab, false)
+        updateTabUi(tab, false)
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         logv("Tag selected: ${tab?.tag}")
 
-        updateTab(tab, true)
+        updateTabUi(tab, true)
 
         (tab?.tag as? String)?.let { tag: String ->
             logv("Pushing $tag onto stack...")
             fragmentStackHistory.push(tag)
 
-            val newFragment = supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
+            val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
             FragmentStackTransactionController(R.id.activityContainer, newFragment, tag, currentFragment)
-                    .commitTransactionNow(supportFragmentManager)
+                    .commitTransactionNow(activity.supportFragmentManager)
 
             currentFragment = newFragment
         }
@@ -134,42 +128,28 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
         (tab?.tag as? String)?.let {
-            val fragment = supportFragmentManager.findFragmentByTag(it)
+            val fragment = activity.supportFragmentManager.findFragmentByTag(it)
             (fragment as? OnBottomNavigationReselectedLister)?.onBottomNavigationReselected()
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
+    fun onHideTabLayout(tabLayout: TabLayout?) {
+        animatorForHidingTab =
+                tabLayout?.animateFromHeight(
+                        activity.getResourceIdFromAttrId(android.R.attr.actionBarSize),
+                        R.integer.tab_layout_animation_duration)
+    }
 
+    fun onSaveInstanceState(outState: Bundle?) {
         fragmentStackHistory.saveState(outState)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        bottomNavigation.clearOnTabSelectedListeners()
-    }
-
-
     // MARK - Private Methods
-
-    private fun getFragmentTagPairs(): List<Pair<String, Fragment>> {
-        val fragmentTagPairs = arrayListOf<Pair<String, Fragment>>(
-                Pair(tagMarkets, MarketsParentFragment()),
-                Pair(tagOrders, OrdersParentFragment()),
-                Pair(tagMyWallet, MyWalletFragment())
-        )
-
-        return fragmentTagPairs.map {
-            Pair(it.first, supportFragmentManager.findFragmentByTag(it.first) ?: it.second)
-        }
-    }
 
     private fun setupTabs() {
 
         fun createTab(tag: String, @DrawableRes iconRes: Int, @StringRes textRes: Int): TabLayout.Tab {
-            val tabView = layoutInflater.inflate(R.layout.bottom_navigation_tab, bottomNavigation, false)
+            val tabView = activity.layoutInflater.inflate(R.layout.bottom_navigation_tab, bottomNavigation, false)
             tabView.findById<ImageView>(R.id.bottomNavigationTabImage)?.setImageResource(iconRes)
             tabView.findById<TextView>(R.id.bottomNavigationTabText)?.setText(textRes)
 
@@ -185,19 +165,19 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
         }
 
         bottomNavigation.addTab(
-                createTab(tagMarkets, R.drawable.ic_show_chart_white_24dp, R.string.markets)
+                createTab(KEY_MARKETS, R.drawable.ic_show_chart_white_24dp, R.string.markets)
         )
 
         bottomNavigation.addTab(
-                createTab(tagOrders, R.drawable.ic_assignment_white_24dp, R.string.orders)
+                createTab(KEY_ORDERS, R.drawable.ic_assignment_white_24dp, R.string.orders)
         )
 
         bottomNavigation.addTab(
-                createTab(tagMyWallet, R.drawable.ic_account_balance_wallet_white_24dp, R.string.my_wallet)
+                createTab(KEY_MY_WALLET, R.drawable.ic_account_balance_wallet_white_24dp, R.string.my_wallet)
         )
     }
 
-    private fun updateTab(tab: TabLayout.Tab?, isSelected: Boolean) {
+    private fun updateTabUi(tab: TabLayout.Tab?, isSelected: Boolean) {
         Handler().postDelayed({
             tab?.let {
                 if (isSelected) {
@@ -217,7 +197,25 @@ abstract class BottomNavigationActivity : BaseActivity(), TabLayout.OnTabSelecte
                             ?.animateTextSizeChange(R.dimen.bottom_navigation_text_size)
                 }
             }
-        }, resources.getInteger(R.integer.ripple_duration).toLong())
+        }, activity.resources.getInteger(R.integer.ripple_duration).toLong())
+    }
+
+    fun onShowTabLayout(tabLayout: TabLayout?) {
+        fun runAnimation() {
+            tabLayout?.animateToHeight(
+                    activity.getResourceIdFromAttrId(android.R.attr.actionBarSize),
+                    R.integer.tab_layout_animation_duration)
+        }
+
+        if (animatorForHidingTab?.isRunning == true) {
+            animatorForHidingTab?.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    runAnimation()
+                }
+            })
+        } else {
+            runAnimation()
+        }
     }
 
 }

@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BottomNavigationActivity
 import com.caplaninnovations.looprwallet.utilities.logd
-import com.caplaninnovations.looprwallet.utilities.logv
 
 /**
  * Created by Corey on 1/17/2018.

@@ -9,8 +9,11 @@ import android.support.multidex.MultiDexApplication
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.activities.SignInActivity
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsManager
+import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
 import com.caplaninnovations.looprwallet.utilities.logi
 import com.google.firebase.crash.FirebaseCrash
+import io.realm.Realm
+import io.realm.android.internal.android.crypto.SyncCryptoFactory
 
 /**
  * Created by Corey on 1/18/2018.
@@ -24,7 +27,7 @@ class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallb
         lateinit var application: LooprWalletApp
     }
 
-    private lateinit var looprSettingsManager: LooprSettingsManager
+    private lateinit var looprSettingsManager: LooprWalletSettings
 
     private val handler = Handler()
 
@@ -35,24 +38,27 @@ class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallb
 
         application = this
 
-        looprSettingsManager = LooprSettingsManager(applicationContext)
+        looprSettingsManager = LooprWalletSettings(applicationContext)
+
+        Realm.init(this)
 
         FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }
 
+    @Volatile
+    var shouldUnlockApp: Boolean = false
+
     override fun onActivityResumed(activity: Activity?) {
+        if (shouldUnlockApp && activity != null) {
+            SyncCryptoFactory.get(activity).unlock_keystore()
+        }
         handler.removeCallbacksAndMessages(null)
+        shouldUnlockApp = false
     }
 
     override fun onActivityPaused(activity: Activity?) {
         val lockoutTime = looprSettingsManager.getLockoutTime()
-        handler.postDelayed({
-            val intent = Intent(applicationContext, SignInActivity::class.java)
-            // TODO clear backstack and force sign in to be before everything else.
-            // TODO Restore backstack on success
-
-            applicationContext.startActivity(intent)
-        }, lockoutTime)
+        handler.postDelayed({ shouldUnlockApp = true }, lockoutTime)
     }
 
     override fun onActivityStarted(activity: Activity?) {

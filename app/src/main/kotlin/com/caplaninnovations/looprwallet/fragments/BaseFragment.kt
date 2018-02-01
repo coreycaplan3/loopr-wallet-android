@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.realm.LooprRealm
 import com.caplaninnovations.looprwallet.utilities.logv
 import io.realm.Realm
+import io.realm.android.internal.android.crypto.SyncCryptoFactory
 
 
 /**
@@ -23,6 +24,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // TODO
+        val x = SyncCryptoFactory.get(context)
         realm = LooprRealm.get("realm-name", ByteArray(1))
 
         return super.onCreateView(inflater, container, savedInstanceState)
