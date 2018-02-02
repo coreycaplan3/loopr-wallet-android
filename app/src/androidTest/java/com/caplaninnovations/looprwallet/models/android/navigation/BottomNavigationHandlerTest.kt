@@ -19,6 +19,7 @@ import android.support.test.rule.ActivityTestRule
 import android.view.View
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
@@ -125,10 +126,12 @@ class BottomNavigationHandlerTest {
 
     @Test
     fun onSaveInstanceState() {
-    }
+        val bundle = Bundle()
+        bottomNavigationHandler.onSaveInstanceState(bundle)
 
-    @After
-    fun tearDown() {
+        assertTrue(bundle.containsKey(FragmentStackHistory.KEY_STACK))
+
+        assertFalse(bundle.isEmpty)
     }
 
 }

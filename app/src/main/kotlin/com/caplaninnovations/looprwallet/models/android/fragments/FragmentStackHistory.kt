@@ -12,12 +12,14 @@ import kotlin.collections.ArrayList
  */
 class FragmentStackHistory(savedInstanceState: Bundle?) {
 
-    private val tagStack = "_Stack"
+    companion object {
+        const val KEY_STACK = "_STACK"
+    }
 
     private val stack: ArrayList<String>
 
     init {
-        stack = savedInstanceState?.getStringArrayList(tagStack) ?: ArrayList()
+        stack = savedInstanceState?.getStringArrayList(KEY_STACK) ?: ArrayList()
     }
 
     /**
@@ -65,7 +67,7 @@ class FragmentStackHistory(savedInstanceState: Bundle?) {
     fun isEmpty() = stack.isEmpty()
 
     fun saveState(outState: Bundle?) {
-        outState?.putStringArrayList(tagStack, stack)
+        outState?.putStringArrayList(KEY_STACK, stack)
     }
 
     // MARK - Private Methods

@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.*
 import android.support.design.widget.CoordinatorLayout
@@ -46,6 +47,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
         private const val KEY_IS_TOOLBAR_COLLAPSED = "_IS_TOOLBAR_COLLAPSED"
         private const val KEY_IS_PROGRESS_DIALOG_SHOWING = "_IS_PROGRESS_DIALOG_SHOWING"
+        private const val KEY_PROGRESS_DIALOG_TITLE = "_PROGRESS_DIALOG_TITLE"
     }
 
     private lateinit var cipherClient: CipherClient
@@ -62,6 +64,9 @@ abstract class BaseActivity : AppCompatActivity() {
     abstract val isSecurityActivity: Boolean
 
     lateinit var progressDialog: AppCompatDialog
+
+    @IdRes
+    var progressDialogTitle: Int? = null
 
     var realm: Realm? = null
 
@@ -80,7 +85,13 @@ abstract class BaseActivity : AppCompatActivity() {
         /*
          * Progress Dialog Setup
          */
-        progressDialog = AppCompatDialog(this)
+        progressDialog = object : AppCompatDialog(this) {
+            override fun setTitle(titleId: Int) {
+                super.setTitle(titleId)
+                progressDialogTitle = titleId
+            }
+        }
+
         progressDialog.setCancelable(false)
         progressDialog.setCanceledOnTouchOutside(false)
         if (savedInstanceState?.getBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING) == true) {
@@ -162,9 +173,11 @@ abstract class BaseActivity : AppCompatActivity() {
     fun disableToolbarCollapsing(container: ViewGroup?) {
         val layoutParams = (toolbar?.layoutParams as? AppBarLayout.LayoutParams)
         layoutParams?.scrollFlags = 0
+        toolbar.requestLayout()
 
         (container?.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
             it.behavior = null
+
             container.requestLayout()
         }
 
@@ -183,6 +196,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
         outState?.putBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
         outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)
+        progressDialogTitle?.let { outState?.putInt(KEY_PROGRESS_DIALOG_TITLE, it) }
     }
 
     override fun onDestroy() {
