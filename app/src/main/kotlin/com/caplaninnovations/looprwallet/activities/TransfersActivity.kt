@@ -5,11 +5,10 @@ import com.caplaninnovations.looprwallet.R
 
 class TransfersActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override val contentView: Int
         get() = R.layout.activity_transfers
+
+    override val isSecurityActivity: Boolean
+        get() = true
 
 }

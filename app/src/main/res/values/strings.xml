@@ -88,4 +88,5 @@
     <string name="search">Search</string>
     <string name="trading_pair">Trading Pair</string>
     <string name="welcome">Welcome</string>
+    <string name="unlock_device">You must unlock your device to access this app</string>
 </resources>

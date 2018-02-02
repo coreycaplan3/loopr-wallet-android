@@ -16,12 +16,13 @@
         <item name="android:textColorSecondary">@color/lightSecondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
 
-        <!-- Overflow Menu -->
-        <item name="android:actionOverflowButtonStyle">@style/lightCustomOverflow</item>
+        <!-- Actionbar -->
+        <item name="titleTextColor">@color/darkPrimaryText</item>
+        <item name="actionOverflowButtonStyle">@style/lightCustomOverflow</item>
 
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/lightPrimary</item>
-        <item name="android:buttonStyle">@style/buttonStyle</item>
+        <item name="buttonStyle">@style/buttonStyle</item>
 
         <!-- Tabs -->
         <item name="tabWidgetTextColor">@color/light_tabs_text</item>
@@ -29,8 +30,8 @@
 
         <!-- Bottom Navigation -->
         <item name="bottomNavigationBackground">@color/lightBottomNavigationBackground</item>
-        <item name="bottomNavigationTextColor">@color/lightPrimaryText</item>
-        <item name="bottomNavigationTextColorSelected">@color/lightPrimaryTextDisabled</item>
+        <item name="bottomNavigationTextColor">@color/darkPrimaryText</item>
+        <item name="bottomNavigationTextColorSelected">@color/darkPrimaryTextDisabled</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">

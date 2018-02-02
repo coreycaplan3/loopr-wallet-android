@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.fragments.LooprFragmentPagerAdapter
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.utilities.logd
 import kotlinx.android.synthetic.main.fragment_orders_parent.*
 
@@ -16,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_orders_parent.*
  * <p></p>
  * Purpose of Class:
  */
-class OrdersParentFragment : BaseTabFragment(), BottomNavigationActivity.OnBottomNavigationReselectedLister {
+class OrdersParentFragment : BaseTabFragment(), BottomNavigationHandler.OnBottomNavigationReselectedLister {
 
     override var tabLayout: TabLayout? = null
 

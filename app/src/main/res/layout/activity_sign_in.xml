@@ -1,34 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include layout="@layout/appbar_main" />
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/activityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:orientation="vertical"
         android:paddingBottom="@dimen/standard_vertical_padding"
         android:paddingLeft="@dimen/standard_horizontal_padding"
         android:paddingRight="@dimen/standard_horizontal_padding"
-        android:paddingTop="@dimen/standard_vertical_padding">
+        android:paddingTop="?android:attr/actionBarSize">
 
-        <TextView
-            style="@style/TextAppearance.AppCompat.Display1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Welcome" />
-
-        <Button
+        <android.support.v7.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:text="Create new Wallet" />
+            android:layout_gravity="center_horizontal">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/standard_padding">
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Welcome" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/vertical_margin"
+                    android:text="Create New Wallet" />
+
+                <Button
+                    android:id="@+id/restoreWalletButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/vertical_margin"
+                    android:text="Restore Existing Wallet" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

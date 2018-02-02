@@ -14,8 +14,7 @@ class WelcomeActivity : BaseActivity() {
     override val contentView: Int
         get() = R.layout.activity_welcome
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    override val isSecurityActivity: Boolean
+        get() = false
 
 }

@@ -26,6 +26,9 @@ class TradingPairActivity : BaseActivity() {
     override val contentView: Int
         get() = R.layout.activity_trading_pair
 
+    override val isSecurityActivity: Boolean
+        get() = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

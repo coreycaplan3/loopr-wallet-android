@@ -1,10 +1,12 @@
 package com.caplaninnovations.looprwallet.utilities
 
+import android.content.Context
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.view.View
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_markets_parent.*
 
 /**
@@ -13,6 +15,14 @@ import kotlinx.android.synthetic.main.fragment_markets_parent.*
  * <p></p>
  * Purpose of Class:
  */
+fun Context.shortToast(@StringRes resId: Int) {
+    Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.longToast(@StringRes resId: Int) {
+    Toast.makeText(this, resId, Toast.LENGTH_LONG).show()
+}
+
 fun View.setPaddingTop(value: Int) {
     setPadding(paddingLeft, value, paddingRight, paddingBottom)
 }

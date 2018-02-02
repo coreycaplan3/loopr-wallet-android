@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.models.android.settings
 
 import android.content.Context
 import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
+import com.caplaninnovations.looprwallet.utilities.RealmUtility
 
 /**
  * Created by Corey Caplan on 1/31/18.
@@ -13,8 +14,9 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
 
     companion object {
 
-        private const val KEY_CURRENT_WALLET = "_CURRENT_WALLET"
-        private const val KEY_CURRENT_REALM = "CURRENT_REALM"
+        const val KEY_SECURITY_LOCKOUT_TIME_MILLIS = "_SECURITY_LOCKOUT_TIME_MILLIS"
+        const val KEY_CURRENT_WALLET = "_CURRENT_WALLET"
+        const val KEY_ALL_WALLETS = "_ALL_WALLETS"
     }
 
     /**
@@ -22,6 +24,9 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
      */
     object LockoutTimes {
         const val DEFAULT_LOCKOUT_TIME_MILLIS: Long = 1000 * 60
+        const val FIVE_MINUTES_MILLIS: Long = 1000 * 60 * 5
+        const val NONE_MILLIS: Long = 1000L
+
     }
 
     /**
@@ -29,7 +34,7 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
      * foreground.
      */
     fun getLockoutTime(): Long {
-        return getLong(Keys.KEY_SECURITY_LOCKOUT_TIME_MILLIS, DEFAULT_LOCKOUT_TIME_MILLIS)
+        return getLong(KEY_SECURITY_LOCKOUT_TIME_MILLIS, DEFAULT_LOCKOUT_TIME_MILLIS)
     }
 
     /**
@@ -49,19 +54,63 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
     }
 
     /**
-     * @param newWalletName The new wallet to be currently used. Can be null to "logout". Doing so
-     * should bring the user back to the sign in screen.
+     * Creates a wallet and sets the current wallet to this new one. Also creates a realm key and
+     * adds the new wallet to the list of all wallets.
+     *
+     * @param newWalletName The new wallet's name which will be set to the current wallet
      */
-    fun changeCurrentWallet(newWalletName: String?) {
-        putString(KEY_CURRENT_WALLET, newWalletName)
+    fun createWallet(newWalletName: String) {
+        putCurrentWallet(newWalletName)
+        addWallet(newWalletName)
+        putRealmKey(newWalletName, RealmUtility.createKey())
+    }
+
+    /**
+     * Removes the given wallet from the device. This also removes the realm encryption key and
+     * deletes the realm database.
+     *
+     * @param wallet The wallet to be removed from the device. This signs the current wallet out if
+     * the selected wallet is the current one
+     */
+    fun removeWallet(wallet: String) {
+        val allWallets = getAllWallets().filterNot { it == wallet }.toTypedArray()
+
+        putAllWallets(allWallets)
+        putRealmKey(wallet, null)
+
+        val newCurrentWallet = if (allWallets.isNotEmpty()) allWallets.first() else null
+        newCurrentWallet?.let { putCurrentWallet(newCurrentWallet) }
     }
 
     fun getRealmKey(walletName: String): ByteArray? {
         return getByteArray(walletName)
     }
 
-    fun putRealmKey(walletName: String, key: ByteArray) {
+    fun getAllWallets(): Array<String> {
+        return getStringArray(KEY_ALL_WALLETS) ?: arrayOf()
+    }
+
+    // MARK - Private methods
+
+    private fun addWallet(wallet: String) {
+        val allWallets = getStringArray(KEY_ALL_WALLETS)?.toMutableList() ?: ArrayList()
+
+        if (!allWallets.contains(wallet)) {
+            allWallets.add(0, wallet)
+            putAllWallets(allWallets.toTypedArray())
+        }
+    }
+
+    private fun putRealmKey(walletName: String, key: ByteArray?) {
         putByteArray(walletName, key)
+    }
+
+    private fun putCurrentWallet(newWalletName: String?) {
+        putString(KEY_CURRENT_WALLET, newWalletName)
+    }
+
+    private fun putAllWallets(allWallets: Array<String>) {
+        putStringArray(KEY_ALL_WALLETS, allWallets)
     }
 
 }

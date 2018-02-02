@@ -5,9 +5,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.realm.LooprRealm
+import com.caplaninnovations.looprwallet.utilities.RealmUtility
 import com.caplaninnovations.looprwallet.utilities.logv
 import io.realm.Realm
+import io.realm.android.CipherClient
 import io.realm.android.internal.android.crypto.SyncCryptoFactory
 
 
@@ -20,12 +23,13 @@ import io.realm.android.internal.android.crypto.SyncCryptoFactory
  */
 abstract class BaseFragment : Fragment() {
 
-    lateinit var realm: Realm
+    private var realm: Realm? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // TODO
-        val x = SyncCryptoFactory.get(context)
-        realm = LooprRealm.get("realm-name", ByteArray(1))
+        val cipherClient = CipherClient(context)
+        if(cipherClient.isKeystoreUnlocked) {
+            realm = RealmUtility.initialize(activity as BaseActivity)
+        }
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -37,8 +41,8 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        realm.removeAllChangeListeners()
-        realm.close()
+        realm?.removeAllChangeListeners()
+        realm?.close()
 
         super.onDestroyView()
     }

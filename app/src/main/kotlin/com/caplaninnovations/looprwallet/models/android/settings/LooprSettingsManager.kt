@@ -5,8 +5,7 @@ import android.content.SharedPreferences
 import android.util.Base64
 import com.caplaninnovations.looprwallet.utilities.fromJson
 import com.google.gson.Gson
-import io.realm.android.internal.android.crypto.SyncCrypto
-import io.realm.android.internal.android.crypto.SyncCryptoFactory
+import io.realm.android.CipherClient
 
 /**
  *  Created by Corey on 1/29/2018.
@@ -16,16 +15,14 @@ import io.realm.android.internal.android.crypto.SyncCryptoFactory
  */
 abstract class LooprSettingsManager(private val context: Context) {
 
-    val crypto: SyncCrypto = SyncCryptoFactory.get(context)
-
     internal companion object Keys {
-
-        const val KEY_SECURITY_LOCKOUT_TIME_MILLIS = "_SECURITY_LOCKOUT_TIME_MILLIS"
 
         const val KEY_THEME = "_THEME"
 
-        private const val KEY_PREFERENCE_NAME = "_LooprWallet"
+        const val KEY_SHARED_PREFERENCE_NAME = "_LooprWallet"
     }
+
+    private val cipherClient: CipherClient = CipherClient(context)
 
     //
     // GETS
@@ -42,8 +39,7 @@ abstract class LooprSettingsManager(private val context: Context) {
     fun getString(key: String): String? {
         val sharedPreferences = getSharedPreferences()
 
-        return sharedPreferences.getString(key, null)?.let { crypto.decrypt(it) }
-                ?: return null
+        return sharedPreferences.getString(key, null)?.let { cipherClient.decrypt(it) }
     }
 
     fun getStringArray(key: String): Array<String>? {
@@ -57,7 +53,7 @@ abstract class LooprSettingsManager(private val context: Context) {
     //
 
     fun putByteArray(key: String, value: ByteArray?) {
-        putString(key, value?.let { Base64.encodeToString(value, Base64.DEFAULT) })
+        putString(key, value?.let { Base64.encodeToString(it, Base64.DEFAULT) })
     }
 
     fun putLong(key: String, value: Long?) {
@@ -65,16 +61,23 @@ abstract class LooprSettingsManager(private val context: Context) {
     }
 
     fun putString(key: String, value: String?) {
-        getSharedPreferences()
-                .edit()
-                .putString(key, value?.let { crypto.encrypt(it) })
-                .apply()
+        if (value != null) {
+            getSharedPreferences()
+                    .edit()
+                    .putString(key, cipherClient.encrypt(value))
+                    .apply()
+        } else {
+            getSharedPreferences()
+                    .edit()
+                    .remove(key)
+                    .apply()
+        }
     }
 
     fun putStringArray(key: String, value: Array<String>?) {
         getSharedPreferences()
                 .edit()
-                .putString(key, value?.let { crypto.encrypt(Gson().toJson(it)) })
+                .putString(key, value?.let { cipherClient.encrypt(Gson().toJson(it)) })
                 .apply()
     }
 
@@ -82,7 +85,7 @@ abstract class LooprSettingsManager(private val context: Context) {
     // MARK - Private Methods
 
     private fun getSharedPreferences(): SharedPreferences {
-        return context.getSharedPreferences(KEY_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        return context.getSharedPreferences(KEY_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 
 }

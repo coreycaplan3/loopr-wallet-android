@@ -48,9 +48,9 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
 
     companion object Tags {
 
-        private const val KEY_MARKETS = "_MARKETS"
-        private const val KEY_ORDERS = "_ORDERS"
-        private const val KEY_MY_WALLET = "_MY_WALLET"
+        const val KEY_MARKETS = "_MARKETS"
+        const val KEY_ORDERS = "_ORDERS"
+        const val KEY_MY_WALLET = "_MY_WALLET"
     }
 
     private val bottomNavigation = activity.bottomNavigation

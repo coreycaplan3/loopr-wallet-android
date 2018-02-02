@@ -25,4 +25,12 @@ internal class LooprMigration : RealmMigration {
     private fun migrate0To1(realm: DynamicRealm?) {
     }
 
+    override fun hashCode(): Int {
+        return javaClass.simpleName.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return other != null && other.javaClass == this.javaClass
+    }
+
 }

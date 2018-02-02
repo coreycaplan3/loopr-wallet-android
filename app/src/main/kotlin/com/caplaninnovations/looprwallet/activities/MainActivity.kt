@@ -2,9 +2,11 @@ package com.caplaninnovations.looprwallet.activities
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.view.MenuItem
 
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
+import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
@@ -16,6 +18,9 @@ class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChan
     override val contentView: Int
         get() = R.layout.activity_main
 
+    override val isSecurityActivity: Boolean
+        get() = true
+
     private lateinit var bottomNavigationHandler: BottomNavigationHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +30,7 @@ class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChan
     }
 
     override fun onBackPressed() {
-        if(bottomNavigationHandler.onBackPressed()) {
+        if (bottomNavigationHandler.onBackPressed()) {
             finish()
         }
     }

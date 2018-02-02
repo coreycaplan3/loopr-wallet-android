@@ -8,13 +8,19 @@ import android.support.design.widget.CoordinatorLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDialog
 import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.Toast
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.settings.LooprThemeSettings
 import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
-import com.caplaninnovations.looprwallet.realm.LooprRealm
+import com.caplaninnovations.looprwallet.utilities.RealmUtility
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
+import com.caplaninnovations.looprwallet.utilities.logd
+import com.caplaninnovations.looprwallet.utilities.longToast
 import io.realm.Realm
+import io.realm.android.CipherClient
+import io.realm.android.internal.android.crypto.SyncCryptoFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 
@@ -36,17 +42,30 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private var isToolbarCollapseEnabled: Boolean = false
 
-    private val tagIsToolbarCollapsed = "_IsToolbarCollapsed"
-    private val tagIsProgressDialogShowing = "_IsProgressDialogShowing"
+    private companion object {
+
+        private const val KEY_IS_TOOLBAR_COLLAPSED = "_IS_TOOLBAR_COLLAPSED"
+        private const val KEY_IS_PROGRESS_DIALOG_SHOWING = "_IS_PROGRESS_DIALOG_SHOWING"
+    }
+
+    private lateinit var cipherClient: CipherClient
 
     /**
      * A layout-resource used to set the *contentView* of the current activity
      */
     abstract val contentView: Int
 
+    /**
+     * True if this activity requires the user to be authenticated (enter OS passcode) or false
+     * otherwise
+     */
+    abstract val isSecurityActivity: Boolean
+
     lateinit var progressDialog: AppCompatDialog
 
-    lateinit var realm: Realm
+    var realm: Realm? = null
+
+    var currentWallet: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +75,7 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(contentView)
         setSupportActionBar(toolbar)
 
-        isToolbarCollapseEnabled = savedInstanceState?.getBoolean(tagIsToolbarCollapsed) ?: false
+        isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED) ?: false
 
         /*
          * Progress Dialog Setup
@@ -64,7 +83,7 @@ abstract class BaseActivity : AppCompatActivity() {
         progressDialog = AppCompatDialog(this)
         progressDialog.setCancelable(false)
         progressDialog.setCanceledOnTouchOutside(false)
-        if (savedInstanceState?.getBoolean(tagIsProgressDialogShowing) == true) {
+        if (savedInstanceState?.getBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING) == true) {
             progressDialog.show()
         }
 
@@ -77,19 +96,22 @@ abstract class BaseActivity : AppCompatActivity() {
             disableToolbarCollapsing(null)
         }
 
-        /*
-         * Realm setup
-         */
-        val walletSettings = LooprWalletSettings(this)
-        val currentWallet = walletSettings.getCurrentWallet()
-
-        if(currentWallet == null) {
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
+        if (isSecurityActivity) {
+            logd("Setting up security activity...")
+            setupCipherClient()
         } else {
-            val walletKey = walletSettings.getRealmKey(currentWallet)
-            // TODO fixme
-            realm = LooprRealm.get(currentWallet, walletKey)
+            logd("Not a security activity...")
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (isSecurityActivity && !cipherClient.isKeystoreUnlocked) {
+            this.longToast(R.string.unlock_device)
+            cipherClient.unlockKeystore()
+        } else if (isSecurityActivity) {
+            setupCipherClient()
         }
     }
 
@@ -99,6 +121,14 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean = true
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        currentWallet?.let {
+            LooprWalletSettings(this).removeWallet(it)
+            startActivity(Intent(this, SignInActivity::class.java))
+        }
+        return false
+    }
 
     /**
      * Enables the toolbar to be collapsed when scrolling
@@ -135,29 +165,42 @@ abstract class BaseActivity : AppCompatActivity() {
 
         (container?.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
             it.behavior = null
+            container.requestLayout()
         }
 
         (activityContainer.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
             // The container is "under" the actionBar, so we must add margin so it is below it
             it.topMargin = resources.getDimension(getResourceIdFromAttrId(android.R.attr.actionBarSize)).toInt()
             activityContainer.layoutParams = it
+            activityContainer.requestLayout()
         }
 
-        isToolbarCollapseEnabled = true
+        isToolbarCollapseEnabled = false
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
 
-        outState?.putBoolean(tagIsToolbarCollapsed, isToolbarCollapseEnabled)
-        outState?.putBoolean(tagIsProgressDialogShowing, progressDialog.isShowing)
+        outState?.putBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
+        outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        realm.removeAllChangeListeners()
-        realm.close()
+        realm?.removeAllChangeListeners()
+        realm?.close()
     }
 
+    // MARK - Private Methods
+
+    private fun setupCipherClient() {
+        cipherClient = CipherClient(this)
+
+        if (!cipherClient.isKeystoreUnlocked) {
+            cipherClient.unlockKeystore()
+        } else {
+            realm = RealmUtility.initialize(this)
+        }
+    }
 }
