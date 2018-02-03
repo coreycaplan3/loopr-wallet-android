@@ -49,7 +49,7 @@ class LooprThemeSettingsTest {
 
     @After
     fun tearDown() {
-        context.getSharedPreferences(LooprSettingsManager.KEY_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        context.getSharedPreferences(LooprSettingsImpl.KEY_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
                 .edit()
                 .clear()
                 .apply()

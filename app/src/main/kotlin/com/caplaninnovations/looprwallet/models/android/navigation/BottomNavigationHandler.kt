@@ -46,7 +46,7 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
         fun onBottomNavigationReselected()
     }
 
-    companion object Tags {
+    companion object {
 
         const val KEY_MARKETS = "_MARKETS"
         const val KEY_ORDERS = "_ORDERS"
@@ -64,11 +64,11 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
             Pair(KEY_MY_WALLET, MyWalletFragment())
     )
 
-    private val fragmentStackHistory = FragmentStackHistory(savedInstanceState)
+    val fragmentStackHistory = FragmentStackHistory(savedInstanceState)
 
-    private var currentFragment: Fragment? = null
+    var currentFragment: Fragment? = null
 
-    private var animatorForHidingTab: Animator? = null
+    var animatorForHidingTab: Animator? = null
 
     init {
         setupTabs()

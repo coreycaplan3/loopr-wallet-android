@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsManager.Keys.KEY_SHARED_PREFERENCE_NAME
+import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsImpl.Keys.KEY_SHARED_PREFERENCE_NAME
 import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings.*
 import org.junit.After
 import org.junit.Before

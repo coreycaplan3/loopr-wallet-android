@@ -15,11 +15,9 @@ import android.widget.Toast
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.settings.LooprThemeSettings
 import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
-import com.caplaninnovations.looprwallet.utilities.RealmUtility
-import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
-import com.caplaninnovations.looprwallet.utilities.logd
-import com.caplaninnovations.looprwallet.utilities.longToast
+import com.caplaninnovations.looprwallet.utilities.*
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.android.CipherClient
 import io.realm.android.internal.android.crypto.SyncCryptoFactory
 import kotlinx.android.synthetic.main.activity_main.*
@@ -70,6 +68,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     var realm: Realm? = null
 
+    var isCurrentWalletDeleted: Boolean = false
     var currentWallet: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,6 +136,8 @@ abstract class BaseActivity : AppCompatActivity() {
         currentWallet?.let {
             LooprWalletSettings(this).removeWallet(it)
             startActivity(Intent(this, SignInActivity::class.java))
+            isCurrentWalletDeleted = true
+            finish()
         }
         return false
     }
@@ -173,7 +174,7 @@ abstract class BaseActivity : AppCompatActivity() {
     fun disableToolbarCollapsing(container: ViewGroup?) {
         val layoutParams = (toolbar?.layoutParams as? AppBarLayout.LayoutParams)
         layoutParams?.scrollFlags = 0
-        toolbar.requestLayout()
+        toolbar?.requestLayout()
 
         (container?.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
             it.behavior = null
@@ -204,6 +205,18 @@ abstract class BaseActivity : AppCompatActivity() {
 
         realm?.removeAllChangeListeners()
         realm?.close()
+
+        if (isCurrentWalletDeleted && currentWallet != null) {
+            RealmUtility.closeAllRealmInstances(currentWallet!!, this)
+
+            val configuration = RealmConfiguration.Builder()
+                    .name(currentWallet!!)
+                    .build()
+
+            if (!Realm.deleteRealm(configuration)) {
+                loge("Error, could not delete realm!", IllegalStateException())
+            }
+        }
     }
 
     // MARK - Private Methods

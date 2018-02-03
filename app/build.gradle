@@ -91,10 +91,13 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     compile "com.google.code.gson:gson:2.8.0"
 
-    // Testing
+    // Unit Testing
     testImplementation "junit:junit:4.12"
     testImplementation 'org.mockito:mockito-core:2.7.6'
     testImplementation "android.arch.core:core-testing:$androidArchitectureComponentsVesrion"
+
+    // Android Testing and Integration Tests
+    androidTestImplementation 'org.mockito:mockito-core:2.7.6'
     androidTestImplementation "com.android.support.test:runner:1.0.1"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.1"
 }

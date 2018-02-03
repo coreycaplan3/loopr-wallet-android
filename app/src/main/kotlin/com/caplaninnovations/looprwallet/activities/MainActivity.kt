@@ -21,7 +21,7 @@ class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChan
     override val isSecurityActivity: Boolean
         get() = true
 
-    private lateinit var bottomNavigationHandler: BottomNavigationHandler
+    lateinit var bottomNavigationHandler: BottomNavigationHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

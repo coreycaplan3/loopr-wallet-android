@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.models.android.fragments
 
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.utilities.logv
 import kotlin.collections.ArrayList
 
@@ -69,6 +70,9 @@ class FragmentStackHistory(savedInstanceState: Bundle?) {
     fun saveState(outState: Bundle?) {
         outState?.putStringArrayList(KEY_STACK, stack)
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getStackSize(): Int = stack.size
 
     // MARK - Private Methods
 

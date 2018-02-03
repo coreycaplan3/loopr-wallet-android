@@ -14,19 +14,23 @@ import android.widget.TextView
  */
 class TopPaddingAssertion(@DimenRes private val dimensionResource: Int) : ViewAssertion {
 
-    override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
-        if (view?.paddingTop != view?.context?.resources?.getDimension(dimensionResource)?.toInt()) {
-            throw NoMatchingViewException.Builder().build()
+    override fun check(view: View?, noViewFoundException: NoMatchingViewException) {
+        val expectedPadding = view?.context?.resources?.getDimension(dimensionResource)?.toInt()
+        if (view?.paddingTop != expectedPadding) {
+            throw IllegalStateException("Invalid padding! " +
+                    "Expected $expectedPadding, but found ${view?.paddingTop}")
         }
     }
 
 }
 
-class HeightAssertion(@DimenRes private val heightResource: Int): ViewAssertion {
+class HeightAssertion(@DimenRes private val heightResource: Int) : ViewAssertion {
 
-    override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
-        if (view?.layoutParams?.height != view?.context?.resources?.getDimension(heightResource)?.toInt()) {
-            throw NoMatchingViewException.Builder().build()
+    override fun check(view: View?, noViewFoundException: NoMatchingViewException) {
+        val expectedHeight = view?.context?.resources?.getDimension(heightResource)?.toInt()
+        if (view?.layoutParams?.height != expectedHeight) {
+            throw IllegalStateException("Invalid height! " +
+                    "Expected $expectedHeight, but found ${view?.height}")
         }
     }
 
@@ -34,9 +38,10 @@ class HeightAssertion(@DimenRes private val heightResource: Int): ViewAssertion 
 
 class AlphaAssertion(private val alpha: Float) : ViewAssertion {
 
-    override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
+    override fun check(view: View?, noViewFoundException: NoMatchingViewException) {
         if (view?.alpha != alpha) {
-            throw NoMatchingViewException.Builder().build()
+            throw IllegalStateException("Invalid alpha! " +
+                    "Expected $alpha, but found ${view?.alpha}")
         }
     }
 
@@ -44,9 +49,12 @@ class AlphaAssertion(private val alpha: Float) : ViewAssertion {
 
 class TextSizeAssertion(@DimenRes private val textSizeResource: Int) : ViewAssertion {
 
-    override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
-        if ((view as? TextView)?.textSize != view?.context?.resources?.getDimension(textSizeResource)) {
-            throw NoMatchingViewException.Builder().build()
+    override fun check(view: View?, noViewFoundException: NoMatchingViewException) {
+        val expectedTextSize = view?.context?.resources?.getDimension(textSizeResource)
+        val foundTextSize = (view as? TextView)?.textSize
+        if (foundTextSize != expectedTextSize) {
+            throw IllegalStateException("Invalid text size! " +
+                    "Expected $expectedTextSize, but found $foundTextSize")
         }
     }
 

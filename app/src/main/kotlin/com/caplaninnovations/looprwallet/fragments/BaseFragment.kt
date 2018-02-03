@@ -23,7 +23,7 @@ import io.realm.android.internal.android.crypto.SyncCryptoFactory
  */
 abstract class BaseFragment : Fragment() {
 
-    private var realm: Realm? = null
+    var realm: Realm? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val cipherClient = CipherClient(context)

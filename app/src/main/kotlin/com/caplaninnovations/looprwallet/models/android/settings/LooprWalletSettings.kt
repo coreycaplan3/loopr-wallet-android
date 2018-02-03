@@ -1,6 +1,5 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
-import android.content.Context
 import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
 import com.caplaninnovations.looprwallet.utilities.RealmUtility
 
@@ -10,13 +9,14 @@ import com.caplaninnovations.looprwallet.utilities.RealmUtility
  * <p></p>
  * Purpose of Class:
  */
-class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
+class LooprWalletSettings(private val looprSettings: LooprSettings) {
 
     companion object {
 
         const val KEY_SECURITY_LOCKOUT_TIME_MILLIS = "_SECURITY_LOCKOUT_TIME_MILLIS"
         const val KEY_CURRENT_WALLET = "_CURRENT_WALLET"
         const val KEY_ALL_WALLETS = "_ALL_WALLETS"
+        const val KEY_REALM_KEY = "_REALM_KEY"
     }
 
     /**
@@ -34,7 +34,7 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
      * foreground.
      */
     fun getLockoutTime(): Long {
-        return getLong(KEY_SECURITY_LOCKOUT_TIME_MILLIS, DEFAULT_LOCKOUT_TIME_MILLIS)
+        return looprSettings.getLong(KEY_SECURITY_LOCKOUT_TIME_MILLIS, DEFAULT_LOCKOUT_TIME_MILLIS)
     }
 
     /**
@@ -42,7 +42,7 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
      * leaving the foreground.
      */
     fun putLockoutTime(lockoutTime: Long) {
-        putLong(KEY_SECURITY_LOCKOUT_TIME_MILLIS, lockoutTime)
+        looprSettings.putLong(KEY_SECURITY_LOCKOUT_TIME_MILLIS, lockoutTime)
     }
 
     /**
@@ -50,7 +50,20 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
      * the user must select or recover one
      */
     fun getCurrentWallet(): String? {
-        return getString(KEY_CURRENT_WALLET)
+        return looprSettings.getString(KEY_CURRENT_WALLET)
+    }
+
+    /**
+     * @return True if the wallet was selected, false otherwise
+     */
+    fun selectCurrentWallet(newCurrentWallet: String): Boolean {
+        val doesContainWallet = getAllWallets().contains(newCurrentWallet)
+
+        if (doesContainWallet) {
+            looprSettings.putString(KEY_CURRENT_WALLET, newCurrentWallet)
+        }
+
+        return doesContainWallet
     }
 
     /**
@@ -58,11 +71,20 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
      * adds the new wallet to the list of all wallets.
      *
      * @param newWalletName The new wallet's name which will be set to the current wallet
+
+     * @return True if the wallet was created successfully or false otherwise. A return of false
+     * is because a wallet with this name already exists
      */
-    fun createWallet(newWalletName: String) {
+    fun createWallet(newWalletName: String): Boolean {
+        if (getAllWallets().contains(newWalletName)) {
+            return false
+        }
+
         putCurrentWallet(newWalletName)
         addWallet(newWalletName)
         putRealmKey(newWalletName, RealmUtility.createKey())
+
+        return true
     }
 
     /**
@@ -71,29 +93,38 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
      *
      * @param wallet The wallet to be removed from the device. This signs the current wallet out if
      * the selected wallet is the current one
+     *
+     * @return True if the wallet was removed or false otherwise
      */
-    fun removeWallet(wallet: String) {
-        val allWallets = getAllWallets().filterNot { it == wallet }.toTypedArray()
+    fun removeWallet(wallet: String): Boolean {
+        var allWallets = getAllWallets()
+        if (!allWallets.contains(wallet)) {
+            return false
+        }
+
+        allWallets = allWallets.filterNot { it == wallet }.toTypedArray()
 
         putAllWallets(allWallets)
         putRealmKey(wallet, null)
 
         val newCurrentWallet = if (allWallets.isNotEmpty()) allWallets.first() else null
-        newCurrentWallet?.let { putCurrentWallet(newCurrentWallet) }
+        putCurrentWallet(newCurrentWallet)
+
+        return true
     }
 
     fun getRealmKey(walletName: String): ByteArray? {
-        return getByteArray(walletName)
+        return looprSettings.getByteArray(KEY_REALM_KEY + walletName)
     }
 
     fun getAllWallets(): Array<String> {
-        return getStringArray(KEY_ALL_WALLETS) ?: arrayOf()
+        return looprSettings.getStringArray(KEY_ALL_WALLETS) ?: arrayOf()
     }
 
     // MARK - Private methods
 
     private fun addWallet(wallet: String) {
-        val allWallets = getStringArray(KEY_ALL_WALLETS)?.toMutableList() ?: ArrayList()
+        val allWallets = looprSettings.getStringArray(KEY_ALL_WALLETS)?.toMutableList() ?: ArrayList()
 
         if (!allWallets.contains(wallet)) {
             allWallets.add(0, wallet)
@@ -102,15 +133,15 @@ class LooprWalletSettings(context: Context) : LooprSettingsManager(context) {
     }
 
     private fun putRealmKey(walletName: String, key: ByteArray?) {
-        putByteArray(walletName, key)
+        looprSettings.putByteArray(KEY_REALM_KEY + walletName, key)
     }
 
     private fun putCurrentWallet(newWalletName: String?) {
-        putString(KEY_CURRENT_WALLET, newWalletName)
+        looprSettings.putString(KEY_CURRENT_WALLET, newWalletName)
     }
 
     private fun putAllWallets(allWallets: Array<String>) {
-        putStringArray(KEY_ALL_WALLETS, allWallets)
+        looprSettings.putStringArray(KEY_ALL_WALLETS, allWallets)
     }
 
 }

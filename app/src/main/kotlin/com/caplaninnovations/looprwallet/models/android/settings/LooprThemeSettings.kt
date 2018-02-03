@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.annotation.StringDef
 import android.support.annotation.StyleRes
 import com.caplaninnovations.looprwallet.R
+import javax.inject.Inject
 
 /**
  * Created by Corey Caplan on 1/30/18.
@@ -11,34 +12,39 @@ import com.caplaninnovations.looprwallet.R
  * <p></p>
  * Purpose of Class:
  */
-class LooprThemeSettings(context: Context) : LooprSettingsManager(context) {
+class LooprThemeSettings(private val looprSettings: LooprSettings) {
 
-    @StringDef(KEY_LIGHT_THEME, KEY_DARK_THEME)
+    @StringDef(ThemeValues.KEY_LIGHT_THEME, ThemeValues.KEY_DARK_THEME)
     annotation class Name
 
     companion object {
+        const val KEY_THEME = "_THEME"
+    }
+
+    object ThemeValues {
         const val KEY_LIGHT_THEME = "_LIGHT_THEME"
         const val KEY_DARK_THEME = "_DARK_THEME"
     }
+
 
     /**
      * The theme for the application
      */
     @StyleRes
     fun getCurrentTheme(): Int {
-        val theme = getString(LooprSettingsManager.KEY_THEME) ?: KEY_LIGHT_THEME
+        val theme = looprSettings.getString(KEY_THEME) ?: ThemeValues.KEY_LIGHT_THEME
         return when (theme) {
-            KEY_LIGHT_THEME -> R.style.AppTheme_Light
-            KEY_DARK_THEME -> R.style.AppTheme_Dark
+            ThemeValues.KEY_LIGHT_THEME -> R.style.AppTheme_Light
+            ThemeValues.KEY_DARK_THEME -> R.style.AppTheme_Dark
             else -> throw IllegalStateException("Invalid theme, found: $theme")
         }
     }
 
     /**
-     *
+     * Saves the specified theme to be the current one
      */
     fun saveTheme(@Name theme: String) {
-        putString(KEY_THEME, theme)
+        looprSettings.putString(KEY_THEME, theme)
     }
 
 }
