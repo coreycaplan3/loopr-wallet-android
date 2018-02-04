@@ -24,12 +24,15 @@ class SplashScreenActivity : BaseActivity() {
         super.onResume()
 
         Handler().postDelayed({
-            val currentWallet = LooprWalletSettings(this).getCurrentWallet()
-            if (currentWallet == null) {
-                startActivity(Intent(this, SignInActivity::class.java))
-            } else {
-                startActivity(Intent(this, MainActivity::class.java))
-            }
+            val currentWallet = LooprWalletSettings(looprSettings).getCurrentWallet()
+            val intent =
+                    if (currentWallet == null) {
+                        Intent(this, SignInActivity::class.java)
+                    } else {
+                        Intent(this, MainActivity::class.java)
+                    }
+
+            startActivity(intent)
             finish()
         }, 1000)
     }

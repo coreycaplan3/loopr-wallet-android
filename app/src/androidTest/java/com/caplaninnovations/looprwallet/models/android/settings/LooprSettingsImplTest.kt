@@ -1,5 +1,9 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
+
 /**
  * Created by Corey Caplan on 2/3/18.
  * Project: loopr-wallet-android

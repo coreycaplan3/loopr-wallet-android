@@ -15,9 +15,9 @@ import io.realm.android.CipherClient
  */
 internal class LooprSettingsImpl(private val context: Context): LooprSettings {
 
-    private companion object {
+    companion object {
 
-        private const val KEY_SHARED_PREFERENCE_NAME = "_LooprWallet"
+        const val KEY_SHARED_PREFERENCE_NAME = "_LooprWallet"
     }
 
     private val cipherClient: CipherClient = CipherClient(context)

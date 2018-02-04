@@ -1,17 +1,11 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
-import android.content.Context
-import android.support.test.InstrumentationRegistry
-import android.support.test.filters.SmallTest
-import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsImpl.Keys.KEY_SHARED_PREFERENCE_NAME
+import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings.*
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 import org.junit.Assert.*
-import org.junit.runner.RunWith
 import java.util.*
 
 /**
@@ -21,19 +15,17 @@ import java.util.*
  *
  * Purpose of Class:
  */
-@RunWith(AndroidJUnit4::class)
-@SmallTest
-class LooprWalletSettingsTest {
-
-    private lateinit var context: Context
+class LooprWalletSettingsTest: BaseDaggerTest() {
 
     private lateinit var looprWalletSettings: LooprWalletSettings
 
     @Before
     fun setUp() {
-        context = InstrumentationRegistry.getTargetContext()
+        looprWalletSettings = LooprWalletSettings(looprSettings)
+    }
 
-        looprWalletSettings = LooprWalletSettings(context)
+    override fun putDefaultWallet() {
+        // NO OP; we don't want to put a default wallet; it will break these tests...
     }
 
     @Test
@@ -77,7 +69,7 @@ class LooprWalletSettingsTest {
 
         // Add a second wallet
 
-        val secondWalletName = "xander"
+        val secondWalletName = "alexander"
         looprWalletSettings.createWallet(secondWalletName)
 
         assertEquals(secondWalletName, looprWalletSettings.getCurrentWallet())
@@ -97,14 +89,6 @@ class LooprWalletSettingsTest {
         assertTrue(Arrays.equals(firstRealmKey, looprWalletSettings.getRealmKey(firstWalletName)))
 
         assertEquals(1, looprWalletSettings.getAllWallets().size)
-    }
-
-    @After
-    fun tearDown() {
-        context.getSharedPreferences(KEY_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-                .edit()
-                .clear()
-                .apply()
     }
 
 }

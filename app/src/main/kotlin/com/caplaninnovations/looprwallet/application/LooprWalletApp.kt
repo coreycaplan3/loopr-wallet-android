@@ -8,11 +8,13 @@ import android.support.multidex.MultiDexApplication
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.dagger.DaggerLooprProductionComponent
 import com.caplaninnovations.looprwallet.dagger.LooprProductionComponent
-import com.caplaninnovations.looprwallet.dagger.LooprProductionModule
+import com.caplaninnovations.looprwallet.dagger.LooprSettingsModule
+import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
 import com.caplaninnovations.looprwallet.utilities.logi
 import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
+import javax.inject.Inject
 
 /**
  * Created by Corey on 1/18/2018.
@@ -20,7 +22,7 @@ import io.realm.Realm
  * <p></p>
  * Purpose of Class:
  */
-class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
+open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
 
     companion object {
         lateinit var application: LooprWalletApp
@@ -29,6 +31,9 @@ class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallb
     private val handler = Handler()
 
     lateinit var looprProductionComponent: LooprProductionComponent
+
+    @Inject
+    lateinit var looprSettings: LooprSettings
 
     override fun onCreate() {
         super.onCreate()
@@ -39,15 +44,16 @@ class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallb
 
         Realm.init(this)
 
-        looprProductionComponent = DaggerLooprProductionComponent.builder()
-                .looprProductionModule(LooprProductionModule(applicationContext))
-                .build()
+        looprProductionComponent = provideDaggerComponent()
+        looprProductionComponent.inject(this)
 
         FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }
 
-    fun getLooprProductionComponent(): LooprProductionComponent {
-        return looprProductionComponent
+    open fun provideDaggerComponent(): LooprProductionComponent {
+        return DaggerLooprProductionComponent.builder()
+                .looprSettingsModule(LooprSettingsModule(applicationContext))
+                .build()
     }
 
     @Volatile
@@ -55,6 +61,7 @@ class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallb
 
     override fun onActivityResumed(activity: Activity?) {
         if (shouldUnlockApp && activity != null) {
+            // TODO
 //            SyncCryptoFactory.get(activity).unlock_keystore()
         }
         handler.removeCallbacksAndMessages(null)
@@ -63,7 +70,7 @@ class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallb
 
     override fun onActivityPaused(activity: Activity?) {
         activity?.let {
-            val lockoutTime = LooprWalletSettings(it).getLockoutTime()
+            val lockoutTime = LooprWalletSettings(looprSettings).getLockoutTime()
             if (lockoutTime != LooprWalletSettings.LockoutTimes.NONE_MILLIS) {
                 handler.postDelayed({ shouldUnlockApp = true }, lockoutTime)
             }

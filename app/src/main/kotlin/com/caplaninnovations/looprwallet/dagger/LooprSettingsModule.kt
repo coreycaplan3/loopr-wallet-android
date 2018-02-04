@@ -1,7 +1,8 @@
 package com.caplaninnovations.looprwallet.dagger
 
+import android.content.Context
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsImplTest
+import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -12,13 +13,12 @@ import javax.inject.Singleton
  * <p></p>
  * Purpose of Class:
  */
+
 @Module
-class LooprTestingModule() {
+open class LooprSettingsModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun provideLooprSettings(): LooprSettings {
-        return LooprSettingsImplTest()
-    }
+    fun provideLooprSettings(): LooprSettings = LooprSettingsImpl(context)
 
 }

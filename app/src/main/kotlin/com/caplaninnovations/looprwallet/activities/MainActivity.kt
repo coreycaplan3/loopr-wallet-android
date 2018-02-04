@@ -7,6 +7,7 @@ import android.view.MenuItem
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
+import com.caplaninnovations.looprwallet.utilities.loge
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**

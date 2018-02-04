@@ -11,17 +11,18 @@ import android.support.v7.app.AppCompatDialog
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.widget.Toast
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.models.android.settings.LooprThemeSettings
 import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
 import com.caplaninnovations.looprwallet.utilities.*
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.android.CipherClient
-import io.realm.android.internal.android.crypto.SyncCryptoFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
+import javax.inject.Inject
 
 /**
  * Created by Corey on 1/14/2018
@@ -63,18 +64,25 @@ abstract class BaseActivity : AppCompatActivity() {
 
     lateinit var progressDialog: AppCompatDialog
 
+    @Inject
+    lateinit var looprSettings: LooprSettings
+
     @IdRes
     var progressDialogTitle: Int? = null
 
     var realm: Realm? = null
 
-    var isCurrentWalletDeleted: Boolean = false
     var currentWallet: String? = null
+
+    // Private Variables
+    private var isCurrentWalletDeleted: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.setTheme(LooprThemeSettings(this).getCurrentTheme())
+        (application as LooprWalletApp).looprProductionComponent.inject(this)
+
+        this.setTheme(LooprThemeSettings(looprSettings).getCurrentTheme())
 
         setContentView(contentView)
         setSupportActionBar(toolbar)
@@ -134,7 +142,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         currentWallet?.let {
-            LooprWalletSettings(this).removeWallet(it)
+            LooprWalletSettings(looprSettings).removeWallet(it)
             startActivity(Intent(this, SignInActivity::class.java))
             isCurrentWalletDeleted = true
             finish()
@@ -206,15 +214,21 @@ abstract class BaseActivity : AppCompatActivity() {
         realm?.removeAllChangeListeners()
         realm?.close()
 
-        if (isCurrentWalletDeleted && currentWallet != null) {
-            RealmUtility.closeAllRealmInstances(currentWallet!!, this)
+        if (isCurrentWalletDeleted) {
+            currentWallet?.let {
+                RealmUtility.closeAllRealmInstances(it, this)
 
-            val configuration = RealmConfiguration.Builder()
-                    .name(currentWallet!!)
-                    .build()
+                val configuration = RealmConfiguration.Builder()
+                        .name(it)
+                        .build()
 
-            if (!Realm.deleteRealm(configuration)) {
-                loge("Error, could not delete realm!", IllegalStateException())
+                try {
+                    if (!Realm.deleteRealm(configuration)) {
+                        throw IllegalStateException("Could not delete realm!")
+                    }
+                } catch (e: Exception) {
+                    loge("An error occurred while deleting the Realm!", e)
+                }
             }
         }
     }

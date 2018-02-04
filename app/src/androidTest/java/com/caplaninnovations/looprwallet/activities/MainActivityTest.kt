@@ -2,31 +2,26 @@ package com.caplaninnovations.looprwallet.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.*
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 import org.hamcrest.Matchers
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.Rule
-import org.junit.runner.RunWith
 import java.util.concurrent.FutureTask
-
 
 /**
  * Created by Corey Caplan on 2/2/18.
@@ -35,31 +30,20 @@ import java.util.concurrent.FutureTask
  *
  * Purpose of Class:
  */
-@RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class MainActivityTest: BaseDaggerTest() {
 
     @get:Rule
-    val activityRule = ActivityTestRule(MainActivity::class.java, false, false)
+    val activityRule = ActivityTestRule(MainActivity::class.java)
 
     private lateinit var bottomNavigationHandler: BottomNavigationHandler
 
-    val walletName = "corey-" + MainActivityTest::class.java.simpleName
-
     @Before
     fun setUp() {
-        val didCreateWallet = LooprWalletSettings(InstrumentationRegistry.getTargetContext())
-                .createWallet(walletName)
-
-        assertTrue(didCreateWallet)
-
         val task = FutureTask {
             bottomNavigationHandler = activityRule.activity.bottomNavigationHandler
         }
 
-        activityRule.launchActivity(Intent())
-
         activityRule.activity.runOnUiThread(task)
-
         task.get()
     }
 
@@ -192,14 +176,6 @@ class MainActivityTest {
         assertTrue(bundle.containsKey(FragmentStackHistory.KEY_STACK))
 
         assertFalse(bundle.isEmpty)
-    }
-
-    @After
-    fun tearDown() {
-        val didRemoveWallet = LooprWalletSettings(InstrumentationRegistry.getTargetContext())
-                .removeWallet(walletName)
-
-        assertTrue(didRemoveWallet)
     }
 
 }

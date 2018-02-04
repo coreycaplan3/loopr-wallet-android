@@ -25,12 +25,13 @@ object RealmUtility {
     }
 
     fun initialize(activity: BaseActivity): Realm? {
-        val walletSettings = LooprWalletSettings(activity)
+        val walletSettings = LooprWalletSettings(activity.looprSettings)
 
         val currentWallet = walletSettings.getCurrentWallet()
         activity.currentWallet = currentWallet
 
         if (currentWallet == null) {
+            loge("STARTING SIGN IN ACTIVITY")
             val intent = Intent(activity, SignInActivity::class.java)
             activity.startActivity(intent)
             activity.finish()
