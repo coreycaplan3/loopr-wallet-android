@@ -3,10 +3,9 @@ package com.caplaninnovations.looprwallet.activities
 import android.content.Intent
 import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
+import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
+import com.caplaninnovations.looprwallet.utilities.loge
 import kotlinx.android.synthetic.main.activity_sign_in.*
-import javax.inject.Inject
 
 class SignInActivity : BaseActivity() {
 
@@ -20,11 +19,11 @@ class SignInActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         restoreWalletButton.setOnClickListener {
-            val settings = LooprWalletSettings(looprSettings)
-
-            // TODO delete me
+            // TODO delete me and replace with real implementation
             val walletName = "corey"
-            settings.createWallet(walletName)
+            if (!securityClient.createWallet(walletName)) {
+                loge("Could not create wallet!", IllegalStateException())
+            }
 
             startActivity(Intent(this, MainActivity::class.java))
             finish()

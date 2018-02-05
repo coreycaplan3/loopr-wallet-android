@@ -1,14 +1,12 @@
 package com.caplaninnovations.looprwallet.dagger
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
-import com.caplaninnovations.looprwallet.utilities.loge
+import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import junit.framework.Assert.assertTrue
 import org.junit.Before
-import org.junit.runner.RunWith
+import org.junit.Test
+import java.util.concurrent.FutureTask
 import javax.inject.Inject
 
 /**
@@ -20,28 +18,36 @@ import javax.inject.Inject
  *
  *
  */
-@RunWith(AndroidJUnit4::class)
-abstract class BaseDaggerTest {
+open class BaseDaggerTest {
 
     @Inject
-    lateinit var looprSettings: LooprSettings
+    lateinit var walletSettings: WalletSettings
 
-    val defaultWalletName = "corey-test"
+    lateinit var component: LooprTestComponent
 
     @Before
     fun baseDaggerSetup() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext
         val app = (context as TestLooprWalletApp)
-        val component = app.provideDaggerComponent() as LooprTestComponent
+        component = app.provideDaggerComponent() as LooprTestComponent
         component.inject(this)
 
         putDefaultWallet()
     }
 
     open fun putDefaultWallet() {
-        loge("PUT DEFAULT WALLET")
-        val didCreateWallet = LooprWalletSettings(looprSettings).createWallet(defaultWalletName)
+        val didCreateWallet = walletSettings.createWallet("corey-test")
         assertTrue(didCreateWallet)
+    }
+
+    fun noOp() {
+        // This function is a no-op, used to prevent an exception being thrown for there being no
+        // test methods in this class (but it uses the AndroidJUnit4 Test Runner)
+    }
+
+    fun waitForAnimationsAndTask(task: FutureTask<*>) {
+        task.get()
+        Thread.sleep(300)
     }
 
 }

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.utilities.str
 
 /**
@@ -13,10 +14,10 @@ import com.caplaninnovations.looprwallet.utilities.str
  * <p></p>
  * Purpose of Class:
  */
-class LooprFragmentPagerAdapter(fm: FragmentManager, private val fragmentList: List<Pair<String, Fragment>>)
+class LooprFragmentPagerAdapter(fm: FragmentManager, private val fragmentList: List<Pair<String, BaseFragment>>)
     : FragmentStatePagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment = fragmentList[position].second
+    override fun getItem(position: Int): BaseFragment = fragmentList[position].second
 
     override fun getCount(): Int = fragmentList.size
 

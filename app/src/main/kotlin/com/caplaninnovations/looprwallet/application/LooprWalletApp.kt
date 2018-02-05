@@ -3,14 +3,10 @@ package com.caplaninnovations.looprwallet.application
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import android.os.Handler
 import android.support.multidex.MultiDexApplication
 import com.caplaninnovations.looprwallet.BuildConfig
-import com.caplaninnovations.looprwallet.dagger.DaggerLooprProductionComponent
-import com.caplaninnovations.looprwallet.dagger.LooprProductionComponent
-import com.caplaninnovations.looprwallet.dagger.LooprSettingsModule
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
+import com.caplaninnovations.looprwallet.dagger.*
+import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.utilities.logi
 import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
@@ -28,12 +24,10 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
         lateinit var application: LooprWalletApp
     }
 
-    private val handler = Handler()
-
     lateinit var looprProductionComponent: LooprProductionComponent
 
     @Inject
-    lateinit var looprSettings: LooprSettings
+    lateinit var securityClient: SecurityClient
 
     override fun onCreate() {
         super.onCreate()
@@ -53,27 +47,22 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
     open fun provideDaggerComponent(): LooprProductionComponent {
         return DaggerLooprProductionComponent.builder()
                 .looprSettingsModule(LooprSettingsModule(applicationContext))
+                .looprRealmModule(LooprRealmModule())
+                .looprSecurityModule(LooprSecurityModule(applicationContext))
                 .build()
     }
 
-    @Volatile
-    var shouldUnlockApp: Boolean = false
-
     override fun onActivityResumed(activity: Activity?) {
-        if (shouldUnlockApp && activity != null) {
-            // TODO
-//            SyncCryptoFactory.get(activity).unlock_keystore()
+        activity?.let {
+            if (!securityClient.isUnlocked()) {
+                securityClient.unlockLooprApp(it)
+            }
         }
-        handler.removeCallbacksAndMessages(null)
-        shouldUnlockApp = false
     }
 
     override fun onActivityPaused(activity: Activity?) {
         activity?.let {
-            val lockoutTime = LooprWalletSettings(looprSettings).getLockoutTime()
-            if (lockoutTime != LooprWalletSettings.LockoutTimes.NONE_MILLIS) {
-                handler.postDelayed({ shouldUnlockApp = true }, lockoutTime)
-            }
+            securityClient.beginLockCountdown()
         }
     }
 

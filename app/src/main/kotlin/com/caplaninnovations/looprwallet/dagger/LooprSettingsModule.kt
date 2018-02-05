@@ -2,7 +2,8 @@ package com.caplaninnovations.looprwallet.dagger
 
 import android.content.Context
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsImpl
+import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
+import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -15,10 +16,18 @@ import javax.inject.Singleton
  */
 
 @Module
-open class LooprSettingsModule(private val context: Context) {
+class LooprSettingsModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun provideLooprSettings(): LooprSettings = LooprSettingsImpl(context)
+    fun provideLooprWalletSettings(): WalletSettings {
+        return WalletSettings(LooprSettings.getInstance(context))
+    }
+
+    @Singleton
+    @Provides
+    fun provideLooprThemeSettings(): ThemeSettings {
+        return ThemeSettings(LooprSettings.getInstance(context))
+    }
 
 }

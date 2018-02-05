@@ -1,15 +1,19 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
-import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
+import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
 import com.caplaninnovations.looprwallet.utilities.RealmUtility
+import com.caplaninnovations.looprwallet.models.security.SecurityClient
 
 /**
  * Created by Corey Caplan on 1/31/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
- * Purpose of Class:
+ *
+ * Purpose of Class: To interact directly with settings, putting or getting values. This class
+ * does not contain much logic, just core essentials. Logic associated with this class can be seen
+ * in conjunction with [SecurityClient]
  */
-class LooprWalletSettings(private val looprSettings: LooprSettings) {
+class WalletSettings(private val looprSettings: LooprSettings) {
 
     companion object {
 
@@ -124,7 +128,8 @@ class LooprWalletSettings(private val looprSettings: LooprSettings) {
     // MARK - Private methods
 
     private fun addWallet(wallet: String) {
-        val allWallets = looprSettings.getStringArray(KEY_ALL_WALLETS)?.toMutableList() ?: ArrayList()
+        val allWallets = looprSettings.getStringArray(KEY_ALL_WALLETS)?.toMutableList()
+                ?: ArrayList()
 
         if (!allWallets.contains(wallet)) {
             allWallets.add(0, wallet)

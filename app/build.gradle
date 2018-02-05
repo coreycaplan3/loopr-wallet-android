@@ -43,7 +43,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Android Multidex for apps with more than 65,536 methods
-    compile 'com.android.support:multidex:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:multidex:1.0.2'
 
     // Android Native Libraries
     ext.androidNativeVersion = '27.0.2'
@@ -62,15 +63,15 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // Networking
-    implementation "com.squareup.retrofit2:retrofit:2.3.0"
-    implementation "com.github.bumptech.glide:glide:3.7.0"
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
 
     // Architecture Components
     ext.androidArchitectureComponentsVesrion = '1.1.0'
     implementation "android.arch.lifecycle:extensions:$androidArchitectureComponentsVesrion"
     implementation "android.arch.lifecycle:reactivestreams:$androidArchitectureComponentsVesrion"
     implementation "android.arch.lifecycle:common-java8:$androidArchitectureComponentsVesrion"
-    implementation "android.arch.paging:runtime:1.0.0-alpha5"
+    implementation 'android.arch.paging:runtime:1.0.0-alpha5'
 
     // Firebase
     ext.firebaseVersion = '11.8.0'
@@ -81,26 +82,27 @@ dependencies {
     implementation "com.google.firebase:firebase-perf:$firebaseVersion"
 
     // Blockchain Dependencies
-    implementation "org.web3j:core:3.1.1-android"
+    implementation 'org.web3j:core:3.1.1-android'
 
     // Realm
-    implementation "io.realm:android-adapters:2.1.1"
-    implementation "io.realm:secure-userstore:1.0.1"
+    implementation 'io.realm:android-adapters:2.1.1'
+    implementation 'io.realm:secure-userstore:1.0.1'
 
     // Other
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation "com.google.code.gson:gson:2.8.0"
+    implementation 'com.google.code.gson:gson:2.8.0'
 
     // Unit Testing
-    testImplementation "junit:junit:4.12"
+    testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.7.6'
     testImplementation "android.arch.core:core-testing:$androidArchitectureComponentsVesrion"
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // Android Testing and Integration Tests
+    androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'org.mockito:mockito-core:2.7.6'
-    androidTestImplementation "com.android.support.test:runner:1.0.1"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.1"
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
 }
 repositories {

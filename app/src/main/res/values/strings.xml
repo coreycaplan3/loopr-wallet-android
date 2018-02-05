@@ -89,4 +89,7 @@
     <string name="trading_pair">Trading Pair</string>
     <string name="welcome">Welcome</string>
     <string name="unlock_device">You must unlock your device to access this app</string>
+    <string name="exit_app">Exit App?</string>
+    <string name="exit_app_rationale">Are you sure you want to exit the app? Your progress will be lost</string>
+    <string name="exit">Exit</string>
 </resources>

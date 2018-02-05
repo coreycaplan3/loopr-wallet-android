@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.activities
 
-import android.content.Intent
 import android.os.Bundle
+import android.support.test.espresso.Espresso
 import android.support.test.espresso.Espresso.*
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.*
@@ -30,10 +30,10 @@ import java.util.concurrent.FutureTask
  *
  * Purpose of Class:
  */
-class MainActivityTest: BaseDaggerTest() {
+class MainActivityTest : BaseDaggerTest() {
 
     @get:Rule
-    val activityRule = ActivityTestRule(MainActivity::class.java)
+    val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java)
 
     private lateinit var bottomNavigationHandler: BottomNavigationHandler
 
@@ -57,33 +57,37 @@ class MainActivityTest: BaseDaggerTest() {
 
     @Test
     fun onBackPressedMultipleTimes() {
+        // Current stack = MARKETS
         val bottomNavigationHandler = activityRule.activity.bottomNavigationHandler
 
         onView(withTagValue(Matchers.`is`(BottomNavigationHandler.KEY_ORDERS)))
                 .perform(click())
 
         // Assert the tab selection propagated successfully
+        // Current stack = ORDERS -- MARKETS
         assertEquals(BottomNavigationHandler.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
 
         onView(withTagValue(Matchers.`is`(BottomNavigationHandler.KEY_MY_WALLET)))
                 .perform(click())
 
         // Assert the tab selection propagated successfully
+        // Current stack = MY_WALLET -- ORDERS -- MARKETS
         assertEquals(BottomNavigationHandler.KEY_MY_WALLET, bottomNavigationHandler.fragmentStackHistory.peek())
 
         onView(withTagValue(Matchers.`is`(BottomNavigationHandler.KEY_MARKETS)))
                 .perform(click())
 
         // Assert the tab selection propagated successfully
+        // Current stack = MARKETS -- MY_WALLET -- ORDERS
         assertEquals(BottomNavigationHandler.KEY_MARKETS, bottomNavigationHandler.fragmentStackHistory.peek())
 
         // Assert that the same fragment wasn't pushed on twice
         assertEquals(3, bottomNavigationHandler.fragmentStackHistory.getStackSize())
 
-        ViewActions.pressBack()
+        Espresso.pressBack()
         assertEquals(BottomNavigationHandler.KEY_MY_WALLET, bottomNavigationHandler.fragmentStackHistory.peek())
 
-        ViewActions.pressBack()
+        Espresso.pressBack()
         assertEquals(BottomNavigationHandler.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
 
         // Can't use the view action's press back since it would throw an exception by leaving the activity
@@ -97,13 +101,15 @@ class MainActivityTest: BaseDaggerTest() {
         // The markets tab is the default selected one
 
         val markets = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationHandler.KEY_MARKETS)!!
+        assertNotNull(markets)
+
         val task = FutureTask { bottomNavigationHandler.onTabUnselected(markets) }
         activityRule.activity.runOnUiThread(task)
 
-        // Wait for any possible animations to be complete
-        task.get()
+        waitForAnimationsAndTask(task)
 
         val customView = markets.customView!!
+        assertNotNull(customView)
 
         onView(Matchers.`is`(customView)).check(TopPaddingAssertion(R.dimen.bottom_navigation_margin_top))
 
@@ -116,20 +122,18 @@ class MainActivityTest: BaseDaggerTest() {
     @Test
     fun onTabSelected() {
         // The markets tab is the default selected one
-        val task = FutureTask {
-            val orders = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationHandler.KEY_ORDERS)!!
-            bottomNavigationHandler.onTabSelected(orders)
-        }
+        val orders = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationHandler.KEY_ORDERS)!!
+        assertNotNull(orders)
+
+        val task = FutureTask { bottomNavigationHandler.onTabSelected(orders) }
         activityRule.activity.runOnUiThread(task)
 
-        // Wait for any possible animations to be complete
-        task.get()
-        Thread.sleep(300)
+        waitForAnimationsAndTask(task)
 
         assertEquals(BottomNavigationHandler.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
 
-        val orders = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationHandler.KEY_ORDERS)!!
         val customView = orders.customView!!
+        assertNotNull(customView)
 
         onView(Matchers.`is`(customView)).check(TopPaddingAssertion(R.dimen.bottom_navigation_margin_top_selected))
 
@@ -146,12 +150,13 @@ class MainActivityTest: BaseDaggerTest() {
 
     @Test
     fun onHideTabLayout() {
-        val tabs = activityRule.activity.marketsTabs!!
+        val tabs = activityRule.activity.marketsTabs
+        assertNotNull(tabs)
+
         val task = FutureTask { bottomNavigationHandler.onHideTabLayout(tabs) }
         activityRule.activity.runOnUiThread(task)
 
-        // Wait for runnable to finish
-        task.get()
+        waitForAnimationsAndTask(task)
 
         onView(Matchers.`is`(tabs)).check(HeightAssertion(R.dimen.zero))
     }
@@ -159,10 +164,12 @@ class MainActivityTest: BaseDaggerTest() {
     @Test
     fun onShowTabLayout() {
         val tabs = activityRule.activity.marketsTabs!!
+        assertNotNull(tabs)
+
         val task = FutureTask { bottomNavigationHandler.onShowTabLayout(tabs) }
         activityRule.activity.runOnUiThread(task)
 
-        task.get()
+        waitForAnimationsAndTask(task)
 
         val resource = activityRule.activity.getResourceIdFromAttrId(android.R.attr.actionBarSize)
         onView(Matchers.`is`(tabs)).check(HeightAssertion(resource))

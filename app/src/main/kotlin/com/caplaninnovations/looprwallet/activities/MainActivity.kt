@@ -1,13 +1,12 @@
 package com.caplaninnovations.looprwallet.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.view.MenuItem
 
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
-import com.caplaninnovations.looprwallet.utilities.loge
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
@@ -15,6 +14,17 @@ import kotlinx.android.synthetic.main.bottom_navigation.*
  * open the app (assuming they are signed in & authenticated).
  */
 class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChangeListener {
+
+    companion object {
+
+        private const val KEY_FINISH_ALL = "_FINISH_ALL"
+
+        fun createIntentToFinishApp(): Intent {
+            return Intent(LooprWalletApp.application.applicationContext, MainActivity::class.java)
+                    .putExtra(KEY_FINISH_ALL, true)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    }
 
     override val contentView: Int
         get() = R.layout.activity_main
@@ -28,6 +38,11 @@ class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChan
         super.onCreate(savedInstanceState)
 
         bottomNavigationHandler = BottomNavigationHandler(this, savedInstanceState)
+
+        if (intent.getBooleanExtra(KEY_FINISH_ALL, false)) {
+            // The user requested to exit the app
+            finish()
+        }
     }
 
     override fun onBackPressed() {

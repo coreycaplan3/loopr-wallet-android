@@ -1,6 +1,5 @@
 package com.caplaninnovations.looprwallet.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.design.widget.AppBarLayout
@@ -13,13 +12,12 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprThemeSettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
+import com.caplaninnovations.looprwallet.dagger.LooprProductionComponent
+import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
+import com.caplaninnovations.looprwallet.models.security.SecurityClient
+import com.caplaninnovations.looprwallet.realm.RealmClient
 import com.caplaninnovations.looprwallet.utilities.*
 import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.android.CipherClient
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import javax.inject.Inject
@@ -49,8 +47,6 @@ abstract class BaseActivity : AppCompatActivity() {
         private const val KEY_PROGRESS_DIALOG_TITLE = "_PROGRESS_DIALOG_TITLE"
     }
 
-    private lateinit var cipherClient: CipherClient
-
     /**
      * A layout-resource used to set the *contentView* of the current activity
      */
@@ -62,27 +58,32 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     abstract val isSecurityActivity: Boolean
 
+    lateinit var looprProductionComponent: LooprProductionComponent
+
     lateinit var progressDialog: AppCompatDialog
 
     @Inject
-    lateinit var looprSettings: LooprSettings
+    lateinit var themeSettings: ThemeSettings
+
+    @Inject
+    lateinit var securityClient: SecurityClient
+
+    @Inject
+    lateinit var realmClient: RealmClient
 
     @IdRes
     var progressDialogTitle: Int? = null
 
     var realm: Realm? = null
 
-    var currentWallet: String? = null
-
-    // Private Variables
-    private var isCurrentWalletDeleted: Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as LooprWalletApp).looprProductionComponent.inject(this)
+        looprProductionComponent = (application as LooprWalletApp).looprProductionComponent
 
-        this.setTheme(LooprThemeSettings(looprSettings).getCurrentTheme())
+        looprProductionComponent.inject(this)
+
+        this.setTheme(themeSettings.getCurrentTheme())
 
         setContentView(contentView)
         setSupportActionBar(toolbar)
@@ -113,23 +114,32 @@ abstract class BaseActivity : AppCompatActivity() {
         } else {
             disableToolbarCollapsing(null)
         }
-
-        if (isSecurityActivity) {
-            logd("Setting up security activity...")
-            setupCipherClient()
-        } else {
-            logd("Not a security activity...")
-        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (isSecurityActivity && !cipherClient.isKeystoreUnlocked) {
+        if (isSecurityActivity && !securityClient.isAndroidKeystoreUnlocked()) {
             this.longToast(R.string.unlock_device)
-            cipherClient.unlockKeystore()
-        } else if (isSecurityActivity) {
-            setupCipherClient()
+            securityClient.unlockAndroidKeystore()
+        } else if (isSecurityActivity && realm == null) {
+            /*
+             * We can initialize the Realm now, since the Keystore is unlocked.
+             *
+             * NOTE, we check if it's null since we don't want to override an already-initialized
+             * realm.
+             */
+            val walletName = securityClient.getCurrentWallet()
+            val encryptionKey = securityClient.getCurrentWalletEncryptionKey()
+            if (walletName != null && encryptionKey != null) {
+                realm = realmClient.getInstance(walletName, encryptionKey)
+            } else {
+                // There is no current wallet... we need to prompt the user to sign in.
+                // This should never happen, since we can't get to a "securityActivity" without
+                // passing through the SplashScreen first.
+                loge("There is no current wallet... prompting the user to sign in", IllegalStateException())
+                securityClient.onNoCurrentWalletSelected(this)
+            }
         }
     }
 
@@ -141,13 +151,31 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean = true
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        currentWallet?.let {
-            LooprWalletSettings(looprSettings).removeWallet(it)
-            startActivity(Intent(this, SignInActivity::class.java))
-            isCurrentWalletDeleted = true
-            finish()
+        /*
+         * TODO This will be replaced down the road with a "select different wallet and remove
+         * TODO wallet" feature
+         */
+        securityClient.getCurrentWallet()?.let {
+
+            realm.removeListenersAndClose()
+
+            securityClient.removeWallet(it)
+            if (securityClient.getCurrentWallet() == null) {
+                securityClient.onNoCurrentWalletSelected(this)
+            }
         }
         return false
+    }
+
+    /**
+     * Updates the provided container, based on the current toolbar mode (collapsing or static).
+     */
+    fun updateContainerBasedOnToolbarMode(container: ViewGroup?) {
+        if (isToolbarCollapseEnabled) {
+            enableToolbarCollapsing(container)
+        } else {
+            disableToolbarCollapsing(container)
+        }
     }
 
     /**
@@ -186,13 +214,13 @@ abstract class BaseActivity : AppCompatActivity() {
 
         (container?.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
             it.behavior = null
-
             container.requestLayout()
         }
 
         (activityContainer.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
             // The container is "under" the actionBar, so we must add margin so it is below it
             it.topMargin = resources.getDimension(getResourceIdFromAttrId(android.R.attr.actionBarSize)).toInt()
+            logd("Action bar size: ${it.topMargin}px")
             activityContainer.layoutParams = it
             activityContainer.requestLayout()
         }
@@ -211,37 +239,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        realm?.removeAllChangeListeners()
-        realm?.close()
-
-        if (isCurrentWalletDeleted) {
-            currentWallet?.let {
-                RealmUtility.closeAllRealmInstances(it, this)
-
-                val configuration = RealmConfiguration.Builder()
-                        .name(it)
-                        .build()
-
-                try {
-                    if (!Realm.deleteRealm(configuration)) {
-                        throw IllegalStateException("Could not delete realm!")
-                    }
-                } catch (e: Exception) {
-                    loge("An error occurred while deleting the Realm!", e)
-                }
-            }
-        }
+        realm.removeListenersAndClose()
     }
 
-    // MARK - Private Methods
-
-    private fun setupCipherClient() {
-        cipherClient = CipherClient(this)
-
-        if (!cipherClient.isKeystoreUnlocked) {
-            cipherClient.unlockKeystore()
-        } else {
-            realm = RealmUtility.initialize(this)
-        }
-    }
 }

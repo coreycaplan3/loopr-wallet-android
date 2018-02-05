@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
+import kotlinx.android.synthetic.main.fragment_markets_favorites.*
 
 /**
  * Created by Corey Caplan on 1/19/18.
@@ -14,8 +15,16 @@ import com.caplaninnovations.looprwallet.R
  */
 class FavoriteMarketsFragment : BaseFragment() {
 
+    override var container: ViewGroup? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_markets_favorites, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        container = favoriteMarketsContainer
     }
 
 }

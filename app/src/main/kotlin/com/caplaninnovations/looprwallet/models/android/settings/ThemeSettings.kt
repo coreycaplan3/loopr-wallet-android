@@ -12,7 +12,7 @@ import javax.inject.Inject
  * <p></p>
  * Purpose of Class:
  */
-class LooprThemeSettings(private val looprSettings: LooprSettings) {
+class ThemeSettings(private val looprSettings: LooprSettings) {
 
     @StringDef(ThemeValues.KEY_LIGHT_THEME, ThemeValues.KEY_DARK_THEME)
     annotation class Name

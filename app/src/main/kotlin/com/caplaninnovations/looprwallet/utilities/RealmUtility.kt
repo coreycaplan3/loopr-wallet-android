@@ -1,12 +1,5 @@
 package com.caplaninnovations.looprwallet.utilities
 
-import android.content.Intent
-import android.util.Base64
-import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.activities.SignInActivity
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
-import com.caplaninnovations.looprwallet.realm.LooprRealm
 import io.realm.Realm
 import java.security.SecureRandom
 
@@ -24,37 +17,11 @@ object RealmUtility {
         return bytes
     }
 
-    fun initialize(activity: BaseActivity): Realm? {
-        val walletSettings = LooprWalletSettings(activity.looprSettings)
+}
 
-        val currentWallet = walletSettings.getCurrentWallet()
-        activity.currentWallet = currentWallet
-
-        if (currentWallet == null) {
-            loge("STARTING SIGN IN ACTIVITY")
-            val intent = Intent(activity, SignInActivity::class.java)
-            activity.startActivity(intent)
-            activity.finish()
-            return null
-        } else {
-            val walletKey = walletSettings.getRealmKey(currentWallet)
-
-            return if (walletKey != null) {
-                logv("Successfully retrieved wallet key: ${Base64.encodeToString(walletKey, Base64.DEFAULT)}")
-                LooprRealm.get(currentWallet, walletKey)
-            } else {
-                loge("Why is the walletKey null?", IllegalStateException())
-                null
-            }
-        }
+fun Realm?.removeListenersAndClose() {
+    if(this != null && !this.isClosed) {
+        this.removeAllChangeListeners()
+        this.close()
     }
-
-    fun closeAllRealmInstances(realmInstanceName: String, activity: BaseActivity) {
-        activity.realm?.close()
-
-        activity.supportFragmentManager.fragments.forEach {
-            (it as? BaseFragment)?.realm?.close()
-        }
-    }
-
 }

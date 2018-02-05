@@ -152,6 +152,7 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
             val tabView = activity.layoutInflater.inflate(R.layout.bottom_navigation_tab, bottomNavigation, false)
             tabView.findById<ImageView>(R.id.bottomNavigationTabImage)?.setImageResource(iconRes)
             tabView.findById<TextView>(R.id.bottomNavigationTabText)?.setText(textRes)
+            tabView.tag = tag
 
             val tab = bottomNavigation.newTab()
                     .setCustomView(tabView)

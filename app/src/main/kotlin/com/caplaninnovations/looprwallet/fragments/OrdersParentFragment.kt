@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.fragments
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,21 +21,20 @@ import kotlinx.android.synthetic.main.fragment_orders_parent.*
 class OrdersParentFragment : BaseTabFragment(), BottomNavigationHandler.OnBottomNavigationReselectedLister {
 
     override var tabLayout: TabLayout? = null
+        get() = activity?.findViewById(R.id.ordersTabs)
+
+    override var viewPager: ViewPager? = null
+        get() = ordersViewPager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        tabLayout = activity?.findViewById(R.id.ordersTabs)
         return inflater.inflate(R.layout.fragment_orders_parent, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        ordersViewPager.adapter = LooprFragmentPagerAdapter(childFragmentManager, listOf(
+    override fun getAdapterContent(): List<Pair<String, BaseFragment>> {
+        return listOf(
                 Pair(getString(R.string.open), OpenOrdersFragment()),
                 Pair(getString(R.string.closed), ClosedOrdersFragment())
-        ))
-
-        tabLayout?.setupWithViewPager(ordersViewPager)
+        )
     }
 
     override fun onBottomNavigationReselected() {

@@ -10,8 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light">
-
-        <uses-library android:name="android.test.runner"/>
+        <uses-library android:name="android.test.runner" />
 
         <activity
             android:name=".activities.SplashScreenActivity"
@@ -22,38 +21,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name" />
-
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
-
         <activity
             android:name=".activities.IntroActivity"
             android:label="@string/title_activity_intro" />
-
         <activity
             android:name=".activities.SignInActivity"
             android:label="@string/title_activity_sign_in" />
-
         <activity
             android:name=".activities.TransfersActivity"
             android:label="@string/transfer" />
-
         <activity
             android:name=".activities.SearchActivity"
             android:label="@string/search" />
-
         <activity
             android:name=".activities.TradingPairActivity"
             android:label="@string/trading_pair" />
-
         <activity
             android:name=".activities.WelcomeActivity"
             android:label="@string/welcome" />
+        <activity android:name=".activities.SecurityActivity"></activity>
     </application>
 
 </manifest>

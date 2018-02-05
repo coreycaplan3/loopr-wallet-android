@@ -1,10 +1,9 @@
 package com.caplaninnovations.looprwallet.activities
 
 import android.content.Intent
-import android.os.Bundle
 import android.os.Handler
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.models.android.settings.LooprWalletSettings
+import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 
 /**
  * Created by Corey Caplan on 2/1/18.
@@ -24,9 +23,8 @@ class SplashScreenActivity : BaseActivity() {
         super.onResume()
 
         Handler().postDelayed({
-            val currentWallet = LooprWalletSettings(looprSettings).getCurrentWallet()
             val intent =
-                    if (currentWallet == null) {
+                    if (securityClient.getCurrentWallet() == null) {
                         Intent(this, SignInActivity::class.java)
                     } else {
                         Intent(this, MainActivity::class.java)
