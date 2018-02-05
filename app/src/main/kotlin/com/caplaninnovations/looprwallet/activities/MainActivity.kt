@@ -17,7 +17,7 @@ class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChan
 
     companion object {
 
-        private const val KEY_FINISH_ALL = "_FINISH_ALL"
+        const val KEY_FINISH_ALL = "_FINISH_ALL"
 
         fun createIntentToFinishApp(): Intent {
             return Intent(LooprWalletApp.application.applicationContext, MainActivity::class.java)
@@ -39,9 +39,20 @@ class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChan
 
         bottomNavigationHandler = BottomNavigationHandler(this, savedInstanceState)
 
-        if (intent.getBooleanExtra(KEY_FINISH_ALL, false)) {
+        isIntentForClosingApplication()
+    }
+
+    /**
+     * @return True if the intent for [getIntent] was sent to close the application or false
+     * otherwise.
+     */
+    fun isIntentForClosingApplication(): Boolean {
+        return if (intent.getBooleanExtra(KEY_FINISH_ALL, false)) {
             // The user requested to exit the app
             finish()
+            true
+        } else {
+            false
         }
     }
 

@@ -18,8 +18,7 @@ import com.caplaninnovations.looprwallet.utilities.logv
  */
 class FragmentStackTransactionController(@IdRes private val container: Int,
                                          private val newFragment: Fragment,
-                                         private val newFragmentTag: String,
-                                         private val oldFragment: Fragment?) {
+                                         private val newFragmentTag: String) {
 
     @IntDef(
             FragmentTransaction.TRANSIT_NONE.toLong(),

@@ -119,10 +119,8 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
             fragmentStackHistory.push(tag)
 
             val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
-            FragmentStackTransactionController(R.id.activityContainer, newFragment, tag, currentFragment)
+            FragmentStackTransactionController(R.id.activityContainer, newFragment, tag)
                     .commitTransactionNow(activity.supportFragmentManager)
-
-            currentFragment = newFragment
         }
     }
 

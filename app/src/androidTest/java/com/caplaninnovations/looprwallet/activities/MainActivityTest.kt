@@ -1,9 +1,9 @@
 package com.caplaninnovations.looprwallet.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.Espresso.*
-import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
@@ -35,6 +35,9 @@ class MainActivityTest : BaseDaggerTest() {
     @get:Rule
     val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java)
 
+    @get:Rule
+    val activityIntentRule = ActivityTestRule<MainActivity>(MainActivity::class.java, false, false)
+
     private lateinit var bottomNavigationHandler: BottomNavigationHandler
 
     @Before
@@ -45,6 +48,22 @@ class MainActivityTest : BaseDaggerTest() {
 
         activityRule.activity.runOnUiThread(task)
         task.get()
+    }
+
+    @Test
+    fun createIntentToFinishApplication() {
+        val intent = MainActivity.createIntentToFinishApp()
+        assertTrue(intent.getBooleanExtra(MainActivity.KEY_FINISH_ALL, false))
+        assertEquals(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK, intent.flags)
+        assertEquals(MainActivity::class.java.`package`, intent.component.packageName)
+        assertEquals(MainActivity::class.java.name, intent.component.className)
+    }
+
+    @Test
+    fun onFinishApplication() {
+        val intent = MainActivity.createIntentToFinishApp()
+        activityIntentRule.launchActivity(intent)
+        assertTrue(activityIntentRule.activity.isIntentForClosingApplication())
     }
 
     @Test
@@ -90,10 +109,8 @@ class MainActivityTest : BaseDaggerTest() {
         Espresso.pressBack()
         assertEquals(BottomNavigationHandler.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
 
-        // Can't use the view action's press back since it would throw an exception by leaving the activity
-        val backPressedTask = FutureTask<Boolean> { bottomNavigationHandler.onBackPressed() }
-        activityRule.activity.runOnUiThread(backPressedTask)
-        assertTrue(backPressedTask.get())
+        Espresso.pressBackUnconditionally()
+        assertTrue(bottomNavigationHandler.fragmentStackHistory.isEmpty())
     }
 
     @Test

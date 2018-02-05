@@ -38,7 +38,8 @@ import javax.inject.Inject
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    private var isToolbarCollapseEnabled: Boolean = false
+    var isToolbarCollapseEnabled: Boolean = false
+        private set
 
     private companion object {
 
@@ -72,7 +73,7 @@ abstract class BaseActivity : AppCompatActivity() {
     lateinit var realmClient: RealmClient
 
     @IdRes
-    var progressDialogTitle: Int? = null
+    private var progressDialogTitle: Int? = null
 
     var realm: Realm? = null
 
@@ -80,7 +81,6 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         looprProductionComponent = (application as LooprWalletApp).looprProductionComponent
-
         looprProductionComponent.inject(this)
 
         this.setTheme(themeSettings.getCurrentTheme())

@@ -5,7 +5,6 @@ import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import junit.framework.Assert.assertTrue
 import org.junit.Before
-import org.junit.Test
 import java.util.concurrent.FutureTask
 import javax.inject.Inject
 
