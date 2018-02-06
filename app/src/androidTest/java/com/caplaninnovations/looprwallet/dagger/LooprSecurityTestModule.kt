@@ -1,10 +1,8 @@
 package com.caplaninnovations.looprwallet.dagger
 
-import android.content.Context
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsImplTest
+import com.caplaninnovations.looprwallet.models.security.SecurityClientTestImpl
+import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsTestImpl
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
-import com.caplaninnovations.looprwallet.models.security.SecurityClientImplTest
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -19,11 +17,11 @@ import javax.inject.Singleton
  *
  */
 @Module
-class LooprSecurityTestModule(private val context: Context) {
+class LooprSecurityTestModule {
 
     @Singleton
     @Provides
     fun provideSecurityModule(): SecurityClient {
-        return SecurityClientImplTest(LooprSettingsImplTest())
+        return SecurityClientTestImpl(LooprSettingsTestImpl())
     }
 }

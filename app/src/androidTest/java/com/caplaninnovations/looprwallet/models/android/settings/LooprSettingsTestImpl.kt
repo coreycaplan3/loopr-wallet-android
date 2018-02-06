@@ -10,7 +10,7 @@ import javax.inject.Singleton
  * <p></p>
  * Purpose of Class:
  */
-internal class LooprSettingsImplTest : LooprSettings {
+internal class LooprSettingsTestImpl : LooprSettings {
 
     private val map = HashMap<String, Any>()
 

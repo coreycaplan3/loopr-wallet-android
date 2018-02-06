@@ -1,11 +1,13 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
+import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.runner.RunWith
 import javax.inject.Inject
 
 /**
@@ -15,6 +17,7 @@ import javax.inject.Inject
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class ThemeSettingsTest : BaseDaggerTest() {
 
     @Inject

@@ -11,7 +11,7 @@ import io.realm.Realm
  *
  *
  */
-class RealmClientImplTest : RealmClient() {
+class RealmClientTestImpl : RealmClient() {
 
     override val schemaVersion: Long
         get() = RealmClient.getInstance().schemaVersion

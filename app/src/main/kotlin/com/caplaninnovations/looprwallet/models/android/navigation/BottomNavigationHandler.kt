@@ -66,7 +66,7 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
 
     val fragmentStackHistory = FragmentStackHistory(savedInstanceState)
 
-    var currentFragment: Fragment? = null
+    private var currentFragment: Fragment? = null
 
     var animatorForHidingTab: Animator? = null
 
@@ -120,7 +120,9 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
 
             val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
             FragmentStackTransactionController(R.id.activityContainer, newFragment, tag)
-                    .commitTransactionNow(activity.supportFragmentManager)
+                    .commitTransactionNow(activity.supportFragmentManager, currentFragment)
+
+            currentFragment = newFragment
         }
     }
 

@@ -7,6 +7,7 @@ import android.support.test.espresso.Espresso.*
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
+import android.support.test.runner.AndroidJUnit4
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
@@ -21,6 +22,7 @@ import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.Rule
+import org.junit.runner.RunWith
 import java.util.concurrent.FutureTask
 
 /**
@@ -30,6 +32,7 @@ import java.util.concurrent.FutureTask
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class MainActivityTest : BaseDaggerTest() {
 
     @get:Rule
@@ -55,15 +58,18 @@ class MainActivityTest : BaseDaggerTest() {
         val intent = MainActivity.createIntentToFinishApp()
         assertTrue(intent.getBooleanExtra(MainActivity.KEY_FINISH_ALL, false))
         assertEquals(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK, intent.flags)
-        assertEquals(MainActivity::class.java.`package`, intent.component.packageName)
+        assertEquals(activityRule.activity.packageName, intent.component.packageName)
         assertEquals(MainActivity::class.java.name, intent.component.className)
     }
 
     @Test
     fun onFinishApplication() {
-        val intent = MainActivity.createIntentToFinishApp()
-        activityIntentRule.launchActivity(intent)
-        assertTrue(activityIntentRule.activity.isIntentForClosingApplication())
+        val launchIntent = MainActivity.createIntentToFinishApp()
+        activityIntentRule.launchActivity(launchIntent)
+
+        val activityIntent = activityIntentRule.activity.intent
+        assertTrue(activityIntent.getBooleanExtra(MainActivity.KEY_FINISH_ALL, false))
+        assertTrue(activityIntentRule.activity.isFinishing)
     }
 
     @Test
@@ -121,9 +127,8 @@ class MainActivityTest : BaseDaggerTest() {
         assertNotNull(markets)
 
         val task = FutureTask { bottomNavigationHandler.onTabUnselected(markets) }
-        activityRule.activity.runOnUiThread(task)
 
-        waitForAnimationsAndTask(task)
+        waitForAnimationsAndTask(activityRule.activity, task, true)
 
         val customView = markets.customView!!
         assertNotNull(customView)
@@ -143,9 +148,8 @@ class MainActivityTest : BaseDaggerTest() {
         assertNotNull(orders)
 
         val task = FutureTask { bottomNavigationHandler.onTabSelected(orders) }
-        activityRule.activity.runOnUiThread(task)
 
-        waitForAnimationsAndTask(task)
+        waitForAnimationsAndTask(activityRule.activity, task, true)
 
         assertEquals(BottomNavigationHandler.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
 
@@ -171,9 +175,8 @@ class MainActivityTest : BaseDaggerTest() {
         assertNotNull(tabs)
 
         val task = FutureTask { bottomNavigationHandler.onHideTabLayout(tabs) }
-        activityRule.activity.runOnUiThread(task)
 
-        waitForAnimationsAndTask(task)
+        waitForAnimationsAndTask(activityRule.activity, task, true)
 
         onView(Matchers.`is`(tabs)).check(HeightAssertion(R.dimen.zero))
     }
@@ -184,9 +187,8 @@ class MainActivityTest : BaseDaggerTest() {
         assertNotNull(tabs)
 
         val task = FutureTask { bottomNavigationHandler.onShowTabLayout(tabs) }
-        activityRule.activity.runOnUiThread(task)
 
-        waitForAnimationsAndTask(task)
+        waitForAnimationsAndTask(activityRule.activity, task, true)
 
         val resource = activityRule.activity.getResourceIdFromAttrId(android.R.attr.actionBarSize)
         onView(Matchers.`is`(tabs)).check(HeightAssertion(resource))

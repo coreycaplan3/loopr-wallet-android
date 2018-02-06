@@ -25,7 +25,7 @@ interface SecurityClient {
     companion object {
 
         fun getInstance(context: Context, looprSettings: LooprSettings): SecurityClient {
-            return SecurityClientImplProduction(context, looprSettings)
+            return SecurityClientProductionImpl(context, looprSettings)
         }
 
     }
@@ -130,7 +130,7 @@ interface SecurityClient {
     fun removeWallet(walletName: String): Boolean
 }
 
-private class SecurityClientImplProduction(context: Context, looprSettings: LooprSettings) : SecurityClient {
+private class SecurityClientProductionImpl(context: Context, looprSettings: LooprSettings) : SecurityClient {
 
     @Volatile
     private var isUnlocked = true

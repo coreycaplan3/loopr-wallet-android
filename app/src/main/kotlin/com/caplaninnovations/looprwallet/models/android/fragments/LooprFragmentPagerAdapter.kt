@@ -1,21 +1,23 @@
 package com.caplaninnovations.looprwallet.models.android.fragments
 
+import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.utilities.str
 
 /**
  * Created by Corey Caplan on 1/24/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
-class LooprFragmentPagerAdapter(fm: FragmentManager, private val fragmentList: List<Pair<String, BaseFragment>>)
-    : FragmentStatePagerAdapter(fm) {
+class LooprFragmentPagerAdapter(private val fragmentManager: FragmentManager,
+                                private val fragmentList: List<Pair<String, BaseFragment>>)
+    : FragmentStatePagerAdapter(fragmentManager) {
 
     override fun getItem(position: Int): BaseFragment = fragmentList[position].second
 
@@ -23,12 +25,36 @@ class LooprFragmentPagerAdapter(fm: FragmentManager, private val fragmentList: L
 
     override fun getPageTitle(position: Int): CharSequence? = fragmentList[position].first
 
-    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
-        // TODO
+    companion object {
+        const val KEY_FRAGMENT = "_FRAGMENT"
     }
 
     override fun saveState(): Parcelable? {
-        return super.saveState()
+        super.saveState()
+        val bundle = Bundle()
+
+        fragmentList.forEachIndexed { index, pair ->
+            val fragment = pair.second
+            val savedState = fragmentManager.saveFragmentInstanceState(fragment)
+            bundle.putParcelable(KEY_FRAGMENT + index, savedState)
+        }
+
+        return bundle
+    }
+
+    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
+        (state as? Bundle)?.let {
+            it.classLoader = loader
+
+            fragmentList.forEachIndexed { index, pair ->
+                val fragment = pair.second
+                val bundle = it.getParcelable(KEY_FRAGMENT + index) as Fragment.SavedState
+                try {
+                    fragment.setInitialSavedState(bundle)
+                } catch (ignored: Exception) {
+                }
+            }
+        }
     }
 
 }

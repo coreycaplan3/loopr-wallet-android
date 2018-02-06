@@ -1,10 +1,12 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
+import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings.*
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.runner.RunWith
 import java.util.*
 
 /**
@@ -14,6 +16,7 @@ import java.util.*
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class WalletSettingsTest : BaseDaggerTest() {
 
     override fun putDefaultWallet() {

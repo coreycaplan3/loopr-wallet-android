@@ -17,7 +17,7 @@ class TestLooprWalletApp : LooprWalletApp() {
         return DaggerLooprTestComponent.builder()
                 .looprSettingsTestModule(LooprSettingsTestModule())
                 .looprRealmTestModule(LooprRealmTestModule())
-                .looprSecurityTestModule(LooprSecurityTestModule(applicationContext))
+                .looprSecurityTestModule(LooprSecurityTestModule())
                 .build()
     }
 }

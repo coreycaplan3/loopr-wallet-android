@@ -25,7 +25,7 @@ class SecurityActivity : BaseActivity() {
         dialog = AlertDialog.Builder(this)
                 .setTitle(R.string.exit_app)
                 .setMessage(R.string.exit_app_rationale)
-                .setPositiveButton(R.string.exit, { dialog, which ->
+                .setPositiveButton(R.string.exit, { dialog, _ ->
                     dialog.dismiss()
                     startActivity(MainActivity.createIntentToFinishApp())
                 })

@@ -18,7 +18,6 @@ import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.realm.RealmClient
 import com.caplaninnovations.looprwallet.utilities.*
 import io.realm.Realm
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import javax.inject.Inject
 
@@ -72,8 +71,11 @@ abstract class BaseActivity : AppCompatActivity() {
     @Inject
     lateinit var realmClient: RealmClient
 
+    lateinit var activityContainer: ViewGroup
+
     @IdRes
-    private var progressDialogTitle: Int? = null
+    var progressDialogTitle: Int? = null
+        private set
 
     var realm: Realm? = null
 
@@ -86,9 +88,8 @@ abstract class BaseActivity : AppCompatActivity() {
         this.setTheme(themeSettings.getCurrentTheme())
 
         setContentView(contentView)
-        setSupportActionBar(toolbar)
 
-        isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED) ?: false
+        activityContainer = findViewById(R.id.activityContainer)
 
         /*
          * Progress Dialog Setup
@@ -109,10 +110,13 @@ abstract class BaseActivity : AppCompatActivity() {
         /*
          * Toolbar Setup
          */
+        setSupportActionBar(toolbar)
+        isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED) ?: false
+
         if (isToolbarCollapseEnabled) {
-            enableToolbarCollapsing(null)
+            enableToolbarCollapsing()
         } else {
-            disableToolbarCollapsing(null)
+            disableToolbarCollapsing()
         }
     }
 
@@ -168,34 +172,20 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     /**
-     * Updates the provided container, based on the current toolbar mode (collapsing or static).
-     */
-    fun updateContainerBasedOnToolbarMode(container: ViewGroup?) {
-        if (isToolbarCollapseEnabled) {
-            enableToolbarCollapsing(container)
-        } else {
-            disableToolbarCollapsing(container)
-        }
-    }
-
-    /**
      * Enables the toolbar to be collapsed when scrolling
-     *
-     * @param container The container to which [AppBarLayout.ScrollingViewBehavior] will be applied
      */
-    fun enableToolbarCollapsing(container: ViewGroup?) {
-        val layoutParams = (toolbar?.layoutParams as? AppBarLayout.LayoutParams)
-        layoutParams?.scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
-
-        (container?.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
-            it.behavior = AppBarLayout.ScrollingViewBehavior()
+    fun enableToolbarCollapsing() {
+        (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
+            it.scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         }
 
         (activityContainer.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
-            // The container is put "under" the actionBar since it is going to be moved out of the
+            // The container is put underneath the toolbar since it is going to be moved out of the
             // way after scrolling
             it.topMargin = 0
+            it.behavior = AppBarLayout.ScrollingViewBehavior()
             activityContainer.layoutParams = it
+            activityContainer.requestLayout()
         }
 
         isToolbarCollapseEnabled = true
@@ -203,24 +193,16 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Disables the toolbar from being collapsed when scrolling
-     *
-     * @param container The container to which [AppBarLayout.ScrollingViewBehavior] will be
-     * **removed**
      */
-    fun disableToolbarCollapsing(container: ViewGroup?) {
-        val layoutParams = (toolbar?.layoutParams as? AppBarLayout.LayoutParams)
-        layoutParams?.scrollFlags = 0
-        toolbar?.requestLayout()
-
-        (container?.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
-            it.behavior = null
-            container.requestLayout()
+    fun disableToolbarCollapsing() {
+        (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
+            it.scrollFlags = 0
         }
 
         (activityContainer.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
-            // The container is "under" the actionBar, so we must add margin so it is below it
+            // The container is underneath the toolbar, so we must add margin so it is below it instead
             it.topMargin = resources.getDimension(getResourceIdFromAttrId(android.R.attr.actionBarSize)).toInt()
-            logd("Action bar size: ${it.topMargin}px")
+            it.behavior = null
             activityContainer.layoutParams = it
             activityContainer.requestLayout()
         }

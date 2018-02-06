@@ -7,7 +7,7 @@ import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import com.caplaninnovations.looprwallet.utilities.loge
 
 /**
- *  Created by Corey on 2/4/2018
+ *  Created by Corey on 2/5/2018
  *
  *  Project: loopr-wallet-android
  *
@@ -15,7 +15,7 @@ import com.caplaninnovations.looprwallet.utilities.loge
  *
  *
  */
-class SecurityClientImplTest(looprSettings: LooprSettings) : SecurityClient {
+class SecurityClientTestImpl(looprSettings: LooprSettings) : SecurityClient {
 
     private val walletSettings = WalletSettings(looprSettings)
 

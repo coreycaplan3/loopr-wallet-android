@@ -23,7 +23,7 @@ abstract class BaseTabFragment : BaseFragment() {
         get() {
             val adapter = viewPager?.adapter as? LooprFragmentPagerAdapter
             val position = tabLayout?.selectedTabPosition
-            return when(position) {
+            return when (position) {
                 is Int -> adapter?.getItem(position)?.container
                 else -> null
             }
@@ -33,10 +33,18 @@ abstract class BaseTabFragment : BaseFragment() {
 
     abstract var viewPager: ViewPager?
 
+    private lateinit var adapter: LooprFragmentPagerAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        adapter = LooprFragmentPagerAdapter(childFragmentManager, getAdapterContent())
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewPager?.adapter = LooprFragmentPagerAdapter(childFragmentManager, getAdapterContent())
+        viewPager?.adapter = adapter
         tabLayout?.setupWithViewPager(viewPager)
 
         tabLayout?.tabTextColors = context?.getAttrColorStateList(R.attr.tabWidgetTextColor)

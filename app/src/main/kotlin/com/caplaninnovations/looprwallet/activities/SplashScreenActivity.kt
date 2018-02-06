@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Handler
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
+import com.caplaninnovations.looprwallet.utilities.longToast
 
 /**
  * Created by Corey Caplan on 2/1/18.
@@ -23,15 +24,21 @@ class SplashScreenActivity : BaseActivity() {
         super.onResume()
 
         Handler().postDelayed({
-            val intent =
-                    if (securityClient.getCurrentWallet() == null) {
-                        Intent(this, SignInActivity::class.java)
-                    } else {
-                        Intent(this, MainActivity::class.java)
-                    }
+            if (securityClient.isAndroidKeystoreUnlocked()) {
+                val intent =
+                        if (securityClient.getCurrentWallet() == null) {
+                            Intent(this, SignInActivity::class.java)
+                        } else {
+                            Intent(this, MainActivity::class.java)
+                        }
 
-            startActivity(intent)
-            finish()
+                startActivity(intent)
+                finish()
+            } else {
+                longToast(R.string.unlock_device
+                )
+                securityClient.unlockAndroidKeystore()
+            }
         }, 1000)
     }
 

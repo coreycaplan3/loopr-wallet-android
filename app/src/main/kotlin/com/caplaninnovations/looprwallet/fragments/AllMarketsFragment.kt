@@ -27,4 +27,7 @@ class AllMarketsFragment : BaseFragment() {
         container = allMarketsContainer
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+    }
+
 }

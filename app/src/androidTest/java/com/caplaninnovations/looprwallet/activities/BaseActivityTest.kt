@@ -7,16 +7,21 @@ import android.support.design.widget.CoordinatorLayout
 import android.support.test.espresso.Espresso.*
 import android.support.test.espresso.matcher.ViewMatchers.isRoot
 import android.support.test.rule.ActivityTestRule
+import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.utilities.OrientationChangeAction
+import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
 import kotlinx.android.synthetic.main.appbar_main.*
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Rule
+import org.junit.runner.RunWith
+import java.util.concurrent.FutureTask
 
 /**
  * Created by Corey Caplan on 2/5/18.
@@ -25,85 +30,87 @@ import org.junit.Rule
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class BaseActivityTest : BaseDaggerTest() {
 
     @get:Rule
-    val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java, false, false)
+    val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java)
 
-    @Test
-    fun onCreate() {
+    private lateinit var activity: BaseActivity
+
+    @Before
+    fun setup() {
+        activity = activityRule.activity
     }
 
     @Test
     fun startProgressDialogAfterRotation() {
-        activityRule.activity.progressDialog.setTitle(R.string.app_name)
-        activityRule.activity.progressDialog.show()
+        val task = FutureTask {
+            activity.progressDialog.setTitle(R.string.app_name)
+            activity.progressDialog.show()
+        }
+
+        waitForAnimationsAndTask(activity, task, false)
 
         onView(isRoot()).perform(OrientationChangeAction.orientationLandscape())
 
         // Assert it's still showing, after the orientation change
-        assertTrue(activityRule.activity.progressDialog.isShowing)
+        assertTrue(activity.progressDialog.isShowing)
+        assertEquals(R.string.app_name, activity.progressDialogTitle)
 
-        activityRule.activity.progressDialog.dismiss()
+        activity.progressDialog.dismiss()
 
         onView(isRoot()).perform(OrientationChangeAction.orientationPortrait())
 
-        assertFalse(activityRule.activity.progressDialog.isShowing)
+        assertFalse(activity.progressDialog.isShowing)
     }
 
     @Test
     fun checkToolbarModeAfterRotation() {
-        activityRule.activity.enableToolbarCollapsing(null)
+        val enableToolbarCollapsingTask = FutureTask { activity.enableToolbarCollapsing() }
+        waitForAnimationsAndTask(activity, enableToolbarCollapsingTask, false)
 
         onView(isRoot()).perform(OrientationChangeAction.orientationLandscape())
-        assertTrue(activityRule.activity.isToolbarCollapseEnabled)
+        assertTrue(activity.isToolbarCollapseEnabled)
+
+        val disableToolbarCollapsingTask = FutureTask { activity.disableToolbarCollapsing() }
+        waitForAnimationsAndTask(activity, disableToolbarCollapsingTask, false)
 
         onView(isRoot()).perform(OrientationChangeAction.orientationPortrait())
-        assertFalse(activityRule.activity.isToolbarCollapseEnabled)
-    }
-
-    @Test
-    fun updateContainerBasedOnToolbarMode() {
-        activityRule.activity.enableToolbarCollapsing(null)
-
-        val container = getCurrentFragmentContainer()
-        activityRule.activity.updateContainerBasedOnToolbarMode(container)
-
-        val enabledBehavior = (container.layoutParams as CoordinatorLayout.LayoutParams).behavior!!
-        assertEquals(AppBarLayout.ScrollingViewBehavior::class.java, enabledBehavior::class.java)
-
-        // Disable toolbar collapsing
-        activityRule.activity.disableToolbarCollapsing(null)
-
-        activityRule.activity.updateContainerBasedOnToolbarMode(container)
-
-        val disabledBehavior = (container.layoutParams as CoordinatorLayout.LayoutParams).behavior
-        assertNull(disabledBehavior)
-
+        assertFalse(activity.isToolbarCollapseEnabled)
     }
 
     @Test
     fun enableToolbarCollapsing() {
-        activityRule.activity.enableToolbarCollapsing(null)
+        val task = FutureTask { activity.enableToolbarCollapsing() }
+        waitForAnimationsAndTask(activity, task, false)
 
-        val toolbarLayoutParams = activityRule.activity.toolbar.layoutParams as AppBarLayout.LayoutParams
+        val toolbarLayoutParams = activity.toolbar.layoutParams as AppBarLayout.LayoutParams
         val flags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         assertEquals(flags, toolbarLayoutParams.scrollFlags)
+
+        val topMargin = (activity.activityContainer.layoutParams as CoordinatorLayout.LayoutParams).topMargin
+        assertEquals(0, topMargin)
     }
 
     @Test
     fun disableToolbarCollapsing() {
-        activityRule.activity.disableToolbarCollapsing(null)
+        val task = FutureTask { activity.disableToolbarCollapsing() }
+        waitForAnimationsAndTask(activity, task, false)
 
-        val toolbarLayoutParams = activityRule.activity.toolbar.layoutParams as AppBarLayout.LayoutParams
+        val toolbarLayoutParams = activity.toolbar.layoutParams as AppBarLayout.LayoutParams
         assertEquals(0, toolbarLayoutParams.scrollFlags)
+
+        val topMargin = (activity.activityContainer.layoutParams as CoordinatorLayout.LayoutParams).topMargin
+        val actionBarSizeResource = activity.getResourceIdFromAttrId(android.R.attr.actionBarSize)
+        val actionBarSize = activity.resources.getDimension(actionBarSizeResource).toInt()
+        assertEquals(actionBarSize, topMargin)
     }
 
     private fun getCurrentFragmentContainer(): ViewGroup {
-        val fragmentManager = activityRule.activity.supportFragmentManager
+        val fragmentManager = activity.supportFragmentManager
         val fragment = (fragmentManager.findFragmentById(R.id.activityContainer) as BaseFragment)
         return fragment.container!!
     }
-
 
 }

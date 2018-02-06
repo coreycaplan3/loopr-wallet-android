@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.dagger
 
 import com.caplaninnovations.looprwallet.realm.RealmClient
-import com.caplaninnovations.looprwallet.realm.RealmClientImplTest
+import com.caplaninnovations.looprwallet.realm.RealmClientTestImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -20,6 +20,6 @@ class LooprRealmTestModule {
 
     @Singleton
     @Provides
-    fun provideLooprRealmClient(): RealmClient = RealmClientImplTest()
+    fun provideLooprRealmClient(): RealmClient = RealmClientTestImpl()
 
 }

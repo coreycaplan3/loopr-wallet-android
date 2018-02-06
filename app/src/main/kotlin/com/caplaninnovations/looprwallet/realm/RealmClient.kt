@@ -14,7 +14,7 @@ abstract class RealmClient {
     companion object {
 
         fun getInstance(): RealmClient {
-            return RealmClientImplProduction()
+            return RealmClientProductionImpl()
         }
 
     }
@@ -33,7 +33,7 @@ abstract class RealmClient {
 
 }
 
-private class RealmClientImplProduction : RealmClient() {
+private class RealmClientProductionImpl : RealmClient() {
 
     override val schemaVersion: Long
         get() = 0

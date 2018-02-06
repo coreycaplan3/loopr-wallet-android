@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import android.support.v4.app.FragmentManager
+import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.utilities.allNonNull
 import com.caplaninnovations.looprwallet.utilities.isAllNonNull
 import com.caplaninnovations.looprwallet.utilities.logv
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 /**
@@ -56,11 +58,19 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
      * Creates a transaction, replaces the current container & commits it now. This **disallows**
      * saving the back-stack, so it must be maintained manually, using [FragmentStackHistory].
      */
-    fun commitTransactionNow(fragmentManager: FragmentManager) {
+    fun commitTransactionNow(fragmentManager: FragmentManager, oldFragment: Fragment?) {
         val transaction = fragmentManager.beginTransaction()
 
-        logv("Replacing container with $newFragmentTag fragment...")
-        transaction.replace(container, newFragment, newFragmentTag)
+        val text = oldFragment?.tag?.plus(" fragment") ?: "container"
+        logv("Replacing $text with $newFragmentTag fragment...")
+
+        oldFragment?.let { transaction.detach(oldFragment) }
+
+        if (newFragment.isDetached) {
+            transaction.attach(newFragment)
+        } else {
+            transaction.replace(container, newFragment, newFragmentTag)
+        }
 
         transaction.setTransition(transition)
 

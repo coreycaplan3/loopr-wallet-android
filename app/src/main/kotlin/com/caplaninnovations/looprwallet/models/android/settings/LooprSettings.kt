@@ -18,7 +18,7 @@ interface LooprSettings {
     companion object {
 
         fun getInstance(context: Context): LooprSettings {
-            return LooprSettingsImplProduction(context)
+            return LooprSettingsProductionImpl(context)
         }
 
     }
@@ -53,7 +53,7 @@ interface LooprSettings {
 
 }
 
-private class LooprSettingsImplProduction(private val context: Context) : LooprSettings {
+private class LooprSettingsProductionImpl(private val context: Context) : LooprSettings {
 
     companion object {
 
