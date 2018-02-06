@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/appbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="?android:attr/actionBarSize" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:paddingLeft="@dimen/large_horizontal_padding"
+        android:paddingRight="@dimen/large_horizontal_padding"
+        android:paddingTop="?android:attr/actionBarSize">
+
+        <Button
+            android:id="@+id/quantityLabel"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_order_default_quantity_label" />
+
+        <EditText
+            android:id="@+id/quantityEditText"
+            style="@style/orderEditTextStyle"
+            android:layout_width="orderWidth"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/quantityLabel"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:scrollHorizontally="true" />
+
+        <Button
+            android:id="@+id/priceLabel"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/quantityLabel"
+            android:layout_marginTop="@dimen/standard_vertical_padding"
+            android:text="@string/market_price" />
+
+        <EditText
+            android:id="@+id/priceEditText"
+            style="@style/orderEditTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/priceLabel"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/quantityEditText"
+            android:layout_marginTop="@dimen/standard_vertical_padding" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

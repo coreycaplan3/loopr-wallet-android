@@ -92,4 +92,6 @@
     <string name="exit_app">Exit App?</string>
     <string name="exit_app_rationale">Are you sure you want to exit the app? Your progress will be lost</string>
     <string name="exit">Exit</string>
+    <string name="create_order_default_quantity_label"># of Appc</string>
+    <string name="market_price">Market Price</string>
 </resources>

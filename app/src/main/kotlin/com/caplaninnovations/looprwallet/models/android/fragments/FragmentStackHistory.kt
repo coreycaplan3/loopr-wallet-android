@@ -17,7 +17,8 @@ class FragmentStackHistory(savedInstanceState: Bundle?) {
         const val KEY_STACK = "_STACK"
     }
 
-    private val stack: ArrayList<String>
+    @VisibleForTesting
+    val stack: ArrayList<String>
 
     init {
         stack = savedInstanceState?.getStringArrayList(KEY_STACK) ?: ArrayList()
@@ -49,11 +50,18 @@ class FragmentStackHistory(savedInstanceState: Bundle?) {
         return stack.removeAt(0)
     }
 
-    fun remove(fragmentTag: String) {
+    /**
+     * @return True if the tag was removed or false if it was not found in the stack
+     */
+    fun remove(fragmentTag: String): Boolean {
         val currentFragmentTag = peek()
 
-        if (fragmentTag == currentFragmentTag) pop() // we're changing the top of the stack
-        else stack.remove(fragmentTag) // we're not changing the UI directly, just removing something
+        return if (fragmentTag == currentFragmentTag) {
+            pop() // We're changing the top of the stack
+            true
+        } else {
+            stack.remove(fragmentTag) // we're not changing the UI directly, just removing something
+        }
     }
 
     /**
@@ -71,10 +79,10 @@ class FragmentStackHistory(savedInstanceState: Bundle?) {
         outState?.putStringArrayList(KEY_STACK, stack)
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun getStackSize(): Int = stack.size
-
     // MARK - Private Methods
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getStackSize() = stack.size
 
     private fun isInStack(fragment: String): Boolean = stack.contains(fragment)
 

@@ -21,11 +21,11 @@ import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
- *  Created by Corey on 1/31/2018
+ * Created by Corey on 1/31/2018
  *
- *  Project: loopr-wallet-android
+ * Project: loopr-wallet-android
  *
- *  Purpose of Class:
+ * Purpose of Class:
  *
  * Handles all activity related to bottom navigation. Note, this class should be cleared out in the
  * activity's
@@ -133,6 +133,24 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
         }
     }
 
+    fun onShowTabLayout(tabLayout: TabLayout?) {
+        fun runAnimation() {
+            tabLayout?.animateToHeight(
+                    activity.getResourceIdFromAttrId(android.R.attr.actionBarSize),
+                    R.integer.tab_layout_animation_duration)
+        }
+
+        if (animatorForHidingTab?.isRunning == true) {
+            animatorForHidingTab?.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    runAnimation()
+                }
+            })
+        } else {
+            runAnimation()
+        }
+    }
+
     fun onHideTabLayout(tabLayout: TabLayout?) {
         animatorForHidingTab =
                 tabLayout?.animateFromHeight(
@@ -199,24 +217,6 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
                 }
             }
         }, activity.resources.getInteger(R.integer.ripple_duration).toLong())
-    }
-
-    fun onShowTabLayout(tabLayout: TabLayout?) {
-        fun runAnimation() {
-            tabLayout?.animateToHeight(
-                    activity.getResourceIdFromAttrId(android.R.attr.actionBarSize),
-                    R.integer.tab_layout_animation_duration)
-        }
-
-        if (animatorForHidingTab?.isRunning == true) {
-            animatorForHidingTab?.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    runAnimation()
-                }
-            })
-        } else {
-            runAnimation()
-        }
     }
 
 }

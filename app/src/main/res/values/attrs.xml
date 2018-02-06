@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Button Styles -->
+    <attr name="borderlessButtonStyle" format="reference" />
+
     <!-- Tab Colors -->
     <attr name="tabWidgetTextColor" format="reference" />
 

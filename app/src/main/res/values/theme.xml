@@ -23,6 +23,7 @@
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/lightPrimary</item>
         <item name="buttonStyle">@style/buttonStyle</item>
+        <item name="borderlessButtonStyle">@style/lightButtonStyleBorderless</item>
 
         <!-- Tabs -->
         <item name="tabWidgetTextColor">@color/light_tabs_text</item>
@@ -54,7 +55,8 @@
 
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/darkPrimary</item>
-        <item name="android:buttonStyle">@style/buttonStyle</item>
+        <item name="buttonStyle">@style/buttonStyle</item>
+        <item name="borderlessButtonStyle">@style/darkButtonStyleBorderless</item>
 
         <!-- Tabs -->
         <item name="tabWidgetTextColor">@color/dark_tabs_text</item>

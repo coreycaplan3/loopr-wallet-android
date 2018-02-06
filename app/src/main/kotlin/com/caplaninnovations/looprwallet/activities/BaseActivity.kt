@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatDialog
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.dagger.LooprProductionComponent
@@ -88,6 +90,8 @@ abstract class BaseActivity : AppCompatActivity() {
         this.setTheme(themeSettings.getCurrentTheme())
 
         setContentView(contentView)
+
+        window.setSoftInputMode(SOFT_INPUT_ADJUST_PAN)
 
         activityContainer = findViewById(R.id.activityContainer)
 

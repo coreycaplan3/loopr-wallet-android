@@ -103,11 +103,8 @@ class MainActivityTest : BaseDaggerTest() {
                 .perform(click())
 
         // Assert the tab selection propagated successfully
-        // Current stack = MARKETS -- MY_WALLET -- ORDERS
+        // Current stack = MARKETS -- MY_WALLET -- ORDERS; markets should not have been added twice
         assertEquals(BottomNavigationHandler.KEY_MARKETS, bottomNavigationHandler.fragmentStackHistory.peek())
-
-        // Assert that the same fragment wasn't pushed on twice
-        assertEquals(3, bottomNavigationHandler.fragmentStackHistory.getStackSize())
 
         Espresso.pressBack()
         assertEquals(BottomNavigationHandler.KEY_MY_WALLET, bottomNavigationHandler.fragmentStackHistory.peek())
