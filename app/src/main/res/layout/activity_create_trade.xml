@@ -27,11 +27,12 @@
         <EditText
             android:id="@+id/quantityEditText"
             style="@style/orderEditTextStyle"
-            android:layout_width="orderWidth"
+            android:layout_width="@dimen/inputOrderWidth"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/quantityLabel"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:inputType="numberDecimal"
             android:scrollHorizontally="true" />
 
         <Button
@@ -46,13 +47,14 @@
         <EditText
             android:id="@+id/priceEditText"
             style="@style/orderEditTextStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/inputOrderWidth"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/priceLabel"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/quantityEditText"
-            android:layout_marginTop="@dimen/standard_vertical_padding" />
+            android:layout_marginTop="@dimen/standard_vertical_padding"
+            android:inputType="numberDecimal" />
 
     </RelativeLayout>
 
