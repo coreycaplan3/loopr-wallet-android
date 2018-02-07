@@ -105,4 +105,5 @@
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
     <string name="default_order_quantity">1420.25</string>
+    <string name="wallet_information">Wallet Information</string>
 </resources>

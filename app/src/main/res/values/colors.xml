@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="red">#F44336</color>
-    <color name="green">#4CAF50</color>
-
     <!-- LIGHT THEME -->
 
     <color name="lightPrimary">#03A9F4</color>
     <color name="lightPrimaryDark">#01579B</color>
     <color name="lightAccent">#4CAF50</color>
+    <color name="lightAccentDisabled">#704CAF50</color>
 
     <color name="lightPrimaryText">#DE000000</color>
     <color name="lightSecondaryText">#8A000000</color>
@@ -21,6 +19,7 @@
     <color name="darkPrimary">#2196F3</color>
     <color name="darkPrimaryDark">#0D47A1</color>
     <color name="darkAccent">#43A047</color>
+    <color name="darkAccentDisabled">#7043A047</color>
 
     <color name="darkPrimaryText">#FFFFFFFF</color>
     <color name="darkSecondaryText">#B3FFFFFF</color>

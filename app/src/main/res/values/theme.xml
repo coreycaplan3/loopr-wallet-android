@@ -8,15 +8,16 @@
         <item name="colorPrimaryDark">@color/lightPrimaryDark</item>
         <item name="colorAccent">@color/lightAccent</item>
 
-        <item name="colorBackground">#FAFAFA</item>
+        <item name="android:colorBackground">#FAFAFA</item>
 
         <item name="colorControlHighlight">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
 
         <!-- Text -->
-        <item name="android:textColorPrimary">@color/lightPrimaryText</item>
-        <item name="android:textColorSecondary">@color/lightSecondaryText</item>
-        <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
+        <!--<item name="android:textColorPrimary">@color/lightPrimaryText</item>-->
+        <!--<item name="android:textColorPrimaryInverse">@color/darkSecondaryText</item>-->
+        <!--<item name="android:textColorSecondary">@color/lightSecondaryText</item>-->
+        <!--<item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>-->
 
         <!-- Divider -->
         <item name="dividerColor">@android:color/black</item>
@@ -26,7 +27,7 @@
         <item name="actionOverflowButtonStyle">@style/lightCustomOverflow</item>
 
         <!-- Button Style -->
-        <item name="colorButtonNormal">@color/lightPrimary</item>
+        <item name="colorButtonNormal">@color/lightAccentDisabled</item>
         <item name="buttonStyle">@style/buttonStyle</item>
         <item name="borderlessButtonStyle">@style/lightButtonStyleBorderless</item>
 
@@ -46,15 +47,16 @@
         <item name="colorPrimary">@color/darkPrimary</item>
         <item name="colorPrimaryDark">@color/darkPrimaryDark</item>
         <item name="colorAccent">@color/darkAccent</item>
-        <item name="colorBackground">#303030</item>
+        <item name="android:colorBackground">#303030</item>
 
         <item name="colorControlHighlight">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
 
         <!-- Text -->
         <item name="android:textColorPrimary">@color/darkPrimaryText</item>
+        <item name="android:textColorPrimaryInverse">@color/darkPrimaryText</item>
         <item name="android:textColorSecondary">@color/darkSecondaryText</item>
-        <item name="android:textColorSecondaryInverse">@color/lightSecondaryText</item>
+        <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
 
         <!-- Divider -->
         <item name="dividerColor">@android:color/white</item>
@@ -64,7 +66,7 @@
         <item name="actionOverflowButtonStyle">@style/darkCustomOverflow</item>
 
         <!-- Button Style -->
-        <item name="colorButtonNormal">@color/darkPrimary</item>
+        <item name="colorButtonNormal">@color/darkAccentDisabled</item>
         <item name="buttonStyle">@style/buttonStyle</item>
         <item name="borderlessButtonStyle">@style/darkButtonStyleBorderless</item>
 
