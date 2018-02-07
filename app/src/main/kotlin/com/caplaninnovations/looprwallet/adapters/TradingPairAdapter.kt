@@ -20,7 +20,7 @@ class TradingPairAdapter : RealmRecyclerViewAdapter<TradingPair, TradingPairView
     constructor(collection: OrderedRealmCollection<TradingPair>) : super(collection, true)
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TradingPairViewHolder {
-        val view = View.inflate(parent?.context, R.layout.trading_pair_view_holder, parent)
+        val view = View.inflate(parent?.context, R.layout.view_holder_trading_pair, parent)
         return TradingPairViewHolder(view)
     }
 

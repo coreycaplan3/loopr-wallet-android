@@ -19,7 +19,7 @@ class OrderAdapter : RealmRecyclerViewAdapter<LooprOrder, OrderViewHolder> {
     constructor(data: OrderedRealmCollection<LooprOrder>?) : super(data, true)
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): OrderViewHolder {
-        val view = View.inflate(parent?.context, R.layout.order_view_holder, parent)
+        val view = View.inflate(parent?.context, R.layout.view_holder_order, parent)
         return OrderViewHolder(view)
     }
 

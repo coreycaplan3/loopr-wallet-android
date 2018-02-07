@@ -1,10 +1,15 @@
 package com.caplaninnovations.looprwallet.utilities
 
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
+import android.support.annotation.ColorInt
+import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_markets_parent.*
@@ -21,6 +26,14 @@ fun Context.shortToast(@StringRes resId: Int) {
 
 fun Context.longToast(@StringRes resId: Int) {
     Toast.makeText(this, resId, Toast.LENGTH_LONG).show()
+}
+
+fun View.setBackgroundTint(@ColorInt tintColor: Int) {
+    background?.let {
+        val drawable = DrawableCompat.wrap(it)
+        DrawableCompat.setTint(drawable, tintColor)
+        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_OVER)
+    }
 }
 
 fun View.setPaddingTop(value: Int) {

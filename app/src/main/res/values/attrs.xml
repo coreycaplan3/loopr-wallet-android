@@ -4,6 +4,9 @@
     <!-- Button Styles -->
     <attr name="borderlessButtonStyle" format="reference" />
 
+    <!-- Divider Colors -->
+    <attr name="dividerColor" format="color"/>
+
     <!-- Tab Colors -->
     <attr name="tabWidgetTextColor" format="reference" />
 

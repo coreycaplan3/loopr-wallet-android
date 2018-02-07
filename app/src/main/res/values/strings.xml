@@ -92,6 +92,17 @@
     <string name="exit_app">Exit App?</string>
     <string name="exit_app_rationale">Are you sure you want to exit the app? Your progress will be lost</string>
     <string name="exit">Exit</string>
-    <string name="create_order_default_quantity_label"># of Appc</string>
+    <string name="create_order_default_quantity_label"># of LRC</string>
     <string name="market_price">Market Price</string>
+    <string name="estimated_cost">Estimated Cost</string>
+    <string name="default_price_in_eth">0.00079059 ETH</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="default_order_total_in_eth">1.1228354475 ETH</string>
+    <string name="default_order_summary">
+        You are about to perform a market buy of 1,420.25 LRC at the current market price of
+        0.00079059 ETH. The total cost is 1.1228354475 ETH.
+    </string>
+    <string name="buy">Buy</string>
+    <string name="sell">Sell</string>
+    <string name="default_order_quantity">1420.25</string>
 </resources>

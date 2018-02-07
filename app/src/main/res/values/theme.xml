@@ -8,6 +8,8 @@
         <item name="colorPrimaryDark">@color/lightPrimaryDark</item>
         <item name="colorAccent">@color/lightAccent</item>
 
+        <item name="colorBackground">#FAFAFA</item>
+
         <item name="colorControlHighlight">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
 
@@ -15,6 +17,9 @@
         <item name="android:textColorPrimary">@color/lightPrimaryText</item>
         <item name="android:textColorSecondary">@color/lightSecondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
+
+        <!-- Divider -->
+        <item name="dividerColor">@android:color/black</item>
 
         <!-- Actionbar -->
         <item name="titleTextColor">@color/darkPrimaryText</item>
@@ -41,6 +46,7 @@
         <item name="colorPrimary">@color/darkPrimary</item>
         <item name="colorPrimaryDark">@color/darkPrimaryDark</item>
         <item name="colorAccent">@color/darkAccent</item>
+        <item name="colorBackground">#303030</item>
 
         <item name="colorControlHighlight">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
@@ -50,8 +56,12 @@
         <item name="android:textColorSecondary">@color/darkSecondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/lightSecondaryText</item>
 
-        <!-- Overflow Menu -->
-        <item name="android:actionOverflowButtonStyle">@style/darkCustomOverflow</item>
+        <!-- Divider -->
+        <item name="dividerColor">@android:color/white</item>
+
+        <!-- Actionbar -->
+        <item name="titleTextColor">@color/darkPrimaryText</item>
+        <item name="actionOverflowButtonStyle">@style/darkCustomOverflow</item>
 
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/darkPrimary</item>
