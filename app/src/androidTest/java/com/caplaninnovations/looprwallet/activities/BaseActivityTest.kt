@@ -25,10 +25,11 @@ import java.util.concurrent.FutureTask
 
 /**
  * Created by Corey Caplan on 2/5/18.
+ *
  * Project: loopr-wallet-android
  *
- *
  * Purpose of Class:
+ *
  */
 @RunWith(AndroidJUnit4::class)
 class BaseActivityTest : BaseDaggerTest() {

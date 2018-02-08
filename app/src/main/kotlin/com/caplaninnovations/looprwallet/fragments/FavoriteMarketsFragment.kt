@@ -9,9 +9,11 @@ import kotlinx.android.synthetic.main.fragment_markets_favorites.*
 
 /**
  * Created by Corey Caplan on 1/19/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 class FavoriteMarketsFragment : BaseFragment() {
 

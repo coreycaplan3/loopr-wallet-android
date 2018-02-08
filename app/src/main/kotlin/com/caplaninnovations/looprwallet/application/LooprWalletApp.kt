@@ -14,9 +14,11 @@ import javax.inject.Inject
 
 /**
  * Created by Corey on 1/18/2018.
+ *
  * Project: LooprWallet
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
 

@@ -7,9 +7,11 @@ import kotlin.collections.ArrayList
 
 /**
  * Created by Corey on 1/19/2018.
+ *
  * Project: LooprWallet
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 class FragmentStackHistory(savedInstanceState: Bundle?) {
 

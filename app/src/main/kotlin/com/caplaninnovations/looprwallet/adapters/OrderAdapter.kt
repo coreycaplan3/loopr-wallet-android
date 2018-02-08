@@ -9,9 +9,11 @@ import io.realm.RealmRecyclerViewAdapter
 
 /**
  * Created by Corey Caplan on 1/29/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 class OrderAdapter : RealmRecyclerViewAdapter<LooprOrder, OrderViewHolder> {
 

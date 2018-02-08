@@ -7,6 +7,14 @@ import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import com.caplaninnovations.looprwallet.utilities.loge
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
+/**
+ * Created by Corey on 1/14/2018
+ *
+ * Project: LooprWallet
+ *
+ * Purpose of Class:
+ *
+ */
 class SignInActivity : BaseActivity() {
 
     override val contentView: Int

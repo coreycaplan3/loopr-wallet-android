@@ -40,7 +40,7 @@ import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 /**
  * An Espresso ViewAction that changes the orientation of the screen.
  *
- * To use it, invoke it like so:
+ * To use it, invoke it like the following:
  * ~~~~
  * onView(isRoot()).perform(OrientationChangeAction.orientationLandscape())
  *

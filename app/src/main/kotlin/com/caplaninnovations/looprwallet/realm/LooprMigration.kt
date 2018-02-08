@@ -4,10 +4,15 @@ import io.realm.DynamicRealm
 import io.realm.RealmMigration
 
 /**
- *  Created by Corey on 1/30/2018.
- *  Project: loopr-wallet-android
- * <p></p>
- *  Purpose of Class:
+ * Created by Corey on 1/30/2018.
+ *
+ * Project: loopr-wallet-android
+ *
+ * Purpose of Class: Class used to deal with any/all migrations of the app's internal database.
+ *
+ * A migration occurs when a user downloads an update for the APP and the previous version of the
+ * app is running a  lower version of the database from the newer one (in the newly-downloaded
+ * version).
  */
 internal class LooprMigration : RealmMigration {
 

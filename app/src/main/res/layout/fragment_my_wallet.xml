@@ -21,16 +21,13 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    style="@style/cardStylePrimaryContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/card_padding_bottom"
-                    android:paddingLeft="@dimen/card_padding_horizontal"
-                    android:paddingRight="@dimen/card_padding_horizontal"
-                    android:paddingTop="@dimen/card_padding_top">
+                    android:orientation="vertical">
 
                     <TextView
-                        style="@style/Base.TextAppearance.AppCompat.Title"
+                        style="@style/Base.TextAppearance.AppCompat.Headline"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/wallet_information" />
@@ -74,9 +71,9 @@
                     android:background="?attr/dividerColor" />
 
                 <LinearLayout
+                    style="@style/cardStyleActionContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/standard_padding_small"
                     android:orientation="horizontal">
 
                     <ImageButton
@@ -91,8 +88,8 @@
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/standard_padding_small"
-                        android:layout_marginStart="@dimen/standard_padding_small"
+                        android:layout_marginLeft="@dimen/horizontal_margin_small"
+                        android:layout_marginStart="@dimen/horizontal_margin_small"
                         android:contentDescription="@string/content_description_reveal_private_key"
                         android:src="@drawable/ic_visibility_white_24dp"
                         android:text="@string/reveal_private_key"
@@ -116,39 +113,29 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    style="@style/cardStylePrimaryContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/card_padding_bottom"
-                    android:paddingLeft="@dimen/card_padding_horizontal"
-                    android:paddingRight="@dimen/card_padding_horizontal"
-                    android:paddingTop="@dimen/card_padding_top">
+                    android:orientation="vertical">
 
                     <TextView
-                        style="@style/Base.TextAppearance.AppCompat.Title"
+                        style="@style/Base.TextAppearance.AppCompat.Headline"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/account_balances" />
 
-                    <View
-                        android:layout_width="match_parent"
+                    <TextView
+                        style="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/standard_padding" />
+                        android:layout_marginTop="@dimen/card_subtitle_margin_top"
+                        android:text="@string/default_eth_balance" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/vertical_margin"
                         android:orientation="vertical">
-
-                        <TextView
-                            style="@style/Base.TextAppearance.AppCompat.Medium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/default_eth_balance" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/standard_padding_small" />
 
                         <TextView
                             style="@style/Base.TextAppearance.AppCompat.Small"
@@ -197,9 +184,9 @@
                     android:background="?attr/dividerColor" />
 
                 <LinearLayout
+                    style="@style/cardStyleActionContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/standard_padding_small"
                     android:orientation="horizontal">
 
                     <ImageButton
@@ -214,6 +201,8 @@
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/horizontal_margin_small"
+                        android:layout_marginStart="@dimen/horizontal_margin_small"
                         android:text="@string/show_all_tokens"
                         android:textColor="?attr/colorPrimary" />
 

@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.appbar_main.*
@@ -27,10 +28,11 @@ import java.util.concurrent.FutureTask
 
 /**
  * Created by Corey Caplan on 2/2/18.
+ *
  * Project: loopr-wallet-android
  *
- *
  * Purpose of Class:
+ *
  */
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest : BaseDaggerTest() {
@@ -85,32 +87,32 @@ class MainActivityTest : BaseDaggerTest() {
         // Current stack = MARKETS
         val bottomNavigationHandler = activityRule.activity.bottomNavigationHandler
 
-        onView(withTagValue(Matchers.`is`(BottomNavigationHandler.KEY_ORDERS)))
+        onView(withTagValue(Matchers.`is`(BottomNavigationFragmentPair.KEY_ORDERS)))
                 .perform(click())
 
         // Assert the tab selection propagated successfully
         // Current stack = ORDERS -- MARKETS
-        assertEquals(BottomNavigationHandler.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
 
-        onView(withTagValue(Matchers.`is`(BottomNavigationHandler.KEY_MY_WALLET)))
+        onView(withTagValue(Matchers.`is`(BottomNavigationFragmentPair.KEY_MY_WALLET)))
                 .perform(click())
 
         // Assert the tab selection propagated successfully
         // Current stack = MY_WALLET -- ORDERS -- MARKETS
-        assertEquals(BottomNavigationHandler.KEY_MY_WALLET, bottomNavigationHandler.fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_MY_WALLET, bottomNavigationHandler.fragmentStackHistory.peek())
 
-        onView(withTagValue(Matchers.`is`(BottomNavigationHandler.KEY_MARKETS)))
+        onView(withTagValue(Matchers.`is`(BottomNavigationFragmentPair.KEY_MARKETS)))
                 .perform(click())
 
         // Assert the tab selection propagated successfully
         // Current stack = MARKETS -- MY_WALLET -- ORDERS; markets should not have been added twice
-        assertEquals(BottomNavigationHandler.KEY_MARKETS, bottomNavigationHandler.fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_MARKETS, bottomNavigationHandler.fragmentStackHistory.peek())
 
         Espresso.pressBack()
-        assertEquals(BottomNavigationHandler.KEY_MY_WALLET, bottomNavigationHandler.fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_MY_WALLET, bottomNavigationHandler.fragmentStackHistory.peek())
 
         Espresso.pressBack()
-        assertEquals(BottomNavigationHandler.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
 
         Espresso.pressBackUnconditionally()
         assertTrue(bottomNavigationHandler.fragmentStackHistory.isEmpty())
@@ -120,7 +122,7 @@ class MainActivityTest : BaseDaggerTest() {
     fun onTabUnselected() {
         // The markets tab is the default selected one
 
-        val markets = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationHandler.KEY_MARKETS)!!
+        val markets = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationFragmentPair.KEY_MARKETS)!!
         assertNotNull(markets)
 
         val task = FutureTask { bottomNavigationHandler.onTabUnselected(markets) }
@@ -134,21 +136,21 @@ class MainActivityTest : BaseDaggerTest() {
 
         onView(Matchers.`is`(customView)).check(AlphaAssertion(0.68f))
 
-        onView(Matchers.`is`(customView.findById<TextView>(R.id.bottomNavigationTabText)))
+        onView(Matchers.`is`(customView.findViewById<TextView>(R.id.bottomNavigationTabText)))
                 .check(TextSizeAssertion(R.dimen.bottom_navigation_text_size))
     }
 
     @Test
     fun onTabSelected() {
         // The markets tab is the default selected one
-        val orders = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationHandler.KEY_ORDERS)!!
+        val orders = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationFragmentPair.KEY_ORDERS)!!
         assertNotNull(orders)
 
         val task = FutureTask { bottomNavigationHandler.onTabSelected(orders) }
 
         waitForAnimationsAndTask(activityRule.activity, task, true)
 
-        assertEquals(BottomNavigationHandler.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, bottomNavigationHandler.fragmentStackHistory.peek())
 
         val customView = orders.customView!!
         assertNotNull(customView)
@@ -157,7 +159,7 @@ class MainActivityTest : BaseDaggerTest() {
 
         onView(Matchers.`is`(customView)).check(AlphaAssertion(1.0F))
 
-        onView(Matchers.`is`(customView.findById<TextView>(R.id.bottomNavigationTabText)))
+        onView(Matchers.`is`(customView.findViewById<TextView>(R.id.bottomNavigationTabText)))
                 .check(TextSizeAssertion(R.dimen.bottom_navigation_text_size_selected))
 
     }

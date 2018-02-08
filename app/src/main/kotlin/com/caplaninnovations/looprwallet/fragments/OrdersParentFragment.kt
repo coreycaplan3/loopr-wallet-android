@@ -9,24 +9,23 @@ import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.utilities.logd
-import kotlinx.android.synthetic.main.fragment_orders_parent.*
+import kotlinx.android.synthetic.main.fragment_general_with_view_pager.*
 
 /**
  * Created by Corey on 1/17/2018.
+ *
  * Project: LooprWallet
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 class OrdersParentFragment : BaseTabFragment(), BottomNavigationHandler.OnBottomNavigationReselectedLister {
 
     override var tabLayout: TabLayout? = null
         get() = activity?.findViewById(R.id.ordersTabs)
 
-    override var viewPager: ViewPager? = null
-        get() = ordersViewPager
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_orders_parent, container, false)
+        return inflater.inflate(R.layout.fragment_general_with_view_pager, container, false)
     }
 
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {

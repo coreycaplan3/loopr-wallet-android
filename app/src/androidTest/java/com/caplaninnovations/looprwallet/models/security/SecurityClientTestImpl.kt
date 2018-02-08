@@ -7,12 +7,11 @@ import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import com.caplaninnovations.looprwallet.utilities.loge
 
 /**
- *  Created by Corey on 2/5/2018
+ * Created by Corey on 2/5/2018
  *
- *  Project: loopr-wallet-android
+ * Project: loopr-wallet-android
  *
- *  Purpose of Class:
- *
+ * Purpose of Class:
  *
  */
 class SecurityClientTestImpl(looprSettings: LooprSettings) : SecurityClient {

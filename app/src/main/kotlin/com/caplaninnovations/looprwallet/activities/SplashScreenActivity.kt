@@ -8,9 +8,11 @@ import com.caplaninnovations.looprwallet.utilities.longToast
 
 /**
  * Created by Corey Caplan on 2/1/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 class SplashScreenActivity : BaseActivity() {
 

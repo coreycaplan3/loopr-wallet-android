@@ -7,12 +7,16 @@ import com.caplaninnovations.looprwallet.utilities.logv
 
 /**
  * Created by Corey Caplan on 2/3/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class: To override the standard JUnit runner and provide an instance of our test
  * application class instead of the default class.
  *
  * **NOTE** this class's package and path correspond to the path in the app .gradle file.
+ *
+ * **THEREFORE, DO NOT CHANGE THIS CLASS'S PACKAGE LOCATION WITHOUT CHANGING THE GRADLE FILE AS
+ * WELL**.
  */
 class LooprTestRunner : AndroidJUnitRunner() {
 

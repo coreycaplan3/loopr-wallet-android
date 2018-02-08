@@ -40,7 +40,7 @@
             android:name=".activities.SearchActivity"
             android:label="@string/search" />
         <activity
-            android:name=".activities.TradingPairActivity"
+            android:name=".activities.TradingPairDetailsActivity"
             android:label="@string/trading_pair" />
         <activity
             android:name=".activities.WelcomeActivity"

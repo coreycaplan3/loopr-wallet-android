@@ -4,10 +4,12 @@ import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
 
 /**
- *  Created by Corey on 1/30/2018.
- *  Project: loopr-wallet-android
- * <p></p>
- *  Purpose of Class:
+ * Created by Corey on 1/30/2018.
+ *
+ * Project: loopr-wallet-android
+ *
+ * Purpose of Class:
+ *
  */
 class WelcomeActivity : BaseActivity() {
 

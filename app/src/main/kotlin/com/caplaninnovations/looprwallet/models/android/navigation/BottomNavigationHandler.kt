@@ -12,9 +12,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.fragments.MarketsParentFragment
-import com.caplaninnovations.looprwallet.fragments.MyWalletFragment
-import com.caplaninnovations.looprwallet.fragments.OrdersParentFragment
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.utilities.*
@@ -25,14 +22,15 @@ import kotlinx.android.synthetic.main.bottom_navigation.*
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class:
- *
- * Handles all activity related to bottom navigation. Note, this class should be cleared out in the
- * activity's
+ * Purpose of Class: Handles all things related to bottom navigation for an activity with bottom
+ * navigation enabled.
  *
  * This class should be instantiated in the corresponding activity's [BaseActivity.onCreate] method.
  */
-class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceState: Bundle?) :
+class BottomNavigationHandler(private val activity: BaseActivity,
+                              private val fragmentTagPairs: List<BottomNavigationFragmentPair>,
+                              @BottomNavigationTag private val initialTag: String,
+                              savedInstanceState: Bundle?) :
         TabLayout.OnTabSelectedListener {
 
     interface OnTabVisibilityChangeListener {
@@ -46,35 +44,19 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
         fun onBottomNavigationReselected()
     }
 
-    companion object {
-
-        const val KEY_MARKETS = "_MARKETS"
-        const val KEY_ORDERS = "_ORDERS"
-        const val KEY_MY_WALLET = "_MY_WALLET"
-    }
-
     private val bottomNavigation = activity.bottomNavigation
-
-    /**
-     * A list of pairs that points a fragment tag to a function that will create its fragment
-     */
-    private val fragmentTagPairs: List<Pair<String, Fragment>> = listOf<Pair<String, Fragment>>(
-            Pair(KEY_MARKETS, MarketsParentFragment()),
-            Pair(KEY_ORDERS, OrdersParentFragment()),
-            Pair(KEY_MY_WALLET, MyWalletFragment())
-    )
 
     val fragmentStackHistory = FragmentStackHistory(savedInstanceState)
 
     private var currentFragment: Fragment? = null
 
-    var animatorForHidingTab: Animator? = null
+    private var animatorForHidingTab: Animator? = null
 
     init {
         setupTabs()
 
         if (savedInstanceState == null) {
-            val tag = KEY_MARKETS
+            val tag = initialTag
             logv("Initializing $tag fragment...")
 
             onTabSelected(bottomNavigation.findTabByTag(tag))
@@ -96,11 +78,11 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
     fun onBackPressed(): Boolean {
         fragmentStackHistory.pop()
 
-        if (fragmentStackHistory.isEmpty()) {
-            return true
+        return if (fragmentStackHistory.isEmpty()) {
+            true
         } else {
             bottomNavigation.findTabByTag(fragmentStackHistory.peek()!!)?.select()
-            return false
+            false
         }
     }
 
@@ -168,8 +150,8 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
 
         fun createTab(tag: String, @DrawableRes iconRes: Int, @StringRes textRes: Int): TabLayout.Tab {
             val tabView = activity.layoutInflater.inflate(R.layout.bottom_navigation_tab, bottomNavigation, false)
-            tabView.findById<ImageView>(R.id.bottomNavigationTabImage)?.setImageResource(iconRes)
-            tabView.findById<TextView>(R.id.bottomNavigationTabText)?.setText(textRes)
+            tabView.findViewById<ImageView>(R.id.bottomNavigationTabImage)?.setImageResource(iconRes)
+            tabView.findViewById<TextView>(R.id.bottomNavigationTabText)?.setText(textRes)
             tabView.tag = tag
 
             val tab = bottomNavigation.newTab()
@@ -183,17 +165,12 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
             return tab
         }
 
-        bottomNavigation.addTab(
-                createTab(KEY_MARKETS, R.drawable.ic_show_chart_white_24dp, R.string.markets)
-        )
+        fragmentTagPairs.forEach {
+            bottomNavigation.addTab(
+                    createTab(it.tag, it.drawableResource, it.textResource)
+            )
+        }
 
-        bottomNavigation.addTab(
-                createTab(KEY_ORDERS, R.drawable.ic_assignment_white_24dp, R.string.orders)
-        )
-
-        bottomNavigation.addTab(
-                createTab(KEY_MY_WALLET, R.drawable.ic_account_balance_wallet_white_24dp, R.string.my_wallet)
-        )
     }
 
     private fun updateTabUi(tab: TabLayout.Tab?, isSelected: Boolean) {
@@ -204,7 +181,7 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
 
                     tab.customView?.animateAlpha(1.toFloat())
 
-                    tab.customView?.findById<TextView>(R.id.bottomNavigationTabText)
+                    tab.customView?.findViewById<TextView>(R.id.bottomNavigationTabText)
                             ?.animateTextSizeChange(R.dimen.bottom_navigation_text_size_selected)
 
                 } else {
@@ -212,7 +189,7 @@ class BottomNavigationHandler(private val activity: BaseActivity, savedInstanceS
 
                     tab.customView?.animateAlpha(0.68.toFloat())
 
-                    tab.customView?.findById<TextView>(R.id.bottomNavigationTabText)
+                    tab.customView?.findViewById<TextView>(R.id.bottomNavigationTabText)
                             ?.animateTextSizeChange(R.dimen.bottom_navigation_text_size)
                 }
             }

@@ -1,16 +1,19 @@
 package com.caplaninnovations.looprwallet.utilities
 
 import android.support.annotation.DimenRes
+import android.support.test.espresso.Espresso
 import android.support.test.espresso.NoMatchingViewException
 import android.support.test.espresso.ViewAssertion
 import android.view.View
 import android.widget.TextView
 
 /**
- * Created by Corey Caplan on 2/1/18.
+ * Created by Corey on 2/1/2018
+ *
  * Project: loopr-wallet-android
- * <p></p>
- * Purpose of Class:
+ *
+ * Purpose of Class: To easily make [Espresso] assertions about a view's top padding
+ *
  */
 class TopPaddingAssertion(@DimenRes private val dimensionResource: Int) : ViewAssertion {
 

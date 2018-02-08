@@ -6,12 +6,23 @@ import android.support.design.widget.TabLayout
 
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.fragments.MarketsParentFragment
+import com.caplaninnovations.looprwallet.fragments.MyWalletFragment
+import com.caplaninnovations.looprwallet.fragments.OrdersParentFragment
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
- * As of right now, this will translate into the *Market* screen for traders, when they first
- * open the app (assuming they are signed in & authenticated).
+ * Created by Corey on 1/14/2018
+ *
+ * Project: LooprWallet
+ *
+ * Purpose of Class: As of right now, this will translate into the *Market* screen for traders,
+ * when they first open the app (assuming they are signed in & authenticated).
  */
 class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChangeListener {
 
@@ -37,7 +48,20 @@ class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChan
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        bottomNavigationHandler = BottomNavigationHandler(this, savedInstanceState)
+        val fragmentTagPairs: List<BottomNavigationFragmentPair> = listOf<BottomNavigationFragmentPair>(
+                BottomNavigationFragmentPair(KEY_MARKETS, MarketsParentFragment(),
+                        R.drawable.ic_show_chart_white_24dp, R.string.markets),
+
+                BottomNavigationFragmentPair(KEY_ORDERS, OrdersParentFragment(),
+                        R.drawable.ic_assignment_white_24dp, R.string.orders),
+
+                BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(),
+                        R.drawable.ic_account_balance_wallet_white_24dp, R.string.my_wallet)
+
+        )
+
+        bottomNavigationHandler = BottomNavigationHandler(this, fragmentTagPairs,
+                BottomNavigationFragmentPair.KEY_MARKETS, savedInstanceState)
 
         isIntentForClosingApplication()
     }

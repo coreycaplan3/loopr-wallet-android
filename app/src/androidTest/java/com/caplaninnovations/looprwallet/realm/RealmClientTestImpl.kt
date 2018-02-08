@@ -3,12 +3,11 @@ package com.caplaninnovations.looprwallet.realm
 import io.realm.Realm
 
 /**
- *  Created by Corey on 2/5/2018
+ * Created by Corey on 2/5/2018
  *
- *  Project: loopr-wallet-android
+ * Project: loopr-wallet-android
  *
- *  Purpose of Class:
- *
+ * Purpose of Class:
  *
  */
 class RealmClientTestImpl : RealmClient() {

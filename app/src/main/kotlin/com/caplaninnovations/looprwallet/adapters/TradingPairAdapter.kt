@@ -3,7 +3,7 @@ package com.caplaninnovations.looprwallet.adapters
 import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.TradingPairActivity
+import com.caplaninnovations.looprwallet.activities.TradingPairDetailsActivity
 import com.caplaninnovations.looprwallet.models.wallet.TradingPair
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
@@ -27,7 +27,7 @@ class TradingPairAdapter : RealmRecyclerViewAdapter<TradingPair, TradingPairView
     override fun onBindViewHolder(holder: TradingPairViewHolder, position: Int) {
         holder.onBind(data!![position], clickListener = {
             val context = holder.itemView.context
-            val intent = TradingPairActivity.IntentCreator.createIntent(it, context)
+            val intent = TradingPairDetailsActivity.IntentCreator.createIntent(it, context)
             context.startActivity(intent)
         })
     }

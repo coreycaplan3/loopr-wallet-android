@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatDialog
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
@@ -60,7 +59,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     abstract val isSecurityActivity: Boolean
 
-    lateinit var looprProductionComponent: LooprProductionComponent
+    private lateinit var looprProductionComponent: LooprProductionComponent
 
     lateinit var progressDialog: AppCompatDialog
 
@@ -165,7 +164,7 @@ abstract class BaseActivity : AppCompatActivity() {
          */
         securityClient.getCurrentWallet()?.let {
 
-            realm.removeListenersAndClose()
+            RealmUtility.removeListenersAndClose(realm)
 
             securityClient.removeWallet(it)
             if (securityClient.getCurrentWallet() == null) {
@@ -225,7 +224,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        realm.removeListenersAndClose()
+        RealmUtility.removeListenersAndClose(realm)
     }
 
 }

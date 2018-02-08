@@ -2,9 +2,16 @@ package com.caplaninnovations.looprwallet.utilities
 
 /**
  * Created by Corey on 1/19/2018.
+ *
  * Project: LooprWallet
- * <p></p>
- * Purpose of Class:
+ *
+ * Purpose of Class: To create utility methods for commonly-done things, to streamline code and
+ * make it more readable
+ *
+ */
+
+/**
+ * @return True if all of the objects in a pair are not null or false otherwise
  */
 fun <T: Any> Pair<T?, T?>.isAllNonNull() = this.first != null && this.second != null
 

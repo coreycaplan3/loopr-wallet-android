@@ -9,6 +9,7 @@ import android.view.ViewGroup
  * Project: LooprWallet
  *
  * Purpose of Class:
+ *
  */
 abstract class BaseFragment : Fragment() {
 

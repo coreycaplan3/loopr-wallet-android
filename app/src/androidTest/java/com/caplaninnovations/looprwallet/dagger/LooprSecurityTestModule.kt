@@ -8,12 +8,11 @@ import dagger.Provides
 import javax.inject.Singleton
 
 /**
- *  Created by Corey on 2/5/2018
+ * Created by Corey on 2/5/2018
  *
- *  Project: loopr-wallet-android
+ * Project: loopr-wallet-android
  *
- *  Purpose of Class:
- *
+ * Purpose of Class:
  *
  */
 @Module

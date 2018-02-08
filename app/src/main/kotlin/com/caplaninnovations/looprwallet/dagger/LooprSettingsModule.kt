@@ -10,9 +10,11 @@ import javax.inject.Singleton
 
 /**
  * Created by Corey Caplan on 2/3/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 
 @Module

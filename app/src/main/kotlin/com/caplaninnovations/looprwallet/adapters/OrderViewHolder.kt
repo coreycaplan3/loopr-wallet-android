@@ -6,9 +6,11 @@ import com.caplaninnovations.looprwallet.models.wallet.LooprOrder
 
 /**
  * Created by Corey Caplan on 1/29/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

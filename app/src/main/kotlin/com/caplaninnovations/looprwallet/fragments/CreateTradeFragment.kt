@@ -11,7 +11,6 @@ import android.support.design.widget.BottomSheetDialogFragment
  *
  * Purpose of Class:
  *
- *
  */
 class CreateTradeFragment : BottomSheetDialogFragment() {
 

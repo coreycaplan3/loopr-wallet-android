@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_my_wallet.*
  * Project: LooprWallet
  *
  * Purpose of Class:
+ *
  */
 class MyWalletFragment: BaseFragment(), BottomNavigationHandler.OnBottomNavigationReselectedLister {
 

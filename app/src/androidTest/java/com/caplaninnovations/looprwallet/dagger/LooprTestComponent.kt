@@ -5,12 +5,11 @@ import dagger.Component
 import javax.inject.Singleton
 
 /**
- *  Created by Corey on 2/3/2018
+ * Created by Corey on 2/3/2018
  *
- *  Project: loopr-wallet-android
+ * Project: loopr-wallet-android
  *
- *  Purpose of Class:
- *
+ * Purpose of Class:
  *
  */
 @Singleton

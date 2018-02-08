@@ -5,6 +5,14 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import com.caplaninnovations.looprwallet.R
 
+/**
+ * Created by Corey on 1/14/2018
+ *
+ * Project: LooprWallet
+ *
+ * Purpose of Class:
+ *
+ */
 class SecurityActivity : BaseActivity() {
 
     companion object {

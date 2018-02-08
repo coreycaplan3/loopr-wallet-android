@@ -5,9 +5,11 @@ import io.realm.RealmConfiguration
 
 /**
  * Created by Corey Caplan on 1/30/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 abstract class RealmClient {
 

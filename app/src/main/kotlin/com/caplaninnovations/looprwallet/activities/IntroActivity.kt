@@ -1,8 +1,15 @@
 package com.caplaninnovations.looprwallet.activities
 
-import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
 
+/**
+ * Created by Corey on 1/14/2018
+ *
+ * Project: LooprWallet
+ *
+ * Purpose of Class:
+ *
+ */
 class IntroActivity : BaseActivity() {
 
     override val contentView: Int

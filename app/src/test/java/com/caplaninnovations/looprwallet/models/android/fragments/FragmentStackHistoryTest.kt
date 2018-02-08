@@ -11,11 +11,10 @@ import org.mockito.junit.MockitoJUnitRunner
 /**
  * Created by Corey on 2/6/2018.
  *
- *
  * Project: loopr-wallet-android
  *
- *
  * Purpose of Class:
+ *
  */
 @RunWith(MockitoJUnitRunner::class)
 class FragmentStackHistoryTest {

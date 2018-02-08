@@ -14,9 +14,11 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 
 /**
  * Created by Corey on 1/19/2018.
+ *
  * Project: LooprWallet
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 class FragmentStackTransactionController(@IdRes private val container: Int,
                                          private val newFragment: Fragment,

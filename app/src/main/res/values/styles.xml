@@ -37,6 +37,17 @@
         <item name="contentPaddingBottom">@dimen/card_padding_bottom</item>
     </style>
 
+    <style name="cardStylePrimaryContainer">
+        <item name="android:paddingTop">@dimen/card_padding_top</item>
+        <item name="android:paddingBottom">@dimen/card_padding_bottom</item>
+        <item name="android:paddingLeft">@dimen/card_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/card_padding_horizontal</item>
+    </style>
+
+    <style name="cardStyleActionContainer">
+        <item name="android:padding">@dimen/standard_padding_small</item>
+    </style>
+
     <!-- Overflow Menu -->
 
     <style name="lightCustomOverflow">
