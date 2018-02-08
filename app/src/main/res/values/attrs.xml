@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Bottom Navigation -->
+    <attr name="bottomNavigationBackground" format="color" />
+    <attr name="bottomNavigationTextColor" format="color" />
+    <attr name="bottomNavigationTextColorSelected" format="color" />
+
     <!-- Button Styles -->
     <attr name="borderlessButtonStyle" format="reference" />
 
@@ -9,9 +14,4 @@
 
     <!-- Tab Colors -->
     <attr name="tabWidgetTextColor" format="reference" />
-
-    <!-- Bottom Navigation -->
-    <attr name="bottomNavigationBackground" format="color" />
-    <attr name="bottomNavigationTextColor" format="color" />
-    <attr name="bottomNavigationTextColorSelected" format="color" />
 </resources>

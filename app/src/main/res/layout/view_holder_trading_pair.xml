@@ -1,7 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="@dimen/standard_padding">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/tradingPairImage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/content_description_trading_pair_image"
+        android:src="@drawable/loopring" />
+
+    <TextView
+        android:id="@+id/tradingPairTickerText"
+        style="@style/Base.TextAppearance.AppCompat.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/standard_horizontal_padding"
+        android:layout_marginStart="@dimen/standard_horizontal_padding"
+        android:layout_toEndOf="@id/tradingPairImage"
+        android:layout_toRightOf="@id/tradingPairImage"
+        android:text="@string/default_trading_pair_ticker" />
+
+    <TextView
+        android:id="@+id/tradingPairTokenNameText"
+        style="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tradingPairTickerText"
+        android:layout_marginLeft="@dimen/standard_horizontal_padding"
+        android:layout_marginStart="@dimen/standard_horizontal_padding"
+        android:layout_marginTop="@dimen/vertical_margin_small"
+        android:layout_toEndOf="@id/tradingPairImage"
+        android:layout_toRightOf="@id/tradingPairImage"
+        android:text="@string/default_trading_pair_token_name" />
+
+    <TextView
+        android:id="@+id/tradingPairPercentageChangeText"
+        style="@style/Base.TextAppearance.AppCompat.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_toEndOf="@id/tradingPairTickerText"
+        android:layout_toRightOf="@id/tradingPairTickerText"
+        android:gravity="end"
+        android:text="@string/default_trading_pair_percentage_change"
+        android:textColor="@color/green" />
+
+    <TextView
+        android:id="@+id/tradingPairCurrentPriceText"
+        style="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tradingPairPercentageChangeText"
+        android:layout_marginTop="@dimen/vertical_margin_small"
+        android:layout_toEndOf="@id/tradingPairTokenNameText"
+        android:layout_toRightOf="@id/tradingPairTokenNameText"
+        android:gravity="end"
+        android:text="@string/default_trading_pair_price" />
+
+</RelativeLayout>

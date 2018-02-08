@@ -13,32 +13,36 @@
         <item name="colorControlHighlight">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
 
-        <!-- Text -->
-        <!--<item name="android:textColorPrimary">@color/lightPrimaryText</item>-->
-        <!--<item name="android:textColorPrimaryInverse">@color/darkSecondaryText</item>-->
-        <!--<item name="android:textColorSecondary">@color/lightSecondaryText</item>-->
-        <!--<item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>-->
-
-        <!-- Divider -->
-        <item name="dividerColor">@android:color/black</item>
-
         <!-- Actionbar -->
         <item name="titleTextColor">@color/darkPrimaryText</item>
         <item name="actionOverflowButtonStyle">@style/lightCustomOverflow</item>
-
-        <!-- Button Style -->
-        <item name="colorButtonNormal">@color/lightAccentDisabled</item>
-        <item name="buttonStyle">@style/buttonStyle</item>
-        <item name="borderlessButtonStyle">@style/lightButtonStyleBorderless</item>
-
-        <!-- Tabs -->
-        <item name="tabWidgetTextColor">@color/light_tabs_text</item>
-        <item name="tabIndicatorColor">@android:color/white</item>
 
         <!-- Bottom Navigation -->
         <item name="bottomNavigationBackground">@color/lightBottomNavigationBackground</item>
         <item name="bottomNavigationTextColor">@color/darkPrimaryText</item>
         <item name="bottomNavigationTextColorSelected">@color/darkPrimaryTextDisabled</item>
+
+        <!-- Button Style -->
+        <item name="colorButtonNormal">@color/lightAccent</item>
+        <item name="buttonStyle">@style/buttonStyle</item>
+        <item name="borderlessButtonStyle">@style/lightButtonStyleBorderless</item>
+
+        <!-- Cards -->
+        <item name="cardBackgroundColor">@color/cardview_light_background</item>
+
+        <!-- Divider -->
+        <item name="dividerColor">@android:color/black</item>
+
+        <!-- Tabs -->
+        <item name="tabWidgetTextColor">@color/light_tabs_text</item>
+        <item name="tabIndicatorColor">@android:color/white</item>
+
+        <!-- Text -->
+        <item name="android:textColorPrimary">@color/lightPrimaryText</item>
+        <item name="android:textColorPrimaryInverse">@color/darkSecondaryText</item>
+        <item name="android:textColorSecondary">@color/lightSecondaryText</item>
+        <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
+
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -52,32 +56,36 @@
         <item name="colorControlHighlight">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
 
+        <!-- Actionbar -->
+        <item name="titleTextColor">@color/darkPrimaryText</item>
+        <item name="actionOverflowButtonStyle">@style/darkCustomOverflow</item>
+
+        <!-- Bottom Navigation -->
+        <item name="bottomNavigationBackground">@color/darkBottomNavigationBackground</item>
+        <item name="bottomNavigationTextColor">@color/darkPrimaryText</item>
+        <item name="bottomNavigationTextColorSelected">@color/darkPrimaryTextDisabled</item>
+
+        <!-- Button Style -->
+        <item name="colorButtonNormal">@color/darkAccent</item>
+        <item name="buttonStyle">@style/buttonStyle</item>
+        <item name="borderlessButtonStyle">@style/darkButtonStyleBorderless</item>
+
+        <!-- Cards -->
+        <item name="cardBackgroundColor">@color/cardview_dark_background</item>
+
+        <!-- Divider -->
+        <item name="dividerColor">@android:color/white</item>
+
+        <!-- Tabs -->
+        <item name="tabWidgetTextColor">@color/dark_tabs_text</item>
+        <item name="tabIndicatorColor">@android:color/white</item>
+
         <!-- Text -->
         <item name="android:textColorPrimary">@color/darkPrimaryText</item>
         <item name="android:textColorPrimaryInverse">@color/darkPrimaryText</item>
         <item name="android:textColorSecondary">@color/darkSecondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
 
-        <!-- Divider -->
-        <item name="dividerColor">@android:color/white</item>
-
-        <!-- Actionbar -->
-        <item name="titleTextColor">@color/darkPrimaryText</item>
-        <item name="actionOverflowButtonStyle">@style/darkCustomOverflow</item>
-
-        <!-- Button Style -->
-        <item name="colorButtonNormal">@color/darkAccentDisabled</item>
-        <item name="buttonStyle">@style/buttonStyle</item>
-        <item name="borderlessButtonStyle">@style/darkButtonStyleBorderless</item>
-
-        <!-- Tabs -->
-        <item name="tabWidgetTextColor">@color/dark_tabs_text</item>
-        <item name="tabIndicatorColor">@android:color/white</item>
-
-        <!-- Bottom Navigation -->
-        <item name="bottomNavigationBackground">@color/darkBottomNavigationBackground</item>
-        <item name="bottomNavigationTextColor">@color/darkPrimaryText</item>
-        <item name="bottomNavigationTextColorSelected">@color/darkPrimaryTextDisabled</item>
     </style>
 
 </resources>

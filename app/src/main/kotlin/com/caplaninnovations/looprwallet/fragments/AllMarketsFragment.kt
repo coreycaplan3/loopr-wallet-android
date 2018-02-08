@@ -9,9 +9,11 @@ import kotlinx.android.synthetic.main.fragment_markets_all.*
 
 /**
  * Created by Corey Caplan on 1/19/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 class AllMarketsFragment : BaseFragment() {
 

@@ -1,5 +1,12 @@
 <resources>
 
+    <!-- Order Screen -->
+
+    <style name="orderEditTextStyle" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/standard_text_size</item>
+    </style>
+
     <style name="orderLabelStyle">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">@dimen/standard_text_size</item>
@@ -7,8 +14,10 @@
         <item name="android:gravity">end</item>
     </style>
 
+    <!-- Buttons -->
+
     <style name="buttonStyle" parent="@style/Widget.AppCompat.Button.Colored">
-        <item name="textAppearance">@color/white</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="lightButtonStyleBorderless" parent="@style/Widget.AppCompat.Button.Borderless">
@@ -19,18 +28,16 @@
         <item name="android:textColor">@color/darkPrimary</item>
     </style>
 
-    <style name="orderEditTextStyle" parent="@style/Widget.AppCompat.EditText">
-        <item name="android:maxLines">1</item>
-        <item name="android:textSize">@dimen/standard_text_size</item>
+    <!-- Card -->
+
+    <style name="cardStyle">
+        <item name="contentPaddingLeft">@dimen/card_padding_horizontal</item>
+        <item name="contentPaddingRight">@dimen/card_padding_horizontal</item>
+        <item name="contentPaddingTop">@dimen/card_padding_top</item>
+        <item name="contentPaddingBottom">@dimen/card_padding_bottom</item>
     </style>
 
-    <style name="CardViewStyle" parent="CardView">
-        <item name="cardCornerRadius">2dp</item>
-        <item name="cardElevation">2dp</item>
-        <item name="cardUseCompatPadding">true</item>
-        <item name="android:paddingLeft">@dimen/standard_padding</item>
-        <item name="android:paddingRight">@dimen/standard_padding</item>
-    </style>
+    <!-- Overflow Menu -->
 
     <style name="lightCustomOverflow">
         <item name="android:src">@drawable/ic_more_vert_white_24dp</item>
