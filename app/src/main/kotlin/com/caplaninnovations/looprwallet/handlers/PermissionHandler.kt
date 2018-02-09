@@ -3,8 +3,12 @@ package com.caplaninnovations.looprwallet.handlers
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.support.annotation.IntDef
 import android.support.v4.app.ActivityCompat
+import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.utilities.loge
+import kotlin.reflect.KProperty
+import kotlin.reflect.full.createType
 
 /**
  * Created by Corey Caplan on 2/9/18.
@@ -14,15 +18,20 @@ import com.caplaninnovations.looprwallet.utilities.loge
  * Purpose of Class:
  *
  */
-class PermissionHandler(private val activity: Activity, private val permission: String) :
+class PermissionHandler(private val activity: BaseActivity,
+                        private val permission: String,
+                        @Code private val requestCode: Int) :
         ActivityCompat.OnRequestPermissionsResultCallback {
+
+    @IntDef(REQUEST_CODE_CAMERA.toLong())
+    annotation class Code
 
     companion object {
 
-        const val REQUEST_CODE = 10320
+        @Code
+        const val REQUEST_CODE_CAMERA = 10320
 
         val delegate: ActivityCompat.PermissionCompatDelegate = LooprPermissionDelegate()
-
     }
 
     private val isPermissionGranted: Boolean
@@ -50,7 +59,7 @@ class PermissionHandler(private val activity: Activity, private val permission: 
         loge("onRequestPermissionsResult")
     }
 
-    private class LooprPermissionDelegate() : ActivityCompat.PermissionCompatDelegate {
+    private class LooprPermissionDelegate : ActivityCompat.PermissionCompatDelegate {
 
         override fun requestPermissions(activity: Activity, permissions: Array<out String>, requestCode: Int): Boolean {
             // Allow the framework to handle the requesting of permissions
@@ -58,7 +67,10 @@ class PermissionHandler(private val activity: Activity, private val permission: 
         }
 
         override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-            return requestCode == REQUEST_CODE
+            return PermissionHandler.Companion::class.members
+                    .filterIsInstance<KProperty<Int>>()
+                    .filter { it.isConst }
+                    .any { it.getter.call(PermissionHandler.Companion) == requestCode }
         }
 
     }

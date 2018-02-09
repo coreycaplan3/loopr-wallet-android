@@ -5,7 +5,6 @@ import android.support.annotation.IdRes
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.*
 import android.support.design.widget.CoordinatorLayout
-import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDialog
 import android.view.Menu
@@ -42,11 +41,12 @@ abstract class BaseActivity : AppCompatActivity() {
     var isToolbarCollapseEnabled: Boolean = false
         private set
 
-    private companion object {
+    companion object {
 
         private const val KEY_IS_TOOLBAR_COLLAPSED = "_IS_TOOLBAR_COLLAPSED"
         private const val KEY_IS_PROGRESS_DIALOG_SHOWING = "_IS_PROGRESS_DIALOG_SHOWING"
         private const val KEY_PROGRESS_DIALOG_TITLE = "_PROGRESS_DIALOG_TITLE"
+
     }
 
     /**

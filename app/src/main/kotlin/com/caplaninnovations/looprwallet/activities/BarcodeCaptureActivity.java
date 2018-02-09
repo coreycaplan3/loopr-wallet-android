@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -94,8 +93,8 @@ public final class BarcodeCaptureActivity extends BaseActivity implements Barcod
      * Initializes the UI and creates the detector pipeline.
      */
     @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
 
         mPreview = findViewById(R.id.preview);
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
@@ -119,7 +118,7 @@ public final class BarcodeCaptureActivity extends BaseActivity implements Barcod
     @Override
     public void onBarcodeDetected(Barcode barcode) {
         String value = barcode.rawValue;
-        if(BlockchainUtility.INSTANCE.isAddressValid(value)) {
+        if (BlockchainUtility.INSTANCE.isAddressValid(value)) {
             setResult(RESULT_OK, new Intent().putExtra(BARCODE_VALUE, value));
             finish();
         } else {
@@ -148,7 +147,7 @@ public final class BarcodeCaptureActivity extends BaseActivity implements Barcod
         View.OnClickListener listener =
                 view -> ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_CAMERA_PERM);
 
-        findViewById(R.id.topLayout).setOnClickListener(listener);
+        findViewById(R.id.activityContainer).setOnClickListener(listener);
         Snackbar.make(mGraphicOverlay, R.string.permission_camera_rationale, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.ok, listener)
                 .show();
@@ -310,9 +309,12 @@ public final class BarcodeCaptureActivity extends BaseActivity implements Barcod
         if (mCameraSource != null) {
             try {
                 mPreview.start(mCameraSource, mGraphicOverlay);
-            } catch (IOException e) {
-                Log.e(TAG, "Unable to start camera source.", e);
+            } catch (SecurityException se) {
+                Log.e(TAG, "The app lacks permission to start the camera ", se);
+            } catch (IOException ioe) {
+                Log.e(TAG, "Unable to start camera source.", ioe);
                 mCameraSource.release();
+                ViewUtilityKt.snackbar(mPreview, R.string.error_starting_camera, Snackbar.LENGTH_LONG);
                 mCameraSource = null;
             }
         }

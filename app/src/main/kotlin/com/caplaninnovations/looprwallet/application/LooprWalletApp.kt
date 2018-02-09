@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import android.support.v4.app.ActivityCompat
 import com.caplaninnovations.looprwallet.BuildConfig
+import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.dagger.*
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
