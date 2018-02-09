@@ -48,7 +48,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                        android:layout_marginTop="@dimen/statistics_pair_margin_top"
                         android:text="@string/current" />
 
                     <TextView
@@ -62,7 +62,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                        android:layout_marginTop="@dimen/statistics_pair_margin_top"
                         android:text="@string/volume" />
 
                     <TextView
@@ -76,7 +76,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                        android:layout_marginTop="@dimen/statistics_pair_margin_top"
                         android:text="@string/market_cap" />
 
                 </LinearLayout>
@@ -101,7 +101,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                        android:layout_marginTop="@dimen/statistics_pair_margin_top"
                         android:text="@string/today_open" />
 
                     <TextView
@@ -115,7 +115,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                        android:layout_marginTop="@dimen/statistics_pair_margin_top"
                         android:text="@string/today_high" />
 
                     <TextView
@@ -129,7 +129,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                        android:layout_marginTop="@dimen/statistics_pair_margin_top"
                         android:text="@string/today_low" />
 
                 </LinearLayout>

@@ -79,6 +79,19 @@ fun TabLayout.findTabByTag(tag: String): TabLayout.Tab? {
 /**
  * Creates a snackbar by using this view to instantiate it and automatically calls show
  *
+ * @param message The string is used to display the snackbar's message
+ * @param length The length that the snackbar will be displayed. Defaults to [Snackbar.LENGTH_LONG]
+ * @see Snackbar.LENGTH_SHORT
+ * @see Snackbar.LENGTH_LONG
+ * @see Snackbar.LENGTH_INDEFINITE
+ */
+fun View.snackbar(message: String, @Duration length: Int = Snackbar.LENGTH_LONG) {
+    Snackbar.make(this, message, length).show()
+}
+
+/**
+ * Creates a snackbar by using this view to instantiate it and automatically calls show
+ *
  * @param message The string resource that is used to display the snackbar's message
  * @param length The length that the snackbar will be displayed. Defaults to [Snackbar.LENGTH_LONG]
  * @see Snackbar.LENGTH_SHORT
@@ -86,7 +99,7 @@ fun TabLayout.findTabByTag(tag: String): TabLayout.Tab? {
  * @see Snackbar.LENGTH_INDEFINITE
  */
 fun View.snackbar(@StringRes message: Int, @Duration length: Int = Snackbar.LENGTH_LONG) {
-    Snackbar.make(this, message, length).show()
+    this.snackbar(str(message), length)
 }
 
 /**
@@ -108,7 +121,7 @@ fun View.snackbarWithAction(@StringRes message: Int,
                             @StringRes actionText: Int,
                             listener: (View) -> Unit,
                             @ColorInt color: Int? = null) {
-    val snackbar = Snackbar.make(this, message, length)
+    val snackbar = Snackbar.make(this, str(message), length)
             .setAction(actionText, listener)
 
     color?.let { snackbar.setActionTextColor(color) }

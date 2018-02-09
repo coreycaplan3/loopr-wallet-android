@@ -64,13 +64,17 @@
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
-    <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
 
     <string name="pref_title_new_message_notifications">New message notifications</string>
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Access to the camera is needed to scan QR codes</string>
+    <string name="no_camera_permission">The QR code scanner cannot run because this app does not have the camera permission</string>
+    <string name="low_storage_error">QR Code Scanner cannot be downloaded due to low device storage</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_intro">IntroActivity</string>
@@ -150,4 +154,6 @@
     <string name="today_open">Today\'s Open</string>
     <string name="today_low">Today\'s Low</string>
     <string name="today_high">Today\'s High</string>
+    <string name="qr_code_scanner_instructions">Tap to capture. Pinch to zoom</string>
+    <string name="is_an_invalid_address">is an invalid address</string>
 </resources>

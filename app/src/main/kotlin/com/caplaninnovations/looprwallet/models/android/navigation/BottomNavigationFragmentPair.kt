@@ -26,10 +26,3 @@ class BottomNavigationFragmentPair(@BottomNavigationTag val tag: String,
     }
 
 }
-
-@StringDef(
-        BottomNavigationFragmentPair.KEY_MARKETS,
-        BottomNavigationFragmentPair.KEY_ORDERS,
-        BottomNavigationFragmentPair.KEY_MY_WALLET
-)
-annotation class BottomNavigationTag

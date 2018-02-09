@@ -2,14 +2,12 @@ package com.caplaninnovations.looprwallet.fragments
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
+import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.utilities.logd
-import kotlinx.android.synthetic.main.fragment_general_with_view_pager.*
 
 /**
  * Created by Corey on 1/17/2018.

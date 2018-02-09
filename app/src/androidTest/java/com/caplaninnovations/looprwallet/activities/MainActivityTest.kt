@@ -13,7 +13,7 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
-import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
+import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.appbar_main.*
 import kotlinx.android.synthetic.main.bottom_navigation.*

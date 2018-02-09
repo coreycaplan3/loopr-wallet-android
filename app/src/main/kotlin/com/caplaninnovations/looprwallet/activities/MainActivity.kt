@@ -13,7 +13,7 @@ import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigat
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
-import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
+import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
@@ -61,7 +61,7 @@ class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChan
         )
 
         bottomNavigationHandler = BottomNavigationHandler(this, fragmentTagPairs,
-                BottomNavigationFragmentPair.KEY_MARKETS, savedInstanceState)
+                KEY_MARKETS, savedInstanceState)
 
         isIntentForClosingApplication()
     }

@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.models.android.navigation
+package com.caplaninnovations.looprwallet.handlers
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -14,6 +14,8 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationTag
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 

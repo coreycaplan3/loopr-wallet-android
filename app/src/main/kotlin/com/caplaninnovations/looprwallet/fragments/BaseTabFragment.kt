@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.fragments.LooprFragmentPagerAdapter
-import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationHandler
+import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.utilities.getAttrColorStateList
 import com.caplaninnovations.looprwallet.utilities.logv
 import kotlinx.android.synthetic.main.fragment_general_with_view_pager.*

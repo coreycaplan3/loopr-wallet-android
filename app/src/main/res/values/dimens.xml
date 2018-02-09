@@ -23,6 +23,8 @@
 
     <!-- Margin -->
 
+    <dimen name="statistics_pair_margin_top">-2dp</dimen>
+
     <dimen name="standard_margin">16dp</dimen>
     <dimen name="vertical_margin">16dp</dimen>
     <dimen name="vertical_margin_small">8dp</dimen>

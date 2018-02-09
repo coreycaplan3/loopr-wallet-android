@@ -4,8 +4,10 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
+import android.support.v4.app.ActivityCompat
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.dagger.*
+import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.utilities.logi
 import com.google.firebase.crash.FirebaseCrash
@@ -38,6 +40,8 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
 
         application = this
 
+        ActivityCompat.setPermissionCompatDelegate(PermissionHandler.delegate)
+
         Realm.init(this)
 
         looprProductionComponent = provideDaggerComponent()
@@ -68,19 +72,19 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
         }
     }
 
+    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+    }
+
     override fun onActivityStarted(activity: Activity?) {
-    }
-
-    override fun onActivityDestroyed(activity: Activity?) {
-    }
-
-    override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
     }
 
     override fun onActivityStopped(activity: Activity?) {
     }
 
-    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+    override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
+    }
+
+    override fun onActivityDestroyed(activity: Activity?) {
     }
 
 }

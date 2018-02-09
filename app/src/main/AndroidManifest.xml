@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.caplaninnovations.looprwallet">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".application.LooprWalletApp"
         android:allowBackup="false"
@@ -45,7 +47,8 @@
         <activity
             android:name=".activities.WelcomeActivity"
             android:label="@string/welcome" />
-        <activity android:name=".activities.SecurityActivity"></activity>
+        <activity android:name=".activities.SecurityActivity" />
+        <activity android:name=".activities.BarcodeCaptureActivity" />
     </application>
 
 </manifest>
