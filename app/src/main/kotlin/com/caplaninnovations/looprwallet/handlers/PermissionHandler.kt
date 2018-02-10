@@ -22,9 +22,9 @@ import kotlin.reflect.KProperty
  * @param onPermissionGranted A function that's called when the permission is granted to the app or
  * if it's already granted.
  * @param onPermissionDenied A function that's called when the permission is denied to the app.
- * @param shouldDelayRequestingPermission True if we shouldn't make a call to [requestPermission]
+ * @param shouldRequestPermissionNow True if we should make a call to [requestPermission]
  * immediately. **NOTE**: You must make a call to [requestPermission] on your own if you set this
- * variable to true. All other functionality will still be handled for you though (when permissions
+ * variable to false. All other functionality will still be handled for you though (when permissions
  * are denied/granted).
  */
 class PermissionHandler(private val activity: BaseActivity,
@@ -32,7 +32,7 @@ class PermissionHandler(private val activity: BaseActivity,
                         @Code private val requestCode: Int,
                         private val onPermissionGranted: () -> Unit,
                         private val onPermissionDenied: () -> Unit,
-                        shouldDelayRequestingPermission: Boolean = false) :
+                        shouldRequestPermissionNow: Boolean = true) :
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     @IntDef(REQUEST_CODE_CAMERA.toLong())
@@ -52,8 +52,13 @@ class PermissionHandler(private val activity: BaseActivity,
         val code = ActivityCompat.checkSelfPermission(activity, permission)
         isPermissionGranted = code == PackageManager.PERMISSION_GRANTED
 
-        if (!isPermissionGranted && !shouldDelayRequestingPermission) {
+        if (!isPermissionGranted && shouldRequestPermissionNow) {
+            // The permission wasn't granted and we aren't delaying requesting the transition, so
+            // let's request it immediately.
             requestPermission()
+        } else if (isPermissionGranted) {
+            // The permission was granted, so let's notify the listener immediately
+            onPermissionGranted.invoke()
         }
     }
 

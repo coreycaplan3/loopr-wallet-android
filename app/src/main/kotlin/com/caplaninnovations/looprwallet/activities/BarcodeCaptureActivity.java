@@ -109,7 +109,7 @@ public final class BarcodeCaptureActivity extends BaseActivity implements Barcod
                     onRequestCameraPermissionFailed();
                     return null;
                 },
-                false);
+                true);
 
         addPermissionHandler(cameraPermissionHandler);
 

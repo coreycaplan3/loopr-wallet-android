@@ -9,11 +9,10 @@ import org.mockito.Mockito
 /**
  * Created by Corey on 2/9/2018.
  *
- *
  * Project: loopr-wallet-android
  *
- *
  * Purpose of Class:
+ *
  */
 class LooprPermissionDelegateTest {
 
