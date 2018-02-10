@@ -14,6 +14,7 @@ import android.view.WindowManager.LayoutParams.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.dagger.LooprProductionComponent
+import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.realm.RealmClient
@@ -38,9 +39,6 @@ import javax.inject.Inject
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    var isToolbarCollapseEnabled: Boolean = false
-        private set
-
     companion object {
 
         private const val KEY_IS_TOOLBAR_COLLAPSED = "_IS_TOOLBAR_COLLAPSED"
@@ -59,6 +57,9 @@ abstract class BaseActivity : AppCompatActivity() {
      * otherwise
      */
     abstract val isSecurityActivity: Boolean
+
+    var isToolbarCollapseEnabled: Boolean = false
+        private set
 
     private lateinit var looprProductionComponent: LooprProductionComponent
 
@@ -81,6 +82,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     var realm: Realm? = null
 
+    private val permissionHandlers: MutableList<PermissionHandler> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -92,6 +95,10 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(contentView)
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_PAN)
+
+        permissionHandlers.forEach {
+            it.requestPermission()
+        }
 
         activityContainer = findViewById(R.id.activityContainer)
 
@@ -148,6 +155,18 @@ abstract class BaseActivity : AppCompatActivity() {
                 loge("There is no current wallet... prompting the user to sign in", IllegalStateException())
                 securityClient.onNoCurrentWalletSelected(this)
             }
+        }
+    }
+
+    fun addPermissionHandler(permissionHandler: PermissionHandler) {
+        permissionHandlers.add(permissionHandler)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        permissionHandlers.forEach {
+            it.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 

@@ -17,7 +17,6 @@ package com.caplaninnovations.looprwallet.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -26,15 +25,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.View;
 import android.widget.Toast;
 
 import com.caplaninnovations.looprwallet.R;
+import com.caplaninnovations.looprwallet.handlers.PermissionHandler;
 import com.caplaninnovations.looprwallet.models.barcode.BarcodeGraphic;
 import com.caplaninnovations.looprwallet.models.barcode.BarcodeGraphicTracker;
 import com.caplaninnovations.looprwallet.models.barcode.BarcodeTrackerFactory;
@@ -99,20 +97,26 @@ public final class BarcodeCaptureActivity extends BaseActivity implements Barcod
         mPreview = findViewById(R.id.preview);
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
 
-        // Check for the camera permission before accessing the camera.  If the
-        // permission is not granted yet, request permission.
-        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        if (rc == PackageManager.PERMISSION_GRANTED) {
-            createCameraSource();
-        } else {
-            requestCameraPermission();
-        }
+        PermissionHandler cameraPermissionHandler = new PermissionHandler(
+                this,
+                Manifest.permission.CAMERA,
+                PermissionHandler.REQUEST_CODE_CAMERA,
+                () -> {
+                    createCameraSource();
+                    return null;
+                },
+                () -> {
+                    onRequestCameraPermissionFailed();
+                    return null;
+                },
+                false);
+
+        addPermissionHandler(cameraPermissionHandler);
 
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, R.string.qr_code_scanner_instructions, Snackbar.LENGTH_LONG)
-                .show();
+        ViewUtilityKt.snackbar(mGraphicOverlay, R.string.qr_code_scanner_instructions, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -125,32 +129,6 @@ public final class BarcodeCaptureActivity extends BaseActivity implements Barcod
             String message = value + getString(R.string.is_an_invalid_address);
             ViewUtilityKt.snackbar(mPreview, message, Snackbar.LENGTH_LONG);
         }
-    }
-
-    /**
-     * Handles the requesting of the camera permission.  This includes
-     * showing a "Snackbar" message of why the permission is needed then
-     * sending the request.
-     */
-    private void requestCameraPermission() {
-        Log.w(TAG, "Camera permission is not granted. Requesting permission");
-
-        final String[] permissions = new String[]{Manifest.permission.CAMERA};
-
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-            ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_CAMERA_PERM);
-            return;
-        }
-
-        final Activity thisActivity = this;
-
-        View.OnClickListener listener =
-                view -> ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_CAMERA_PERM);
-
-        findViewById(R.id.activityContainer).setOnClickListener(listener);
-        Snackbar.make(mGraphicOverlay, R.string.permission_camera_rationale, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.ok, listener)
-                .show();
     }
 
     @Override
@@ -284,8 +262,12 @@ public final class BarcodeCaptureActivity extends BaseActivity implements Barcod
         Log.e(TAG, "Permission not granted: results len = " + grantResults.length +
                 " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.app_name)
+
+    }
+
+    private void onRequestCameraPermissionFailed() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.app_name)
                 .setMessage(R.string.no_camera_permission)
                 .setPositiveButton(R.string.ok, (dialog, id) -> finish())
                 .show();
