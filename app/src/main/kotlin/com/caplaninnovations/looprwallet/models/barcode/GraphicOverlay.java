@@ -46,19 +46,19 @@ import java.util.Vector;
  * </ol>
  */
 @SuppressWarnings("WeakerAccess")
-public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
+public class GraphicOverlay extends View {
     private final Object mLock = new Object();
     private int mPreviewWidth;
     private float mWidthScaleFactor = 1.0f;
     private int mPreviewHeight;
     private float mHeightScaleFactor = 1.0f;
     private int mFacing = CameraSource.CAMERA_FACING_BACK;
-    private Set<T> mGraphics = new HashSet<>();
+    private Set<BarcodeGraphic> mGraphics = new HashSet<>();
 
     /**
      * Base class for a custom graphics object to be rendered within the graphic overlay.  Subclass
      * this and implement the {@link Graphic#draw(Canvas)} method to define the
-     * graphics element.  Add instances to the overlay using {@link GraphicOverlay#add(Graphic)}.
+     * graphics element.  Add instances to the overlay using {@link GraphicOverlay#add(BarcodeGraphic)}}.
      */
     public static abstract class Graphic {
         private GraphicOverlay mOverlay;
@@ -138,7 +138,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     /**
      * Adds a graphic to the overlay.
      */
-    public void add(T graphic) {
+    public void add(BarcodeGraphic graphic) {
         synchronized (mLock) {
             mGraphics.add(graphic);
         }
@@ -148,7 +148,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     /**
      * Removes a graphic from the overlay.
      */
-    public void remove(T graphic) {
+    public void remove(BarcodeGraphic graphic) {
         synchronized (mLock) {
             mGraphics.remove(graphic);
         }
@@ -160,10 +160,9 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
      *
      * @return list of all active graphics.
      */
-    @SuppressWarnings("unchecked")
-    public List<T> getGraphics() {
+    public List<BarcodeGraphic> getGraphics() {
         synchronized (mLock) {
-            return new Vector(mGraphics);
+            return new Vector<>(mGraphics);
         }
     }
 

@@ -30,7 +30,7 @@ import com.google.android.gms.vision.barcode.Barcode;
  */
 @SuppressWarnings("unused")
 public class BarcodeGraphicTracker extends Tracker<Barcode> {
-    private GraphicOverlay<BarcodeGraphic> mOverlay;
+    private GraphicOverlay mOverlay;
     private BarcodeGraphic mGraphic;
 
     private BarcodeUpdateListener mBarcodeUpdateListener;
@@ -44,7 +44,7 @@ public class BarcodeGraphicTracker extends Tracker<Barcode> {
         void onBarcodeDetected(Barcode barcode);
     }
 
-    BarcodeGraphicTracker(GraphicOverlay<BarcodeGraphic> mOverlay, BarcodeGraphic mGraphic,
+    BarcodeGraphicTracker(GraphicOverlay mOverlay, BarcodeGraphic mGraphic,
                           Context context) {
         this.mOverlay = mOverlay;
         this.mGraphic = mGraphic;

@@ -1,9 +1,11 @@
 package com.caplaninnovations.looprwallet.handlers
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.support.annotation.IntDef
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.ActivityCompat
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import kotlin.reflect.KProperty
@@ -27,12 +29,12 @@ import kotlin.reflect.KProperty
  * variable to false. All other functionality will still be handled for you though (when permissions
  * are denied/granted).
  */
-class PermissionHandler(private val activity: BaseActivity,
-                        private val permission: String,
-                        @Code private val requestCode: Int,
-                        private val onPermissionGranted: () -> Unit,
-                        private val onPermissionDenied: () -> Unit,
-                        shouldRequestPermissionNow: Boolean = true) :
+open class PermissionHandler(private val activity: BaseActivity,
+                             private val permission: String,
+                             @Code private val requestCode: Int,
+                             private val onPermissionGranted: () -> Unit,
+                             private val onPermissionDenied: () -> Unit,
+                             val shouldRequestPermissionNow: Boolean = true) :
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     @IntDef(REQUEST_CODE_CAMERA.toLong())
@@ -52,12 +54,8 @@ class PermissionHandler(private val activity: BaseActivity,
         val code = ActivityCompat.checkSelfPermission(activity, permission)
         isPermissionGranted = code == PackageManager.PERMISSION_GRANTED
 
-        if (!isPermissionGranted && shouldRequestPermissionNow) {
-            // The permission wasn't granted and we aren't delaying requesting the transition, so
-            // let's request it immediately.
-            requestPermission()
-        } else if (isPermissionGranted) {
-            // The permission was granted, so let's notify the listener immediately
+        if(isPermissionGranted) {
+            // The permission is already granted. Let's tell our listener immediately
             onPermissionGranted.invoke()
         }
     }
@@ -66,11 +64,12 @@ class PermissionHandler(private val activity: BaseActivity,
      * Requests permissions from the user for the permission put into this instance's constructor.
      * On success/failure, [onPermissionGranted] [onPermissionDenied] will be called automatically.
      */
+    @SuppressLint("VisibleForTests")
     fun requestPermission() {
         if (isPermissionGranted) {
             onPermissionGranted.invoke()
         } else {
-            ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
+            requestPermissionWrapper()
         }
     }
 
@@ -85,6 +84,15 @@ class PermissionHandler(private val activity: BaseActivity,
         } else {
             onPermissionDenied.invoke()
         }
+    }
+
+    /**
+     * A wrapper around [ActivityCompat.requestPermissions] to make testing easier, since we can
+     * stub this method and mock it.
+     */
+    @VisibleForTesting
+    open fun requestPermissionWrapper() {
+        ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
     }
 
     private class LooprPermissionDelegate : ActivityCompat.PermissionCompatDelegate {

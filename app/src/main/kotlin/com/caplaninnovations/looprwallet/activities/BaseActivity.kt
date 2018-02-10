@@ -82,7 +82,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     var realm: Realm? = null
 
-    private val permissionHandlers: MutableList<PermissionHandler> = mutableListOf()
+    private lateinit var permissionHandlers: List<PermissionHandler>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,9 +96,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_PAN)
 
-        permissionHandlers.forEach {
-            it.requestPermission()
-        }
+        permissionHandlers = getAllPermissionHandlers()
+        permissionHandlers
+                .filter { it.shouldRequestPermissionNow }
+                .forEach { it.requestPermission() }
 
         activityContainer = findViewById(R.id.activityContainer)
 
@@ -158,8 +159,9 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun addPermissionHandler(permissionHandler: PermissionHandler) {
-        permissionHandlers.add(permissionHandler)
+    open fun getAllPermissionHandlers(): List<PermissionHandler> {
+        // Default is to return an empty list
+        return listOf()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

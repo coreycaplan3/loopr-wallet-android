@@ -3,7 +3,6 @@ package com.caplaninnovations.looprwallet.handlers
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.utilities.loge
 import junit.framework.Assert.*
 import org.junit.Test
 
@@ -11,11 +10,7 @@ import org.junit.Before
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.internal.verification.api.VerificationData
-import org.mockito.verification.VerificationMode
-import org.powermock.api.mockito.PowerMockito
-import org.powermock.core.classloader.annotations.PrepareForTest
-import org.powermock.modules.junit4.PowerMockRunner
+import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * Created by Corey on 2/9/2018.
@@ -24,7 +19,7 @@ import org.powermock.modules.junit4.PowerMockRunner
  *
  * Purpose of Class:
  */
-@RunWith(PowerMockRunner::class)
+@RunWith(MockitoJUnitRunner::class)
 class PermissionHandlerTest {
 
     companion object {
@@ -66,11 +61,8 @@ class PermissionHandlerTest {
 
     private var isFailureFunctionCalled = false
 
-    @PrepareForTest(ActivityCompat::class)
     @Before
     fun setup() {
-        PowerMockito.mockStatic(ActivityCompat::class.java)
-
         Mockito.`when`(ActivityCompat.checkSelfPermission(activity, PERMISSION_DENIED_IN_INITIAL_CHECK))
                 .thenReturn(PackageManager.PERMISSION_DENIED)
         assertEquals(PackageManager.PERMISSION_DENIED, ActivityCompat.checkSelfPermission(activity, PERMISSION_DENIED_IN_INITIAL_CHECK))
@@ -80,38 +72,28 @@ class PermissionHandlerTest {
         assertEquals(PackageManager.PERMISSION_GRANTED, ActivityCompat.checkSelfPermission(activity, PERMISSION_GRANTED_IMMEDIATELY))
 
 
-        successPermissionHandler = PermissionHandler(
+        successPermissionHandler = Mockito.spy(PermissionHandler(
                 activity = activity,
                 permission = PERMISSION_DENIED_IN_INITIAL_CHECK,
                 requestCode = REQUEST_CODE_FOR_SUCCESS,
                 onPermissionGranted = this::successFunction,
                 onPermissionDenied = this::failureFunction,
                 shouldRequestPermissionNow = false
-        )
+        ))
+        assertFalse(successPermissionHandler.shouldRequestPermissionNow)
 
-        failurePermissionHandler = PermissionHandler(
+        failurePermissionHandler = Mockito.spy(PermissionHandler(
                 activity = activity,
                 permission = PERMISSION_DENIED_IN_INITIAL_CHECK,
                 requestCode = REQUEST_CODE_FOR_FAILURE,
                 onPermissionGranted = this::successFunction,
                 onPermissionDenied = this::failureFunction,
                 shouldRequestPermissionNow = false
-        )
+        ))
+        assertFalse(failurePermissionHandler.shouldRequestPermissionNow)
 
-        Mockito.`when`(ActivityCompat.requestPermissions(activity, arrayOf(PERMISSION_DENIED_IN_INITIAL_CHECK), REQUEST_CODE_FOR_SUCCESS))
-                .then { invocation ->
-                    loge("Invoking mocked ActivityCompat.requestPermissions!")
-                    when {
-                        invocation.arguments.contains(REQUEST_CODE_FOR_SUCCESS) -> thenPermissionGranted()
-                        invocation.arguments.contains(REQUEST_CODE_FOR_FAILURE) -> thenPermissionDenied()
-                    }
-                }
 
-        PowerMockito.verifyStatic()
-
-        // Neither of these values should have been set, since we ARE delaying requesting permissions
-        assertFalse(isSuccessFunctionCalled)
-        assertFalse(isFailureFunctionCalled)
+        setupMockingRequestPermissions()
     }
 
     @Test
@@ -150,7 +132,7 @@ class PermissionHandlerTest {
                 requestCode = REQUEST_CODE_FOR_SUCCESS,
                 onPermissionGranted = this::successFunction,
                 onPermissionDenied = this::failureFunction,
-                shouldRequestPermissionNow = true
+                shouldRequestPermissionNow = false
         )
 
         assertTrue(isSuccessFunctionCalled)
@@ -163,7 +145,7 @@ class PermissionHandlerTest {
                 requestCode = REQUEST_CODE_FOR_FAILURE,
                 onPermissionGranted = this::successFunction,
                 onPermissionDenied = this::failureFunction,
-                shouldRequestPermissionNow = true
+                shouldRequestPermissionNow = false
         )
 
         // Requesting the permission fails, but checking the permission returns GRANTED --> so,
@@ -174,30 +156,63 @@ class PermissionHandlerTest {
 
     @Test
     fun turnImmediateRequestingPermissionOn() {
-        successPermissionHandler = PermissionHandler(
+        successPermissionHandler = Mockito.spy(PermissionHandler(
                 activity = activity,
                 permission = PERMISSION_DENIED_IN_INITIAL_CHECK,
                 requestCode = REQUEST_CODE_FOR_SUCCESS,
                 onPermissionGranted = this::successFunction,
                 onPermissionDenied = this::failureFunction,
                 shouldRequestPermissionNow = true
-        )
+        ))
 
-        assertTrue(isSuccessFunctionCalled)
-        assertFalse(isFailureFunctionCalled)
-        isSuccessFunctionCalled = false // Reset its value
-
-        failurePermissionHandler = PermissionHandler(
+        failurePermissionHandler = Mockito.spy(PermissionHandler(
                 activity = activity,
                 permission = PERMISSION_DENIED_IN_INITIAL_CHECK,
                 requestCode = REQUEST_CODE_FOR_FAILURE,
                 onPermissionGranted = this::successFunction,
                 onPermissionDenied = this::failureFunction,
                 shouldRequestPermissionNow = true
-        )
+        ))
+
+        setupMockingRequestPermissions()
+
+        assertTrue(successPermissionHandler.shouldRequestPermissionNow)
+        successPermissionHandler.requestPermission()
+
+        assertTrue(isSuccessFunctionCalled)
+        assertFalse(isFailureFunctionCalled)
+
+        isSuccessFunctionCalled = false // Reset its value
+
+        assertTrue(failurePermissionHandler.shouldRequestPermissionNow)
+        failurePermissionHandler.requestPermission()
 
         assertTrue(isFailureFunctionCalled)
         assertFalse(isSuccessFunctionCalled)
+    }
+
+    // MARK - Private Methods
+
+    private fun setupMockingRequestPermissions() {
+        Mockito.`when`(successPermissionHandler.requestPermissionWrapper())
+                .thenAnswer({ thenPermissionGranted() })
+
+        successPermissionHandler.requestPermissionWrapper()
+        assertTrue(isSuccessFunctionCalled)
+
+        isSuccessFunctionCalled = false // Reset the value
+
+        Mockito.`when`(failurePermissionHandler.requestPermissionWrapper())
+                .thenAnswer({ thenPermissionDenied() })
+
+        failurePermissionHandler.requestPermissionWrapper()
+        assertTrue(isFailureFunctionCalled)
+
+        isFailureFunctionCalled = false // Reset the value
+
+        // Neither of these values should have been set, since we ARE delaying requesting permissions
+        assertFalse(isSuccessFunctionCalled)
+        assertFalse(isFailureFunctionCalled)
     }
 
     private fun thenPermissionGranted() {
