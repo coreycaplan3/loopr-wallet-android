@@ -75,13 +75,15 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
     }
 
     override fun getAllPermissionHandlers(): List<PermissionHandler> {
-        return listOf(PermissionHandler(
-                this,
-                Manifest.permission.CAMERA,
-                PermissionHandler.REQUEST_CODE_CAMERA,
-                { createCameraSource() },
-                { onRequestCameraPermissionFailed() },
-                true))
+        return listOf(
+                PermissionHandler(
+                        activity = this,
+                        permission = Manifest.permission.CAMERA,
+                        requestCode = PermissionHandler.REQUEST_CODE_CAMERA,
+                        onPermissionGranted = { createCameraSource() },
+                        onPermissionDenied = { onRequestCameraPermissionFailed() },
+                        shouldRequestPermissionNow = true)
+        )
     }
 
     override fun onBarcodeDetected(barcode: Barcode) {
