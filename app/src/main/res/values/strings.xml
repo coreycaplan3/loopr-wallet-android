@@ -104,8 +104,9 @@
     <string name="reveal_private_key">Reveal Private Key</string>
     <string name="account_balances">Account Balances</string>
     <string name="content_description_share_address">Share your address</string>
-    <string name="content_description_reveal_private_key">Reveal your Private Key</string>
-    <string name="show_all_tokens">Show All Tokens</string>
+    <string name="content_description_reveal_private_key">Temporarily Reveal your Private Key</string>
+    <string name="content_description_download_keystore">Download the keystore file for backup</string>
+    <string name="view_all_tokens">View All Tokens</string>
     <string name="content_description_send_ether_or_tokens">Send Ether or tokens to another address</string>
     <string name="ellipsis">.....</string>
     <string name="content_description_trading_pair_image">The logo for this cryptocurrency</string>
@@ -137,7 +138,12 @@
     <string name="send">Send</string>
     <string name="content_description_send_swap">Swaps the input to be in terms of tokens instead of currency</string>
     <string name="recipient_address">Recipient Address</string>
+    <string name="contact_address">Contact Address</string>
     <string name="content_description_qrcode_scanner">Scan the recipient\'s address via barcode</string>
     <string name="_continue">Continue</string>
     <string name="number_of"># of</string>
+    <string name="contact_name">Contact Name</string>
+    <string name="contacts_and_transfers"><![CDATA[Contacts & Transfers]]></string>
+    <string name="show_transfers">Show Transfers</string>
+    <string name="start_a_transfer">Start a Transfer</string>
 </resources>

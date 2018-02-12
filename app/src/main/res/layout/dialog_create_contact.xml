@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/standard_padding">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/createContactNameInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/barcodeScannerButton"
+        android:layout_toStartOf="@id/barcodeScannerButton"
+        app:errorEnabled="true">
+
+        <EditText
+            android:id="@+id/createContactNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contact_name"
+            tools:text="@string/default_contact_name" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/createContactAddressInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/createContactNameInputLayout"
+        android:layout_toLeftOf="@id/barcodeScannerButton"
+        android:layout_toStartOf="@id/barcodeScannerButton"
+        app:errorEnabled="true">
+
+        <EditText
+            android:id="@+id/createContactAddressEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contact_address"
+            tools:text="@string/default_address" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/barcodeScannerButton"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/createContactNameInputLayout"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/content_description_qrcode_scanner"
+        android:tint="?android:attr/textColorPrimary"
+        app:srcCompat="@drawable/qrcode_scan" />
+
+</RelativeLayout>

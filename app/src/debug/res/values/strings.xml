@@ -33,4 +33,6 @@
     <string name="default_price">$0.6294309</string>
     <string name="default_trade_volume">$2,511,280 USD</string>
     <string name="default_market_cap">$353,995,717 USD</string>
+    <string name="default_contact_name_with_label">Recipient: Corey Caplan</string>
+    <string name="default_contact_name">Corey Caplan</string>
 </resources>

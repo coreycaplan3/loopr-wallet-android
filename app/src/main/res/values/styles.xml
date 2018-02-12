@@ -16,6 +16,22 @@
 
     <!-- Buttons -->
 
+    <style name="CardActionButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">@dimen/card_action_icon_size</item>
+        <item name="android:layout_height">@dimen/card_action_icon_size</item>
+        <item name="android:background">@drawable/accent_ripple_effect</item>
+        <item name="android:tint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="CardFlatButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/card_action_icon_size</item>
+        <item name="android:background">@drawable/accent_ripple_effect</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:paddingLeft">@dimen/card_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/card_padding_horizontal</item>
+    </style>
+
     <style name="buttonStyle" parent="@style/Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/white</item>
     </style>

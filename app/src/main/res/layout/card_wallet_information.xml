@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/cardStylePrimaryContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Base.TextAppearance.AppCompat.Headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/wallet_information" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/standard_padding" />
+
+            <TextView
+                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/your_address" />
+
+            <TextView
+                android:id="@+id/addressText"
+                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true"
+                tools:text="@string/default_address" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/standard_padding_small" />
+
+            <TextView
+                style="@style/Base.TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/unlock_to_reveal_private_key" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.12"
+            android:background="?attr/dividerColor" />
+
+        <LinearLayout
+            style="@style/cardStyleActionContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/shareAddressButton"
+                style="@style/CardActionButton"
+                android:contentDescription="@string/content_description_share_address"
+                android:src="@drawable/ic_share_white_24dp" />
+
+            <ImageButton
+                android:id="@+id/showPrivateKeyButton"
+                style="@style/CardActionButton"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small"
+                android:background="@drawable/accent_ripple_effect"
+                android:contentDescription="@string/content_description_reveal_private_key"
+                android:src="@drawable/ic_visibility_white_24dp"
+                android:text="@string/reveal_private_key" />
+
+            <ImageButton
+                android:id="@+id/downloadKeyStoreFile"
+                style="@style/CardActionButton"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small"
+                android:contentDescription="@string/content_description_download_keystore"
+                android:src="@drawable/ic_file_download_white_24dp"
+                android:text="@string/reveal_private_key" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
