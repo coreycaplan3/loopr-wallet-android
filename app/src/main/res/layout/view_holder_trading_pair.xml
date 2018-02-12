@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
@@ -11,7 +12,7 @@
         android:layout_height="48dp"
         android:layout_centerVertical="true"
         android:contentDescription="@string/content_description_trading_pair_image"
-        android:src="@drawable/loopring" />
+        tools:src="@drawable/loopring" />
 
     <TextView
         android:id="@+id/tradingPairTickerText"
@@ -22,7 +23,7 @@
         android:layout_marginStart="@dimen/standard_horizontal_padding"
         android:layout_toEndOf="@id/tradingPairImage"
         android:layout_toRightOf="@id/tradingPairImage"
-        android:text="@string/default_trading_pair_ticker" />
+        tools:text="@string/default_trading_pair_ticker" />
 
     <TextView
         android:id="@+id/tradingPairTokenNameText"
@@ -35,7 +36,7 @@
         android:layout_marginTop="@dimen/vertical_margin_small"
         android:layout_toEndOf="@id/tradingPairImage"
         android:layout_toRightOf="@id/tradingPairImage"
-        android:text="@string/default_trading_pair_token_name" />
+        tools:text="@string/default_trading_pair_token_name" />
 
     <TextView
         android:id="@+id/tradingPairPercentageChangeText"
@@ -47,8 +48,8 @@
         android:layout_toEndOf="@id/tradingPairTickerText"
         android:layout_toRightOf="@id/tradingPairTickerText"
         android:gravity="end"
-        android:text="@string/default_trading_pair_percentage_change"
-        android:textColor="@color/green" />
+        android:textColor="@color/green"
+        tools:text="@string/default_trading_pair_percentage_change" />
 
     <TextView
         android:id="@+id/tradingPairCurrentPriceText"
@@ -62,6 +63,6 @@
         android:layout_toEndOf="@id/tradingPairTokenNameText"
         android:layout_toRightOf="@id/tradingPairTokenNameText"
         android:gravity="end"
-        android:text="@string/default_trading_pair_price" />
+        tools:text="@string/default_trading_pair_price" />
 
 </RelativeLayout>

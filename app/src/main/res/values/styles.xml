@@ -20,6 +20,13 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="ButtonNumberPad" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/accent_ripple_effect</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
+
     <style name="lightButtonStyleBorderless" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/lightPrimaryDark</item>
     </style>

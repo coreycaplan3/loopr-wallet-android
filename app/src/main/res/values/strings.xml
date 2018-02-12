@@ -13,7 +13,6 @@
     </string>
 
     <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
@@ -63,19 +62,17 @@
     <string-array name="multi_select_list_preference_default_value" />
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
-
     <string name="pref_header_notifications">Notifications</string>
-
     <string name="pref_title_new_message_notifications">New message notifications</string>
-
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
 
+    <string name="ask">Ask:</string>
+    <string name="bid">Bid:</string>
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed to scan QR codes</string>
     <string name="no_camera_permission">The QR code scanner cannot run because this app does not have the camera permission. The camera will now close.</string>
     <string name="low_storage_error">QR Code Scanner cannot be downloaded due to low device storage</string>
-
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_intro">IntroActivity</string>
     <string name="title_activity_sign_in">SignInActivity</string>
@@ -96,21 +93,11 @@
     <string name="exit_app">Exit App?</string>
     <string name="exit_app_rationale">Are you sure you want to exit the app? Your progress will be lost</string>
     <string name="exit">Exit</string>
-    <string name="create_order_default_quantity_label"># of LRC</string>
     <string name="market_price">Market Price</string>
     <string name="estimated_cost">Estimated Cost</string>
-    <string name="default_price_in_eth">0.00079059 ETH</string>
-    <string name="order_summary">Order Summary</string>
-    <string name="default_order_total_in_eth">1.1228354475 ETH</string>
-    <string name="default_order_summary">
-        You are about to perform a market buy of 1,420.25 LRC at the current market price of
-        0.00079059 ETH. The total cost is 1.1228354475 ETH.
-    </string>
-    <string name="buy">Buy</string>
+    <string name="order_summary">Order Summary</string><string name="buy">Buy</string>
     <string name="sell">Sell</string>
-    <string name="default_order_quantity">1420.25</string>
     <string name="wallet_information">Wallet Information</string>
-    <string name="default_address">0x4995314DDFf0C9A7f9a48A4563aD2c73D4b2c483</string>
     <string name="your_address">Your Address:</string>
     <string name="content_description_copy_address">Allows you to copy your address to the clipboard</string>
     <string name="unlock_to_reveal_private_key">Unlock to Reveal Private Key</string>
@@ -118,38 +105,16 @@
     <string name="account_balances">Account Balances</string>
     <string name="content_description_share_address">Share your address</string>
     <string name="content_description_reveal_private_key">Reveal your Private Key</string>
-    <string name="default_eth_balance">3.25 ETH</string>
     <string name="show_all_tokens">Show All Tokens</string>
     <string name="content_description_send_ether_or_tokens">Send Ether or tokens to another address</string>
-    <string name="default_lrc_balance">132 LRC</string>
-    <string name="default_snov_balance">10,324.27801 SNOV</string>
-    <string name="default_itc_balance">560 ITC</string>
     <string name="ellipsis">.....</string>
-    <string name="default_eos_balance">103 EOS</string>
-    <string name="default_omg_balance">27 OMG</string>
-    <string name="default_trading_pair_ticker">LRC</string>
     <string name="content_description_trading_pair_image">The logo for this cryptocurrency</string>
-    <string name="default_trading_pair_token_name">Loopring</string>
-    <string name="default_trading_pair_percentage_change">+6.27%</string>
-    <string name="default_trading_pair_price">$0.626840</string>
     <string name="letter_b">B</string>
     <string name="letter_s">S</string>
-    <string name="default_buy_order_pair">LRC → ETH</string>
-    <string name="default_sell_order_pair">ETH → LRC</string>
-    <string name="default_order_percentage_complete">90% Complete</string>
-    <string name="default_ask_eth">Ask: 0.00079059 ETH</string>
-    <string name="default_bid_eth">Bid: 0.00079059 ETH</string>
-    <string name="default_order_quantity_with_label">Quantity: 1320.425</string>
-    <string name="default_order_placed_time">2/7/2018 at 4:15 pm</string>
-    <string name="default_order_completion_time">Completed: 2/7/2018 at 4:17 PM</string>
     <string name="share_your_address">Share your address</string>
-    <string name="default_total_cost_eth">Cost: 1.04391 ETH</string>
     <string name="statistics">Statistics</string>
-    <string name="default_price">$0.6294309</string>
     <string name="current">Current</string>
-    <string name="default_trade_volume">$2,511,280 USD</string>
     <string name="volume">Volume</string>
-    <string name="default_market_cap">$353,995,717 USD</string>
     <string name="market_cap">Market Cap</string>
     <string name="today_open">Today\'s Open</string>
     <string name="today_low">Today\'s Low</string>
@@ -157,4 +122,22 @@
     <string name="qr_code_scanner_instructions">Tap to capture. Pinch to zoom</string>
     <string name="is_an_invalid_address">is an invalid address</string>
     <string name="error_starting_camera">There was an error starting the camera</string>
+    <string name="_7">7</string>
+    <string name="_8">8</string>
+    <string name="_9">9</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="_6">6</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="decimal">.</string>
+    <string name="_0">0</string>
+    <string name="max">Max</string>
+    <string name="send">Send</string>
+    <string name="content_description_send_swap">Swaps the input to be in terms of tokens instead of currency</string>
+    <string name="recipient_address">Recipient Address</string>
+    <string name="content_description_qrcode_scanner">Scan the recipient\'s address via barcode</string>
+    <string name="_continue">Continue</string>
+    <string name="number_of"># of</string>
 </resources>

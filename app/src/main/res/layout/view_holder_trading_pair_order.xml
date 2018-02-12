@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
@@ -36,8 +37,8 @@
             android:layout_marginStart="@dimen/horizontal_margin"
             android:layout_toEndOf="@id/tradingPairOrderBuySellCircleContainer"
             android:layout_toRightOf="@id/tradingPairOrderBuySellCircleContainer"
-            android:text="@string/default_order_placed_time"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            tools:text="@string/default_order_placed_time" />
 
     </RelativeLayout>
 
@@ -58,8 +59,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_toLeftOf="@id/tradingPairOrderQuantityText"
                 android:layout_toStartOf="@id/tradingPairOrderQuantityText"
-                android:text="@string/default_bid_eth"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                tools:text="@string/default_bid_eth" />
 
             <TextView
                 android:id="@+id/tradingPairOrderCostProceedsText"
@@ -71,8 +72,8 @@
                 android:layout_marginTop="@dimen/vertical_margin_small"
                 android:layout_toLeftOf="@id/tradingPairOrderQuantityText"
                 android:layout_toStartOf="@id/tradingPairOrderQuantityText"
-                android:text="@string/default_total_cost_eth"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                tools:text="@string/default_total_cost_eth" />
 
             <TextView
                 android:id="@+id/tradingPairOrderQuantityText"
@@ -82,8 +83,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="@dimen/vertical_margin_small"
-                android:text="@string/default_order_quantity_with_label"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                tools:text="@string/default_order_quantity_with_label" />
 
         </RelativeLayout>
 

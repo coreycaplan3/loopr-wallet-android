@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_default_display_name">John Smith</string>
+    <string name="create_order_default_quantity_label"># of LRC</string>
+    <string name="default_price_in_eth">0.00079059 ETH</string>
+    <string name="default_order_total_in_eth">1.1228354475 ETH</string>
+    <string name="default_order_summary">
+        You are about to perform a market buy of 1,420.25 LRC at the current market price of
+        0.00079059 ETH. The total cost is 1.1228354475 ETH.
+    </string>
+
+    <string name="default_order_quantity">1420.25</string>
+    <string name="default_address">0x4995314DDFf0C9A7f9a48A4563aD2c73D4b2c483</string>
+    <string name="default_eth_balance">3.25 ETH</string>
+    <string name="default_lrc_balance">132 LRC</string>
+    <string name="default_snov_balance">10,324.27801 SNOV</string>
+    <string name="default_itc_balance">560 ITC</string>
+    <string name="default_eos_balance">103 EOS</string>
+    <string name="default_omg_balance">27 OMG</string>
+    <string name="default_trading_pair_ticker">LRC</string>
+    <string name="default_trading_pair_token_name">Loopring</string>
+    <string name="default_trading_pair_percentage_change">+6.27%</string>
+    <string name="default_trading_pair_price">$0.626840</string>
+    <string name="default_buy_order_pair">LRC → ETH</string>
+    <string name="default_sell_order_pair">ETH → LRC</string>
+    <string name="default_order_percentage_complete">90% Complete</string>
+    <string name="default_ask_eth">Ask: 0.00079059 ETH</string>
+    <string name="default_bid_eth">Bid: 0.00079059 ETH</string>
+    <string name="default_order_quantity_with_label">Quantity: 1320.425</string>
+    <string name="default_order_placed_time">2/7/2018 at 4:15 pm</string>
+    <string name="default_order_completion_time">Completed: 2/7/2018 at 4:17 PM</string>
+    <string name="default_total_cost_eth">Cost: 1.04391 ETH</string>
+    <string name="default_price">$0.6294309</string>
+    <string name="default_trade_volume">$2,511,280 USD</string>
+    <string name="default_market_cap">$353,995,717 USD</string>
+</resources>

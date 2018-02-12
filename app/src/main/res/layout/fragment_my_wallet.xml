@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/myWalletContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -44,12 +45,12 @@
                         android:text="@string/your_address" />
 
                     <TextView
-                        android:id="@+id/addressTextView"
+                        android:id="@+id/addressText"
                         style="@style/Base.TextAppearance.AppCompat.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/default_address"
-                        android:textIsSelectable="true" />
+                        android:textIsSelectable="true"
+                        tools:text="@string/default_address" />
 
                     <View
                         android:layout_width="match_parent"
@@ -77,6 +78,7 @@
                     android:orientation="horizontal">
 
                     <ImageButton
+                        android:id="@+id/shareAddressButton"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -85,6 +87,7 @@
                         android:tint="?colorPrimary" />
 
                     <ImageButton
+                        android:id="@+id/showPrivateKeyButton"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -125,11 +128,12 @@
                         android:text="@string/account_balances" />
 
                     <TextView
+                        android:id="@+id/ethereumBalanceText"
                         style="@style/Base.TextAppearance.AppCompat.Subhead"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/card_subtitle_margin_top"
-                        android:text="@string/default_eth_balance" />
+                        tools:text="@string/default_eth_balance" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -138,36 +142,42 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/firstTokenBalance"
                             style="@style/Base.TextAppearance.AppCompat.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/default_lrc_balance" />
+                            tools:text="@string/default_lrc_balance" />
 
                         <TextView
+                            android:id="@+id/secondTokenBalance"
                             style="@style/Base.TextAppearance.AppCompat.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/default_snov_balance" />
+                            tools:text="@string/default_snov_balance" />
 
                         <TextView
+                            android:id="@+id/thirdTokenBalance"
                             style="@style/Base.TextAppearance.AppCompat.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/default_itc_balance" />
+                            tools:text="@string/default_itc_balance" />
 
                         <TextView
+                            android:id="@+id/fourthTokenBalance"
                             style="@style/Base.TextAppearance.AppCompat.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/default_omg_balance" />
+                            tools:text="@string/default_omg_balance" />
 
                         <TextView
+                            android:id="@+id/fifthTokenBalance"
                             style="@style/Base.TextAppearance.AppCompat.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/default_eos_balance" />
+                            tools:text="@string/default_eos_balance" />
 
                         <TextView
+                            android:id="@+id/ellipsisText"
                             style="@style/Base.TextAppearance.AppCompat.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -190,6 +200,7 @@
                     android:orientation="horizontal">
 
                     <ImageButton
+                        android:id="@+id/myWalletSendButton"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -198,6 +209,7 @@
                         android:tint="?attr/colorPrimary" />
 
                     <Button
+                        android:id="@+id/myWalletShowTokensButton"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
