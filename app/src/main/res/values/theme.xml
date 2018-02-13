@@ -8,10 +8,13 @@
         <item name="colorPrimaryDark">@color/lightPrimaryDark</item>
         <item name="colorAccent">@color/lightAccent</item>
 
+        <item name="colorBackground">#FAFAFA</item>
         <item name="android:colorBackground">#FAFAFA</item>
 
         <item name="colorControlHighlight">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
+
+        <item name="circleBackgroundColor">@color/lightShadowColor</item>
 
         <!-- Actionbar -->
         <item name="titleTextColor">@color/darkPrimaryText</item>
@@ -25,7 +28,8 @@
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/lightAccent</item>
         <item name="buttonStyle">@style/buttonStyle</item>
-        <item name="borderlessButtonStyle">@style/lightButtonStyleBorderless</item>
+        <item name="borderlessButtonColor">@color/lightPrimaryDark</item>
+        <item name="borderlessButtonStyle">@style/buttonStyleBorderless</item>
 
         <!-- Cards -->
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
@@ -52,10 +56,14 @@
         <item name="colorPrimary">@color/darkPrimary</item>
         <item name="colorPrimaryDark">@color/darkPrimaryDark</item>
         <item name="colorAccent">@color/darkAccent</item>
+
+        <item name="colorBackground">#303030</item>
         <item name="android:colorBackground">#303030</item>
 
         <item name="colorControlHighlight">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
+
+        <item name="circleBackgroundColor">@color/darkShadowColor</item>
 
         <!-- Actionbar -->
         <item name="titleTextColor">@color/darkPrimaryText</item>
@@ -69,7 +77,8 @@
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/darkAccent</item>
         <item name="buttonStyle">@style/buttonStyle</item>
-        <item name="borderlessButtonStyle">@style/darkButtonStyleBorderless</item>
+        <item name="borderlessButtonColor">@color/darkPrimary</item>
+        <item name="borderlessButtonStyle">@style/buttonStyleBorderless</item>
 
         <!-- Cards -->
         <item name="cardBackgroundColor">@color/cardview_dark_background</item>

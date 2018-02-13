@@ -12,7 +12,7 @@
     <string name="default_order_quantity">1420.25</string>
     <string name="default_address">0x4995314DDFf0C9A7f9a48A4563aD2c73D4b2c483</string>
     <string name="default_eth_balance">3.25 ETH</string>
-    <string name="default_lrc_balance">132 LRC</string>
+    <string name="default_lrc_quantity">132 LRC</string>
     <string name="default_snov_balance">10,324.27801 SNOV</string>
     <string name="default_itc_balance">560 ITC</string>
     <string name="default_eos_balance">103 EOS</string>
@@ -31,8 +31,16 @@
     <string name="default_order_completion_time">Completed: 2/7/2018 at 4:17 PM</string>
     <string name="default_total_cost_eth">Cost: 1.04391 ETH</string>
     <string name="default_price">$0.6294309</string>
+    <string name="default_total_price">~ $81.84</string>
     <string name="default_trade_volume">$2,511,280 USD</string>
     <string name="default_market_cap">$353,995,717 USD</string>
     <string name="default_contact_name_with_label">Recipient: Corey Caplan</string>
     <string name="default_contact_name">Corey Caplan</string>
+    <string name="default_received_token">Received LRC</string>
+    <string name="default_sent_token">Sent LRC</string>
+    <string name="default_from_contact">From Corey Caplan</string>
+    <string name="default_to_contact">To Corey Caplan</string>
+    <string name="default_date">Feb 12, 2018 at 1:24 AM</string>
+    <string name="default_sent_lrc_quantity">Sent - 132 LRC</string>
+    <string name="default_receive_lrc_quantity">Received - 132 LRC</string>
 </resources>

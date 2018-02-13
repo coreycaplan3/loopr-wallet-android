@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Background Colors -->
+    <attr name="colorBackground" format="color" />
+    <attr name="circleBackgroundColor" format="color" />
+
     <!-- Bottom Navigation -->
     <attr name="bottomNavigationBackground" format="color" />
     <attr name="bottomNavigationTextColor" format="color" />
     <attr name="bottomNavigationTextColorSelected" format="color" />
 
     <!-- Button Styles -->
-    <attr name="borderlessButtonStyle" format="reference" />
+    <attr name="borderlessButtonColor" format="color" />
 
     <!-- Divider Colors -->
-    <attr name="dividerColor" format="color"/>
+    <attr name="dividerColor" format="color" />
 
     <!-- Tab Colors -->
     <attr name="tabWidgetTextColor" format="reference" />

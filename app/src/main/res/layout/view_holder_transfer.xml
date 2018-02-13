@@ -1,8 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/accent_ripple_effect"
+    android:padding="@dimen/standard_padding">
 
-    
+    <FrameLayout
+        android:id="@+id/transferViewHolderImageContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:id="@+id/transferViewHolderReceiveImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/border"
+            android:contentDescription="@string/content_description_receive"
+            android:src="@drawable/transfer_receive"
+            android:tint="@color/green" />
+
+        <ImageView
+            android:id="@+id/transferViewHolderSendImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/border"
+            android:contentDescription="@string/content_description_receive"
+            android:src="@drawable/transfer_send"
+            android:tint="@color/red"
+            tools:visibility="gone" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/transferViewHolderTokenLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_toEndOf="@id/transferViewHolderImageContainer"
+        android:layout_toRightOf="@id/transferViewHolderImageContainer"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        tools:text="@string/default_received_token" />
+
+    <TextView
+        android:id="@+id/transferViewHolderContactLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/transferViewHolderTokenLabel"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/vertical_margin_small"
+        android:layout_toEndOf="@id/transferViewHolderImageContainer"
+        android:layout_toRightOf="@id/transferViewHolderImageContainer"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        tools:text="@string/default_from_contact" />
+
+    <TextView
+        android:id="@+id/transferViewHolderQuantityLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_toEndOf="@id/transferViewHolderTokenLabel"
+        android:layout_toRightOf="@id/transferViewHolderTokenLabel"
+        android:gravity="end"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        tools:text="@string/default_lrc_quantity" />
+
+    <TextView
+        android:id="@+id/transferViewHolderPriceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/transferViewHolderTokenLabel"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/vertical_margin_small"
+        android:layout_toEndOf="@id/transferViewHolderContactLabel"
+        android:layout_toRightOf="@id/transferViewHolderContactLabel"
+        android:gravity="end"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        tools:text="@string/default_total_price" />
 
 </RelativeLayout>

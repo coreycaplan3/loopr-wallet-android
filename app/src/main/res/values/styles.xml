@@ -43,12 +43,8 @@
         <item name="android:layout_height">0dp</item>
     </style>
 
-    <style name="lightButtonStyleBorderless" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/lightPrimaryDark</item>
-    </style>
-
-    <style name="darkButtonStyleBorderless" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/darkPrimary</item>
+    <style name="buttonStyleBorderless" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">?attr/borderlessButtonColor</item>
     </style>
 
     <!-- Card -->
