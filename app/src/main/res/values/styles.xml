@@ -32,7 +32,7 @@
         <item name="android:paddingRight">@dimen/card_padding_horizontal</item>
     </style>
 
-    <style name="buttonStyle" parent="@style/Widget.AppCompat.Button.Colored">
+    <style name="ButtonStyle" parent="@style/Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/white</item>
     </style>
 
@@ -43,13 +43,17 @@
         <item name="android:layout_height">0dp</item>
     </style>
 
-    <style name="buttonStyleBorderless" parent="@style/Widget.AppCompat.Button.Borderless">
+    <style name="ButtonStyle.Borderless" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">?attr/borderlessButtonColor</item>
     </style>
 
     <!-- Card -->
 
-    <style name="cardStyle">
+    <style name="CardStyle">
+        <item name="contentPadding">@dimen/standard_padding</item>
+    </style>
+
+    <style name="CardStyle.Title">
         <item name="contentPaddingLeft">@dimen/card_padding_horizontal</item>
         <item name="contentPaddingRight">@dimen/card_padding_horizontal</item>
         <item name="contentPaddingTop">@dimen/card_padding_top</item>

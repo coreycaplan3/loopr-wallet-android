@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/standard_vertical_padding">
+    android:layout_marginTop="@dimen/standard_vertical_padding"
+    tools:showIn="@layout/fragment_my_wallet">
 
     <LinearLayout
         android:layout_width="match_parent"

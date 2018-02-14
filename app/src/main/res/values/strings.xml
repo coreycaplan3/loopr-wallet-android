@@ -154,4 +154,10 @@
     <string name="complete">Complete</string>
     <string name="view_in_explorer">View in Explorer</string>
     <string name="pending">Pending</string>
+    <string name="create_new_wallet">Create New Wallet</string>
+    <string name="restore_existing_wallet">Restore Existing Wallet</string>
+    <string name="content_description_app_icon">The application\'s logo</string>
+    <string name="question_restore_wallet">How would you like to restore your wallet?</string>
+    <string name="private_key">Private Key</string>
+    <string name="key_file">Key File</string>
 </resources>

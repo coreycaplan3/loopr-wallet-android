@@ -11,6 +11,7 @@
     <color name="lightPrimaryDark">#01579B</color>
     <color name="lightAccent">#4CAF50</color>
     <color name="lightAccentDisabled">#704CAF50</color>
+    <color name="lightBackground">#ECECEC</color>
 
     <color name="lightShadowColor">#999999</color>
 
@@ -26,6 +27,7 @@
     <color name="darkPrimaryDark">#0D47A1</color>
     <color name="darkAccent">#43A047</color>
     <color name="darkAccentDisabled">#7043A047</color>
+    <color name="darkBackground">#303030</color>
 
     <color name="darkShadowColor">#555555</color>
 
