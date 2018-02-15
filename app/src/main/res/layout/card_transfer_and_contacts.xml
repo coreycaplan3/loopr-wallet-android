@@ -63,7 +63,7 @@
 
             <ImageButton
                 android:id="@+id/addContactButton"
-                style="@style/Button.CardAction"
+                style="@style/App.Button.CardAction"
                 android:contentDescription="@string/content_description_send_ether_or_tokens"
                 android:src="@drawable/ic_person_add_white_24dp" />
 

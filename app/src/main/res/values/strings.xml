@@ -163,4 +163,5 @@
     <string name="underscore">_</string>
     <string name="security_unlock_with_pin">Unlock with your PIN</string>
     <string name="content_description_pin_circle">A circle which represents your PIN being inputted</string>
+    <string name="content_description_bottom_navigation_image">A tab that allows you to navigate to different parts of the application</string>
 </resources>

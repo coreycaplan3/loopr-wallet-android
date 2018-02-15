@@ -58,8 +58,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/dialogTransferPriceLabel"
-        android:layout_marginBottom="@dimen/vertical_margin_small"
-        android:layout_marginTop="@dimen/vertical_margin_small"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
         android:alpha="0.12"
         android:background="?attr/dividerColor" />
 
@@ -102,12 +102,15 @@
         android:layout_marginLeft="@dimen/horizontal_margin_small"
         android:layout_marginStart="@dimen/horizontal_margin_small"
         android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_toEndOf="@id/dialogTransferTransactionLabel"
+        android:layout_toRightOf="@id/dialogTransferTransactionLabel"
         android:paddingTop="@dimen/standard_padding_small"
         android:text="@string/transaction"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
-    <TextView
+    <Button
         android:id="@+id/dialogTransferTransactionLabel"
+        style="@style/App.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -118,14 +121,9 @@
         android:layout_marginRight="@dimen/horizontal_margin_small"
         android:layout_marginStart="@dimen/horizontal_margin_small"
         android:layout_marginTop="@dimen/vertical_margin"
-        android:layout_toEndOf="@id/dialogTransferTransactionDefaultLabel"
-        android:layout_toRightOf="@id/dialogTransferTransactionDefaultLabel"
-        android:gravity="end"
+        android:gravity="center"
         android:paddingBottom="@dimen/standard_padding_small"
         android:paddingTop="@dimen/standard_padding_small"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-        android:textColor="?borderlessButtonColor"
-        android:textIsSelectable="true"
         tools:text="@string/view_in_explorer" />
 
     <TextView
