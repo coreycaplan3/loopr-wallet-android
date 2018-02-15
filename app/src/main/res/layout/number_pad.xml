@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:showIn="@layout/fragment_create_transfer_amount">
 
     <android.support.constraint.Guideline
         android:id="@+id/verticalGuideline1"
@@ -62,7 +63,7 @@
 
     <Button
         android:id="@+id/numberPadDecimal"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/decimal"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"
@@ -72,7 +73,7 @@
 
     <Button
         android:id="@+id/numberPadZero"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_0"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"
         app:layout_constraintLeft_toRightOf="@id/verticalGuideline1"
@@ -81,7 +82,7 @@
 
     <ImageButton
         android:id="@+id/numberPadBackspace"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:src="@drawable/ic_keyboard_backspace_white_24dp"
         android:tint="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"
@@ -92,7 +93,7 @@
 
     <Button
         android:id="@+id/numberPadOne"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_1"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline1"
@@ -101,7 +102,7 @@
 
     <Button
         android:id="@+id/numberPadTwo"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_2"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"
         app:layout_constraintLeft_toRightOf="@id/verticalGuideline1"
@@ -110,7 +111,7 @@
 
     <Button
         android:id="@+id/numberPadThree"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_3"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"
         app:layout_constraintEnd_toStartOf="@id/verticalGuideline3"
@@ -119,7 +120,7 @@
 
     <Button
         android:id="@+id/numberPadFour"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_4"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2"
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline1"
@@ -128,7 +129,7 @@
 
     <Button
         android:id="@+id/numberPadFive"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_5"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2"
         app:layout_constraintLeft_toRightOf="@id/verticalGuideline1"
@@ -137,7 +138,7 @@
 
     <Button
         android:id="@+id/numberPadSix"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_6"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2"
         app:layout_constraintEnd_toStartOf="@id/verticalGuideline3"
@@ -146,7 +147,7 @@
 
     <Button
         android:id="@+id/numberPadSeven"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_7"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline1"
@@ -155,7 +156,7 @@
 
     <Button
         android:id="@+id/numberPadEight"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_8"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"
         app:layout_constraintLeft_toRightOf="@id/verticalGuideline1"
@@ -164,7 +165,7 @@
 
     <Button
         android:id="@+id/numberPadNine"
-        style="@style/ButtonNumberPad"
+        style="@style/App.Button.NumberPad"
         android:text="@string/_9"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"
         app:layout_constraintEnd_toStartOf="@id/verticalGuideline3"

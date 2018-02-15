@@ -1,9 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.caplaninnovations.looprwallet.activities.SecurityActivity">
 
-</android.support.design.widget.CoordinatorLayout>
+    <include layout="@layout/appbar_main" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/activitySecurityVerticalGuideline2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/activitySecurityUnlockTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/security_unlock_with_pin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        app:layout_constraintBottom_toTopOf="@id/activitySecurityVerticalGuideline2"
+        app:layout_constraintGuide_percent=""
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:padding="@dimen/standard_padding_small"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activitySecurityUnlockTitle">
+
+        <ImageView
+            android:id="@+id/activitySecurityDrawable1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/horizontal_margin_small"
+            android:layout_marginRight="@dimen/horizontal_margin_small"
+            android:contentDescription="@string/content_description_pin_circle"
+            android:src="@drawable/primary_color_circle" />
+
+        <ImageView
+            android:id="@+id/activitySecurityDrawable2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/horizontal_margin_small"
+            android:layout_marginRight="@dimen/horizontal_margin_small"
+            android:contentDescription="@string/content_description_pin_circle"
+            android:src="@drawable/primary_color_circle" />
+
+        <ImageView
+            android:id="@+id/activitySecurityDrawable3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/horizontal_margin_small"
+            android:layout_marginRight="@dimen/horizontal_margin_small"
+            android:contentDescription="@string/content_description_pin_circle"
+            android:src="@drawable/primary_color_circle" />
+
+        <ImageView
+            android:id="@+id/activitySecurityDrawable4"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/content_description_pin_circle"
+            android:src="@drawable/primary_color_circle" />
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/number_pad"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activitySecurityVerticalGuideline2" />
+
+</android.support.constraint.ConstraintLayout>

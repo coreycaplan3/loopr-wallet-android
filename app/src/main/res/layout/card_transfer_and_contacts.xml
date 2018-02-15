@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            style="@style/cardStylePrimaryContainer"
+            style="@style/App.Card.PrimaryContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -32,14 +32,14 @@
 
                 <Button
                     android:id="@+id/showTransfersButton"
-                    style="@style/CardFlatButton"
+                    style="@style/App.Button.CardFlat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/show_transfers" />
 
                 <Button
                     android:id="@+id/createTransfersButton"
-                    style="@style/CardFlatButton"
+                    style="@style/App.Button.CardFlat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/vertical_margin_small"
@@ -56,14 +56,14 @@
             android:background="?attr/dividerColor" />
 
         <LinearLayout
-            style="@style/cardStyleActionContainer"
+            style="@style/App.Card.ActionContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/addContactButton"
-                style="@style/CardActionButton"
+                style="@style/Button.CardAction"
                 android:contentDescription="@string/content_description_send_ether_or_tokens"
                 android:src="@drawable/ic_person_add_white_24dp" />
 
