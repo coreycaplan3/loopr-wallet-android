@@ -3,7 +3,6 @@ package com.caplaninnovations.looprwallet.activities
 import android.content.Intent
 import android.os.Handler
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import com.caplaninnovations.looprwallet.utilities.longToast
 
 /**
@@ -17,7 +16,7 @@ import com.caplaninnovations.looprwallet.utilities.longToast
 class SplashScreenActivity : BaseActivity() {
 
     override val contentView: Int
-        get() = R.layout.activity_splash_screen
+        get() = R.layout.activity_splash
 
     override val isSecurityActivity: Boolean
         get() = true

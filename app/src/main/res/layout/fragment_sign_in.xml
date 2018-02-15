@@ -16,7 +16,7 @@
         <include layout="@layout/app_logo_container" />
 
         <android.support.v7.widget.CardView
-            style="@style/CardStyle"
+            style="@style/App.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/vertical_margin_large">
@@ -29,7 +29,7 @@
                 android:padding="@dimen/standard_padding">
 
                 <Button
-                    style="@style/ButtonStyle.Borderless"
+                    style="@style/App.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -37,7 +37,7 @@
 
                 <Button
                     android:id="@+id/restoreWalletButton"
-                    style="@style/ButtonStyle.Borderless"
+                    style="@style/App.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

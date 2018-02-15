@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            style="@style/cardStylePrimaryContainer"
+            style="@style/App.Card.PrimaryContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -90,14 +90,14 @@
             android:background="?attr/dividerColor" />
 
         <LinearLayout
-            style="@style/cardStyleActionContainer"
+            style="@style/App.Card.ActionContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/myWalletSendButton"
-                style="@style/CardActionButton"
+                style="@style/Button.CardAction"
                 android:contentDescription="@string/content_description_send_ether_or_tokens"
                 android:src="@drawable/ic_send_white_24dp" />
 

@@ -12,13 +12,13 @@
         <item name="colorBackground">@color/lightBackground</item>
         <item name="android:colorBackground">@color/lightBackground</item>
 
-        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlActivated">@color/lightAccent</item>
 
         <item name="circleBackgroundColor">@color/lightShadowColor</item>
 
         <!-- Actionbar -->
         <item name="titleTextColor">@color/darkPrimaryText</item>
-        <item name="actionOverflowButtonStyle">@style/lightCustomOverflow</item>
+        <item name="actionOverflowButtonStyle">@style/App.LightCustomOverflow</item>
 
         <!-- Bottom Navigation -->
         <item name="bottomNavigationBackground">@color/lightBottomNavigationBackground</item>
@@ -27,9 +27,9 @@
 
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/lightAccent</item>
-        <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="buttonStyle">@style/App.Button</item>
         <item name="borderlessButtonColor">@color/lightPrimaryDark</item>
-        <item name="borderlessButtonStyle">@style/ButtonStyle.Borderless</item>
+        <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
 
         <!-- Cards -->
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
@@ -61,13 +61,13 @@
         <item name="colorBackground">@color/darkBackground</item>
         <item name="android:colorBackground">@color/darkBackground</item>
 
-        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlActivated">@color/darkAccent</item>
 
         <item name="circleBackgroundColor">@color/darkShadowColor</item>
 
         <!-- Actionbar -->
         <item name="titleTextColor">@color/darkPrimaryText</item>
-        <item name="actionOverflowButtonStyle">@style/darkCustomOverflow</item>
+        <item name="actionOverflowButtonStyle">@style/App.DarkCustomOverflow</item>
 
         <!-- Bottom Navigation -->
         <item name="bottomNavigationBackground">@color/darkBottomNavigationBackground</item>
@@ -76,9 +76,9 @@
 
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/darkAccent</item>
-        <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="buttonStyle">@style/App.Button</item>
         <item name="borderlessButtonColor">@color/darkPrimary</item>
-        <item name="borderlessButtonStyle">@style/ButtonStyle.Borderless</item>
+        <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
 
         <!-- Cards -->
         <item name="cardBackgroundColor">@color/cardview_dark_background</item>
