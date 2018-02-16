@@ -7,8 +7,8 @@
 
     <!-- Bottom Navigation -->
     <attr name="bottomNavigationBackground" format="color" />
+    <attr name="bottomNavigationTabTextColor" format="color" />
     <attr name="bottomNavigationTextColor" format="color" />
-    <attr name="bottomNavigationTextColorSelected" format="color" />
 
     <!-- Button Styles -->
     <attr name="borderlessButtonColor" format="color" />
@@ -16,6 +16,6 @@
     <!-- Divider Colors -->
     <attr name="dividerColor" format="color" />
 
-    <!-- Tab Colors -->
-    <attr name="tabWidgetTextColor" format="reference" />
+    <!-- Text Colors -->
+    <attr name="textColorDisabled" format="color" />
 </resources>

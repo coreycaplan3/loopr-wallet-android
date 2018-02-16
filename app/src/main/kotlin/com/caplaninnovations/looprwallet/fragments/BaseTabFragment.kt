@@ -47,7 +47,7 @@ abstract class BaseTabFragment : BaseFragment() {
         generalFragmentViewPager.adapter = adapter
         tabLayout?.setupWithViewPager(generalFragmentViewPager)
 
-        tabLayout?.tabTextColors = context?.getAttrColorStateList(R.attr.tabWidgetTextColor)
+        tabLayout?.tabTextColors = context?.getAttrColorStateList(R.attr.bottomNavigationTabTextColor)
     }
 
     abstract fun getAdapterContent(): List<Pair<String, BaseFragment>>

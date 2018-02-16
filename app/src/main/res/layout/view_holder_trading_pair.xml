@@ -48,7 +48,7 @@
         android:layout_toEndOf="@id/tradingPairTickerText"
         android:layout_toRightOf="@id/tradingPairTickerText"
         android:gravity="end"
-        android:textColor="@color/green"
+        android:textColor="@color/material_green"
         tools:text="@string/default_trading_pair_percentage_change" />
 
     <TextView

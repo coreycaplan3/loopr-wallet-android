@@ -158,10 +158,17 @@
     <string name="restore_existing_wallet">Restore Existing Wallet</string>
     <string name="content_description_app_icon">The application\'s logo</string>
     <string name="question_restore_wallet">How would you like to restore your wallet?</string>
-    <string name="private_key">Private Key</string>
     <string name="key_file">Key File</string>
     <string name="underscore">_</string>
     <string name="security_unlock_with_pin">Unlock with your PIN</string>
     <string name="content_description_pin_circle">A circle which represents your PIN being inputted</string>
     <string name="content_description_bottom_navigation_image">A tab that allows you to navigate to different parts of the application</string>
+    <string name="enter_your_private_key">Enter your Private Key</string>
+    <string name="rationale_enter_private_key">Make sure you\'re in a safe environment with no one looking over your shoulder</string>
+    <string name="private_key">Private Key</string>
+    <string name="unlock">Unlock</string>
+    <string name="select_keystore_file_enter_password">Select your Keystore File and Enter your Password</string>
+    <string name="select_keystore_file">Select Keystore File</string>
+    <string name="password">Password</string>
+    <string name="content_description_password_toggle">Press to show or hide your password</string>
 </resources>

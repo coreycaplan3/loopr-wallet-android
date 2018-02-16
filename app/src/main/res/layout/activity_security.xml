@@ -23,7 +23,6 @@
         android:text="@string/security_unlock_with_pin"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         app:layout_constraintBottom_toTopOf="@id/activitySecurityVerticalGuideline2"
-        app:layout_constraintGuide_percent=""
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

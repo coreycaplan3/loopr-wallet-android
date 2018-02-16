@@ -50,6 +50,7 @@
 
     <!-- Text -->
     <dimen name="standard_text_size">13sp</dimen>
+    <dimen name="subtitle">14sp</dimen>
     <dimen name="card_subtitle_margin_top">12dp</dimen>
     <dimen name="card_action_icon_size">36dp</dimen>
 

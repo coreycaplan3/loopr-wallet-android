@@ -43,4 +43,5 @@
     <string name="default_date">Feb 12, 2018 at 1:24 AM</string>
     <string name="default_sent_lrc_quantity">Sent - 132 LRC</string>
     <string name="default_receive_lrc_quantity">Received - 132 LRC</string>
+    <string name="default_wallet_name">My-Wallet.json</string>
 </resources>

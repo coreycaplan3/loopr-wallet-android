@@ -10,15 +10,17 @@
     <color name="lightPrimary">#03A9F4</color>
     <color name="lightPrimaryDark">#01579B</color>
     <color name="lightAccent">#4CAF50</color>
-    <color name="lightAccentDisabled">#704CAF50</color>
     <color name="lightBackground">#ECECEC</color>
 
+    <color name="lightButtonDisabled">#1F000000</color>
     <color name="lightShadowColor">#999999</color>
 
     <color name="lightPrimaryText">#DE000000</color>
     <color name="lightSecondaryText">#8A000000</color>
-    <color name="lightPrimaryTextDisabled">#60000000</color>
+    <color name="lightSubtitleText">#8A000000</color>
+    <color name="lightTextColorDisabled">#43000000</color>
 
+    <color name="lightBottomNavigationTextDisabled">#60000000</color>
     <color name="lightBottomNavigationBackground">@color/lightPrimary</color>
 
     <!-- DARK THEME -->
@@ -26,15 +28,17 @@
     <color name="darkPrimary">#2196F3</color>
     <color name="darkPrimaryDark">#0D47A1</color>
     <color name="darkAccent">#43A047</color>
-    <color name="darkAccentDisabled">#7043A047</color>
     <color name="darkBackground">#303030</color>
 
+    <color name="darkButtonDisabled">#1FFFFFFF</color>
     <color name="darkShadowColor">#555555</color>
 
     <color name="darkPrimaryText">#FFFFFFFF</color>
     <color name="darkSecondaryText">#B3FFFFFF</color>
-    <color name="darkPrimaryTextDisabled">#7FFEFEFE</color>
+    <color name="darkSubtitleText">#8AFFFFFF</color>
+    <color name="darkTextColorDisabled">#4DFFFFFF</color>
 
+    <color name="darkBottomNavigationTextDisabled">#7FFEFEFE</color>
     <color name="darkBottomNavigationBackground">@color/darkPrimary</color>
 
 </resources>

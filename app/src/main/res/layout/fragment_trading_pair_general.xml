@@ -25,7 +25,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/statistics"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <LinearLayout
                     android:id="@+id/tradingPairGeneralPrimaryContainer"
@@ -43,10 +43,11 @@
                         android:id="@+id/tradingPairGeneralCurrentPriceText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="@string/default_price" />
 
                     <TextView
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/statistics_pair_margin_top"
@@ -57,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/vertical_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="@string/default_trade_volume" />
 
                     <TextView
@@ -71,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/vertical_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="@string/default_market_cap" />
 
                     <TextView
@@ -96,7 +97,7 @@
                         android:id="@+id/tradingPairGeneralOpenPriceText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="@string/default_price" />
 
                     <TextView
@@ -110,7 +111,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/vertical_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="@string/default_price" />
 
                     <TextView
@@ -124,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/vertical_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="@string/default_price" />
 
                     <TextView

@@ -18,7 +18,7 @@
             android:background="@drawable/border"
             android:contentDescription="@string/content_description_receive"
             android:src="@drawable/transfer_receive"
-            android:tint="@color/green" />
+            android:tint="@color/material_green" />
 
         <ImageView
             android:id="@+id/dialogTransferSendImage"
@@ -27,7 +27,7 @@
             android:background="@drawable/border"
             android:contentDescription="@string/content_description_receive"
             android:src="@drawable/transfer_send"
-            android:tint="@color/red"
+            android:tint="@color/material_red"
             tools:visibility="gone" />
 
     </FrameLayout>
@@ -50,7 +50,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/vertical_margin_small"
         android:gravity="end"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subtitle"
         tools:text="@string/default_total_price" />
 
     <View

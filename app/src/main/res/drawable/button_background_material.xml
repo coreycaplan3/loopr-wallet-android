@@ -10,5 +10,10 @@
             <solid android:color="@android:color/white" />
         </shape>
     </item>
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/colorButtonNormal" />
+        </shape>
+    </item>
     <item android:drawable="?attr/colorAccent" />
 </selector>
