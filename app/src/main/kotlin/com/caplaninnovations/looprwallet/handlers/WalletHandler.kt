@@ -14,7 +14,6 @@ import org.web3j.crypto.WalletUtils
 class WalletHandler {
 
     fun createWallet() {
-//        WalletUtils.
     }
 
 }

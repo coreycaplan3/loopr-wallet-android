@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragmentRestoreMnemonicPhraseRecyclerView"
+        android:id="@+id/fragmentEnterPhraseRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/fragmentRestoreMnemonicPhraseContainer"
-        tools:listitem="@layout/view_holder_mnemonic_phrase" />
+        android:layout_above="@id/fragmentEnterPhraseContainer"
+        tools:listitem="@layout/view_holder_phrase" />
 
     <RelativeLayout
-        android:id="@+id/fragmentRestoreMnemonicPhraseContainer"
+        android:id="@+id/fragmentEnterPhraseContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -22,11 +21,11 @@
         android:padding="@dimen/standard_padding">
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/fragmentRestoreMnemonicPhraseInputLayout"
+            android:id="@+id/fragmentEnterPhraseInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/fragmentRestoreMnemonicAddButton"
-            android:layout_toStartOf="@id/fragmentRestoreMnemonicAddButton"
+            android:layout_toLeftOf="@id/fragmentEnterPhraseAddButton"
+            android:layout_toStartOf="@id/fragmentEnterPhraseAddButton"
             android:theme="@style/App.WhiteInputLayout">
 
             <requestFocus />
@@ -42,7 +41,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/fragmentRestoreMnemonicAddButton"
+            android:id="@+id/fragmentEnterPhraseAddButton"
             style="@style/App.Button.Borderless.White"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

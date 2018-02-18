@@ -10,4 +10,6 @@
 
     <integer name="tab_layout_animation_duration">200</integer>
 
+    <integer name="wallet_name_max_length">100</integer>
+
 </resources>

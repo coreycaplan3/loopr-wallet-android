@@ -10,7 +10,7 @@ import com.caplaninnovations.looprwallet.R
  * Purpose of Class:
  *
  */
-class TransfersActivity : BaseActivity() {
+class ViewTransfersActivity : BaseActivity() {
 
     override val contentView: Int
         get() = R.layout.activity_view_transfers

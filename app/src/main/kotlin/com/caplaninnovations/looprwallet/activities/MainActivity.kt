@@ -6,9 +6,9 @@ import android.support.design.widget.TabLayout
 
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.fragments.MarketsParentFragment
-import com.caplaninnovations.looprwallet.fragments.MyWalletFragment
-import com.caplaninnovations.looprwallet.fragments.OrdersParentFragment
+import com.caplaninnovations.looprwallet.fragments.markets.MarketsParentFragment
+import com.caplaninnovations.looprwallet.fragments.mywallet.MyWalletFragment
+import com.caplaninnovations.looprwallet.fragments.orders.OrdersParentFragment
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET

@@ -1,10 +1,11 @@
-package com.caplaninnovations.looprwallet.fragments
+package com.caplaninnovations.looprwallet.fragments.markets
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_markets_all.*
 
 /**

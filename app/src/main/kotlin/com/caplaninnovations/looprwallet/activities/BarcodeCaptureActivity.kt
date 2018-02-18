@@ -31,7 +31,6 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.barcode.*
 import com.caplaninnovations.looprwallet.utilities.*
-import com.caplaninnovations.looprwallet.utilities.BlockchainUtility
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -40,6 +39,7 @@ import com.google.android.gms.vision.MultiProcessor
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.activity_barcode_capture.*
+import org.web3j.crypto.WalletUtils
 
 import java.io.IOException
 
@@ -88,7 +88,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
 
     override fun onBarcodeDetected(barcode: Barcode) {
         val value = barcode.rawValue
-        if (BlockchainUtility.isAddressValid(value)) {
+        if (WalletUtils.isValidAddress(value)) {
             setResult(RESULT_OK, Intent().putExtra(KEY_BARCODE_VALUE, value))
             finish()
         } else {

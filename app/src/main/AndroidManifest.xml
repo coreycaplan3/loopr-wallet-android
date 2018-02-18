@@ -36,7 +36,7 @@
             android:name=".activities.SignInActivity"
             android:label="@string/title_activity_sign_in" />
         <activity
-            android:name=".activities.TransfersActivity"
+            android:name=".activities.ViewTransfersActivity"
             android:label="@string/transfer" />
         <activity
             android:name=".activities.SearchActivity"

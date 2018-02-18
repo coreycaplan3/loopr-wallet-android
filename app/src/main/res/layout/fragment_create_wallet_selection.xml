@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:padding="@dimen/standard_padding">
+
+    <include layout="@layout/app_logo_container" />
+
+    <android.support.v7.widget.CardView
+        style="@style/App.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/vertical_margin_large">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/standard_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/fragmentCreateWalletSelectionKeystoreHelpButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/horizontal_margin_small"
+                    android:layout_marginRight="@dimen/horizontal_margin_small"
+                    android:background="@drawable/ripple_effect_accent"
+                    android:contentDescription="@string/content_description_keystore"
+                    android:src="@drawable/ic_help_outline_white_24dp"
+                    android:tint="?attr/colorPrimary" />
+
+                <Button
+                    android:id="@+id/fragmentCreateWalletSelectionKeystoreButton"
+                    style="@style/App.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/create_with_keystore" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/fragmentCreateWalletSelectionPhraseHelpButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/horizontal_margin_small"
+                    android:layout_marginRight="@dimen/horizontal_margin_small"
+                    android:background="@drawable/ripple_effect_accent"
+                    android:contentDescription="@string/content_description_phrase"
+                    android:src="@drawable/ic_help_outline_white_24dp"
+                    android:tint="?attr/colorPrimary" />
+
+                <Button
+                    android:id="@+id/fragmentCreateWalletSelectionPhraseButton"
+                    style="@style/App.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/create_with_phrase" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

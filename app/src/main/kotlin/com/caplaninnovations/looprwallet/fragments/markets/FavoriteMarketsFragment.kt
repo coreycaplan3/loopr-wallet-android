@@ -1,11 +1,12 @@
-package com.caplaninnovations.looprwallet.fragments
+package com.caplaninnovations.looprwallet.fragments.markets
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import kotlinx.android.synthetic.main.fragment_orders_closed.*
+import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import kotlinx.android.synthetic.main.fragment_markets_favorites.*
 
 /**
  * Created by Corey Caplan on 1/19/18.
@@ -15,18 +16,18 @@ import kotlinx.android.synthetic.main.fragment_orders_closed.*
  * Purpose of Class:
  *
  */
-class ClosedOrdersFragment: BaseFragment() {
+class FavoriteMarketsFragment : BaseFragment() {
 
     override var container: ViewGroup? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_orders_closed, container, false)
+        return inflater.inflate(R.layout.fragment_markets_favorites, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        container = closedOrdersContainer
+        container = favoriteMarketsContainer
     }
 
 }
