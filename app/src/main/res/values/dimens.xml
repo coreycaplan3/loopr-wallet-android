@@ -45,6 +45,7 @@
     <dimen name="standard_padding_small">8dp</dimen>
     <dimen name="standard_horizontal_padding">16dp</dimen>
     <dimen name="standard_vertical_padding">16dp</dimen>
+    <dimen name="standard_vertical_padding_small">8dp</dimen>
     <dimen name="large_horizontal_padding">32dp</dimen>
     <dimen name="large_vertical_padding">32dp</dimen>
 

@@ -43,7 +43,9 @@
         <!-- Text -->
         <item name="android:textColorPrimary">@color/lightPrimaryText</item>
         <item name="android:textColorPrimaryInverse">@color/darkSecondaryText</item>
-        <item name="android:textColorPrimaryInverseDisableOnly">@color/text_color_light_primary_inverse</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">
+            @color/text_color_light_primary_inverse
+        </item>
         <item name="android:textColorSecondary">@color/lightSecondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
         <item name="textColorError">@color/textColorError</item>
@@ -92,7 +94,9 @@
         <!-- Text -->
         <item name="android:textColorPrimary">@color/darkPrimaryText</item>
         <item name="android:textColorPrimaryInverse">@color/darkPrimaryText</item>
-        <item name="android:textColorPrimaryInverseDisableOnly">@color/text_color_dark_primary_inverse</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">
+            @color/text_color_dark_primary_inverse
+        </item>
         <item name="android:textColorSecondary">@color/darkSecondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
         <item name="textColorDisabled">@color/textColorError</item>

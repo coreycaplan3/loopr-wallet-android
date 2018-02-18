@@ -171,4 +171,9 @@
     <string name="select_keystore_file">Select Keystore File</string>
     <string name="password">Password</string>
     <string name="content_description_password_toggle">Press to show or hide your password</string>
+    <string name="content_description_reorder_mnemonic_phrase">Reorder the word to a different position</string>
+    <string name="add">Add</string>
+    <string name="word">Word</string>
+    <string name="your_12_words">Your 12 Words</string>
+    <string name="unlock_wallet">Unlock Wallet</string>
 </resources>

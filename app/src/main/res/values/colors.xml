@@ -9,7 +9,7 @@
 
     <color name="lightPrimary">#03A9F4</color>
     <color name="lightPrimaryDark">#01579B</color>
-    <color name="lightAccent">#4CAF50</color>
+    <color name="lightAccent">#66BB6A</color>
     <color name="lightBackground">#ECECEC</color>
 
     <color name="lightButtonDisabled">#1F000000</color>
@@ -27,7 +27,7 @@
 
     <color name="darkPrimary">#2196F3</color>
     <color name="darkPrimaryDark">#0D47A1</color>
-    <color name="darkAccent">#43A047</color>
+    <color name="darkAccent">@color/lightAccent</color>
     <color name="darkBackground">#303030</color>
 
     <color name="darkButtonDisabled">#1FFFFFFF</color>

@@ -52,9 +52,14 @@
         <item name="android:textColor">?attr/borderlessButtonColor</item>
     </style>
 
+    <style name="App.Button.Borderless.White" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/ripple_effect_white</item>
+    </style>
+
     <!-- Card -->
 
-    <style name="App.Card">
+    <style name="App.Card" parent="CardView">
         <item name="contentPadding">@dimen/standard_padding</item>
     </style>
 
@@ -74,6 +79,12 @@
 
     <style name="App.Card.ActionContainer">
         <item name="android:padding">@dimen/standard_padding_small</item>
+    </style>
+
+    <!-- Input -->
+
+    <style name="App.WhiteInputLayout" parent="AppTheme.Dark">
+        <item name="colorControlActivated">#FFF</item>
     </style>
 
     <!-- Overflow Menu -->

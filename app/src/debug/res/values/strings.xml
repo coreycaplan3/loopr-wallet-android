@@ -44,4 +44,6 @@
     <string name="default_sent_lrc_quantity">Sent - 132 LRC</string>
     <string name="default_receive_lrc_quantity">Received - 132 LRC</string>
     <string name="default_wallet_name">My-Wallet.json</string>
+    <string name="default_mnemonic_apple">1 - Apple</string>
+    <string name="default_mnemonic_phrase">apple\nbanana\nstrawberry\navocado\ncherry\nblueberry\npear\nmango\nkiwi\nraspberry\nblackberry\norange</string>
 </resources>
