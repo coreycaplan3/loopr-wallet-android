@@ -20,7 +20,7 @@
         android:paddingTop="@dimen/standard_vertical_padding_small">
 
         <ImageButton
-            android:id="@+id/viewHolderMnemonicPhraseReorderButton"
+            android:id="@+id/viewHolderPhraseReorderButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentEnd="true"
@@ -32,15 +32,15 @@
             android:tint="?android:attr/textColorPrimary" />
 
         <TextView
-            android:id="@+id/viewHolderMnemonicPhraseWord"
+            android:id="@+id/viewHolderPhraseWordLabel"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/viewHolderMnemonicPhraseReorderButton"
-            android:layout_toStartOf="@id/viewHolderMnemonicPhraseReorderButton"
+            android:layout_toLeftOf="@id/viewHolderPhraseReorderButton"
+            android:layout_toStartOf="@id/viewHolderPhraseReorderButton"
             tools:text="@string/default_mnemonic_apple" />
 
     </RelativeLayout>

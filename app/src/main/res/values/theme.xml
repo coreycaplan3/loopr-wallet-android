@@ -21,7 +21,6 @@
         <item name="actionOverflowButtonStyle">@style/App.LightCustomOverflow</item>
 
         <!-- Bottom Navigation -->
-        <item name="bottomNavigationBackground">@color/lightBottomNavigationBackground</item>
         <item name="bottomNavigationTextColor">@color/darkPrimaryText</item>
 
         <!-- Button Style -->
@@ -72,7 +71,6 @@
         <item name="actionOverflowButtonStyle">@style/App.DarkCustomOverflow</item>
 
         <!-- Bottom Navigation -->
-        <item name="bottomNavigationBackground">@color/darkBottomNavigationBackground</item>
         <item name="bottomNavigationTextColor">@color/darkPrimaryText</item>
 
         <!-- Button Style -->

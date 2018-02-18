@@ -21,7 +21,6 @@
     <color name="lightTextColorDisabled">#43000000</color>
 
     <color name="lightBottomNavigationTextDisabled">#60000000</color>
-    <color name="lightBottomNavigationBackground">@color/lightPrimary</color>
 
     <!-- DARK THEME -->
 
@@ -39,6 +38,5 @@
     <color name="darkTextColorDisabled">#4DFFFFFF</color>
 
     <color name="darkBottomNavigationTextDisabled">#7FFEFEFE</color>
-    <color name="darkBottomNavigationBackground">@color/darkPrimary</color>
 
 </resources>

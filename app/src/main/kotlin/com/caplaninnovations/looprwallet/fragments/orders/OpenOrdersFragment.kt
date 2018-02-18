@@ -18,16 +18,12 @@ import kotlinx.android.synthetic.main.fragment_orders_open.*
  */
 class OpenOrdersFragment : BaseFragment() {
 
-    override var container: ViewGroup? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_orders_open, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        container = openOrdersContainer
     }
 
 }

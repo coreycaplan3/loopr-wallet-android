@@ -3,6 +3,10 @@ package com.caplaninnovations.looprwallet.activities
 import android.content.Intent
 import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletSelectionFragment
+import com.caplaninnovations.looprwallet.fragments.signin.SignInFragment
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.utilities.loge
 
 /**
@@ -23,6 +27,10 @@ class SignInActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState == null) {
+            executeFragmentTransaction(SignInFragment(), SignInFragment.TAG)
+        }
     }
 
 }

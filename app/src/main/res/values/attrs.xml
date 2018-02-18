@@ -6,7 +6,6 @@
     <attr name="circleBackgroundColor" format="color" />
 
     <!-- Bottom Navigation -->
-    <attr name="bottomNavigationBackground" format="color" />
     <attr name="bottomNavigationTabTextColor" format="color" />
     <attr name="bottomNavigationTextColor" format="color" />
 

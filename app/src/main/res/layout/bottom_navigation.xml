@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/bottom_navigation_height"
     android:layout_gravity="bottom"
-    android:background="?attr/bottomNavigationBackground"
+    android:background="?attr/colorPrimary"
     app:elevation="8dp">
 
     <android.support.design.widget.TabLayout

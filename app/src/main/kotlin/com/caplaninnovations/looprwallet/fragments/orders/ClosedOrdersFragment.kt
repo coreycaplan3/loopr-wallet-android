@@ -18,16 +18,12 @@ import kotlinx.android.synthetic.main.fragment_orders_closed.*
  */
 class ClosedOrdersFragment: BaseFragment() {
 
-    override var container: ViewGroup? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_orders_closed, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        container = closedOrdersContainer
     }
 
 }

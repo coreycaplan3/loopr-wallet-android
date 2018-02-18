@@ -21,16 +21,6 @@ import kotlinx.android.synthetic.main.fragment_general_with_view_pager.*
  */
 abstract class BaseTabFragment : BaseFragment() {
 
-    override var container: ViewGroup? = null
-        get() {
-            val adapter = generalFragmentViewPager?.adapter as? LooprFragmentPagerAdapter
-            val position = tabLayout?.selectedTabPosition
-            return when (position) {
-                is Int -> adapter?.getItem(position)?.container
-                else -> null
-            }
-        }
-
     abstract var tabLayout: TabLayout?
 
     private lateinit var adapter: LooprFragmentPagerAdapter

@@ -5,9 +5,10 @@
 
     <include layout="@layout/appbar_main" />
 
-    <FrameLayout
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/activityContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:attr/actionBarSize" />
 
 </android.support.design.widget.CoordinatorLayout>

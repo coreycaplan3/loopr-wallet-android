@@ -30,7 +30,7 @@ class SplashScreenActivity : BaseActivity() {
                         if (securityClient.getCurrentWallet() == null) {
                             Intent(this, SignInActivity::class.java)
                         } else {
-                            Intent(this, BarcodeCaptureActivity::class.java)
+                            Intent(this, MainActivity::class.java)
                         }
 
                 startActivity(intent)

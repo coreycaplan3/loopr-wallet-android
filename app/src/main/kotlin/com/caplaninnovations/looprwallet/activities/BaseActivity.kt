@@ -5,16 +5,21 @@ import android.support.annotation.IdRes
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.*
 import android.support.design.widget.CoordinatorLayout
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDialog
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.dagger.LooprProductionComponent
+import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.realm.RealmClient
@@ -76,6 +81,13 @@ abstract class BaseActivity : AppCompatActivity() {
 
     lateinit var activityContainer: ViewGroup
 
+    /**
+     * A stack history used for creating a backstack for fragments. To start using it, call
+     * [executeFragmentTransaction] in the activity's [onCreate] when the activity is created for
+     * the first time.
+     */
+    lateinit var baseActivityFragmentStackHistory: FragmentStackHistory
+
     @IdRes
     var progressDialogTitle: Int? = null
         private set
@@ -96,12 +108,15 @@ abstract class BaseActivity : AppCompatActivity() {
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_PAN)
 
+        baseActivityFragmentStackHistory = FragmentStackHistory(savedInstanceState)
+
         permissionHandlers = getAllPermissionHandlers()
         permissionHandlers
                 .filter { it.shouldRequestPermissionNow }
                 .forEach { it.requestPermission() }
 
         activityContainer = findViewById(R.id.activityContainer)
+        (activityContainer as? NestedScrollView)?.isFillViewport = true
 
         /*
          * Progress Dialog Setup
@@ -177,6 +192,25 @@ abstract class BaseActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onBackPressed() {
+        val oldFragmentTag = baseActivityFragmentStackHistory.pop()
+
+        if (baseActivityFragmentStackHistory.isEmpty()) {
+            finish()
+            return
+        }
+
+        val oldFragment = oldFragmentTag?.let { supportFragmentManager.findFragmentByTag(it) }
+        val newFragment = supportFragmentManager.findFragmentByTag(baseActivityFragmentStackHistory.peek())
+
+        if (newFragment == null || newFragment.tag == null) {
+            loge("onBackPressed: NewFragment or NewFragment.Tag is null", IllegalStateException())
+        } else {
+            FragmentStackTransactionController(R.id.activityContainer, newFragment, newFragment.tag!!)
+                    .commitTransactionNow(supportFragmentManager, oldFragment)
+        }
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean = true
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -235,8 +269,18 @@ abstract class BaseActivity : AppCompatActivity() {
         isToolbarCollapseEnabled = false
     }
 
+    open fun executeFragmentTransaction(fragment: BaseFragment, fragmentTag: String) {
+        val oldFragment = supportFragmentManager.findFragmentById(R.id.activityContainer)
+        FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
+                .commitTransactionNow(supportFragmentManager, oldFragment)
+
+        baseActivityFragmentStackHistory.push(fragmentTag)
+    }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
+
+        baseActivityFragmentStackHistory.saveState(outState)
 
         outState?.putBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
         outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)

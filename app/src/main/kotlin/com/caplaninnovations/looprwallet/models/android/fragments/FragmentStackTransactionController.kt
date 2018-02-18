@@ -66,7 +66,10 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
         val text = oldFragment?.tag?.plus(" fragment") ?: "container"
         logv("Replacing $text with $newFragmentTag fragment...")
 
-        oldFragment?.let { transaction.detach(oldFragment) }
+        oldFragment?.let {
+            if (!it.isDetached)
+                transaction.detach(oldFragment)
+        }
 
         if (newFragment.isDetached) {
             transaction.attach(newFragment)

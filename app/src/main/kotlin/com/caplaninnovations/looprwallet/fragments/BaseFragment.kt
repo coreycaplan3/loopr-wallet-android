@@ -13,6 +13,4 @@ import android.view.ViewGroup
  */
 abstract class BaseFragment : Fragment() {
 
-    abstract var container: ViewGroup?
-
 }

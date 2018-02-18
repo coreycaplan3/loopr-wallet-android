@@ -29,6 +29,7 @@
                 android:padding="@dimen/standard_padding">
 
                 <Button
+                    android:id="@+id/createNewWalletButton"
                     style="@style/App.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

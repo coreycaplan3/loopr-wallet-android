@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- This file is generally for any fragment that only needs a view pager-->
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="?android:attr/actionBarSize">
+    android:layout_height="match_parent">
 
-    <!-- Added margin to the top to account for the tab bar (shown in activity) -->
+    <include layout="@layout/appbar_main" />
 
-    <android.support.v4.view.ViewPager
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/generalFragmentViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
