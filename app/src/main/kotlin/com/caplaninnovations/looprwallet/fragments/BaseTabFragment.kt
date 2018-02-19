@@ -1,16 +1,19 @@
 package com.caplaninnovations.looprwallet.fragments
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
-import android.view.LayoutInflater
+import android.transition.Fade
+import android.transition.Transition
+import android.transition.Visibility
 import android.view.View
-import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.fragments.LooprFragmentPagerAdapter
-import com.caplaninnovations.looprwallet.utilities.getAttrColorStateList
+import com.caplaninnovations.looprwallet.transitions.TabTransition
+import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.fragment_markets_parent.*
 
 /**
@@ -35,8 +38,21 @@ abstract class BaseTabFragment : BaseFragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        allowEnterTransitionOverlap = false
-        postponeEnterTransition()
+        if (isLollipop()) {
+            allowEnterTransitionOverlap = true
+            allowReturnTransitionOverlap = true
+
+            val tabEnterTransition = TabTransition().addTarget(tabLayoutName) as TabTransition
+            tabEnterTransition.mode = Visibility.MODE_IN
+            enterTransition = tabEnterTransition
+            reenterTransition = tabEnterTransition
+
+            val tabExitTransition = TabTransition().addTarget(tabLayoutName) as TabTransition
+            tabExitTransition.mode = Visibility.MODE_OUT
+            exitTransition = tabExitTransition
+            returnTransition = tabExitTransition
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,11 +67,15 @@ abstract class BaseTabFragment : BaseFragment() {
         fragmentContainer.adapter = adapter
 
         tabLayout = view.findViewById(tabLayoutId)
+        tabLayout?.layoutParams?.height = 0
+        tabLayout?.layoutParams = tabLayout?.layoutParams
+
         ViewGroupCompat.setTransitionGroup(tabLayout, true)
         ViewCompat.setTransitionName(tabLayout, tabLayoutName)
         tabLayout?.setupWithViewPager(fragmentContainer)
         tabLayout?.tabTextColors = context?.getAttrColorStateList(R.attr.bottomNavigationTabTextColor)
     }
+
 
     abstract fun getAdapterContent(): List<Pair<String, BaseFragment>>
 

@@ -10,13 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationTag
-import com.caplaninnovations.looprwallet.transitions.TabHideTransition
-import com.caplaninnovations.looprwallet.transitions.TabShowTransition
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
@@ -101,22 +98,6 @@ class BottomNavigationHandler(private val activity: BaseActivity,
             val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
 
             val controller = FragmentStackTransactionController(R.id.activityContainer, newFragment, tag)
-
-            controller.oldFragmentExitTransition = currentFragment?.let {
-                if (it is BaseTabFragment) {
-                    TabHideTransition().addTarget(it.tabLayoutName)
-                } else {
-                    null
-                }
-            }
-
-            controller.newFragmentEnterTransition = newFragment.let {
-                if (it is BaseTabFragment) {
-                    TabShowTransition().addTarget(it.tabLayoutName)
-                } else {
-                    null
-                }
-            }
 
             controller.commitTransactionNow(activity.supportFragmentManager, currentFragment)
             currentFragment = newFragment

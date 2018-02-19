@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.support.annotation.DimenRes
 import android.support.annotation.IntegerRes
+import android.transition.TransitionManager
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -58,11 +59,14 @@ fun TextView.animateTextSizeChange(@DimenRes toValue: Int) {
  * value is [R.integer.animation_duration] or 300ms
  */
 fun View.animateToHeight(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration): Animator {
+    this.layoutParams.height = 0
+    this.requestLayout()
+
     val animator = ValueAnimator.ofFloat(0f, resources.getDimension(toValue))
     animator.interpolator = DecelerateInterpolator()
     animator.addUpdateListener {
         this.layoutParams.height = (it.animatedValue as Float).toInt()
-        this.requestLayout()
+        this.layoutParams = layoutParams
     }
 
     animator.duration = resources.getInteger(duration).toLong()
@@ -79,10 +83,11 @@ fun View.animateToHeight(@DimenRes toValue: Int, @IntegerRes duration: Int = R.i
  */
 fun View.animateFromHeight(@DimenRes fromValue: Int, @IntegerRes duration: Int = R.integer.animation_duration): Animator {
     val animator = ValueAnimator.ofFloat(resources.getDimension(fromValue), 0f)
+
     animator.interpolator = DecelerateInterpolator()
     animator.addUpdateListener {
-        this.layoutParams.height = (it.animatedValue as Float).toInt()
-        this.requestLayout()
+        layoutParams.height = (it.animatedValue as Float).toInt()
+        this.layoutParams = layoutParams
     }
 
     animator.duration = resources.getInteger(duration).toLong()

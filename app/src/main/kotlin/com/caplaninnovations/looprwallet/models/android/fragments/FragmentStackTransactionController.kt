@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import android.support.v4.app.FragmentManager
-import android.support.transition.Transition
 import com.caplaninnovations.looprwallet.utilities.*
 
 
@@ -33,10 +32,6 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
 
     @FragmentTransition
     var transition = FragmentTransaction.TRANSIT_NONE
-
-    var oldFragmentExitTransition: Transition? = null
-
-    var newFragmentEnterTransition: Transition? = null
 
     @AnimRes
     @AnimatorRes
@@ -67,24 +62,21 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
         val text = oldFragment?.tag?.plus(" fragment") ?: "container"
         logv("Replacing $text with $newFragmentTag fragment...")
 
-        oldFragment?.exitTransition = oldFragmentExitTransition
-        newFragment.enterTransition = newFragmentEnterTransition
+        transaction?.let { transaction.setTransition(transition) }
 
-        if (newFragmentEnterTransition == null && oldFragmentExitTransition == null) {
-            transaction.setTransition(transition)
-        }
+//        oldFragment?.let {
+//            if (!it.isDetached) {
+//                transaction.detach(it)
+//            }
+//        }
 
-        oldFragment?.let {
-            if (!it.isDetached) {
-                transaction.detach(it)
-            }
-        }
+//        if (newFragment.isDetached) {
+//            transaction.attach(newFragment)
+//        } else {
+//            transaction.replace(container, newFragment, newFragmentTag)
+//        }
 
-        if (newFragment.isDetached) {
-            transaction.attach(newFragment)
-        } else {
-            transaction.replace(container, newFragment, newFragmentTag)
-        }
+        transaction.replace(container, newFragment, newFragmentTag)
 
         Pair(enterAnimation, exitAnimation).allNonNull { enterExitPair ->
             val popEnterExitPair = Pair(popEnterAnimation, popExitAnimation)
