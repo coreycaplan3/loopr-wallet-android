@@ -86,7 +86,7 @@ class BaseActivityTest : BaseDaggerTest() {
         val task = FutureTask { activity.enableToolbarCollapsing() }
         waitForAnimationsAndTask(activity, task, false)
 
-        val toolbarLayoutParams = activity.toolbar.layoutParams as AppBarLayout.LayoutParams
+        val toolbarLayoutParams = activity.ordersToolbar.layoutParams as AppBarLayout.LayoutParams
         val flags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         assertEquals(flags, toolbarLayoutParams.scrollFlags)
 
@@ -99,7 +99,7 @@ class BaseActivityTest : BaseDaggerTest() {
         val task = FutureTask { activity.disableToolbarCollapsing() }
         waitForAnimationsAndTask(activity, task, false)
 
-        val toolbarLayoutParams = activity.toolbar.layoutParams as AppBarLayout.LayoutParams
+        val toolbarLayoutParams = activity.ordersToolbar.layoutParams as AppBarLayout.LayoutParams
         assertEquals(0, toolbarLayoutParams.scrollFlags)
 
         val topMargin = (activity.activityContainer.layoutParams as CoordinatorLayout.LayoutParams).topMargin

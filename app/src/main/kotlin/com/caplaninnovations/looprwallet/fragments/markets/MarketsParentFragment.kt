@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.fragments.markets
 
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,17 +21,17 @@ import com.caplaninnovations.looprwallet.utilities.*
  */
 class MarketsParentFragment : BaseTabFragment(), BottomNavigationHandler.OnBottomNavigationReselectedLister {
 
-    override val tabLayoutName: String
+    override val tabLayoutTransitionName: String
         get() = "markets-tab"
 
     override val layoutResource: Int
         get() = R.layout.fragment_markets_parent
 
     override val tabLayoutId: Int
-        get() = R.id.fragmentMarketsParentTabLayout
+        get() = R.id.marketsTabs
 
-    override fun createAppbarLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.appbar_markets, container, false)
+    override fun createAppbarLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): AppBarLayout? {
+        return inflater.inflate(R.layout.appbar_markets, container, false) as AppBarLayout?
     }
 
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {

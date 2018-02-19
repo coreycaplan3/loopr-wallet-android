@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.widget.ImageView
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
@@ -86,21 +88,34 @@ class BottomNavigationHandler(private val activity: BaseActivity,
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
+        fun commitTransaction(fragment: Fragment, fragmentTag: String) {
+            val controller = FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
+            controller.commitTransactionNow(activity.supportFragmentManager, currentFragment)
+            currentFragment = fragment
+        }
+
         logv("Tag selected: ${tab?.tag}")
 
         updateTabUi(tab, true)
 
-        (tab?.tag as? String)?.let { tag: String ->
-            logv("Pushing $tag onto stack...")
+        (tab?.tag as? String)?.let { newFragmentTag: String ->
+            logv("Pushing $newFragmentTag onto stack...")
 
-            fragmentStackHistory.push(tag)
+            fragmentStackHistory.push(newFragmentTag)
 
-            val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
+            val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(newFragmentTag, fragmentTagPairs)
 
-            val controller = FragmentStackTransactionController(R.id.activityContainer, newFragment, tag)
+            val baseFragment = currentFragment as? BaseFragment
+            if (baseFragment?.appbarLayout?.isExpanded() == false) {
+                logd("Expanding appbar before committing transaction...")
+                baseFragment.appbarLayout?.setExpanded(true, true)
 
-            controller.commitTransactionNow(activity.supportFragmentManager, currentFragment)
-            currentFragment = newFragment
+                // Allow the appbar to snap into place for committing the transaction
+                Handler().postDelayed({ commitTransaction(newFragment, newFragmentTag) },
+                        125L)
+            } else {
+                commitTransaction(newFragment, newFragmentTag)
+            }
         }
     }
 

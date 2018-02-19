@@ -5,10 +5,8 @@ import android.graphics.PorterDuff
 import android.support.annotation.ColorInt
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
-import android.support.design.widget.BaseTransientBottomBar
+import android.support.design.widget.*
 import android.support.design.widget.BaseTransientBottomBar.Duration
-import android.support.design.widget.Snackbar
-import android.support.design.widget.TabLayout
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import android.widget.Toast
@@ -53,6 +51,12 @@ fun View.setBackgroundTint(@ColorInt tintColor: Int) {
         DrawableCompat.setTint(drawable, tintColor)
         DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_OVER)
     }
+}
+
+fun AppBarLayout.isExpanded() : Boolean {
+    val coordinatorLayoutParams = (layoutParams as? CoordinatorLayout.LayoutParams)
+    val behavior = (coordinatorLayoutParams?.behavior as? AppBarLayout.Behavior)
+    return behavior?.topAndBottomOffset == 0
 }
 
 /**

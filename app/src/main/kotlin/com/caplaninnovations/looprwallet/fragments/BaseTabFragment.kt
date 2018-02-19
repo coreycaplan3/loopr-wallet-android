@@ -1,13 +1,10 @@
 package com.caplaninnovations.looprwallet.fragments
 
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
-import android.transition.Fade
-import android.transition.Transition
 import android.transition.Visibility
 import android.view.View
 import com.caplaninnovations.looprwallet.R
@@ -26,12 +23,17 @@ import kotlinx.android.synthetic.main.fragment_markets_parent.*
  */
 abstract class BaseTabFragment : BaseFragment() {
 
-    abstract val tabLayoutName: String
+    companion object {
+
+        const val KEY_APP_BAR_SCALE = "_APP_BAR_SCALE"
+        private const val TAB_LAYOUT_DEFAULT_HEIGHT = 0
+    }
+
+    abstract val tabLayoutTransitionName: String
 
     abstract val tabLayoutId: Int
 
-    var tabLayout: TabLayout? = null
-        private set
+    private var tabLayout: TabLayout? = null
 
     private lateinit var adapter: LooprFragmentPagerAdapter
 
@@ -39,20 +41,18 @@ abstract class BaseTabFragment : BaseFragment() {
         super.onAttach(context)
 
         if (isLollipop()) {
-            allowEnterTransitionOverlap = true
-            allowReturnTransitionOverlap = true
+            postponeEnterTransition()
+            allowEnterTransitionOverlap = false
+            allowReturnTransitionOverlap = false
 
-            val tabEnterTransition = TabTransition().addTarget(tabLayoutName) as TabTransition
+            val tabEnterTransition = TabTransition().addTarget(tabLayoutTransitionName) as TabTransition
             tabEnterTransition.mode = Visibility.MODE_IN
             enterTransition = tabEnterTransition
-            reenterTransition = tabEnterTransition
 
-            val tabExitTransition = TabTransition().addTarget(tabLayoutName) as TabTransition
+            val tabExitTransition = TabTransition().addTarget(tabLayoutTransitionName) as TabTransition
             tabExitTransition.mode = Visibility.MODE_OUT
             exitTransition = tabExitTransition
-            returnTransition = tabExitTransition
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,16 +67,26 @@ abstract class BaseTabFragment : BaseFragment() {
         fragmentContainer.adapter = adapter
 
         tabLayout = view.findViewById(tabLayoutId)
-        tabLayout?.layoutParams?.height = 0
-        tabLayout?.layoutParams = tabLayout?.layoutParams
 
+        tabLayout?.layoutParams?.height = savedInstanceState?.getInt(KEY_APP_BAR_SCALE, TAB_LAYOUT_DEFAULT_HEIGHT) ?: TAB_LAYOUT_DEFAULT_HEIGHT
+        tabLayout?.layoutParams = tabLayout?.layoutParams
         ViewGroupCompat.setTransitionGroup(tabLayout, true)
-        ViewCompat.setTransitionName(tabLayout, tabLayoutName)
+        ViewCompat.setTransitionName(tabLayout, tabLayoutTransitionName)
+
         tabLayout?.setupWithViewPager(fragmentContainer)
         tabLayout?.tabTextColors = context?.getAttrColorStateList(R.attr.bottomNavigationTabTextColor)
+
+        enableToolbarCollapsing()
+
+        startPostponedEnterTransition()
     }
 
-
     abstract fun getAdapterContent(): List<Pair<String, BaseFragment>>
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(KEY_APP_BAR_SCALE, tabLayout?.height ?: TAB_LAYOUT_DEFAULT_HEIGHT)
+    }
 
 }

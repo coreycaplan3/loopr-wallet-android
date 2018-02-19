@@ -35,7 +35,11 @@ abstract class BaseFragment : Fragment() {
     var isToolbarCollapseEnabled: Boolean = false
         private set
 
-    private var toolbar: Toolbar? = null
+    var appbarLayout: AppBarLayout? = null
+        private set
+
+    var toolbar: Toolbar? = null
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +51,9 @@ abstract class BaseFragment : Fragment() {
         val fragmentView = inflater.inflate(layoutResource, container, false) as ViewGroup
 
         if (parentFragment == null) {
-            val appbarLayout = createAppbarLayout(inflater, container, savedInstanceState)
+            appbarLayout = createAppbarLayout(inflater, container, savedInstanceState)
             fragmentView.addView(appbarLayout)
-            toolbar = appbarLayout.findViewById(R.id.toolbar)
+            toolbar = appbarLayout?.findViewById(R.id.ordersToolbar)
         }
 
         return fragmentView
@@ -60,7 +64,10 @@ abstract class BaseFragment : Fragment() {
 
         if (parentFragment == null) {
             // We are NOT in a child fragment
-            toolbar = view.findViewById(R.id.toolbar)
+            toolbar = (0..(appbarLayout?.childCount ?: 0))
+                    .map { appbarLayout?.getChildAt(it) }
+                    .filterIsInstance<Toolbar>()
+                    .first()
             (activity as? BaseActivity)?.setSupportActionBar(toolbar)
 
             if (isToolbarCollapseEnabled) {
@@ -71,8 +78,8 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    open fun createAppbarLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.appbar_main, container, false)
+    open fun createAppbarLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): AppBarLayout? {
+        return inflater.inflate(R.layout.appbar_main, container, false) as AppBarLayout?
     }
 
     /**

@@ -23,6 +23,12 @@ class MyWalletFragment: BaseFragment(), BottomNavigationHandler.OnBottomNavigati
     override val layoutResource: Int
         get() = R.layout.fragment_my_wallet
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        enableToolbarCollapsing()
+    }
+
     override fun onBottomNavigationReselected() {
         logd("Wallet Reselected!")
     }
