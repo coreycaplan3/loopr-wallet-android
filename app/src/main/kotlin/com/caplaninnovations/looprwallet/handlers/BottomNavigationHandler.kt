@@ -103,18 +103,22 @@ class BottomNavigationHandler(private val activity: BaseActivity,
 
             controller.oldFragmentExitTransition = currentFragment?.let {
                 if (it is BaseTabFragment && isKitkat()) {
-                    TabHideTransition().addTarget(it.tabLayoutResource)
+                    TabHideTransition().addTarget(it.tabLayout)
                 } else {
                     null
                 }
+                // set enter transition in oncreate and pass whether or not to delay via BUNDLE
             }
 
             controller.newFragmentEnterTransition = newFragment.let {
                 if (it is BaseTabFragment && isKitkat()) {
-                    val transition = TabShowTransition().addTarget(it.tabLayoutResource)
+                    val transition = TabShowTransition().addTarget(it.tabLayout)
                     if (controller.oldFragmentExitTransition != null) {
                         val resources = LooprWalletApp.application.applicationContext.resources
                         transition.startDelay = resources.getInteger(R.integer.tab_layout_animation_duration).toLong()
+                        transition
+                    } else {
+                        transition.startDelay = 0
                         transition
                     }
                 } else {

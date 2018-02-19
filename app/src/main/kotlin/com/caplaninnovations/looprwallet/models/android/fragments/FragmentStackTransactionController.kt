@@ -80,19 +80,12 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
                 transaction.detach(oldFragment)
         }
 
-        var exitTransition: Transition? = null
-        if (oldFragment is BaseTabFragment && isKitkat()) {
-            exitTransition = TabHideTransition().addTarget(oldFragment.tabLayout)
-            oldFragment.exitTransition = exitTransition
-        }
+        oldFragment?.exitTransition = oldFragmentExitTransition
 
-        val newFragment = this.newFragment
-        if (newFragment is BaseTabFragment && isKitkat()) {
-            val enterTransition = TabShowTransition().addTarget(newFragment.tabLayout)
-            enterTransition.startDelay = exitTransition?.let {
+        newFragment.enterTransition = newFragmentEnterTransition
 
-            } ?: 0
-            newFragment.enterTransition = enterTransition
+        if(newFragmentEnterTransition == null && oldFragmentExitTransition == null) {
+            transaction.setTransition(transition)
         }
 
         if (newFragment.isDetached) {
