@@ -86,7 +86,6 @@ fun View.animateFromHeight(@DimenRes fromValue: Int, @IntegerRes duration: Int =
     }
 
     animator.duration = resources.getInteger(duration).toLong()
-    animator.start()
 
     return animator
 }

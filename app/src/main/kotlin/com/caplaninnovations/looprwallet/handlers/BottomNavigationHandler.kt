@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
@@ -55,7 +54,9 @@ class BottomNavigationHandler(private val activity: BaseActivity,
             val tag = initialTag
             logv("Initializing $tag fragment...")
 
-            onTabSelected(bottomNavigation.findTabByTag(tag))
+            Handler().postDelayed({
+                onTabSelected(bottomNavigation.findTabByTag(tag))
+            }, 300L)
         } else {
             val tag = fragmentStackHistory.peek()!!
             logv("Pushing $tag fragment...")
@@ -102,25 +103,16 @@ class BottomNavigationHandler(private val activity: BaseActivity,
             val controller = FragmentStackTransactionController(R.id.activityContainer, newFragment, tag)
 
             controller.oldFragmentExitTransition = currentFragment?.let {
-                if (it is BaseTabFragment && isKitkat()) {
-                    TabHideTransition().addTarget(it.tabLayout)
+                if (it is BaseTabFragment) {
+                    TabHideTransition().addTarget(it.tabLayoutName)
                 } else {
                     null
                 }
-                // set enter transition in oncreate and pass whether or not to delay via BUNDLE
             }
 
             controller.newFragmentEnterTransition = newFragment.let {
-                if (it is BaseTabFragment && isKitkat()) {
-                    val transition = TabShowTransition().addTarget(it.tabLayout)
-                    if (controller.oldFragmentExitTransition != null) {
-                        val resources = LooprWalletApp.application.applicationContext.resources
-                        transition.startDelay = resources.getInteger(R.integer.tab_layout_animation_duration).toLong()
-                        transition
-                    } else {
-                        transition.startDelay = 0
-                        transition
-                    }
+                if (it is BaseTabFragment) {
+                    TabShowTransition().addTarget(it.tabLayoutName)
                 } else {
                     null
                 }

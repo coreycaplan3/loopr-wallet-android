@@ -1,20 +1,12 @@
 package com.caplaninnovations.looprwallet.models.android.fragments
 
-import android.os.Build
 import android.support.annotation.*
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import android.support.v4.app.FragmentManager
-import android.transition.Slide
-import android.transition.Transition
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
-import com.caplaninnovations.looprwallet.transitions.TabHideTransition
-import com.caplaninnovations.looprwallet.transitions.TabShowTransition
+import android.support.transition.Transition
 import com.caplaninnovations.looprwallet.utilities.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 /**
@@ -75,17 +67,17 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
         val text = oldFragment?.tag?.plus(" fragment") ?: "container"
         logv("Replacing $text with $newFragmentTag fragment...")
 
-        oldFragment?.let {
-            if (!it.isDetached)
-                transaction.detach(oldFragment)
-        }
-
         oldFragment?.exitTransition = oldFragmentExitTransition
-
         newFragment.enterTransition = newFragmentEnterTransition
 
-        if(newFragmentEnterTransition == null && oldFragmentExitTransition == null) {
+        if (newFragmentEnterTransition == null && oldFragmentExitTransition == null) {
             transaction.setTransition(transition)
+        }
+
+        oldFragment?.let {
+            if (!it.isDetached) {
+                transaction.detach(it)
+            }
         }
 
         if (newFragment.isDetached) {
@@ -114,7 +106,7 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
 
         sharedElements?.let { it.forEach { transaction.addSharedElement(it.first, it.second) } }
 
-        transaction.commitNow()
+        transaction.commit()
     }
 
 }

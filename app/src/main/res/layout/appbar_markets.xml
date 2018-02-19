@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/app_bar_layout"
+    android:id="@+id/orders_app_bar_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/orders_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         app:title="@string/app_name" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/marketsTabs"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:tabBackground="?attr/colorPrimary"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="?attr/tabIndicatorColor"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed" />
 
 </android.support.design.widget.AppBarLayout>
