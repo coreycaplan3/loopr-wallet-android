@@ -1,14 +1,15 @@
 package com.caplaninnovations.looprwallet.fragments
 
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.design.widget.TabLayout
+import android.support.v4.view.ViewPager
 import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.fragments.LooprFragmentPagerAdapter
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.utilities.getAttrColorStateList
-import com.caplaninnovations.looprwallet.utilities.logv
 import kotlinx.android.synthetic.main.fragment_general_with_view_pager.*
 
 /**
@@ -21,7 +22,10 @@ import kotlinx.android.synthetic.main.fragment_general_with_view_pager.*
  */
 abstract class BaseTabFragment : BaseFragment() {
 
-    abstract var tabLayout: TabLayout?
+    abstract val tabLayoutResource: Int
+
+    lateinit var tabLayout: TabLayout
+        private set
 
     private lateinit var adapter: LooprFragmentPagerAdapter
 
@@ -34,26 +38,13 @@ abstract class BaseTabFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        generalFragmentViewPager.adapter = adapter
-        tabLayout?.setupWithViewPager(generalFragmentViewPager)
+        fragmentContainer.adapter = adapter
 
-        tabLayout?.tabTextColors = context?.getAttrColorStateList(R.attr.bottomNavigationTabTextColor)
+        tabLayout = view.findViewById(tabLayoutResource)
+        tabLayout.setupWithViewPager(fragmentContainer)
+        tabLayout.tabTextColors = context?.getAttrColorStateList(R.attr.bottomNavigationTabTextColor)
     }
 
     abstract fun getAdapterContent(): List<Pair<String, BaseFragment>>
-
-    override fun onResume() {
-        super.onResume()
-        logv("Showing tab layout...")
-
-        (activity as? BottomNavigationHandler.OnTabVisibilityChangeListener)?.onShowTabLayout(tabLayout)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        logv("Hiding tab layout...")
-
-        (activity as? BottomNavigationHandler.OnTabVisibilityChangeListener)?.onHideTabLayout(tabLayout)
-    }
 
 }

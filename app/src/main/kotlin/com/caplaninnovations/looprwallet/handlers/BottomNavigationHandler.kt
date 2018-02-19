@@ -1,7 +1,5 @@
 package com.caplaninnovations.looprwallet.handlers
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.DrawableRes
@@ -12,10 +10,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationTag
+import com.caplaninnovations.looprwallet.transitions.TabHideTransition
+import com.caplaninnovations.looprwallet.transitions.TabShowTransition
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
@@ -35,12 +37,6 @@ class BottomNavigationHandler(private val activity: BaseActivity,
                               savedInstanceState: Bundle?) :
         TabLayout.OnTabSelectedListener {
 
-    interface OnTabVisibilityChangeListener {
-
-        fun onShowTabLayout(tabLayout: TabLayout?)
-        fun onHideTabLayout(tabLayout: TabLayout?)
-    }
-
     interface OnBottomNavigationReselectedLister {
 
         fun onBottomNavigationReselected()
@@ -51,8 +47,6 @@ class BottomNavigationHandler(private val activity: BaseActivity,
     val fragmentStackHistory = FragmentStackHistory(savedInstanceState)
 
     private var currentFragment: Fragment? = null
-
-    private var animatorForHidingTab: Animator? = null
 
     init {
         setupTabs()
@@ -100,12 +94,35 @@ class BottomNavigationHandler(private val activity: BaseActivity,
 
         (tab?.tag as? String)?.let { tag: String ->
             logv("Pushing $tag onto stack...")
+
             fragmentStackHistory.push(tag)
 
             val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(tag, fragmentTagPairs)
-            FragmentStackTransactionController(R.id.activityContainer, newFragment, tag)
-                    .commitTransactionNow(activity.supportFragmentManager, currentFragment)
 
+            val controller = FragmentStackTransactionController(R.id.activityContainer, newFragment, tag)
+
+            controller.oldFragmentExitTransition = currentFragment?.let {
+                if (it is BaseTabFragment && isKitkat()) {
+                    TabHideTransition().addTarget(it.tabLayoutResource)
+                } else {
+                    null
+                }
+            }
+
+            controller.newFragmentEnterTransition = newFragment.let {
+                if (it is BaseTabFragment && isKitkat()) {
+                    val transition = TabShowTransition().addTarget(it.tabLayoutResource)
+                    if (controller.oldFragmentExitTransition != null) {
+                        val resources = LooprWalletApp.application.applicationContext.resources
+                        transition.startDelay = resources.getInteger(R.integer.tab_layout_animation_duration).toLong()
+                        transition
+                    }
+                } else {
+                    null
+                }
+            }
+
+            controller.commitTransactionNow(activity.supportFragmentManager, currentFragment)
             currentFragment = newFragment
         }
     }
@@ -115,31 +132,6 @@ class BottomNavigationHandler(private val activity: BaseActivity,
             val fragment = activity.supportFragmentManager.findFragmentByTag(it)
             (fragment as? OnBottomNavigationReselectedLister)?.onBottomNavigationReselected()
         }
-    }
-
-    fun onShowTabLayout(tabLayout: TabLayout?) {
-        fun runAnimation() {
-            tabLayout?.animateToHeight(
-                    activity.getResourceIdFromAttrId(android.R.attr.actionBarSize),
-                    R.integer.tab_layout_animation_duration)
-        }
-
-        if (animatorForHidingTab?.isRunning == true) {
-            animatorForHidingTab?.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    runAnimation()
-                }
-            })
-        } else {
-            runAnimation()
-        }
-    }
-
-    fun onHideTabLayout(tabLayout: TabLayout?) {
-        animatorForHidingTab =
-                tabLayout?.animateFromHeight(
-                        activity.getResourceIdFromAttrId(android.R.attr.actionBarSize),
-                        R.integer.tab_layout_animation_duration)
     }
 
     fun onSaveInstanceState(outState: Bundle?) {

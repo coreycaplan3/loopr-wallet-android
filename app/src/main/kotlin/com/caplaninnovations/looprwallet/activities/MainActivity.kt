@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.bottom_navigation.*
  * Purpose of Class: As of right now, this will translate into the *Market* screen for traders,
  * when they first open the app (assuming they are signed in & authenticated).
  */
-class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChangeListener {
+class MainActivity : BaseActivity() {
 
     companion object {
 
@@ -84,14 +84,6 @@ class MainActivity : BaseActivity(), BottomNavigationHandler.OnTabVisibilityChan
         if (bottomNavigationHandler.onBackPressed()) {
             finish()
         }
-    }
-
-    override fun onShowTabLayout(tabLayout: TabLayout?) {
-        bottomNavigationHandler.onShowTabLayout(tabLayout)
-    }
-
-    override fun onHideTabLayout(tabLayout: TabLayout?) {
-        bottomNavigationHandler.onHideTabLayout(tabLayout)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

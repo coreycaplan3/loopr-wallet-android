@@ -19,12 +19,11 @@ import kotlinx.android.synthetic.main.fragment_create_wallet_selection.*
  */
 class CreateWalletSelectionFragment : BaseFragment() {
 
+    override val layoutResource: Int
+        get() = R.layout.fragment_create_wallet_selection
+
     companion object {
         val TAG = CreateWalletSelectionFragment::class.java.simpleName
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_create_wallet_selection, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

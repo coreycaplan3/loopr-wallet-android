@@ -1,7 +1,16 @@
 package com.caplaninnovations.looprwallet.fragments
 
+import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
+import android.support.v7.widget.Toolbar
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
 
 /**
  * Created by Corey on 1/14/2018.
@@ -12,5 +21,119 @@ import android.view.ViewGroup
  *
  */
 abstract class BaseFragment : Fragment() {
+
+    companion object {
+
+        private const val KEY_IS_TOOLBAR_COLLAPSED = "_IS_TOOLBAR_COLLAPSED"
+    }
+
+    /**
+     * The layout resource used to inflate this fragment's view
+     */
+    abstract val layoutResource: Int
+
+    var isToolbarCollapseEnabled: Boolean = false
+        private set
+
+    private var toolbar: Toolbar? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED) == true
+    }
+
+    final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val fragmentView = inflater.inflate(layoutResource, container, false) as ViewGroup
+
+        if (parentFragment == null) {
+            val appbarLayout = createAppbarLayout(inflater, container, savedInstanceState)
+            fragmentView.addView(appbarLayout)
+            toolbar = appbarLayout.findViewById(R.id.toolbar)
+        }
+
+        return fragmentView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (parentFragment == null) {
+            // We are NOT in a child fragment
+            toolbar = view.findViewById(R.id.toolbar)
+            (activity as? BaseActivity)?.setSupportActionBar(toolbar)
+
+            if (isToolbarCollapseEnabled) {
+                enableToolbarCollapsing()
+            } else {
+                disableToolbarCollapsing()
+            }
+        }
+    }
+
+    open fun createAppbarLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.appbar_main, container, false)
+    }
+
+    /**
+     * Enables the toolbar to be collapsed when scrolling
+     */
+    fun enableToolbarCollapsing() {
+        (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
+            it.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+        }
+
+        val container = view?.findViewById<View>(R.id.fragmentContainer)
+                ?: throw IllegalStateException("FragmentContainer cannot be null!")
+
+        (container.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
+            // The container is put underneath the toolbar since it is going to be moved out of the
+            // way after scrolling
+            it.topMargin = 0
+            it.behavior = AppBarLayout.ScrollingViewBehavior()
+            container.layoutParams = it
+            container.requestLayout()
+        }
+
+        isToolbarCollapseEnabled = true
+    }
+
+    /**
+     * Disables the toolbar from being collapsed when scrolling
+     */
+    fun disableToolbarCollapsing() {
+        (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
+            it.scrollFlags = 0
+        }
+
+        val container = view?.findViewById<View>(R.id.fragmentContainer)
+                ?: throw IllegalStateException("FragmentContainer cannot be null!")
+
+        (container.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
+            // The container is underneath the toolbar, so we must add margin so it is below it instead
+            val topMarginResource = context?.getResourceIdFromAttrId(android.R.attr.actionBarSize)
+            if (topMarginResource != null) {
+                it.topMargin = resources.getDimension(topMarginResource).toInt()
+            }
+
+            it.behavior = null
+            container.layoutParams = it
+            container.requestLayout()
+        }
+
+        isToolbarCollapseEnabled = false
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        (activity as? BaseActivity)?.setSupportActionBar(null)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
+    }
 
 }

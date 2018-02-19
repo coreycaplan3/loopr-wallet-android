@@ -1,63 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    android:clipToPadding="false"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:padding="@dimen/standard_padding">
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:clipToPadding="false">
 
-        <include layout="@layout/app_logo_container" />
-
-        <android.support.v7.widget.CardView
-            style="@style/App.Card"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/vertical_margin_large">
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:padding="@dimen/standard_padding">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <include layout="@layout/app_logo_container" />
+
+            <android.support.v7.widget.CardView
+                style="@style/App.Card"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical"
-                android:padding="@dimen/standard_padding">
+                android:layout_marginTop="@dimen/vertical_margin_large">
 
-                <Button
-                    android:id="@+id/createNewWalletButton"
-                    style="@style/App.Button.Borderless"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/create_new_wallet" />
+                    android:orientation="vertical"
+                    android:padding="@dimen/standard_padding">
 
-                <Button
-                    android:id="@+id/restoreWalletButton"
-                    style="@style/App.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/vertical_margin"
-                    android:text="@string/restore_existing_wallet" />
+                    <Button
+                        android:id="@+id/createNewWalletButton"
+                        style="@style/App.Button.CardFlat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/create_new_wallet" />
 
-            </LinearLayout>
+                    <Button
+                        android:id="@+id/restoreWalletButton"
+                        style="@style/App.Button.CardFlat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/vertical_margin"
+                        android:text="@string/restore_existing_wallet" />
 
-        </android.support.v7.widget.CardView>
+                </LinearLayout>
 
-    </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/vertical_margin_small"
-        android:text="Copyright Text"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        </LinearLayout>
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/vertical_margin_small"
+            android:text="Copyright Text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

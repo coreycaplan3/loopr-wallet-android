@@ -46,10 +46,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     companion object {
 
-        private const val KEY_IS_TOOLBAR_COLLAPSED = "_IS_TOOLBAR_COLLAPSED"
         private const val KEY_IS_PROGRESS_DIALOG_SHOWING = "_IS_PROGRESS_DIALOG_SHOWING"
         private const val KEY_PROGRESS_DIALOG_TITLE = "_PROGRESS_DIALOG_TITLE"
-
     }
 
     /**
@@ -62,9 +60,6 @@ abstract class BaseActivity : AppCompatActivity() {
      * otherwise
      */
     abstract val isSecurityActivity: Boolean
-
-    var isToolbarCollapseEnabled: Boolean = false
-        private set
 
     private lateinit var looprProductionComponent: LooprProductionComponent
 
@@ -116,7 +111,6 @@ abstract class BaseActivity : AppCompatActivity() {
                 .forEach { it.requestPermission() }
 
         activityContainer = findViewById(R.id.activityContainer)
-        (activityContainer as? NestedScrollView)?.isFillViewport = true
 
         /*
          * Progress Dialog Setup
@@ -137,14 +131,6 @@ abstract class BaseActivity : AppCompatActivity() {
         /*
          * Toolbar Setup
          */
-        setSupportActionBar(toolbar)
-        isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED) ?: false
-
-        if (isToolbarCollapseEnabled) {
-            enableToolbarCollapsing()
-        } else {
-            disableToolbarCollapsing()
-        }
     }
 
     override fun onResume() {
@@ -230,45 +216,6 @@ abstract class BaseActivity : AppCompatActivity() {
         return false
     }
 
-    /**
-     * Enables the toolbar to be collapsed when scrolling
-     */
-    fun enableToolbarCollapsing() {
-        (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
-            it.scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
-        }
-
-        (activityContainer.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
-            // The container is put underneath the toolbar since it is going to be moved out of the
-            // way after scrolling
-            it.topMargin = 0
-            it.behavior = AppBarLayout.ScrollingViewBehavior()
-            activityContainer.layoutParams = it
-            activityContainer.requestLayout()
-        }
-
-        isToolbarCollapseEnabled = true
-    }
-
-    /**
-     * Disables the toolbar from being collapsed when scrolling
-     */
-    fun disableToolbarCollapsing() {
-        (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
-            it.scrollFlags = 0
-        }
-
-        (activityContainer.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
-            // The container is underneath the toolbar, so we must add margin so it is below it instead
-            it.topMargin = resources.getDimension(getResourceIdFromAttrId(android.R.attr.actionBarSize)).toInt()
-            it.behavior = null
-            activityContainer.layoutParams = it
-            activityContainer.requestLayout()
-        }
-
-        isToolbarCollapseEnabled = false
-    }
-
     open fun executeFragmentTransaction(fragment: BaseFragment, fragmentTag: String) {
         val oldFragment = supportFragmentManager.findFragmentById(R.id.activityContainer)
         FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
@@ -282,9 +229,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
         baseActivityFragmentStackHistory.saveState(outState)
 
-        outState?.putBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
         outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)
         progressDialogTitle?.let { outState?.putInt(KEY_PROGRESS_DIALOG_TITLE, it) }
+
+        progressDialog.dismiss()
     }
 
     override fun onDestroy() {

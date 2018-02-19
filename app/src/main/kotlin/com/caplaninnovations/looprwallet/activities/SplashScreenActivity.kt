@@ -19,7 +19,7 @@ class SplashScreenActivity : BaseActivity() {
         get() = R.layout.activity_splash
 
     override val isSecurityActivity: Boolean
-        get() = true
+        get() = false
 
     override fun onResume() {
         super.onResume()

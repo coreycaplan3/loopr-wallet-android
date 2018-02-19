@@ -1,14 +1,19 @@
 package com.caplaninnovations.looprwallet.models.android.fragments
 
+import android.os.Build
 import android.support.annotation.*
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.view.View
 import android.support.v4.app.FragmentManager
+import android.transition.Slide
+import android.transition.Transition
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.utilities.allNonNull
-import com.caplaninnovations.looprwallet.utilities.isAllNonNull
-import com.caplaninnovations.looprwallet.utilities.logv
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
+import com.caplaninnovations.looprwallet.transitions.TabHideTransition
+import com.caplaninnovations.looprwallet.transitions.TabShowTransition
+import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 
 
@@ -36,6 +41,10 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
 
     @FragmentTransition
     var transition = FragmentTransaction.TRANSIT_NONE
+
+    var oldFragmentExitTransition: Transition? = null
+
+    var newFragmentEnterTransition: Transition? = null
 
     @AnimRes
     @AnimatorRes
@@ -71,13 +80,26 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
                 transaction.detach(oldFragment)
         }
 
+        var exitTransition: Transition? = null
+        if (oldFragment is BaseTabFragment && isKitkat()) {
+            exitTransition = TabHideTransition().addTarget(oldFragment.tabLayout)
+            oldFragment.exitTransition = exitTransition
+        }
+
+        val newFragment = this.newFragment
+        if (newFragment is BaseTabFragment && isKitkat()) {
+            val enterTransition = TabShowTransition().addTarget(newFragment.tabLayout)
+            enterTransition.startDelay = exitTransition?.let {
+
+            } ?: 0
+            newFragment.enterTransition = enterTransition
+        }
+
         if (newFragment.isDetached) {
             transaction.attach(newFragment)
         } else {
             transaction.replace(container, newFragment, newFragmentTag)
         }
-
-        transaction.setTransition(transition)
 
         Pair(enterAnimation, exitAnimation).allNonNull { enterExitPair ->
             val popEnterExitPair = Pair(popEnterAnimation, popExitAnimation)

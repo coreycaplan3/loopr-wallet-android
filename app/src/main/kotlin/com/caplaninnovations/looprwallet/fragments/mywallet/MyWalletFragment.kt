@@ -20,13 +20,8 @@ import kotlinx.android.synthetic.main.fragment_my_wallet.*
  */
 class MyWalletFragment: BaseFragment(), BottomNavigationHandler.OnBottomNavigationReselectedLister {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_wallet, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
+    override val layoutResource: Int
+        get() = R.layout.fragment_my_wallet
 
     override fun onBottomNavigationReselected() {
         logd("Wallet Reselected!")

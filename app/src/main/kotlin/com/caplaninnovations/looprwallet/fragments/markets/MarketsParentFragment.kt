@@ -21,12 +21,10 @@ import com.caplaninnovations.looprwallet.utilities.*
  */
 class MarketsParentFragment : BaseTabFragment(), BottomNavigationHandler.OnBottomNavigationReselectedLister {
 
-    override var tabLayout: TabLayout? = null
-        get() = activity?.findViewById(R.id.marketsTabs)
+    override val layoutResource: Int
+        get() = R.layout.fragment_general_with_view_pager
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_general_with_view_pager, container, false)
-    }
+    override var tabLayoutResource: Int = R.id.marketsTabs
 
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {
         return listOf(

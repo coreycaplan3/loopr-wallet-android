@@ -1,10 +1,6 @@
 package com.caplaninnovations.looprwallet.fragments.orders
 
-import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
@@ -21,12 +17,10 @@ import com.caplaninnovations.looprwallet.utilities.logd
  */
 class OrdersParentFragment : BaseTabFragment(), BottomNavigationHandler.OnBottomNavigationReselectedLister {
 
-    override var tabLayout: TabLayout? = null
-        get() = activity?.findViewById(R.id.ordersTabs)
+    override val layoutResource: Int
+        get() = R.layout.fragment_general_with_view_pager
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_general_with_view_pager, container, false)
-    }
+    override val tabLayoutResource: Int = R.id.ordersTabs
 
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {
         return listOf(

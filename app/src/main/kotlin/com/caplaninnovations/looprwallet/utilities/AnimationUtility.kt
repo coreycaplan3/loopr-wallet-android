@@ -57,7 +57,7 @@ fun TextView.animateTextSizeChange(@DimenRes toValue: Int) {
  * @param duration An optional duration that can be supplied as an integer resource. The default
  * value is [R.integer.animation_duration] or 300ms
  */
-fun View.animateToHeight(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration) {
+fun View.animateToHeight(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration): Animator {
     val animator = ValueAnimator.ofFloat(0f, resources.getDimension(toValue))
     animator.interpolator = DecelerateInterpolator()
     animator.addUpdateListener {
@@ -66,7 +66,8 @@ fun View.animateToHeight(@DimenRes toValue: Int, @IntegerRes duration: Int = R.i
     }
 
     animator.duration = resources.getInteger(duration).toLong()
-    animator.start()
+
+    return animator
 }
 
 /**

@@ -21,17 +21,14 @@ import kotlinx.android.synthetic.main.fragment_markets_all.*
  */
 class AllMarketsFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_markets_all, container, false)
-    }
+    override val layoutResource: Int
+        get() = R.layout.fragment_markets_all
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as? BaseActivity)?.enableToolbarCollapsing()
-
-        allMarketsContainer.adapter = AllMarketsAdapter()
-        allMarketsContainer.layoutManager = LinearLayoutManager(context)
+        fragmentContainer.layoutManager = LinearLayoutManager(context)
+        fragmentContainer.adapter = AllMarketsAdapter()
     }
 
 }
