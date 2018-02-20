@@ -53,9 +53,7 @@ class BottomNavigationHandler(private val activity: BaseActivity,
             val tag = initialTag
             logv("Initializing $tag fragment...")
 
-            Handler().postDelayed({
-                onTabSelected(bottomNavigation.findTabByTag(tag))
-            }, 300L)
+            Handler().postDelayed({ onTabSelected(bottomNavigation.findTabByTag(tag)) }, 300L)
         } else {
             val tag = fragmentStackHistory.peek()!!
             logv("Pushing $tag fragment...")

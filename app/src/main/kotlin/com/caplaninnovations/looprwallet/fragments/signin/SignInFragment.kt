@@ -28,14 +28,17 @@ class SignInFragment : BaseFragment() {
         get() = R.layout.fragment_sign_in
 
     companion object {
-        val TAG = SignInFragment::class.java.simpleName
+        val TAG: String = SignInFragment::class.simpleName!!
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         createNewWalletButton.setOnClickListener {
-            (activity as? BaseActivity)?.securityClient?.createWallet("corey")
+            executeFragmentTransaction(CreateWalletSelectionFragment(), CreateWalletSelectionFragment.TAG)
+        }
+
+        restoreWalletButton.setOnClickListener {
             startActivity(Intent(context, MainActivity::class.java))
         }
     }

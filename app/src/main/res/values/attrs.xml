@@ -5,10 +5,6 @@
     <attr name="colorBackground" format="color" />
     <attr name="circleBackgroundColor" format="color" />
 
-    <!-- Bottom Navigation -->
-    <attr name="bottomNavigationTabTextColor" format="color" />
-    <attr name="bottomNavigationTextColor" format="color" />
-
     <!-- Button Styles -->
     <attr name="borderlessButtonColor" format="color" />
 

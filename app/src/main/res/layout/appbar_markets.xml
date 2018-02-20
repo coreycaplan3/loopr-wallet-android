@@ -15,7 +15,7 @@
         android:id="@+id/marketsTabs"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        app:tabBackground="?attr/colorPrimary"
+        android:background="?attr/colorPrimary"
         app:tabGravity="fill"
         app:tabIndicatorColor="?attr/tabIndicatorColor"
         app:tabIndicatorHeight="3dp"

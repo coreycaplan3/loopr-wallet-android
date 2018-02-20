@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewGroupCompat
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +55,19 @@ abstract class BaseFragment : Fragment() {
             appbarLayout = createAppbarLayout(inflater, container, savedInstanceState)
             fragmentView.addView(appbarLayout)
             toolbar = appbarLayout?.findViewById(R.id.ordersToolbar)
+
+            ViewGroupCompat.setTransitionGroup(appbarLayout, true)
+
+            val fragmentStack = (activity as? BaseActivity)?.baseActivityFragmentStackHistory
+            fragmentStack?.let {
+                if(!it.isEmpty()) {
+                    toolbar?.setNavigationIcon(R.drawable.ic_forward_white_24dp)
+                    toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
+                    toolbar?.setNavigationOnClickListener {
+                        (activity as? BaseActivity)?.onBackPressed()
+                    }
+                }
+            }
         }
 
         return fragmentView
@@ -129,6 +143,10 @@ abstract class BaseFragment : Fragment() {
         }
 
         isToolbarCollapseEnabled = false
+    }
+
+    fun executeFragmentTransaction(fragment: BaseFragment, tag: String) {
+        (activity as? BaseActivity)?.executeFragmentTransaction(fragment, tag)
     }
 
     override fun onDestroyView() {

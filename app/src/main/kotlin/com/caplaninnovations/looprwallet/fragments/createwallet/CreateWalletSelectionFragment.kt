@@ -29,8 +29,18 @@ class CreateWalletSelectionFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fragmentCreateWalletSelectionKeystoreButton.setOnClickListener {
+            executeFragmentTransaction(CreateWalletKeystoreFragment(), CreateWalletKeystoreFragment.TAG)
+        }
+
         fragmentCreateWalletSelectionKeystoreHelpButton.setOnClickListener {
-            (activity as? BaseActivity)
+        }
+
+        fragmentCreateWalletSelectionPhraseButton.setOnClickListener {
+
+        }
+
+        fragmentCreateWalletSelectionPhraseHelpButton.setOnClickListener {
         }
     }
 

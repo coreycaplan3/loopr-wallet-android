@@ -197,4 +197,5 @@
     <string name="about_this_step">About this Step</string>
     <string name="about_remember_phrase">This 12-word phrase is used to recover and unlock your wallet. It must be used with the password oyu provided earlier. By pressing \"Confirm Phrase\" you will be taken to the next screen to reenter these 12 words.</string>
     <string name="help_recycler_empty_phrase">You have not entered a word yet in your 12-word phrase. To enter a word, type a word in the box below ad press \"Add\". After entering all 12 words, press \"Done\".\n\nIf you need to reorder your words, hold the reorder icon on the right and drag it. If you need to delete a word, swipe it to the right.</string>
+    <string name="content_description_navigation_icon">This button allows you to navigate back to the most recent screen you were on</string>
 </resources>

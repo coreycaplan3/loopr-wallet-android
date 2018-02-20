@@ -23,7 +23,7 @@
         android:layout_gravity="center"
         android:paddingLeft="@dimen/bottom_navigation_margin_horizontal"
         android:paddingRight="@dimen/bottom_navigation_margin_horizontal"
-        android:textColor="?attr/bottomNavigationTextColor"
+        android:textColor="?attr/tabTextColor"
         android:textSize="12sp" />
 
 </LinearLayout>
