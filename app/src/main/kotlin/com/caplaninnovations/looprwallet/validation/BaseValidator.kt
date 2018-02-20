@@ -13,9 +13,12 @@ import android.text.TextWatcher
  *
  *
  */
-abstract class BaseValidator(val textInputLayout: TextInputLayout) : TextWatcher {
+abstract class BaseValidator(private val textInputLayout: TextInputLayout) : TextWatcher {
 
-    protected var error: String? = null
+    /**
+     * It's initialized to a nonnull value, so [isValid] returns false
+     */
+    protected var error: String? = ""
 
     init {
         textInputLayout.editText?.addTextChangedListener(this)
@@ -38,6 +41,11 @@ abstract class BaseValidator(val textInputLayout: TextInputLayout) : TextWatcher
         }
     }
 
+    /**
+     * Checks if a given string is valid. If it's not valid, [error] should be set to a nonnull
+     * value and this method should return false. If it *is* valid, [error] should be set to null
+     * and this method should return true.
+     */
     protected abstract fun isValid(text: String?): Boolean
 
     fun isValid(): Boolean = error != null

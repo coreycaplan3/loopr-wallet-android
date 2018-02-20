@@ -5,11 +5,17 @@ import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.datalayer.WalletCreationPasswordViewModel
+import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
+import com.caplaninnovations.looprwallet.utilities.allNonnull
+import com.caplaninnovations.looprwallet.utilities.loge
+import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.validation.PasswordValidator
+import com.caplaninnovations.looprwallet.validation.WalletNameValidator
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import kotlinx.android.synthetic.main.card_create_wallet_name.*
+import kotlinx.android.synthetic.main.card_create_wallet_password.*
 
 /**
  * Created by Corey Caplan on 2/19/18.
@@ -31,17 +37,27 @@ class CreateWalletKeystoreFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val walletCreationPasswordViewModel = ViewModelProviders.of(activity!!)
+        val walletCreationPasswordData = ViewModelProviders.of(activity!!)
                 .get(WalletCreationPasswordViewModel::class.java)
+                .walletCreationPassword
 
-        val passwordValidator = PasswordValidator(createWalletNameInputLayout)
+        val walletNameValidator = WalletNameValidator(createWalletNameInputLayout)
+        val passwordValidator = PasswordValidator(createWalletPasswordInputLayout)
         validatorList = listOf(passwordValidator)
 
         fragmentCreateWalletKeystoreCreateButton.setOnClickListener {
             if (isAllValidatorsValid()) {
-//                walletCreationPasswordViewModel.walletCreationPassword.value = WalletCreationPassword()
-            } else {
+                val walletName = walletNameValidator.getText()
+                val password = passwordValidator.getText()
 
+                if (!listOf(walletName, password).allNonnull()) {
+                    loge("Error, invalid state!", IllegalStateException())
+                    return@setOnClickListener
+                }
+
+                walletCreationPasswordData.value = WalletCreationPassword(walletName!!, password!!)
+
+                ConfirmPasswordDialog().show(fragmentManager, ConfirmPasswordDialog.TAG)
             }
         }
     }
