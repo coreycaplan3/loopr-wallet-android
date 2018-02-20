@@ -2,15 +2,10 @@ package com.caplaninnovations.looprwallet.activities
 
 import android.os.Bundle
 import android.support.annotation.IdRes
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.AppBarLayout.LayoutParams.*
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDialog
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.*
 import com.caplaninnovations.looprwallet.R
@@ -25,7 +20,6 @@ import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.realm.RealmClient
 import com.caplaninnovations.looprwallet.utilities.*
 import io.realm.Realm
-import kotlinx.android.synthetic.main.appbar_main.*
 import javax.inject.Inject
 
 /**
@@ -78,10 +72,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * A stack history used for creating a backstack for fragments. To start using it, call
-     * [executeFragmentTransaction] in the activity's [onCreate] when the activity is created for
+     * [pushFragmentTransaction] in the activity's [onCreate] when the activity is created for
      * the first time.
      */
-    lateinit var baseActivityFragmentStackHistory: FragmentStackHistory
+    open lateinit var fragmentStackHistory: FragmentStackHistory
 
     @IdRes
     var progressDialogTitle: Int? = null
@@ -103,7 +97,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_PAN)
 
-        baseActivityFragmentStackHistory = FragmentStackHistory(savedInstanceState)
+        fragmentStackHistory = FragmentStackHistory(true, savedInstanceState)
 
         permissionHandlers = getAllPermissionHandlers()
         permissionHandlers
@@ -160,6 +154,18 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    fun removeWallet() {
+        securityClient.getCurrentWallet()?.let {
+
+            RealmUtility.removeListenersAndClose(realm)
+
+            securityClient.removeWallet(it)
+            if (securityClient.getCurrentWallet() == null) {
+                securityClient.onNoCurrentWalletSelected(this)
+            }
+        }
+    }
+
     open fun getAllPermissionHandlers(): List<PermissionHandler> {
         // Default is to return an empty list
         return listOf()
@@ -173,61 +179,43 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
-
     override fun onBackPressed() {
-        val oldFragmentTag = baseActivityFragmentStackHistory.pop()
-
-        if (baseActivityFragmentStackHistory.isEmpty()) {
-            finish()
-            return
-        }
-
-        val oldFragment = oldFragmentTag?.let { supportFragmentManager.findFragmentByTag(it) }
-        val newFragment = supportFragmentManager.findFragmentByTag(baseActivityFragmentStackHistory.peek())
-
-        if (newFragment == null || newFragment.tag == null) {
-            loge("onBackPressed: NewFragment or NewFragment.Tag is null", IllegalStateException())
-        } else {
-            FragmentStackTransactionController(R.id.activityContainer, newFragment, newFragment.tag!!)
-                    .commitTransactionNow(supportFragmentManager, oldFragment)
-        }
+        popFragmentTransaction()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean = true
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        /*
-         * TODO This will be replaced down the road with a "select different wallet and remove
-         * TODO wallet" feature
-         */
-        securityClient.getCurrentWallet()?.let {
-
-            RealmUtility.removeListenersAndClose(realm)
-
-            securityClient.removeWallet(it)
-            if (securityClient.getCurrentWallet() == null) {
-                securityClient.onNoCurrentWalletSelected(this)
-            }
-        }
-        return false
-    }
-
-    open fun executeFragmentTransaction(fragment: BaseFragment, fragmentTag: String) {
+    /**
+     * Pushes the given fragment onto the stack and saves the old one
+     */
+    open fun pushFragmentTransaction(fragment: BaseFragment, fragmentTag: String) {
         val oldFragment = supportFragmentManager.findFragmentById(R.id.activityContainer)
         FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
                 .commitTransactionNow(supportFragmentManager, oldFragment)
 
-        baseActivityFragmentStackHistory.push(fragmentTag)
+        fragmentStackHistory.push(fragmentTag)
+    }
+
+    open fun popFragmentTransaction() {
+        val oldFragment = supportFragmentManager.findFragmentByTag(fragmentStackHistory.pop())
+
+        val newFragmentTag = fragmentStackHistory.peek()
+        if (newFragmentTag == null) {
+            // There are no fragments left in the stack
+            finish()
+            return
+        }
+
+        val newFragment = supportFragmentManager.findFragmentByTag(newFragmentTag)
+
+        newFragment?.let {
+            FragmentStackTransactionController(R.id.activityContainer, newFragment, newFragmentTag)
+                    .commitTransactionNow(supportFragmentManager, oldFragment)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
 
-        baseActivityFragmentStackHistory.saveState(outState)
+        fragmentStackHistory.saveState(outState)
 
         outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)
         progressDialogTitle?.let { outState?.putInt(KEY_PROGRESS_DIALOG_TITLE, it) }

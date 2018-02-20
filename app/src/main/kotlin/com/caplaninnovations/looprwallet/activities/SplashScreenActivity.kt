@@ -36,8 +36,7 @@ class SplashScreenActivity : BaseActivity() {
                 startActivity(intent)
                 finish()
             } else {
-                longToast(R.string.unlock_device
-                )
+                longToast(R.string.unlock_device)
                 securityClient.unlockAndroidKeystore()
             }
         }, 1000)

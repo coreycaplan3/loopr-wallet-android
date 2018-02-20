@@ -12,8 +12,12 @@ import kotlin.collections.ArrayList
  *
  * Purpose of Class:
  *
+ * @param isUpNavigationEnabled True if upwards navigation should be enabled or false to disabled.
+ * This is mainly useful for bottom-navigation, when the user is navigating "horizontally" instead
+ * of vertically.
+ * @param savedInstanceState The bundle passed to the activity in its *onCreate*.
  */
-class FragmentStackHistory(savedInstanceState: Bundle?) {
+class FragmentStackHistory(private val isUpNavigationEnabled: Boolean, savedInstanceState: Bundle?) {
 
     companion object {
         const val KEY_STACK = "_STACK"
@@ -27,7 +31,7 @@ class FragmentStackHistory(savedInstanceState: Bundle?) {
     }
 
     /**
-     * Pushes the given fragment (represented via Int) onto the stack. If it is already on the
+     * Pushes the given fragment (represented via tag) onto the stack. If it is already on the
      * stack, it is moved to the front.
      */
     fun push(fragmentTag: String) {
@@ -76,6 +80,11 @@ class FragmentStackHistory(savedInstanceState: Bundle?) {
      * True if the stack is empty, false otherwise
      */
     fun isEmpty() = stack.isEmpty()
+
+    /**
+     * @return True to display and support up navigation or false to disable and hide it
+     */
+    fun isUpNavigationEnabled(): Boolean = isUpNavigationEnabled && stack.size > 1
 
     fun saveState(outState: Bundle?) {
         outState?.putStringArrayList(KEY_STACK, stack)

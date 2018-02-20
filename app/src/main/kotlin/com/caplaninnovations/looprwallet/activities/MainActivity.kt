@@ -14,6 +14,7 @@ import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigat
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
@@ -43,12 +44,14 @@ class MainActivity : BaseActivity() {
     override val isSecurityActivity: Boolean
         get() = true
 
+    override lateinit var fragmentStackHistory: FragmentStackHistory
+
     lateinit var bottomNavigationHandler: BottomNavigationHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val fragmentTagPairs: List<BottomNavigationFragmentPair> = listOf<BottomNavigationFragmentPair>(
+        val fragmentTagPairs: List<BottomNavigationFragmentPair> = listOf(
                 BottomNavigationFragmentPair(KEY_MARKETS, MarketsParentFragment(),
                         R.drawable.ic_show_chart_white_24dp, R.string.markets),
 
@@ -57,11 +60,12 @@ class MainActivity : BaseActivity() {
 
                 BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(),
                         R.drawable.ic_account_balance_wallet_white_24dp, R.string.my_wallet)
-
         )
 
+        fragmentStackHistory = FragmentStackHistory(false, savedInstanceState)
+
         bottomNavigationHandler = BottomNavigationHandler(this, fragmentTagPairs,
-                KEY_MARKETS, savedInstanceState)
+                KEY_MARKETS, fragmentStackHistory, savedInstanceState)
 
         isIntentForClosingApplication()
     }
@@ -84,12 +88,6 @@ class MainActivity : BaseActivity() {
         if (bottomNavigationHandler.onBackPressed()) {
             finish()
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-
-        bottomNavigationHandler.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {

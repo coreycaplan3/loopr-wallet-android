@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.widget.ImageView
@@ -32,6 +31,7 @@ import kotlinx.android.synthetic.main.bottom_navigation.*
 class BottomNavigationHandler(private val activity: BaseActivity,
                               private val fragmentTagPairs: List<BottomNavigationFragmentPair>,
                               @BottomNavigationTag private val initialTag: String,
+                              private val fragmentStackHistory: FragmentStackHistory,
                               savedInstanceState: Bundle?) :
         TabLayout.OnTabSelectedListener {
 
@@ -42,19 +42,19 @@ class BottomNavigationHandler(private val activity: BaseActivity,
 
     private val bottomNavigation = activity.bottomNavigation
 
-    val fragmentStackHistory = FragmentStackHistory(savedInstanceState)
-
     private var currentFragment: Fragment? = null
 
     init {
         setupTabs()
 
-        if (savedInstanceState == null) {
+        savedInstanceState.let {
             val tag = initialTag
             logv("Initializing $tag fragment...")
 
             Handler().postDelayed({ onTabSelected(bottomNavigation.findTabByTag(tag)) }, 300L)
-        } else {
+        }
+
+        savedInstanceState?.let {
             val tag = fragmentStackHistory.peek()!!
             logv("Pushing $tag fragment...")
 
@@ -72,11 +72,14 @@ class BottomNavigationHandler(private val activity: BaseActivity,
     fun onBackPressed(): Boolean {
         fragmentStackHistory.pop()
 
-        return if (fragmentStackHistory.isEmpty()) {
-            true
-        } else {
-            bottomNavigation.findTabByTag(fragmentStackHistory.peek()!!)?.select()
-            false
+        fragmentStackHistory.peek()?.let {
+            bottomNavigation.findTabByTag(it)?.select()
+            return false
+        }
+
+        fragmentStackHistory.peek().let {
+            // The stack is empty. Time to finish the activity
+            return true
         }
     }
 
@@ -122,10 +125,6 @@ class BottomNavigationHandler(private val activity: BaseActivity,
             val fragment = activity.supportFragmentManager.findFragmentByTag(it)
             (fragment as? OnBottomNavigationReselectedLister)?.onBottomNavigationReselected()
         }
-    }
-
-    fun onSaveInstanceState(outState: Bundle?) {
-        fragmentStackHistory.saveState(outState)
     }
 
     // MARK - Private Methods

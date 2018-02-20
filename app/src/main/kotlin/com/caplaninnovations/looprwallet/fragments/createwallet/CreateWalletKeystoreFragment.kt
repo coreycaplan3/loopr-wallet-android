@@ -1,9 +1,13 @@
 package com.caplaninnovations.looprwallet.fragments.createwallet
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.datalayer.WalletCreationPasswordViewModel
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
+import com.caplaninnovations.looprwallet.validation.PasswordValidator
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import kotlinx.android.synthetic.main.card_create_wallet_name.*
 
@@ -27,11 +31,19 @@ class CreateWalletKeystoreFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentCreateWalletKeystoreCreateButton
+        val walletCreationPasswordViewModel = ViewModelProviders.of(activity!!)
+                .get(WalletCreationPasswordViewModel::class.java)
 
-        createWalletNameEditText
+        val passwordValidator = PasswordValidator(createWalletNameInputLayout)
+        validatorList = listOf(passwordValidator)
 
+        fragmentCreateWalletKeystoreCreateButton.setOnClickListener {
+            if (isAllValidatorsValid()) {
+//                walletCreationPasswordViewModel.walletCreationPassword.value = WalletCreationPassword()
+            } else {
 
+            }
+        }
     }
 
 }

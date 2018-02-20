@@ -1,11 +1,8 @@
 package com.caplaninnovations.looprwallet.fragments.createwallet
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_create_wallet_selection.*
 
@@ -30,7 +27,7 @@ class CreateWalletSelectionFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fragmentCreateWalletSelectionKeystoreButton.setOnClickListener {
-            executeFragmentTransaction(CreateWalletKeystoreFragment(), CreateWalletKeystoreFragment.TAG)
+            pushFragmentTransaction(CreateWalletKeystoreFragment(), CreateWalletKeystoreFragment.TAG)
         }
 
         fragmentCreateWalletSelectionKeystoreHelpButton.setOnClickListener {

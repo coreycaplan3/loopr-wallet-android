@@ -64,18 +64,6 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
 
         transaction?.let { transaction.setTransition(transition) }
 
-//        oldFragment?.let {
-//            if (!it.isDetached) {
-//                transaction.detach(it)
-//            }
-//        }
-
-//        if (newFragment.isDetached) {
-//            transaction.attach(newFragment)
-//        } else {
-//            transaction.replace(container, newFragment, newFragmentTag)
-//        }
-
         transaction.replace(container, newFragment, newFragmentTag)
 
         Pair(enterAnimation, exitAnimation).allNonNull { enterExitPair ->

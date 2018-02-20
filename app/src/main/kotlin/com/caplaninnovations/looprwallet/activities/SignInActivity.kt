@@ -1,13 +1,8 @@
 package com.caplaninnovations.looprwallet.activities
 
-import android.content.Intent
 import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletSelectionFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInFragment
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
-import com.caplaninnovations.looprwallet.utilities.loge
 
 /**
  * Created by Corey on 1/14/2018
@@ -29,7 +24,7 @@ class SignInActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            executeFragmentTransaction(SignInFragment(), SignInFragment.TAG)
+            pushFragmentTransaction(SignInFragment(), SignInFragment.TAG)
         }
     }
 

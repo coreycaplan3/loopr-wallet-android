@@ -6,12 +6,12 @@ import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewGroupCompat
 import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.utilities.RealmUtility
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
+import com.caplaninnovations.looprwallet.validation.BaseValidator
 
 /**
  * Created by Corey on 1/14/2018.
@@ -42,6 +42,8 @@ abstract class BaseFragment : Fragment() {
     var toolbar: Toolbar? = null
         private set
 
+    var validatorList: List<BaseValidator>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -58,14 +60,12 @@ abstract class BaseFragment : Fragment() {
 
             ViewGroupCompat.setTransitionGroup(appbarLayout, true)
 
-            val fragmentStack = (activity as? BaseActivity)?.baseActivityFragmentStackHistory
+            val fragmentStack = (activity as? BaseActivity)?.fragmentStackHistory
             fragmentStack?.let {
-                if(!it.isEmpty()) {
-                    toolbar?.setNavigationIcon(R.drawable.ic_forward_white_24dp)
+                if (it.isUpNavigationEnabled()) {
+                    toolbar?.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
                     toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
-                    toolbar?.setNavigationOnClickListener {
-                        (activity as? BaseActivity)?.onBackPressed()
-                    }
+                    toolbar?.setNavigationOnClickListener { popFragmentTransaction() }
                 }
             }
         }
@@ -89,11 +89,41 @@ abstract class BaseFragment : Fragment() {
             } else {
                 disableToolbarCollapsing()
             }
+
+            setHasOptionsMenu(true)
         }
+    }
+
+    /**
+     * Checks if all of the validators are valid. If [validatorList] is null, this method returns
+     * true
+     * @return True if the list of validators all are valid or if [validatorList] is null. Returns
+     * false if at least one of them is invalid
+     */
+    fun isAllValidatorsValid() = validatorList?.none { !it.isValid() } ?: true
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.main_menu, menu)
     }
 
     open fun createAppbarLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): AppBarLayout? {
         return inflater.inflate(R.layout.appbar_main, container, false) as AppBarLayout?
+    }
+
+    /**
+     * Executes the given fragment transaction, pushing the given fragment to the front and saving
+     * the old one (if present)
+     */
+    fun pushFragmentTransaction(fragment: BaseFragment, tag: String) {
+        (activity as? BaseActivity)?.pushFragmentTransaction(fragment, tag)
+    }
+
+    /**
+     * Executes the given fragment transaction, popping the current fragment from the front and
+     * moving the next one in the stack to the front
+     */
+    fun popFragmentTransaction() {
+        (activity as? BaseActivity)?.popFragmentTransaction()
     }
 
     /**
@@ -145,13 +175,19 @@ abstract class BaseFragment : Fragment() {
         isToolbarCollapseEnabled = false
     }
 
-    fun executeFragmentTransaction(fragment: BaseFragment, tag: String) {
-        (activity as? BaseActivity)?.executeFragmentTransaction(fragment, tag)
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        /*
+         * TODO This will be replaced down the road with a "select different wallet and remove
+         * TODO wallet" feature
+         */
+        (activity as? BaseActivity)?.removeWallet()
+        return false
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
+        validatorList?.forEach { it.destroy() }
         (activity as? BaseActivity)?.setSupportActionBar(null)
     }
 

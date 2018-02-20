@@ -1,6 +1,8 @@
 package com.caplaninnovations.looprwallet.validation
 
-import android.support.annotation.StringRes
+import android.support.design.widget.TextInputLayout
+import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.utilities.str
 
 /**
  * Created by Corey Caplan on 2/19/18.
@@ -10,23 +12,26 @@ import android.support.annotation.StringRes
  * Purpose of Class:
  *
  */
-class PasswordValidator(val password: String) {
+class PasswordValidator(textInputLayout: TextInputLayout) : BaseValidator(textInputLayout) {
 
-    private var passwordError: Int? = null
-
-    fun isPasswordValid(): Boolean {
-        return true
-    }
-
-    /**
-     * Gets the error
-     */
-    @StringRes
-    fun getErrorDescription(): Int? {
-        return if (!isPasswordValid()) {
-            passwordError
-        } else {
-            null
+    override fun isValid(text: String?): Boolean {
+        return when {
+            text == null -> {
+                error = str(R.string.error_password_required)
+                return false
+            }
+            text.length < 9 -> {
+                error = str(R.string.error_password_too_short)
+                return false
+            }
+            text.length > 255 -> {
+                error = str(R.string.error_too_long)
+                return false
+            }
+            else -> {
+                error = null
+                true
+            }
         }
     }
 
