@@ -44,7 +44,7 @@ class CreateWalletKeystoreFragment : BaseFragment() {
 
         val walletNameValidator = WalletNameValidator(createWalletNameInputLayout) { this.onFormChanged() }
         val passwordValidator = PasswordValidator(createWalletPasswordInputLayout) { this.onFormChanged() }
-        validatorList = listOf(passwordValidator)
+        validatorList = listOf(walletNameValidator, passwordValidator)
 
         createButton.setOnClickListener {
             if (isAllValidatorsValid()) {

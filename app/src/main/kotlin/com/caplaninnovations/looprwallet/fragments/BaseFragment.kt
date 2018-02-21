@@ -96,12 +96,12 @@ abstract class BaseFragment : Fragment() {
     /**
      * Checks if all of the validators are valid. If [validatorList] is null, this method returns
      * true
-     * @return True if the list of validators all are valid or if [validatorList] is null. Returns
-     * false if at least one of them is invalid
+     * @return True if all elements of [validatorList] are valid and the list is not null. Returns
+     * false if at least one of them is invalid or the list is null.
      */
     fun isAllValidatorsValid(): Boolean {
         val validatorList = this.validatorList
-        return validatorList == null || validatorList.all { it.isValid() }
+        return validatorList != null && validatorList.all { it.isValid() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

@@ -2,7 +2,6 @@ package com.caplaninnovations.looprwallet.fragments.createwallet
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
-import android.support.test.espresso.Espresso.*
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.*
 import android.support.test.espresso.matcher.ViewMatchers.*
@@ -12,11 +11,13 @@ import com.caplaninnovations.looprwallet.activities.FragmentTestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
+import com.caplaninnovations.looprwallet.validation.BaseValidator
 import junit.framework.Assert.*
 import kotlinx.android.synthetic.main.card_create_wallet_name.*
 import kotlinx.android.synthetic.main.card_create_wallet_password.*
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import org.hamcrest.Matchers.*
+import org.junit.Assert.assertNotEquals
 import org.junit.Before
 
 import org.junit.Rule
@@ -38,7 +39,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
     @get:Rule
     val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
 
-    private val createWalletKeystoreFragment = CreateWalletKeystoreFragment()
+    private val fragment = CreateWalletKeystoreFragment()
 
     private val goodName = "corey"
     private val goodPassword = "coreycorey"
@@ -51,96 +52,102 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
 
     @Before
     fun setUp() {
-        activityRule.activity.addFragment(createWalletKeystoreFragment, CreateWalletKeystoreFragment.TAG)
+        activityRule.activity.addFragment(fragment, CreateWalletKeystoreFragment.TAG)
 
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
     }
 
     @Test
     fun formIsEmpty_stateShouldBeEmpty() {
-        onView(`is`(createWalletKeystoreFragment.createWalletNameEditText))
+        Espresso.onView(`is`(fragment.createWalletNameEditText))
                 .check(matches(hasErrorText(nullString)))
                 .check(matches(withText(emptyString)))
 
-        onView(`is`(createWalletKeystoreFragment.createWalletPasswordEditText))
+        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
                 .check(matches(hasErrorText(nullString)))
                 .check(matches(withText(emptyString)))
 
-        onView(`is`(createWalletKeystoreFragment.createButton))
+        Espresso.onView(`is`(fragment.createButton))
                 .check(isDisabled())
     }
 
     @Test
-    fun okayName_passwordEmpty() {
-        onView(`is`(createWalletKeystoreFragment.createWalletNameEditText))
-                .perform(typeText(goodName))
+    fun nameOkay_passwordEmpty() {
+        Espresso.onView(`is`(fragment.createWalletNameEditText))
+                .perform(typeText(goodName), closeSoftKeyboard())
                 .check(matches(hasErrorText(nullString)))
 
-        onView(`is`(createWalletKeystoreFragment.createWalletPasswordEditText))
+        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
                 .check(matches(hasErrorText(nullString)))
                 .check(matches(withText(emptyString)))
 
-        onView(`is`(createWalletKeystoreFragment.createButton))
+        Espresso.onView(`is`(fragment.fragmentContainer))
+                .perform(swipeUp())
+
+        Espresso.onView(`is`(fragment.createButton))
                 .check(isDisabled())
     }
 
     @Test
     fun nameEmpty_passwordOkay() {
-        onView(`is`(createWalletKeystoreFragment.createWalletNameEditText))
+        Espresso.onView(`is`(fragment.createWalletNameEditText))
                 .check(matches(withText(emptyString)))
                 .check(matches(hasErrorText(nullString)))
 
-        onView(`is`(createWalletKeystoreFragment.createWalletPasswordEditText))
-                .perform(typeText(goodPassword))
+        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
+                .perform(typeText(goodPassword), closeSoftKeyboard())
                 .check(matches(withText(goodPassword)))
                 .check(matches(hasErrorText(nullString)))
 
-        Espresso.closeSoftKeyboard()
+        Espresso.onView(`is`(fragment.fragmentContainer))
+                .perform(swipeUp())
 
-        onView(`is`(createWalletKeystoreFragment.createButton))
+        Espresso.onView(`is`(fragment.createButton))
                 .check(isDisabled())
     }
 
     @Test
     fun nameBad_passwordBad() {
-        onView(`is`(createWalletKeystoreFragment.createWalletNameEditText))
-                .perform(typeText(badName))
+        Espresso.onView(`is`(fragment.createWalletNameEditText))
+                .perform(typeText(badName), closeSoftKeyboard())
 
-        assertNotNull(createWalletKeystoreFragment.createWalletNameInputLayout.error)
+        assertNotNull(fragment.createWalletNameInputLayout.error)
+        assertNotEquals(BaseValidator.DEFAULT_ERROR, fragment.createWalletNameInputLayout.error)
 
-        onView(`is`(createWalletKeystoreFragment.createWalletPasswordEditText))
-                .perform(typeText(badPassword))
+        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
+                .perform(typeText(badPassword), closeSoftKeyboard())
 
-        assertNotNull(createWalletKeystoreFragment.createWalletPasswordInputLayout.error)
+        assertNotNull(fragment.createWalletPasswordInputLayout.error)
+        assertNotEquals(BaseValidator.DEFAULT_ERROR, fragment.createWalletPasswordInputLayout.error)
 
         Espresso.closeSoftKeyboard()
 
-        Thread.sleep(5000)
+        Espresso.onView(`is`(fragment.fragmentContainer))
+                .perform(swipeUp())
 
-        onView(`is`(createWalletKeystoreFragment.createButton))
+        Espresso.onView(`is`(fragment.createButton))
                 .check(isDisabled())
     }
 
     @Test
     fun nameOkay_passwordOkay() {
-        onView(`is`(createWalletKeystoreFragment.createWalletNameEditText))
-                .perform(typeText(goodName))
+        Espresso.onView(`is`(fragment.createWalletNameEditText))
+                .perform(typeText(goodName), closeSoftKeyboard())
                 .check(matches(hasErrorText(nullString)))
 
-        onView(`is`(createWalletKeystoreFragment.createWalletPasswordEditText))
-                .perform(typeText(goodPassword))
+        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
+                .perform(typeText(goodPassword), closeSoftKeyboard())
                 .check(matches(hasErrorText(nullString)))
 
-        Espresso.closeSoftKeyboard()
+        Espresso.onView(`is`(fragment.fragmentContainer))
+                .perform(swipeUp())
 
-        onView(`is`(createWalletKeystoreFragment.createButton))
+        Espresso.onView(`is`(fragment.createButton))
                 .check(matches(isEnabled()))
                 .perform(click())
 
         val walletCreationData = WalletCreationPassword(goodName, goodPassword)
-        assertEquals(walletCreationData, createWalletKeystoreFragment.walletCreationPasswordData.value)
-
-        Thread.sleep(10000)
+        assertEquals(walletCreationData, fragment.walletCreationPasswordData.value)
     }
 
 }

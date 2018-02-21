@@ -11,17 +11,28 @@ import android.text.TextWatcher
  *
  * Purpose of Class:
  *
- *
+ * @param textInputLayout The [TextInputLayout] whose text will be monitored
+ * @param onChangeListener A listener that will be invoked whenever the content of [TextInputLayout]
+ * changes. Typically, this will be used to enable/disable the submit button.
+ * @param isRequired True if the field is required (cannot be empty) or false otherwise.
  */
 abstract class BaseValidator(
         private val textInputLayout: TextInputLayout,
-        private val onChangeListener: () -> Unit
+        private val onChangeListener: () -> Unit,
+        private val isRequired: Boolean = true
 ) : TextWatcher {
 
+    companion object {
+        const val DEFAULT_ERROR = "error"
+    }
+
     /**
-     * It's initialized to a nonnull value, so [isValid] returns false
+     * If this validator's field is required, it's initialized to a nonnull value, so [isValid]
+     * returns false for empty/default states.
+     *
+     * Otherwise, it is initialized to null, so it returns true initially for default/empty states.
      */
-    protected var error: String? = ""
+    protected var error: String? = if (isRequired) DEFAULT_ERROR else null
 
     init {
         textInputLayout.editText?.addTextChangedListener(this)

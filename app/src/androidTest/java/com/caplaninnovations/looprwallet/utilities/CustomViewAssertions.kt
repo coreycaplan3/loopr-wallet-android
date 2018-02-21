@@ -50,7 +50,9 @@ class CustomViewAssertions {
 
         fun isDisabled(): ViewAssertion {
             return ViewAssertion { view, _ ->
-                if (view == null || view.isEnabled) {
+                if (view == null) {
+                    throw IllegalStateException("Invalid state! View is null!")
+                }  else if (view.isEnabled) {
                     throw IllegalStateException("Invalid state! Expected view to be disabled")
                 }
             }
