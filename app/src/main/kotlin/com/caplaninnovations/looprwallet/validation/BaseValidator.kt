@@ -42,6 +42,8 @@ abstract class BaseValidator(
         } else {
             textInputLayout.error = error
         }
+
+        onChangeListener.invoke()
     }
 
     /**
@@ -51,7 +53,7 @@ abstract class BaseValidator(
      */
     protected abstract fun isValid(text: String?): Boolean
 
-    fun isValid(): Boolean = error != null
+    fun isValid(): Boolean = error == null
 
     fun getText() = textInputLayout.editText?.text?.toString()
 

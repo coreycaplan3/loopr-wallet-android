@@ -1,9 +1,7 @@
 package com.caplaninnovations.looprwallet.utilities
 
 import android.support.annotation.DimenRes
-import android.support.test.espresso.NoMatchingViewException
 import android.support.test.espresso.ViewAssertion
-import android.view.View
 import android.widget.TextView
 
 /**
@@ -52,7 +50,7 @@ class CustomViewAssertions {
 
         fun isDisabled(): ViewAssertion {
             return ViewAssertion { view, _ ->
-                if (view != null && !view.isEnabled) {
+                if (view == null || view.isEnabled) {
                     throw IllegalStateException("Invalid state! Expected view to be disabled")
                 }
             }

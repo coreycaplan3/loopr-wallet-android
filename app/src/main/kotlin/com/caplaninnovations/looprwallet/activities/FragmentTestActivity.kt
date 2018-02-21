@@ -27,18 +27,18 @@ class FragmentTestActivity : BaseActivity() {
     fun addFragment(fragment: Fragment, tag: String) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.activityContainer, fragment, tag)
-                .commit()
+                .commitNow()
 
         if (fragment.retainInstance) {
             supportFragmentManager.beginTransaction()
                     .add(fragment, tag)
-                    .commit()
+                    .commitNow()
         }
     }
 
     fun removeFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
                 .remove(fragment)
-                .commit()
+                .commitNow()
     }
 }

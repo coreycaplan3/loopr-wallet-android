@@ -99,7 +99,10 @@ abstract class BaseFragment : Fragment() {
      * @return True if the list of validators all are valid or if [validatorList] is null. Returns
      * false if at least one of them is invalid
      */
-    fun isAllValidatorsValid() = validatorList?.none { !it.isValid() } ?: true
+    fun isAllValidatorsValid(): Boolean {
+        val validatorList = this.validatorList
+        return validatorList == null || validatorList.all { it.isValid() }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.main_menu, menu)

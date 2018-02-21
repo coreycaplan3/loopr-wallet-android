@@ -1,6 +1,5 @@
 package com.caplaninnovations.looprwallet.fragments.createwallet
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
@@ -59,7 +58,7 @@ class CreateWalletKeystoreFragment : BaseFragment() {
 
                 walletCreationPasswordData.value = WalletCreationPassword(walletName!!, password!!)
 
-                ConfirmPasswordDialog().show(fragmentManager, ConfirmPasswordDialog.TAG)
+                ConfirmPasswordDialog.createInstance(password).show(fragmentManager, ConfirmPasswordDialog.TAG)
             }
         }
     }

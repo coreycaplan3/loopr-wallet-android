@@ -8,4 +8,4 @@ package com.caplaninnovations.looprwallet.models.wallet
  * Purpose of Class:
  *
  */
-open class WalletCreationPassword(var walletName: String, var password: String)
+data class WalletCreationPassword(var walletName: String, var password: String)
