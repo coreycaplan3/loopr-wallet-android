@@ -19,7 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class FragmentStackHistoryTest {
 
-    private val fragmentStackHistory = FragmentStackHistory(null)
+    private val fragmentStackHistory = FragmentStackHistory(true, null)
 
     private val tagOne = "one"
     private val tagTwo = "two"
@@ -92,7 +92,7 @@ class FragmentStackHistoryTest {
 
         fragmentStackHistory.saveState(bundle)
 
-        val newStack = FragmentStackHistory(bundle)
+        val newStack = FragmentStackHistory(false, bundle)
 
         assertEquals(3, newStack.getStackSize())
 
@@ -122,6 +122,30 @@ class FragmentStackHistoryTest {
 
         fragmentStackHistory.push(tagOne)
         assertEquals(3, fragmentStackHistory.getStackSize())
+    }
+
+    @Test
+    fun isUpNavigationEnabled() {
+        // There are not enough items in the stack.
+        assertFalse(fragmentStackHistory.isUpNavigationEnabled())
+
+        fragmentStackHistory.push(tagOne)
+
+        // There are not enough items in the stack.
+        assertFalse(fragmentStackHistory.isUpNavigationEnabled())
+
+        fragmentStackHistory.push(tagTwo)
+        assertTrue(fragmentStackHistory.isUpNavigationEnabled())
+
+        val fragmentStackHistory = FragmentStackHistory(false, null)
+        assertFalse(fragmentStackHistory.isUpNavigationEnabled())
+
+        fragmentStackHistory.push(tagOne)
+
+        assertFalse(fragmentStackHistory.isUpNavigationEnabled())
+
+        fragmentStackHistory.push(tagTwo)
+        assertFalse(fragmentStackHistory.isUpNavigationEnabled())
     }
 
 }

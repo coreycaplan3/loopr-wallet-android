@@ -68,8 +68,6 @@ abstract class BaseActivity : AppCompatActivity() {
     @Inject
     lateinit var realmClient: RealmClient
 
-    lateinit var activityContainer: ViewGroup
-
     /**
      * A stack history used for creating a backstack for fragments. To start using it, call
      * [pushFragmentTransaction] in the activity's [onCreate] when the activity is created for
@@ -100,11 +98,8 @@ abstract class BaseActivity : AppCompatActivity() {
         fragmentStackHistory = FragmentStackHistory(true, savedInstanceState)
 
         permissionHandlers = getAllPermissionHandlers()
-        permissionHandlers
-                .filter { it.shouldRequestPermissionNow }
+        permissionHandlers.filter { it.shouldRequestPermissionNow }
                 .forEach { it.requestPermission() }
-
-        activityContainer = findViewById(R.id.activityContainer)
 
         /*
          * Progress Dialog Setup
@@ -154,7 +149,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun removeWallet() {
+    fun removeWalletCurrentWallet() {
         securityClient.getCurrentWallet()?.let {
 
             RealmUtility.removeListenersAndClose(realm)

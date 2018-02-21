@@ -13,7 +13,10 @@ import android.text.TextWatcher
  *
  *
  */
-abstract class BaseValidator(private val textInputLayout: TextInputLayout) : TextWatcher {
+abstract class BaseValidator(
+        private val textInputLayout: TextInputLayout,
+        private val onChangeListener: () -> Unit
+) : TextWatcher {
 
     /**
      * It's initialized to a nonnull value, so [isValid] returns false

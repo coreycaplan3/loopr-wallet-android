@@ -42,19 +42,19 @@ import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
  *
  * To use it, invoke it like the following:
  * ~~~~
- * onView(isRoot()).perform(OrientationChangeAction.orientationLandscape())
+ * onView(isRoot()).perform(OrientationChangeAction.changeOrientationToLandscape())
  *
- * onView(isRoot()).perform(OrientationChangeAction.orientationPortrait())
+ * onView(isRoot()).perform(OrientationChangeAction.changeOrientationToPortrait())
  * ~~~~
  */
 class OrientationChangeAction private constructor(private val orientation: Int) : ViewAction {
 
     companion object {
-        fun orientationLandscape(): ViewAction {
+        fun changeOrientationToLandscape(): ViewAction {
             return OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
         }
 
-        fun orientationPortrait(): ViewAction {
+        fun changeOrientationToPortrait(): ViewAction {
             return OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         }
     }

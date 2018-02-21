@@ -4,11 +4,14 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.support.annotation.ColorInt
 import android.support.annotation.IdRes
+import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.design.widget.*
 import android.support.design.widget.BaseTransientBottomBar.Duration
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 
 /**
@@ -40,6 +43,16 @@ fun Context.longToast(@StringRes stringResource: Int) {
 }
 
 /**
+ * @param layoutRes The layout resource that will be inflated
+ * @param attachToRoot True to attach it to the root or false to not attach it.
+ * @return The view that was inflated if [attachToRoot] was false or the root view if [attachToRoot]
+ * was set to true.
+ */
+fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
+    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+}
+
+/**
  * Sets the background tint of this view, by getting the background drawable and using
  * [DrawableCompat] to set it. The tint mode used is [PorterDuff.Mode.SRC_OVER].
  *
@@ -53,7 +66,7 @@ fun View.setBackgroundTint(@ColorInt tintColor: Int) {
     }
 }
 
-fun AppBarLayout.isExpanded() : Boolean {
+fun AppBarLayout.isExpanded(): Boolean {
     val coordinatorLayoutParams = (layoutParams as? CoordinatorLayout.LayoutParams)
     val behavior = (coordinatorLayoutParams?.behavior as? AppBarLayout.Behavior)
     return behavior?.topAndBottomOffset == 0

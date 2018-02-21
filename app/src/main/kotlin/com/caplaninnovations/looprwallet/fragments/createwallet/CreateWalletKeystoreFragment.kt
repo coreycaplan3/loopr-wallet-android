@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.fragments.createwallet
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
@@ -10,7 +11,6 @@ import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
 import com.caplaninnovations.looprwallet.utilities.allNonnull
 import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.validation.PasswordValidator
 import com.caplaninnovations.looprwallet.validation.WalletNameValidator
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
@@ -34,24 +34,26 @@ class CreateWalletKeystoreFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_create_wallet_keystore
 
+    val walletCreationPasswordData by lazy {
+        ViewModelProviders.of(activity!!)
+                .get(WalletCreationPasswordViewModel::class.java)
+                .walletCreationPassword
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val walletCreationPasswordData = ViewModelProviders.of(activity!!)
-                .get(WalletCreationPasswordViewModel::class.java)
-                .walletCreationPassword
-
-        val walletNameValidator = WalletNameValidator(createWalletNameInputLayout)
-        val passwordValidator = PasswordValidator(createWalletPasswordInputLayout)
+        val walletNameValidator = WalletNameValidator(createWalletNameInputLayout) { this.onFormChanged() }
+        val passwordValidator = PasswordValidator(createWalletPasswordInputLayout) { this.onFormChanged() }
         validatorList = listOf(passwordValidator)
 
-        fragmentCreateWalletKeystoreCreateButton.setOnClickListener {
+        createButton.setOnClickListener {
             if (isAllValidatorsValid()) {
                 val walletName = walletNameValidator.getText()
                 val password = passwordValidator.getText()
 
                 if (!listOf(walletName, password).allNonnull()) {
-                    loge("Error, invalid state!", IllegalStateException())
+                    loge("Error! This should not have occurred", IllegalStateException())
                     return@setOnClickListener
                 }
 
@@ -60,6 +62,12 @@ class CreateWalletKeystoreFragment : BaseFragment() {
                 ConfirmPasswordDialog().show(fragmentManager, ConfirmPasswordDialog.TAG)
             }
         }
+    }
+
+    // Mark - Private Methods
+
+    private fun onFormChanged() {
+        createButton.isEnabled = isAllValidatorsValid()
     }
 
 }

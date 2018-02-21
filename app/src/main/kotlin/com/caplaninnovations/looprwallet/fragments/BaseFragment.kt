@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.utilities.RealmUtility
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
 import com.caplaninnovations.looprwallet.validation.BaseValidator
 
@@ -180,7 +179,7 @@ abstract class BaseFragment : Fragment() {
          * TODO This will be replaced down the road with a "select different wallet and remove
          * TODO wallet" feature
          */
-        (activity as? BaseActivity)?.removeWallet()
+        (activity as? BaseActivity)?.removeWalletCurrentWallet()
         return false
     }
 

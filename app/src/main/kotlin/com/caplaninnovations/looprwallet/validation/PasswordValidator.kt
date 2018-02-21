@@ -11,8 +11,14 @@ import com.caplaninnovations.looprwallet.utilities.str
  *
  * Purpose of Class:
  *
+ * @param textInputLayout The [TextInputLayout] whose text will be monitored
+ * @param onChangeListener A listener that will be invoked whenever the content of [TextInputLayout]
+ * changes. Typically, this will be used to enable/disable the submit button.
  */
-class PasswordValidator(textInputLayout: TextInputLayout) : BaseValidator(textInputLayout) {
+class PasswordValidator(
+        textInputLayout: TextInputLayout,
+        onChangeListener: () -> Unit
+) : BaseValidator(textInputLayout, onChangeListener) {
 
     override fun isValid(text: String?): Boolean {
         return when {
