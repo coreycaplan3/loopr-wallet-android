@@ -14,4 +14,4 @@ import kotlinx.android.parcel.Parcelize
  */
 @SuppressLint("ParcelCreator")
 @Parcelize
-data class WalletCreationPassword(var walletName: String, var password: String) : Parcelable
+data class WalletCreationKeystore(var walletName: String, var password: String) : Parcelable

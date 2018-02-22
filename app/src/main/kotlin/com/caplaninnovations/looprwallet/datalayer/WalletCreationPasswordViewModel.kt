@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.datalayer
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
+import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 
 /**
  * Created by Corey Caplan on 2/20/18.
@@ -14,6 +14,6 @@ import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
  */
 class WalletCreationPasswordViewModel : ViewModel() {
 
-    val walletCreationPassword = MutableLiveData<WalletCreationPassword>()
+    val walletCreationPassword = MutableLiveData<WalletCreationKeystore>()
 
 }

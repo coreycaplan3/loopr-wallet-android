@@ -28,7 +28,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/fragmentCreateWalletSelectionKeystoreHelpButton"
+                    android:id="@+id/keystoreHelpButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
@@ -40,7 +40,7 @@
                     android:tint="?attr/colorPrimary" />
 
                 <Button
-                    android:id="@+id/fragmentCreateWalletSelectionKeystoreButton"
+                    android:id="@+id/createFromKeystoreButton"
                     style="@style/App.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/fragmentCreateWalletSelectionPhraseHelpButton"
+                    android:id="@+id/phraseHelpButton"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
@@ -68,7 +68,7 @@
                     android:tint="?attr/colorPrimary" />
 
                 <Button
-                    android:id="@+id/fragmentCreateWalletSelectionPhraseButton"
+                    android:id="@+id/createFromPhraseButton"
                     style="@style/App.Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

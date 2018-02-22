@@ -9,7 +9,7 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
+import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
 import com.caplaninnovations.looprwallet.validation.BaseValidator
 import junit.framework.Assert.*
@@ -146,7 +146,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
                 .check(matches(isEnabled()))
                 .perform(click())
 
-        val walletCreationData = WalletCreationPassword(goodName, goodPassword)
+        val walletCreationData = WalletCreationKeystore(goodName, goodPassword)
         assertEquals(walletCreationData, fragment.walletCreationPasswordData.value)
     }
 

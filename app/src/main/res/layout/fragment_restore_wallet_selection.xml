@@ -26,12 +26,20 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <Button
-                android:id="@+id/restoreWalletKeyFileButton"
+                android:id="@+id/restoreWalletKeystoreButton"
                 style="@style/App.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/vertical_margin"
                 android:text="@string/key_file" />
+
+            <Button
+                android:id="@+id/restoreWalletPhraseButton"
+                style="@style/App.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:text="@string/twelve_word_phrase" />
 
             <Button
                 android:id="@+id/restoreWalletPrivateKeyButton"

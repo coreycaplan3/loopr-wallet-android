@@ -26,18 +26,21 @@ class CreateWalletSelectionFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentCreateWalletSelectionKeystoreButton.setOnClickListener {
+        createFromKeystoreButton.setOnClickListener {
             pushFragmentTransaction(CreateWalletKeystoreFragment(), CreateWalletKeystoreFragment.TAG)
         }
 
-        fragmentCreateWalletSelectionKeystoreHelpButton.setOnClickListener {
+        keystoreHelpButton.setOnClickListener {
+            // TODO
         }
 
-        fragmentCreateWalletSelectionPhraseButton.setOnClickListener {
-
+        // TODO after Bip39 is included in Web3j library
+        createFromPhraseButton.visibility = View.GONE
+        createFromPhraseButton.setOnClickListener {
         }
 
-        fragmentCreateWalletSelectionPhraseHelpButton.setOnClickListener {
+        phraseHelpButton.visibility = View.GONE
+        phraseHelpButton.setOnClickListener {
         }
     }
 
