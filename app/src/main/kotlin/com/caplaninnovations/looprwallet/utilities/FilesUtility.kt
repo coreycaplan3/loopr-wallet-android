@@ -3,6 +3,7 @@ package com.caplaninnovations.looprwallet.utilities
 import android.Manifest
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
 import android.os.Environment
 import android.support.annotation.RequiresPermission
 import com.caplaninnovations.looprwallet.R
@@ -19,6 +20,22 @@ import java.io.File
  *
  */
 object FilesUtility {
+
+    fun getFileChooserIntent(): Intent {
+        return if (isKitkat()) {
+            Intent(Intent.ACTION_OPEN_DOCUMENT)
+                    .addCategory(Intent.CATEGORY_OPENABLE)
+                    .setType("*/*")
+        } else {
+            Intent(Intent.ACTION_GET_CONTENT)
+                    .addCategory(Intent.CATEGORY_OPENABLE)
+                    .setType("*/*")
+        }
+    }
+
+    fun getFileFromActivityResult(intent: Intent): File? {
+        return intent.data?.let { File(it.path) }
+    }
 
     fun getDownloadsDirectory(): File {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
