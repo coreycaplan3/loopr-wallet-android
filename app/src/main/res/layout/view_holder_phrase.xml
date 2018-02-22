@@ -2,8 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/cardBackgroundColor">
+    android:layout_height="48dp"
+    android:background="?attr/cardBackgroundColor"
+    android:foreground="@drawable/ripple_effect_accent">
 
     <View
         android:layout_width="match_parent"
@@ -33,7 +34,7 @@
 
         <TextView
             android:id="@+id/viewHolderPhraseWordLabel"
-            style="@style/TextAppearance.AppCompat.Title"
+            style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

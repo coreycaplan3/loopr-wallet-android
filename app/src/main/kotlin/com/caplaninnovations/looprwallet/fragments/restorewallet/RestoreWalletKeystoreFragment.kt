@@ -1,17 +1,18 @@
 package com.caplaninnovations.looprwallet.fragments.restorewallet
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_restore_keystore.*
-import android.net.Uri
+import android.support.design.widget.Snackbar
 import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.longToast
-import org.web3j.crypto.WalletUtils
+import com.caplaninnovations.looprwallet.utilities.snackbar
 import java.io.File
 
 
@@ -23,9 +24,11 @@ import java.io.File
  * Purpose of Class:
  *
  */
-class RestoreWalletKeystoreFragment: BaseFragment() {
+class RestoreWalletKeystoreFragment : BaseFragment() {
 
     companion object {
+        val TAG: String = RestoreWalletKeystoreFragment::class.java.simpleName
+
         const val KEY_OPEN_FILE_REQUEST_CODE = 1943934
     }
 
@@ -39,26 +42,30 @@ class RestoreWalletKeystoreFragment: BaseFragment() {
 
 
         keystoreSelectFileButton.setOnClickListener {
-            // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
-            // browser.
-            val intent = FilesUtility.getFileChooserIntent()
-            startActivityForResult(intent, KEY_OPEN_FILE_REQUEST_CODE)
+            try {
+                val intent = FilesUtility.getFileChooserIntent(R.string.title_select_keystore_file)
+                startActivityForResult(intent, KEY_OPEN_FILE_REQUEST_CODE)
+            } catch (e: ActivityNotFoundException) {
+                it.snackbar(R.string.error_install_file_manager, Snackbar.LENGTH_INDEFINITE)
+            }
         }
 
         keystoreUnlockButton.setOnClickListener {
-//            WalletUtils.loadCredentials()
+            //            WalletUtils.loadCredentials()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == KEY_OPEN_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if(data == null) {
+        val context = this.context ?: return
+
+        if (requestCode == KEY_OPEN_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
                 loge("Invalid state, how did this happen?", IllegalStateException())
-                context?.longToast(R.string.error_retrieve_file)
+                context.longToast(R.string.error_retrieve_file)
                 return
             }
 
-            keystoreFile = FilesUtility.getFileFromActivityResult(data)
+            keystoreFile = FilesUtility.getFileFromActivityResult(context, data)
         }
     }
 

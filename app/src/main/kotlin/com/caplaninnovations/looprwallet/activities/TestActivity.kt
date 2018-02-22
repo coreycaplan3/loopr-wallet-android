@@ -5,7 +5,7 @@ import android.support.annotation.RestrictTo
 import android.support.annotation.RestrictTo.Scope.TESTS
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletKeystoreFragment
+import com.caplaninnovations.looprwallet.fragments.restorewallet.RestoreWalletKeystoreFragment
 
 /**
  * Created by Corey on 2/20/2018
@@ -27,7 +27,7 @@ class TestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null && intent?.getBooleanExtra("AddFragment", false) == true) {
-            addFragment(CreateWalletKeystoreFragment(), CreateWalletKeystoreFragment.TAG)
+            addFragment(RestoreWalletKeystoreFragment(), RestoreWalletKeystoreFragment.TAG)
         }
     }
 

@@ -165,7 +165,7 @@
     <string name="content_description_pin_circle">A circle which represents your PIN being inputted</string>
     <string name="content_description_bottom_navigation_image">A tab that allows you to navigate to different parts of the application</string>
     <string name="enter_your_private_key">Enter your Private Key</string>
-    <string name="rationale_enter_private_key">Make sure you\'re in a safe environment with no one looking over your shoulder</string>
+    <string name="rationale_enter_private_key">Make sure you\'re in a safe environment, and no one looking over your shoulder</string>
     <string name="private_key">Private Key</string>
     <string name="unlock">Unlock</string>
     <string name="select_keystore_file_enter_password">Select your Keystore File and Enter your Password</string>
@@ -207,4 +207,8 @@
     <string name="description_keystore_download">The keystore file to unlock your wallet named %s</string>
     <string name="twelve_word_phrase">12-Word Phrase</string>
     <string name="error_retrieve_file">An unknown error occurred retrieving your file</string>
+    <string name="title_select_keystore_file">Select your Keystore File</string>
+    <string name="error_install_file_manager">To select your keystore file, install a File Manager</string>
+    <string name="restore_wallet">Restore Wallet</string>
+    <string name="error_enter_valid_word">You must enter a valid word</string>
 </resources>

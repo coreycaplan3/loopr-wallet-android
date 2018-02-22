@@ -8,6 +8,7 @@ import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletSelectionFragment
+import com.caplaninnovations.looprwallet.fragments.restorewallet.RestoreWalletSelectionFragment
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 /**
@@ -36,9 +37,15 @@ class SignInFragment : BaseFragment() {
         }
 
         restoreWalletButton.setOnClickListener {
+            pushFragmentTransaction(RestoreWalletSelectionFragment(), RestoreWalletSelectionFragment.TAG)
+        }
+
+        restoreWalletButton.setOnLongClickListener {
+            // TODO delete me
             (activity as? BaseActivity)?.securityClient?.createWallet("corey-wallet")
             activity?.finish()
             startActivity(Intent(context, MainActivity::class.java))
+            true
         }
     }
 
