@@ -9,7 +9,7 @@ import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.activities.FragmentTestActivity
+import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.utilities.OrientationChangeAction
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
@@ -34,7 +34,7 @@ import java.util.concurrent.FutureTask
 class BaseFragmentTest : BaseDaggerTest() {
 
     @get:Rule
-    val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
+    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
 
     private lateinit var activity: BaseActivity
 

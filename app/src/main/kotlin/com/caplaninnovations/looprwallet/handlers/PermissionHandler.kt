@@ -37,13 +37,17 @@ open class PermissionHandler(private val activity: BaseActivity,
                              val shouldRequestPermissionNow: Boolean = true) :
         ActivityCompat.OnRequestPermissionsResultCallback {
 
-    @IntDef(REQUEST_CODE_CAMERA.toLong())
+    @IntDef(
+            REQUEST_CODE_CAMERA.toLong(),
+            REQUEST_CODE_EXTERNAL_FILES.toLong()
+    )
     annotation class Code
 
     companion object {
 
         @Code
-        const val REQUEST_CODE_CAMERA = 10320
+        const val REQUEST_CODE_CAMERA = 10226372
+        const val REQUEST_CODE_EXTERNAL_FILES = 2039897
 
         val delegate: ActivityCompat.PermissionCompatDelegate = LooprPermissionDelegate()
     }
@@ -53,11 +57,6 @@ open class PermissionHandler(private val activity: BaseActivity,
     init {
         val code = ActivityCompat.checkSelfPermission(activity, permission)
         isPermissionGranted = code == PackageManager.PERMISSION_GRANTED
-
-        if(isPermissionGranted) {
-            // The permission is already granted. Let's tell our listener immediately
-            onPermissionGranted.invoke()
-        }
     }
 
     /**
@@ -88,7 +87,7 @@ open class PermissionHandler(private val activity: BaseActivity,
 
     /**
      * A wrapper around [ActivityCompat.requestPermissions] to make testing easier, since we can
-     * stub this method and mock it.
+     * stub this method and mock it. This method is set to *open* for testing purposes
      */
     @VisibleForTesting
     open fun requestPermissionWrapper() {

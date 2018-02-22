@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.application
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import android.support.v4.app.ActivityCompat
@@ -27,6 +28,8 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
 
     companion object {
         lateinit var application: LooprWalletApp
+
+        fun getContext() = application.applicationContext
     }
 
     lateinit var looprProductionComponent: LooprProductionComponent

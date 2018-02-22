@@ -204,4 +204,5 @@
     <string name="error_password_too_short">Your password must be at least 9 characters long</string>
     <string name="error_too_long">This field is too long</string>
     <string name="confirm">Confirm</string>
+    <string name="description_keystore_download">The keystore file to unlock your wallet named %s</string>
 </resources>

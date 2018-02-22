@@ -92,7 +92,6 @@ class PermissionHandlerTest {
         ))
         assertFalse(failurePermissionHandler.shouldRequestPermissionNow)
 
-
         setupMockingRequestPermissions()
     }
 
@@ -100,6 +99,7 @@ class PermissionHandlerTest {
     fun requestPermission() {
         successPermissionHandler.requestPermission()
         assertTrue(isSuccessFunctionCalled)
+        assertFalse(isSuccessFunctionCalled)
 
         // Reset the value back to false
         isSuccessFunctionCalled = false
@@ -135,6 +135,8 @@ class PermissionHandlerTest {
                 shouldRequestPermissionNow = false
         )
 
+        successPermissionHandler.requestPermission()
+
         assertTrue(isSuccessFunctionCalled)
         assertFalse(isFailureFunctionCalled)
         isSuccessFunctionCalled = false // Reset its value
@@ -147,6 +149,8 @@ class PermissionHandlerTest {
                 onPermissionDenied = this::failureFunction,
                 shouldRequestPermissionNow = false
         )
+
+        failurePermissionHandler.requestPermission()
 
         // Requesting the permission fails, but checking the permission returns GRANTED --> so,
         // failure from [requestPermission] is over-ruled!
@@ -177,16 +181,14 @@ class PermissionHandlerTest {
         setupMockingRequestPermissions()
 
         assertTrue(successPermissionHandler.shouldRequestPermissionNow)
-        successPermissionHandler.requestPermission()
 
+        successPermissionHandler.requestPermission()
         assertTrue(isSuccessFunctionCalled)
         assertFalse(isFailureFunctionCalled)
-
         isSuccessFunctionCalled = false // Reset its value
 
         assertTrue(failurePermissionHandler.shouldRequestPermissionNow)
         failurePermissionHandler.requestPermission()
-
         assertTrue(isFailureFunctionCalled)
         assertFalse(isSuccessFunctionCalled)
     }
@@ -199,6 +201,7 @@ class PermissionHandlerTest {
 
         successPermissionHandler.requestPermissionWrapper()
         assertTrue(isSuccessFunctionCalled)
+        assertFalse(isFailureFunctionCalled)
 
         isSuccessFunctionCalled = false // Reset the value
 
@@ -207,10 +210,11 @@ class PermissionHandlerTest {
 
         failurePermissionHandler.requestPermissionWrapper()
         assertTrue(isFailureFunctionCalled)
+        assertFalse(isSuccessFunctionCalled)
 
         isFailureFunctionCalled = false // Reset the value
 
-        // Neither of these values should have been set, since we ARE delaying requesting permissions
+        // Check that they're indeed reset back to false
         assertFalse(isSuccessFunctionCalled)
         assertFalse(isFailureFunctionCalled)
     }

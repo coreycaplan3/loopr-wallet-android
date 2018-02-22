@@ -1,5 +1,9 @@
 package com.caplaninnovations.looprwallet.models.wallet
 
+import android.annotation.SuppressLint
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 /**
  * Created by Corey Caplan on 2/20/18.
  *
@@ -8,4 +12,6 @@ package com.caplaninnovations.looprwallet.models.wallet
  * Purpose of Class:
  *
  */
-data class WalletCreationPassword(var walletName: String, var password: String)
+@SuppressLint("ParcelCreator")
+@Parcelize
+data class WalletCreationPassword(var walletName: String, var password: String) : Parcelable

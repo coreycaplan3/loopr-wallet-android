@@ -1,11 +1,19 @@
 package com.caplaninnovations.looprwallet.dialogs
 
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
+import com.caplaninnovations.looprwallet.utilities.loge
+import kotlinx.android.synthetic.main.dialog_confirm_password.*
+import org.web3j.crypto.WalletUtils
+import java.io.File
 
 /**
  * Created by Corey Caplan on 2/20/18.
@@ -20,25 +28,21 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
     companion object {
 
         val TAG: String = ConfirmPasswordDialog::class.java.simpleName
-        const val KEY_PASSWORD = "_PASSWORD"
+        const val KEY_WALLET = "_WALLET"
 
-        fun createInstance(password: String): ConfirmPasswordDialog {
-            val dialog = ConfirmPasswordDialog()
-
-            val bundle = Bundle()
-            bundle.putString(KEY_PASSWORD, password)
-            dialog.arguments = bundle
-
-            return dialog
+        fun createInstance(walletCreationPassword: WalletCreationPassword): ConfirmPasswordDialog {
+            return ConfirmPasswordDialog().apply {
+                arguments = Bundle().apply { putParcelable(KEY_WALLET, walletCreationPassword) }
+            }
         }
     }
 
-    lateinit var password: String
+    private lateinit var walletCreationPassword: WalletCreationPassword
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        password = arguments?.getString(KEY_PASSWORD) ?: throw IllegalStateException()
+        walletCreationPassword = arguments?.getParcelable(KEY_WALLET) ?: throw IllegalStateException()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,8 +52,28 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-    }
+        dialog?.let {
+            it.setOnShowListener {
+                val bottomSheetDialog = dialog as? BottomSheetDialog
+                val bottomSheet = bottomSheetDialog?.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
+                bottomSheet?.let {
+                    BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
 
+            cancelButton.setOnClickListener { dismiss() }
+
+            confirmButton.setOnClickListener {
+                val generatedWalletName = WalletUtils.generateFullNewWalletFile(walletCreationPassword.password, it.context.filesDir)
+                val createdFile = File(it.context.filesDir, generatedWalletName)
+                val newFile = File(it.context.filesDir, walletCreationPassword.walletName + ".json")
+                if (!createdFile.renameTo(newFile)) {
+                    loge("Could not rename generated wallet file!", IllegalStateException())
+                }
+            }
+        }
+
+    }
 
 
 }

@@ -81,8 +81,8 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
                         permission = Manifest.permission.CAMERA,
                         requestCode = PermissionHandler.REQUEST_CODE_CAMERA,
                         onPermissionGranted = { createCameraSource() },
-                        onPermissionDenied = { onRequestCameraPermissionFailed() },
-                        shouldRequestPermissionNow = true)
+                        onPermissionDenied = { onRequestCameraPermissionFailed() }
+                )
         )
     }
 

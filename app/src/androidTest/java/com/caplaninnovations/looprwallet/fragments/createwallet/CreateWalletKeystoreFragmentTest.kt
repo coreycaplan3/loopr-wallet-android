@@ -7,7 +7,7 @@ import android.support.test.espresso.assertion.ViewAssertions.*
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.activities.FragmentTestActivity
+import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
@@ -37,7 +37,7 @@ import org.junit.runner.RunWith
 class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
 
     @get:Rule
-    val activityRule = ActivityTestRule<FragmentTestActivity>(FragmentTestActivity::class.java)
+    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
 
     private val fragment = CreateWalletKeystoreFragment()
 
@@ -54,7 +54,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
     fun setUp() {
         activityRule.activity.addFragment(fragment, CreateWalletKeystoreFragment.TAG)
 
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
     }
 
     @Test

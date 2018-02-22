@@ -1,12 +1,15 @@
 package com.caplaninnovations.looprwallet.fragments.createwallet
 
+import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.datalayer.WalletCreationPasswordViewModel
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPassword
 import com.caplaninnovations.looprwallet.utilities.allNonnull
 import com.caplaninnovations.looprwallet.utilities.loge
@@ -39,6 +42,16 @@ class CreateWalletKeystoreFragment : BaseFragment() {
                 .walletCreationPassword
     }
 
+    private val filesPermissionHandler by lazy {
+        PermissionHandler(
+                activity as BaseActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                PermissionHandler.REQUEST_CODE_EXTERNAL_FILES,
+                this::onFilePermissionGranted,
+                this::onFilePermissionDenied
+        )
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -58,7 +71,7 @@ class CreateWalletKeystoreFragment : BaseFragment() {
 
                 walletCreationPasswordData.value = WalletCreationPassword(walletName!!, password!!)
 
-                ConfirmPasswordDialog.createInstance(password).show(fragmentManager, ConfirmPasswordDialog.TAG)
+                filesPermissionHandler.requestPermission()
             }
         }
     }
@@ -67,6 +80,20 @@ class CreateWalletKeystoreFragment : BaseFragment() {
 
     private fun onFormChanged() {
         createButton.isEnabled = isAllValidatorsValid()
+    }
+
+    private fun onFilePermissionGranted() {
+        val walletCreationPassword = walletCreationPasswordData.value
+        if (walletCreationPassword != null) {
+            ConfirmPasswordDialog.createInstance(walletCreationPassword)
+                    .show(fragmentManager, ConfirmPasswordDialog.TAG)
+        } else {
+            loge("Error invalid state!", IllegalStateException())
+        }
+    }
+
+    private fun onFilePermissionDenied() {
+        // TODO
     }
 
 }

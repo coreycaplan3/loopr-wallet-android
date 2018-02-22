@@ -23,7 +23,7 @@
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/lightButtonDisabled</item>
         <item name="buttonStyle">@style/App.Button</item>
-        <item name="borderlessButtonColor">@color/lightPrimaryDark</item>
+        <item name="borderlessButtonColor">@color/lightPrimary</item>
         <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
 
         <!-- Cards -->

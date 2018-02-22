@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDialog
-import android.view.Menu
-import android.view.MenuItem
-import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp

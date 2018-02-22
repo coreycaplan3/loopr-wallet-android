@@ -1,8 +1,10 @@
 package com.caplaninnovations.looprwallet.activities
 
+import android.Manifest
 import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.signin.SignInFragment
+import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 
 /**
  * Created by Corey on 1/14/2018
