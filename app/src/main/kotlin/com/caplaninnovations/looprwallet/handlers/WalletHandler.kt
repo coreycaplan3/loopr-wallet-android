@@ -1,19 +1,19 @@
 package com.caplaninnovations.looprwallet.handlers
 
-import org.web3j.crypto.WalletUtils
+import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 
 /**
- * Created by Corey on 2/16/2018
+ * Created by Corey Caplan on 2/22/18.
  *
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
  *
- *
  */
-class WalletHandler {
+class WalletHandler(private val settings: WalletSettings) {
 
-    fun createWallet() {
+    init {
+        settings.getAllWallets()
     }
 
 }

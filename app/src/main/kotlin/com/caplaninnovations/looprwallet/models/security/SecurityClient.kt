@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Handler
 import com.caplaninnovations.looprwallet.activities.*
 import com.caplaninnovations.looprwallet.models.android.settings.*
+import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.utilities.loge
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -36,10 +37,11 @@ interface SecurityClient {
      * selected one.
      *
      * @param walletName The name of the new wallet
+     * @param privateKey The private key of the new wallet
      * @return True if the wallet was created successfully, or false otherwise. A return of false
      * means that a wallet with this name already exists
      */
-    fun createWallet(walletName: String): Boolean
+    fun createWallet(walletName: String, privateKey: String): Boolean
 
     /**
      * Selects a new current-wallet (from an existing list) and resets the current activity task
@@ -55,13 +57,7 @@ interface SecurityClient {
      * @return The current wallet being used by the user. A null return values means there is no
      * current wallet selected.
      */
-    fun getCurrentWallet(): String?
-
-    /**
-     * @return The encryption key to be used with the current wallet (as returned by
-     * [getCurrentWallet]. A null return means there is no current wallet selected.
-     */
-    fun getCurrentWalletEncryptionKey(): ByteArray?
+    fun getCurrentWallet(): LooprWallet?
 
     /**
      * Called when there is **NO** current wallet selected by the user. A call to this method
@@ -141,8 +137,8 @@ private class SecurityClientProductionImpl(context: Context, looprSettings: Loop
 
     private val cipherClient = CipherClient(context)
 
-    override fun createWallet(walletName: String): Boolean {
-        return walletSettings.createWallet(walletName)
+    override fun createWallet(walletName: String, privateKey: String): Boolean {
+        return walletSettings.createWallet(walletName, privateKey)
     }
 
     override fun selectNewCurrentWallet(newCurrentWallet: String, currentActivity: BaseActivity) {
@@ -153,17 +149,7 @@ private class SecurityClientProductionImpl(context: Context, looprSettings: Loop
         currentActivity.startActivity(intent)
     }
 
-    override fun getCurrentWallet(): String? = walletSettings.getCurrentWallet()
-
-    override fun getCurrentWalletEncryptionKey(): ByteArray? {
-        val currentWallet = getCurrentWallet()
-
-        return if (currentWallet != null) {
-            walletSettings.getRealmKey(currentWallet)
-        } else {
-            null
-        }
-    }
+    override fun getCurrentWallet(): LooprWallet? = walletSettings.getCurrentWallet()
 
     override fun onNoCurrentWalletSelected(currentActivity: BaseActivity) {
         val intent = Intent(currentActivity, SignInActivity::class.java)

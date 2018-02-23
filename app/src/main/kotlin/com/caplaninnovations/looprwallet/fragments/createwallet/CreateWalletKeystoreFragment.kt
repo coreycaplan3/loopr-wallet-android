@@ -13,10 +13,11 @@ import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.utilities.allNonnull
 import com.caplaninnovations.looprwallet.utilities.loge
+import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.validation.PasswordValidator
 import com.caplaninnovations.looprwallet.validation.WalletNameValidator
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
-import kotlinx.android.synthetic.main.card_create_wallet_name.*
+import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.card_create_wallet_password.*
 
 /**
@@ -55,7 +56,7 @@ class CreateWalletKeystoreFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val walletNameValidator = WalletNameValidator(createWalletNameInputLayout) { this.onFormChanged() }
+        val walletNameValidator = WalletNameValidator(walletNameInputLayout) { this.onFormChanged() }
         val passwordValidator = PasswordValidator(createWalletPasswordInputLayout) { this.onFormChanged() }
         validatorList = listOf(walletNameValidator, passwordValidator)
 
@@ -76,12 +77,16 @@ class CreateWalletKeystoreFragment : BaseFragment() {
         }
     }
 
-    // Mark - Private Methods
-
-    private fun onFormChanged() {
+    override fun onFormChanged() {
         createButton.isEnabled = isAllValidatorsValid()
     }
 
+    // Mark - Private Methods
+
+    /**
+     * Called when permission is granted for the app to access files. This method is *only* called
+     * when the rest of the form is valid.
+     */
     private fun onFilePermissionGranted() {
         val walletCreationPassword = walletCreationPasswordData.value
         if (walletCreationPassword != null) {
@@ -93,7 +98,7 @@ class CreateWalletKeystoreFragment : BaseFragment() {
     }
 
     private fun onFilePermissionDenied() {
-        // TODO
+        view?.snackbar(R.string.permission_rationale_files)
     }
 
 }

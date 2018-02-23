@@ -211,4 +211,9 @@
     <string name="error_install_file_manager">To select your keystore file, install a File Manager</string>
     <string name="restore_wallet">Restore Wallet</string>
     <string name="error_enter_valid_word">You must enter a valid word</string>
+    <string name="error_invalid_keystore_or_password">The file selected or password is invalid</string>
+    <string name="permission_rationale_files">File permissions are needed to save your wallet information</string>
+    <string name="error_invalid_private_key">This private key is invalid</string>
+    <string name="error_creating_credentials">There was an error creating your credentials</string>
+    <string name="error_creating_wallet">There was an unknwon error creating your wallet</string>
 </resources>

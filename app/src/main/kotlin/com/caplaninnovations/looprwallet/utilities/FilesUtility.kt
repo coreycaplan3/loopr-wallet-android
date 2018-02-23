@@ -43,8 +43,8 @@ object FilesUtility {
         }
     }
 
-    fun getFileFromActivityResult(context: Context, intent: Intent): File? {
-        return intent.data?.let { File(getPath(context, it)) }
+    fun getFileFromActivityResult(context: Context, uri: Uri?): File? {
+        return uri?.let { File(getPath(context, it)) }
     }
 
     fun getDownloadsDirectory(): File {

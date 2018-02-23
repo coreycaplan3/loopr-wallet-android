@@ -42,6 +42,9 @@ abstract class BaseFragment : Fragment() {
         private set
 
     var validatorList: List<BaseValidator>? = null
+        set(value) {
+            onFormChanged()
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +113,14 @@ abstract class BaseFragment : Fragment() {
 
     open fun createAppbarLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): AppBarLayout? {
         return inflater.inflate(R.layout.appbar_main, container, false) as AppBarLayout?
+    }
+
+    /**
+     * Propagates form changes to the rest of the UI, if necessary. This depends on the return
+     * value of [isAllValidatorsValid].
+     */
+    open fun onFormChanged() {
+        // Do nothing for now
     }
 
     /**
