@@ -5,7 +5,7 @@ import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
+import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.validation.PrivateKeyValidator
@@ -44,16 +44,17 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
         privateKeyUnlockButton.setOnClickListener {
             val walletName = walletNameEditText.text.toString()
             val privateKey = privateKeyEditText.text.toString()
-            try {
-                val credentials = Credentials.create(privateKey)
-                val isCreated = (activity as? BaseActivity)?.securityClient?.createWallet(walletName, privateKey)
-                if (isCreated == null || isCreated == false) {
-                    loge("Could not create wallet!", IllegalStateException())
-                    it.snackbar(R.string.error_creating_wallet)
+            val securityClient = (activity as? BaseActivity)?.securityClient
+
+            when {
+                securityClient != null -> {
+                    WalletCreationHandler(walletName, privateKey, securityClient)
+                            .createWallet(it)
                 }
-            } catch (e: Exception) {
-                loge("Error creating credentials!", e)
-                it.snackbar(R.string.error_creating_credentials)
+                else -> {
+                    loge("Could not create wallet!", IllegalStateException())
+                    view.snackbar(R.string.error_creating_wallet)
+                }
             }
         }
     }

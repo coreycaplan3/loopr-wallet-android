@@ -63,6 +63,8 @@ class WalletSettings(private val looprSettings: LooprSettings) {
         }
     }
 
+    fun doesWalletExist(walletName: String) = getAllWallets().contains(walletName)
+
     /**
      * @return True if the wallet was selected, false otherwise
      */
@@ -88,6 +90,10 @@ class WalletSettings(private val looprSettings: LooprSettings) {
      */
     fun createWallet(newWalletName: String, privateKey: String): Boolean {
         if (getAllWallets().contains(newWalletName)) {
+            return false
+        }
+
+        if (getAllWallets().any({ getPrivateKey(it) != null })) {
             return false
         }
 

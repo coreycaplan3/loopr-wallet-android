@@ -22,7 +22,11 @@ class PrivateKeyValidator(
 
     override fun isValid(text: String?): Boolean {
         return when {
-            WalletUtils.isValidPrivateKey(text) -> {
+            text == null -> {
+                error = str(R.string.error_private_key_required)
+                false
+            }
+            isValidPrivateKey(text) -> {
                 error = null
                 true
             }

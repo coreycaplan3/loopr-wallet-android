@@ -215,5 +215,8 @@
     <string name="permission_rationale_files">File permissions are needed to save your wallet information</string>
     <string name="error_invalid_private_key">This private key is invalid</string>
     <string name="error_creating_credentials">There was an error creating your credentials</string>
-    <string name="error_creating_wallet">There was an unknwon error creating your wallet</string>
+    <string name="error_creating_wallet">There was an unknown error creating your wallet</string>
+    <string name="error_private_key_required">You must enter a valid private key</string>
+    <string name="error_wallet_already_exists">A wallet with this name or private key already exists in this app</string>
+    <string name="wallet_creation_successful">Wallet creation successful</string>
 </resources>

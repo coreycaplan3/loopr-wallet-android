@@ -10,6 +10,8 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_restore_keystore.*
 import android.support.design.widget.Snackbar
+import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
 import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.longToast
@@ -78,18 +80,23 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
         keystoreUnlockButton.setOnClickListener {
             val walletName = walletNameEditText.text.toString()
             val password = keystorePasswordEditText.text.toString()
-            val file = keystoreFile
+            val file: File? = keystoreFile
 
-            if (file != null) {
-                try {
+            when {
+                file != null -> {
                     val credentials = WalletUtils.loadCredentials(password, file)
 
-                } catch (e: Exception) {
-                    it.snackbar(R.string.error_invalid_keystore_or_password)
+                    val securityClient = (activity as? BaseActivity)?.securityClient
+                    WalletCreationHandler(walletName, credentials, securityClient)
+                            .createWallet(view)
                 }
-            } else {
-                loge("This should not have happened!", IllegalStateException())
+
+                else -> {
+                    // TODO
+                    loge("File was null, this should not have happened!", throw IllegalStateException())
+                }
             }
+
         }
     }
 

@@ -1,6 +1,5 @@
 package com.caplaninnovations.looprwallet.dialogs
 
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
@@ -10,10 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPhrase
+import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.loge
+import com.caplaninnovations.looprwallet.utilities.snackbar
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
+import org.web3j.crypto.Credentials
 import org.web3j.crypto.WalletUtils
 import java.io.File
 
@@ -84,29 +88,39 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
 
         cancelButton.setOnClickListener { dismiss() }
 
-        walletCreationKeystore?.let { wallet ->
-            confirmButton.setOnClickListener { clickListenerForKeystore(it.context, wallet) }
+        when {
+            walletCreationKeystore != null ->
+                confirmButton.setOnClickListener { clickListenerForKeystore(it, walletCreationKeystore!!) }
+
+            walletCreationPhrase != null ->
+                confirmButton.setOnClickListener { clickListenerForPhrase(it, walletCreationPhrase!!) }
         }
 
-        walletCreationPhrase?.let { wallet ->
-            confirmButton.setOnClickListener { clickListenerForPhrase(it.context, wallet) }
-        }
-
-        confirmButton.setOnClickListener {
-        }
     }
 
-    private fun clickListenerForKeystore(context: Context, walletCreationKeystore: WalletCreationKeystore) {
-        val generatedWalletName = WalletUtils.generateFullNewWalletFile(walletCreationKeystore.password, context.filesDir)
-        val createdFile = File(context.filesDir, generatedWalletName)
-        val newFile = File(context.filesDir, walletCreationKeystore.walletName + ".keystore")
-        if (!createdFile.renameTo(newFile)) {
+    private fun clickListenerForKeystore(view: View, wallet: WalletCreationKeystore) {
+        val walletDirectory = view.context.filesDir
+
+        // Create the wallet
+        val generatedWalletName = WalletUtils.generateFullNewWalletFile(wallet.password, walletDirectory)
+        val credentialFile = File(walletDirectory, FilesUtility.getKeystoreFileName(wallet.walletName))
+        if (!File(walletDirectory, generatedWalletName).renameTo(credentialFile)) {
             loge("Could not rename generated wallet file!", IllegalStateException())
+            view.snackbar(R.string.error_creating_wallet)
+            return
         }
+
+        val credentials = WalletUtils.loadCredentials(wallet.password, credentialFile)
+        createWalletFromCredentials(view, wallet.walletName, credentials)
     }
 
-    private fun clickListenerForPhrase(context: Context, wallet: WalletCreationPhrase) {
+    private fun clickListenerForPhrase(view: View, wallet: WalletCreationPhrase) {
         //TODO
+    }
+
+    private fun createWalletFromCredentials(view: View, walletName: String, credentials: Credentials) {
+        WalletCreationHandler(walletName, credentials, (activity as? BaseActivity)?.securityClient)
+                .createWallet(view)
     }
 
 }

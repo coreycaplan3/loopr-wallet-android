@@ -32,14 +32,14 @@ interface SecurityClient {
     }
 
     /**
-     * Attempts to create a wallet with the given name. If a wallet with that name already exists,
-     * the creation will fail. Upon creating the wallet, the new wallet will also become the
-     * selected one.
+     * Attempts to create a wallet with the given name. If a wallet with that name or private key
+     * already exists, the creation will fail. Upon creating the wallet, the new wallet will also
+     * become the selected one.
      *
      * @param walletName The name of the new wallet
      * @param privateKey The private key of the new wallet
      * @return True if the wallet was created successfully, or false otherwise. A return of false
-     * means that a wallet with this name already exists
+     * means that a wallet with this name or private key already exists
      */
     fun createWallet(walletName: String, privateKey: String): Boolean
 
