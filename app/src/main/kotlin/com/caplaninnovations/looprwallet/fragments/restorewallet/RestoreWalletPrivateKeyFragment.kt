@@ -46,9 +46,11 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
             val privateKey = privateKeyEditText.text.toString()
             val securityClient = (activity as? BaseActivity)?.securityClient
 
+            val credentials = Credentials.create(privateKey)
+
             when {
                 securityClient != null -> {
-                    WalletCreationHandler(walletName, privateKey, securityClient)
+                    WalletCreationHandler(walletName, credentials, securityClient)
                             .createWallet(it)
                 }
                 else -> {

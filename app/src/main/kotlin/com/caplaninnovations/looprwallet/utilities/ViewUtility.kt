@@ -3,7 +3,6 @@ package com.caplaninnovations.looprwallet.utilities
 import android.content.Context
 import android.graphics.PorterDuff
 import android.support.annotation.ColorInt
-import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.design.widget.*
@@ -13,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.caplaninnovations.looprwallet.R
 
 /**
  * Created by Corey on 1/17/2018.
@@ -117,6 +117,14 @@ fun View.snackbar(message: String, @Duration length: Int = Snackbar.LENGTH_LONG)
  */
 fun View.snackbar(@StringRes message: Int, @Duration length: Int = Snackbar.LENGTH_LONG) {
     this.snackbar(str(message), length)
+}
+
+/**
+ * Creates a snackbar with an error message attached to it. This view is used to instantiate it,
+ * and show is automatically called.
+ */
+fun View.snackbarUnknownError() {
+    this.snackbar(str(R.string.error_unknown))
 }
 
 /**

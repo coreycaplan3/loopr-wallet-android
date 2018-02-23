@@ -32,7 +32,7 @@ class RestoreWalletSelectionFragment : BaseFragment() {
             pushFragmentTransaction(RestoreWalletKeystoreFragment(), RestoreWalletKeystoreFragment.TAG)
         }
 
-        // TODO
+        // TODO - after phrase is implemented in Web3j
         restoreWalletPhraseButton.visibility = View.GONE
         restoreWalletPhraseButton.setOnClickListener {
             pushFragmentTransaction(WalletEnterPhraseFragment(), WalletEnterPhraseFragment.TAG)

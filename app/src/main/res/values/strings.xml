@@ -219,4 +219,9 @@
     <string name="error_private_key_required">You must enter a valid private key</string>
     <string name="error_wallet_already_exists">A wallet with this name or private key already exists in this app</string>
     <string name="wallet_creation_successful">Wallet creation successful</string>
+    <string name="error_keystore_unsupported">The selected keystore file is not supported</string>
+    <string name="error_unknown">An unknown error occurred, please try again or submit a bug report</string>
+    <string name="error_password_invalid">The password is invalid</string>
+    <string name="error_private_key_length">Your private key must be 64 characters long</string>
+    <string name="error_private_key_format">Your private key must only contain the letters A–F and numbers 0–9</string>
 </resources>

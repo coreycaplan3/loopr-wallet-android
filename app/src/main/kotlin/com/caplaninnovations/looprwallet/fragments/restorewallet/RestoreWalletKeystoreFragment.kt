@@ -5,6 +5,8 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.StringRes
+import android.support.annotation.VisibleForTesting
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
@@ -19,6 +21,7 @@ import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.validation.PasswordValidator
 import com.caplaninnovations.looprwallet.validation.WalletNameValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
+import org.web3j.crypto.CipherException
 import org.web3j.crypto.WalletUtils
 import java.io.File
 
@@ -80,24 +83,32 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
         keystoreUnlockButton.setOnClickListener {
             val walletName = walletNameEditText.text.toString()
             val password = keystorePasswordEditText.text.toString()
-            val file: File? = keystoreFile
+            val file = keystoreFile
 
-            when {
-                file != null -> {
-                    val credentials = WalletUtils.loadCredentials(password, file)
-
-                    val securityClient = (activity as? BaseActivity)?.securityClient
-                    WalletCreationHandler(walletName, credentials, securityClient)
-                            .createWallet(view)
-                }
-
-                else -> {
-                    // TODO
-                    loge("File was null, this should not have happened!", throw IllegalStateException())
-                }
+            if (file == null) {
+                loge("File was null, this should not have happened!", IllegalStateException())
+                it.snackbar(R.string.error_retrieve_file)
+                return@setOnClickListener
             }
 
+            try {
+                val credentials = WalletUtils.loadCredentials(password, file)
+
+                val securityClient = (activity as? BaseActivity)?.securityClient
+                WalletCreationHandler(walletName, credentials, securityClient)
+                        .createWallet(view)
+            } catch (e: Exception) {
+                if (e is CipherException) {
+                    it.snackbar(getErrorMessageFromKeystoreError(e))
+                    it.snackbar("The given password is incorrect or keystore file is incorrect")
+
+                } else {
+                    it.snackbar("There was an error restoring your wallet")
+                    loge("Error decrypting wallet!", e)
+                }
+            }
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -123,7 +134,21 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
 
     override fun onFormChanged() {
         // If all validators are valid and the keystore URI is not null, the user can submit
-        keystoreUnlockButton.isEnabled = isAllValidatorsValid() && keystoreUri != null
+        keystoreUnlockButton.isEnabled = isAllValidatorsValid() && keystoreFile != null
+    }
+
+    // Mark - Private Methods
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    @StringRes
+    fun getErrorMessageFromKeystoreError(exception: CipherException): Int {
+        val message = exception.message
+        return when {
+            message == null -> R.string.error_unknown
+            message.toLowerCase().contains("supported") -> R.string.error_keystore_unsupported
+            message.toLowerCase().contains("password") -> R.string.error_password_invalid
+            else -> R.string.error_unknown
+        }
     }
 
 }

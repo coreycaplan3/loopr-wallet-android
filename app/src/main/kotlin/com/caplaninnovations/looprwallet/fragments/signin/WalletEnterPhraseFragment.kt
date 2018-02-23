@@ -25,8 +25,10 @@ class WalletEnterPhraseFragment : BaseFragment() {
         val TAG: String = WalletEnterPhraseFragment::class.java.simpleName
 
         const val KEY_FRAGMENT_TYPE = "_FRAGMENT_TYPE"
-        const val TYPE_CONFIRM_PHRASE = "CONFIRM_PHRASE"
-        const val TYPE_ENTER_PHRASE = "ENTER_PHRASE"
+        const val TYPE_CONFIRM_PHRASE = "TYPE_CONFIRM_PHRASE"
+        const val TYPE_ENTER_PHRASE = "TYPE_ENTER_PHRASE"
+
+        private const val PHRASE_SIZE = 12
 
         /**
          * @param type Can be one of [TYPE_CONFIRM_PHRASE] or [TYPE_ENTER_PHRASE]
@@ -58,7 +60,8 @@ class WalletEnterPhraseFragment : BaseFragment() {
                     context?.longToast(R.string.error_enter_valid_word)
                 }
                 else -> {
-                    if (phrase.size == 12) {
+                    if (phrase.size == PHRASE_SIZE) {
+                        // TODO
                         Toast.makeText(context, "Creating...", Toast.LENGTH_LONG).show()
                     } else {
                         onWordAdded(enteredWord)
@@ -75,7 +78,7 @@ class WalletEnterPhraseFragment : BaseFragment() {
     fun onWordAdded(word: String) {
         phrase.add(word)
 
-        if (phrase.size == 12) {
+        if (phrase.size == PHRASE_SIZE) {
             // We need to disallow more words from being inputted and allow the user to submit
             TransitionManager.beginDelayedTransition(view as ViewGroup)
             enterPhraseAddSubmitButton.text = getEnterPhraseSubmitButtonText()
@@ -92,12 +95,15 @@ class WalletEnterPhraseFragment : BaseFragment() {
     fun onWordRemoved(word: String) {
         phrase.remove(word)
 
-        if (phrase.size == 12) {
+        if (phrase.size == PHRASE_SIZE - 1) {
             // We are downsizing from 12. Allow the user to input new words and disable submission
             TransitionManager.beginDelayedTransition(view as ViewGroup)
-            enterPhraseAddSubmitButton.text = getString(R.string.add)
-            enterPhraseAddSubmitButton.layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
-            enterPhraseAddSubmitButton.requestLayout()
+
+            enterPhraseAddSubmitButton.apply {
+                text = getString(R.string.add)
+                layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                requestLayout()
+            }
 
             enterPhraseInputLayout.visibility = View.VISIBLE
         }
@@ -105,7 +111,7 @@ class WalletEnterPhraseFragment : BaseFragment() {
 
     // MARK - Private Methods
 
-    fun getEnterPhraseSubmitButtonText(): String {
+    private fun getEnterPhraseSubmitButtonText(): String {
         return when (fragmentType) {
             TYPE_CONFIRM_PHRASE -> getString(R.string.create_wallet)
             TYPE_ENTER_PHRASE -> getString(R.string.restore_wallet)

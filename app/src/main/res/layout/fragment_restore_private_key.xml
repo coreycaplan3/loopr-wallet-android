@@ -43,6 +43,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/vertical_margin_large"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="@integer/private_key_length"
                     app:errorEnabled="true"
                     app:hintEnabled="false">
 
@@ -51,7 +53,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/private_key"
-                        android:inputType="textMultiLine" />
+                        android:inputType="textMultiLine"
+                        android:lineSpacingMultiplier="1.25" />
 
                 </android.support.design.widget.TextInputLayout>
 
