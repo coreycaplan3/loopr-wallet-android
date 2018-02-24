@@ -10,7 +10,7 @@ import android.view.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
-import com.caplaninnovations.looprwallet.validation.BaseValidator
+import com.caplaninnovations.looprwallet.validators.BaseValidator
 
 /**
  * Created by Corey on 1/14/2018.

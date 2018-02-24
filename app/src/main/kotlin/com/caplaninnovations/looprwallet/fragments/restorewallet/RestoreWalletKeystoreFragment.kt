@@ -18,8 +18,8 @@ import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.longToast
 import com.caplaninnovations.looprwallet.utilities.snackbar
-import com.caplaninnovations.looprwallet.validation.PasswordValidator
-import com.caplaninnovations.looprwallet.validation.WalletNameValidator
+import com.caplaninnovations.looprwallet.validators.PasswordValidator
+import com.caplaninnovations.looprwallet.validators.WalletNameValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import org.web3j.crypto.CipherException
 import org.web3j.crypto.WalletUtils

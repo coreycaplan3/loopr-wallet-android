@@ -1,5 +1,6 @@
-package com.caplaninnovations.looprwallet.validation
+package com.caplaninnovations.looprwallet.validators
 
+import android.support.annotation.VisibleForTesting
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
@@ -66,9 +67,14 @@ abstract class BaseValidator(
 
     fun isValid(): Boolean = error == null
 
-    fun getText() = textInputLayout.editText?.text?.toString()
+    fun getText() = getTextFromInputLayout()
 
     fun destroy() {
         textInputLayout.editText?.removeTextChangedListener(this)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    fun getTextFromInputLayout(): String? {
+        return textInputLayout.editText?.text?.toString()
     }
 }

@@ -14,8 +14,8 @@ import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.utilities.allNonnull
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.snackbar
-import com.caplaninnovations.looprwallet.validation.PasswordValidator
-import com.caplaninnovations.looprwallet.validation.WalletNameValidator
+import com.caplaninnovations.looprwallet.validators.PasswordValidator
+import com.caplaninnovations.looprwallet.validators.WalletNameValidator
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.card_create_wallet_password.*

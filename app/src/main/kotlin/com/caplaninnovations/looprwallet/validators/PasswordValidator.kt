@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.validation
+package com.caplaninnovations.looprwallet.validators
 
 import android.support.design.widget.TextInputLayout
 import com.caplaninnovations.looprwallet.R

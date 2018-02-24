@@ -11,7 +11,7 @@ import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
-import com.caplaninnovations.looprwallet.validation.BaseValidator
+import com.caplaninnovations.looprwallet.validators.BaseValidator
 import junit.framework.Assert.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.card_create_wallet_password.*

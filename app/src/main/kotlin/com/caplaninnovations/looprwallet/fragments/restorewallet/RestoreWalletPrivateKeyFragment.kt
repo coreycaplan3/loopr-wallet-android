@@ -8,8 +8,8 @@ import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.snackbar
-import com.caplaninnovations.looprwallet.validation.PrivateKeyValidator
-import com.caplaninnovations.looprwallet.validation.WalletNameValidator
+import com.caplaninnovations.looprwallet.validators.PrivateKeyValidator
+import com.caplaninnovations.looprwallet.validators.WalletNameValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.fragment_restore_private_key.*
 import org.web3j.crypto.Credentials
