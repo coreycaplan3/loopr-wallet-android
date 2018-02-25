@@ -1,9 +1,11 @@
 package com.caplaninnovations.looprwallet.validators
 
+import android.support.annotation.StringRes
 import android.support.annotation.VisibleForTesting
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
+import com.caplaninnovations.looprwallet.utilities.str
 
 /**
  * Created by Corey on 2/20/2018
@@ -33,7 +35,8 @@ abstract class BaseValidator(
      *
      * Otherwise, it is initialized to null, so it returns true initially for default/empty states.
      */
-    protected var error: String? = if (isRequired) DEFAULT_ERROR else null
+    @VisibleForTesting
+    var error: String? = if (isRequired) DEFAULT_ERROR else null
 
     init {
         textInputLayout.editText?.addTextChangedListener(this)
@@ -63,18 +66,33 @@ abstract class BaseValidator(
      * value and this method should return false. If it *is* valid, [error] should be set to null
      * and this method should return true.
      */
-    protected abstract fun isValid(text: String?): Boolean
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    abstract fun isValid(text: String?): Boolean
 
+    /**
+     * @return True if the input is valid or false otherwise
+     */
     fun isValid(): Boolean = error == null
 
-    fun getText() = getTextFromInputLayout()
+    /**
+     * @return The current text that the user inputted into the [TextInputLayout]
+     */
+    fun getInputText() = getTextFromInputLayout()
 
     fun destroy() {
         textInputLayout.editText?.removeTextChangedListener(this)
     }
 
+    // Mark - Private Methods
+
     @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
-    fun getTextFromInputLayout(): String? {
+    open fun getTextFromInputLayout(): String? {
         return textInputLayout.editText?.text?.toString()
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    open fun getTextFromResource(@StringRes resource: Int): String? {
+        return str(resource)
+    }
+
 }

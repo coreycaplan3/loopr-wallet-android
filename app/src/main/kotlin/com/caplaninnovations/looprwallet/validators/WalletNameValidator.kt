@@ -27,6 +27,7 @@ class WalletNameValidator(
                 error = str(R.string.error_wallet_name_required)
                 false
             }
+            // TODO length edge cases and numbers in regex
             !text.matches(Regex("[a-zA-Z\\-_]+")) -> {
                 error = str(R.string.error_wallet_name_bad_format)
                 false

@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.validators
 
 import android.support.design.widget.TextInputLayout
+import android.text.SpannableStringBuilder
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -21,44 +22,52 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class BaseValidatorTest {
 
+    open class BaseValidatorForTest(
+            textInputLayout: TextInputLayout,
+            onChangeListener: () -> Unit,
+            isRequired: Boolean,
+            private val defaultError: String?
+    ) : BaseValidator(textInputLayout, onChangeListener, isRequired) {
+
+        override fun isValid(text: String?): Boolean {
+            error = defaultError
+            return error == null
+        }
+
+    }
+
     private val defaultText = "hello"
     private val defaultError = "hello-error"
 
     @Mock
     lateinit var textInputLayout: TextInputLayout
 
-    lateinit var successValidator: BaseValidator
-    lateinit var failureValidator: BaseValidator
+    private lateinit var successValidator: BaseValidator
+    private lateinit var failureValidator: BaseValidator
 
-    var isChangeCalled = false
+    private var isChangeCalled = false
 
     @Before
     fun setUp() {
-        successValidator = object : BaseValidator(
+        successValidator = BaseValidatorForTest(
                 textInputLayout,
                 this@BaseValidatorTest::onTextChanged,
-                isRequired = true
-        ) {
-            override fun isValid(text: String?): Boolean {
-                error = null
-                return true
-            }
-        }
+                isRequired = true,
+                defaultError = null
+        )
 
-        failureValidator = object : BaseValidator(
+        failureValidator = BaseValidatorForTest(
                 textInputLayout,
                 this@BaseValidatorTest::onTextChanged,
-                isRequired = true
-        ) {
-            override fun isValid(text: String?): Boolean {
-                error = defaultError
-                return false
-            }
-        }
+                isRequired = true,
+                defaultError = defaultError
+        )
 
         successValidator = Mockito.spy(successValidator)
+        Mockito.doReturn(defaultText).`when`(successValidator).getTextFromInputLayout()
 
-        Mockito.`when`(successValidator.getTextFromInputLayout()).thenReturn(defaultText)
+        failureValidator = Mockito.spy(failureValidator)
+        Mockito.doReturn(defaultText).`when`(failureValidator).getTextFromInputLayout()
     }
 
     @After
@@ -73,11 +82,6 @@ class BaseValidatorTest {
     }
 
     @Test
-    fun isValid_afterTextChanged() {
-        assertTrue(successValidator.isValid())
-    }
-
-    @Test
     fun isValid_initial_isNotRequiredField() {
         val notRequiredValidator = object : BaseValidator(textInputLayout, { onTextChanged() }, false) {
             override fun isValid(text: String?): Boolean = false
@@ -88,8 +92,23 @@ class BaseValidatorTest {
     }
 
     @Test
+    fun isValid_afterTextChanged() {
+        successValidator.afterTextChanged(SpannableStringBuilder().append(defaultText))
+        assertTrue(successValidator.isValid())
+        assertTrue(isChangeCalled)
+    }
+
+    @Test
+    fun isNotValid_afterTextChanged() {
+        failureValidator.afterTextChanged(SpannableStringBuilder().append(defaultText))
+        assertFalse(failureValidator.isValid())
+        assertTrue(isChangeCalled)
+    }
+
+    @Test
     fun getText() {
-        assertEquals(defaultText, successValidator.getText())
+        assertEquals(defaultText, successValidator.getInputText())
+        assertEquals(defaultText, failureValidator.getInputText())
     }
 
     private fun onTextChanged() {

@@ -42,7 +42,9 @@ class SignInFragment : BaseFragment() {
 
         restoreWalletButton.setOnLongClickListener {
             // TODO delete me
-            (activity as? BaseActivity)?.securityClient?.createWallet("corey-wallet")
+            val walletName = "corey-wallet"
+            val privateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e439"
+            (activity as? BaseActivity)?.securityClient?.createWallet(walletName, privateKey)
             activity?.finish()
             startActivity(Intent(context, MainActivity::class.java))
             true

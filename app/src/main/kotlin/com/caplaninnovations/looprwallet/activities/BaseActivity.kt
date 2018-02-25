@@ -132,10 +132,9 @@ abstract class BaseActivity : AppCompatActivity() {
              * NOTE, we check if it's null since we don't want to override an already-initialized
              * realm.
              */
-            val walletName = securityClient.getCurrentWallet()
-            val encryptionKey = securityClient.getCurrentWalletEncryptionKey()
-            if (walletName != null && encryptionKey != null) {
-                realm = realmClient.getInstance(walletName, encryptionKey)
+            val wallet = securityClient.getCurrentWallet()
+            if (wallet != null) {
+                realm = realmClient.getInstance(wallet.walletName, wallet.realmKey)
             } else {
                 // There is no current wallet... we need to prompt the user to sign in.
                 // This should never happen, since we can't get to a "securityActivity" without
@@ -151,7 +150,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
             RealmUtility.removeListenersAndClose(realm)
 
-            securityClient.removeWallet(it)
+            securityClient.removeWallet(it.walletName)
             if (securityClient.getCurrentWallet() == null) {
                 securityClient.onNoCurrentWalletSelected(this)
             }

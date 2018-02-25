@@ -62,8 +62,8 @@ class CreateWalletKeystoreFragment : BaseFragment() {
 
         createButton.setOnClickListener {
             if (isAllValidatorsValid()) {
-                val walletName = walletNameValidator.getText()
-                val password = passwordValidator.getText()
+                val walletName = walletNameValidator.getInputText()
+                val password = passwordValidator.getInputText()
 
                 if (!listOf(walletName, password).allNonnull()) {
                     loge("Error! This should not have occurred", IllegalStateException())
