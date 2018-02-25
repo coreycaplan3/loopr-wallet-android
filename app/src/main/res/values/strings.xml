@@ -226,4 +226,7 @@
     <string name="error_password_invalid">The password is invalid</string>
     <string name="error_private_key_length">Your private key must be 64 characters long</string>
     <string name="error_private_key_format">Your private key must only contain the letters A–F and numbers 0–9</string>
+    <string name="request_permission">Request Permission</string>
+    <string name="file_permissions_needed">File Permissions Needed</string>
+    <string name="rationale_file_permission">File permissions are needed to save your keystore file. Don\'t worry, we take the best measures to keep your information secure. To learn more, read our Security FAQ.</string>
 </resources>

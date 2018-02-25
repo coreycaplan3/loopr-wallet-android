@@ -77,7 +77,7 @@ abstract class BaseValidator(
     /**
      * @return The current text that the user inputted into the [TextInputLayout]
      */
-    fun getInputText() = getTextFromInputLayout()
+    fun getText() = getTextFromInputLayout()
 
     fun destroy() {
         textInputLayout.editText?.removeTextChangedListener(this)

@@ -41,28 +41,28 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
                 PrivateKeyValidator(privateKeyInputLayout, this::onFormChanged)
         )
 
-        privateKeyUnlockButton.setOnClickListener {
-            val walletName = walletNameEditText.text.toString()
-            val privateKey = privateKeyEditText.text.toString()
-            val securityClient = (activity as? BaseActivity)?.securityClient
-
-            val credentials = Credentials.create(privateKey)
-
-            when {
-                securityClient != null -> {
-                    WalletCreationHandler(walletName, credentials, securityClient)
-                            .createWallet(it)
-                }
-                else -> {
-                    loge("Could not create wallet!", IllegalStateException())
-                    view.snackbar(R.string.error_creating_wallet)
-                }
-            }
-        }
+        privateKeyUnlockButton.setOnClickListener(this::onUnlockWalletClick)
     }
 
     override fun onFormChanged() {
         privateKeyUnlockButton.isEnabled = isAllValidatorsValid()
+    }
+
+    // MARK - Private Methods
+
+    /**
+     * Called when the user attempts to create the wallet with the given private key.
+     *
+     * @param view The button view that was clicked
+     */
+    private fun onUnlockWalletClick(buttonView: View) {
+        val walletName = walletNameEditText.text.toString()
+        val privateKey = privateKeyEditText.text.toString()
+
+        val credentials = Credentials.create(privateKey)
+
+        WalletCreationHandler(walletName, credentials, activity)
+                .createWallet(buttonView)
     }
 
 }

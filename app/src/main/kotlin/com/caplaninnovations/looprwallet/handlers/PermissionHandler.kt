@@ -52,7 +52,8 @@ open class PermissionHandler(private val activity: BaseActivity,
         val delegate: ActivityCompat.PermissionCompatDelegate = LooprPermissionDelegate()
     }
 
-    private val isPermissionGranted: Boolean
+    var isPermissionGranted: Boolean
+        private set
 
     init {
         val code = ActivityCompat.checkSelfPermission(activity, permission)
@@ -63,7 +64,6 @@ open class PermissionHandler(private val activity: BaseActivity,
      * Requests permissions from the user for the permission put into this instance's constructor.
      * On success/failure, [onPermissionGranted] [onPermissionDenied] will be called automatically.
      */
-    @SuppressLint("VisibleForTests")
     fun requestPermission() {
         if (isPermissionGranted) {
             onPermissionGranted.invoke()
@@ -79,6 +79,7 @@ open class PermissionHandler(private val activity: BaseActivity,
         }
 
         if (grantResults[index] == PackageManager.PERMISSION_GRANTED) {
+            isPermissionGranted = true
             onPermissionGranted.invoke()
         } else {
             onPermissionDenied.invoke()
@@ -89,7 +90,7 @@ open class PermissionHandler(private val activity: BaseActivity,
      * A wrapper around [ActivityCompat.requestPermissions] to make testing easier, since we can
      * stub this method and mock it. This method is set to *open* for testing purposes
      */
-    @VisibleForTesting
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     open fun requestPermissionWrapper() {
         ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
     }

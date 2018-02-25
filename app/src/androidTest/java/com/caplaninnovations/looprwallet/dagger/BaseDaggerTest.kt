@@ -8,6 +8,8 @@ import junit.framework.Assert.assertTrue
 import org.junit.Before
 import java.util.concurrent.FutureTask
 import javax.inject.Inject
+import junit.framework.Assert.assertNotNull
+
 
 /**
  * Created by Corey on 2/3/2018
@@ -35,13 +37,10 @@ open class BaseDaggerTest {
     }
 
     open fun putDefaultWallet() {
-        val didCreateWallet = walletSettings.createWallet("corey-test")
+        val walletName = "loopr-test"
+        val privateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e493"
+        val didCreateWallet = walletSettings.createWallet(walletName, privateKey)
         assertTrue(didCreateWallet)
-    }
-
-    fun noOp() {
-        // This function is a no-op, used to prevent an exception being thrown for there being no
-        // test methods in this class (but it uses the AndroidJUnit4 Test Runner)
     }
 
     /**
@@ -56,6 +55,17 @@ open class BaseDaggerTest {
         if (waitForAnimations) {
             Thread.sleep(300)
         }
+    }
+
+    fun <T : BaseActivity> waitForActivityToStartAndFinish(activityClass: Class<T>) {
+        val activityMonitor = InstrumentationRegistry.getInstrumentation()
+                .addMonitor(activityClass.name, null, false)
+
+        val activity = InstrumentationRegistry.getInstrumentation()
+                .waitForMonitorWithTimeout(activityMonitor, 5000)
+
+        assertNotNull(activity)
+        activity.finish()
     }
 
 }

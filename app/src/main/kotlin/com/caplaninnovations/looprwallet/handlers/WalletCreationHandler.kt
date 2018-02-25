@@ -1,9 +1,11 @@
 package com.caplaninnovations.looprwallet.handlers
 
+import android.app.Activity
 import android.content.Intent
 import android.content.Intent.*
 import android.view.View
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.utilities.loge
@@ -22,8 +24,10 @@ import org.web3j.utils.Numeric
 class WalletCreationHandler(
         private val walletName: String,
         private val credentials: Credentials,
-        private val securityClient: SecurityClient?
+        activity: Activity?
 ) {
+
+    private val securityClient: SecurityClient? = (activity as? BaseActivity)?.securityClient
 
     /**
      * Attempts to create a wallet, if possible, and then goes to the [MainActivity] with the newly
@@ -32,7 +36,7 @@ class WalletCreationHandler(
      * @param view A view used for creating a snackbar, for when the creation succeeds or fails
      */
     fun createWallet(view: View) {
-        if(securityClient == null) {
+        if (securityClient == null) {
             loge("Could not create wallet!", IllegalStateException())
             view.snackbar(R.string.error_creating_wallet)
             return

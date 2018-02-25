@@ -12,12 +12,11 @@ import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
 import com.caplaninnovations.looprwallet.validators.BaseValidator
-import junit.framework.Assert.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.card_create_wallet_password.*
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import org.hamcrest.Matchers.*
-import org.junit.Assert.assertNotEquals
+import org.junit.Assert.*
 import org.junit.Before
 
 import org.junit.Rule

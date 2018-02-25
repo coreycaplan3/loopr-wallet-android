@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPhrase
@@ -119,7 +118,7 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
     }
 
     private fun createWalletFromCredentials(view: View, walletName: String, credentials: Credentials) {
-        WalletCreationHandler(walletName, credentials, (activity as? BaseActivity)?.securityClient)
+        WalletCreationHandler(walletName, credentials, activity)
                 .createWallet(view)
     }
 

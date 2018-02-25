@@ -12,7 +12,6 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_restore_keystore.*
 import android.support.design.widget.Snackbar
-import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
 import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.loge
@@ -94,16 +93,14 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
             try {
                 val credentials = WalletUtils.loadCredentials(password, file)
 
-                val securityClient = (activity as? BaseActivity)?.securityClient
-                WalletCreationHandler(walletName, credentials, securityClient)
+                WalletCreationHandler(walletName, credentials, activity)
                         .createWallet(view)
             } catch (e: Exception) {
                 if (e is CipherException) {
                     it.snackbar(getErrorMessageFromKeystoreError(e))
-                    it.snackbar("The given password is incorrect or keystore file is incorrect")
 
                 } else {
-                    it.snackbar("There was an error restoring your wallet")
+                    it.snackbar(R.string.error_unknown)
                     loge("Error decrypting wallet!", e)
                 }
             }

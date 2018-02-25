@@ -107,8 +107,8 @@ class BaseValidatorTest {
 
     @Test
     fun getText() {
-        assertEquals(defaultText, successValidator.getInputText())
-        assertEquals(defaultText, failureValidator.getInputText())
+        assertEquals(defaultText, successValidator.getText())
+        assertEquals(defaultText, failureValidator.getText())
     }
 
     private fun onTextChanged() {
