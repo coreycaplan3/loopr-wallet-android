@@ -196,11 +196,11 @@
     <string name="your_12_word_phrase">Your 12-Word Phrase</string>
     <string name="about_this_step">About this Step</string>
     <string name="about_remember_phrase">This 12-word phrase is used to recover and unlock your wallet. It must be used with the password oyu provided earlier. By pressing \"Confirm Phrase\" you will be taken to the next screen to reenter these 12 words.</string>
-    <string name="help_recycler_empty_phrase">You have not entered a word yet in your 12-word phrase. To enter a word, type a word in the box below ad press \"Add\". After entering all 12 words, press \"Done\".\n\nIf you need to reorder your words, hold the reorder icon on the right and drag it. If you need to delete a word, swipe it to the right.</string>
+    <string name="help_recycler_empty_phrase">You have not entered a word yet in your 12-word phrase. To enter a word, type a word in the box below and press \"Add\". After entering all 12 words, press \"Done\".\n\nIf you need to reorder your words, hold the reorder icon on the right and drag it. If you need to delete a word, swipe it to the right.</string>
     <string name="content_description_navigation_icon">This button allows you to navigate back to the most recent screen you were on</string>
     <string name="error_password_required">You must enter a password</string>
     <string name="error_wallet_name_required">You must enter a wallet name</string>
-    <string name="error_wallet_name_bad_format">The wallet name can only contain letters, dashes, (-), and underscores (_)</string>
+    <string name="error_wallet_name_bad_format">The wallet name can only contain letters, numbers, dashes, (-), and underscores (_)</string>
     <string name="error_wallet_name_too_short">The wallet name should be at least 3 characters long</string>
     <string name="error_wallet_name_too_long">The wallet name cannot be longer than 255 characters</string>
     <string name="error_password_too_short">Your password must be at least 9 characters long</string>

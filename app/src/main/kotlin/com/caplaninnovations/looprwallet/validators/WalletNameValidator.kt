@@ -16,7 +16,7 @@ import com.caplaninnovations.looprwallet.utilities.str
  * @param onChangeListener A listener that will be invoked whenever the content of [TextInputLayout]
  * changes. Typically, this will be used to enable/disable the submit button.
  */
-class WalletNameValidator(
+open class WalletNameValidator(
         textInputLayout: TextInputLayout,
         onChangeListener: () -> Unit
 ) : BaseValidator(textInputLayout, onChangeListener) {
@@ -24,12 +24,19 @@ class WalletNameValidator(
     override fun isValid(text: String?): Boolean {
         return when {
             text == null || text.isEmpty() -> {
-                error = str(R.string.error_wallet_name_required)
+                error = getTextFromResource(R.string.error_wallet_name_required)
                 false
             }
-            // TODO length edge cases and numbers in regex
-            !text.matches(Regex("[a-zA-Z\\-_]+")) -> {
-                error = str(R.string.error_wallet_name_bad_format)
+            !text.matches(Regex("[a-zA-Z0-9\\-_]+")) -> {
+                error = getTextFromResource(R.string.error_wallet_name_bad_format)
+                false
+            }
+            text.length < 3 -> {
+                error = getTextFromResource(R.string.error_wallet_name_too_short)
+                false
+            }
+            text.length > 255 -> { // check against R.integer.wallet_name_max_length
+                error = getTextFromResource(R.string.error_wallet_name_too_long)
                 false
             }
             else -> {
