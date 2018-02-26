@@ -112,11 +112,14 @@ dependencies {
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // Android Testing and Integration Tests
-    androidTestImplementation 'junit:junit:4.12'
-    androidTestImplementation 'org.mockito:mockito-core:2.7.6'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2-alpha1'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    ext.espressoVersion = '3.0.1'
+    androidTestImplementation "junit:junit:4.12"
+    androidTestImplementation "org.mockito:mockito-core:2.7.6"
+    androidTestImplementation "com.android.support.test:rules:1.0.2-alpha1"
+    androidTestImplementation "com.android.support.test:runner:1.0.1"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
+
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
 }
 repositories {

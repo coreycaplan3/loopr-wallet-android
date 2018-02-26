@@ -20,7 +20,6 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.FutureTask
 
 /**
  * Created by Corey Caplan on 2/25/18.
@@ -93,7 +92,7 @@ class ConfirmPasswordDialogTest : BaseDaggerTest() {
                 .check(matches(isEnabled()))
                 .perform(click())
 
-        waitForActivityToStartAndFinish(MainActivity::class.java)
+        assertActivityActive(MainActivity::class.java, 10000)
     }
 
     @Test
@@ -116,7 +115,7 @@ class ConfirmPasswordDialogTest : BaseDaggerTest() {
                 .perform(click())
 
         // TODO - We need to implement these kinds of wallets
-        waitForActivityToStartAndFinish(MainActivity::class.java)
+        assertActivityActive(MainActivity::class.java)
     }
 
 }

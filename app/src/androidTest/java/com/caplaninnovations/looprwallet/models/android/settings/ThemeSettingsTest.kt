@@ -31,16 +31,16 @@ class ThemeSettingsTest : BaseDaggerTest() {
     @Test
     fun getCurrentTheme() {
         val theme = themeSettings.getCurrentTheme()
-        assertEquals(R.style.AppTheme_Light, theme)
+        assertEquals(R.style.AppTheme_Dark, theme)
     }
 
     @Test
     fun saveTheme() {
         val theme = themeSettings.getCurrentTheme()
-        assertEquals(R.style.AppTheme_Light, theme)
+        assertEquals(R.style.AppTheme_Dark, theme)
 
-        themeSettings.saveTheme(ThemeSettings.ThemeValues.KEY_DARK_THEME)
-        assertEquals(R.style.AppTheme_Dark, themeSettings.getCurrentTheme())
+        themeSettings.saveTheme(ThemeSettings.ThemeValues.KEY_LIGHT_THEME)
+        assertEquals(R.style.AppTheme_Light, themeSettings.getCurrentTheme())
     }
 
 }

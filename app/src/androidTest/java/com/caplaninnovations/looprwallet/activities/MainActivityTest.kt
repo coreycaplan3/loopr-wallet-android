@@ -125,14 +125,14 @@ class MainActivityTest : BaseDaggerTest() {
         // The markets tab is the default selected one
 
         val markets = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationFragmentPair.KEY_MARKETS)!!
-        assertNotNull(markets)
 
         val task = FutureTask { bottomNavigationHandler.onTabUnselected(markets) }
-
         waitForTask(activityRule.activity, task, true)
 
+        // Wait extra time for everything to propagate
+        Thread.sleep(500)
+
         val customView = markets.customView!!
-        assertNotNull(customView)
 
         onView(`is`(customView))
                 .check(topPaddingIs(R.dimen.bottom_navigation_margin_top))
@@ -148,20 +148,22 @@ class MainActivityTest : BaseDaggerTest() {
     fun onTabSelected_tabAnimationValues() {
         // The markets tab is the default selected one
         val orders = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationFragmentPair.KEY_ORDERS)!!
-        assertNotNull(orders)
 
         val task = FutureTask { bottomNavigationHandler.onTabSelected(orders) }
-
         waitForTask(activityRule.activity, task, true)
+
+        // Wait extra time for everything to propagate
+        Thread.sleep(500)
 
         assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, fragmentStackHistory.peek())
 
         val customView = orders.customView!!
-        assertNotNull(customView)
 
-        onView(`is`(customView)).check(topPaddingIs(R.dimen.bottom_navigation_margin_top_selected))
+        onView(`is`(customView))
+                .check(topPaddingIs(R.dimen.bottom_navigation_margin_top_selected))
 
-        onView(`is`(customView)).check(alphaIs(1.0F))
+        onView(`is`(customView))
+                .check(alphaIs(1.0F))
 
         onView(`is`(customView.findViewById<TextView>(R.id.bottomNavigationTabText)))
                 .check(textSizeIs(R.dimen.bottom_navigation_text_size_selected))

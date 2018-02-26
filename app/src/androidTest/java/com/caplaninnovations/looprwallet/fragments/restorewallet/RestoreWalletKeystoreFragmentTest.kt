@@ -11,7 +11,6 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
@@ -144,13 +143,15 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerTest() {
                 .check(matches(isEnabled()))
                 .perform(click())
 
-        waitForActivityToStartAndFinish(MainActivity::class.java)
+        assertActivityActive(MainActivity::class.java, 15000)
     }
 
     @Test
     fun rotation_fileShouldBePersisted() {
         val file = getKeystoreFile()
-        fragment.keystoreUri = Uri.fromFile(file)
+
+        val task = FutureTask { fragment.keystoreUri = Uri.fromFile(file) }
+        waitForTask(activityRule.activity, task, false)
 
         Espresso.onView(isRoot()).perform(OrientationChangeAction.changeOrientationToLandscape())
 
@@ -184,7 +185,9 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerTest() {
 
         val file = getKeystoreFile()
         val intent = Intent().setData(Uri.fromFile(file))
-        fragment.onActivityResult(requestCode, resultCode, intent)
+
+        val task = FutureTask { fragment.onActivityResult(requestCode, resultCode, intent) }
+        waitForTask(activityRule.activity, task, false)
 
         assertNotNull(fragment.keystoreUri)
         assertEquals(file.name, fragment.keystoreFile?.name)

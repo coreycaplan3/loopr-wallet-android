@@ -50,7 +50,7 @@ class BaseActivityTest : BaseDaggerTest() {
 
         // Assert it's still showing, after the orientation change
         assertTrue(activity.progressDialog.isShowing)
-        assertEquals(R.string.app_name, activity.progressDialogMessage)
+        assertEquals(str(R.string.app_name), activity.progressDialogMessage)
 
         val dismissTask = FutureTask { activity.progressDialog.dismiss() }
         waitForTask(activity, dismissTask, false)

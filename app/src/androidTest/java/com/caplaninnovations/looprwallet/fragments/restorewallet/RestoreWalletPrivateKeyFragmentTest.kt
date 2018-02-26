@@ -1,6 +1,5 @@
 package com.caplaninnovations.looprwallet.fragments.restorewallet
 
-import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.*
@@ -10,7 +9,6 @@ import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletKeystoreFragment
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 import kotlinx.android.synthetic.main.fragment_restore_private_key.*
@@ -131,7 +129,7 @@ class RestoreWalletPrivateKeyFragmentTest : BaseDaggerTest() {
                 .check(matches(isEnabled()))
                 .perform(click())
 
-        waitForActivityToStartAndFinish(MainActivity::class.java)
+        assertActivityActive(MainActivity::class.java, 10000)
     }
 
 }

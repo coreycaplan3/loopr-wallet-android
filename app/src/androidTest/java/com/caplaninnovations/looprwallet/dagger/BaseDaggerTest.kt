@@ -2,6 +2,8 @@ package com.caplaninnovations.looprwallet.dagger
 
 import android.app.Activity
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.intent.Intents.intended
+import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
@@ -11,6 +13,11 @@ import org.junit.Before
 import java.util.concurrent.FutureTask
 import javax.inject.Inject
 import org.junit.Assert.*
+import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import android.support.test.runner.lifecycle.Stage
+import android.support.test.InstrumentationRegistry.getTargetContext
+import android.content.ComponentName
+import android.support.test.espresso.intent.Intents
 
 
 /**
@@ -35,11 +42,15 @@ open class BaseDaggerTest {
         component = app.provideDaggerComponent() as LooprTestComponent
         component.inject(this)
 
+        Intents.init()
+
         putDefaultWallet()
     }
 
     @After
     fun baseDaggerTearDown() {
+        Intents.release()
+
         walletSettings.getAllWallets().forEach { walletSettings.removeWallet(it) }
     }
 
@@ -72,15 +83,12 @@ open class BaseDaggerTest {
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
     }
 
-    fun <T : Activity> waitForActivityToStartAndFinish(activityClass: Class<T>) {
-        val instrumentation = InstrumentationRegistry.getInstrumentation()
-
-        val activityMonitor = instrumentation.addMonitor(activityClass.name, null, false)
-
-        val activity = instrumentation.waitForMonitorWithTimeout(activityMonitor, 10000)
-
-        assertNotNull(activity)
-        activity.finish()
+    /**
+     * Asserts that the active activity is the one provided
+     */
+    fun <T : Activity> assertActivityActive(activityClass: Class<T>, waitTime: Long = 500) {
+        Thread.sleep(waitTime)
+        intended(hasComponent(ComponentName(getTargetContext(), activityClass)))
     }
 
 }
