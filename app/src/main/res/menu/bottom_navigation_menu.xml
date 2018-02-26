@@ -7,6 +7,9 @@
         android:icon="@drawable/ic_assignment_white_24dp"
         android:title="@string/orders" />
     <item
+        android:icon="@drawable/ic_swap_horiz_white_24dp"
+        android:title="@string/transactions" />
+    <item
         android:icon="@drawable/ic_account_balance_wallet_white_24dp"
         android:title="@string/my_wallet" />
 </menu>

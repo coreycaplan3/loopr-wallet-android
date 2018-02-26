@@ -1,12 +1,17 @@
 package com.caplaninnovations.looprwallet.handlers
 
+import android.animation.LayoutTransition
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
@@ -17,6 +22,7 @@ import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigat
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationTag
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
+import kotlinx.android.synthetic.main.bottom_navigation_tab.view.*
 
 /**
  * Created by Corey on 1/31/2018
@@ -165,14 +171,16 @@ class BottomNavigationHandler(private val activity: BaseActivity,
         tab?.customView?.apply {
             val tabTextView = findViewById<TextView>(R.id.bottomNavigationTabText)
             if (isSelected) {
-                animateTopPadding(R.dimen.bottom_navigation_margin_top_selected)
-                animateAlpha(1.toFloat())
-                tabTextView?.animateTextSizeChange(R.dimen.bottom_navigation_text_size_selected)
-
+                tabTextView.isSelected = true
+                animateTopPadding(R.dimen.bottom_navigation_margin_top_selected, R.integer.animation_duration_short)
+                animateToWidth(R.dimen.bottom_navigation_width_selected, R.integer.animation_duration_short)
+                animateToAlpha(1.toFloat(), R.integer.animation_duration_short)
+                tabTextView.animateScaleBoth(1F, R.integer.animation_duration_short)
             } else {
-                animateTopPadding(R.dimen.bottom_navigation_margin_top)
-                animateAlpha(0.68.toFloat())
-                tabTextView?.animateTextSizeChange(R.dimen.bottom_navigation_text_size)
+                animateTopPadding(R.dimen.bottom_navigation_margin_top, R.integer.animation_duration_short)
+                animateToWidth(R.dimen.bottom_navigation_width, R.integer.animation_duration_short)
+                animateToAlpha(0.68.toFloat(), R.integer.animation_duration_short)
+                tabTextView.animateScaleBoth(0F, R.integer.animation_duration_short)
             }
         }
     }

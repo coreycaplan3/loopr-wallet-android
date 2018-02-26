@@ -1,14 +1,13 @@
 package com.caplaninnovations.looprwallet.utilities
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ValueAnimator
+import android.animation.*
+import android.graphics.Path
 import android.support.annotation.DimenRes
 import android.support.annotation.IntegerRes
-import android.transition.TransitionManager
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 
@@ -28,14 +27,28 @@ import com.caplaninnovations.looprwallet.R
  * @param toValue The value to which the alpha will be animated. Must be between 0 and 1
  * (inclusive).
  */
-fun View.animateAlpha(toValue: Float) {
+fun View.animateToAlpha(toValue: Float, @IntegerRes duration: Int = R.integer.animation_duration) {
     if (toValue < 0 || toValue > 1) {
         throw IllegalArgumentException("The inputted toValue must be between [0, 1]. Found: $toValue")
     }
 
     val animator = ValueAnimator.ofFloat(this.alpha, toValue)
     animator.addUpdateListener { this.alpha = it.animatedValue as Float }
-    animator.duration = resources.getInteger(R.integer.animation_duration_short).toLong()
+    animator.addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationStart(animation: Animator?) {
+            if (toValue != 0F) {
+                visibility = View.VISIBLE
+            }
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            if (toValue == 0F) {
+                visibility = View.GONE
+            }
+        }
+    })
+
+    animator.duration = resources.getInteger(duration).toLong()
     animator.start()
 }
 
@@ -44,10 +57,106 @@ fun View.animateAlpha(toValue: Float) {
  *
  * @param toValue The dimension resource, to which the text's size will be animated (end value).
  */
-fun TextView.animateTextSizeChange(@DimenRes toValue: Int) {
-    val animator = ValueAnimator.ofFloat(this.textSize, resources.getDimension(toValue))
+fun TextView.animateTextSizeChange(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration) {
+    val endSize = resources.getDimension(toValue)
+
+    val view = this
+    val animator = ValueAnimator.ofFloat(this.textSize, endSize)
     animator.addUpdateListener { setTextSize(TypedValue.COMPLEX_UNIT_PX, it.animatedValue as Float) }
-    animator.duration = resources.getInteger(R.integer.animation_duration_short).toLong()
+    animator.addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationStart(animation: Animator?) {
+            if (endSize != 0F) {
+                view.visibility = View.VISIBLE
+            }
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            if (endSize == 0F) {
+                view.visibility = View.GONE
+            }
+        }
+    })
+    animator.duration = resources.getInteger(duration).toLong()
+    animator.start()
+}
+
+fun View.animateScaleX(toValue: Float, @IntegerRes duration: Int = R.integer.animation_duration) {
+    pivotX = (this.measuredWidth / 2).toFloat()
+
+    val animator = ObjectAnimator.ofFloat(this, View.SCALE_X, toValue)
+
+    animator.addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationStart(animation: Animator?) {
+            if (toValue != 0F) {
+                visibility = View.VISIBLE
+            }
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            if (toValue == 0F) {
+                visibility = View.GONE
+            }
+        }
+    })
+
+    animator.duration = resources.getInteger(duration).toLong()
+
+    animator.start()
+}
+
+
+fun View.animateScaleBoth(toValue: Float, @IntegerRes duration: Int = R.integer.animation_duration) {
+    pivotX = (this.width / 2).toFloat()
+    pivotY = (this.height / 2).toFloat()
+
+    val actualDuration = resources.getInteger(duration).toLong()
+
+    val xScale = ObjectAnimator.ofFloat(this, View.SCALE_X, toValue)
+            .setDuration(actualDuration)
+
+    val yScale = ObjectAnimator.ofFloat(this, View.SCALE_Y, toValue)
+            .setDuration(actualDuration)
+
+    val animator = AnimatorSet()
+
+    animator.addListener(object : AnimatorListenerAdapter() {
+        override fun onAnimationStart(animation: Animator?) {
+            if (toValue != 0F) {
+                visibility = View.VISIBLE
+            }
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+            if (toValue == 0F) {
+                visibility = View.GONE
+            }
+        }
+    })
+
+    animator.playTogether(xScale, yScale)
+    animator.duration = actualDuration
+
+    animator.start()
+}
+
+/**
+ * Animates the width of this view to the given value from its initial width
+ *
+ * @param toValue The dimension resource, to which the width will be animated (end value)
+ * @param duration An optional duration that can be supplied as an integer resource. The default
+ * value is [R.integer.animation_duration] or 300ms
+ */
+fun View.animateToWidth(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration) {
+    val animator = ValueAnimator.ofFloat(this.measuredWidth.toFloat(), resources.getDimension(toValue))
+    animator.interpolator = DecelerateInterpolator()
+    animator.addUpdateListener {
+        val params = this.layoutParams
+        params.width = (it.animatedValue as Float).toInt()
+        this.layoutParams = params
+    }
+
+    animator.duration = resources.getInteger(duration).toLong()
+
     animator.start()
 }
 
@@ -137,15 +246,14 @@ fun View.animateToTranslationY(@DimenRes toValue: Int) {
             .start()
 }
 
-
 /**
  * Animates the top padding of a view to the given value
  *
  * @param toValue The dimension value, to which the view's top padding will be animated
  */
-fun View.animateTopPadding(@DimenRes toValue: Int) {
+fun View.animateTopPadding(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration) {
     val animator = ValueAnimator.ofInt(this.paddingTop, resources.getDimension(toValue).toInt())
     animator.addUpdateListener { this.setPaddingTop(it.animatedValue as Int) }
-    animator.duration = resources.getInteger(R.integer.animation_duration_short).toLong()
+    animator.duration = resources.getInteger(duration).toLong()
     animator.start()
 }

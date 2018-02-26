@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/bottom_navigation_height"
@@ -10,15 +10,13 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
+        android:animateLayoutChanges="true"
         android:layout_height="@dimen/bottom_navigation_height"
-        android:layout_marginBottom="0dp"
-        android:paddingBottom="0dp"
         app:tabGravity="fill"
         app:tabIndicatorColor="#FFF"
         app:tabIndicatorHeight="0dp"
-        app:tabMaxWidth="0dp"
-        app:tabMinWidth="80dp"
-        app:tabMode="fixed"
-        app:tabPaddingBottom="0dp" />
+        app:tabMaxWidth="@dimen/bottom_navigation_width_selected"
+        app:tabMinWidth="@dimen/bottom_navigation_width"
+        app:tabMode="fixed" />
 
-</android.support.design.widget.AppBarLayout>
+</android.support.design.widget.BottomNavigationView>

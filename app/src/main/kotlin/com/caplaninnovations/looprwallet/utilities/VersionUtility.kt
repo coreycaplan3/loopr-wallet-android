@@ -13,6 +13,11 @@ import android.os.Build
  */
 
 /**
+ * @return True if running on API version >= 16
+ */
+fun isJellybean(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+
+/**
  * @return True if running on API version >= 18
  */
 fun isJellybeanR2(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2

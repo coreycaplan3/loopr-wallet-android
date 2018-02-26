@@ -2,19 +2,20 @@ package com.caplaninnovations.looprwallet.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TabLayout
 
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.fragments.markets.MarketsParentFragment
 import com.caplaninnovations.looprwallet.fragments.mywallet.MyWalletFragment
 import com.caplaninnovations.looprwallet.fragments.orders.OrdersParentFragment
+import com.caplaninnovations.looprwallet.fragments.transactions.ViewTransactionsFragment
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
+import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSACTIONS
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
@@ -69,6 +70,9 @@ class MainActivity : BaseActivity() {
 
                 BottomNavigationFragmentPair(KEY_ORDERS, OrdersParentFragment(),
                         R.drawable.ic_assignment_white_24dp, R.string.orders),
+
+                BottomNavigationFragmentPair(KEY_TRANSACTIONS, ViewTransactionsFragment(),
+                        R.drawable.ic_swap_horiz_white_48dp, R.string.transactions),
 
                 BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(),
                         R.drawable.ic_account_balance_wallet_white_24dp, R.string.my_wallet)

@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.fragments.transfers
+package com.caplaninnovations.looprwallet.fragments.transactions
 
 /**
  * Created by Corey Caplan on 2/18/18.
