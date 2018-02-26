@@ -21,8 +21,7 @@ import com.caplaninnovations.looprwallet.utilities.str
  */
 abstract class BaseValidator(
         private val textInputLayout: TextInputLayout,
-        private val onChangeListener: () -> Unit,
-        private val isRequired: Boolean = true
+        private val onChangeListener: () -> Unit
 ) : TextWatcher {
 
     companion object {
@@ -36,7 +35,7 @@ abstract class BaseValidator(
      * Otherwise, it is initialized to null, so it returns true initially for default/empty states.
      */
     @VisibleForTesting
-    var error: String? = if (isRequired) DEFAULT_ERROR else null
+    var error: String? = null
 
     init {
         textInputLayout.editText?.addTextChangedListener(this)
@@ -72,7 +71,7 @@ abstract class BaseValidator(
     /**
      * @return True if the input is valid or false otherwise
      */
-    fun isValid(): Boolean = error == null
+    fun isValid(): Boolean = isValid(getText())
 
     /**
      * @return The current text that the user inputted into the [TextInputLayout]

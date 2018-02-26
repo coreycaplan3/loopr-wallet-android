@@ -1,6 +1,8 @@
 package com.caplaninnovations.looprwallet.dialogs
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
@@ -9,14 +11,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
+import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
+import com.caplaninnovations.looprwallet.models.wallet.PasswordWallet
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPhrase
 import com.caplaninnovations.looprwallet.utilities.FilesUtility
+import com.caplaninnovations.looprwallet.utilities.WalletGeneratorUtility
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.snackbar
+import com.caplaninnovations.looprwallet.validators.PasswordMatcherValidator
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
-import org.web3j.crypto.Credentials
 import org.web3j.crypto.WalletUtils
 import java.io.File
 
@@ -49,11 +53,34 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
     }
 
     private val walletCreationKeystore: WalletCreationKeystore? by lazy {
-        arguments?.getParcelable(KEY_WALLET) as? WalletCreationKeystore
+        val wallet: Parcelable? = arguments?.getParcelable(KEY_WALLET)
+        if (wallet is WalletCreationKeystore) {
+            wallet
+        } else {
+            null
+        }
+
     }
 
     private val walletCreationPhrase: WalletCreationPhrase? by lazy {
-        arguments?.getParcelable(KEY_WALLET) as? WalletCreationPhrase
+        val wallet: Parcelable? = arguments?.getParcelable(KEY_WALLET)
+        if (wallet is WalletCreationPhrase) {
+            wallet
+        } else {
+            null
+        }
+    }
+
+    private val passwordMatcherValidator: PasswordMatcherValidator by lazy {
+        val password = listOf<PasswordWallet?>(walletCreationKeystore, walletCreationPhrase)
+                .first { it != null }!!
+                .getWalletPassword()
+
+        PasswordMatcherValidator(confirmPasswordInputLayout, this::onPasswordChange, password)
+    }
+
+    val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
+        ViewModelProviders.of(this).get(WalletGeneratorViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,39 +114,37 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
 
         cancelButton.setOnClickListener { dismiss() }
 
+        onPasswordChange()
+
         when {
             walletCreationKeystore != null ->
-                confirmButton.setOnClickListener { clickListenerForKeystore(it, walletCreationKeystore!!) }
+                confirmButton.setOnClickListener {
+                    clickListenerForKeystore(it, walletCreationKeystore!!)
+                }
 
             walletCreationPhrase != null ->
-                confirmButton.setOnClickListener { clickListenerForPhrase(it, walletCreationPhrase!!) }
+                confirmButton.setOnClickListener {
+                    clickListenerForPhrase(it, walletCreationPhrase!!)
+                }
         }
 
+        WalletGeneratorUtility.setupForFragment(walletGeneratorViewModel, this)
+    }
+
+    // MARK - Private Methods
+
+    private fun onPasswordChange() {
+        confirmButton.isEnabled = passwordMatcherValidator.isValid()
     }
 
     private fun clickListenerForKeystore(view: View, wallet: WalletCreationKeystore) {
         val walletDirectory = view.context.filesDir
 
-        // Create the wallet
-        val generatedWalletName = WalletUtils.generateFullNewWalletFile(wallet.password, walletDirectory)
-        val credentialFile = File(walletDirectory, FilesUtility.getKeystoreFileName(wallet.walletName))
-        if (!File(walletDirectory, generatedWalletName).renameTo(credentialFile)) {
-            loge("Could not rename generated wallet file!", IllegalStateException())
-            view.snackbar(R.string.error_creating_wallet)
-            return
-        }
-
-        val credentials = WalletUtils.loadCredentials(wallet.password, credentialFile)
-        createWalletFromCredentials(view, wallet.walletName, credentials)
+        walletGeneratorViewModel.createKeystoreWallet(wallet.walletName, wallet.password, walletDirectory)
     }
 
     private fun clickListenerForPhrase(view: View, wallet: WalletCreationPhrase) {
         //TODO
-    }
-
-    private fun createWalletFromCredentials(view: View, walletName: String, credentials: Credentials) {
-        WalletCreationHandler(walletName, credentials, activity)
-                .createWallet(view)
     }
 
 }

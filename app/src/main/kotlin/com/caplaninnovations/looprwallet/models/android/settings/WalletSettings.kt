@@ -59,7 +59,25 @@ class WalletSettings(private val looprSettings: LooprSettings) {
     fun getCurrentWallet(): LooprWallet? {
         val walletName = looprSettings.getString(KEY_CURRENT_WALLET)
         return walletName?.let {
-            LooprWallet(it, getRealmKey(it)!!, getPrivateKey(it)!!)
+            val realmKey = getRealmKey(it)
+            val privateKey = getPrivateKey(it)
+            if (realmKey != null && privateKey != null) {
+                LooprWallet(walletName, realmKey, privateKey)
+            } else {
+                null
+            }
+        }
+    }
+
+    /**
+     * @return The current wallet being used by a user. A null return value means there is no
+     * current wallet and the user must create, select or recover one
+     */
+    fun getWallet(walletName: String): LooprWallet? {
+        return if (!getAllWallets().contains(walletName)) {
+            return null
+        } else {
+            LooprWallet(walletName, getRealmKey(walletName)!!, getPrivateKey(walletName)!!)
         }
     }
 
@@ -93,7 +111,8 @@ class WalletSettings(private val looprSettings: LooprSettings) {
             return false
         }
 
-        if (getAllWallets().any({ getPrivateKey(it) != null })) {
+        if (getAllWallets().any({ getPrivateKey(it) == privateKey })) {
+            // There's already a wallet with this private key
             return false
         }
 

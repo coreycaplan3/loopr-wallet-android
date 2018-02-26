@@ -10,6 +10,7 @@ import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.snackbar
+import com.caplaninnovations.looprwallet.utilities.str
 import org.web3j.crypto.Credentials
 import org.web3j.utils.Numeric
 
@@ -24,38 +25,27 @@ import org.web3j.utils.Numeric
 class WalletCreationHandler(
         private val walletName: String,
         private val credentials: Credentials,
-        activity: Activity?
+        private val securityClient: SecurityClient?
 ) {
-
-    private val securityClient: SecurityClient? = (activity as? BaseActivity)?.securityClient
 
     /**
      * Attempts to create a wallet, if possible, and then goes to the [MainActivity] with the newly
      * signed-in wallet.
      *
-     * @param view A view used for creating a snackbar, for when the creation succeeds or fails
+     * @return A string containing the error if the operation was a failure or null if it was a
+     * success
      */
-    fun createWallet(view: View) {
+    fun createWallet(): String? {
         if (securityClient == null) {
             loge("Could not create wallet!", IllegalStateException())
-            view.snackbar(R.string.error_creating_wallet)
-            return
+            return str(R.string.error_creating_wallet)
         }
 
         val privateKey = Numeric.encodeQuantity(credentials.ecKeyPair.privateKey)
 
-        when (securityClient.createWallet(walletName, privateKey)) {
-            true -> {
-                view.snackbar(R.string.wallet_creation_successful)
-
-                val intent = Intent(view.context, MainActivity::class.java)
-                        .addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_NEW_TASK)
-
-                view.context.startActivity(intent)
-            }
-            false -> {
-                view.snackbar(R.string.error_wallet_already_exists)
-            }
+        return when (securityClient.createWallet(walletName, privateKey)) {
+            true -> null
+            false -> str(R.string.error_wallet_already_exists)
         }
     }
 

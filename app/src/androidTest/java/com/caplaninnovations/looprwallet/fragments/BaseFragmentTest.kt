@@ -8,7 +8,6 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.utilities.OrientationChangeAction
@@ -33,43 +32,49 @@ import java.util.concurrent.FutureTask
 @RunWith(AndroidJUnit4::class)
 class BaseFragmentTest : BaseDaggerTest() {
 
+    class TestingBaseFragment : BaseFragment() {
+        override val layoutResource: Int
+            get() = R.layout.fragment_test_container
+
+    }
+
     @get:Rule
     val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
 
-    private lateinit var activity: BaseActivity
+    private val baseFragment = TestingBaseFragment()
+    private val tag = "fragment"
 
-    private val baseFragment = object : BaseFragment() {
-        override val layoutResource: Int
-            get() = R.layout.fragment_test_container
-    }
+    private lateinit var activity: TestActivity
+
 
     @Before
     fun setup() {
         activity = activityRule.activity
-        activityRule.activity.addFragment(baseFragment, BaseFragment::class.java.simpleName)
+        val task = FutureTask {
+            activity.addFragment(baseFragment, tag)
+        }
+        activity.runOnUiThread(task)
+        waitForTask(activity, task, false)
+        waitForActivityToBeSetup()
     }
 
     @Test
     fun checkToolbarModeAfterRotation() {
         val enableToolbarCollapsingTask = FutureTask { baseFragment.enableToolbarCollapsing() }
-        waitForAnimationsAndTask(activity, enableToolbarCollapsingTask, false)
+        waitForTask(activity, enableToolbarCollapsingTask, true)
 
         onView(isRoot()).perform(OrientationChangeAction.changeOrientationToLandscape())
-        assertTrue(baseFragment.isToolbarCollapseEnabled)
 
-        val disableToolbarCollapsingTask = FutureTask { baseFragment.disableToolbarCollapsing() }
-        waitForAnimationsAndTask(activity, disableToolbarCollapsingTask, false)
-
-        onView(isRoot()).perform(OrientationChangeAction.changeOrientationToPortrait())
-        assertFalse(baseFragment.isToolbarCollapseEnabled)
+        val recreatedFragment = activity.supportFragmentManager.findFragmentById(R.id.activityContainer) as BaseFragment
+        assertTrue(recreatedFragment.isToolbarCollapseEnabled)
     }
 
     @Test
     fun enableToolbarCollapsing__checkUi() {
         val task = FutureTask { baseFragment.enableToolbarCollapsing() }
-        waitForAnimationsAndTask(activity, task, false)
+        waitForTask(activity, task, false)
 
-        val toolbarLayoutParams = activity.ordersToolbar.layoutParams as AppBarLayout.LayoutParams
+        val toolbarLayoutParams = activity.toolbar.layoutParams as AppBarLayout.LayoutParams
         val flags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
         assertEquals(flags, toolbarLayoutParams.scrollFlags)
 
@@ -81,9 +86,9 @@ class BaseFragmentTest : BaseDaggerTest() {
     @Test
     fun disableToolbarCollapsing_checkUi() {
         val task = FutureTask { baseFragment.disableToolbarCollapsing() }
-        waitForAnimationsAndTask(activity, task, false)
+        waitForTask(activity, task, false)
 
-        val toolbarLayoutParams = activity.ordersToolbar.layoutParams as AppBarLayout.LayoutParams
+        val toolbarLayoutParams = activity.toolbar.layoutParams as AppBarLayout.LayoutParams
         assertEquals(0, toolbarLayoutParams.scrollFlags)
 
         val fragmentContainer = baseFragment.view?.findViewById<ViewGroup>(R.id.fragmentContainer)

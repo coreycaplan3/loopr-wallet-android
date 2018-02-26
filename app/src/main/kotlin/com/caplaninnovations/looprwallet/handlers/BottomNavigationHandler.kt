@@ -47,19 +47,24 @@ class BottomNavigationHandler(private val activity: BaseActivity,
     init {
         setupTabs()
 
-        savedInstanceState.let {
-            val tag = initialTag
-            logv("Initializing $tag fragment...")
+        when {
+            savedInstanceState != null -> {
+                val tag = fragmentStackHistory.peek()!!
+                logv("Pushing $tag fragment...")
 
-            Handler().postDelayed({ onTabSelected(bottomNavigation.findTabByTag(tag)) }, 300L)
-        }
+                // We don't need to select the tab actually, just update the UI
+                updateTabUi(bottomNavigation.findTabByTag(tag), true)
+                currentFragment = activity.supportFragmentManager.findFragmentByTag(tag)
+            }
+            else -> {
+                val tag = initialTag
+                logv("Initializing $tag fragment...")
 
-        savedInstanceState?.let {
-            val tag = fragmentStackHistory.peek()!!
-            logv("Pushing $tag fragment...")
-
-            updateTabUi(bottomNavigation.findTabByTag(tag), true)
-            currentFragment = activity.supportFragmentManager.findFragmentByTag(tag)
+                Handler().postDelayed({
+                    // Needed to allow the TabLayout animation to occur initially.
+                    onTabSelected(bottomNavigation.findTabByTag(tag))
+                }, 100)
+            }
         }
 
         bottomNavigation.addOnTabSelectedListener(this)
@@ -157,26 +162,19 @@ class BottomNavigationHandler(private val activity: BaseActivity,
     }
 
     private fun updateTabUi(tab: TabLayout.Tab?, isSelected: Boolean) {
-        Handler().postDelayed({
-            tab?.let {
-                if (isSelected) {
-                    tab.customView?.animateTopPadding(R.dimen.bottom_navigation_margin_top_selected)
+        tab?.customView?.apply {
+            val tabTextView = findViewById<TextView>(R.id.bottomNavigationTabText)
+            if (isSelected) {
+                animateTopPadding(R.dimen.bottom_navigation_margin_top_selected)
+                animateAlpha(1.toFloat())
+                tabTextView?.animateTextSizeChange(R.dimen.bottom_navigation_text_size_selected)
 
-                    tab.customView?.animateAlpha(1.toFloat())
-
-                    tab.customView?.findViewById<TextView>(R.id.bottomNavigationTabText)
-                            ?.animateTextSizeChange(R.dimen.bottom_navigation_text_size_selected)
-
-                } else {
-                    tab.customView?.animateTopPadding(R.dimen.bottom_navigation_margin_top)
-
-                    tab.customView?.animateAlpha(0.68.toFloat())
-
-                    tab.customView?.findViewById<TextView>(R.id.bottomNavigationTabText)
-                            ?.animateTextSizeChange(R.dimen.bottom_navigation_text_size)
-                }
+            } else {
+                animateTopPadding(R.dimen.bottom_navigation_margin_top)
+                animateAlpha(0.68.toFloat())
+                tabTextView?.animateTextSizeChange(R.dimen.bottom_navigation_text_size)
             }
-        }, activity.resources.getInteger(R.integer.ripple_duration).toLong())
+        }
     }
 
 }

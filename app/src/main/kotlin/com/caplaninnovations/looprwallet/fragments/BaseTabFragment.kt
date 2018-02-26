@@ -41,7 +41,6 @@ abstract class BaseTabFragment : BaseFragment() {
         super.onAttach(context)
 
         if (isLollipop()) {
-            postponeEnterTransition()
             allowEnterTransitionOverlap = false
             allowReturnTransitionOverlap = false
 
@@ -77,8 +76,6 @@ abstract class BaseTabFragment : BaseFragment() {
         tabLayout?.tabTextColors = context?.getAttrColorStateList(R.attr.tabTextColor)
 
         enableToolbarCollapsing()
-
-        startPostponedEnterTransition()
     }
 
     abstract fun getAdapterContent(): List<Pair<String, BaseFragment>>

@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.activities
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
@@ -54,7 +55,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private lateinit var looprProductionComponent: LooprProductionComponent
 
-    lateinit var progressDialog: AppCompatDialog
+    lateinit var progressDialog: ProgressDialog
 
     @Inject
     lateinit var themeSettings: ThemeSettings
@@ -72,14 +73,14 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     open lateinit var fragmentStackHistory: FragmentStackHistory
 
-    @IdRes
-    var progressDialogTitle: Int? = null
+    var progressDialogMessage: String? = null
         private set
 
     var realm: Realm? = null
 
     private lateinit var permissionHandlers: List<PermissionHandler>
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -101,10 +102,10 @@ abstract class BaseActivity : AppCompatActivity() {
         /*
          * Progress Dialog Setup
          */
-        progressDialog = object : AppCompatDialog(this) {
-            override fun setTitle(titleId: Int) {
-                super.setTitle(titleId)
-                progressDialogTitle = titleId
+        progressDialog = object : ProgressDialog(this) {
+            override fun setMessage(message: CharSequence?) {
+                super.setMessage(message)
+                progressDialogMessage = message?.toString()
             }
         }
 
@@ -209,7 +210,7 @@ abstract class BaseActivity : AppCompatActivity() {
         fragmentStackHistory.saveState(outState)
 
         outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)
-        progressDialogTitle?.let { outState?.putInt(KEY_PROGRESS_DIALOG_TITLE, it) }
+        outState?.putString(KEY_PROGRESS_DIALOG_TITLE, progressDialogMessage)
 
         progressDialog.dismiss()
     }

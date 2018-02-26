@@ -18,4 +18,9 @@ import kotlinx.android.parcel.Parcelize
  */
 @SuppressLint("ParcelCreator")
 @Parcelize
-data class WalletCreationPhrase(val walletName: String, val password: String, val phrase: List<String>) : Parcelable
+data class WalletCreationPhrase(val walletName: String, val password: String, val phrase: List<String>) : Parcelable, PasswordWallet {
+
+    override fun getWalletPassword(): String {
+        return password
+    }
+}

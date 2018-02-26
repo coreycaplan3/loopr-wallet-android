@@ -1,6 +1,5 @@
 package com.caplaninnovations.looprwallet.fragments.createwallet
 
-import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.*
@@ -13,7 +12,7 @@ import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
-import kotlinx.android.synthetic.main.card_create_wallet_password.*
+import kotlinx.android.synthetic.main.card_enter_wallet_password.*
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import org.hamcrest.Matchers.*
 import org.junit.Assert.*
@@ -22,6 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.FutureTask
 
 /**
  * Created by Corey on 2/20/2018.
@@ -40,20 +40,23 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
 
     private val fragment = CreateWalletKeystoreFragment()
 
-    private val goodName = "corey"
-    private val goodPassword = "coreycorey"
+    private val goodName = "loopr"
+    private val goodPassword = "looprloopr"
 
-    private val badName = "corey corey" // there cannot be any spaces
-    private val badPassword = "corey" // it's too short
+    private val badName = "loopr loopr" // there cannot be any spaces
+    private val badPassword = "loopr" // it's too short
 
     private val nullString: String? = null
     private val emptyString: String? = ""
 
     @Before
     fun setUp() {
-        activityRule.activity.addFragment(fragment, CreateWalletKeystoreFragment.TAG)
-
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        val task = FutureTask {
+            activityRule.activity.addFragment(fragment, CreateWalletKeystoreFragment.TAG)
+        }
+        activityRule.activity.runOnUiThread(task)
+        waitForTask(activityRule.activity, task, false)
+        waitForActivityToBeSetup()
     }
 
     @Test
@@ -62,7 +65,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
                 .check(matches(hasErrorText(nullString)))
                 .check(matches(withText(emptyString)))
 
-        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
+        Espresso.onView(`is`(fragment.enterWalletPasswordEditText))
                 .check(matches(hasErrorText(nullString)))
                 .check(matches(withText(emptyString)))
 
@@ -76,7 +79,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
                 .perform(typeText(goodName), closeSoftKeyboard())
                 .check(matches(hasErrorText(nullString)))
 
-        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
+        Espresso.onView(`is`(fragment.enterWalletPasswordEditText))
                 .check(matches(hasErrorText(nullString)))
                 .check(matches(withText(emptyString)))
 
@@ -93,7 +96,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
                 .check(matches(withText(emptyString)))
                 .check(matches(hasErrorText(nullString)))
 
-        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
+        Espresso.onView(`is`(fragment.enterWalletPasswordEditText))
                 .perform(typeText(goodPassword), closeSoftKeyboard())
                 .check(matches(withText(goodPassword)))
                 .check(matches(hasErrorText(nullString)))
@@ -113,11 +116,11 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
         assertNotNull(fragment.walletNameInputLayout.error)
         assertNotEquals(BaseValidator.DEFAULT_ERROR, fragment.walletNameInputLayout.error)
 
-        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
+        Espresso.onView(`is`(fragment.enterWalletPasswordEditText))
                 .perform(typeText(badPassword), closeSoftKeyboard())
 
-        assertNotNull(fragment.createWalletPasswordInputLayout.error)
-        assertNotEquals(BaseValidator.DEFAULT_ERROR, fragment.createWalletPasswordInputLayout.error)
+        assertNotNull(fragment.enterWalletPasswordInputLayout.error)
+        assertNotEquals(BaseValidator.DEFAULT_ERROR, fragment.enterWalletPasswordInputLayout.error)
 
         Espresso.closeSoftKeyboard()
 
@@ -134,7 +137,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerTest() {
                 .perform(typeText(goodName), closeSoftKeyboard())
                 .check(matches(hasErrorText(nullString)))
 
-        Espresso.onView(`is`(fragment.createWalletPasswordEditText))
+        Espresso.onView(`is`(fragment.enterWalletPasswordEditText))
                 .perform(typeText(goodPassword), closeSoftKeyboard())
                 .check(matches(hasErrorText(nullString)))
 

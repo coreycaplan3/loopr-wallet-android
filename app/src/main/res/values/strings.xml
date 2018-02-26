@@ -229,4 +229,9 @@
     <string name="request_permission">Request Permission</string>
     <string name="file_permissions_needed">File Permissions Needed</string>
     <string name="rationale_file_permission">File permissions are needed to save your keystore file. Don\'t worry, we take the best measures to keep your information secure. To learn more, read our Security FAQ.</string>
+    <string name="allow">Allow</string>
+    <string name="you_may_finish_restoring_wallet">You may now finish restoring your wallet</string>
+    <string name="password_is_incorrect">This password is incorrect</string>
+    <string name="error_password_incorrect">This password is incorrect</string>
+    <string name="creating_wallet">Creating Wallet...</string>
 </resources>

@@ -1,14 +1,16 @@
 package com.caplaninnovations.looprwallet.dagger
 
+import android.app.Activity
 import android.support.test.InstrumentationRegistry
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import junit.framework.Assert.assertTrue
+import org.junit.After
 import org.junit.Before
 import java.util.concurrent.FutureTask
 import javax.inject.Inject
-import junit.framework.Assert.assertNotNull
+import org.junit.Assert.*
 
 
 /**
@@ -36,6 +38,11 @@ open class BaseDaggerTest {
         putDefaultWallet()
     }
 
+    @After
+    fun baseDaggerTearDown() {
+        walletSettings.getAllWallets().forEach { walletSettings.removeWallet(it) }
+    }
+
     open fun putDefaultWallet() {
         val walletName = "loopr-test"
         val privateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e493"
@@ -49,7 +56,7 @@ open class BaseDaggerTest {
      * @param waitForAnimations True if there should be an extra 300 ms wait, in anticipation for
      * animations to finish or false not to wait.
      */
-    fun waitForAnimationsAndTask(activity: BaseActivity, task: FutureTask<*>, waitForAnimations: Boolean) {
+    fun waitForTask(activity: BaseActivity, task: FutureTask<*>, waitForAnimations: Boolean) {
         activity.runOnUiThread(task)
         task.get()
         if (waitForAnimations) {
@@ -57,12 +64,20 @@ open class BaseDaggerTest {
         }
     }
 
-    fun <T : BaseActivity> waitForActivityToStartAndFinish(activityClass: Class<T>) {
-        val activityMonitor = InstrumentationRegistry.getInstrumentation()
-                .addMonitor(activityClass.name, null, false)
+    /**
+     * Waits for the application to be idling and running. Useful when committing fragment
+     * transactions, so we can guarantee tests have a properly setup fragment/dialog.
+     */
+    fun waitForActivityToBeSetup() {
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+    }
 
-        val activity = InstrumentationRegistry.getInstrumentation()
-                .waitForMonitorWithTimeout(activityMonitor, 5000)
+    fun <T : Activity> waitForActivityToStartAndFinish(activityClass: Class<T>) {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+
+        val activityMonitor = instrumentation.addMonitor(activityClass.name, null, false)
+
+        val activity = instrumentation.waitForMonitorWithTimeout(activityMonitor, 10000)
 
         assertNotNull(activity)
         activity.finish()

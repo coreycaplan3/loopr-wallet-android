@@ -31,9 +31,21 @@ class MainActivity : BaseActivity() {
 
         const val KEY_FINISH_ALL = "_FINISH_ALL"
 
+        /**
+         * @return An intent used to kill the entire application, if started
+         */
         fun createIntentToFinishApp(): Intent {
             return Intent(LooprWalletApp.application.applicationContext, MainActivity::class.java)
                     .putExtra(KEY_FINISH_ALL, true)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        /**
+         * @return An intent used to start this activity (as normal), clearing any previous tasks
+         * which may have pointed to here
+         */
+        fun createIntent(): Intent {
+            return Intent(LooprWalletApp.getContext(), MainActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }

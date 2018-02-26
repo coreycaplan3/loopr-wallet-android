@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.datalayer
+package com.caplaninnovations.looprwallet.viewmodels
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel

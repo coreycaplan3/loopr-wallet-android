@@ -4,6 +4,7 @@ import android.app.Activity
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
+import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.utilities.loge
 
 /**
@@ -18,24 +19,16 @@ class SecurityClientTestImpl(looprSettings: LooprSettings) : SecurityClient {
 
     private val walletSettings = WalletSettings(looprSettings)
 
-    override fun createWallet(walletName: String): Boolean {
-        return walletSettings.createWallet(walletName)
+    override fun createWallet(walletName: String, privateKey: String): Boolean {
+        return walletSettings.createWallet(walletName, privateKey)
     }
 
     override fun selectNewCurrentWallet(newCurrentWallet: String, currentActivity: BaseActivity) {
         loge("Stub code: selectNewCurrentWallet")
     }
 
-    override fun getCurrentWallet(): String? {
+    override fun getCurrentWallet(): LooprWallet? {
         return walletSettings.getCurrentWallet()
-    }
-
-    override fun getCurrentWalletEncryptionKey(): ByteArray? {
-        val currentWallet = getCurrentWallet()
-        return when (currentWallet) {
-            is String -> walletSettings.getRealmKey(currentWallet)
-            else -> null
-        }
     }
 
     override fun onNoCurrentWalletSelected(currentActivity: BaseActivity) {

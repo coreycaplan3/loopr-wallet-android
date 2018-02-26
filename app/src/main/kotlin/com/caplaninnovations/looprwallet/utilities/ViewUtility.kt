@@ -142,7 +142,7 @@ fun View.snackbarUnknownError() {
  * @see Snackbar.LENGTH_INDEFINITE
  */
 fun View.snackbarWithAction(@StringRes message: Int,
-                            @Duration length: Int = Snackbar.LENGTH_LONG,
+                            length: Int = Snackbar.LENGTH_LONG,
                             @StringRes actionText: Int,
                             listener: (View) -> Unit,
                             @ColorInt color: Int? = null) {

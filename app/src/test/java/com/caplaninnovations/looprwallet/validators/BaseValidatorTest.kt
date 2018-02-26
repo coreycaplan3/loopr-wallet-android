@@ -27,7 +27,7 @@ class BaseValidatorTest {
             onChangeListener: () -> Unit,
             isRequired: Boolean,
             private val defaultError: String?
-    ) : BaseValidator(textInputLayout, onChangeListener, isRequired) {
+    ) : BaseValidator(textInputLayout, onChangeListener) {
 
         override fun isValid(text: String?): Boolean {
             error = defaultError
@@ -83,7 +83,7 @@ class BaseValidatorTest {
 
     @Test
     fun isValid_initial_isNotRequiredField() {
-        val notRequiredValidator = object : BaseValidator(textInputLayout, { onTextChanged() }, false) {
+        val notRequiredValidator = object : BaseValidator(textInputLayout, { onTextChanged() }) {
             override fun isValid(text: String?): Boolean = false
         }
 

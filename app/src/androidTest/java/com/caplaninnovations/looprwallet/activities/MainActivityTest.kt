@@ -14,7 +14,6 @@ import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.*
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.alphaIs
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.textSizeIs
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.topPaddingIs
@@ -51,13 +50,11 @@ class MainActivityTest : BaseDaggerTest() {
 
     @Before
     fun setUp() {
-        val task = FutureTask {
-            bottomNavigationHandler = activityRule.activity.bottomNavigationHandler
-            fragmentStackHistory = activityRule.activity.fragmentStackHistory
-        }
+        val activity = activityRule.activity
+        waitForActivityToBeSetup()
 
-        activityRule.activity.runOnUiThread(task)
-        task.get()
+        bottomNavigationHandler = activity.bottomNavigationHandler
+        fragmentStackHistory = activity.fragmentStackHistory
     }
 
     @Test
@@ -93,6 +90,8 @@ class MainActivityTest : BaseDaggerTest() {
         onView(withTagValue(`is`(BottomNavigationFragmentPair.KEY_ORDERS)))
                 .perform(click())
 
+        Thread.sleep(300)
+
         // Assert the tab selection propagated successfully
         // Current stack = ORDERS -- MARKETS
         assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, fragmentStackHistory.peek())
@@ -122,7 +121,7 @@ class MainActivityTest : BaseDaggerTest() {
     }
 
     @Test
-    fun onTabUnselected_TabAnimationValues() {
+    fun onTabUnselected_tabAnimationValues() {
         // The markets tab is the default selected one
 
         val markets = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationFragmentPair.KEY_MARKETS)!!
@@ -130,7 +129,7 @@ class MainActivityTest : BaseDaggerTest() {
 
         val task = FutureTask { bottomNavigationHandler.onTabUnselected(markets) }
 
-        waitForAnimationsAndTask(activityRule.activity, task, true)
+        waitForTask(activityRule.activity, task, true)
 
         val customView = markets.customView!!
         assertNotNull(customView)
@@ -138,21 +137,22 @@ class MainActivityTest : BaseDaggerTest() {
         onView(`is`(customView))
                 .check(topPaddingIs(R.dimen.bottom_navigation_margin_top))
 
-        onView(`is`(customView)).check(alphaIs(0.68f))
+        onView(`is`(customView))
+                .check(alphaIs(0.68f))
 
         onView(`is`(customView.findViewById<TextView>(R.id.bottomNavigationTabText)))
                 .check(textSizeIs(R.dimen.bottom_navigation_text_size))
     }
 
     @Test
-    fun onTabSelected_TabAnimationValues() {
+    fun onTabSelected_tabAnimationValues() {
         // The markets tab is the default selected one
         val orders = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationFragmentPair.KEY_ORDERS)!!
         assertNotNull(orders)
 
         val task = FutureTask { bottomNavigationHandler.onTabSelected(orders) }
 
-        waitForAnimationsAndTask(activityRule.activity, task, true)
+        waitForTask(activityRule.activity, task, true)
 
         assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, fragmentStackHistory.peek())
 

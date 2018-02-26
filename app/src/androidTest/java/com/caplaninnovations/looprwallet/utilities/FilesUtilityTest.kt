@@ -1,8 +1,8 @@
 package com.caplaninnovations.looprwallet.utilities
 
-import android.Manifest.permission.*
-import android.content.pm.PackageManager
+import android.Manifest
 import android.support.test.rule.ActivityTestRule
+import android.support.test.rule.GrantPermissionRule
 import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import org.junit.After
@@ -25,10 +25,13 @@ import java.io.File
  */
 class FilesUtilityTest : BaseDaggerTest() {
 
-    val baseFileName = "test-file"
-
     @get:Rule
     val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
+
+    @get:Rule
+    val grantFilePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    private val baseFileName = "test-file.txt"
 
     @Before
     fun setup() {
@@ -51,19 +54,15 @@ class FilesUtilityTest : BaseDaggerTest() {
 
     @Test
     fun saveFileToDownloadFolder() {
-        val file = File(activityRule.activity.filesDir, baseFileName)
-        file.writeBytes("Hello World!".toByteArray())
+        val testFile = File(activityRule.activity.cacheDir, baseFileName)
+        if (!testFile.exists() && !testFile.createNewFile()) {
+            throw IllegalStateException("Could not create test file!")
+        }
 
-        val activity = activityRule.activity
+        testFile.writeBytes("Hello World!".toByteArray())
 
-        activity.apply {
-            runOnUiThread {
-                if (checkSelfPermission(WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(arrayOf(WRITE_EXTERNAL_STORAGE), 1)
-                } else {
-                    FilesUtility.saveFileToDownloadFolder(file)
-                }
-            }
+        activityRule.activity.runOnUiThread {
+            FilesUtility.saveFileToDownloadFolder(testFile)
         }
     }
 

@@ -7,7 +7,7 @@ import android.support.v7.app.AlertDialog
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.datalayer.WalletCreationPasswordViewModel
+import com.caplaninnovations.looprwallet.viewmodels.WalletCreationPasswordViewModel
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
@@ -20,7 +20,7 @@ import com.caplaninnovations.looprwallet.validators.PasswordValidator
 import com.caplaninnovations.looprwallet.validators.WalletNameValidator
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
-import kotlinx.android.synthetic.main.card_create_wallet_password.*
+import kotlinx.android.synthetic.main.card_enter_wallet_password.*
 
 /**
  * Created by Corey Caplan on 2/19/18.
@@ -59,7 +59,7 @@ class CreateWalletKeystoreFragment : BaseFragment() {
 
     private val filePermissionsDialog: AlertDialog? by lazy {
         context?.let {
-            DialogUtility.createFilePermissionsDialog(it, filePermissionsHandler::requestPermission)
+            DialogUtility.createFilePermissionsDialog(it, filePermissionsHandler)
         }
     }
 
@@ -68,7 +68,7 @@ class CreateWalletKeystoreFragment : BaseFragment() {
     }
 
     private val passwordValidator: PasswordValidator by lazy {
-        PasswordValidator(createWalletPasswordInputLayout, this::onFormChanged)
+        PasswordValidator(enterWalletPasswordInputLayout, this::onFormChanged)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

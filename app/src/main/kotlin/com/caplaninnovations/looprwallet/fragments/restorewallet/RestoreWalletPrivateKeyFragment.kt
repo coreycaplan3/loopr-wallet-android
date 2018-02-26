@@ -1,13 +1,12 @@
 package com.caplaninnovations.looprwallet.fragments.restorewallet
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
-import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.snackbar
+import com.caplaninnovations.looprwallet.utilities.WalletGeneratorUtility
 import com.caplaninnovations.looprwallet.validators.PrivateKeyValidator
 import com.caplaninnovations.looprwallet.validators.WalletNameValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
@@ -32,6 +31,9 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_restore_private_key
 
+    private val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
+        ViewModelProviders.of(this).get(WalletGeneratorViewModel::class.java)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +43,9 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
                 PrivateKeyValidator(privateKeyInputLayout, this::onFormChanged)
         )
 
-        privateKeyUnlockButton.setOnClickListener(this::onUnlockWalletClick)
+        privateKeyUnlockButton.setOnClickListener { onUnlockWalletClick() }
+
+        WalletGeneratorUtility.setupForFragment(walletGeneratorViewModel, this)
     }
 
     override fun onFormChanged() {
@@ -55,14 +59,11 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
      *
      * @param view The button view that was clicked
      */
-    private fun onUnlockWalletClick(buttonView: View) {
+    private fun onUnlockWalletClick() {
         val walletName = walletNameEditText.text.toString()
-        val privateKey = privateKeyEditText.text.toString()
+        val privateKey = privateKeyEditText.text.toString().toLowerCase()
 
-        val credentials = Credentials.create(privateKey)
-
-        WalletCreationHandler(walletName, credentials, activity)
-                .createWallet(buttonView)
+        walletGeneratorViewModel.createCredentialsWallet(walletName, privateKey)
     }
 
 }

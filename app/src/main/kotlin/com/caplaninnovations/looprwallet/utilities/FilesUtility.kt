@@ -43,7 +43,7 @@ object FilesUtility {
         }
     }
 
-    fun getFileFromActivityResult(context: Context, uri: Uri?): File? {
+    fun getFileFromUri(context: Context, uri: Uri?): File? {
         return uri?.let { File(getPath(context, it)) }
     }
 
@@ -59,17 +59,15 @@ object FilesUtility {
     @Throws(Exception::class)
     @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun saveFileToDownloadFolder(fileToSave: File) {
-        val downloadedFile = File(getDownloadsDirectory(), fileToSave.name)
         val allBytes = fileToSave.readBytes()
-        downloadedFile.writeBytes(allBytes)
 
         val service = (LooprWalletApp.getContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager)
         service.addCompletedDownload(
-                downloadedFile.name,
-                String.format(str(R.string.description_keystore_download), downloadedFile.name),
+                fileToSave.name,
+                String.format(str(R.string.description_keystore_download), fileToSave.name),
                 true,
                 "application/json",
-                downloadedFile.path,
+                fileToSave.path,
                 allBytes.size.toLong(),
                 true)
     }

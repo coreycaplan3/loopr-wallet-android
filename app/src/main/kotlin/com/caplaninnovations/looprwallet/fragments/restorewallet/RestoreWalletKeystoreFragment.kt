@@ -1,27 +1,25 @@
 package com.caplaninnovations.looprwallet.fragments.restorewallet
 
+import android.Manifest
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.annotation.VisibleForTesting
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_restore_keystore.*
 import android.support.design.widget.Snackbar
-import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
-import com.caplaninnovations.looprwallet.utilities.FilesUtility
-import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.longToast
-import com.caplaninnovations.looprwallet.utilities.snackbar
+import android.support.v7.app.AlertDialog
+import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
+import com.caplaninnovations.looprwallet.handlers.PermissionHandler
+import com.caplaninnovations.looprwallet.utilities.*
 import com.caplaninnovations.looprwallet.validators.PasswordValidator
 import com.caplaninnovations.looprwallet.validators.WalletNameValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
-import org.web3j.crypto.CipherException
-import org.web3j.crypto.WalletUtils
 import java.io.File
 
 
@@ -40,28 +38,59 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
 
         const val KEY_OPEN_FILE_REQUEST_CODE = 1943934
 
+        const val KEY_IS_FILE_DIALOG_SHOWING = "_IS_FILE_DIALOG_SHOWING"
         const val KEY_URI = "_URI"
     }
 
     override val layoutResource: Int
         get() = R.layout.fragment_restore_keystore
 
-    private var keystoreUri: Uri? = null
-        private set(value) {
-            context?.let { keystoreFile = FilesUtility.getFileFromActivityResult(it, value) }
+    val filePermissionsHandler by lazy {
+        PermissionHandler(
+                activity as BaseActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                PermissionHandler.REQUEST_CODE_EXTERNAL_FILES,
+                this::onFilePermissionGranted,
+                this::onFilePermissionDenied
+        )
+    }
+
+    val filePermissionsDialog: AlertDialog? by lazy {
+        context?.let {
+            DialogUtility.createFilePermissionsDialog(it, filePermissionsHandler)
+        }
+    }
+
+    var keystoreUri: Uri? = null
+        set(value) {
+            field = value
+
+            val context = this.context
+            if (context == null) {
+                loge("Context was null!", IllegalStateException())
+            } else {
+                keystoreFile = FilesUtility.getFileFromUri(context, value)
+            }
         }
 
+    var keystoreFile: File? = null
+        private set(value) {
+            field = value
 
-    private var keystoreFile: File? = null
+            // We need to manually propagate form changes of the file
+            onFormChanged()
+        }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        keystoreUri = savedInstanceState?.getParcelable(KEY_URI)
+    private val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
+        ViewModelProviders.of(this).get(WalletGeneratorViewModel::class.java)
     }
+
+    // END PROPERTIES
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        keystoreUri = savedInstanceState?.getParcelable(KEY_URI)
 
         keystoreFile?.let { keystoreSelectFileButton.text = it.name }
 
@@ -69,6 +98,10 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
                 WalletNameValidator(walletNameInputLayout, this::onFormChanged),
                 PasswordValidator(keystorePasswordInputLayout, this::onFormChanged)
         )
+
+        if (savedInstanceState?.getBoolean(KEY_IS_FILE_DIALOG_SHOWING) == true) {
+            filePermissionsDialog?.show()
+        }
 
         keystoreSelectFileButton.setOnClickListener {
             try {
@@ -79,37 +112,17 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
             }
         }
 
-        keystoreUnlockButton.setOnClickListener {
-            val walletName = walletNameEditText.text.toString()
-            val password = keystorePasswordEditText.text.toString()
-            val file = keystoreFile
+        keystoreUnlockButton.setOnClickListener(this::onUnlockButtonClick)
 
-            if (file == null) {
-                loge("File was null, this should not have happened!", IllegalStateException())
-                it.snackbar(R.string.error_retrieve_file)
-                return@setOnClickListener
-            }
-
-            try {
-                val credentials = WalletUtils.loadCredentials(password, file)
-
-                WalletCreationHandler(walletName, credentials, activity)
-                        .createWallet(view)
-            } catch (e: Exception) {
-                if (e is CipherException) {
-                    it.snackbar(getErrorMessageFromKeystoreError(e))
-
-                } else {
-                    it.snackbar(R.string.error_unknown)
-                    loge("Error decrypting wallet!", e)
-                }
-            }
-        }
-
+        WalletGeneratorUtility.setupForFragment(walletGeneratorViewModel, this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        val context = this.context ?: return
+        val context = context
+        if (context == null) {
+            loge("Context was null!", IllegalStateException())
+            return
+        }
 
         if (requestCode == KEY_OPEN_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (intent == null) {
@@ -123,29 +136,60 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putParcelable(KEY_URI, keystoreUri)
-    }
-
     override fun onFormChanged() {
         // If all validators are valid and the keystore URI is not null, the user can submit
         keystoreUnlockButton.isEnabled = isAllValidatorsValid() && keystoreFile != null
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putParcelable(KEY_URI, keystoreUri)
+        outState.putBoolean(KEY_IS_FILE_DIALOG_SHOWING, filePermissionsDialog?.isShowing == true)
+
+        filePermissionsDialog?.dismiss()
+    }
+
     // Mark - Private Methods
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
-    @StringRes
-    fun getErrorMessageFromKeystoreError(exception: CipherException): Int {
-        val message = exception.message
-        return when {
-            message == null -> R.string.error_unknown
-            message.toLowerCase().contains("supported") -> R.string.error_keystore_unsupported
-            message.toLowerCase().contains("password") -> R.string.error_password_invalid
-            else -> R.string.error_unknown
+    /**
+     * Called when permission is granted for the app to access files. This method is *only* called
+     * when the rest of the form is valid.
+     */
+    private fun onFilePermissionGranted() {
+        if (keystoreUnlockButton.isEnabled) {
+            keystoreUnlockButton.performClick()
+        } else {
+            loge("Error invalid state!", IllegalStateException())
+            view?.snackbar(R.string.you_may_finish_restoring_wallet)
         }
+    }
+
+    private fun onFilePermissionDenied() {
+        view?.snackbarWithAction(
+                R.string.permission_rationale_files,
+                Snackbar.LENGTH_INDEFINITE,
+                R.string.allow,
+                { _ -> filePermissionsHandler.requestPermission() })
+    }
+
+    private fun onUnlockButtonClick(buttonView: View) {
+        if (!filePermissionsHandler.isPermissionGranted) {
+            filePermissionsDialog?.show()
+            return
+        }
+
+        val walletName = walletNameEditText.text.toString()
+        val password = keystorePasswordEditText.text.toString()
+        val file = keystoreFile
+
+        if (file == null) {
+            loge("File was null, this should not have happened!", IllegalStateException())
+            buttonView.snackbar(R.string.error_retrieve_file)
+            return
+        }
+
+        walletGeneratorViewModel.loadKeystoreWallet(walletName, password, file)
     }
 
 }

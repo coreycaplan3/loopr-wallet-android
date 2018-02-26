@@ -6,6 +6,7 @@ import android.support.annotation.RestrictTo.Scope.TESTS
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.restorewallet.RestoreWalletKeystoreFragment
+import com.caplaninnovations.looprwallet.fragments.restorewallet.RestoreWalletPrivateKeyFragment
 
 /**
  * Created by Corey on 2/20/2018
@@ -27,26 +28,15 @@ class TestActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null && intent?.getBooleanExtra("AddFragment", false) == true) {
-            addFragment(RestoreWalletKeystoreFragment(), RestoreWalletKeystoreFragment.TAG)
+            // used for testing a sole fragment
+            addFragment(RestoreWalletPrivateKeyFragment(), RestoreWalletPrivateKeyFragment.TAG)
         }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        throw IllegalStateException("Could not perform test because permissions needed to be requested!")
     }
 
     fun addFragment(fragment: Fragment, tag: String) {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.activityContainer, fragment, tag)
-                .commit()
-
-        if (fragment.retainInstance) {
-            supportFragmentManager.beginTransaction()
-                    .add(fragment, tag)
-                    .commit()
-        }
+                .commitNow()
     }
 
     fun removeFragment(fragment: Fragment) {

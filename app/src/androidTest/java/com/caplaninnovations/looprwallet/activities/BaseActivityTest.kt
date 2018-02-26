@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.utilities.OrientationChangeAction
+import com.caplaninnovations.looprwallet.utilities.str
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -38,20 +39,21 @@ class BaseActivityTest : BaseDaggerTest() {
 
     @Test
     fun startProgressDialogAfterRotation() {
-        val task = FutureTask {
-            activity.progressDialog.setTitle(R.string.app_name)
+        val showTask = FutureTask {
+            activity.progressDialog.setMessage(str(R.string.app_name))
             activity.progressDialog.show()
         }
 
-        waitForAnimationsAndTask(activity, task, false)
+        waitForTask(activity, showTask, false)
 
         onView(isRoot()).perform(OrientationChangeAction.changeOrientationToLandscape())
 
         // Assert it's still showing, after the orientation change
         assertTrue(activity.progressDialog.isShowing)
-        assertEquals(R.string.app_name, activity.progressDialogTitle)
+        assertEquals(R.string.app_name, activity.progressDialogMessage)
 
-        activity.progressDialog.dismiss()
+        val dismissTask = FutureTask { activity.progressDialog.dismiss() }
+        waitForTask(activity, dismissTask, false)
 
         onView(isRoot()).perform(OrientationChangeAction.changeOrientationToPortrait())
 

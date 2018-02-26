@@ -10,6 +10,7 @@ import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
+import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletKeystoreFragment
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 import kotlinx.android.synthetic.main.fragment_restore_private_key.*
@@ -20,6 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.FutureTask
 
 /**
  * Created by Corey on 2/25/2018.
@@ -38,10 +40,10 @@ class RestoreWalletPrivateKeyFragmentTest : BaseDaggerTest() {
 
     private val fragment = RestoreWalletPrivateKeyFragment()
 
-    private val goodName = "loopr-wallet"
+    private val goodName = "loopr-wallet-private-key"
     private val badName = "loopr-wallet$"
 
-    private val goodPrivateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e493"
+    private val goodPrivateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e699"
     private val badPrivateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8ezzz"
 
     private val emptyString = ""
@@ -49,9 +51,12 @@ class RestoreWalletPrivateKeyFragmentTest : BaseDaggerTest() {
 
     @Before
     fun setUp() {
-        activityRule.activity.addFragment(fragment, RestoreWalletPrivateKeyFragment.TAG)
-
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        val task = FutureTask {
+            activityRule.activity.addFragment(fragment, RestoreWalletPrivateKeyFragment.TAG)
+        }
+        activityRule.activity.runOnUiThread(task)
+        waitForTask(activityRule.activity, task, false)
+        waitForActivityToBeSetup()
     }
 
     @Test
@@ -111,10 +116,12 @@ class RestoreWalletPrivateKeyFragmentTest : BaseDaggerTest() {
     fun nameOkay_privateKeyOkay() {
         Espresso.onView(`is`(fragment.walletNameEditText))
                 .perform(typeText(goodName), closeSoftKeyboard())
+                .check(matches(withText(goodName)))
                 .check(matches(hasErrorText(nullString)))
 
         Espresso.onView(`is`(fragment.privateKeyEditText))
                 .perform(typeText(goodPrivateKey), closeSoftKeyboard())
+                .check(matches(withText(goodPrivateKey)))
                 .check(matches(hasErrorText(nullString)))
 
         Espresso.onView(`is`(fragment.fragmentContainer))

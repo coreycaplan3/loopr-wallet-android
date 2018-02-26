@@ -2,34 +2,34 @@ package com.caplaninnovations.looprwallet.validators
 
 import android.support.design.widget.TextInputLayout
 import com.caplaninnovations.looprwallet.R
-import org.web3j.crypto.WalletUtils
-import org.web3j.utils.Numeric
 
 /**
- * Created by Corey Caplan on 2/22/18.
+ * Created by Corey on 2/25/2018
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class:
+ * Purpose of Class: To check the [otherPassword] against the inputted one to see if it's valid
  *
  */
-open class PrivateKeyValidator(
+open class PasswordMatcherValidator(
         textInputLayout: TextInputLayout,
-        onChangeListener: () -> Unit
+        onChangeListener: () -> Unit,
+        private val otherPassword: String
 ) : BaseValidator(textInputLayout, onChangeListener) {
 
     override fun isValid(text: String?): Boolean {
         return when {
             text == null || text.isEmpty() -> {
-                error = getTextFromResource(R.string.error_private_key_required)
+                // The passwords cannot match anyway, since the length is less than the min.
+                error = null
                 false
             }
-            !text.toLowerCase().matches(Regex("[a-f0-9]+")) -> {
-                error = getTextFromResource(R.string.error_private_key_format)
+            text.length < 9 -> {
+                error = getTextFromResource(R.string.error_password_too_short)
                 false
             }
-            !WalletUtils.isValidPrivateKey(text) -> {
-                error = getTextFromResource(R.string.error_private_key_length)
+            text != otherPassword -> {
+                error = getTextFromResource(R.string.error_password_incorrect)
                 false
             }
             else -> {
@@ -38,5 +38,4 @@ open class PrivateKeyValidator(
             }
         }
     }
-
 }

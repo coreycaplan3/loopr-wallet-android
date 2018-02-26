@@ -3,6 +3,7 @@ package com.caplaninnovations.looprwallet.models.android.settings
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings.*
+import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -18,6 +19,9 @@ import java.util.*
  */
 @RunWith(AndroidJUnit4::class)
 class WalletSettingsTest : BaseDaggerTest() {
+
+    private val privateKeyOne = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e491"
+    private val privateKeyTwo = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e492"
 
     override fun putDefaultWallet() {
         // NO OP; we don't want to put a default wallet; it will break these tests.
@@ -53,10 +57,13 @@ class WalletSettingsTest : BaseDaggerTest() {
     @Test
     fun createWallet() {
         // Add the first wallet
-        val firstWalletName = "corey"
-        walletSettings.createWallet(firstWalletName)
+        val firstWalletName = "loopr1"
+        assertTrue(walletSettings.createWallet(firstWalletName, privateKeyOne))
 
-        assertEquals(firstWalletName, walletSettings.getCurrentWallet())
+        walletSettings.getCurrentWallet()
+        val firstWallet = walletSettings.getWallet(firstWalletName)
+
+        assertEquals(firstWallet, walletSettings.getCurrentWallet())
 
         val firstRealmKey = walletSettings.getRealmKey(firstWalletName)
 
@@ -65,10 +72,11 @@ class WalletSettingsTest : BaseDaggerTest() {
 
         // Add a second wallet
 
-        val secondWalletName = "alexander"
-        walletSettings.createWallet(secondWalletName)
+        val secondWalletName = "loopr2"
+        assertTrue(walletSettings.createWallet(secondWalletName, privateKeyTwo))
 
-        assertEquals(secondWalletName, walletSettings.getCurrentWallet())
+        val secondWallet = walletSettings.getWallet(secondWalletName)
+        assertEquals(secondWallet, walletSettings.getCurrentWallet())
 
         val secondRealmKey = walletSettings.getRealmKey(secondWalletName)
 
@@ -79,7 +87,7 @@ class WalletSettingsTest : BaseDaggerTest() {
 
         walletSettings.removeWallet(secondWalletName)
 
-        assertEquals(firstWalletName, walletSettings.getCurrentWallet())
+        assertEquals(firstWallet, walletSettings.getCurrentWallet())
         assertTrue(Arrays.equals(firstRealmKey, walletSettings.getRealmKey(firstWalletName)))
         assertEquals(1, walletSettings.getAllWallets().size)
     }

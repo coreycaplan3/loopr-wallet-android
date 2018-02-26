@@ -10,6 +10,7 @@ import android.view.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
+import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 
 /**
@@ -43,6 +44,7 @@ abstract class BaseFragment : Fragment() {
 
     var validatorList: List<BaseValidator>? = null
         set(value) {
+            field = value
             onFormChanged()
         }
 
@@ -58,7 +60,7 @@ abstract class BaseFragment : Fragment() {
         if (parentFragment == null) {
             appbarLayout = createAppbarLayout(inflater, container, savedInstanceState)
             fragmentView.addView(appbarLayout)
-            toolbar = appbarLayout?.findViewById(R.id.ordersToolbar)
+            toolbar = appbarLayout?.findViewById(R.id.toolbar)
 
             ViewGroupCompat.setTransitionGroup(appbarLayout, true)
 
@@ -170,7 +172,13 @@ abstract class BaseFragment : Fragment() {
             it.scrollFlags = 0
         }
 
-        val container = view?.findViewById<View>(R.id.fragmentContainer)
+        val view = view
+        if(view == null) {
+            loge("BaseView was null!", IllegalStateException())
+            return
+        }
+
+        val container = view.findViewById<View>(R.id.fragmentContainer)
                 ?: throw IllegalStateException("FragmentContainer cannot be null!")
 
         (container.layoutParams as? CoordinatorLayout.LayoutParams)?.let {

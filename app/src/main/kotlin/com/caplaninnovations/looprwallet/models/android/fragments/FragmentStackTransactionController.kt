@@ -31,7 +31,7 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
     var sharedElements: List<Pair<View, String>>? = null
 
     @FragmentTransition
-    var transition = FragmentTransaction.TRANSIT_NONE
+    var transition: Int? = null
 
     @AnimRes
     @AnimatorRes
@@ -62,7 +62,7 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
         val text = oldFragment?.tag?.plus(" fragment") ?: "container"
         logv("Replacing $text with $newFragmentTag fragment...")
 
-        transaction?.let { transaction.setTransition(transition) }
+        transition?.let { transaction.setTransition(it) }
 
         transaction.replace(container, newFragment, newFragmentTag)
 
