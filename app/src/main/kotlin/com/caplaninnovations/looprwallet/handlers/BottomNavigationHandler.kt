@@ -63,7 +63,7 @@ class BottomNavigationHandler(private val activity: BaseActivity,
                 Handler().postDelayed({
                     // Needed to allow the TabLayout animation to occur initially.
                     onTabSelected(bottomNavigation.findTabByTag(tag))
-                }, 100)
+                }, 200)
             }
         }
 
@@ -96,7 +96,7 @@ class BottomNavigationHandler(private val activity: BaseActivity,
     override fun onTabSelected(tab: TabLayout.Tab?) {
         fun commitTransaction(fragment: Fragment, fragmentTag: String) {
             val controller = FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
-            controller.commitTransactionNow(activity.supportFragmentManager, currentFragment)
+            controller.commitTransaction(activity.supportFragmentManager, currentFragment)
             currentFragment = fragment
         }
 

@@ -56,7 +56,7 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
      * Creates a transaction, replaces the current container & commits it now. This **disallows**
      * saving the back-stack, so it must be maintained manually, using [FragmentStackHistory].
      */
-    fun commitTransactionNow(fragmentManager: FragmentManager, oldFragment: Fragment?) {
+    fun commitTransaction(fragmentManager: FragmentManager, oldFragment: Fragment?) {
         val transaction = fragmentManager.beginTransaction()
 
         val text = oldFragment?.tag?.plus(" fragment") ?: "container"
@@ -85,6 +85,8 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
         transitionStyle?.let { transaction.setTransitionStyle(it) }
 
         sharedElements?.let { it.forEach { transaction.addSharedElement(it.first, it.second) } }
+
+        transaction.addToBackStack(newFragmentTag)
 
         transaction.commit()
     }

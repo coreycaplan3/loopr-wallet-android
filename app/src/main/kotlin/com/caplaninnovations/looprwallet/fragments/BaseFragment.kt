@@ -11,6 +11,7 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
 import com.caplaninnovations.looprwallet.utilities.loge
+import com.caplaninnovations.looprwallet.utilities.logi
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 
 /**
@@ -57,19 +58,22 @@ abstract class BaseFragment : Fragment() {
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val fragmentView = inflater.inflate(layoutResource, container, false) as ViewGroup
 
+        val baseActivity = (activity as? BaseActivity)
+
         if (parentFragment == null) {
             appbarLayout = createAppbarLayout(inflater, container, savedInstanceState)
             fragmentView.addView(appbarLayout)
             toolbar = appbarLayout?.findViewById(R.id.toolbar)
+            setHasOptionsMenu(true)
 
             ViewGroupCompat.setTransitionGroup(appbarLayout, true)
 
-            val fragmentStack = (activity as? BaseActivity)?.fragmentStackHistory
-            fragmentStack?.let {
+            baseActivity?.setSupportActionBar(toolbar)
+            baseActivity?.fragmentStackHistory?.let {
                 if (it.isUpNavigationEnabled()) {
+                    logi("Up navigation is enabled...")
                     toolbar?.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
                     toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
-                    toolbar?.setNavigationOnClickListener { popFragmentTransaction() }
                 }
             }
         }
@@ -93,8 +97,6 @@ abstract class BaseFragment : Fragment() {
             } else {
                 disableToolbarCollapsing()
             }
-
-            setHasOptionsMenu(true)
         }
     }
 
@@ -173,7 +175,7 @@ abstract class BaseFragment : Fragment() {
         }
 
         val view = view
-        if(view == null) {
+        if (view == null) {
             loge("BaseView was null!", IllegalStateException())
             return
         }
@@ -197,12 +199,21 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        /*
-         * TODO This will be replaced down the road with a "select different wallet and remove
-         * TODO wallet" feature
-         */
-        (activity as? BaseActivity)?.removeWalletCurrentWallet()
-        return false
+        when {
+            item?.itemId == android.R.id.home -> {
+                (activity as? BaseActivity)?.onBackPressed()
+            }
+            item?.itemId == R.id.menu_settings_2 -> {
+                /**
+                 * TODO This will be replaced down the road with a "select different wallet and
+                 * TODO remove wallet" feature
+                 */
+                (activity as? BaseActivity)?.removeWalletCurrentWallet()
+                return false
+            }
+        }
+
+        return true
     }
 
     override fun onDestroyView() {

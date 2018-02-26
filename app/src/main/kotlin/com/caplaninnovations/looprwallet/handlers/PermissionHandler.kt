@@ -46,8 +46,8 @@ open class PermissionHandler(private val activity: BaseActivity,
     companion object {
 
         @Code
-        const val REQUEST_CODE_CAMERA = 10226372
-        const val REQUEST_CODE_EXTERNAL_FILES = 2039897
+        const val REQUEST_CODE_CAMERA = 102
+        const val REQUEST_CODE_EXTERNAL_FILES = 203
 
         val delegate: ActivityCompat.PermissionCompatDelegate = LooprPermissionDelegate()
     }

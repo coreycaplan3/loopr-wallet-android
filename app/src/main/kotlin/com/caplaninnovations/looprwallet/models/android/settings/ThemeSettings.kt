@@ -32,7 +32,7 @@ class ThemeSettings(private val looprSettings: LooprSettings) {
      */
     @StyleRes
     fun getCurrentTheme(): Int {
-        val theme = looprSettings.getString(KEY_THEME) ?: ThemeValues.KEY_LIGHT_THEME
+        val theme = looprSettings.getString(KEY_THEME) ?: ThemeValues.KEY_DARK_THEME
         return when (theme) {
             ThemeValues.KEY_LIGHT_THEME -> R.style.AppTheme_Light
             ThemeValues.KEY_DARK_THEME -> R.style.AppTheme_Dark

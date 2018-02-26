@@ -36,7 +36,7 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
     companion object {
         val TAG: String = RestoreWalletKeystoreFragment::class.java.simpleName
 
-        const val KEY_OPEN_FILE_REQUEST_CODE = 1943934
+        const val KEY_OPEN_FILE_REQUEST_CODE = 194
 
         const val KEY_IS_FILE_DIALOG_SHOWING = "_IS_FILE_DIALOG_SHOWING"
         const val KEY_URI = "_URI"
@@ -77,6 +77,16 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
         private set(value) {
             field = value
 
+            val name = value?.name
+            when {
+                name != null -> {
+                    keystoreSelectFileButton.text = name
+                }
+                else -> {
+                    keystoreSelectFileButton.setText(R.string.select_keystore_file)
+                }
+            }
+
             // We need to manually propagate form changes of the file
             onFormChanged()
         }
@@ -91,8 +101,6 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         keystoreUri = savedInstanceState?.getParcelable(KEY_URI)
-
-        keystoreFile?.let { keystoreSelectFileButton.text = it.name }
 
         validatorList = listOf(
                 WalletNameValidator(walletNameInputLayout, this::onFormChanged),
@@ -118,6 +126,8 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+
         val context = context
         if (context == null) {
             loge("Context was null!", IllegalStateException())

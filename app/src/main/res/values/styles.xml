@@ -50,6 +50,9 @@
 
     <style name="App.Button.Borderless" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">?attr/borderlessButtonColor</item>
+        <item name="android:paddingLeft">@dimen/standard_horizontal_padding_small</item>
+        <item name="android:paddingRight">@dimen/standard_horizontal_padding_small</item>
+        <item name="android:background">@drawable/ripple_effect_accent</item>
     </style>
 
     <style name="App.Button.Borderless.White" parent="@style/Widget.AppCompat.Button.Borderless">

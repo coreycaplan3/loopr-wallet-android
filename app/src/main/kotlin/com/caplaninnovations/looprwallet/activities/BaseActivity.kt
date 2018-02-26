@@ -2,9 +2,8 @@ package com.caplaninnovations.looprwallet.activities
 
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.support.annotation.IdRes
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDialog
 import android.view.WindowManager.LayoutParams.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
@@ -114,10 +113,6 @@ abstract class BaseActivity : AppCompatActivity() {
         if (savedInstanceState?.getBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING) == true) {
             progressDialog.show()
         }
-
-        /*
-         * Toolbar Setup
-         */
     }
 
     override fun onResume() {
@@ -180,14 +175,15 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     open fun pushFragmentTransaction(fragment: BaseFragment, fragmentTag: String) {
         val oldFragment = supportFragmentManager.findFragmentById(R.id.activityContainer)
-        FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
-                .commitTransactionNow(supportFragmentManager, oldFragment)
+        val controller = FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
+        controller.transition = FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+        controller.commitTransaction(supportFragmentManager, oldFragment)
 
         fragmentStackHistory.push(fragmentTag)
     }
 
     open fun popFragmentTransaction() {
-        val oldFragment = supportFragmentManager.findFragmentByTag(fragmentStackHistory.pop())
+        supportFragmentManager.findFragmentByTag(fragmentStackHistory.pop())
 
         val newFragmentTag = fragmentStackHistory.peek()
         if (newFragmentTag == null) {
@@ -196,12 +192,7 @@ abstract class BaseActivity : AppCompatActivity() {
             return
         }
 
-        val newFragment = supportFragmentManager.findFragmentByTag(newFragmentTag)
-
-        newFragment?.let {
-            FragmentStackTransactionController(R.id.activityContainer, newFragment, newFragmentTag)
-                    .commitTransactionNow(supportFragmentManager, oldFragment)
-        }
+        supportFragmentManager.popBackStack()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
