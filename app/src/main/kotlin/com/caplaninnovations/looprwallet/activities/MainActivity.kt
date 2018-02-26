@@ -72,7 +72,7 @@ class MainActivity : BaseActivity() {
                         R.drawable.ic_assignment_white_24dp, R.string.orders),
 
                 BottomNavigationFragmentPair(KEY_TRANSACTIONS, ViewTransactionsFragment(),
-                        R.drawable.ic_swap_horiz_white_48dp, R.string.transactions),
+                        R.drawable.ic_swap_horiz_white_24dp, R.string.transactions),
 
                 BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(),
                         R.drawable.ic_account_balance_wallet_white_24dp, R.string.my_wallet)
