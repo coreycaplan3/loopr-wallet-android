@@ -51,6 +51,8 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
         looprProductionComponent = provideDaggerComponent()
         looprProductionComponent.inject(this)
 
+        BuildConfig.API_URL
+
         FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }
 

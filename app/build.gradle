@@ -3,6 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
+apply plugin: 'com.novoda.build-properties'
+
+buildProperties {
+    secrets.file rootProject.file('secrets/secrets.properties')
+}
 
 android {
     compileSdkVersion 27
@@ -36,7 +41,40 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+
+    flavorDimensions "environment", "minSdk"
+
     productFlavors {
+
+        // API LEVELS
+        minApi16 {
+            dimension "minSdk"
+            minSdkVersion 16
+        }
+        minApi21 {
+            // Specifically to avoid Multidexing on CI, which is causing OOM errors for now
+            // This should be removed when possible
+            dimension "minSdk"
+            minSdkVersion 21
+        }
+
+        // ENVIRONMENT
+        envDebug {
+            buildConfigProperty "API_URL", buildProperties.secrets["debugApiServer"]
+
+            dimension "environment"
+            versionNameSuffix "-debug"
+        }
+
+        envStaging {
+            dimension "environment"
+            versionNameSuffix "-staging"
+        }
+
+        envProduction {
+            dimension "environment"
+            buildConfigField "String", "ENVIRONMENT", "env_prod"
+        }
     }
 }
 
@@ -113,13 +151,12 @@ dependencies {
 
     // Android Testing and Integration Tests
     ext.espressoVersion = '3.0.1'
-    androidTestImplementation "junit:junit:4.12"
-    androidTestImplementation "org.mockito:mockito-core:2.7.6"
-    androidTestImplementation "com.android.support.test:rules:1.0.2-alpha1"
-    androidTestImplementation "com.android.support.test:runner:1.0.1"
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'org.mockito:mockito-core:2.7.6'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2-alpha1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
-
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
 }
 repositories {
