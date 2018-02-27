@@ -14,6 +14,7 @@ import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.utilities.logi
 import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
+import org.web3j.protocol.Web3j
 import javax.inject.Inject
 
 /**
@@ -29,13 +30,16 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
     companion object {
         lateinit var application: LooprWalletApp
 
-        fun getContext() = application.applicationContext
+        fun getContext(): Context = application.applicationContext
     }
 
     lateinit var looprProductionComponent: LooprProductionComponent
 
     @Inject
     lateinit var securityClient: SecurityClient
+
+    @Inject
+    lateinit var ethereumClient: Web3j
 
     override fun onCreate() {
         super.onCreate()

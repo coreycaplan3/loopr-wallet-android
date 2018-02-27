@@ -1,13 +1,11 @@
 package com.caplaninnovations.looprwallet.fragments.createwallet
 
 import android.Manifest
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.viewmodels.WalletCreationPasswordViewModel
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
@@ -36,16 +34,13 @@ class CreateWalletKeystoreFragment : BaseFragment() {
         val TAG: String = CreateWalletKeystoreFragment::class.simpleName!!
 
         const val KEY_IS_FILE_DIALOG_SHOWING = "_IS_FILE_DIALOG_SHOWING"
+        const val KEY_WALLET_CREATION_KEYSTORE = "_WALLET_CREATION_KEYSTORE"
     }
 
     override val layoutResource: Int
         get() = R.layout.fragment_create_wallet_keystore
 
-    val walletCreationPasswordData by lazy {
-        ViewModelProviders.of(activity!!)
-                .get(WalletCreationPasswordViewModel::class.java)
-                .walletCreationPassword
-    }
+    var walletCreationKeystore: WalletCreationKeystore? = null
 
     private val filePermissionsHandler by lazy {
         PermissionHandler(
@@ -74,6 +69,8 @@ class CreateWalletKeystoreFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        walletCreationKeystore = savedInstanceState?.getParcelable(KEY_WALLET_CREATION_KEYSTORE)
+
         validatorList = listOf(walletNameValidator, passwordValidator)
 
         createButton.setOnClickListener(this::onCreateWalletButtonClick)
@@ -90,6 +87,7 @@ class CreateWalletKeystoreFragment : BaseFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
+        outState.putParcelable(KEY_WALLET_CREATION_KEYSTORE, walletCreationKeystore)
         outState.putBoolean(KEY_IS_FILE_DIALOG_SHOWING, filePermissionsDialog?.isShowing == true)
     }
 
@@ -106,7 +104,7 @@ class CreateWalletKeystoreFragment : BaseFragment() {
                 return
             }
 
-            walletCreationPasswordData.value = WalletCreationKeystore(walletName!!, password!!)
+            walletCreationKeystore = WalletCreationKeystore(walletName!!, password!!)
 
             if (!filePermissionsHandler.isPermissionGranted) {
                 filePermissionsDialog?.show()
@@ -119,9 +117,9 @@ class CreateWalletKeystoreFragment : BaseFragment() {
      * when the rest of the form is valid.
      */
     private fun onFilePermissionGranted() {
-        val walletCreationPassword = walletCreationPasswordData.value
-        if (walletCreationPassword != null) {
-            ConfirmPasswordDialog.createInstance(walletCreationPassword)
+        val wallet = walletCreationKeystore
+        if (wallet != null) {
+            ConfirmPasswordDialog.createInstance(wallet)
                     .show(fragmentManager, ConfirmPasswordDialog.TAG)
         } else {
             loge("Error invalid state!", IllegalStateException())

@@ -6,7 +6,9 @@ import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.realm.RealmClient
+import com.caplaninnovations.looprwallet.viewmodels.EthereumTransactionViewModel
 import dagger.Component
+import org.web3j.protocol.Web3j
 import javax.inject.Singleton
 
 /**
@@ -25,8 +27,9 @@ interface LooprProductionComponent {
     fun inject(baseActivity: BaseActivity)
     fun inject(looprWalletApp: LooprWalletApp)
 
-    fun walletSettings(): WalletSettings
-    fun themeSettings(): ThemeSettings
-    fun realmClient(): RealmClient
-    fun securityClient(): SecurityClient
+    val walletSettings: WalletSettings
+    val themeSettings: ThemeSettings
+    val realmClient: RealmClient
+    val securityClient: SecurityClient
+    val web3j: Web3j
 }
