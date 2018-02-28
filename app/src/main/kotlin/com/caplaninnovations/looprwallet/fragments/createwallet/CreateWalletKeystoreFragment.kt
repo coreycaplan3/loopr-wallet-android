@@ -9,7 +9,7 @@ import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
-import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.utilities.DialogUtility
 import com.caplaninnovations.looprwallet.utilities.allNonnull
 import com.caplaninnovations.looprwallet.utilities.loge

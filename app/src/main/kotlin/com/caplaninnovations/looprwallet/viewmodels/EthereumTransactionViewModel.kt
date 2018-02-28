@@ -15,10 +15,10 @@ import java.math.BigDecimal
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class: To send updates to the main thread on ETH transactions
+ * Purpose of Class: To send updates to the main thread for ETH transactions
  *
  */
-class EthereumTransactionViewModel : ViewModel() {
+class dEthereumTransactionViewModel : ViewModel() {
 
     val isTransactionRunning = MutableLiveData<Boolean>()
 

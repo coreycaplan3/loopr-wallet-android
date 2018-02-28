@@ -9,8 +9,8 @@ import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
-import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPhrase
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
 import org.hamcrest.Matchers.`is`

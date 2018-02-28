@@ -8,6 +8,7 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.utilities.str
@@ -29,23 +30,22 @@ class WalletCreationHandler(
 ) {
 
     /**
-     * Attempts to create a wallet, if possible, and then goes to the [MainActivity] with the newly
-     * signed-in wallet.
+     * Attempts to create a wallet, if possible. Return s
      *
-     * @return A string containing the error if the operation was a failure or null if it was a
-     * success
+     * @return An instance of [WalletCreationResult] containing whether or not the operation was
+     * successful or the error if the operation was a failure.
      */
-    fun createWallet(): String? {
+    fun createWallet(): WalletCreationResult {
         if (securityClient == null) {
             loge("Could not create wallet!", IllegalStateException())
-            return str(R.string.error_creating_wallet)
+            return WalletCreationResult(false, str(R.string.error_creating_wallet))
         }
 
         val privateKey = Numeric.encodeQuantity(credentials.ecKeyPair.privateKey)
 
         return when (securityClient.createWallet(walletName, privateKey)) {
-            true -> null
-            false -> str(R.string.error_wallet_already_exists)
+            true -> WalletCreationResult(true, null)
+            false -> WalletCreationResult(false, str(R.string.error_wallet_already_exists))
         }
     }
 

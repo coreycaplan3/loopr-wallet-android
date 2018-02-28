@@ -1,18 +1,16 @@
 package com.caplaninnovations.looprwallet.viewmodels
 
-import android.Manifest
 import android.arch.lifecycle.*
-import android.os.AsyncTask
-import android.support.annotation.RequiresPermission
 import android.support.annotation.StringRes
 import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
-import com.caplaninnovations.looprwallet.models.security.SecurityClient
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
 import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.str
+import kotlinx.coroutines.experimental.async
 import org.web3j.crypto.CipherException
 import org.web3j.crypto.Credentials
 import org.web3j.crypto.WalletUtils
@@ -63,116 +61,81 @@ class WalletGeneratorViewModel : ViewModel() {
         return errorMessage.observe(owner, Observer<String> { t -> f.invoke(t) })
     }
 
-    fun createCredentialsWallet(walletName: String, privateKey: String) {
-        WalletCreationAsyncTask(walletName, privateKey, securityClient, this::onCreationPostExecute)
-                .execute()
-        isCreationRunning.value = true
+    fun createCredentialsWallet(walletName: String, privateKey: String) = createWalletAsync {
+        val credentials = Credentials.create(privateKey)
+        WalletCreationHandler(walletName, credentials, securityClient).createWallet()
     }
 
-    fun createKeystoreWallet(walletName: String, password: String, file: File) {
-        CreateKeystoreWalletAsyncTask(walletName, password, file, securityClient, this::onCreationPostExecute)
-                .execute()
-        isCreationRunning.value = true
-    }
+    /**
+     * Attempts to create a wallet using a password and keystore.
+     *
+     * @param walletName The wallet's *unique* name
+     * @param password The wallet's password, used to derive the private key.
+     * @param filesDirectory The directory in which the keystore can be generated.
+     */
+    fun createKeystoreWallet(walletName: String, password: String, filesDirectory: File) = createWalletAsync {
+        try {
+            val generatedWalletName = WalletUtils.generateLightNewWalletFile(password, filesDirectory)
+            val generatedFile = File(filesDirectory, generatedWalletName)
+            val credentialFile = File(filesDirectory, FilesUtility.getKeystoreFileName(walletName))
 
-    fun loadKeystoreWallet(walletName: String, password: String, file: File) {
-        LoadKeystoreWalletAsyncTask(walletName, password, file, securityClient, this::onCreationPostExecute)
-                .execute()
-        isCreationRunning.value = true
-    }
-
-    // Mark - Private Methods
-    private fun onCreationPostExecute(error: String?) {
-        isCreationRunning.value = false
-
-        if (error == null) {
-            isWalletCreated.value = true
-        } else {
-            isWalletCreated.value = false
-            errorMessage.value = error
-        }
-    }
-
-    private open class WalletCreationAsyncTask(
-            private val walletName: String,
-            private val privateKey: String,
-            private val securityClient: SecurityClient,
-            private val onComplete: (error: String?) -> Unit
-    ) : AsyncTask<Void, Void, String?>() {
-
-        override fun doInBackground(vararg params: Void?): String? {
-            val credentials = Credentials.create(privateKey)
-            return WalletCreationHandler(walletName, credentials, securityClient).createWallet()
-        }
-
-        override fun onPostExecute(result: String?) {
-            onComplete.invoke(result)
-        }
-
-    }
-
-    class CreateKeystoreWalletAsyncTask(
-            private val walletName: String,
-            private val password: String,
-            private val filesDirectory: File,
-            private val securityClient: SecurityClient,
-            private val onComplete: (error: String?) -> Unit
-    ) : AsyncTask<Void, Void, String?>() {
-
-        override fun doInBackground(vararg params: Void?): String? {
-            return try {
-                val generatedWalletName = WalletUtils.generateLightNewWalletFile(password, filesDirectory)
-                val credentialFile = File(filesDirectory, FilesUtility.getKeystoreFileName(walletName))
-
-                if (!File(filesDirectory, generatedWalletName).renameTo(credentialFile)) {
-                    loge("Could not rename generated wallet filesDirectory!", IllegalStateException())
-                    str(R.string.error_creating_wallet)
-                } else {
+            when (generatedFile.renameTo(credentialFile)) {
+                true -> {
+                    loge("Could not rename generated wallet file in filesDirectory!", IllegalStateException())
+                    WalletCreationResult(false, str(R.string.error_creating_wallet))
+                }
+                false -> {
                     val credentials = WalletUtils.loadCredentials(password, credentialFile)
                     WalletCreationHandler(walletName, credentials, securityClient).createWallet()
                 }
-            } catch (e: Exception) {
-                if (e is CipherException) {
-                    str(getErrorMessageFromKeystoreError(e))
-                } else {
-                    loge("Error decrypting wallet!", e)
-                    str(R.string.error_unknown)
-                }
+            }
+        } catch (e: Exception) {
+            if (e is CipherException) {
+                WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
+            } else {
+                loge("Error decrypting wallet!", e)
+                WalletCreationResult(false, str(R.string.error_unknown))
             }
         }
-
-        override fun onPostExecute(result: String?) {
-            onComplete.invoke(result)
-        }
-
     }
 
-    class LoadKeystoreWalletAsyncTask(
-            private val walletName: String,
-            private val password: String,
-            private val file: File,
-            private val securityClient: SecurityClient,
-            private val onComplete: (error: String?) -> Unit
-    ) : AsyncTask<Void, Void, String?>() {
+    fun loadKeystoreWallet(walletName: String, password: String, file: File) = createWalletAsync {
+        try {
+            val credentials = WalletUtils.loadCredentials(password, file)
+            WalletCreationHandler(walletName, credentials, securityClient).createWallet()
+        } catch (e: Exception) {
+            if (e is CipherException) {
+                WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
+            } else {
+                loge("Error decrypting wallet!", e)
+                WalletCreationResult(false, str(R.string.error_unknown))
+            }
+        }
+    }
 
-        override fun doInBackground(vararg params: Void?): String? {
-            return try {
-                val credentials = WalletUtils.loadCredentials(password, file)
-                WalletCreationHandler(walletName, credentials, securityClient).createWallet()
-            } catch (e: Exception) {
-                if (e is CipherException) {
-                    str(getErrorMessageFromKeystoreError(e))
-                } else {
-                    loge("Error decrypting wallet!", e)
-                    str(R.string.error_unknown)
+
+    // Mark - Private Methods
+
+    /**
+     * Creates or restores a wallet async (non-blocking) and calls
+     * @param block A function that takes no parameters and returns a [WalletCreationResult]
+     */
+    private fun createWalletAsync(block: () -> WalletCreationResult) {
+        async {
+            isCreationRunning.value = true
+            val walletCreationResult = block.invoke()
+
+            isCreationRunning.value = false
+            when (walletCreationResult.isSuccessful) {
+                true -> {
+                    isWalletCreated.value = true
+                }
+                false -> {
+                    isWalletCreated.value = false
+                    errorMessage.value = walletCreationResult.error
                 }
             }
         }
-
-        override fun onPostExecute(result: String?) {
-            onComplete.invoke(result)
-        }
-
     }
 
 }

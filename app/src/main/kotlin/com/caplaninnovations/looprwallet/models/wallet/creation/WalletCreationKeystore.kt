@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.models.wallet
+package com.caplaninnovations.looprwallet.models.wallet.creation
 
 import android.annotation.SuppressLint
 import android.os.Parcelable
@@ -14,7 +14,7 @@ import kotlinx.android.parcel.Parcelize
  */
 @SuppressLint("ParcelCreator")
 @Parcelize
-data class WalletCreationKeystore(var walletName: String, var password: String) : Parcelable, PasswordWallet {
+data class WalletCreationKeystore(var walletName: String, var password: String) : Parcelable, PasswordBasedWallet {
 
     override fun getWalletPassword(): String {
         return password

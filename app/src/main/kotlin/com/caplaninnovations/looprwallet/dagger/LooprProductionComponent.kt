@@ -6,7 +6,6 @@ import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.realm.RealmClient
-import com.caplaninnovations.looprwallet.viewmodels.EthereumTransactionViewModel
 import dagger.Component
 import org.web3j.protocol.Web3j
 import javax.inject.Singleton
@@ -21,7 +20,7 @@ import javax.inject.Singleton
  */
 @Singleton
 @Component(modules = [LooprSettingsModule::class, LooprRealmModule::class,
-    LooprSecurityModule::class])
+    LooprSecurityModule::class, LooprEthModule::class])
 interface LooprProductionComponent {
 
     fun inject(baseActivity: BaseActivity)

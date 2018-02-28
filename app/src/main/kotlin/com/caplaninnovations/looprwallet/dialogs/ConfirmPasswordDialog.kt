@@ -12,17 +12,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
-import com.caplaninnovations.looprwallet.models.wallet.PasswordWallet
-import com.caplaninnovations.looprwallet.models.wallet.WalletCreationKeystore
-import com.caplaninnovations.looprwallet.models.wallet.WalletCreationPhrase
-import com.caplaninnovations.looprwallet.utilities.FilesUtility
+import com.caplaninnovations.looprwallet.models.wallet.creation.PasswordBasedWallet
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
 import com.caplaninnovations.looprwallet.utilities.WalletGeneratorUtility
-import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.validators.PasswordMatcherValidator
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
-import org.web3j.crypto.WalletUtils
-import java.io.File
 
 /**
  * Created by Corey Caplan on 2/20/18.
@@ -72,7 +67,7 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
     }
 
     private val passwordMatcherValidator: PasswordMatcherValidator by lazy {
-        val password = listOf<PasswordWallet?>(walletCreationKeystore, walletCreationPhrase)
+        val password = listOf<PasswordBasedWallet?>(walletCreationKeystore, walletCreationPhrase)
                 .first { it != null }!!
                 .getWalletPassword()
 
