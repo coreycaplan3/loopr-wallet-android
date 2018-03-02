@@ -9,6 +9,7 @@ import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
+import com.caplaninnovations.looprwallet.models.android.observers.observeForDoubleSpend
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
 import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.loge
@@ -43,34 +44,25 @@ class WalletGeneratorViewModel : ViewModel() {
         fun setupForFragment(walletGeneratorViewModel: WalletGeneratorViewModel,
                              fragment: Fragment) {
             val activity = fragment.activity
-            walletGeneratorViewModel.isCreationRunning.observe(fragment, Observer { isCreationRunning ->
+            walletGeneratorViewModel.isCreationRunning.observeForDoubleSpend(fragment, {
                 val progress = (activity as? BaseActivity)?.progressDialog
 
-                isCreationRunning?.let {
-                    if (it) {
-                        progress?.setMessage(str(R.string.creating_wallet))
-                        progress?.show()
-                    } else {
-                        if (progress?.isShowing == true) {
-                            progress.dismiss()
-                        }
+                if (it) {
+                    progress?.setMessage(str(R.string.creating_wallet))
+                    progress?.show()
+                } else {
+                    if (progress?.isShowing == true) {
+                        progress.dismiss()
                     }
-
-                    walletGeneratorViewModel.isCreationRunning.value = null
                 }
             })
 
-            walletGeneratorViewModel.walletCreation.observe(fragment, Observer {
-                it?.let { walletCreationResult ->
-                    if (walletCreationResult.isSuccessful) {
-                        activity?.startActivity(MainActivity.createIntent())
-                        activity?.finish()
-                    } else {
-                        walletCreationResult.error?.let { fragment.view?.snackbar(it) }
-                    }
-
-                    // Reset its value
-                    walletGeneratorViewModel.walletCreation.value = null
+            walletGeneratorViewModel.walletCreation.observeForDoubleSpend(fragment, {
+                if (it.isSuccessful) {
+                    activity?.startActivity(MainActivity.createIntent())
+                    activity?.finish()
+                } else {
+                    it.error?.let { fragment.view?.snackbar(it) }
                 }
             })
 

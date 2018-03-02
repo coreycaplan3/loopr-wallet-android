@@ -20,8 +20,9 @@ abstract class RealmClient {
             val buildType = BuildConfig.BUILD_TYPE
             return when (buildType) {
                 "debug" -> RealmClientDebugImpl()
+                "staging" -> RealmClientProductionImpl()
                 "release" -> RealmClientProductionImpl()
-                else -> throw IllegalArgumentException("Invalid build flavor, found: $buildType")
+                else -> throw IllegalArgumentException("Invalid build type, found: $buildType")
             }
         }
     }

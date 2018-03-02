@@ -1,6 +1,9 @@
 <resources>
     <dimen name="zero">0dp</dimen>
 
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_elevation_selected">8dp</dimen>
+
     <!-- Bottom Navigation -->
     <dimen name="bottom_navigation_height">56dp</dimen>
     <dimen name="bottom_navigation_margin_top">16dp</dimen>

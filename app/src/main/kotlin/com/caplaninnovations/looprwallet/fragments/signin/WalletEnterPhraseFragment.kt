@@ -2,13 +2,20 @@ package com.caplaninnovations.looprwallet.fragments.signin
 
 import android.os.Bundle
 import android.support.transition.TransitionManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.adapters.phrase.PhraseAdapter
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.utilities.longToast
 import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
+import android.support.v7.widget.helper.ItemTouchHelper
+import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
+import com.caplaninnovations.looprwallet.handlers.SimpleItemTouchHandler
+
 
 /**
  * Created by Corey on 2/22/2018
@@ -19,10 +26,12 @@ import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
  *
  *
  */
-class WalletEnterPhraseFragment : BaseFragment() {
+class WalletEnterPhraseFragment : BaseFragment(), OnStartDragListener {
 
     companion object {
         val TAG: String = WalletEnterPhraseFragment::class.java.simpleName
+
+        private const val KEY_PHRASE = "_PHRASE"
 
         const val KEY_FRAGMENT_TYPE = "_FRAGMENT_TYPE"
         const val TYPE_CONFIRM_PHRASE = "TYPE_CONFIRM_PHRASE"
@@ -43,32 +52,36 @@ class WalletEnterPhraseFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_enter_phrase_confirm
 
-    private val phrase = mutableListOf<String>()
+    private lateinit var phrase: ArrayList<String>
 
     private val fragmentType by lazy {
         arguments!!.getString(KEY_FRAGMENT_TYPE)
     }
 
+    private lateinit var itemTouchHelper: ItemTouchHelper
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        phrase = savedInstanceState?.getStringArrayList(KEY_PHRASE) ?: arrayListOf()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        enterPhraseAddSubmitButton.setOnClickListener {
-            val enteredWord = enterPhraseEditText.text.toString().trim().toLowerCase()
 
-            when {
-                enteredWord.isEmpty() || !enteredWord.matches(Regex("[a-z]+")) -> {
-                    context?.longToast(R.string.error_enter_valid_word)
-                }
-                else -> {
-                    if (phrase.size == PHRASE_SIZE) {
-                        // TODO
-                        Toast.makeText(context, "Creating...", Toast.LENGTH_LONG).show()
-                    } else {
-                        onWordAdded(enteredWord)
-                    }
-                }
-            }
-        }
+        enterPhraseAddSubmitButton.setOnClickListener { onEnterPhraseAddSubmitButtonClick() }
+
+        enterPhraseRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        val adapter = PhraseAdapter(phrase, this::onWordRemoved, this)
+        enterPhraseRecyclerView.adapter = adapter
+
+        itemTouchHelper = ItemTouchHelper(SimpleItemTouchHandler(adapter))
+    }
+
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+        itemTouchHelper.startDrag(viewHolder)
     }
 
     /**
@@ -77,6 +90,10 @@ class WalletEnterPhraseFragment : BaseFragment() {
      */
     fun onWordAdded(word: String) {
         phrase.add(word)
+
+        enterPhraseRecyclerView.adapter.notifyItemInserted(phrase.size - 1)
+
+        enterPhraseRecyclerView.smoothScrollToPosition(phrase.size - 1)
 
         if (phrase.size == PHRASE_SIZE) {
             // We need to disallow more words from being inputted and allow the user to submit
@@ -95,9 +112,11 @@ class WalletEnterPhraseFragment : BaseFragment() {
     fun onWordRemoved(word: String) {
         phrase.remove(word)
 
+        enterPhraseRecyclerView.adapter.notifyItemRemoved(phrase.size)
+
         if (phrase.size == PHRASE_SIZE - 1) {
-            // We are downsizing from 12. Allow the user to input new words and disable submission
-            TransitionManager.beginDelayedTransition(view as ViewGroup)
+            // We are downsizing from 12. Allow the user to input new words
+            (view as? ViewGroup)?.let { TransitionManager.beginDelayedTransition(it) }
 
             enterPhraseAddSubmitButton.apply {
                 text = getString(R.string.add)
@@ -109,7 +128,31 @@ class WalletEnterPhraseFragment : BaseFragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putStringArrayList(KEY_PHRASE, phrase)
+    }
+
     // MARK - Private Methods
+
+    private fun onEnterPhraseAddSubmitButtonClick() {
+        val enteredWord = enterPhraseEditText.text.toString().trim().toLowerCase()
+
+        when {
+            enteredWord.isEmpty() || !enteredWord.matches(Regex("[a-z]+")) -> {
+                context?.longToast(R.string.error_enter_valid_word)
+            }
+            else -> {
+                if (phrase.size == PHRASE_SIZE) {
+                    // TODO
+                    Toast.makeText(context, "Creating...", Toast.LENGTH_LONG).show()
+                } else {
+                    onWordAdded(enteredWord)
+                }
+            }
+        }
+    }
 
     private fun getEnterPhraseSubmitButtonText(): String {
         return when (fragmentType) {
