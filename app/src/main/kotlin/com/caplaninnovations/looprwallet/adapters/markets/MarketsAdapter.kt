@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.adapters
+package com.caplaninnovations.looprwallet.adapters.markets
 
 import android.view.View
 import android.view.ViewGroup
@@ -10,21 +10,21 @@ import io.realm.RealmRecyclerViewAdapter
 
 /**
  * Created by Corey Caplan on 1/29/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
-class TradingPairAdapter : RealmRecyclerViewAdapter<TradingPair, TradingPairViewHolder> {
+class MarketsAdapter(collection: OrderedRealmCollection<TradingPair>) :
+        RealmRecyclerViewAdapter<TradingPair, MarketsViewHolder>(collection, true) {
 
-    @Suppress("ConvertSecondaryConstructorToPrimary")
-    constructor(collection: OrderedRealmCollection<TradingPair>) : super(collection, true)
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TradingPairViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MarketsViewHolder {
         val view = View.inflate(parent?.context, R.layout.view_holder_trading_pair, parent)
-        return TradingPairViewHolder(view)
+        return MarketsViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TradingPairViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MarketsViewHolder, position: Int) {
         holder.onBind(data!![position], clickListener = {
             val context = holder.itemView.context
             val intent = TradingPairDetailsActivity.IntentCreator.createIntent(it, context)

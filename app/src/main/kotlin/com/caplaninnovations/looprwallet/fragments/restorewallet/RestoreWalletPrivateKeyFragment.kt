@@ -6,12 +6,10 @@ import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.utilities.WalletGeneratorUtility
 import com.caplaninnovations.looprwallet.validators.PrivateKeyValidator
 import com.caplaninnovations.looprwallet.validators.WalletNameValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.fragment_restore_private_key.*
-import org.web3j.crypto.Credentials
 
 /**
  * Created by Corey on 2/22/2018
@@ -45,7 +43,7 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
 
         privateKeyUnlockButton.setOnClickListener { onUnlockWalletClick() }
 
-        WalletGeneratorUtility.setupForFragment(walletGeneratorViewModel, this)
+        WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
     }
 
     override fun onFormChanged() {

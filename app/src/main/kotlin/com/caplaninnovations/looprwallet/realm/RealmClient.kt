@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.realm
 
+import com.caplaninnovations.looprwallet.BuildConfig
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -16,9 +17,13 @@ abstract class RealmClient {
     companion object {
 
         fun getInstance(): RealmClient {
-            return RealmClientProductionImpl()
+            val buildType = BuildConfig.BUILD_TYPE
+            return when (buildType) {
+                "debug" -> RealmClientDebugImpl()
+                "release" -> RealmClientProductionImpl()
+                else -> throw IllegalArgumentException("Invalid build flavor, found: $buildType")
+            }
         }
-
     }
 
     abstract val schemaVersion: Long
@@ -33,18 +38,33 @@ abstract class RealmClient {
                 .schemaVersion(schemaVersion)
     }
 
-}
+    private class RealmClientDebugImpl : RealmClient() {
 
-private class RealmClientProductionImpl : RealmClient() {
+        override val schemaVersion: Long
+            get() = 0
 
-    override val schemaVersion: Long
-        get() = 0
+        override fun getInstance(realmName: String, encryptionKey: ByteArray): Realm {
+            val configuration = getRealmConfigurationBuilder(realmName, encryptionKey)
+                    .deleteRealmIfMigrationNeeded()
+                    .build()
 
-    override fun getInstance(realmName: String, encryptionKey: ByteArray): Realm {
-        val configuration = getRealmConfigurationBuilder(realmName, encryptionKey)
-                .build()
+            return Realm.getInstance(configuration)
+        }
 
-        return Realm.getInstance(configuration)
+    }
+
+    private class RealmClientProductionImpl : RealmClient() {
+
+        override val schemaVersion: Long
+            get() = 0
+
+        override fun getInstance(realmName: String, encryptionKey: ByteArray): Realm {
+            val configuration = getRealmConfigurationBuilder(realmName, encryptionKey)
+                    .build()
+
+            return Realm.getInstance(configuration)
+        }
+
     }
 
 }

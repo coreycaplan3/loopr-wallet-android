@@ -15,7 +15,6 @@ import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
 import com.caplaninnovations.looprwallet.models.wallet.creation.PasswordBasedWallet
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
-import com.caplaninnovations.looprwallet.utilities.WalletGeneratorUtility
 import com.caplaninnovations.looprwallet.validators.PasswordMatcherValidator
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
 
@@ -123,7 +122,7 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
                 }
         }
 
-        WalletGeneratorUtility.setupForFragment(walletGeneratorViewModel, this)
+        WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
     }
 
     // MARK - Private Methods

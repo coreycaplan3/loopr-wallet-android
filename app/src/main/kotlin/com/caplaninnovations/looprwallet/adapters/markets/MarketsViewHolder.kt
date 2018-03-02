@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.adapters
+package com.caplaninnovations.looprwallet.adapters.markets
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -12,10 +12,12 @@ import com.caplaninnovations.looprwallet.models.wallet.TradingPair
  * Purpose of Class:
  *
  */
-class TradingPairViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class MarketsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun onBind(tradingPair: TradingPair, clickListener: (TradingPair) -> Unit) {
-        itemView.setOnClickListener({ clickListener(tradingPair) })
+        itemView.setOnClickListener {
+            clickListener(tradingPair)
+        }
     }
 
 }

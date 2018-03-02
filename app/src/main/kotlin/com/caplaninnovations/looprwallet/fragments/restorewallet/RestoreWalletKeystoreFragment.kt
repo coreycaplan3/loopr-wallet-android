@@ -122,7 +122,7 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
 
         keystoreUnlockButton.setOnClickListener(this::onUnlockButtonClick)
 
-        WalletGeneratorUtility.setupForFragment(walletGeneratorViewModel, this)
+        WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {

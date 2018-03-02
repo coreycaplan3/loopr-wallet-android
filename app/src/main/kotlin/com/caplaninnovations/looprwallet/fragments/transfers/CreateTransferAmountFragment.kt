@@ -1,29 +1,26 @@
-package com.caplaninnovations.looprwallet.fragments.markets
+package com.caplaninnovations.looprwallet.fragments.transfers
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import kotlinx.android.synthetic.main.fragment_markets_all.*
 
 /**
- * Created by Corey Caplan on 1/19/18.
+ * Created by Corey Caplan on 2/18/18.
  *
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
  *
  */
-class AllMarketsFragment : BaseFragment() {
+class CreateTransferAmountFragment : BaseFragment() {
 
     override val layoutResource: Int
-        get() = R.layout.fragment_markets_all
+        get() = R.layout.fragment_create_transfer_amount
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentContainer.layoutManager = LinearLayoutManager(context)
     }
 
 }

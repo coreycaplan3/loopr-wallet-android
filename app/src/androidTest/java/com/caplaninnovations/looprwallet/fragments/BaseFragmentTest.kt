@@ -11,8 +11,6 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.utilities.OrientationChangeAction
-import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
-import kotlinx.android.synthetic.main.appbar_main.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule

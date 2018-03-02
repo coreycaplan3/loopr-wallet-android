@@ -8,7 +8,7 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.fragments.markets.MarketsParentFragment
 import com.caplaninnovations.looprwallet.fragments.mywallet.MyWalletFragment
 import com.caplaninnovations.looprwallet.fragments.orders.OrdersParentFragment
-import com.caplaninnovations.looprwallet.fragments.transactions.ViewTransactionsFragment
+import com.caplaninnovations.looprwallet.fragments.transfers.ViewTransfersFragment
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
@@ -71,7 +71,7 @@ class MainActivity : BaseActivity() {
                 BottomNavigationFragmentPair(KEY_ORDERS, OrdersParentFragment(),
                         R.drawable.ic_assignment_white_24dp, R.string.orders),
 
-                BottomNavigationFragmentPair(KEY_TRANSACTIONS, ViewTransactionsFragment(),
+                BottomNavigationFragmentPair(KEY_TRANSACTIONS, ViewTransfersFragment(),
                         R.drawable.ic_swap_horiz_white_24dp, R.string.transactions),
 
                 BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(),

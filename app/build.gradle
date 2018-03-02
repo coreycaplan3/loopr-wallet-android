@@ -30,6 +30,7 @@ android {
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        debug.java.srcDirs += 'src/debug/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
@@ -42,38 +43,33 @@ android {
         unitTests.returnDefaultValues = true
     }
 
-    flavorDimensions "environment", "minSdk"
+    flavorDimensions "environment"
 
     productFlavors {
-
-        // API LEVELS
-        minApi16 {
-            dimension "minSdk"
-            minSdkVersion 16
-        }
-        minApi21 {
-            // Specifically to avoid Multidexing on CI, which is causing OOM errors for now
-            // This should be removed when possible
-            dimension "minSdk"
-            minSdkVersion 21
-        }
-
-        // ENVIRONMENT
-        envDebug {
+        flavorMockNet {
             buildConfigProperty "API_URL", buildProperties.secrets["debugApiServer"]
 
+            buildConfigField "String", "ENVIRONMENT", "mockNet"
+
             dimension "environment"
-            versionNameSuffix "-debug"
+            versionNameSuffix "-mocknet"
         }
 
-        envStaging {
+        flavorTestNet {
+            buildConfigProperty "API_URL", buildProperties.secrets["testNetApiServer"]
+
+            buildConfigField "String", "ENVIRONMENT", "testNet"
+
             dimension "environment"
-            versionNameSuffix "-staging"
+            versionNameSuffix "-testnet"
         }
 
-        envProduction {
+        flavorMainNet {
+            buildConfigProperty "API_URL", buildProperties.secrets["productionApiServer"]
+
+            buildConfigField "String", "ENVIRONMENT", "mainNet"
+
             dimension "environment"
-            buildConfigField "String", "ENVIRONMENT", "env_prod"
         }
     }
 }

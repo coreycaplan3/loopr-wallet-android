@@ -18,7 +18,7 @@ import java.math.BigDecimal
  * Purpose of Class: To send updates to the main thread for ETH transactions
  *
  */
-class dEthereumTransactionViewModel : ViewModel() {
+class EthereumTransactionViewModel : ViewModel() {
 
     val isTransactionRunning = MutableLiveData<Boolean>()
 

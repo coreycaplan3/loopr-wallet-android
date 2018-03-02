@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
-import android.transition.Visibility
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.fragments.LooprFragmentPagerAdapter
@@ -40,18 +39,7 @@ abstract class BaseTabFragment : BaseFragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        if (isLollipop()) {
-            allowEnterTransitionOverlap = false
-            allowReturnTransitionOverlap = false
-
-            val tabEnterTransition = TabTransition().addTarget(tabLayoutTransitionName) as TabTransition
-            tabEnterTransition.mode = Visibility.MODE_IN
-            enterTransition = tabEnterTransition
-
-            val tabExitTransition = TabTransition().addTarget(tabLayoutTransitionName) as TabTransition
-            tabExitTransition.mode = Visibility.MODE_OUT
-            exitTransition = tabExitTransition
-        }
+        TabTransition.setupForBaseTabFragment(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

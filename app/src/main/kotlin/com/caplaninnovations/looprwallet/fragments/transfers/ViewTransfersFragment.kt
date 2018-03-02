@@ -1,5 +1,7 @@
-package com.caplaninnovations.looprwallet.fragments.transactions
+package com.caplaninnovations.looprwallet.fragments.transfers
 
+import android.os.Bundle
+import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 
@@ -11,9 +13,15 @@ import com.caplaninnovations.looprwallet.fragments.BaseFragment
  * Purpose of Class:
  *
  */
-class ViewTransactionsFragment : BaseFragment() {
+class ViewTransfersFragment : BaseFragment() {
 
     override val layoutResource: Int
         get() = R.layout.fragment_view_transactions
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+    }
 
 }

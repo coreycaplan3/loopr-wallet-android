@@ -3,12 +3,16 @@ package com.caplaninnovations.looprwallet.viewmodels
 import android.arch.lifecycle.*
 import android.support.annotation.StringRes
 import android.support.annotation.VisibleForTesting
+import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
 import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.loge
+import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.utilities.str
 import kotlinx.coroutines.experimental.async
 import org.web3j.crypto.CipherException
@@ -29,6 +33,49 @@ class WalletGeneratorViewModel : ViewModel() {
 
     companion object {
 
+        /**
+         * Setups and standardizes the usage of [WalletGeneratorViewModel]. This includes the observers
+         * used to watch for wallet generation.
+         *
+         * @param walletGeneratorViewModel The generator used to create/restore wallets
+         * @param fragment The fragment in which this view model resides
+         */
+        fun setupForFragment(walletGeneratorViewModel: WalletGeneratorViewModel,
+                             fragment: Fragment) {
+            val activity = fragment.activity
+            walletGeneratorViewModel.isCreationRunning.observe(fragment, Observer { isCreationRunning ->
+                val progress = (activity as? BaseActivity)?.progressDialog
+
+                isCreationRunning?.let {
+                    if (it) {
+                        progress?.setMessage(str(R.string.creating_wallet))
+                        progress?.show()
+                    } else {
+                        if (progress?.isShowing == true) {
+                            progress.dismiss()
+                        }
+                    }
+
+                    walletGeneratorViewModel.isCreationRunning.value = null
+                }
+            })
+
+            walletGeneratorViewModel.walletCreation.observe(fragment, Observer {
+                it?.let { walletCreationResult ->
+                    if (walletCreationResult.isSuccessful) {
+                        activity?.startActivity(MainActivity.createIntent())
+                        activity?.finish()
+                    } else {
+                        walletCreationResult.error?.let { fragment.view?.snackbar(it) }
+                    }
+
+                    // Reset its value
+                    walletGeneratorViewModel.walletCreation.value = null
+                }
+            })
+
+        }
+
         @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
         @StringRes
         fun getErrorMessageFromKeystoreError(exception: CipherException): Int {
@@ -45,21 +92,16 @@ class WalletGeneratorViewModel : ViewModel() {
 
     private val securityClient = LooprWalletApp.application.securityClient
 
-    private val isCreationRunning = MutableLiveData<Boolean>()
-    private val isWalletCreated = MutableLiveData<Boolean>()
-    private val errorMessage = MutableLiveData<String>()
+    /**
+     * Tracks whether or not wallet creation is running.
+     */
+    val isCreationRunning = MutableLiveData<Boolean>()
 
-    fun observeIsCreationRunning(owner: LifecycleOwner, f: (Boolean?) -> Unit) {
-        return isCreationRunning.observe(owner, Observer<Boolean> { t -> f.invoke(t) })
-    }
-
-    fun observeIsWalletCreated(owner: LifecycleOwner, f: (Boolean?) -> Unit) {
-        return isWalletCreated.observe(owner, Observer<Boolean> { t -> f.invoke(t) })
-    }
-
-    fun observeErrorMessage(owner: LifecycleOwner, f: (String?) -> Unit) {
-        return errorMessage.observe(owner, Observer<String> { t -> f.invoke(t) })
-    }
+    /**
+     * Tracks whether or not the wallet was created, if it was successful, and any possible errors
+     * with its creation
+     */
+    val walletCreation = MutableLiveData<WalletCreationResult>()
 
     fun createCredentialsWallet(walletName: String, privateKey: String) = createWalletAsync {
         val credentials = Credentials.create(privateKey)
@@ -124,17 +166,8 @@ class WalletGeneratorViewModel : ViewModel() {
         async {
             isCreationRunning.value = true
             val walletCreationResult = block.invoke()
-
             isCreationRunning.value = false
-            when (walletCreationResult.isSuccessful) {
-                true -> {
-                    isWalletCreated.value = true
-                }
-                false -> {
-                    isWalletCreated.value = false
-                    errorMessage.value = walletCreationResult.error
-                }
-            }
+            walletCreation.value = walletCreationResult
         }
     }
 

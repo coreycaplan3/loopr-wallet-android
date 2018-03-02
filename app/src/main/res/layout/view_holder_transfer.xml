@@ -7,13 +7,13 @@
     android:padding="@dimen/standard_padding">
 
     <FrameLayout
-        android:id="@+id/transferViewHolderImageContainer"
+        android:id="@+id/imageContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true">
 
         <ImageView
-            android:id="@+id/transferViewHolderReceiveImage"
+            android:id="@+id/receiveImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/border"
@@ -22,7 +22,7 @@
             android:tint="@color/material_green" />
 
         <ImageView
-            android:id="@+id/transferViewHolderSendImage"
+            android:id="@+id/sendImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/border"
@@ -34,32 +34,32 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/transferViewHolderTokenLabel"
+        android:id="@+id/tokenLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/horizontal_margin"
         android:layout_marginStart="@dimen/horizontal_margin"
-        android:layout_toEndOf="@id/transferViewHolderImageContainer"
-        android:layout_toRightOf="@id/transferViewHolderImageContainer"
+        android:layout_toEndOf="@id/imageContainer"
+        android:layout_toRightOf="@id/imageContainer"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         tools:text="@string/default_received_token" />
 
     <TextView
-        android:id="@+id/transferViewHolderContactLabel"
+        android:id="@+id/contactLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/transferViewHolderTokenLabel"
+        android:layout_below="@id/tokenLabel"
         android:layout_marginLeft="@dimen/horizontal_margin"
         android:layout_marginStart="@dimen/horizontal_margin"
         android:layout_marginTop="@dimen/vertical_margin_small"
-        android:layout_toEndOf="@id/transferViewHolderImageContainer"
-        android:layout_toRightOf="@id/transferViewHolderImageContainer"
+        android:layout_toEndOf="@id/imageContainer"
+        android:layout_toRightOf="@id/imageContainer"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         tools:text="@string/default_from_contact" />
 
     <TextView
-        android:id="@+id/transferViewHolderQuantityLabel"
+        android:id="@+id/quantityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -67,24 +67,24 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/horizontal_margin"
         android:layout_marginStart="@dimen/horizontal_margin"
-        android:layout_toEndOf="@id/transferViewHolderTokenLabel"
-        android:layout_toRightOf="@id/transferViewHolderTokenLabel"
+        android:layout_toEndOf="@id/tokenLabel"
+        android:layout_toRightOf="@id/tokenLabel"
         android:gravity="end"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         tools:text="@string/default_lrc_quantity" />
 
     <TextView
-        android:id="@+id/transferViewHolderPriceLabel"
+        android:id="@+id/priceLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/transferViewHolderTokenLabel"
+        android:layout_below="@id/tokenLabel"
         android:layout_marginLeft="@dimen/horizontal_margin"
         android:layout_marginStart="@dimen/horizontal_margin"
         android:layout_marginTop="@dimen/vertical_margin_small"
-        android:layout_toEndOf="@id/transferViewHolderContactLabel"
-        android:layout_toRightOf="@id/transferViewHolderContactLabel"
+        android:layout_toEndOf="@id/contactLabel"
+        android:layout_toRightOf="@id/contactLabel"
         android:gravity="end"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         tools:text="@string/default_total_price" />

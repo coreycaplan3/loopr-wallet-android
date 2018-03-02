@@ -1,16 +1,13 @@
 package com.caplaninnovations.looprwallet.transitions
 
 import android.animation.*
-import android.annotation.TargetApi
-import android.os.Build
-import android.transition.Transition
-import android.transition.TransitionListenerAdapter
-import android.transition.TransitionValues
-import android.transition.Visibility
+import android.support.transition.TransitionValues
+import android.support.transition.Visibility
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
 import com.caplaninnovations.looprwallet.utilities.*
 
 /**
@@ -21,8 +18,29 @@ import com.caplaninnovations.looprwallet.utilities.*
  * Purpose of Class:
  *
  */
-@TargetApi(Build.VERSION_CODES.KITKAT)
 class TabTransition : Visibility() {
+
+    companion object {
+
+        fun setupForBaseTabFragment(baseTagFragment: BaseTabFragment) =
+                baseTagFragment.apply {
+                    allowEnterTransitionOverlap = false
+                    allowReturnTransitionOverlap = false
+
+                    enterTransition = TabTransition()
+                            .addMode(Visibility.MODE_IN)
+                            .addTarget(tabLayoutTransitionName)
+
+                    exitTransition = TabTransition()
+                            .addMode(Visibility.MODE_OUT)
+                            .addTarget(tabLayoutTransitionName) as TabTransition
+                }
+    }
+
+    fun addMode(mode: Int): TabTransition {
+        this.mode = mode
+        return this
+    }
 
     override fun onAppear(sceneRoot: ViewGroup?, view: View?, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
         logd("Tabs appearing...")

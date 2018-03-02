@@ -1,16 +1,9 @@
 package com.caplaninnovations.looprwallet.handlers
 
-import android.app.Activity
-import android.content.Intent
-import android.content.Intent.*
-import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.models.security.SecurityClient
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
 import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.utilities.str
 import org.web3j.crypto.Credentials
 import org.web3j.utils.Numeric
@@ -30,7 +23,10 @@ class WalletCreationHandler(
 ) {
 
     /**
-     * Attempts to create a wallet, if possible. Return s
+     * **THIS METHOD BLOCKS AND MUST NOT BE ON THE UI THREAD**
+     *
+     * Attempts to create a wallet, if possible. Returns a [WalletCreationResult] which wraps the
+     * success/failure aspect of the creation.
      *
      * @return An instance of [WalletCreationResult] containing whether or not the operation was
      * successful or the error if the operation was a failure.
