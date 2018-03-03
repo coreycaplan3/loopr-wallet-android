@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.restorewallet.RestoreWalletKeystoreFragment
 import com.caplaninnovations.looprwallet.fragments.restorewallet.RestoreWalletPrivateKeyFragment
+import com.caplaninnovations.looprwallet.fragments.signin.WalletEnterPhraseFragment
 
 /**
  * Created by Corey on 2/20/2018
@@ -27,9 +28,9 @@ class TestActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null && intent?.getBooleanExtra("AddFragment", false) == true) {
+        if (savedInstanceState == null) {
             // used for testing a sole fragment
-            addFragment(RestoreWalletPrivateKeyFragment(), RestoreWalletPrivateKeyFragment.TAG)
+            addFragment(WalletEnterPhraseFragment.createEnterPhraseInstance(), WalletEnterPhraseFragment.TAG)
         }
     }
 

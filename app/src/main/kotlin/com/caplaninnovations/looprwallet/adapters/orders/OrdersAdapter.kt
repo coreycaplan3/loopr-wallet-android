@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.wallet.LooprOrder
+import com.caplaninnovations.looprwallet.utilities.inflate
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
 
@@ -20,9 +21,8 @@ class OrdersAdapter : RealmRecyclerViewAdapter<LooprOrder, OrdersViewHolder> {
     @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(data: OrderedRealmCollection<LooprOrder>?) : super(data, true)
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): OrdersViewHolder {
-        val view = View.inflate(parent?.context, R.layout.view_holder_generic_order, parent)
-        return OrdersViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdersViewHolder {
+        return OrdersViewHolder(parent.inflate(R.layout.view_holder_generic_order))
     }
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {

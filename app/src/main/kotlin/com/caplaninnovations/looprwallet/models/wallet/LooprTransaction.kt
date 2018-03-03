@@ -18,7 +18,7 @@ class LooprTransaction {
         const val COMPLETE = 3
     }
 
-    @IntDef(value = [WAITING.toLong(), PENDING.toLong(), COMPLETE.toLong()])
+    @IntDef(value = [WAITING, PENDING, COMPLETE])
     annotation class TransactionStatus
 
 }

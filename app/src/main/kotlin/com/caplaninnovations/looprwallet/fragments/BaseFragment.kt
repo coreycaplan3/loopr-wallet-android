@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.fragments
 
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
+import android.support.design.widget.AppBarLayout.LayoutParams.*
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewGroupCompat
@@ -10,6 +11,7 @@ import android.view.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
+import com.caplaninnovations.looprwallet.utilities.logd
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.logi
 import com.caplaninnovations.looprwallet.validators.BaseValidator
@@ -62,7 +64,7 @@ abstract class BaseFragment : Fragment() {
 
         if (parentFragment == null) {
             appbarLayout = createAppbarLayout(inflater, container, savedInstanceState)
-            fragmentView.addView(appbarLayout)
+            fragmentView.addView(appbarLayout, 0)
             toolbar = appbarLayout?.findViewById(R.id.toolbar)
             setHasOptionsMenu(true)
 
@@ -147,8 +149,9 @@ abstract class BaseFragment : Fragment() {
      * Enables the toolbar to be collapsed when scrolling
      */
     fun enableToolbarCollapsing() {
+        logd("Toolbar is null: ${toolbar == null}")
         (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
-            it.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+            it.scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         }
 
         val container = view?.findViewById<View>(R.id.fragmentContainer)
@@ -157,9 +160,9 @@ abstract class BaseFragment : Fragment() {
         (container.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
             // The container is put underneath the toolbar since it is going to be moved out of the
             // way after scrolling
+            logd("Setting container layout params to enable scrolling behavior...")
             it.topMargin = 0
             it.behavior = AppBarLayout.ScrollingViewBehavior()
-            container.layoutParams = it
             container.requestLayout()
         }
 
@@ -191,7 +194,6 @@ abstract class BaseFragment : Fragment() {
             }
 
             it.behavior = null
-            container.layoutParams = it
             container.requestLayout()
         }
 

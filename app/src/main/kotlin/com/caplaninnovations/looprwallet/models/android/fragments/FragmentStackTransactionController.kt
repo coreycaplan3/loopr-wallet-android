@@ -21,10 +21,10 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
                                          private val newFragmentTag: String) {
 
     @IntDef(
-            FragmentTransaction.TRANSIT_NONE.toLong(),
-            FragmentTransaction.TRANSIT_FRAGMENT_OPEN.toLong(),
-            FragmentTransaction.TRANSIT_FRAGMENT_CLOSE.toLong(),
-            FragmentTransaction.TRANSIT_FRAGMENT_FADE.toLong())
+            FragmentTransaction.TRANSIT_NONE,
+            FragmentTransaction.TRANSIT_FRAGMENT_OPEN,
+            FragmentTransaction.TRANSIT_FRAGMENT_CLOSE,
+            FragmentTransaction.TRANSIT_FRAGMENT_FADE)
     @Retention(AnnotationRetention.SOURCE)
     internal annotation class FragmentTransition
 

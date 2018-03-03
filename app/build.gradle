@@ -55,7 +55,7 @@ android {
         flavorMockNet {
             buildConfigProperty "API_URL", buildProperties.secrets["debugApiServer"]
 
-            buildConfigField "String", "ENVIRONMENT", "mockNet"
+            buildConfigField "String", "ENVIRONMENT", "\"mockNet\""
 
             dimension "environment"
             versionNameSuffix "-mocknet"
@@ -64,7 +64,7 @@ android {
         flavorTestNet {
             buildConfigProperty "API_URL", buildProperties.secrets["testNetApiServer"]
 
-            buildConfigField "String", "ENVIRONMENT", "testNet"
+            buildConfigField "String", "ENVIRONMENT", "\"testNet\""
 
             dimension "environment"
             versionNameSuffix "-testnet"
@@ -73,7 +73,7 @@ android {
         flavorMainNet {
             buildConfigProperty "API_URL", buildProperties.secrets["productionApiServer"]
 
-            buildConfigField "String", "ENVIRONMENT", "mainNet"
+            buildConfigField "String", "ENVIRONMENT", "\"mainNet\""
 
             dimension "environment"
         }

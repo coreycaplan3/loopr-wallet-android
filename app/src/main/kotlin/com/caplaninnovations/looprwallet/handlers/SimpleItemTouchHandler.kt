@@ -25,10 +25,10 @@ import com.caplaninnovations.looprwallet.adapters.ItemTouchViewHolder
 
 /**
  * An implementation of [ItemTouchHelper.Callback] that enables basic drag & drop and
- * swipe-to-dismiss. Drag events are automatically started by an item long-press.<br></br>
+ * swipe-to-dismiss. Drag events are automatically started by an item long-press.
  *
- * Expects the `RecyclerView.Adapter` to listen for [ ] callbacks and the `RecyclerView.ViewHolder` to implement
- * [ItemTouchHelperViewHolder].
+ * Expects the `RecyclerView.Adapter` to listen for callbacks and the `RecyclerView.ViewHolder` to implement
+ * [ItemTouchViewHolder].
  *
  * @author Paul Burke (ipaulpro)
  */
@@ -40,7 +40,7 @@ class SimpleItemTouchHandler(private val itemTouchAdapter: ItemTouchAdapter) : I
     }
 
     override fun isLongPressDragEnabled(): Boolean {
-        return true
+        return false
     }
 
     override fun isItemViewSwipeEnabled(): Boolean {
@@ -66,8 +66,7 @@ class SimpleItemTouchHandler(private val itemTouchAdapter: ItemTouchAdapter) : I
         }
 
         // Notify the adapter of the move
-        itemTouchAdapter.onItemMove(source.adapterPosition, target.adapterPosition)
-        return true
+        return itemTouchAdapter.onItemMove(source.layoutPosition, target.layoutPosition)
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {

@@ -10,7 +10,11 @@
 
     <application>
 
-        <activity android:name=".activities.TestActivity" />
+        <activity android:name=".activities.TestActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 

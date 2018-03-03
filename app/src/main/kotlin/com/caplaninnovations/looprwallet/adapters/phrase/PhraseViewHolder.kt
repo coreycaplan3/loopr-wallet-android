@@ -20,16 +20,14 @@ import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
  *
  *
  */
-class PhraseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), LayoutContainer,
-        ItemTouchViewHolder {
+class PhraseViewHolder(itemView: View, dragStartListener: OnStartDragListener)
+    : RecyclerView.ViewHolder(itemView), LayoutContainer, ItemTouchViewHolder {
 
     override val containerView: View?
         get() = itemView
 
 
-    fun bind(word: String, dragStartListener: OnStartDragListener) {
-        phraseWordLabel.text = String.format("%d - %s", adapterPosition, word)
-
+    init {
         phraseReorderButton.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -43,12 +41,18 @@ class PhraseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Layo
         }
     }
 
+    fun bind(word: String) {
+        phraseWordLabel.text = String.format("%d - %s", adapterPosition + 1, word)
+    }
+
     override fun onItemSelected() {
         setCardElevation(R.dimen.card_elevation_selected)
+        phraseCard.alpha = 0.85F
     }
 
     override fun onItemClear() {
         setCardElevation(R.dimen.card_elevation)
+        phraseCard.alpha = 1F
     }
 
     // Mark - Private Methods

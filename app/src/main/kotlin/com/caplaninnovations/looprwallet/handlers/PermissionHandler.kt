@@ -38,8 +38,8 @@ open class PermissionHandler(private val activity: BaseActivity,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     @IntDef(
-            REQUEST_CODE_CAMERA.toLong(),
-            REQUEST_CODE_EXTERNAL_FILES.toLong()
+            REQUEST_CODE_CAMERA,
+            REQUEST_CODE_EXTERNAL_FILES
     )
     annotation class Code
 
