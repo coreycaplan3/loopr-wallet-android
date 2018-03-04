@@ -47,7 +47,7 @@ object FilesUtility {
         return uri?.let { File(getPath(context, it)) }
     }
 
-    fun getKeystoreFileName(walletName: String): String = walletName + ".json"
+    fun getWalletFilename(walletName: String): String = walletName + ".json"
 
     fun getDownloadsDirectory(): File {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)

@@ -105,13 +105,13 @@ class WalletGeneratorViewModel : ViewModel() {
      *
      * @param walletName The wallet's *unique* name
      * @param password The wallet's password, used to derive the private key.
-     * @param filesDirectory The directory in which the keystore can be generated.
+     * @param filesDirectory The directory in which the phrase can be generated.
      */
     fun createKeystoreWallet(walletName: String, password: String, filesDirectory: File) = createWalletAsync {
         try {
-            val generatedWalletName = WalletUtils.generateLightNewWalletFile(password, filesDirectory)
-            val generatedFile = File(filesDirectory, generatedWalletName)
-            val credentialFile = File(filesDirectory, FilesUtility.getKeystoreFileName(walletName))
+            val bip39Wallet = WalletUtils.generateBip39Wallet(password, filesDirectory)
+            val generatedFile = File(filesDirectory, bip39Wallet.filename)
+            val credentialFile = File(filesDirectory, FilesUtility.getWalletFilename(walletName))
 
             when (generatedFile.renameTo(credentialFile)) {
                 true -> {
@@ -119,7 +119,7 @@ class WalletGeneratorViewModel : ViewModel() {
                     WalletCreationResult(false, str(R.string.error_creating_wallet))
                 }
                 false -> {
-                    val credentials = WalletUtils.loadCredentials(password, credentialFile)
+                    val credentials = WalletUtils.loadBip39Credentials(password, bip39Wallet.mnemonic)
                     WalletCreationHandler(walletName, credentials, securityClient).createWallet()
                 }
             }
@@ -147,6 +147,62 @@ class WalletGeneratorViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Attempts to create a wallet using a password and keystore.
+     *
+     * @param walletName The wallet's *unique* name
+     * @param password The wallet's password, used to derive the private key.
+     * @param filesDirectory The directory in which the keystore can be generated.
+     */
+    fun createPhraseWallet(walletName: String, password: String, filesDirectory: File) = createWalletAsync {
+        try {
+            val bip39Wallet = WalletUtils.generateBip39Wallet(password, filesDirectory)
+            val generatedFile = File(filesDirectory, bip39Wallet.filename)
+            val credentialFile = File(filesDirectory, FilesUtility.getWalletFilename(walletName))
+
+            when (generatedFile.renameTo(credentialFile)) {
+                true -> {
+                    loge("Could not rename generated wallet file in filesDirectory!", IllegalStateException())
+                    WalletCreationResult(false, str(R.string.error_creating_wallet))
+                }
+                false -> {
+                    val credentials = WalletUtils.loadBip39Credentials(password, bip39Wallet.mnemonic)
+                    WalletCreationHandler(walletName, credentials, securityClient).createWallet()
+                }
+            }
+        } catch (e: Exception) {
+            if (e is CipherException) {
+                WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
+            } else {
+                loge("Error decrypting wallet!", e)
+                WalletCreationResult(false, str(R.string.error_unknown))
+            }
+        }
+    }
+
+    /**
+     * Attempts to create a wallet using a password and keystore.
+     *
+     * @param walletName The wallet's *unique* name
+     * @param password The wallet's password, used to derive the private key.
+     * @param phrase The 12-word phrase used to recover the wallet and derive the private key
+     */
+    fun loadPhraseWallet(walletName: String, password: String, phrase: ArrayList<String>) = createWalletAsync {
+        try {
+            val builder = StringBuilder()
+            phrase.forEach { builder.append(it) }
+
+            val credentials = WalletUtils.loadBip39Credentials(password, builder.toString())
+            WalletCreationHandler(walletName, credentials, securityClient).createWallet()
+        } catch (e: Exception) {
+            if (e is CipherException) {
+                WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
+            } else {
+                loge("Error decrypting wallet!", e)
+                WalletCreationResult(false, str(R.string.error_unknown))
+            }
+        }
+    }
 
     // Mark - Private Methods
 

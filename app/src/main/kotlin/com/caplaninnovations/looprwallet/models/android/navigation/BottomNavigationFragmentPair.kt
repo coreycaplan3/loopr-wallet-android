@@ -22,7 +22,7 @@ class BottomNavigationFragmentPair(@BottomNavigationTag val tag: String,
 
         const val KEY_MARKETS = "_MARKETS"
         const val KEY_ORDERS = "_ORDERS"
-        const val KEY_TRANSACTIONS = "_TRANSACTIONS"
+        const val KEY_TRANSFERS = "_TRANSFERS"
         const val KEY_MY_WALLET = "_MY_WALLET"
     }
 

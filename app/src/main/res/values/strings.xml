@@ -150,7 +150,7 @@
     <string name="content_description_receive">You have received a token or Ether</string>
     <string name="date">Date</string>
     <string name="transaction">Transaction</string>
-    <string name="transactions">Transactions</string>
+    <string name="transfers">Transfers</string>
     <string name="default_transaction">0x925d6cd0b5cfb0bd6f549482c6dde00bb0be14578cfd8edc8fd29ea4085327a6</string>
     <string name="status">Status</string>
     <string name="complete">Complete</string>
