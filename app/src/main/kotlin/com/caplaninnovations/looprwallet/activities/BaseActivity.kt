@@ -90,7 +90,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
         setContentView(contentView)
 
-        window.setSoftInputMode(SOFT_INPUT_ADJUST_PAN)
+        window.setSoftInputMode(SOFT_INPUT_ADJUST_RESIZE)
 
         fragmentStackHistory = FragmentStackHistory(true, savedInstanceState)
 

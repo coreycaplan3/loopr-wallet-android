@@ -22,3 +22,21 @@ fun <T> List<T>.allEqual(other: List<T>): Boolean {
     return this.mapIndexedNotNull { index, item -> other[index] == item }
             .all { it }
 }
+
+/**
+ * Creates a string using [separator] as the delimiter between words.
+ */
+fun List<String>.mkString(separator: String): String {
+    val builder = StringBuilder()
+
+    forEachIndexed { index, s ->
+        builder.append(s)
+
+        val isNotLastWord = index < size - 1
+        if (isNotLastWord) {
+            builder.append(separator)
+        }
+    }
+
+    return builder.toString()
+}

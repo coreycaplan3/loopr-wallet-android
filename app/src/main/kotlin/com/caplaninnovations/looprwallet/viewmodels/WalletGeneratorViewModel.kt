@@ -12,14 +12,12 @@ import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
 import com.caplaninnovations.looprwallet.models.android.observers.observeForDoubleSpend
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
-import com.caplaninnovations.looprwallet.utilities.FilesUtility
-import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.snackbar
-import com.caplaninnovations.looprwallet.utilities.str
-import kotlinx.coroutines.experimental.android.UI
+import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.coroutines.experimental.async
 import org.web3j.crypto.*
 import java.io.File
+import java.lang.reflect.Field
+import java.lang.reflect.Modifier
 import java.security.SecureRandom
 
 /**
@@ -162,8 +160,10 @@ class WalletGeneratorViewModel : ViewModel() {
                 val initialEntropy = ByteArray(16)
                 SecureRandom().nextBytes(initialEntropy)
 
+                populateWordListFromAssets()
+
                 val phrase = MnemonicUtils.generateMnemonic(initialEntropy)
-                val phraseList = ArrayList(phrase.split("\\s+").toMutableList())
+                val phraseList = ArrayList(phrase.split(Regex("\\s+")).toMutableList())
                 walletPhraseGeneration.postValue(WalletCreationPhrase(walletName, password, phraseList))
                 walletCreation.postValue(WalletCreationResult(true, null))
             } catch (e: Exception) {
@@ -173,7 +173,6 @@ class WalletGeneratorViewModel : ViewModel() {
             }
         }
     }
-
 
     /**
      * Attempts to create a wallet using a password and keystore.
@@ -219,6 +218,25 @@ class WalletGeneratorViewModel : ViewModel() {
             isCreationRunning.postValue(false)
             walletCreation.postValue(walletCreationResult)
         }
+    }
+
+    /**
+     * A work-around because the default population of words **FAILS** in [MnemonicUtils] due to it
+     * not being Android compatible
+     */
+    private fun populateWordListFromAssets() {
+        val stream = LooprWalletApp.getContext().assets.open("en-mnemonic-word-list.txt")
+        val lines = stream.bufferedReader().readLines()
+        logd("Line [25]: ${lines[25]}")
+
+        val field = MnemonicUtils::class.java.getDeclaredField("WORD_LIST")
+        field.isAccessible = true
+
+//        val modifiers = Field::class.java.getDeclaredField("modifiers")
+//        modifiers.isAccessible = true
+//        modifiers.setInt(field, field.modifiers and Modifier.FINAL.inv())
+
+        field.set(null, lines)
     }
 
 }

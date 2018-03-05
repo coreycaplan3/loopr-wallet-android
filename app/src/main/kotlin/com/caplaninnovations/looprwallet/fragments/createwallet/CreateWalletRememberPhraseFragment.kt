@@ -3,11 +3,13 @@ package com.caplaninnovations.looprwallet.fragments.createwallet
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
-import com.caplaninnovations.looprwallet.BuildConfig
+import com.caplaninnovations.looprwallet.BuildConfig.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
+import com.caplaninnovations.looprwallet.utilities.logd
+import com.caplaninnovations.looprwallet.utilities.mkString
 import kotlinx.android.synthetic.main.fragment_create_wallet_phrase_remember.*
 
 /**
@@ -43,25 +45,24 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
 
             override fun onTick(millisUntilFinished: Long) {
                 timeLeft = millisUntilFinished
-                if (millisUntilFinished % 1000L == 0L) {
-                    updateConfirmButton()
-                }
+                updateConfirmButton()
             }
         }
-    }
-
-    private val walletCreationPhrase: WalletCreationPhrase by lazy {
-        arguments!!.getParcelable(KEY_WALLET_PHRASE) as WalletCreationPhrase
     }
 
     override val layoutResource: Int
         get() = R.layout.fragment_create_wallet_phrase_remember
 
+    private val walletCreationPhrase: WalletCreationPhrase by lazy {
+        arguments!!.getParcelable(KEY_WALLET_PHRASE) as WalletCreationPhrase
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        timeLeft = savedInstanceState?.getLong(KEY_TIME_LEFT) ?: BuildConfig.DEFAULT_READ_TIMEOUT
-        setupTimer()
+        phraseRememberLabel.text = walletCreationPhrase.phrase.mkString("\n")
+
+        setupTimer(savedInstanceState)
 
         rememberPhraseConfirmButton.setOnClickListener {
             pushFragmentTransaction(
@@ -84,7 +85,9 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
 
     // Mark - Private Methods
 
-    private fun setupTimer() {
+    private fun setupTimer(savedInstanceState: Bundle?) {
+        timeLeft = savedInstanceState?.getLong(KEY_TIME_LEFT, DEFAULT_READ_TIMEOUT) ?: DEFAULT_READ_TIMEOUT
+
         if (timeLeft > 0) timer.start()
         else timer.onFinish()
     }

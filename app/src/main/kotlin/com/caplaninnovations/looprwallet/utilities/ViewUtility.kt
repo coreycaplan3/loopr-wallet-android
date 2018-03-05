@@ -11,6 +11,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.caplaninnovations.looprwallet.R
 
@@ -23,6 +24,19 @@ import com.caplaninnovations.looprwallet.R
  * make it more readable
  *
  */
+
+object ViewUtility {
+
+    /**
+     * Closes the soft keyboard, if open.
+     *
+     * @param view A view that is currently in the hierarchy
+     */
+    fun closeKeyboard(view: View) {
+        val manager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromInputMethod(view.windowToken, 0)
+    }
+}
 
 /**
  * A utility function for creating a short toast

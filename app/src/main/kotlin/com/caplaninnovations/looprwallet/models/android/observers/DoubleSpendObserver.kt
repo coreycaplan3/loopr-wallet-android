@@ -27,6 +27,5 @@ fun <T> MutableLiveData<T>.observeForDoubleSpend(owner: LifecycleOwner, onChange
             onChange.invoke(it)
             value = null
         }
-        logd("Value Changed!")
     })
 }

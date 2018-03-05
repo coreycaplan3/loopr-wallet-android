@@ -1,14 +1,17 @@
 package com.caplaninnovations.looprwallet.fragments.signin
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletRememberPhraseFragment
 import com.caplaninnovations.looprwallet.models.android.observers.observeForDoubleSpend
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
+import com.caplaninnovations.looprwallet.utilities.ViewUtility
 import com.caplaninnovations.looprwallet.utilities.logd
 import com.caplaninnovations.looprwallet.utilities.longToast
 import com.caplaninnovations.looprwallet.validators.PasswordValidator
@@ -78,7 +81,6 @@ class SignInEnterPasswordFragment : BaseFragment() {
         walletGeneratorViewModel.walletCreation.observeForDoubleSpend(this, {
             val progress = (activity as? BaseActivity)?.progressDialog
             if (progress?.isShowing == true) {
-                logd("Dismissing progress dialog...")
                 progress.dismiss()
             }
 
@@ -94,7 +96,7 @@ class SignInEnterPasswordFragment : BaseFragment() {
             )
         })
 
-        rememberPhraseConfirmButton.setOnClickListener { onSubmitFormClick() }
+        rememberPhraseConfirmButton.setOnClickListener(this::onSubmitFormClick)
     }
 
     override fun onFormChanged() {
@@ -103,9 +105,11 @@ class SignInEnterPasswordFragment : BaseFragment() {
 
     // MARK - Private Methods
 
-    private fun onSubmitFormClick() {
+    private fun onSubmitFormClick(buttonView: View) {
         val walletName = walletNameEditText.text.toString()
         val password = enterWalletPasswordEditText.text.toString()
+
+        ViewUtility.closeKeyboard(buttonView)
 
         when (fragmentType) {
             TYPE_CREATE_WALLET -> {

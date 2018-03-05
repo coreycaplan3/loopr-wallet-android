@@ -149,7 +149,6 @@ abstract class BaseFragment : Fragment() {
      * Enables the toolbar to be collapsed when scrolling
      */
     fun enableToolbarCollapsing() {
-        logd("Toolbar is null: ${toolbar == null}")
         (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
             it.scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         }

@@ -113,8 +113,6 @@ class SignInEnterPhraseFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.window?.setSoftInputMode(SOFT_INPUT_ADJUST_RESIZE)
-
         enterPhraseAddSubmitButton.setOnClickListener { onSubmitButtonClick() }
 
         enterPhraseEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -147,12 +145,6 @@ class SignInEnterPhraseFragment : BaseFragment() {
         enableToolbarCollapsing()
 
         WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        activity?.window?.setSoftInputMode(SOFT_INPUT_ADJUST_PAN)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
