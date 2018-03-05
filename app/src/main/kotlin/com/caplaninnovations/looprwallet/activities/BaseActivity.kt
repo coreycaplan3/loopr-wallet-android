@@ -38,7 +38,7 @@ abstract class BaseActivity : AppCompatActivity() {
     companion object {
 
         private const val KEY_IS_PROGRESS_DIALOG_SHOWING = "_IS_PROGRESS_DIALOG_SHOWING"
-        private const val KEY_PROGRESS_DIALOG_TITLE = "_PROGRESS_DIALOG_TITLE"
+        private const val KEY_PROGRESS_DIALOG_MESSAGE = "_PROGRESS_DIALOG_MESSAGE"
     }
 
     /**
@@ -95,8 +95,7 @@ abstract class BaseActivity : AppCompatActivity() {
         fragmentStackHistory = FragmentStackHistory(true, savedInstanceState)
 
         permissionHandlers = getAllPermissionHandlers()
-        permissionHandlers.filter { it.shouldRequestPermissionNow }
-                .forEach { it.requestPermission() }
+        permissionHandlers.filter { it.shouldRequestPermissionNow }.forEach { it.requestPermission() }
 
         /*
          * Progress Dialog Setup
@@ -111,6 +110,7 @@ abstract class BaseActivity : AppCompatActivity() {
         progressDialog.setCancelable(false)
         progressDialog.setCanceledOnTouchOutside(false)
         if (savedInstanceState?.getBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING) == true) {
+            progressDialogMessage = savedInstanceState.getString(KEY_PROGRESS_DIALOG_MESSAGE)
             progressDialog.show()
         }
     }
@@ -201,7 +201,7 @@ abstract class BaseActivity : AppCompatActivity() {
         fragmentStackHistory.saveState(outState)
 
         outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)
-        outState?.putString(KEY_PROGRESS_DIALOG_TITLE, progressDialogMessage)
+        outState?.putString(KEY_PROGRESS_DIALOG_MESSAGE, progressDialogMessage)
 
         progressDialog.dismiss()
     }

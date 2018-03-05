@@ -22,16 +22,24 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
-        release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        debug {
+            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "2000L"
         }
         staging {
+            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "15000L"
+
             debuggable false
             jniDebuggable false
             renderscriptDebuggable false
             minifyEnabled true
+        }
+        release {
+            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "15000L"
+
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     sourceSets {

@@ -10,16 +10,17 @@ import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.handlers.WalletCreationHandler
 import com.caplaninnovations.looprwallet.models.android.observers.observeForDoubleSpend
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
 import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.utilities.str
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import org.web3j.crypto.CipherException
-import org.web3j.crypto.Credentials
-import org.web3j.crypto.WalletUtils
+import org.web3j.crypto.*
 import java.io.File
+import java.security.SecureRandom
 
 /**
  * Created by Corey on 2/25/2018
@@ -95,6 +96,8 @@ class WalletGeneratorViewModel : ViewModel() {
      */
     val walletCreation = MutableLiveData<WalletCreationResult>()
 
+    val walletPhraseGeneration = MutableLiveData<WalletCreationPhrase>()
+
     fun createCredentialsWallet(walletName: String, privateKey: String) = createWalletAsync {
         val credentials = Credentials.create(privateKey)
         WalletCreationHandler(walletName, credentials, securityClient).createWallet()
@@ -148,37 +151,29 @@ class WalletGeneratorViewModel : ViewModel() {
     }
 
     /**
-     * Attempts to create a wallet using a password and keystore.
+     * Attempts to create a 12-word phrase for a Bip39 wallet.
      *
      * @param walletName The wallet's *unique* name
      * @param password The wallet's password, used to derive the private key.
-     * @param filesDirectory The directory in which the keystore can be generated.
      */
-    fun createPhraseWallet(walletName: String, password: String, filesDirectory: File) = createWalletAsync {
-        try {
-            val bip39Wallet = WalletUtils.generateBip39Wallet(password, filesDirectory)
-            val generatedFile = File(filesDirectory, bip39Wallet.filename)
-            val credentialFile = File(filesDirectory, FilesUtility.getWalletFilename(walletName))
+    fun createPhraseAsync(walletName: String, password: String) {
+        async {
+            try {
+                val initialEntropy = ByteArray(16)
+                SecureRandom().nextBytes(initialEntropy)
 
-            when (generatedFile.renameTo(credentialFile)) {
-                true -> {
-                    loge("Could not rename generated wallet file in filesDirectory!", IllegalStateException())
-                    WalletCreationResult(false, str(R.string.error_creating_wallet))
-                }
-                false -> {
-                    val credentials = WalletUtils.loadBip39Credentials(password, bip39Wallet.mnemonic)
-                    WalletCreationHandler(walletName, credentials, securityClient).createWallet()
-                }
-            }
-        } catch (e: Exception) {
-            if (e is CipherException) {
-                WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
-            } else {
-                loge("Error decrypting wallet!", e)
-                WalletCreationResult(false, str(R.string.error_unknown))
+                val phrase = MnemonicUtils.generateMnemonic(initialEntropy)
+                val phraseList = ArrayList(phrase.split("\\s+").toMutableList())
+                walletPhraseGeneration.postValue(WalletCreationPhrase(walletName, password, phraseList))
+                walletCreation.postValue(WalletCreationResult(true, null))
+            } catch (e: Exception) {
+                loge("Could not create phrase: ", e)
+                val error = str(R.string.error_creating_wallet)
+                walletCreation.postValue(WalletCreationResult(false, error))
             }
         }
     }
+
 
     /**
      * Attempts to create a wallet using a password and keystore.
@@ -189,10 +184,17 @@ class WalletGeneratorViewModel : ViewModel() {
      */
     fun loadPhraseWallet(walletName: String, password: String, phrase: ArrayList<String>) = createWalletAsync {
         try {
-            val builder = StringBuilder()
-            phrase.forEach { builder.append(it) }
+            val phraseAsString = StringBuilder()
+            phrase.forEachIndexed { index, item ->
+                phraseAsString.append(item)
 
-            val credentials = WalletUtils.loadBip39Credentials(password, builder.toString())
+                val isNotLastIndex = index < phrase.size - 1
+                if (isNotLastIndex) {
+                    phraseAsString.append(" ")
+                }
+            }
+
+            val credentials = WalletUtils.loadBip39Credentials(password, phraseAsString.toString())
             WalletCreationHandler(walletName, credentials, securityClient).createWallet()
         } catch (e: Exception) {
             if (e is CipherException) {
@@ -212,10 +214,10 @@ class WalletGeneratorViewModel : ViewModel() {
      */
     private fun createWalletAsync(block: () -> WalletCreationResult) {
         async {
-            isCreationRunning.value = true
+            isCreationRunning.postValue(true)
             val walletCreationResult = block.invoke()
-            isCreationRunning.value = false
-            walletCreation.value = walletCreationResult
+            isCreationRunning.postValue(false)
+            walletCreation.postValue(walletCreationResult)
         }
     }
 

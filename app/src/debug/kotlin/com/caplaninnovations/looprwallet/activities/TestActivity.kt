@@ -5,9 +5,8 @@ import android.support.annotation.RestrictTo
 import android.support.annotation.RestrictTo.Scope.TESTS
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.restorewallet.RestoreWalletKeystoreFragment
-import com.caplaninnovations.looprwallet.fragments.restorewallet.RestoreWalletPrivateKeyFragment
-import com.caplaninnovations.looprwallet.fragments.signin.WalletEnterPhraseFragment
+import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
 
 /**
  * Created by Corey on 2/20/2018
@@ -30,7 +29,8 @@ class TestActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             // used for testing a sole fragment
-            addFragment(WalletEnterPhraseFragment.createEnterPhraseInstance(), WalletEnterPhraseFragment.TAG)
+            val wallet = WalletCreationPhrase("loopr-test", "looprwallet", arrayListOf())
+            addFragment(SignInEnterPhraseFragment.createEnterPhraseInstance(wallet), SignInEnterPhraseFragment.TAG)
         }
     }
 

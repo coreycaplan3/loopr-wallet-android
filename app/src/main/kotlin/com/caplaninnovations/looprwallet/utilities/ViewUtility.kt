@@ -43,6 +43,15 @@ fun Context.longToast(@StringRes stringResource: Int) {
 }
 
 /**
+ * A utility function for creating a long toast
+ *
+ * @param stringResource A string resource that is used for the message of the toast
+ */
+fun Context.longToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+/**
  * @param layoutRes The layout resource that will be inflated
  * @param attachToRoot True to attach it to the root or false to not attach it.
  * @return The view that was inflated if [attachToRoot] was false or the root view if [attachToRoot]

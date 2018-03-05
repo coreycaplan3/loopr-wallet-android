@@ -39,7 +39,7 @@ class WalletCreationHandler(
 
         val privateKey = Numeric.encodeQuantity(credentials.ecKeyPair.privateKey)
 
-        return when (securityClient.createWallet(walletName, privateKey)) {
+        return when (securityClient.createWallet(walletName.toLowerCase(), privateKey)) {
             true -> WalletCreationResult(true, null)
             false -> WalletCreationResult(false, str(R.string.error_wallet_already_exists))
         }

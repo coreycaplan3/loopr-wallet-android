@@ -184,8 +184,10 @@
     <string name="content_description_keystore">Provides a helpful description of what a keystore is</string>
     <string name="content_description_phrase">Provides a helpful description of what a phrase is</string>
     <string name="enter_a_strong_password">Enter a Strong Password</string>
+    <string name="enter_old_password">Enter Your Old Password</string>
     <string name="safety_description_password">Remember to keep your password and keystore safe. You will need both your password and the keystore file in order to unlock your wallet or recover it in the future. You are solely responsible for managing your credentials. We do not backup your credentials for you!</string>
-    <string name="safety_description_phrase">Remember to keep your password and phrase safe. You will need your password and the 12-word phrase in order to unlock your wallet or recover it in the future. You are solely responsible for managing your credentials. We do not backup your credentials for you! By pressing "Generate Phrase" below, you will be taken to the next screen with your 12-word phrase. Keep it safe and make sure no one is looking over your shoulder.</string>
+    <string name="safety_create_phrase">Remember to keep your password and phrase safe. You will need your password and the 12-word phrase in order to unlock your wallet or recover it in the future. You are solely responsible for managing your credentials. We do not backup your credentials for you! By pressing \"Generate Phrase\", you will be taken to the next screen with your 12-word phrase. Keep it safe and make sure no one is looking over your shoulder.</string>
+    <string name="safety_recover_phrase">Remember to keep your password and phrase safe. You will need your password and the 12-word phrase in order to unlock your wallet or recover it in the future. You are solely responsible for managing your credentials. We do not backup your credentials for you! Keep your information safe and make sure no one is looking over your shoulder.</string>
     <string name="backup_your_credentials">Backup your Credentials</string>
     <string name="create_wallet">Create Wallet</string>
     <string name="safety_confirm_password">By pressing \"confirm\", you acknowledge that you read and understood the disclaimer and will keep your credentials safe. Treat them with care, because they may be responsible for guarding your riches one day.</string>
@@ -213,7 +215,7 @@
     <string name="title_select_keystore_file">Select your Keystore File</string>
     <string name="error_install_file_manager">To select your keystore file, install a File Manager</string>
     <string name="restore_wallet">Restore Wallet</string>
-    <string name="error_enter_valid_word">You must enter a valid word</string>
+    <string name="error_phrase_enter_valid_word">Enter a valid word with no spaces and only letters</string>
     <string name="error_invalid_keystore_or_password">The file selected or password is invalid</string>
     <string name="permission_rationale_files">File permissions are needed to save your wallet information</string>
     <string name="error_invalid_private_key">This private key is invalid</string>
@@ -234,5 +236,8 @@
     <string name="you_may_finish_restoring_wallet">You may now finish restoring your wallet</string>
     <string name="password_is_incorrect">This password is incorrect</string>
     <string name="error_password_incorrect">This password is incorrect</string>
-    <string name="creating_wallet">Creating Wallet...</string>
+    <string name="creating_wallet">Creating Wallet…</string>
+    <string name="error_incorrect_phrase">One or more of the words is incorrect</string>
+    <string name="generating_phrase">Generating your 12-word phrase…</string>
+    <string name="enter_phrase">Enter Phrase</string>
 </resources>

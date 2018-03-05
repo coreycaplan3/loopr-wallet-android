@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPasswordFragment
+import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import kotlinx.android.synthetic.main.fragment_create_wallet_selection.*
 
 /**
@@ -27,19 +29,23 @@ class CreateWalletSelectionFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         createFromKeystoreButton.setOnClickListener {
-            pushFragmentTransaction(CreateWalletKeystoreFragment(), CreateWalletKeystoreFragment.TAG)
+            pushFragmentTransaction(
+                    CreateWalletKeystoreFragment(),
+                    CreateWalletKeystoreFragment.TAG
+            )
         }
 
         keystoreHelpButton.setOnClickListener {
             // TODO
         }
 
-        // TODO after Bip39 is included in Web3j library
-        createFromPhraseButton.visibility = View.GONE
         createFromPhraseButton.setOnClickListener {
+            pushFragmentTransaction(
+                    SignInEnterPasswordFragment.createInstance(SignInEnterPasswordFragment.TYPE_CREATE_WALLET),
+                    SignInEnterPhraseFragment.TAG
+            )
         }
 
-        phraseHelpButton.visibility = View.GONE
         phraseHelpButton.setOnClickListener {
         }
     }

@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.fragments.signin.WalletEnterPhraseFragment
+import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPasswordFragment
+import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import kotlinx.android.synthetic.main.fragment_restore_wallet_selection.*
 
 /**
@@ -32,10 +33,11 @@ class RestoreWalletSelectionFragment : BaseFragment() {
             pushFragmentTransaction(RestoreWalletKeystoreFragment(), RestoreWalletKeystoreFragment.TAG)
         }
 
-        // TODO - after phrase is implemented in Web3j
-        restoreWalletPhraseButton.visibility = View.GONE
         restoreWalletPhraseButton.setOnClickListener {
-            pushFragmentTransaction(WalletEnterPhraseFragment(), WalletEnterPhraseFragment.TAG)
+            pushFragmentTransaction(
+                    SignInEnterPasswordFragment.createInstance(SignInEnterPasswordFragment.TYPE_RESTORE_WALLET),
+                    SignInEnterPhraseFragment.TAG
+            )
         }
 
         restoreWalletPrivateKeyButton.setOnClickListener {

@@ -3,6 +3,7 @@ package com.caplaninnovations.looprwallet.models.android.observers
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import com.caplaninnovations.looprwallet.utilities.logd
 
 /**
  * Created by Corey on 3/2/2018
@@ -26,5 +27,6 @@ fun <T> MutableLiveData<T>.observeForDoubleSpend(owner: LifecycleOwner, onChange
             onChange.invoke(it)
             value = null
         }
+        logd("Value Changed!")
     })
 }

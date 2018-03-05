@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.fragments.signin
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.transition.TransitionManager
@@ -7,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.adapters.phrase.PhraseAdapter
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
@@ -22,6 +22,9 @@ import com.caplaninnovations.looprwallet.utilities.logd
 import kotlin.collections.ArrayList
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
+import com.caplaninnovations.looprwallet.utilities.allEqual
+import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
 
 
 /**
@@ -33,14 +36,16 @@ import android.widget.LinearLayout
  *
  *
  */
-class WalletEnterPhraseFragment : BaseFragment() {
+class SignInEnterPhraseFragment : BaseFragment() {
 
     companion object {
-        val TAG: String = WalletEnterPhraseFragment::class.java.simpleName
+        val TAG: String = SignInEnterPhraseFragment::class.java.simpleName
 
         private const val KEY_PHRASE = "_PHRASE"
+        private const val KEY_CORRECT_PHRASE = "_CORRECT_PHRASE"
+        private const val KEY_WALLET_CREATION = "_WALLET_CREATION"
 
-        const val KEY_FRAGMENT_TYPE = "_FRAGMENT_TYPE"
+        private const val KEY_FRAGMENT_TYPE = "_FRAGMENT_TYPE"
         private const val TYPE_CONFIRM_PHRASE = "TYPE_CONFIRM_PHRASE"
         private const val TYPE_ENTER_PHRASE = "TYPE_ENTER_PHRASE"
 
@@ -50,25 +55,30 @@ class WalletEnterPhraseFragment : BaseFragment() {
          * Creates a fragment for confirming a phrase (usually for creation purposes to verify that
          * the user wrote down his/her phrase)
          *
-         * @param phrase The correct phrase. Used for checking against what the user entered.
+         * @param wallet The wallet object containing the information for creating the phrase.
+         * Should have the *phrase* field set
          */
-        fun createConfirmPhraseInstance(phrase: ArrayList<String>): WalletEnterPhraseFragment {
-            return WalletEnterPhraseFragment().apply {
-                arguments = Bundle().apply {
-                    putString(KEY_FRAGMENT_TYPE, TYPE_ENTER_PHRASE)
-                    putStringArrayList(KEY_PHRASE, phrase)
-                }
+        fun createConfirmPhraseInstance(wallet: WalletCreationPhrase): SignInEnterPhraseFragment {
+            return SignInEnterPhraseFragment().apply {
+                arguments = setupArguments(TYPE_CONFIRM_PHRASE, wallet, wallet.phrase)
             }
         }
 
         /**
          * Creates a fragment for entering a phrase (usually for recovery purposes)
          */
-        fun createEnterPhraseInstance(): WalletEnterPhraseFragment {
-            return WalletEnterPhraseFragment().apply {
-                arguments = Bundle().apply { putString(KEY_FRAGMENT_TYPE, TYPE_ENTER_PHRASE) }
+        fun createEnterPhraseInstance(wallet: WalletCreationPhrase): SignInEnterPhraseFragment {
+            return SignInEnterPhraseFragment().apply {
+                arguments = setupArguments(TYPE_ENTER_PHRASE, wallet, null)
             }
         }
+
+        private fun setupArguments(fragmentType: String, walletCreationPhrase: WalletCreationPhrase, correctPhrase: ArrayList<String>?) =
+                Bundle().apply {
+                    putString(KEY_FRAGMENT_TYPE, fragmentType)
+                    putParcelable(KEY_WALLET_CREATION, walletCreationPhrase)
+                    putStringArrayList(KEY_CORRECT_PHRASE, correctPhrase)
+                }
     }
 
     override val layoutResource: Int
@@ -77,12 +87,19 @@ class WalletEnterPhraseFragment : BaseFragment() {
     private lateinit var phrase: ArrayList<String>
 
     private val correctPhrase: ArrayList<String> by lazy {
-        arguments?.getStringArrayList(KEY_PHRASE)
-                ?: throw IllegalStateException("Arguments should not be null!")
+        arguments!!.getStringArrayList(KEY_CORRECT_PHRASE)
+    }
+
+    private val walletCreationPhrase: WalletCreationPhrase by lazy {
+        arguments!!.getParcelable(KEY_WALLET_CREATION) as WalletCreationPhrase
     }
 
     private val fragmentType by lazy {
         arguments!!.getString(KEY_FRAGMENT_TYPE)
+    }
+
+    val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
+        ViewModelProviders.of(this).get(WalletGeneratorViewModel::class.java)
     }
 
     private var itemTouchHelper: ItemTouchHelper? = null
@@ -90,7 +107,7 @@ class WalletEnterPhraseFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        phrase = savedInstanceState?.getStringArrayList(KEY_PHRASE) ?: arrayListOf("hello", "there", "wallet", "banana", "apple", "pear", "melon", "berry", "pineapple", "tree")
+        phrase = savedInstanceState?.getStringArrayList(KEY_PHRASE) ?: arrayListOf()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -98,7 +115,7 @@ class WalletEnterPhraseFragment : BaseFragment() {
 
         activity?.window?.setSoftInputMode(SOFT_INPUT_ADJUST_RESIZE)
 
-        enterPhraseAddSubmitButton.setOnClickListener { onEnterPhraseAddSubmitButtonClick() }
+        enterPhraseAddSubmitButton.setOnClickListener { onSubmitButtonClick() }
 
         enterPhraseEditText.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener when (actionId) {
@@ -114,7 +131,7 @@ class WalletEnterPhraseFragment : BaseFragment() {
 
             val adapter = PhraseAdapter(
                     phrase,
-                    this@WalletEnterPhraseFragment::onWordRemoved,
+                    this@SignInEnterPhraseFragment::onWordRemoved,
                     object : OnStartDragListener {
                         override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
                             itemTouchHelper?.startDrag(viewHolder)
@@ -128,6 +145,8 @@ class WalletEnterPhraseFragment : BaseFragment() {
         }
 
         enableToolbarCollapsing()
+
+        WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
     }
 
     override fun onDestroyView() {
@@ -144,17 +163,16 @@ class WalletEnterPhraseFragment : BaseFragment() {
 
     // MARK - Private Methods
 
-    private fun onEnterPhraseAddSubmitButtonClick() {
+    private fun onSubmitButtonClick() {
         val enteredWord = enterPhraseEditText.text.toString().trim().toLowerCase()
 
         when {
             enteredWord.isEmpty() || !enteredWord.matches(Regex("[a-z]+")) -> {
-                context?.longToast(R.string.error_enter_valid_word)
+                context?.longToast(R.string.error_phrase_enter_valid_word)
             }
             else -> {
                 if (phrase.size == PHRASE_SIZE) {
-                    // TODO
-                    Toast.makeText(context, "Creating...", Toast.LENGTH_LONG).show()
+                    submitPhrase()
                 } else {
                     onWordAdded(enteredWord)
                     enterPhraseEditText.text = null
@@ -195,6 +213,25 @@ class WalletEnterPhraseFragment : BaseFragment() {
             TYPE_CONFIRM_PHRASE -> getString(R.string.create_wallet)
             TYPE_ENTER_PHRASE -> getString(R.string.restore_wallet)
             else -> throw IllegalArgumentException("Invalid fragmentType, found $fragmentType")
+        }
+    }
+
+    private fun submitPhrase() {
+        val walletName = walletCreationPhrase.walletName
+        val password = walletCreationPhrase.password
+
+        when (fragmentType) {
+            TYPE_CONFIRM_PHRASE -> {
+                if (phrase.allEqual(correctPhrase)) {
+                    walletGeneratorViewModel.loadPhraseWallet(walletName, password, phrase)
+                } else {
+                    context?.longToast(R.string.error_incorrect_phrase)
+                }
+            }
+            TYPE_ENTER_PHRASE -> {
+                walletGeneratorViewModel.loadPhraseWallet(walletName, password, phrase)
+            }
+            else -> throw IllegalStateException("Invalid type, found: $fragmentType")
         }
     }
 
