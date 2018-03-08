@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPasswordFragment
+import com.caplaninnovations.looprwallet.fragments.signin.EnterPasswordForPhraseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import kotlinx.android.synthetic.main.fragment_create_wallet_selection.*
 
@@ -22,7 +22,7 @@ class CreateWalletSelectionFragment : BaseFragment() {
         get() = R.layout.fragment_create_wallet_selection
 
     companion object {
-        val TAG = CreateWalletSelectionFragment::class.java.simpleName
+        val TAG: String = CreateWalletSelectionFragment::class.java.simpleName
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,12 +41,13 @@ class CreateWalletSelectionFragment : BaseFragment() {
 
         createFromPhraseButton.setOnClickListener {
             pushFragmentTransaction(
-                    SignInEnterPasswordFragment.createInstance(SignInEnterPasswordFragment.TYPE_CREATE_WALLET),
-                    SignInEnterPhraseFragment.TAG
+                    EnterPasswordForPhraseFragment.createCreationInstance(),
+                    EnterPasswordForPhraseFragment.TAG
             )
         }
 
         phraseHelpButton.setOnClickListener {
+            // TODO
         }
     }
 

@@ -88,7 +88,7 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
 
         transaction.addToBackStack(newFragmentTag)
 
-        transaction.commit()
+        transaction.commitAllowingStateLoss()
     }
 
 }

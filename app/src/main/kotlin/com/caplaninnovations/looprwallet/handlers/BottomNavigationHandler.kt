@@ -171,15 +171,14 @@ class BottomNavigationHandler(private val activity: BaseActivity,
         tab?.customView?.apply {
             val tabTextView = findViewById<TextView>(R.id.bottomNavigationTabText)
             if (isSelected) {
-                tabTextView.isSelected = true
                 animateTopPadding(R.dimen.bottom_navigation_margin_top_selected, R.integer.animation_duration_short)
                 animateToWidth(R.dimen.bottom_navigation_width_selected, R.integer.animation_duration_short)
-                animateToAlpha(1.toFloat(), R.integer.animation_duration_short)
+                animateToAlpha(1F, R.integer.animation_duration_short)
                 tabTextView.animateScaleBoth(1F, R.integer.animation_duration_short)
             } else {
                 animateTopPadding(R.dimen.bottom_navigation_margin_top, R.integer.animation_duration_short)
                 animateToWidth(R.dimen.bottom_navigation_width, R.integer.animation_duration_short)
-                animateToAlpha(0.68.toFloat(), R.integer.animation_duration_short)
+                animateToAlpha(0.68F, R.integer.animation_duration_short)
                 tabTextView.animateScaleBoth(0F, R.integer.animation_duration_short)
             }
         }

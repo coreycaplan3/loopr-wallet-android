@@ -13,7 +13,7 @@ import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
-import com.caplaninnovations.looprwallet.models.security.SecurityClient
+import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.realm.RealmClient
 import com.caplaninnovations.looprwallet.utilities.*
 import io.realm.Realm
@@ -60,7 +60,7 @@ abstract class BaseActivity : AppCompatActivity() {
     lateinit var themeSettings: ThemeSettings
 
     @Inject
-    lateinit var securityClient: SecurityClient
+    lateinit var walletClient: WalletClient
 
     @Inject
     lateinit var realmClient: RealmClient
@@ -118,9 +118,9 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (isSecurityActivity && !securityClient.isAndroidKeystoreUnlocked()) {
+        if (isSecurityActivity && !walletClient.isAndroidKeystoreUnlocked()) {
             this.longToast(R.string.unlock_device)
-            securityClient.unlockAndroidKeystore()
+            walletClient.unlockAndroidKeystore()
         } else if (isSecurityActivity && realm == null) {
             /*
              * We can initialize the Realm now, since the Keystore is unlocked.
@@ -128,27 +128,28 @@ abstract class BaseActivity : AppCompatActivity() {
              * NOTE, we check if it's null since we don't want to override an already-initialized
              * realm.
              */
-            val wallet = securityClient.getCurrentWallet()
+            val wallet = walletClient.getCurrentWallet()
             if (wallet != null) {
+                logd("Opening wallet ${wallet.walletName}...")
                 realm = realmClient.getInstance(wallet.walletName, wallet.realmKey)
             } else {
                 // There is no current wallet... we need to prompt the user to sign in.
                 // This should never happen, since we can't get to a "securityActivity" without
                 // passing through the SplashScreen first.
                 loge("There is no current wallet... prompting the user to sign in", IllegalStateException())
-                securityClient.onNoCurrentWalletSelected(this)
+                walletClient.onNoCurrentWalletSelected(this)
             }
         }
     }
 
     fun removeWalletCurrentWallet() {
-        securityClient.getCurrentWallet()?.let {
+        walletClient.getCurrentWallet()?.let {
 
             RealmUtility.removeListenersAndClose(realm)
 
-            securityClient.removeWallet(it.walletName)
-            if (securityClient.getCurrentWallet() == null) {
-                securityClient.onNoCurrentWalletSelected(this)
+            walletClient.removeWallet(it.walletName)
+            if (walletClient.getCurrentWallet() == null) {
+                walletClient.onNoCurrentWalletSelected(this)
             }
         }
     }

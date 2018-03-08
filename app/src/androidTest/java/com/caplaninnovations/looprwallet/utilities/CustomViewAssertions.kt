@@ -21,8 +21,9 @@ class CustomViewAssertions {
             return ViewAssertion { view, _ ->
                 if (view?.alpha != expectedAlpha) {
                     val actualAlpha = view?.alpha
-                    throw IllegalStateException("Invalid alpha! " +
+                    throw AssertionError(IllegalStateException("Invalid alpha! " +
                             "Expected $expectedAlpha, but found $actualAlpha")
+                    )
                 }
             }
         }
@@ -31,8 +32,31 @@ class CustomViewAssertions {
             return ViewAssertion { view, _ ->
                 val expectedHeight = view?.context?.resources?.getDimension(expectedHeightResource)?.toInt()
                 if (view?.layoutParams?.height != expectedHeight) {
-                    throw IllegalStateException("Invalid height! " +
+                    throw AssertionError(IllegalStateException("Invalid height! " +
                             "Expected $expectedHeight, but found ${view?.height}")
+                    )
+                }
+            }
+        }
+
+        fun scaleXIs(expectedScaleX: Float): ViewAssertion {
+            return ViewAssertion { view, _ ->
+                val foundScaleX = view?.scaleX
+                if (foundScaleX != expectedScaleX) {
+                    throw AssertionError(IllegalStateException("Invalid scaleX! " +
+                            "Expected $expectedScaleX, but found $foundScaleX")
+                    )
+                }
+            }
+        }
+
+        fun scaleYIs(expectedScaleY: Float): ViewAssertion {
+            return ViewAssertion { view, _ ->
+                val foundScaleY = view?.scaleY
+                if (foundScaleY != expectedScaleY) {
+                    throw AssertionError(IllegalStateException("Invalid scaleY! " +
+                            "Expected $expectedScaleY, but found $foundScaleY")
+                    )
                 }
             }
         }
@@ -42,8 +66,9 @@ class CustomViewAssertions {
                 val expectedTextSize = view?.context?.resources?.getDimension(expectedTextSizeResource)
                 val foundTextSize = (view as? TextView)?.textSize
                 if (foundTextSize != expectedTextSize) {
-                    throw IllegalStateException("Invalid text size! " +
+                    throw AssertionError(IllegalStateException("Invalid text size! " +
                             "Expected $expectedTextSize, but found $foundTextSize")
+                    )
                 }
             }
         }
@@ -51,9 +76,9 @@ class CustomViewAssertions {
         fun isDisabled(): ViewAssertion {
             return ViewAssertion { view, _ ->
                 if (view == null) {
-                    throw IllegalStateException("Invalid state! View is null!")
-                }  else if (view.isEnabled) {
-                    throw IllegalStateException("Invalid state! Expected view to be disabled")
+                    throw AssertionError(IllegalStateException("Invalid state! View is null!"))
+                } else if (view.isEnabled) {
+                    throw AssertionError(IllegalStateException("Invalid state! Expected view to be disabled"))
                 }
             }
         }
@@ -62,8 +87,9 @@ class CustomViewAssertions {
             return ViewAssertion { view, _ ->
                 val expectedPadding = view?.context?.resources?.getDimension(expectedTopPaddingResource)?.toInt()
                 if (view?.paddingTop != expectedPadding) {
-                    throw IllegalStateException("Invalid padding! " +
+                    throw AssertionError(IllegalStateException("Invalid padding! " +
                             "Expected $expectedPadding, but found ${view?.paddingTop}")
+                    )
                 }
             }
         }

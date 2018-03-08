@@ -3,7 +3,7 @@ package com.caplaninnovations.looprwallet.models.android.settings
 import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
 import com.caplaninnovations.looprwallet.utilities.RealmUtility
-import com.caplaninnovations.looprwallet.models.security.SecurityClient
+import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 
 /**
@@ -11,9 +11,10 @@ import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class: To interact directly with settings, putting or getting values. This class
- * does not contain much logic, just core essentials. Logic associated with this class can be seen
- * in conjunction with [SecurityClient]
+ * Purpose of Class: **This class should not be touched directly. Instead, use [WalletClient]** To
+ * interact directly with settings, putting or getting values. This class does not contain much
+ * logic, just core essentials. Logic associated with this class can be seen in conjunction with
+ * [WalletClient].
  */
 class WalletSettings(private val looprSettings: LooprSettings) {
 
@@ -71,7 +72,8 @@ class WalletSettings(private val looprSettings: LooprSettings) {
 
     /**
      * @return The current wallet being used by a user. A null return value means there is no
-     * current wallet and the user must create, select or recover one
+     * current wallet and the user must create, select or recover one. The wallet variable
+     * should already be cleansed (all lower case, correct formatting, etc.)
      */
     fun getWallet(walletName: String): LooprWallet? {
         return if (!getAllWallets().contains(walletName)) {
@@ -81,6 +83,10 @@ class WalletSettings(private val looprSettings: LooprSettings) {
         }
     }
 
+    /**
+     * @param walletName The name of the wallet to check for its existence. The wallet variable
+     * should already be cleansed (all lower case, correct formatting, etc.)
+     */
     fun doesWalletExist(walletName: String) = getAllWallets().contains(walletName)
 
     /**
@@ -100,7 +106,8 @@ class WalletSettings(private val looprSettings: LooprSettings) {
      * Creates a wallet and sets the current wallet to this new one. Also creates a realm key and
      * adds the new wallet to the list of all wallets.
      *
-     * @param newWalletName The new wallet's name which will be set to the current wallet
+     * @param newWalletName The new wallet's name which will be set to the current wallet. The
+     * wallet variable should already be cleansed (all lower case, correct formatting, etc.)
      * @param privateKey The verified/cleansed private key
 
      * @return True if the wallet was created successfully or false otherwise. A return of false

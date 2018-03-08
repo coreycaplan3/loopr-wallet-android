@@ -25,9 +25,9 @@ class SplashScreenActivity : BaseActivity() {
         super.onResume()
 
         Handler().postDelayed({
-            if (securityClient.isAndroidKeystoreUnlocked()) {
+            if (walletClient.isAndroidKeystoreUnlocked()) {
                 val intent =
-                        if (securityClient.getCurrentWallet() == null) {
+                        if (walletClient.getCurrentWallet() == null) {
                             Intent(this, SignInActivity::class.java)
                         } else {
                             Intent(this, MainActivity::class.java)
@@ -38,7 +38,7 @@ class SplashScreenActivity : BaseActivity() {
                 finish()
             } else {
                 longToast(R.string.unlock_device)
-                securityClient.unlockAndroidKeystore()
+                walletClient.unlockAndroidKeystore()
             }
         }, 1000)
     }

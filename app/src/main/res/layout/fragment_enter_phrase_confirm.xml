@@ -12,6 +12,7 @@
         tools:listitem="@layout/view_holder_phrase" />
 
     <LinearLayout
+        android:id="@+id/enterPhraseContainer"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="bottom"

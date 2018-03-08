@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.dagger
 
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettingsTest
+import com.caplaninnovations.looprwallet.models.android.settings.WalletSettingsTest
 import dagger.Component
 import javax.inject.Singleton
 
@@ -13,10 +14,11 @@ import javax.inject.Singleton
  *
  */
 @Singleton
-@Component(modules = [LooprSettingsTestModule::class, LooprRealmTestModule::class,
-    LooprSecurityTestModule::class])
+@Component(modules = [LooprSettingsModule::class, LooprRealmModule::class,
+    LooprSecurityModule::class, LooprEthModule::class])
 interface LooprTestComponent : LooprProductionComponent {
 
     fun inject(baseDaggerTest: BaseDaggerTest)
     fun inject(themeSettingsTest: ThemeSettingsTest)
+    fun inject(walletSettingsTest: WalletSettingsTest)
 }

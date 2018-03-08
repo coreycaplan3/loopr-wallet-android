@@ -8,7 +8,6 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
-import com.caplaninnovations.looprwallet.utilities.logd
 import com.caplaninnovations.looprwallet.utilities.mkString
 import kotlinx.android.synthetic.main.fragment_create_wallet_phrase_remember.*
 
@@ -23,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_create_wallet_phrase_remember.*
 class CreateWalletRememberPhraseFragment : BaseFragment() {
 
     companion object {
-        val TAG = CreateWalletRememberPhraseFragment::class.java.simpleName
+        val TAG: String = CreateWalletRememberPhraseFragment::class.java.simpleName
         private const val KEY_WALLET_PHRASE = "_WALLET_PHRASE"
 
         private const val KEY_TIME_LEFT = "_TIME_LEFT"
@@ -39,8 +38,8 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
     private val timer: CountDownTimer by lazy {
         object : CountDownTimer(timeLeft, 100) {
             override fun onFinish() {
-                rememberPhraseConfirmButton.isEnabled = true
-                rememberPhraseConfirmButton.setText(R.string.confirm_phrase)
+                rememberGeneratePhraseButton.isEnabled = true
+                rememberGeneratePhraseButton.setText(R.string.confirm_phrase)
             }
 
             override fun onTick(millisUntilFinished: Long) {
@@ -64,7 +63,7 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
 
         setupTimer(savedInstanceState)
 
-        rememberPhraseConfirmButton.setOnClickListener {
+        rememberGeneratePhraseButton.setOnClickListener {
             pushFragmentTransaction(
                     SignInEnterPhraseFragment.createConfirmPhraseInstance(walletCreationPhrase),
                     SignInEnterPhraseFragment.TAG
@@ -93,8 +92,8 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
     }
 
     private fun updateConfirmButton() {
-        rememberPhraseConfirmButton.isEnabled = false
-        rememberPhraseConfirmButton.text = (timeLeft / 1000L).toString()
+        rememberGeneratePhraseButton.isEnabled = false
+        rememberGeneratePhraseButton.text = (timeLeft / 1000L).toString()
     }
 
 }

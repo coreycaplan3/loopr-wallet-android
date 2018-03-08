@@ -20,13 +20,13 @@ import kotlinx.android.synthetic.main.fragment_sign_in.*
  *
  *
  */
-class SignInFragment : BaseFragment() {
+class SignInSelectionFragment : BaseFragment() {
 
     override val layoutResource: Int
         get() = R.layout.fragment_sign_in
 
     companion object {
-        val TAG: String = SignInFragment::class.simpleName!!
+        val TAG: String = SignInSelectionFragment::class.simpleName!!
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,9 +42,9 @@ class SignInFragment : BaseFragment() {
 
         restoreWalletButton.setOnLongClickListener {
             // TODO delete me
-            val walletName = "corey-wallet"
+            val walletName = "debug-loopr-wallet"
             val privateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e439"
-            (activity as? BaseActivity)?.securityClient?.createWallet(walletName, privateKey)
+            (activity as? BaseActivity)?.walletClient?.createWallet(walletName, privateKey)
             startActivity(Intent(context, MainActivity::class.java))
             activity?.finish()
             true

@@ -20,7 +20,7 @@ open class PasswordMatcherValidator(
     override fun isValid(text: String?): Boolean {
         return when {
             text == null || text.isEmpty() -> {
-                // The passwords cannot match anyway, since the length is less than the min.
+                // The passwords cannot match anyway, since the it's empty.
                 error = null
                 false
             }

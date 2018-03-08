@@ -15,6 +15,8 @@ import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackH
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.alphaIs
+import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.scaleXIs
+import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.scaleYIs
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.textSizeIs
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.topPaddingIs
 import com.caplaninnovations.looprwallet.utilities.findTabByTag
@@ -40,21 +42,28 @@ import java.util.concurrent.FutureTask
 class MainActivityTest : BaseDaggerTest() {
 
     @get:Rule
-    val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java)
+    val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java, false, false)
 
     @get:Rule
     val activityIntentRule = ActivityTestRule<MainActivity>(MainActivity::class.java, false, false)
+
+    private val activity by lazy {
+        activityRule.activity
+    }
 
     private lateinit var bottomNavigationHandler: BottomNavigationHandler
     private lateinit var fragmentStackHistory: FragmentStackHistory
 
     @Before
     fun setUp() {
-        val activity = activityRule.activity
+        activityRule.launchActivity(null)
+
         waitForActivityToBeSetup()
 
         bottomNavigationHandler = activity.bottomNavigationHandler
         fragmentStackHistory = activity.fragmentStackHistory
+
+        Thread.sleep(250) // wait the bottom navigation handler to be initialized
     }
 
     @Test
@@ -87,6 +96,8 @@ class MainActivityTest : BaseDaggerTest() {
     @Test
     fun onBackPressedMultipleTimes() {
         // Current stack = MARKETS
+        assertEquals(BottomNavigationFragmentPair.KEY_MARKETS, fragmentStackHistory.peek())
+
         onView(withTagValue(`is`(BottomNavigationFragmentPair.KEY_ORDERS)))
                 .perform(click())
 
@@ -99,12 +110,19 @@ class MainActivityTest : BaseDaggerTest() {
         onView(withTagValue(`is`(BottomNavigationFragmentPair.KEY_MY_WALLET)))
                 .perform(click())
 
+        Thread.sleep(300)
+
         // Assert the tab selection propagated successfully
         // Current stack = MY_WALLET -- ORDERS -- MARKETS
         assertEquals(BottomNavigationFragmentPair.KEY_MY_WALLET, fragmentStackHistory.peek())
 
-        onView(withTagValue(`is`(BottomNavigationFragmentPair.KEY_MARKETS)))
-                .perform(click())
+        /*
+         * For some reason espresso bugs out and won't let us click here... so we'll do it the "old
+         * fashion way"
+         */
+        val tab = activity.bottomNavigation.findTabByTag(BottomNavigationFragmentPair.KEY_MARKETS)
+        val task = FutureTask { tab!!.select() }
+        waitForTask(activity, task, true)
 
         // Assert the tab selection propagated successfully
         // Current stack = MARKETS -- MY_WALLET -- ORDERS; markets should not have been added twice
@@ -130,7 +148,7 @@ class MainActivityTest : BaseDaggerTest() {
         waitForTask(activityRule.activity, task, true)
 
         // Wait extra time for everything to propagate
-        Thread.sleep(500)
+        Thread.sleep(300)
 
         val customView = markets.customView!!
 
@@ -141,7 +159,9 @@ class MainActivityTest : BaseDaggerTest() {
                 .check(alphaIs(0.68f))
 
         onView(`is`(customView.findViewById<TextView>(R.id.bottomNavigationTabText)))
-                .check(textSizeIs(R.dimen.bottom_navigation_text_size))
+                .check(textSizeIs(R.dimen.bottom_navigation_text_size_selected))
+                .check(scaleXIs(0F))
+                .check(scaleYIs(0F))
     }
 
     @Test
@@ -149,11 +169,11 @@ class MainActivityTest : BaseDaggerTest() {
         // The markets tab is the default selected one
         val orders = activityRule.activity.bottomNavigation.findTabByTag(BottomNavigationFragmentPair.KEY_ORDERS)!!
 
-        val task = FutureTask { bottomNavigationHandler.onTabSelected(orders) }
+        val task = FutureTask { orders.select() }
         waitForTask(activityRule.activity, task, true)
 
         // Wait extra time for everything to propagate
-        Thread.sleep(500)
+        Thread.sleep(300)
 
         assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, fragmentStackHistory.peek())
 
@@ -167,6 +187,8 @@ class MainActivityTest : BaseDaggerTest() {
 
         onView(`is`(customView.findViewById<TextView>(R.id.bottomNavigationTabText)))
                 .check(textSizeIs(R.dimen.bottom_navigation_text_size_selected))
+                .check(scaleXIs(1.0F))
+                .check(scaleYIs(1.0F))
 
     }
 

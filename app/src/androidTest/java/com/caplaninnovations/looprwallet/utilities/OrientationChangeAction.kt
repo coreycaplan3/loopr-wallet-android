@@ -36,6 +36,8 @@ import org.hamcrest.Matcher
 
 import android.support.test.espresso.matcher.ViewMatchers.isRoot
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import android.content.ContextWrapper
+
 
 /**
  * An Espresso ViewAction that changes the orientation of the screen.
@@ -65,8 +67,19 @@ class OrientationChangeAction private constructor(private val orientation: Int) 
 
     override fun perform(uiController: UiController?, view: View?) {
         uiController?.loopMainThreadUntilIdle()
-        val activity = view?.context as? Activity
-        activity?.requestedOrientation = orientation
+        var activity: Activity? = view!!.context as? Activity
+
+        if(activity == null) {
+            var context = view.context
+            while (context is ContextWrapper) {
+                if (context is Activity) {
+                    activity = context
+                }
+                context = context.baseContext
+            }
+        }
+
+        activity!!.requestedOrientation = orientation
 
         val resumedActivities = ActivityLifecycleMonitorRegistry.getInstance()
                 .getActivitiesInStage(Stage.RESUMED)

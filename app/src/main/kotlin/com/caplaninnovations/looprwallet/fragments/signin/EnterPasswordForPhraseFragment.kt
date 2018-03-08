@@ -1,18 +1,17 @@
 package com.caplaninnovations.looprwallet.fragments.signin
 
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletRememberPhraseFragment
 import com.caplaninnovations.looprwallet.models.android.observers.observeForDoubleSpend
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
 import com.caplaninnovations.looprwallet.utilities.ViewUtility
-import com.caplaninnovations.looprwallet.utilities.logd
+import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.longToast
 import com.caplaninnovations.looprwallet.validators.PasswordValidator
 import com.caplaninnovations.looprwallet.validators.WalletNameValidator
@@ -29,20 +28,26 @@ import kotlinx.android.synthetic.main.fragment_sign_in_enter_password.*
  * Purpose of Class: First step in the create/restore phrase wallet process.
  *
  */
-class SignInEnterPasswordFragment : BaseFragment() {
+class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.Communicator {
 
     companion object {
-        val TAG: String = SignInEnterPasswordFragment::class.java.simpleName
+        val TAG: String = EnterPasswordForPhraseFragment::class.simpleName!!
 
         private const val KEY_TYPE = "_TYPE"
 
-        const val TYPE_RESTORE_WALLET = "restore_wallet"
-        const val TYPE_CREATE_WALLET = "create_wallet"
+        private const val TYPE_RESTORE_WALLET = "restore_phrase_wallet"
+        private const val TYPE_CREATE_WALLET = "create_phrase_wallet"
 
-        fun createInstance(type: String) =
-                SignInEnterPasswordFragment().apply {
-                    arguments = Bundle().apply { putString(KEY_TYPE, type) }
+        fun createRestorationInstance() =
+                EnterPasswordForPhraseFragment().apply {
+                    arguments = Bundle().apply { putString(KEY_TYPE, TYPE_RESTORE_WALLET) }
                 }
+
+        fun createCreationInstance() =
+                EnterPasswordForPhraseFragment().apply {
+                    arguments = Bundle().apply { putString(KEY_TYPE, TYPE_CREATE_WALLET) }
+                }
+
     }
 
     override val layoutResource: Int
@@ -61,23 +66,52 @@ class SignInEnterPasswordFragment : BaseFragment() {
 
         validatorList = listOf(
                 WalletNameValidator(walletNameInputLayout, this::onFormChanged),
-                PasswordValidator(enterWalletPasswordInputLayout, this::onFormChanged)
+                PasswordValidator(walletPasswordInputLayout, this::onFormChanged)
         )
 
         when (fragmentType) {
             TYPE_CREATE_WALLET -> {
                 enterWalletPasswordTitleLabel.setText(R.string.enter_a_strong_password)
-                rememberPhraseConfirmButton.setText(R.string.generate_phrase)
+                rememberGeneratePhraseButton.setText(R.string.generate_phrase)
                 enterPhrasePasswordSafetyLabel.setText(R.string.safety_create_phrase)
             }
             TYPE_RESTORE_WALLET -> {
                 enterWalletPasswordTitleLabel.setText(R.string.enter_old_password)
-                rememberPhraseConfirmButton.setText(R.string.enter_phrase)
+                rememberGeneratePhraseButton.setText(R.string.enter_phrase)
                 enterPhrasePasswordSafetyLabel.setText(R.string.safety_recover_phrase)
             }
             else -> throw IllegalArgumentException("Invalid fragmentType, found: $fragmentType")
         }
 
+        rememberGeneratePhraseButton.setOnClickListener(this::onSubmitFormClick)
+
+        setupViewModel(view)
+    }
+
+    override fun onFormChanged() {
+        rememberGeneratePhraseButton.isEnabled = isAllValidatorsValid()
+    }
+
+    override fun onPasswordConfirmed() {
+        val walletName = walletNameEditText.text.toString()
+        val password = walletPasswordEditText.text.toString()
+
+        if (!isAllValidatorsValid()) {
+            loge("All validators should be valid!", IllegalStateException())
+            return
+        }
+
+        (activity as? BaseActivity)?.progressDialog?.apply {
+            setMessage(getString(R.string.generating_phrase))
+            show()
+        }
+
+        walletGeneratorViewModel.createPhraseAsync(walletName, password)
+    }
+
+    // MARK - Private Methods
+
+    private fun setupViewModel(view: View) {
         walletGeneratorViewModel.walletCreation.observeForDoubleSpend(this, {
             val progress = (activity as? BaseActivity)?.progressDialog
             if (progress?.isShowing == true) {
@@ -95,34 +129,23 @@ class SignInEnterPasswordFragment : BaseFragment() {
                     CreateWalletRememberPhraseFragment.TAG
             )
         })
-
-        rememberPhraseConfirmButton.setOnClickListener(this::onSubmitFormClick)
     }
-
-    override fun onFormChanged() {
-        rememberPhraseConfirmButton.isEnabled = isAllValidatorsValid()
-    }
-
-    // MARK - Private Methods
 
     private fun onSubmitFormClick(buttonView: View) {
         val walletName = walletNameEditText.text.toString()
-        val password = enterWalletPasswordEditText.text.toString()
+        val password = walletPasswordEditText.text.toString()
 
         ViewUtility.closeKeyboard(buttonView)
 
+        val wallet = WalletCreationPhrase(walletName, password, arrayListOf())
+
         when (fragmentType) {
             TYPE_CREATE_WALLET -> {
-                (activity as? BaseActivity)?.progressDialog?.apply {
-                    setMessage(getString(R.string.generating_phrase))
-                    show()
-                }
-
-                walletGeneratorViewModel.createPhraseAsync(walletName, password)
+                val dialog = ConfirmPasswordDialog.createInstance(TAG, wallet)
+                dialog.show(fragmentManager, ConfirmPasswordDialog.TAG)
             }
 
             TYPE_RESTORE_WALLET -> {
-                val wallet = WalletCreationPhrase(walletName, password, arrayListOf())
                 pushFragmentTransaction(
                         SignInEnterPhraseFragment.createEnterPhraseInstance(wallet),
                         SignInEnterPhraseFragment.TAG

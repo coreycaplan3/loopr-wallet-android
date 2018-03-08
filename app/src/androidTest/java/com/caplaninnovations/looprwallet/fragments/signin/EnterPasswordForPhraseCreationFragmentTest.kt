@@ -1,67 +1,66 @@
-package com.caplaninnovations.looprwallet.fragments.createwallet
+package com.caplaninnovations.looprwallet.fragments.signin
 
-import android.Manifest
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.*
 import android.support.test.espresso.matcher.ViewMatchers.*
-import android.support.test.rule.GrantPermissionRule
-import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.activities.MainActivity
+import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
+import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletRememberPhraseFragment
+import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
+import com.caplaninnovations.looprwallet.utilities.str
 import com.caplaninnovations.looprwallet.validators.BaseValidator
-import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.card_enter_wallet_password.*
-import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
-import org.hamcrest.Matchers.*
-import org.junit.Assert.*
-import org.junit.Rule
+import kotlinx.android.synthetic.main.card_wallet_name.*
+import kotlinx.android.synthetic.main.fragment_sign_in_enter_password.*
+import org.hamcrest.Matchers.`is`
 
+import org.junit.Assert.*
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.util.concurrent.FutureTask
 
 /**
- * Created by Corey on 2/20/2018.
- *
+ * Created by Corey on 3/6/2018.
  *
  * Project: loopr-wallet-android
  *
- *
- * Purpose of Class:
+ * Purpose of Class: For testing the [EnterPasswordForPhraseFragment.createCreationInstance]
+ * version of the fragment.
  */
-@RunWith(AndroidJUnit4::class)
-class CreateWalletKeystoreFragmentTest : BaseDaggerFragmentTest<CreateWalletKeystoreFragment>() {
+class EnterPasswordForPhraseCreationFragmentTest : BaseDaggerFragmentTest<EnterPasswordForPhraseFragment>() {
 
-    @Rule
-    @JvmField
-    val grantFilePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    override val fragment = EnterPasswordForPhraseFragment.createCreationInstance()
+    override val tag = EnterPasswordForPhraseFragment.TAG
 
-    override val fragment = CreateWalletKeystoreFragment()
-    override val tag = CreateWalletKeystoreFragment.TAG
-
+    private val badName = "loopr$" // bad character
     private val goodName = "loopr"
-    private val goodPassword = "looprloopr"
 
-    private val badName = "loopr loopr" // there cannot be any spaces
-    private val badPassword = "loopr" // it's too short
+    private val badPassword = "loopr" // too short
+    private val goodPassword = "looprwallet"
 
+    private val emptyString = ""
     private val nullString: String? = null
-    private val emptyString: String? = ""
 
     @Test
-    fun formIsEmpty_stateShouldBeEmpty() {
-        Espresso.onView(`is`(fragment.walletNameEditText))
-                .check(matches(hasErrorText(nullString)))
-                .check(matches(withText(emptyString)))
+    fun viewText_isCorrect() {
+        fragment.apply {
+            assertEquals(str(R.string.enter_a_strong_password), enterWalletPasswordTitleLabel.text)
+            assertEquals(str(R.string.generate_phrase), rememberGeneratePhraseButton.text)
+            assertEquals(str(R.string.safety_create_phrase), enterPhrasePasswordSafetyLabel.text)
+        }
+    }
 
+    @Test
+    fun initialState_buttonDisabled_textEmpty() {
         Espresso.onView(`is`(fragment.walletPasswordEditText))
-                .check(matches(hasErrorText(nullString)))
                 .check(matches(withText(emptyString)))
 
-        Espresso.onView(`is`(fragment.createButton))
+        Espresso.onView(`is`(fragment.walletNameEditText))
+                .check(matches(withText(emptyString)))
+
+        Espresso.onView(`is`(fragment.rememberGeneratePhraseButton))
                 .check(isDisabled())
     }
 
@@ -71,6 +70,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerFragmentTest<CreateWalletKeys
                 .perform(typeText(goodName), closeSoftKeyboard())
                 .check(matches(hasErrorText(nullString)))
 
+        // Still empty, so error should be empty
         Espresso.onView(`is`(fragment.walletPasswordEditText))
                 .check(matches(hasErrorText(nullString)))
                 .check(matches(withText(emptyString)))
@@ -78,26 +78,8 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerFragmentTest<CreateWalletKeys
         Espresso.onView(`is`(fragment.fragmentContainer))
                 .perform(swipeUp())
 
-        Espresso.onView(`is`(fragment.createButton))
-                .check(isDisabled())
-    }
-
-    @Test
-    fun nameEmpty_passwordOkay() {
-        Espresso.onView(`is`(fragment.walletNameEditText))
-                .check(matches(withText(emptyString)))
-                .check(matches(hasErrorText(nullString)))
-
-        Espresso.onView(`is`(fragment.walletPasswordEditText))
-                .perform(typeText(goodPassword), closeSoftKeyboard())
-                .check(matches(withText(goodPassword)))
-                .check(matches(hasErrorText(nullString)))
-
-        Espresso.onView(`is`(fragment.fragmentContainer))
-                .perform(swipeUp())
-
-        Espresso.onView(`is`(fragment.createButton))
-                .check(isDisabled())
+        Espresso.onView(`is`(fragment.rememberGeneratePhraseButton))
+                .check(CustomViewAssertions.isDisabled())
     }
 
     @Test
@@ -119,8 +101,8 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerFragmentTest<CreateWalletKeys
         Espresso.onView(`is`(fragment.fragmentContainer))
                 .perform(swipeUp())
 
-        Espresso.onView(`is`(fragment.createButton))
-                .check(isDisabled())
+        Espresso.onView(`is`(fragment.rememberGeneratePhraseButton))
+                .check(CustomViewAssertions.isDisabled())
     }
 
     @Test
@@ -136,7 +118,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerFragmentTest<CreateWalletKeys
         Espresso.onView(`is`(fragment.fragmentContainer))
                 .perform(swipeUp())
 
-        Espresso.onView(`is`(fragment.createButton))
+        Espresso.onView(`is`(fragment.rememberGeneratePhraseButton))
                 .check(matches(isEnabled()))
                 .perform(click())
 
@@ -157,7 +139,10 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerFragmentTest<CreateWalletKeys
         val task = FutureTask { fragment.onPasswordConfirmed() }
         waitForTask(activity, task, false)
 
-        assertActivityActive(MainActivity::class.java, 7500)
+        Thread.sleep(500)
+
+        val fragment = activity.supportFragmentManager.findFragmentById(R.id.activityContainer)
+        assertEquals(CreateWalletRememberPhraseFragment.TAG, fragment.tag)
     }
 
 }

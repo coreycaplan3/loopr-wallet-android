@@ -104,7 +104,9 @@ fun View.animateScaleX(toValue: Float, @IntegerRes duration: Int = R.integer.ani
     animator.start()
 }
 
-
+/**
+ * Animates the scale of both x and y values of the view
+ */
 fun View.animateScaleBoth(toValue: Float, @IntegerRes duration: Int = R.integer.animation_duration) {
     pivotX = (this.width / 2).toFloat()
     pivotY = (this.height / 2).toFloat()

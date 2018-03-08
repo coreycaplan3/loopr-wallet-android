@@ -45,7 +45,7 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_restore_keystore
 
-    val filePermissionsHandler by lazy {
+    private val filePermissionsHandler by lazy {
         PermissionHandler(
                 activity as BaseActivity,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -91,7 +91,7 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
             onFormChanged()
         }
 
-    private val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
+    private val walletGeneratorViewModel by lazy {
         ViewModelProviders.of(this).get(WalletGeneratorViewModel::class.java)
     }
 

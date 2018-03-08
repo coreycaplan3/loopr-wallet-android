@@ -4,7 +4,7 @@ import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
-import com.caplaninnovations.looprwallet.models.security.SecurityClient
+import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.realm.RealmClient
 import dagger.Component
 import org.web3j.protocol.Web3j
@@ -29,6 +29,6 @@ interface LooprProductionComponent {
     val walletSettings: WalletSettings
     val themeSettings: ThemeSettings
     val realmClient: RealmClient
-    val securityClient: SecurityClient
+    val walletClient: WalletClient
     val web3j: Web3j
 }

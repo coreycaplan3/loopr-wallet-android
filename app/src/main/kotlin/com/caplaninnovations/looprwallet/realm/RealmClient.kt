@@ -31,10 +31,9 @@ abstract class RealmClient {
 
     abstract fun getInstance(realmName: String, encryptionKey: ByteArray): Realm
 
-    protected fun getRealmConfigurationBuilder(realmName: String, encryptionKey: ByteArray): RealmConfiguration.Builder {
+    protected fun getRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
         return RealmConfiguration.Builder()
                 .name(realmName)
-                .encryptionKey(encryptionKey)
                 .migration(LooprMigration())
                 .schemaVersion(schemaVersion)
     }
@@ -45,8 +44,9 @@ abstract class RealmClient {
             get() = 0
 
         override fun getInstance(realmName: String, encryptionKey: ByteArray): Realm {
-            val configuration = getRealmConfigurationBuilder(realmName, encryptionKey)
+            val configuration = getRealmConfigurationBuilder(realmName)
                     .deleteRealmIfMigrationNeeded()
+                    .inMemory()
                     .build()
 
             return Realm.getInstance(configuration)
@@ -54,13 +54,17 @@ abstract class RealmClient {
 
     }
 
+    /**
+     * Class for PRODUCTION and STAGING usage of [Realm]
+     */
     private class RealmClientProductionImpl : RealmClient() {
 
         override val schemaVersion: Long
             get() = 0
 
         override fun getInstance(realmName: String, encryptionKey: ByteArray): Realm {
-            val configuration = getRealmConfigurationBuilder(realmName, encryptionKey)
+            val configuration = getRealmConfigurationBuilder(realmName)
+                    .encryptionKey(encryptionKey)
                     .build()
 
             return Realm.getInstance(configuration)

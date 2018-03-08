@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.fragments.createwallet
 
 import android.Manifest
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.View
@@ -11,11 +12,11 @@ import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.utilities.DialogUtility
-import com.caplaninnovations.looprwallet.utilities.allNonnull
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.snackbar
 import com.caplaninnovations.looprwallet.validators.PasswordValidator
 import com.caplaninnovations.looprwallet.validators.WalletNameValidator
+import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.card_enter_wallet_password.*
@@ -28,19 +29,16 @@ import kotlinx.android.synthetic.main.card_enter_wallet_password.*
  * Purpose of Class:
  *
  */
-class CreateWalletKeystoreFragment : BaseFragment() {
+class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.Communicator {
 
     companion object {
         val TAG: String = CreateWalletKeystoreFragment::class.simpleName!!
 
         const val KEY_IS_FILE_DIALOG_SHOWING = "_IS_FILE_DIALOG_SHOWING"
-        const val KEY_WALLET_CREATION_KEYSTORE = "_WALLET_CREATION_KEYSTORE"
     }
 
     override val layoutResource: Int
         get() = R.layout.fragment_create_wallet_keystore
-
-    var walletCreationKeystore: WalletCreationKeystore? = null
 
     private val filePermissionsHandler by lazy {
         PermissionHandler(
@@ -63,52 +61,68 @@ class CreateWalletKeystoreFragment : BaseFragment() {
     }
 
     private val passwordValidator: PasswordValidator by lazy {
-        PasswordValidator(enterWalletPasswordInputLayout, this::onFormChanged)
+        PasswordValidator(walletPasswordInputLayout, this::onFormChanged)
+    }
+
+    val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
+        ViewModelProviders.of(this).get(WalletGeneratorViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        walletCreationKeystore = savedInstanceState?.getParcelable(KEY_WALLET_CREATION_KEYSTORE)
-
         validatorList = listOf(walletNameValidator, passwordValidator)
 
-        createButton.setOnClickListener(this::onCreateWalletButtonClick)
+        createButton.setOnClickListener { onCreateWalletButtonClick() }
 
-        if(savedInstanceState?.getBoolean(KEY_IS_FILE_DIALOG_SHOWING) == true) {
+        if (savedInstanceState?.getBoolean(KEY_IS_FILE_DIALOG_SHOWING) == true) {
             filePermissionsDialog?.show()
         }
+
+        WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
     }
 
     override fun onFormChanged() {
         createButton.isEnabled = isAllValidatorsValid()
     }
 
+    override fun onPasswordConfirmed() {
+        val walletName = walletNameEditText.text.toString()
+        val password = walletPasswordEditText.text.toString()
+
+        val walletDirectory = view?.context?.filesDir
+
+        if (walletDirectory == null) {
+            loge("Wallet directory cannot be null!", IllegalStateException())
+            return
+        }
+
+        if (!isAllValidatorsValid()) {
+            loge("All validators must be valid!", IllegalStateException())
+            return
+        }
+
+        walletGeneratorViewModel.createKeystoreWallet(walletName, password, walletDirectory)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putParcelable(KEY_WALLET_CREATION_KEYSTORE, walletCreationKeystore)
         outState.putBoolean(KEY_IS_FILE_DIALOG_SHOWING, filePermissionsDialog?.isShowing == true)
     }
 
     // Mark - Private Methods
 
-    private fun onCreateWalletButtonClick(buttonView: View) {
-        if (isAllValidatorsValid()) {
-            val walletName = walletNameValidator.getText()
-            val password = passwordValidator.getText()
+    private fun onCreateWalletButtonClick() {
+        if (!isAllValidatorsValid()) {
+            loge("Error, this should not have occurred", IllegalStateException())
+            return
+        }
 
-            if (!listOf(walletName, password).allNonnull()) {
-                loge("Error! This should not have occurred", IllegalStateException())
-                buttonView.snackbar(R.string.error_unknown)
-                return
-            }
-
-            walletCreationKeystore = WalletCreationKeystore(walletName!!, password!!)
-
-            if (!filePermissionsHandler.isPermissionGranted) {
-                filePermissionsDialog?.show()
-            }
+        if (!filePermissionsHandler.isPermissionGranted) {
+            filePermissionsDialog?.show()
+        } else {
+            onFilePermissionGranted()
         }
     }
 
@@ -117,13 +131,13 @@ class CreateWalletKeystoreFragment : BaseFragment() {
      * when the rest of the form is valid.
      */
     private fun onFilePermissionGranted() {
-        val wallet = walletCreationKeystore
-        if (wallet != null) {
-            ConfirmPasswordDialog.createInstance(wallet)
-                    .show(fragmentManager, ConfirmPasswordDialog.TAG)
-        } else {
-            loge("Error invalid state!", IllegalStateException())
-        }
+        val walletName = walletNameEditText.text.toString()
+        val password = walletPasswordEditText.text.toString()
+
+        val wallet = WalletCreationKeystore(walletName, password)
+
+        val dialog = ConfirmPasswordDialog.createInstance(TAG, wallet)
+        dialog.show(fragmentManager, ConfirmPasswordDialog.TAG)
     }
 
     private fun onFilePermissionDenied() {

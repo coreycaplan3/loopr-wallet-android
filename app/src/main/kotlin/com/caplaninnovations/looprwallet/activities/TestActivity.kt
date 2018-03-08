@@ -5,7 +5,7 @@ import android.support.annotation.RestrictTo
 import android.support.annotation.RestrictTo.Scope.TESTS
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPasswordFragment
+import com.caplaninnovations.looprwallet.fragments.signin.EnterPasswordForPhraseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
 
@@ -30,9 +30,8 @@ class TestActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             // used for testing a sole fragment
-            val wallet = WalletCreationPhrase("loopr-test", "looprwallet", arrayListOf())
             addFragment(
-                    SignInEnterPasswordFragment.createInstance(SignInEnterPasswordFragment.TYPE_CREATE_WALLET),
+                    EnterPasswordForPhraseFragment.createCreationInstance(),
                     SignInEnterPhraseFragment.TAG
             )
         }

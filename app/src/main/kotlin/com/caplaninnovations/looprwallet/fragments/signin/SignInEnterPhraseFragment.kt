@@ -3,6 +3,8 @@ package com.caplaninnovations.looprwallet.fragments.signin
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
+import android.support.design.widget.AppBarLayout
 import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,7 +16,6 @@ import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.utilities.longToast
 import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.WindowManager.LayoutParams.*
 import android.view.inputmethod.EditorInfo
 import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
 import com.caplaninnovations.looprwallet.handlers.SimpleItemTouchHandler
@@ -33,7 +34,6 @@ import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
  *
  */
 class SignInEnterPhraseFragment : BaseFragment() {
@@ -73,7 +73,9 @@ class SignInEnterPhraseFragment : BaseFragment() {
             }
         }
 
-        private fun setupArguments(fragmentType: String, walletCreationPhrase: WalletCreationPhrase, correctPhrase: ArrayList<String>?) =
+        private fun setupArguments(fragmentType: String,
+                                   walletCreationPhrase: WalletCreationPhrase,
+                                   correctPhrase: ArrayList<String>?) =
                 Bundle().apply {
                     putString(KEY_FRAGMENT_TYPE, fragmentType)
                     putParcelable(KEY_WALLET_CREATION, walletCreationPhrase)
@@ -84,7 +86,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_enter_phrase_confirm
 
-    private lateinit var phrase: ArrayList<String>
+    lateinit var phrase: ArrayList<String>
 
     private val correctPhrase: ArrayList<String> by lazy {
         arguments!!.getStringArrayList(KEY_CORRECT_PHRASE)
@@ -122,7 +124,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
             }
         }
 
-        setupForm()
+        setupFormUI()
 
         fragmentContainer.apply {
             this.layoutManager = LinearLayoutManager(context)
@@ -159,16 +161,15 @@ class SignInEnterPhraseFragment : BaseFragment() {
         val enteredWord = enterPhraseEditText.text.toString().trim().toLowerCase()
 
         when {
+            phrase.size == PHRASE_SIZE -> {
+                submitPhrase()
+            }
             enteredWord.isEmpty() || !enteredWord.matches(Regex("[a-z]+")) -> {
                 context?.longToast(R.string.error_phrase_enter_valid_word)
             }
             else -> {
-                if (phrase.size == PHRASE_SIZE) {
-                    submitPhrase()
-                } else {
-                    onWordAdded(enteredWord)
-                    enterPhraseEditText.text = null
-                }
+                onWordAdded(enteredWord)
+                enterPhraseEditText.text = null
             }
         }
     }
@@ -181,6 +182,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
         logd("Adding word: $word")
         (fragmentContainer.adapter as PhraseAdapter).onWordAdded(word)
         fragmentContainer.smoothScrollToPosition(phrase.size - 1)
+        appbarLayout?.setExpanded(false)
 
         if (phrase.size == PHRASE_SIZE) {
             // We need to disallow more words from being inputted and allow the user to submit
@@ -188,7 +190,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
                     ?.hideSoftInputFromWindow(view?.windowToken, 0)
 
             TransitionManager.beginDelayedTransition(view as ViewGroup)
-            setupForm()
+            setupFormUI()
         }
     }
 
@@ -196,15 +198,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
         if (phrase.size == PHRASE_SIZE - 1) {
             // We are downsizing from 12. Allow the user to input new words
             (view as? ViewGroup)?.let { TransitionManager.beginDelayedTransition(it) }
-            setupForm()
-        }
-    }
-
-    private fun getEnterPhraseSubmitButtonText(): String {
-        return when (fragmentType) {
-            TYPE_CONFIRM_PHRASE -> getString(R.string.create_wallet)
-            TYPE_ENTER_PHRASE -> getString(R.string.restore_wallet)
-            else -> throw IllegalArgumentException("Invalid fragmentType, found $fragmentType")
+            setupFormUI()
         }
     }
 
@@ -227,7 +221,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
         }
     }
 
-    private fun setupForm() {
+    private fun setupFormUI() {
         if (phrase.size == PHRASE_SIZE) {
             enterPhraseAddSubmitButton.text = getEnterPhraseSubmitButtonText()
             (enterPhraseInputLayout.layoutParams as? LinearLayout.LayoutParams)?.let {
@@ -240,6 +234,14 @@ class SignInEnterPhraseFragment : BaseFragment() {
                 it.weight = 0.75F
                 enterPhraseInputLayout.requestLayout()
             }
+        }
+    }
+
+    private fun getEnterPhraseSubmitButtonText(): String {
+        return when (fragmentType) {
+            TYPE_CONFIRM_PHRASE -> getString(R.string.create_wallet)
+            TYPE_ENTER_PHRASE -> getString(R.string.restore_wallet)
+            else -> throw IllegalArgumentException("Invalid fragmentType, found $fragmentType")
         }
     }
 

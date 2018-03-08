@@ -16,7 +16,6 @@ import javax.inject.Singleton
  * Purpose of Class:
  *
  */
-
 @Module
 class LooprSettingsModule(private val context: Context) {
 

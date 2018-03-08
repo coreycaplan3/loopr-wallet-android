@@ -9,9 +9,7 @@ import org.web3j.crypto.CipherException
 /**
  * Created by Corey on 2/25/2018.
  *
- *
  * Project: loopr-wallet-android
- *
  *
  * Purpose of Class:
  */

@@ -16,8 +16,6 @@ import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.coroutines.experimental.async
 import org.web3j.crypto.*
 import java.io.File
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
 import java.security.SecureRandom
 
 /**
@@ -26,7 +24,6 @@ import java.security.SecureRandom
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
  *
  */
 class WalletGeneratorViewModel : ViewModel() {
@@ -81,7 +78,7 @@ class WalletGeneratorViewModel : ViewModel() {
 
     }
 
-    private val securityClient = LooprWalletApp.application.securityClient
+    private val securityClient = LooprWalletApp.application.walletClient
 
     /**
      * Tracks whether or not wallet creation is running.
@@ -110,18 +107,18 @@ class WalletGeneratorViewModel : ViewModel() {
      */
     fun createKeystoreWallet(walletName: String, password: String, filesDirectory: File) = createWalletAsync {
         try {
-            val bip39Wallet = WalletUtils.generateBip39Wallet(password, filesDirectory)
-            val generatedFile = File(filesDirectory, bip39Wallet.filename)
+            val filename = WalletUtils.generateLightNewWalletFile(password, filesDirectory)
+            val generatedFile = File(filesDirectory, filename)
             val credentialFile = File(filesDirectory, FilesUtility.getWalletFilename(walletName))
 
             when (generatedFile.renameTo(credentialFile)) {
                 true -> {
-                    loge("Could not rename generated wallet file in filesDirectory!", IllegalStateException())
-                    WalletCreationResult(false, str(R.string.error_creating_wallet))
+                    val credentials = WalletUtils.loadCredentials(password, credentialFile)
+                    WalletCreationHandler(walletName, credentials, securityClient).createWallet()
                 }
                 false -> {
-                    val credentials = WalletUtils.loadBip39Credentials(password, bip39Wallet.mnemonic)
-                    WalletCreationHandler(walletName, credentials, securityClient).createWallet()
+                    loge("Could not rename generated wallet file in filesDirectory!", IllegalStateException())
+                    WalletCreationResult(false, str(R.string.error_creating_wallet))
                 }
             }
         } catch (e: Exception) {
@@ -164,8 +161,8 @@ class WalletGeneratorViewModel : ViewModel() {
 
                 val phrase = MnemonicUtils.generateMnemonic(initialEntropy)
                 val phraseList = ArrayList(phrase.split(Regex("\\s+")).toMutableList())
-                walletPhraseGeneration.postValue(WalletCreationPhrase(walletName, password, phraseList))
                 walletCreation.postValue(WalletCreationResult(true, null))
+                walletPhraseGeneration.postValue(WalletCreationPhrase(walletName, password, phraseList))
             } catch (e: Exception) {
                 loge("Could not create phrase: ", e)
                 val error = str(R.string.error_creating_wallet)
@@ -227,14 +224,9 @@ class WalletGeneratorViewModel : ViewModel() {
     private fun populateWordListFromAssets() {
         val stream = LooprWalletApp.getContext().assets.open("en-mnemonic-word-list.txt")
         val lines = stream.bufferedReader().readLines()
-        logd("Line [25]: ${lines[25]}")
 
         val field = MnemonicUtils::class.java.getDeclaredField("WORD_LIST")
         field.isAccessible = true
-
-//        val modifiers = Field::class.java.getDeclaredField("modifiers")
-//        modifiers.isAccessible = true
-//        modifiers.setInt(field, field.modifiers and Modifier.FINAL.inv())
 
         field.set(null, lines)
     }

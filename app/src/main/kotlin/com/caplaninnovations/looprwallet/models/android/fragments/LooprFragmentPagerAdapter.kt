@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import com.caplaninnovations.looprwallet.utilities.logd
 
 /**
  * Created by Corey Caplan on 1/24/18.
@@ -35,8 +36,12 @@ class LooprFragmentPagerAdapter(private val fragmentManager: FragmentManager,
 
         fragmentList.forEachIndexed { index, pair ->
             val fragment = pair.second
-            val savedState = fragmentManager.saveFragmentInstanceState(fragment)
-            bundle.putParcelable(KEY_FRAGMENT + index, savedState)
+            try {
+                val savedState = fragmentManager.saveFragmentInstanceState(fragment)
+                bundle.putParcelable(KEY_FRAGMENT + index, savedState)
+            } catch (e: Exception) {
+                logd("Unable to save state for ${fragment.tag}")
+            }
         }
 
         return bundle

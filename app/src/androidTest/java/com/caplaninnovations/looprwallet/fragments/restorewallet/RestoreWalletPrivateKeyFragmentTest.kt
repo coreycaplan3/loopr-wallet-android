@@ -8,7 +8,7 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.TestActivity
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
+import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 import kotlinx.android.synthetic.main.fragment_restore_private_key.*
@@ -31,12 +31,10 @@ import java.util.concurrent.FutureTask
  * Purpose of Class:
  */
 @RunWith(AndroidJUnit4::class)
-class RestoreWalletPrivateKeyFragmentTest : BaseDaggerTest() {
+class RestoreWalletPrivateKeyFragmentTest : BaseDaggerFragmentTest<RestoreWalletPrivateKeyFragment>() {
 
-    @get:Rule
-    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
-
-    private val fragment = RestoreWalletPrivateKeyFragment()
+    override val fragment = RestoreWalletPrivateKeyFragment()
+    override val tag = RestoreWalletPrivateKeyFragment.TAG
 
     private val goodName = "loopr-wallet-private-key"
     private val badName = "loopr-wallet$"
@@ -46,16 +44,6 @@ class RestoreWalletPrivateKeyFragmentTest : BaseDaggerTest() {
 
     private val emptyString = ""
     private val nullString: String? = null
-
-    @Before
-    fun setUp() {
-        val task = FutureTask {
-            activityRule.activity.addFragment(fragment, RestoreWalletPrivateKeyFragment.TAG)
-        }
-        activityRule.activity.runOnUiThread(task)
-        waitForTask(activityRule.activity, task, false)
-        waitForActivityToBeSetup()
-    }
 
     @Test
     fun initialState_buttonDisabled_textEmpty() {
@@ -129,7 +117,7 @@ class RestoreWalletPrivateKeyFragmentTest : BaseDaggerTest() {
                 .check(matches(isEnabled()))
                 .perform(click())
 
-        assertActivityActive(MainActivity::class.java, 10000)
+        assertActivityActive(MainActivity::class.java)
     }
 
 }

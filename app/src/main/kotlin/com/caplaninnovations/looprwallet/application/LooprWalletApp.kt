@@ -7,10 +7,9 @@ import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import android.support.v4.app.ActivityCompat
 import com.caplaninnovations.looprwallet.BuildConfig
-import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.dagger.*
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
-import com.caplaninnovations.looprwallet.models.security.SecurityClient
+import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.utilities.logi
 import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
@@ -33,10 +32,12 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
         fun getContext(): Context = application.applicationContext
     }
 
-    lateinit var looprProductionComponent: LooprProductionComponent
+    val looprProductionComponent: LooprProductionComponent by lazy {
+        provideDaggerComponent()
+    }
 
     @Inject
-    lateinit var securityClient: SecurityClient
+    lateinit var walletClient: WalletClient
 
     @Inject
     lateinit var ethereumClient: Web3j
@@ -52,10 +53,7 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
 
         Realm.init(this)
 
-        looprProductionComponent = provideDaggerComponent()
         looprProductionComponent.inject(this)
-
-        BuildConfig.API_URL
 
         FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }
@@ -70,15 +68,15 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
 
     override fun onActivityResumed(activity: Activity?) {
         activity?.let {
-            if (!securityClient.isUnlocked()) {
-                securityClient.unlockLooprApp(it)
+            if (!walletClient.isUnlocked()) {
+                walletClient.unlockLooprApp(it)
             }
         }
     }
 
     override fun onActivityPaused(activity: Activity?) {
         activity?.let {
-            securityClient.beginLockCountdown()
+            walletClient.beginLockCountdown()
         }
     }
 

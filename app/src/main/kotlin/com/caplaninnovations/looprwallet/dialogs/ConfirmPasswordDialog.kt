@@ -1,6 +1,5 @@
 package com.caplaninnovations.looprwallet.dialogs
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.design.widget.BottomSheetBehavior
@@ -11,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
+import com.caplaninnovations.looprwallet.activities.SignInActivity
 import com.caplaninnovations.looprwallet.models.wallet.creation.PasswordBasedWallet
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
@@ -23,70 +22,71 @@ import kotlinx.android.synthetic.main.dialog_confirm_password.*
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class:
+ * Purpose of Class: A dialog that prompts the user to reenter his/her text password.
  *
  */
 class ConfirmPasswordDialog : BottomSheetDialogFragment() {
 
+    /**
+     * An interface used to communicate with the activity that a password has been confirmed
+     */
+    interface Communicator {
+
+        /**
+         * Called when the password has been confirmed by the user and is able to proceed with the
+         * operation.
+         */
+        fun onPasswordConfirmed()
+    }
+
     companion object {
 
         val TAG: String = ConfirmPasswordDialog::class.java.simpleName
+
+        private const val KEY_CURRENT_FRAGMENT_TAG = "_CURRENT_FRAGMENT_TAG"
+
         const val KEY_WALLET = "_WALLET"
 
-        fun createInstance(walletCreationKeystore: WalletCreationKeystore): ConfirmPasswordDialog {
+        /**
+         * @param currentFragmentTag The tag of the currently active fragment. Used to communicate
+         * back to it, after the user confirms their password.
+         * @param walletCreationKeystore The wallet that the user is creating.
+         */
+        fun createInstance(currentFragmentTag: String, walletCreationKeystore: WalletCreationKeystore): ConfirmPasswordDialog {
             return ConfirmPasswordDialog().apply {
-                arguments = Bundle().apply { putParcelable(KEY_WALLET, walletCreationKeystore) }
+                arguments = Bundle().apply {
+                    putString(KEY_CURRENT_FRAGMENT_TAG, currentFragmentTag)
+                    putParcelable(KEY_WALLET, walletCreationKeystore)
+                }
             }
         }
 
-        fun createInstance(walletCreationPhrase: WalletCreationPhrase): ConfirmPasswordDialog {
+        /**
+         * @param currentFragmentTag The tag of the currently active fragment. Used to communicate
+         * back to it, after the user confirms their password.
+         * @param walletCreationPhrase The wallet that the user is creating.
+         */
+        fun createInstance(currentFragmentTag: String, walletCreationPhrase: WalletCreationPhrase): ConfirmPasswordDialog {
             return ConfirmPasswordDialog().apply {
-                arguments = Bundle().apply { putParcelable(KEY_WALLET, walletCreationPhrase) }
+                arguments = Bundle().apply {
+                    putString(KEY_CURRENT_FRAGMENT_TAG, currentFragmentTag)
+                    putParcelable(KEY_WALLET, walletCreationPhrase)
+                }
             }
         }
     }
 
-    private val walletCreationKeystore: WalletCreationKeystore? by lazy {
-        val wallet: Parcelable? = arguments?.getParcelable(KEY_WALLET)
-        if (wallet is WalletCreationKeystore) {
-            wallet
-        } else {
-            null
-        }
-
+    private val currentFragmentTag: String by lazy {
+        arguments!!.getString(KEY_CURRENT_FRAGMENT_TAG)
     }
 
-    private val walletCreationPhrase: WalletCreationPhrase? by lazy {
-        val wallet: Parcelable? = arguments?.getParcelable(KEY_WALLET)
-        if (wallet is WalletCreationPhrase) {
-            wallet
-        } else {
-            null
-        }
+    private val passwordBasedWallet: PasswordBasedWallet by lazy {
+        arguments!!.getParcelable<Parcelable>(KEY_WALLET) as PasswordBasedWallet
     }
 
     private val passwordMatcherValidator: PasswordMatcherValidator by lazy {
-        val password = listOf<PasswordBasedWallet?>(walletCreationKeystore, walletCreationPhrase)
-                .first { it != null }!!
-                .getWalletPassword()
-
+        val password = passwordBasedWallet.getWalletPassword()
         PasswordMatcherValidator(confirmPasswordInputLayout, this::onPasswordChange, password)
-    }
-
-    val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
-        ViewModelProviders.of(this).get(WalletGeneratorViewModel::class.java)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val walletList = listOf(
-                walletCreationKeystore,
-                walletCreationPhrase
-        )
-        if (walletList.filter { it != null }.size != 1) {
-            throw IllegalStateException("Invalid argument passed!")
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -110,35 +110,16 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
 
         onPasswordChange()
 
-        when {
-            walletCreationKeystore != null ->
-                confirmButton.setOnClickListener {
-                    clickListenerForKeystore(it, walletCreationKeystore!!)
-                }
-
-            walletCreationPhrase != null ->
-                confirmButton.setOnClickListener {
-                    clickListenerForPhrase(it, walletCreationPhrase!!)
-                }
+        confirmButton.setOnClickListener {
+            (activity as? SignInActivity)?.onPasswordConfirmed(currentFragmentTag)
+            dismissAllowingStateLoss()
         }
-
-        WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
     }
 
     // MARK - Private Methods
 
     private fun onPasswordChange() {
         confirmButton.isEnabled = passwordMatcherValidator.isValid()
-    }
-
-    private fun clickListenerForKeystore(view: View, wallet: WalletCreationKeystore) {
-        val walletDirectory = view.context.filesDir
-
-        walletGeneratorViewModel.createKeystoreWallet(wallet.walletName, wallet.password, walletDirectory)
-    }
-
-    private fun clickListenerForPhrase(view: View, wallet: WalletCreationPhrase) {
-        //TODO
     }
 
 }

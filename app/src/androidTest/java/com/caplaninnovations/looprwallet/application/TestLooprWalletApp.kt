@@ -14,9 +14,10 @@ class TestLooprWalletApp : LooprWalletApp() {
 
     override fun provideDaggerComponent(): LooprProductionComponent {
         return DaggerLooprTestComponent.builder()
-                .looprSettingsTestModule(LooprSettingsTestModule())
-                .looprRealmTestModule(LooprRealmTestModule())
-                .looprSecurityTestModule(LooprSecurityTestModule())
+                .looprRealmModule(LooprRealmModule())
+                .looprSecurityModule(LooprSecurityModule(this.applicationContext))
+                .looprSettingsModule(LooprSettingsModule(this.applicationContext))
+                .looprEthModule(LooprEthModule())
                 .build()
     }
 }

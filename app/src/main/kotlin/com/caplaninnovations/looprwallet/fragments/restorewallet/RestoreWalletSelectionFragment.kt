@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPasswordFragment
+import com.caplaninnovations.looprwallet.fragments.signin.EnterPasswordForPhraseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import kotlinx.android.synthetic.main.fragment_restore_wallet_selection.*
 
@@ -35,8 +35,8 @@ class RestoreWalletSelectionFragment : BaseFragment() {
 
         restoreWalletPhraseButton.setOnClickListener {
             pushFragmentTransaction(
-                    SignInEnterPasswordFragment.createInstance(SignInEnterPasswordFragment.TYPE_RESTORE_WALLET),
-                    SignInEnterPhraseFragment.TAG
+                    EnterPasswordForPhraseFragment.createRestorationInstance(),
+                    EnterPasswordForPhraseFragment.TAG
             )
         }
 

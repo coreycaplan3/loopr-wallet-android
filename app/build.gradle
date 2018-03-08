@@ -182,6 +182,7 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-core:2.7.6"
     androidTestImplementation "com.android.support.test:rules:1.0.2-alpha1"
     androidTestImplementation "com.android.support.test:runner:1.0.1"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"

@@ -7,8 +7,10 @@ import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.runner.RunWith
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by Corey Caplan on 2/1/18.
@@ -20,8 +22,16 @@ import java.util.*
 @RunWith(AndroidJUnit4::class)
 class WalletSettingsTest : BaseDaggerTest() {
 
+    @Inject
+    lateinit var walletSettings: WalletSettings
+
     private val privateKeyOne = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e491"
     private val privateKeyTwo = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e492"
+
+    @Before
+    fun setup() {
+        component.inject(this)
+    }
 
     override fun putDefaultWallet() {
         // NO OP; we don't want to put a default wallet; it will break these tests.
@@ -41,12 +51,11 @@ class WalletSettingsTest : BaseDaggerTest() {
 
         assertEquals(LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS, lockoutTime)
 
-        val newLockoutTime = LockoutTimes.FIVE_MINUTES_MILLIS
-        walletSettings.putLockoutTime(newLockoutTime)
+        walletSettings.putLockoutTime(LockoutTimes.FIVE_MINUTES_MILLIS)
+        assertEquals(LockoutTimes.FIVE_MINUTES_MILLIS, walletSettings.getLockoutTime())
 
-        assertEquals(newLockoutTime, walletSettings.getLockoutTime())
-
-        assertNotEquals(lockoutTime, newLockoutTime)
+        walletSettings.putLockoutTime(LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS)
+        assertEquals(LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS, lockoutTime)
     }
 
     @Test
@@ -83,7 +92,7 @@ class WalletSettingsTest : BaseDaggerTest() {
         assertFalse(Arrays.equals(firstRealmKey, secondRealmKey))
         assertEquals(2, walletSettings.getAllWallets().size)
 
-        // Remove Xander's wallet and assert that Corey is now selected
+        // Remove second wallet and assert that first is now selected
 
         walletSettings.removeWallet(secondWalletName)
 

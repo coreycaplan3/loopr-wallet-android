@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.handlers
 
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.models.security.SecurityClient
+import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
 import com.caplaninnovations.looprwallet.utilities.loge
 import com.caplaninnovations.looprwallet.utilities.str
@@ -19,7 +19,7 @@ import org.web3j.utils.Numeric
 class WalletCreationHandler(
         private val walletName: String,
         private val credentials: Credentials,
-        private val securityClient: SecurityClient?
+        private val walletClient: WalletClient?
 ) {
 
     /**
@@ -32,14 +32,14 @@ class WalletCreationHandler(
      * successful or the error if the operation was a failure.
      */
     fun createWallet(): WalletCreationResult {
-        if (securityClient == null) {
+        if (walletClient == null) {
             loge("Could not create wallet!", IllegalStateException())
             return WalletCreationResult(false, str(R.string.error_creating_wallet))
         }
 
         val privateKey = Numeric.encodeQuantity(credentials.ecKeyPair.privateKey)
 
-        return when (securityClient.createWallet(walletName.toLowerCase(), privateKey)) {
+        return when (walletClient.createWallet(walletName.toLowerCase(), privateKey)) {
             true -> WalletCreationResult(true, null)
             false -> WalletCreationResult(false, str(R.string.error_wallet_already_exists))
         }

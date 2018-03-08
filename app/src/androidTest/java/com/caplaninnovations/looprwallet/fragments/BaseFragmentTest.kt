@@ -9,10 +9,10 @@ import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.TestActivity
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
+import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.utilities.OrientationChangeAction
+import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,10 +25,9 @@ import java.util.concurrent.FutureTask
  *
  * Purpose of Class:
  *
- *
  */
 @RunWith(AndroidJUnit4::class)
-class BaseFragmentTest : BaseDaggerTest() {
+class BaseFragmentTest : BaseDaggerFragmentTest<BaseFragmentTest.TestingBaseFragment>() {
 
     class TestingBaseFragment : BaseFragment() {
         override val layoutResource: Int
@@ -36,29 +35,12 @@ class BaseFragmentTest : BaseDaggerTest() {
 
     }
 
-    @get:Rule
-    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
-
-    private val baseFragment = TestingBaseFragment()
-    private val tag = "fragment"
-
-    private lateinit var activity: TestActivity
-
-
-    @Before
-    fun setup() {
-        activity = activityRule.activity
-        val task = FutureTask {
-            activity.addFragment(baseFragment, tag)
-        }
-        activity.runOnUiThread(task)
-        waitForTask(activity, task, false)
-        waitForActivityToBeSetup()
-    }
+    override val fragment = TestingBaseFragment()
+    override val tag = "BaseFragment"
 
     @Test
     fun checkToolbarModeAfterRotation() {
-        val enableToolbarCollapsingTask = FutureTask { baseFragment.enableToolbarCollapsing() }
+        val enableToolbarCollapsingTask = FutureTask { fragment.enableToolbarCollapsing() }
         waitForTask(activity, enableToolbarCollapsingTask, true)
 
         onView(isRoot()).perform(OrientationChangeAction.changeOrientationToLandscape())
@@ -69,27 +51,27 @@ class BaseFragmentTest : BaseDaggerTest() {
 
     @Test
     fun enableToolbarCollapsing__checkUi() {
-        val task = FutureTask { baseFragment.enableToolbarCollapsing() }
+        val task = FutureTask { fragment.enableToolbarCollapsing() }
         waitForTask(activity, task, false)
 
-        val toolbarLayoutParams = activity.toolbar.layoutParams as AppBarLayout.LayoutParams
+        val toolbarLayoutParams = fragment.toolbar!!.layoutParams as AppBarLayout.LayoutParams
         val flags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
         assertEquals(flags, toolbarLayoutParams.scrollFlags)
 
-        val fragmentContainer = baseFragment.view?.findViewById<ViewGroup>(R.id.fragmentContainer)
+        val fragmentContainer = fragment.view?.findViewById<ViewGroup>(R.id.fragmentContainer)
         val topMargin = (fragmentContainer!!.layoutParams as CoordinatorLayout.LayoutParams).topMargin
         assertEquals(0, topMargin)
     }
 
     @Test
     fun disableToolbarCollapsing_checkUi() {
-        val task = FutureTask { baseFragment.disableToolbarCollapsing() }
+        val task = FutureTask { fragment.disableToolbarCollapsing() }
         waitForTask(activity, task, false)
 
-        val toolbarLayoutParams = activity.toolbar.layoutParams as AppBarLayout.LayoutParams
+        val toolbarLayoutParams = fragment.toolbar!!.layoutParams as AppBarLayout.LayoutParams
         assertEquals(0, toolbarLayoutParams.scrollFlags)
 
-        val fragmentContainer = baseFragment.view?.findViewById<ViewGroup>(R.id.fragmentContainer)
+        val fragmentContainer = fragment.view?.findViewById<ViewGroup>(R.id.fragmentContainer)
         val topMargin = (fragmentContainer!!.layoutParams as CoordinatorLayout.LayoutParams).topMargin
         val actionBarSizeResource = activity.getResourceIdFromAttrId(android.R.attr.actionBarSize)
         val actionBarSize = activity.resources.getDimension(actionBarSizeResource).toInt()

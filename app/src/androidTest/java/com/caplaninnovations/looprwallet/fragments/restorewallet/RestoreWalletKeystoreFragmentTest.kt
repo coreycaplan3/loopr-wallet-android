@@ -8,12 +8,10 @@ import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.*
 import android.support.test.espresso.matcher.ViewMatchers.*
-import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.MainActivity
-import com.caplaninnovations.looprwallet.activities.TestActivity
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
+import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions
 import com.caplaninnovations.looprwallet.utilities.FilesUtility
 import com.caplaninnovations.looprwallet.utilities.OrientationChangeAction
@@ -22,7 +20,6 @@ import kotlinx.android.synthetic.main.fragment_restore_keystore.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import org.hamcrest.Matchers.*
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -38,16 +35,14 @@ import java.util.concurrent.FutureTask
  * Purpose of Class:
  */
 @RunWith(AndroidJUnit4::class)
-class RestoreWalletKeystoreFragmentTest : BaseDaggerTest() {
+class RestoreWalletKeystoreFragmentTest : BaseDaggerFragmentTest<RestoreWalletKeystoreFragment>() {
 
-    @get:Rule
-    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
-
-    @get:Rule
+    @Rule
     @JvmField
     val grantFilePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-    private val fragment = RestoreWalletKeystoreFragment()
+    override val fragment = RestoreWalletKeystoreFragment()
+    override val tag = RestoreWalletKeystoreFragment.TAG
 
     private val goodName = "loopr-wallet-restore-keystore"
     private val badName = "loopr-wallet$" // cannot contain special characters
@@ -59,16 +54,6 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerTest() {
     private val nullString: String? = null
 
     private val fileName = "loopr-test-keystore.json"
-
-    @Before
-    fun setUp() {
-        val task = FutureTask {
-            activityRule.activity.addFragment(fragment, RestoreWalletKeystoreFragment.TAG)
-        }
-        activityRule.activity.runOnUiThread(task)
-        waitForTask(activityRule.activity, task, false)
-        waitForActivityToBeSetup()
-    }
 
     @Test
     fun initialState_buttonDisabled_textEmpty() {
@@ -143,7 +128,7 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerTest() {
                 .check(matches(isEnabled()))
                 .perform(click())
 
-        assertActivityActive(MainActivity::class.java, 15000)
+        assertActivityActive(MainActivity::class.java, 7000)
     }
 
     @Test
