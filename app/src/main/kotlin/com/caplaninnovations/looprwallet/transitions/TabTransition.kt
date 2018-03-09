@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.transitions
 
 import android.animation.*
+import android.support.transition.TransitionSet
 import android.support.transition.TransitionValues
 import android.support.transition.Visibility
 import android.view.View
@@ -24,40 +25,25 @@ class TabTransition : Visibility() {
 
         fun setupForBaseTabFragment(baseTagFragment: BaseTabFragment) =
                 baseTagFragment.apply {
-                    allowEnterTransitionOverlap = false
-                    allowReturnTransitionOverlap = false
-
-                    enterTransition = TabTransition()
+                    (enterTransition as TransitionSet).addTransition(TabTransition()
                             .addMode(Visibility.MODE_IN)
                             .addTarget(tabLayoutTransitionName)
+                    )
 
-                    exitTransition = TabTransition()
-                            .addMode(Visibility.MODE_OUT)
-                            .addTarget(tabLayoutTransitionName) as TabTransition
+                    (exitTransition as TransitionSet).addTransition(
+                            TabTransition()
+                                    .addMode(Visibility.MODE_OUT)
+                                    .addTarget(tabLayoutTransitionName) as TabTransition
+                    )
                 }
-    }
-
-    fun addMode(mode: Int): TabTransition {
-        this.mode = mode
-        return this
     }
 
     override fun onAppear(sceneRoot: ViewGroup?, view: View?, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
         logd("Tabs appearing...")
 
-        return view?.context?.resources?.let {
-            val height = view.context!!.getResourceIdFromAttrId(android.R.attr.actionBarSize)
-            val animator = ValueAnimator.ofFloat(0F, it.getDimension(height))
-                    .setDuration(it.getInteger(R.integer.tab_layout_animation_duration).toLong())
-
-            animator.addUpdateListener {
-                view.layoutParams.height = (it.animatedValue as Float).toInt()
-                view.layoutParams = view.layoutParams
-            }
-
-            animator.interpolator = DecelerateInterpolator()
-
-            animator
+        return view?.let {
+            val height = it.context.getResourceIdFromAttrId(android.R.attr.actionBarSize)
+            it.animateToHeight(height, R.integer.fragment_transition_duration)
         }
     }
 
@@ -67,7 +53,7 @@ class TabTransition : Visibility() {
         return view?.context?.resources?.let {
             view.pivotY = 0F
             val animator = ObjectAnimator.ofFloat(view, View.SCALE_Y, 1F, 0F)
-                    .setDuration(it.getInteger(R.integer.tab_layout_animation_duration).toLong())
+                    .setDuration(it.getInteger(R.integer.fragment_transition_duration).toLong())
 
             animator.interpolator = DecelerateInterpolator()
 

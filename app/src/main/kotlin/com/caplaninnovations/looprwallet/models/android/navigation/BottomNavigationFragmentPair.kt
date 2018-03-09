@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.models.android.navigation
 
 import android.support.annotation.DrawableRes
+import android.support.annotation.IdRes
 import android.support.annotation.StringDef
 import android.support.annotation.StringRes
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
@@ -15,8 +16,7 @@ import com.caplaninnovations.looprwallet.fragments.BaseFragment
  */
 class BottomNavigationFragmentPair(@BottomNavigationTag val tag: String,
                                    val fragment: BaseFragment,
-                                   @DrawableRes val drawableResource: Int,
-                                   @StringRes val textResource: Int) {
+                                   @IdRes val menuId: Int) {
 
     companion object {
 

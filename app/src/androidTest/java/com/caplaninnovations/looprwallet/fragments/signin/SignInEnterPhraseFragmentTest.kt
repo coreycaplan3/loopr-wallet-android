@@ -24,7 +24,6 @@ import org.junit.Test
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.contrib.RecyclerViewActions
 import org.junit.After
 import java.util.concurrent.FutureTask
 
@@ -43,9 +42,10 @@ class SignInEnterPhraseFragmentTest : BaseDaggerFragmentTest<SignInEnterPhraseFr
             "pizza", "breeze", "raise"
     )
 
-    private val wallet = WalletCreationPhrase("loopr", "looprwallet", correctPhrase)
+    private val walletForCreation = WalletCreationPhrase("looprCreation", "looprwallet1", correctPhrase)
+    private val walletForRestoration = WalletCreationPhrase("looprRestoration", "looprwallet2", correctPhrase)
 
-    override var fragment = SignInEnterPhraseFragment.createConfirmPhraseInstance(wallet)
+    override var fragment = SignInEnterPhraseFragment.createConfirmPhraseInstance(walletForCreation)
     override val tag = SignInEnterPhraseFragment.TAG
 
     @Before
@@ -55,7 +55,8 @@ class SignInEnterPhraseFragmentTest : BaseDaggerFragmentTest<SignInEnterPhraseFr
 
     @After
     fun tearDown() {
-        walletClient.removeWallet(wallet.walletName)
+        walletClient.removeWallet(walletForCreation.walletName)
+        walletClient.removeWallet(walletForRestoration.walletName)
     }
 
     @Test
@@ -186,7 +187,7 @@ class SignInEnterPhraseFragmentTest : BaseDaggerFragmentTest<SignInEnterPhraseFr
 
     @Test
     fun phraseOkay_restoreWallet() {
-        fragment = SignInEnterPhraseFragment.createEnterPhraseInstance(wallet)
+        fragment = SignInEnterPhraseFragment.createEnterPhraseInstance(walletForRestoration)
         val task = FutureTask { activity.addFragment(fragment, SignInEnterPhraseFragment.TAG) }
         waitForTask(activity, task, true)
 

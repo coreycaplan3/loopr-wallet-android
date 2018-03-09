@@ -8,6 +8,7 @@ import android.support.annotation.StringRes
 import android.support.design.widget.*
 import android.support.design.widget.BaseTransientBottomBar.Duration
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +64,17 @@ fun Context.longToast(@StringRes stringResource: Int) {
  */
 fun Context.longToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun RecyclerView.setupWithFab(fab: FloatingActionButton) {
+    this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            if (dy < 0 && !fab.isShown)
+                fab.show()
+            else if (dy > 0 && fab.isShown)
+                fab.hide()
+        }
+    })
 }
 
 /**

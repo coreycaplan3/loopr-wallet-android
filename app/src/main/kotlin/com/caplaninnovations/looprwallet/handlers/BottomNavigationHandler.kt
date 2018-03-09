@@ -1,17 +1,10 @@
 package com.caplaninnovations.looprwallet.handlers
 
-import android.animation.LayoutTransition
+import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
-import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.view.animation.LayoutAnimationController
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
@@ -22,7 +15,6 @@ import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigat
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationTag
 import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
-import kotlinx.android.synthetic.main.bottom_navigation_tab.view.*
 
 /**
  * Created by Corey on 1/31/2018
@@ -32,26 +24,24 @@ import kotlinx.android.synthetic.main.bottom_navigation_tab.view.*
  * Purpose of Class: Handles all things related to bottom navigation for an activity with bottom
  * navigation enabled.
  *
- * This class should be instantiated in the corresponding activity's [BaseActivity.onCreate] method.
+ * This class should be instantiated in the corresponding activity's [Activity.onCreate] method.
  */
 class BottomNavigationHandler(private val activity: BaseActivity,
                               private val fragmentTagPairs: List<BottomNavigationFragmentPair>,
                               @BottomNavigationTag private val initialTag: String,
                               private val fragmentStackHistory: FragmentStackHistory,
-                              savedInstanceState: Bundle?) :
-        TabLayout.OnTabSelectedListener {
+                              savedInstanceState: Bundle?) {
 
-    interface OnBottomNavigationReselectedLister {
+    interface BottomNavigationReselectedLister {
 
         fun onBottomNavigationReselected()
     }
 
-    private val bottomNavigation = activity.bottomNavigation
+    private val bottomNavigationView = activity.bottomNavigationView
 
     private var currentFragment: Fragment? = null
 
     init {
-        setupTabs()
 
         when {
             savedInstanceState != null -> {
@@ -59,7 +49,6 @@ class BottomNavigationHandler(private val activity: BaseActivity,
                 logv("Pushing $tag fragment...")
 
                 // We don't need to select the tab actually, just update the UI
-                updateTabUi(bottomNavigation.findTabByTag(tag), true)
                 currentFragment = activity.supportFragmentManager.findFragmentByTag(tag)
             }
             else -> {
@@ -68,12 +57,22 @@ class BottomNavigationHandler(private val activity: BaseActivity,
 
                 Handler().postDelayed({
                     // Needed to allow the TabLayout animation to occur initially.
-                    onTabSelected(bottomNavigation.findTabByTag(tag))
+                    executeFragmentTransaction(fragmentTagPairs.first().tag)
                 }, 200)
             }
         }
 
-        bottomNavigation.addOnTabSelectedListener(this)
+        bottomNavigationView.inflateMenu(R.menu.bottom_navigation_menu)
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            executeFragmentTransaction(getTagFromMenuId(it.itemId))
+            true
+        }
+
+        bottomNavigationView.setOnNavigationItemReselectedListener {
+            val tag = getTagFromMenuId(it.itemId)
+            val fragment = activity.supportFragmentManager.findFragmentByTag(tag)
+            (fragment as? BottomNavigationReselectedLister)?.onBottomNavigationReselected()
+        }
     }
 
     /**
@@ -84,7 +83,7 @@ class BottomNavigationHandler(private val activity: BaseActivity,
         fragmentStackHistory.pop()
 
         fragmentStackHistory.peek()?.let {
-            bottomNavigation.findTabByTag(it)?.select()
+            bottomNavigationView.selectedItemId = getMenuIdFromTag(it)
             return false
         }
 
@@ -94,93 +93,38 @@ class BottomNavigationHandler(private val activity: BaseActivity,
         }
     }
 
-    override fun onTabUnselected(tab: TabLayout.Tab?) {
-        logv("Tag unselected: ${tab?.tag}")
-        updateTabUi(tab, false)
+    // MARK - Private Methods
+
+    private fun getTagFromMenuId(id: Int): String {
+        return fragmentTagPairs.find { it.menuId == id }!!.tag
     }
 
-    override fun onTabSelected(tab: TabLayout.Tab?) {
+    private fun getMenuIdFromTag(tag: String): Int {
+        return fragmentTagPairs.find { it.tag == tag }!!.menuId
+    }
+
+    private fun executeFragmentTransaction(newFragmentTag: String) {
+
         fun commitTransaction(fragment: Fragment, fragmentTag: String) {
             val controller = FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
             controller.commitTransaction(activity.supportFragmentManager, currentFragment)
             currentFragment = fragment
         }
 
-        logv("Tag selected: ${tab?.tag}")
+        fragmentStackHistory.push(newFragmentTag)
 
-        updateTabUi(tab, true)
+        val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(newFragmentTag, fragmentTagPairs)
 
-        (tab?.tag as? String)?.let { newFragmentTag: String ->
-            logv("Pushing $newFragmentTag onto stack...")
+        val baseFragment = currentFragment as? BaseFragment
+        if (baseFragment?.appbarLayout?.isExpanded() == false) {
+            logv("Expanding appbar before committing transaction...")
 
-            fragmentStackHistory.push(newFragmentTag)
+            baseFragment.appbarLayout?.setExpanded(true, true)
 
-            val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(newFragmentTag, fragmentTagPairs)
-
-            val baseFragment = currentFragment as? BaseFragment
-            if (baseFragment?.appbarLayout?.isExpanded() == false) {
-                logd("Expanding appbar before committing transaction...")
-                baseFragment.appbarLayout?.setExpanded(true, true)
-
-                // Allow the appbar to snap into place for committing the transaction
-                Handler().postDelayed({ commitTransaction(newFragment, newFragmentTag) },
-                        125L)
-            } else {
-                commitTransaction(newFragment, newFragmentTag)
-            }
-        }
-    }
-
-    override fun onTabReselected(tab: TabLayout.Tab?) {
-        (tab?.tag as? String)?.let {
-            val fragment = activity.supportFragmentManager.findFragmentByTag(it)
-            (fragment as? OnBottomNavigationReselectedLister)?.onBottomNavigationReselected()
-        }
-    }
-
-    // MARK - Private Methods
-
-    private fun setupTabs() {
-
-        fun createTab(tag: String, @DrawableRes iconRes: Int, @StringRes textRes: Int): TabLayout.Tab {
-            val tabView = activity.layoutInflater.inflate(R.layout.bottom_navigation_tab, bottomNavigation, false)
-            tabView.findViewById<ImageView>(R.id.bottomNavigationTabImage)?.setImageResource(iconRes)
-            tabView.findViewById<TextView>(R.id.bottomNavigationTabText)?.setText(textRes)
-            tabView.tag = tag
-
-            val tab = bottomNavigation.newTab()
-                    .setCustomView(tabView)
-                    .setTag(tag)
-
-            if (fragmentStackHistory.peek() == tag) {
-                tab.select()
-            }
-
-            return tab
-        }
-
-        fragmentTagPairs.forEach {
-            bottomNavigation.addTab(
-                    createTab(it.tag, it.drawableResource, it.textResource)
-            )
-        }
-
-    }
-
-    private fun updateTabUi(tab: TabLayout.Tab?, isSelected: Boolean) {
-        tab?.customView?.apply {
-            val tabTextView = findViewById<TextView>(R.id.bottomNavigationTabText)
-            if (isSelected) {
-                animateTopPadding(R.dimen.bottom_navigation_margin_top_selected, R.integer.animation_duration_short)
-                animateToWidth(R.dimen.bottom_navigation_width_selected, R.integer.animation_duration_short)
-                animateToAlpha(1F, R.integer.animation_duration_short)
-                tabTextView.animateScaleBoth(1F, R.integer.animation_duration_short)
-            } else {
-                animateTopPadding(R.dimen.bottom_navigation_margin_top, R.integer.animation_duration_short)
-                animateToWidth(R.dimen.bottom_navigation_width, R.integer.animation_duration_short)
-                animateToAlpha(0.68F, R.integer.animation_duration_short)
-                tabTextView.animateScaleBoth(0F, R.integer.animation_duration_short)
-            }
+            // Allow the appbar to snap into place for committing the transaction
+            Handler().postDelayed({ commitTransaction(newFragment, newFragmentTag) }, 125L)
+        } else {
+            commitTransaction(newFragment, newFragmentTag)
         }
     }
 

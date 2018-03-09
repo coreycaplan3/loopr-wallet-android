@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/menu_markets"
         android:icon="@drawable/ic_show_chart_white_24dp"
         android:title="@string/markets" />
     <item
+        android:id="@+id/menu_orders"
         android:icon="@drawable/ic_assignment_white_24dp"
         android:title="@string/orders" />
     <item
+        android:id="@+id/menu_transfers"
         android:icon="@drawable/ic_swap_horiz_white_24dp"
         android:title="@string/transfers" />
     <item
+        android:id="@+id/menu_my_wallet"
         android:icon="@drawable/ic_account_balance_wallet_white_24dp"
         android:title="@string/my_wallet" />
 </menu>

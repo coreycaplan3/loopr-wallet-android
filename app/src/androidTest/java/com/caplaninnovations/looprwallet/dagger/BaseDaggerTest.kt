@@ -71,16 +71,12 @@ open class BaseDaggerTest {
     fun baseDaggerTearDown() {
         Intents.release()
 
-        wallet?.let {
-            val task = FutureTask { walletClient.removeWallet(it.walletName) }
-            instrumentation.runOnMainSync(task)
-            task.get()
-            logd("Deleted wallet...")
-        }
+        wallet?.let { walletClient.removeWallet(it.walletName) }
 
         val field = LooprSettings.Companion::class.java.getDeclaredField("looprSettings")
         field.isAccessible = true
         field.set(null, null)
+
         logd("Reset LooprSettings static instance")
     }
 

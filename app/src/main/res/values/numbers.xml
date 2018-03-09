@@ -9,7 +9,8 @@
     <integer name="animation_duration_extra_short">50</integer>
     <integer name="animation_duration_long">600</integer>
 
-    <integer name="tab_layout_animation_duration">200</integer>
+    <integer name="fragment_transition_duration">200</integer>
+    <integer name="fab_transition_duration">100</integer>
 
     <!-- Wallet -->
     <integer name="wallet_name_max_length">255</integer>

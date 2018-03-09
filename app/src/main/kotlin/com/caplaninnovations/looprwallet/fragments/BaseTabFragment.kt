@@ -28,7 +28,8 @@ abstract class BaseTabFragment : BaseFragment() {
         private const val TAB_LAYOUT_DEFAULT_HEIGHT = 0
     }
 
-    abstract val tabLayoutTransitionName: String
+    val tabLayoutTransitionName
+        get() = "tab-transition-$tag"
 
     abstract val tabLayoutId: Int
 

@@ -1,19 +1,23 @@
 package com.caplaninnovations.looprwallet.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.*
 import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.FloatingActionButton
+import android.support.transition.TransitionManager
+import android.support.transition.TransitionSet
+import android.support.transition.Visibility
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
-import com.caplaninnovations.looprwallet.utilities.logd
-import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.logi
+import com.caplaninnovations.looprwallet.transitions.FloatingActionButtonTransition
+import com.caplaninnovations.looprwallet.utilities.*
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 
 /**
@@ -45,11 +49,38 @@ abstract class BaseFragment : Fragment() {
     var toolbar: Toolbar? = null
         private set
 
+    var floatingActionButton: FloatingActionButton? = null
+        private set
+
+    private val fabTransitionName
+        get() = "fab-transition-$tag"
+
     var validatorList: List<BaseValidator>? = null
         set(value) {
             field = value
             onFormChanged()
         }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        allowEnterTransitionOverlap = false
+        allowReturnTransitionOverlap = false
+
+        enterTransition = TransitionSet()
+                .addTransition(
+                        FloatingActionButtonTransition()
+                                .addMode(Visibility.MODE_IN)
+                                .addTarget(fabTransitionName)
+                )
+
+        exitTransition = TransitionSet()
+                .addTransition(
+                        FloatingActionButtonTransition()
+                                .addMode(Visibility.MODE_OUT)
+                                .addTarget(fabTransitionName)
+                )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,24 +91,10 @@ abstract class BaseFragment : Fragment() {
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val fragmentView = inflater.inflate(layoutResource, container, false) as ViewGroup
 
-        val baseActivity = (activity as? BaseActivity)
-
         if (parentFragment == null) {
-            appbarLayout = createAppbarLayout(inflater, container, savedInstanceState)
-            fragmentView.addView(appbarLayout, 0)
-            toolbar = appbarLayout?.findViewById(R.id.toolbar)
-            setHasOptionsMenu(true)
-
-            ViewGroupCompat.setTransitionGroup(appbarLayout, true)
-
-            baseActivity?.setSupportActionBar(toolbar)
-            baseActivity?.fragmentStackHistory?.let {
-                if (it.isUpNavigationEnabled()) {
-                    logi("Up navigation is enabled...")
-                    toolbar?.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-                    toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
-                }
-            }
+            // We are NOT in a child fragment
+            createAppbar(fragmentView, savedInstanceState)
+            createFab(fragmentView)
         }
 
         return fragmentView
@@ -88,17 +105,8 @@ abstract class BaseFragment : Fragment() {
 
         if (parentFragment == null) {
             // We are NOT in a child fragment
-            toolbar = (0..(appbarLayout?.childCount ?: 0))
-                    .map { appbarLayout?.getChildAt(it) }
-                    .filterIsInstance<Toolbar>()
-                    .first()
-            (activity as? BaseActivity)?.setSupportActionBar(toolbar)
-
-            if (isToolbarCollapseEnabled) {
-                enableToolbarCollapsing()
-            } else {
-                disableToolbarCollapsing()
-            }
+            setupAppbar()
+            floatingActionButton?.let { initializeFloatingActionButton(it) }
         }
     }
 
@@ -117,8 +125,8 @@ abstract class BaseFragment : Fragment() {
         inflater?.inflate(R.menu.main_menu, menu)
     }
 
-    open fun createAppbarLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): AppBarLayout? {
-        return inflater.inflate(R.layout.appbar_main, container, false) as AppBarLayout?
+    open fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
+        return fragmentView.inflate(R.layout.appbar_main, false) as AppBarLayout?
     }
 
     /**
@@ -127,6 +135,17 @@ abstract class BaseFragment : Fragment() {
      */
     open fun onFormChanged() {
         // Do nothing for now
+    }
+
+    /**
+     * Called when the [floatingActionButton] is safe to be initialized. This may include setting
+     * its visibility, click listeners, icons, etc.
+     *
+     * The default implementation sets the fab's visibility to GONE (it assumes the fragment does
+     * not need a fab).
+     */
+    open fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
+        floatingActionButton.visibility = View.GONE
     }
 
     /**
@@ -228,6 +247,50 @@ abstract class BaseFragment : Fragment() {
         super.onSaveInstanceState(outState)
 
         outState.putBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
+    }
+
+    // MARK - Private Methods
+
+    private fun createAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) {
+        appbarLayout = createAppbarLayout(fragmentView, savedInstanceState)
+        fragmentView.addView(appbarLayout, 0)
+        toolbar = appbarLayout?.findViewById(R.id.toolbar)
+        setHasOptionsMenu(true)
+
+        ViewGroupCompat.setTransitionGroup(appbarLayout, true)
+
+        val baseActivity = (activity as? BaseActivity)
+
+        baseActivity?.setSupportActionBar(toolbar)
+        baseActivity?.fragmentStackHistory?.let {
+            if (it.isUpNavigationEnabled()) {
+                logi("Up navigation is enabled...")
+                toolbar?.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+                toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
+            }
+        }
+    }
+
+    private fun createFab(fragmentView: ViewGroup) {
+        floatingActionButton = (fragmentView.inflate(R.layout.floating_action_button) as FloatingActionButton)
+                .apply {
+                    ViewCompat.setTransitionName(this, fabTransitionName)
+                    fragmentView.addView(this)
+                }
+    }
+
+    private fun setupAppbar() {
+        toolbar = (0..(appbarLayout?.childCount ?: 0))
+                .map { appbarLayout?.getChildAt(it) }
+                .filterIsInstance<Toolbar>()
+                .first()
+        (activity as? BaseActivity)?.setSupportActionBar(toolbar)
+
+        if (isToolbarCollapseEnabled) {
+            enableToolbarCollapsing()
+        } else {
+            disableToolbarCollapsing()
+        }
     }
 
 }

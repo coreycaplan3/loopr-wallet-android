@@ -16,7 +16,6 @@ import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigat
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
-import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
  * Created by Corey on 1/14/2018
@@ -65,17 +64,13 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         val fragmentTagPairs: List<BottomNavigationFragmentPair> = listOf(
-                BottomNavigationFragmentPair(KEY_MARKETS, MarketsParentFragment(),
-                        R.drawable.ic_show_chart_white_24dp, R.string.markets),
+                BottomNavigationFragmentPair(KEY_MARKETS, MarketsParentFragment(), R.id.menu_markets),
 
-                BottomNavigationFragmentPair(KEY_ORDERS, OrdersParentFragment(),
-                        R.drawable.ic_assignment_white_24dp, R.string.orders),
+                BottomNavigationFragmentPair(KEY_ORDERS, OrdersParentFragment(), R.id.menu_orders),
 
-                BottomNavigationFragmentPair(KEY_TRANSFERS, ViewTransfersFragment(),
-                        R.drawable.ic_swap_horiz_white_24dp, R.string.transfers),
+                BottomNavigationFragmentPair(KEY_TRANSFERS, ViewTransfersFragment(), R.id.menu_transfers),
 
-                BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(),
-                        R.drawable.ic_account_balance_wallet_white_24dp, R.string.my_wallet)
+                BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(), R.id.menu_my_wallet)
         )
 
         fragmentStackHistory = FragmentStackHistory(false, savedInstanceState)
@@ -86,11 +81,19 @@ class MainActivity : BaseActivity() {
         isIntentForClosingApplication()
     }
 
+    override fun onBackPressed() {
+        if (bottomNavigationHandler.onBackPressed()) {
+            finish()
+        }
+    }
+
+    // MARK - Private Methods
+
     /**
      * @return True if the intent for [getIntent] was sent to close the application or false
      * otherwise.
      */
-    fun isIntentForClosingApplication(): Boolean {
+    private fun isIntentForClosingApplication(): Boolean {
         return if (intent.getBooleanExtra(KEY_FINISH_ALL, false)) {
             // The user requested to exit the app
             finish()
@@ -98,18 +101,6 @@ class MainActivity : BaseActivity() {
         } else {
             false
         }
-    }
-
-    override fun onBackPressed() {
-        if (bottomNavigationHandler.onBackPressed()) {
-            finish()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        bottomNavigation.clearOnTabSelectedListeners()
     }
 
 }

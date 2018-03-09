@@ -5,7 +5,7 @@
 
     <color name="textColorError">#F44336</color>
 
-    <color name="tabText">#FFFFFF</color>
+    <color name="tabText">#FEFEFE</color>
     <color name="tabTextDisabled">#B3FFFFFF</color>
 
     <!-- LIGHT THEME -->

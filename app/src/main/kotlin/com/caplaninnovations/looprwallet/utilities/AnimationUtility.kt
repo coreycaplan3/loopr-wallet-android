@@ -1,13 +1,12 @@
 package com.caplaninnovations.looprwallet.utilities
 
 import android.animation.*
-import android.graphics.Path
 import android.support.annotation.DimenRes
 import android.support.annotation.IntegerRes
+import android.support.v4.view.animation.LinearOutSlowInInterpolator
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.DecelerateInterpolator
-import android.widget.FrameLayout
 import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 
@@ -107,9 +106,13 @@ fun View.animateScaleX(toValue: Float, @IntegerRes duration: Int = R.integer.ani
 /**
  * Animates the scale of both x and y values of the view
  */
-fun View.animateScaleBoth(toValue: Float, @IntegerRes duration: Int = R.integer.animation_duration) {
-    pivotX = (this.width / 2).toFloat()
-    pivotY = (this.height / 2).toFloat()
+fun View.animateScaleBoth(toValue: Float, @IntegerRes duration: Int = R.integer.animation_duration): Animator {
+    if(this.width != 0) {
+        pivotX = (this.width / 2).toFloat()
+    }
+    if(this.height != 0) {
+        pivotY = (this.height / 2).toFloat()
+    }
 
     val actualDuration = resources.getInteger(duration).toLong()
 
@@ -120,6 +123,7 @@ fun View.animateScaleBoth(toValue: Float, @IntegerRes duration: Int = R.integer.
             .setDuration(actualDuration)
 
     val animator = AnimatorSet()
+    animator.interpolator = LinearOutSlowInInterpolator()
 
     animator.addListener(object : AnimatorListenerAdapter() {
         override fun onAnimationStart(animation: Animator?) {
@@ -138,43 +142,26 @@ fun View.animateScaleBoth(toValue: Float, @IntegerRes duration: Int = R.integer.
     animator.playTogether(xScale, yScale)
     animator.duration = actualDuration
 
-    animator.start()
+    return animator
 }
 
 /**
- * Animates the width of this view to the given value from its initial width
- *
- * @param toValue The dimension resource, to which the width will be animated (end value)
- * @param duration An optional duration that can be supplied as an integer resource. The default
- * value is [R.integer.animation_duration] or 300ms
+ * Animates the scale of both x and y values of the view
  */
-fun View.animateToWidth(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration) {
-    val animator = ValueAnimator.ofFloat(this.measuredWidth.toFloat(), resources.getDimension(toValue))
-    animator.interpolator = DecelerateInterpolator()
-    animator.addUpdateListener {
-        val params = this.layoutParams
-        params.width = (it.animatedValue as Float).toInt()
-        this.layoutParams = params
-    }
-
-    animator.duration = resources.getInteger(duration).toLong()
-
-    animator.start()
+fun View.animateScaleBothAndStart(toValue: Float, @IntegerRes duration: Int = R.integer.animation_duration) {
+    this.animateScaleBoth(toValue, duration).start()
 }
 
 /**
- * Animates the height of this view from the given value to zero
+ * Animates the height of this view to the given value
  *
  * @param toValue The dimension resource, to which the height will be animated (end value)
  * @param duration An optional duration that can be supplied as an integer resource. The default
  * value is [R.integer.animation_duration] or 300ms
  */
 fun View.animateToHeight(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration): Animator {
-    this.layoutParams.height = 0
-    this.requestLayout()
-
-    val animator = ValueAnimator.ofFloat(0f, resources.getDimension(toValue))
-    animator.interpolator = DecelerateInterpolator()
+    val animator = ValueAnimator.ofFloat(measuredHeight.toFloat(), resources.getDimension(toValue))
+    animator.interpolator = LinearOutSlowInInterpolator()
     animator.addUpdateListener {
         this.layoutParams.height = (it.animatedValue as Float).toInt()
         this.layoutParams = layoutParams
@@ -186,18 +173,17 @@ fun View.animateToHeight(@DimenRes toValue: Int, @IntegerRes duration: Int = R.i
 }
 
 /**
- * Animates the height of this view from the given value to zero
+ * Animates the width of this view to the given value
  *
- * @param fromValue The dimension resource, from which the height will be animated (start value)
+ * @param toValue The dimension resource, to which the width will be animated (end value)
  * @param duration An optional duration that can be supplied as an integer resource. The default
  * value is [R.integer.animation_duration] or 300ms
  */
-fun View.animateFromHeight(@DimenRes fromValue: Int, @IntegerRes duration: Int = R.integer.animation_duration): Animator {
-    val animator = ValueAnimator.ofFloat(resources.getDimension(fromValue), 0f)
-
-    animator.interpolator = DecelerateInterpolator()
+fun View.animateToWidth(@DimenRes toValue: Int, @IntegerRes duration: Int = R.integer.animation_duration): Animator {
+    val animator = ValueAnimator.ofFloat(measuredWidth.toFloat(), resources.getDimension(toValue))
+    animator.interpolator = LinearOutSlowInInterpolator()
     animator.addUpdateListener {
-        layoutParams.height = (it.animatedValue as Float).toInt()
+        this.layoutParams.width = (it.animatedValue as Float).toInt()
         this.layoutParams = layoutParams
     }
 

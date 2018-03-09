@@ -3,8 +3,6 @@ package com.caplaninnovations.looprwallet.fragments.signin
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.VisibleForTesting
-import android.support.design.widget.AppBarLayout
 import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
