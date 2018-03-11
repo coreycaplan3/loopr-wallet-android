@@ -51,7 +51,7 @@
     <dimen name="standard_padding">16dp</dimen>
     <dimen name="standard_padding_small">8dp</dimen>
     <dimen name="standard_horizontal_padding">16dp</dimen>
-    <dimen name="standard_horizontal_padding_small">8dp</dimen>
+    <dimen name="horizontal_padding_small">8dp</dimen>
     <dimen name="standard_vertical_padding">16dp</dimen>
     <dimen name="vertical_padding_small">8dp</dimen>
     <dimen name="large_horizontal_padding">32dp</dimen>
@@ -63,5 +63,6 @@
     <dimen name="card_subtitle_margin_top">12dp</dimen>
     <dimen name="card_action_icon_size">36dp</dimen>
     <dimen name="fab_size">56dp</dimen>
+    <dimen name="contact_height">64dp</dimen>
 
 </resources>

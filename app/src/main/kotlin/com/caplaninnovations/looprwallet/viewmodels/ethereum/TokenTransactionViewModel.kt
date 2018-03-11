@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.viewmodels
+package com.caplaninnovations.looprwallet.viewmodels.ethereum
 
 import android.arch.lifecycle.ViewModelProvider
 

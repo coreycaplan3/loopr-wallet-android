@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.caplaninnovations.looprwallet.activities
 
 import android.app.ProgressDialog
@@ -18,6 +20,13 @@ import com.caplaninnovations.looprwallet.realm.RealmClient
 import com.caplaninnovations.looprwallet.utilities.*
 import io.realm.Realm
 import javax.inject.Inject
+import android.content.Intent
+import android.support.v4.content.LocalBroadcastManager
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.Window
+
 
 /**
  * Created by Corey on 1/14/2018
@@ -50,7 +59,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * True if this activity requires the user to be authenticated (enter OS passcode) or false
      * otherwise
      */
-    abstract val isSecurityActivity: Boolean
+    abstract val isSecureActivity: Boolean
 
     private lateinit var looprProductionComponent: LooprProductionComponent
 
@@ -65,6 +74,24 @@ abstract class BaseActivity : AppCompatActivity() {
     @Inject
     lateinit var realmClient: RealmClient
 
+    private val keyboardLayoutListener by lazy {
+        ViewTreeObserver.OnGlobalLayoutListener {
+            val rootLayout = getRootLayout()
+            val heightDiff = rootLayout.rootView.height - rootLayout.height
+            val contentViewTop = window.findViewById<View>(Window.ID_ANDROID_CONTENT).top
+
+            val broadcastManager = LocalBroadcastManager.getInstance(this@BaseActivity)
+
+            if (heightDiff <= contentViewTop) {
+                onHideKeyboard()
+
+                // TODO broadcast via broadcastManager?
+            } else {
+                val keyboardHeight = heightDiff - contentViewTop
+                onShowKeyboard(keyboardHeight)
+            }
+        }
+    }
     /**
      * A stack history used for creating a backstack for fragments. To start using it, call
      * [pushFragmentTransaction] in the activity's [onCreate] when the activity is created for
@@ -97,31 +124,18 @@ abstract class BaseActivity : AppCompatActivity() {
         permissionHandlers = getAllPermissionHandlers()
         permissionHandlers.filter { it.shouldRequestPermissionNow }.forEach { it.requestPermission() }
 
-        /*
-         * Progress Dialog Setup
-         */
-        progressDialog = object : ProgressDialog(this) {
-            override fun setMessage(message: CharSequence?) {
-                super.setMessage(message)
-                progressDialogMessage = message?.toString()
-            }
-        }
+        getRootLayout().viewTreeObserver.addOnGlobalLayoutListener(keyboardLayoutListener)
 
-        progressDialog.setCancelable(false)
-        progressDialog.setCanceledOnTouchOutside(false)
-        if (savedInstanceState?.getBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING) == true) {
-            progressDialogMessage = savedInstanceState.getString(KEY_PROGRESS_DIALOG_MESSAGE)
-            progressDialog.show()
-        }
+        setupProgressDialog(savedInstanceState)
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (isSecurityActivity && !walletClient.isAndroidKeystoreUnlocked()) {
+        if (isSecureActivity && !walletClient.isAndroidKeystoreUnlocked()) {
             this.longToast(R.string.unlock_device)
             walletClient.unlockAndroidKeystore()
-        } else if (isSecurityActivity && realm == null) {
+        } else if (isSecureActivity && realm == null) {
             /*
              * We can initialize the Realm now, since the Keystore is unlocked.
              *
@@ -171,6 +185,16 @@ abstract class BaseActivity : AppCompatActivity() {
         popFragmentTransaction()
     }
 
+    open fun onHideKeyboard() {
+        val fragment = (supportFragmentManager.findFragmentById(R.id.activityContainer) as? BaseFragment)
+        fragment?.onHideKeyboard()
+    }
+
+    open fun onShowKeyboard(keyboardHeight: Int) {
+        val fragment = (supportFragmentManager.findFragmentById(R.id.activityContainer) as? BaseFragment)
+        fragment?.onShowKeyboard(keyboardHeight)
+    }
+
     /**
      * Pushes the given fragment onto the stack and saves the old one
      */
@@ -210,7 +234,32 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
+        val rootLayout = findViewById<ViewGroup>(R.id.activityContainer)
+        rootLayout.viewTreeObserver.removeGlobalOnLayoutListener(keyboardLayoutListener)
+
         RealmUtility.removeListenersAndClose(realm)
+    }
+
+    // MARK - Private Methods
+
+    private fun setupProgressDialog(savedInstanceState: Bundle?) {
+        progressDialog = object : ProgressDialog(this) {
+            override fun setMessage(message: CharSequence?) {
+                super.setMessage(message)
+                progressDialogMessage = message?.toString()
+            }
+        }
+
+        progressDialog.setCancelable(false)
+        progressDialog.setCanceledOnTouchOutside(false)
+        if (savedInstanceState?.getBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING) == true) {
+            progressDialogMessage = savedInstanceState.getString(KEY_PROGRESS_DIALOG_MESSAGE)
+            progressDialog.show()
+        }
+    }
+
+    private fun getRootLayout(): ViewGroup {
+        return findViewById<ViewGroup>(R.id.activityContainer).rootView as ViewGroup
     }
 
 }

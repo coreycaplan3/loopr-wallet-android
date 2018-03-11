@@ -17,6 +17,12 @@
         <item name="android:gravity">end</item>
     </style>
 
+    <!-- Auto Complete Text View -->
+
+    <style name="App.AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+        <item name="android:popupBackground">@color/cardview_light_background</item>
+    </style>
+
     <!-- Buttons -->
 
     <style name="App.Button.CardAction" parent="Widget.AppCompat.Button.Borderless">
@@ -50,8 +56,8 @@
 
     <style name="App.Button.Borderless" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">?attr/borderlessButtonColor</item>
-        <item name="android:paddingLeft">@dimen/standard_horizontal_padding_small</item>
-        <item name="android:paddingRight">@dimen/standard_horizontal_padding_small</item>
+        <item name="android:paddingLeft">@dimen/horizontal_padding_small</item>
+        <item name="android:paddingRight">@dimen/horizontal_padding_small</item>
         <item name="android:background">@drawable/ripple_effect_accent</item>
     </style>
 
@@ -63,6 +69,8 @@
     <!-- Card -->
 
     <style name="App.Card" parent="CardView">
+        <item name="cardElevation">2dp</item>
+        <item name="cardCornerRadius">2dp</item>
         <item name="contentPadding">@dimen/standard_padding</item>
     </style>
 
@@ -100,11 +108,27 @@
         <item name="android:src">@drawable/ic_more_vert_white_24dp</item>
     </style>
 
+    <!-- Search View -->
+
+    <style name="App.SearchView" parent="Widget.AppCompat.SearchView.ActionBar">
+        <item name="layout">@layout/toolbar_search_view</item>
+        <item name="commitIcon">@drawable/ic_search_commit</item>
+        <item name="autoCompleteTextViewStyle">@style/App.AutoCompleteTextView</item>
+        <item name="suggestionRowLayout">@layout/view_holder_contact</item>
+        <item name="android:maxWidth">9999dp</item>
+    </style>
+
     <!-- Text -->
 
     <style name="TextAppearance.AppCompat.Subtitle" parent="@style/TextAppearance.AppCompat.Subhead">
         <item name="android:textSize">@dimen/subtitle</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <!-- Toolbar -->
+
+    <style name="App.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="searchViewStyle">@style/App.SearchView</item>
     </style>
 
 </resources>

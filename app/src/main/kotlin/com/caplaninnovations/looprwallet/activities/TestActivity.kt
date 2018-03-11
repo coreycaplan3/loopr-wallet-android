@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.signin.EnterPasswordForPhraseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
+import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferRecipientFragment
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
 
 /**
@@ -22,7 +23,7 @@ class TestActivity : BaseActivity() {
     override val contentView: Int
         get() = R.layout.activity_test_container
 
-    override val isSecurityActivity: Boolean
+    override val isSecureActivity: Boolean
         get() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +32,8 @@ class TestActivity : BaseActivity() {
         if (savedInstanceState == null) {
             // used for testing a sole fragment
             addFragment(
-                    EnterPasswordForPhraseFragment.createCreationInstance(),
-                    SignInEnterPhraseFragment.TAG
+                    CreateTransferRecipientFragment(),
+                    CreateTransferRecipientFragment.TAG
             )
         }
     }

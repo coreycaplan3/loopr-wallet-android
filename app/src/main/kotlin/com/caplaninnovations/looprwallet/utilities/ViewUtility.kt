@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
 
 /**
  * Created by Corey on 1/17/2018.
@@ -36,6 +37,14 @@ object ViewUtility {
     fun closeKeyboard(view: View) {
         val manager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromInputMethod(view.windowToken, 0)
+    }
+}
+
+fun isRtl(): Boolean {
+    return if(isJellybeanR1()) {
+        LooprWalletApp.getContext().resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+    } else {
+        false
     }
 }
 

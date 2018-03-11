@@ -86,7 +86,6 @@
     <string name="open">Open</string>
     <string name="closed">Closed</string>
     <string name="transfer">Transfer</string>
-    <string name="search">Search</string>
     <string name="trading_pair">Trading Pair</string>
     <string name="welcome">Welcome</string>
     <string name="unlock_device">You must unlock your device to access this app</string>
@@ -222,6 +221,10 @@
     <string name="error_creating_credentials">There was an error creating your credentials</string>
     <string name="error_creating_wallet">There was an unknown error creating your wallet</string>
     <string name="error_private_key_required">You must enter a valid private key</string>
+    <string name="error_public_key_required">You must enter a valid address</string>
+
+    <string name="error_public_key_format">The address must start with \"0x\" and can only contain numbers and the letters A-F</string>
+    <string name="error_public_key_length">The address must be 42 characters long</string>
     <string name="error_wallet_already_exists">A wallet with this name or private key already exists in this app</string>
     <string name="wallet_creation_successful">Wallet creation successful</string>
     <string name="error_keystore_unsupported">The selected keystore file is not supported</string>
@@ -240,4 +243,9 @@
     <string name="error_incorrect_phrase">One or more of the words is incorrect</string>
     <string name="generating_phrase">Generating your 12-word phrase…</string>
     <string name="enter_phrase">Enter Phrase</string>
+    <string name="empty_state_contact">You have no contacts. Contacts allow you to quickly identify people without having to reenter their address.</string>
+    <string name="search">Search</string>
+    <string name="empty_state_no_contacts">No contacts found</string>
+    <string name="unknown">Unknown</string>
+    <string name="formatter_recipient">Recipient: %s</string>
 </resources>

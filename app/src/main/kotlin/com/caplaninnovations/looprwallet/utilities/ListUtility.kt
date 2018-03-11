@@ -24,6 +24,16 @@ fun <T> List<T>.allEqual(other: List<T>): Boolean {
 }
 
 /**
+ * Returns index of the first element matching the given [predicate], or null if the list does not contain such element.
+ */
+public inline fun <T> List<T>.indexOfFirstOrNull(predicate: (T) -> Boolean): Int? {
+    for ((index, item) in this.withIndex()) {
+        if (predicate(item)) return index
+    }
+    return null
+}
+
+/**
  * Creates a string using [separator] as the delimiter between words.
  */
 fun List<String>.mkString(separator: String): String {

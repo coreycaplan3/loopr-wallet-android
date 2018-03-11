@@ -53,7 +53,7 @@ class MainActivity : BaseActivity() {
     override val contentView: Int
         get() = R.layout.activity_main
 
-    override val isSecurityActivity: Boolean
+    override val isSecureActivity: Boolean
         get() = true
 
     override lateinit var fragmentStackHistory: FragmentStackHistory

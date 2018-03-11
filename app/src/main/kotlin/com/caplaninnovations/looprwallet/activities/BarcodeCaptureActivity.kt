@@ -59,7 +59,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
     override val contentView: Int
         get() = R.layout.activity_barcode_capture
 
-    override val isSecurityActivity: Boolean
+    override val isSecureActivity: Boolean
         get() = true
 
     /**

@@ -154,10 +154,10 @@ class WalletGeneratorViewModel : ViewModel() {
     fun createPhraseAsync(walletName: String, password: String) {
         async {
             try {
+                populateWordListFromAssets()
+
                 val initialEntropy = ByteArray(16)
                 SecureRandom().nextBytes(initialEntropy)
-
-                populateWordListFromAssets()
 
                 val phrase = MnemonicUtils.generateMnemonic(initialEntropy)
                 val phraseList = ArrayList(phrase.split(Regex("\\s+")).toMutableList())

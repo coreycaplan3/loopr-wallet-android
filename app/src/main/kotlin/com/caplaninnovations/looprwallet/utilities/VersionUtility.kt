@@ -20,6 +20,11 @@ fun isJellybean(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_
 /**
  * @return True if running on API version >= 18
  */
+fun isJellybeanR1(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+
+/**
+ * @return True if running on API version >= 18
+ */
 fun isJellybeanR2(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
 
 /**

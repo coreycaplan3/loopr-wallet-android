@@ -15,7 +15,7 @@ class IntroActivity : BaseActivity() {
     override val contentView: Int
         get() = R.layout.activity_intro
 
-    override val isSecurityActivity: Boolean
+    override val isSecureActivity: Boolean
         get() = false
 
 }

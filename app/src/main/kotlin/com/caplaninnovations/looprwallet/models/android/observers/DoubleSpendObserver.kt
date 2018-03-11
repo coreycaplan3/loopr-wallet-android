@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.models.android.observers
 
 import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.caplaninnovations.looprwallet.utilities.logd
@@ -21,11 +22,13 @@ import com.caplaninnovations.looprwallet.utilities.logd
  *
  * After the [onChange] function is invoked, the value in this [MutableLiveData] is set to *null*
  */
-fun <T> MutableLiveData<T>.observeForDoubleSpend(owner: LifecycleOwner, onChange: (T) -> Unit) {
-    this.observe(owner, Observer {
-        it?.let {
-            onChange.invoke(it)
-            value = null
-        }
-    })
+fun <T> LiveData<T>.observeForDoubleSpend(owner: LifecycleOwner, onChange: (T) -> Unit) {
+    if (this is MutableLiveData) {
+        this.observe(owner, Observer {
+            it?.let {
+                onChange.invoke(it)
+                this.value = null
+            }
+        })
+    }
 }

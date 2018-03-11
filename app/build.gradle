@@ -44,7 +44,6 @@ android {
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        debug.java.srcDirs += 'src/debug/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
@@ -60,30 +59,35 @@ android {
     flavorDimensions "environment"
 
     productFlavors {
-        flavorMockNet {
-            buildConfigProperty "API_URL", buildProperties.secrets["debugApiServer"]
+        mocknet {
+            buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mocknetServerUrl"]
 
-            buildConfigField "String", "ENVIRONMENT", "\"mockNet\""
+            buildConfigField "String", "ENVIRONMENT", "\"mocknet\""
 
             dimension "environment"
+            applicationIdSuffix ".mocknet"
             versionNameSuffix "-mocknet"
         }
 
-        flavorTestNet {
-            buildConfigProperty "API_URL", buildProperties.secrets["testNetApiServer"]
+        // Flavor name cannot start with "test"
+        infuraTestnet {
+            buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["testnetServerUrl"]
 
-            buildConfigField "String", "ENVIRONMENT", "\"testNet\""
+            buildConfigField "String", "ENVIRONMENT", "\"testnet\""
 
             dimension "environment"
+            applicationIdSuffix ".infuraTestnet"
             versionNameSuffix "-testnet"
         }
 
-        flavorMainNet {
-            buildConfigProperty "API_URL", buildProperties.secrets["productionApiServer"]
+        mainnet {
+            buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mainnetServerUrl"]
 
-            buildConfigField "String", "ENVIRONMENT", "\"mainNet\""
+            buildConfigField "String", "ENVIRONMENT", "\"mainnet\""
 
             dimension "environment"
+            applicationIdSuffix ".mainnet"
+            versionNameSuffix "-mainnet"
         }
     }
 }

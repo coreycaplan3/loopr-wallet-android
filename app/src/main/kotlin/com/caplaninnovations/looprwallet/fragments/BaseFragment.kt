@@ -110,6 +110,12 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+    open fun onShowKeyboard(keyboardHeight: Int) {
+    }
+
+    open fun onHideKeyboard() {
+    }
+
     /**
      * Checks if all of the validators are valid. If [validatorList] is null, this method returns
      * true
@@ -121,8 +127,8 @@ abstract class BaseFragment : Fragment() {
         return validatorList != null && validatorList.all { it.isValid() }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.main_menu, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
     }
 
     open fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {

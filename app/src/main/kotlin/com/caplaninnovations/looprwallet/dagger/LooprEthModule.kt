@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.dagger
 
+import com.caplaninnovations.looprwallet.BuildConfig
 import dagger.Module
 import dagger.Provides
 import org.web3j.protocol.Web3j
@@ -21,6 +22,6 @@ class LooprEthModule {
 
     @Provides
     @Singleton
-    fun provideWeb3j(): Web3j = Web3jFactory.build(HttpService())
+    fun provideWeb3j(): Web3j = Web3jFactory.build(HttpService(BuildConfig.ETHEREUM_URL))
 
 }

@@ -18,7 +18,7 @@ class SplashScreenActivity : BaseActivity() {
     override val contentView: Int
         get() = R.layout.activity_splash
 
-    override val isSecurityActivity: Boolean
+    override val isSecureActivity: Boolean
         get() = false
 
     override fun onResume() {

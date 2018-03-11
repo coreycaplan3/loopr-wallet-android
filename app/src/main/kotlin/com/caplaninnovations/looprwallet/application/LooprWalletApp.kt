@@ -63,6 +63,7 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
                 .looprSettingsModule(LooprSettingsModule(applicationContext))
                 .looprRealmModule(LooprRealmModule())
                 .looprSecurityModule(LooprSecurityModule(applicationContext))
+                .looprEthModule(LooprEthModule())
                 .build()
     }
 
