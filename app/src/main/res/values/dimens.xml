@@ -1,6 +1,8 @@
 <resources>
     <dimen name="zero">0dp</dimen>
 
+    <dimen name="keyboard_threshold">100dp</dimen>
+
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_elevation_selected">8dp</dimen>
 

@@ -5,10 +5,7 @@ import android.support.annotation.RestrictTo
 import android.support.annotation.RestrictTo.Scope.TESTS
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.signin.EnterPasswordForPhraseFragment
-import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
-import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferRecipientFragment
-import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
+import com.caplaninnovations.looprwallet.fragments.transfers.SelectTransferRecipientFragment
 
 /**
  * Created by Corey on 2/20/2018
@@ -32,8 +29,8 @@ class TestActivity : BaseActivity() {
         if (savedInstanceState == null) {
             // used for testing a sole fragment
             addFragment(
-                    CreateTransferRecipientFragment(),
-                    CreateTransferRecipientFragment.TAG
+                    SelectTransferRecipientFragment(),
+                    SelectTransferRecipientFragment.TAG
             )
         }
     }

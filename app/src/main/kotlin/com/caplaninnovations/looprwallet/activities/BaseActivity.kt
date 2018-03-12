@@ -3,6 +3,7 @@
 package com.caplaninnovations.looprwallet.activities
 
 import android.app.ProgressDialog
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
@@ -20,13 +21,9 @@ import com.caplaninnovations.looprwallet.realm.RealmClient
 import com.caplaninnovations.looprwallet.utilities.*
 import io.realm.Realm
 import javax.inject.Inject
-import android.content.Intent
-import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.view.Window
-
 
 /**
  * Created by Corey on 1/14/2018
@@ -48,6 +45,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
         private const val KEY_IS_PROGRESS_DIALOG_SHOWING = "_IS_PROGRESS_DIALOG_SHOWING"
         private const val KEY_PROGRESS_DIALOG_MESSAGE = "_PROGRESS_DIALOG_MESSAGE"
+
+        private const val KEY_IS_KEYBOARD_SHOWING = "_IS_KEYBOARD_SHOWING"
     }
 
     /**
@@ -74,21 +73,31 @@ abstract class BaseActivity : AppCompatActivity() {
     @Inject
     lateinit var realmClient: RealmClient
 
+    private var isKeyboardHidden = true
+
     private val keyboardLayoutListener by lazy {
-        ViewTreeObserver.OnGlobalLayoutListener {
-            val rootLayout = getRootLayout()
-            val heightDiff = rootLayout.rootView.height - rootLayout.height
-            val contentViewTop = window.findViewById<View>(Window.ID_ANDROID_CONTENT).top
+        object : ViewTreeObserver.OnGlobalLayoutListener {
 
-            val broadcastManager = LocalBroadcastManager.getInstance(this@BaseActivity)
+            private val rect = Rect()
+            private val visibleThreshold = resources.getDimension(R.dimen.keyboard_threshold)
+            private var wasOpened = false
 
-            if (heightDiff <= contentViewTop) {
-                onHideKeyboard()
+            override fun onGlobalLayout() {
+                getRootLayout().getWindowVisibleDisplayFrame(rect)
+                val heightDiff = getRootLayout().rootView.height - rect.height()
+                val isOpen = heightDiff > visibleThreshold
+                if (isOpen == wasOpened) {
+                    // keyboard state has not changed
+                    return
+                }
 
-                // TODO broadcast via broadcastManager?
-            } else {
-                val keyboardHeight = heightDiff - contentViewTop
-                onShowKeyboard(keyboardHeight)
+                wasOpened = isOpen
+
+                if (isOpen) {
+                    onShowKeyboard()
+                } else {
+                    onHideKeyboard()
+                }
             }
         }
     }
@@ -124,6 +133,7 @@ abstract class BaseActivity : AppCompatActivity() {
         permissionHandlers = getAllPermissionHandlers()
         permissionHandlers.filter { it.shouldRequestPermissionNow }.forEach { it.requestPermission() }
 
+        isKeyboardHidden = savedInstanceState?.getBoolean(KEY_IS_KEYBOARD_SHOWING, true) ?: true
         getRootLayout().viewTreeObserver.addOnGlobalLayoutListener(keyboardLayoutListener)
 
         setupProgressDialog(savedInstanceState)
@@ -190,9 +200,9 @@ abstract class BaseActivity : AppCompatActivity() {
         fragment?.onHideKeyboard()
     }
 
-    open fun onShowKeyboard(keyboardHeight: Int) {
+    open fun onShowKeyboard() {
         val fragment = (supportFragmentManager.findFragmentById(R.id.activityContainer) as? BaseFragment)
-        fragment?.onShowKeyboard(keyboardHeight)
+        fragment?.onShowKeyboard()
     }
 
     /**
@@ -225,6 +235,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
         fragmentStackHistory.saveState(outState)
 
+        outState?.putBoolean(KEY_IS_KEYBOARD_SHOWING, isKeyboardHidden)
         outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)
         outState?.putString(KEY_PROGRESS_DIALOG_MESSAGE, progressDialogMessage)
 
@@ -258,8 +269,8 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    private fun getRootLayout(): ViewGroup {
-        return findViewById<ViewGroup>(R.id.activityContainer).rootView as ViewGroup
+    private fun getRootLayout(): View {
+        return findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
     }
 
 }

@@ -110,7 +110,7 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    open fun onShowKeyboard(keyboardHeight: Int) {
+    open fun onShowKeyboard() {
     }
 
     open fun onHideKeyboard() {

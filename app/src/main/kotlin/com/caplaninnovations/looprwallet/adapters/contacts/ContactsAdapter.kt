@@ -1,10 +1,8 @@
 package com.caplaninnovations.looprwallet.adapters.contacts
 
-import android.os.Handler
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.models.user.Contact
 import com.caplaninnovations.looprwallet.utilities.indexOfFirstOrNull
 import com.caplaninnovations.looprwallet.utilities.inflate
@@ -30,8 +28,6 @@ class ContactsAdapter(
     }
 
     var isSearching = false
-
-    private var recyclerView: RecyclerView? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -60,18 +56,9 @@ class ContactsAdapter(
         }
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        this.recyclerView = recyclerView
-    }
-
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-        this.recyclerView = null
-    }
-
     /**
-     * Call this method if the selected address changes from outside this adapter
+     * Call this method if the selected address changes from outside this adapter.
+     * This method is only responsible for updating the data-model so the UI changes appropriately
      */
     fun onSelectedContactChanged(newSelectedContactAddress: String?) {
         val oldSelectedAddress = this.selectedContactAddress
@@ -83,7 +70,6 @@ class ContactsAdapter(
         val index = contactList.indexOfFirstOrNull { it.address == newSelectedContactAddress }
         index?.let {
             notifyItemChanged(it)
-            recyclerView?.scrollToPosition(it)
         }
     }
 

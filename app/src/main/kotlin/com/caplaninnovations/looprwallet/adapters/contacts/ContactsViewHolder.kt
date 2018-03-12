@@ -21,12 +21,13 @@ class ContactsViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), L
     override val containerView: View?
         get() = itemView
 
+    @Suppress("deprecation")
     fun bind(item: Contact, selectedContactAddress: String?, onContactSelected: (Int) -> Unit) {
         contactNameLabel.text = item.name
         contactAddressLabel.text = item.address
 
         val backgroundColorResource = if (selectedContactAddress == item.address) {
-            itemView.context.getResourceIdFromAttrId(R.attr.colorAccent)
+            itemView.context.getResourceIdFromAttrId(R.attr.colorPrimary)
         } else {
             itemView.context.getResourceIdFromAttrId(R.attr.cardBackgroundColor)
         }

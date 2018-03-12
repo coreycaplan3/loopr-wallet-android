@@ -11,7 +11,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/standard_horizontal_padding"
     android:paddingRight="@dimen/standard_horizontal_padding"
-    tools:showIn="@layout/fragment_create_transfer_recipient">
+    tools:showIn="@layout/fragment_select_transfer_recipient">
 
     <TextView
         android:id="@+id/contactNameLabel"

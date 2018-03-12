@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.fragments.transfers
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
@@ -8,7 +9,7 @@ import android.text.TextUtils
 import android.view.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import kotlinx.android.synthetic.main.fragment_create_transfer_recipient.*
+import kotlinx.android.synthetic.main.fragment_select_transfer_recipient.*
 import com.caplaninnovations.looprwallet.adapters.contacts.ContactsAdapter
 import com.caplaninnovations.looprwallet.animations.ToolbarToSearchAnimation
 import com.caplaninnovations.looprwallet.models.user.Contact
@@ -25,7 +26,7 @@ import com.caplaninnovations.looprwallet.validators.PublicKeyValidator
  * Purpose of Class:
  *
  */
-class CreateTransferRecipientFragment : BaseFragment() {
+class SelectTransferRecipientFragment : BaseFragment() {
 
     companion object {
         val TAG: String = CreateTransferAmountFragment::class.java.simpleName
@@ -35,7 +36,7 @@ class CreateTransferRecipientFragment : BaseFragment() {
     }
 
     override val layoutResource: Int
-        get() = R.layout.fragment_create_transfer_recipient
+        get() = R.layout.fragment_select_transfer_recipient
 
     private lateinit var adapter: ContactsAdapter
 
@@ -54,13 +55,6 @@ class CreateTransferRecipientFragment : BaseFragment() {
     )
 
     private var selectedContactAddress: String? = null
-        set(value) {
-            field = value
-            if (value != null) {
-                val contact = contactList.find { it.address == value }
-                recipientAddressEditText.setText(contact?.address)
-            }
-        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -95,21 +89,26 @@ class CreateTransferRecipientFragment : BaseFragment() {
         (searchItem.actionView as? SearchView)?.let { setupSearchView(searchItem, it) }
 
         if (searchQuery != null) {
-            logd("Expanding search actionView...")
-            searchItem.expandActionView()
+            Handler().postDelayed({
+                searchItem.expandActionView()
+                (searchItem.actionView as SearchView).setQuery(searchQuery, false)
+            }, 300)
         }
+
     }
 
     override fun onHideKeyboard() {
-        super.onHideKeyboard()
-
         scrollToSelectedContact()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString(KEY_SEARCH_QUERY, searchQuery)
+        val queryString = searchQuery?.let {
+            if(it.trim().isEmpty()) null
+            else it
+        }
+        outState.putString(KEY_SEARCH_QUERY, queryString)
         outState.putString(KEY_SELECTED_CONTACT, selectedContactAddress)
     }
 
@@ -117,16 +116,19 @@ class CreateTransferRecipientFragment : BaseFragment() {
 
     override fun onFormChanged() {
         val isValid = isAllValidatorsValid()
-        var recipientAddress: String? = null
 
         val recipientName: String? = if (isValid) {
-            recipientAddress = recipientAddressEditText.text.toString()
-            contactList.find { it.address == recipientAddress }?.name ?: str(R.string.unknown)
+            val recipientAddress = recipientAddressEditText.text.toString()
+            val contact = contactList.find { it.address == recipientAddress }
+            selectedContactAddress = contact?.address
+
+            contact?.name ?: str(R.string.unknown)
         } else {
+            selectedContactAddress = null
             null
         }
 
-        adapter.onSelectedContactChanged(recipientAddress)
+        adapter.onSelectedContactChanged(selectedContactAddress)
 
         recipientNameLabel?.text = if (recipientName != null) {
             String.format(str(R.string.formatter_recipient), recipientName)
@@ -137,14 +139,16 @@ class CreateTransferRecipientFragment : BaseFragment() {
         createTransferContinueButton.isEnabled = isValid
     }
 
+    /**
+     * Called from the adapter when a user selected a contact
+     */
     private fun onContactSelected(contact: Contact) {
-        selectedContactAddress = contact.address
-
+        // We set the text on the EditText, since it'll trigger #onFormChanged
+        recipientAddressEditText.setText(contact.address)
         searchItem.collapseActionView()
     }
 
     private fun setupSearchView(searchItem: MenuItem, searchView: SearchView) {
-        searchView.setQuery(searchQuery, false)
 
         searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
@@ -154,14 +158,22 @@ class CreateTransferRecipientFragment : BaseFragment() {
             }
         }
 
+        var wasInitialized = false
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
+                if (wasInitialized) {
+                    searchQuery = newText
+                } else {
+                    wasInitialized = true
+                }
+
                 adapter.isSearching = !TextUtils.isEmpty(newText)
 
                 if (TextUtils.isEmpty(newText)) {
                     adapter.contactList = contactList
                 } else {
-                    adapter.contactList = adapter.contactList.filter {
+                    adapter.contactList = contactList.filter {
                         it.name.toLowerCase().contains(newText.toLowerCase())
                     }
                 }
@@ -181,11 +193,7 @@ class CreateTransferRecipientFragment : BaseFragment() {
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 logd("Collapsing MenuItem...")
 
-                val activity = activity
-                if(activity != null && !activity.isChangingConfigurations) {
-                    // We aren't changing configurations so the user must have initiated the collapse
-                    searchQuery = null
-                }
+                searchQuery = null
 
                 adapter.contactList = contactList
                 adapter.notifyDataSetChanged()
@@ -197,7 +205,7 @@ class CreateTransferRecipientFragment : BaseFragment() {
 
                 if (item.isActionViewExpanded) {
                     ToolbarToSearchAnimation.animateToToolbar(
-                            fragment = this@CreateTransferRecipientFragment,
+                            fragment = this@SelectTransferRecipientFragment,
                             numberOfMenuIcon = 1,
                             containsOverflow = false
                     )
@@ -213,7 +221,7 @@ class CreateTransferRecipientFragment : BaseFragment() {
                 createTransferContinueButton.visibility = View.GONE
 
                 ToolbarToSearchAnimation.animateToSearch(
-                        fragment = this@CreateTransferRecipientFragment,
+                        fragment = this@SelectTransferRecipientFragment,
                         numberOfMenuIcon = 1,
                         containsOverflow = false
                 )
@@ -226,9 +234,7 @@ class CreateTransferRecipientFragment : BaseFragment() {
     private fun scrollToSelectedContact() {
         selectedContactAddress?.let { address ->
             val index = contactList.indexOfFirstOrNull { it.address == address }
-            index?.let {
-                contactsRecyclerView?.scrollToPosition(it)
-            }
+            index?.let { contactsRecyclerView?.scrollToPosition(it) }
         }
     }
 
