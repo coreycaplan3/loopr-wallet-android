@@ -27,7 +27,7 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 
 import com.caplaninnovations.looprwallet.R;
-import com.caplaninnovations.looprwallet.utilities.ViewUtilityKt;
+import com.caplaninnovations.looprwallet.extensions.ViewExtensionsKt;
 import com.google.android.gms.common.images.Size;
 
 import java.io.IOException;
@@ -176,7 +176,7 @@ public class CameraSourcePreview extends ViewGroup {
             Log.e(TAG, "Do not have permission to start the camera", se);
         } catch (IOException ioe) {
             Log.e(TAG, "Could not start camera source", ioe);
-            ViewUtilityKt.snackbar(this, R.string.error_starting_camera, Snackbar.LENGTH_LONG);
+            ViewExtensionsKt.snackbar(this, R.string.error_starting_camera, Snackbar.LENGTH_LONG);
         }
     }
 

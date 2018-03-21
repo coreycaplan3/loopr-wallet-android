@@ -1,20 +1,20 @@
 package com.caplaninnovations.looprwallet.animations
 
 import android.animation.Animator
-import android.view.animation.AnimationSet
-import android.view.animation.TranslateAnimation
-import android.view.animation.AlphaAnimation
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.ViewAnimationUtils
 import android.support.v4.content.ContextCompat
+import android.view.ViewAnimationUtils
+import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.TranslateAnimation
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.extensions.isLollipop
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.utilities.isLollipop
-import com.caplaninnovations.looprwallet.utilities.isRtl
+import com.caplaninnovations.looprwallet.utilities.ViewUtility
 
 
 /**
@@ -42,7 +42,7 @@ object ToolbarToSearchAnimation {
 
 
             val endRadius = toolbar.width - getOverflowWidth(containsOverflow) - getMenuWidth(numberOfMenuIcon)
-            val centerX = if (isRtl()) toolbar.width - endRadius else endRadius
+            val centerX = if (ViewUtility.isRtl()) toolbar.width - endRadius else endRadius
             val centerY = toolbar.height / 2
 
             val createCircularReveal = ViewAnimationUtils.createCircularReveal(toolbar, centerX, centerY, 0.0f, endRadius.toFloat())
@@ -65,7 +65,7 @@ object ToolbarToSearchAnimation {
 
             val width = toolbar.width - getOverflowWidth(containsOverflow) - getMenuWidth(numberOfMenuIcon)
 
-            val centerX = if (isRtl()) toolbar.width - width else width
+            val centerX = if (ViewUtility.isRtl()) toolbar.width - width else width
             val centerY = toolbar.height / 2
 
             val createCircularReveal = ViewAnimationUtils.createCircularReveal(toolbar, centerX, centerY, width.toFloat(), 0.0f)
@@ -102,7 +102,7 @@ object ToolbarToSearchAnimation {
     }
 
     private fun getOverflowWidth(containsOverflow: Boolean): Int {
-        val resources = LooprWalletApp.getContext().resources
+        val resources = LooprWalletApp.context.resources
         return if (containsOverflow) {
             resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material)
         } else {
@@ -111,7 +111,7 @@ object ToolbarToSearchAnimation {
     }
 
     private fun getMenuWidth(numberOfMenuIcon: Int): Int {
-        val resources = LooprWalletApp.getContext().resources
+        val resources = LooprWalletApp.context.resources
         val buttonWidth = resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material)
         return buttonWidth * numberOfMenuIcon / 2
     }

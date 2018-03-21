@@ -12,11 +12,12 @@ import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.utilities.DialogUtility
-import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.snackbar
+import com.caplaninnovations.looprwallet.extensions.logd
+import com.caplaninnovations.looprwallet.extensions.loge
+import com.caplaninnovations.looprwallet.extensions.snackbar
 import com.caplaninnovations.looprwallet.validators.PasswordValidator
 import com.caplaninnovations.looprwallet.validators.WalletNameValidator
-import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
+import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.card_enter_wallet_password.*
@@ -43,6 +44,7 @@ class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.Commu
     private val filePermissionsHandler by lazy {
         PermissionHandler(
                 activity as BaseActivity,
+                this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 PermissionHandler.REQUEST_CODE_EXTERNAL_FILES,
                 this::onFilePermissionGranted,
@@ -64,7 +66,7 @@ class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.Commu
         PasswordValidator(walletPasswordInputLayout, this::onFormChanged)
     }
 
-    val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
+    private val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
         ViewModelProviders.of(this).get(WalletGeneratorViewModel::class.java)
     }
 
@@ -80,6 +82,13 @@ class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.Commu
         }
 
         WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        logd("Handling file permissions...")
+        filePermissionsHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onFormChanged() {

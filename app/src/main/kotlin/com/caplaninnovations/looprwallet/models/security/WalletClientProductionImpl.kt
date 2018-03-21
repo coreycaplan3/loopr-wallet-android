@@ -11,7 +11,7 @@ import com.caplaninnovations.looprwallet.activities.SignInActivity
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.utilities.loge
+import com.caplaninnovations.looprwallet.extensions.loge
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.android.CipherClient
@@ -56,6 +56,7 @@ class WalletClientProductionImpl(context: Context, looprSettings: LooprSettings)
         val intent = Intent(currentActivity, SignInActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         currentActivity.startActivity(intent)
+        currentActivity.finish()
     }
 
     override fun isUnlocked(): Boolean = isUnlocked
@@ -96,7 +97,7 @@ class WalletClientProductionImpl(context: Context, looprSettings: LooprSettings)
         return try {
             Realm.deleteRealm(configuration)
         } catch (e: Exception) {
-            loge("An error occurred while deleting the Realm!", e)
+            loge("An addErrorObserver occurred while deleting the Realm!", e)
             false
         }
     }

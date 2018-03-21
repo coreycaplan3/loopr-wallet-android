@@ -2,21 +2,20 @@ package com.caplaninnovations.looprwallet.fragments.signin
 
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
-import android.support.test.espresso.assertion.ViewAssertions.*
+import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletRememberPhraseFragment
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
-import com.caplaninnovations.looprwallet.utilities.str
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 import kotlinx.android.synthetic.main.card_enter_wallet_password.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.fragment_sign_in_enter_password.*
 import org.hamcrest.Matchers.`is`
-
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.concurrent.FutureTask

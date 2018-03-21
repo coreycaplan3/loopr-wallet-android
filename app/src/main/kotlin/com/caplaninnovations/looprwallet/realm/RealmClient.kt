@@ -20,8 +20,7 @@ abstract class RealmClient {
             val buildType = BuildConfig.BUILD_TYPE
             return when (buildType) {
                 "debug" -> RealmClientDebugImpl()
-                "staging" -> RealmClientProductionImpl()
-                "release" -> RealmClientProductionImpl()
+                "staging", "release" -> RealmClientProductionImpl()
                 else -> throw IllegalArgumentException("Invalid build type, found: $buildType")
             }
         }
@@ -35,6 +34,7 @@ abstract class RealmClient {
         return RealmConfiguration.Builder()
                 .name(realmName)
                 .migration(LooprMigration())
+                .initialData(InitialRealmData.getInitialData())
                 .schemaVersion(schemaVersion)
     }
 
@@ -44,7 +44,7 @@ abstract class RealmClient {
             get() = 0
 
         override fun getInstance(realmName: String, encryptionKey: ByteArray): Realm {
-            val configuration = getRealmConfigurationBuilder(realmName)
+            val configuration = getRealmConfigurationBuilder("$realmName-in-memory")
                     .deleteRealmIfMigrationNeeded()
                     .inMemory()
                     .build()
@@ -54,9 +54,6 @@ abstract class RealmClient {
 
     }
 
-    /**
-     * Class for PRODUCTION and STAGING usage of [Realm]
-     */
     private class RealmClientProductionImpl : RealmClient() {
 
         override val schemaVersion: Long

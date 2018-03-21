@@ -2,9 +2,7 @@ package com.caplaninnovations.looprwallet.models.android.fragments
 
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
-import com.caplaninnovations.looprwallet.utilities.logd
-import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.logv
+import com.caplaninnovations.looprwallet.extensions.logv
 import kotlin.collections.ArrayList
 
 /**

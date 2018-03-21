@@ -5,7 +5,7 @@ import android.content.Context
 import com.caplaninnovations.looprwallet.activities.*
 import com.caplaninnovations.looprwallet.models.android.settings.*
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.utilities.logd
+import com.caplaninnovations.looprwallet.extensions.logd
 
 /**
  *  Created by Corey on 2/4/2018
@@ -21,7 +21,7 @@ interface WalletClient {
     companion object {
 
         fun getInstance(context: Context, looprSettings: LooprSettings): WalletClient {
-            logd("Initializing wallet client...")
+            logd("Initializing currentWallet client...")
             return WalletClientProductionImpl(context, looprSettings)
         }
 

@@ -2,7 +2,8 @@ package com.caplaninnovations.looprwallet.validators
 
 import android.support.design.widget.TextInputLayout
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.utilities.str
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.utilities.RegexUtility
 
 /**
  * Created by Corey Caplan on 2/20/18.
@@ -21,13 +22,15 @@ open class WalletNameValidator(
         onChangeListener: () -> Unit
 ) : BaseValidator(textInputLayout, onChangeListener) {
 
+    private val nameMaxLength = LooprWalletApp.context.resources.getInteger(R.integer.name_max_length)
+
     override fun isValid(text: String?): Boolean {
         return when {
             text == null || text.isEmpty() -> {
                 error = getTextFromResource(R.string.error_wallet_name_required)
                 false
             }
-            !text.matches(Regex("[a-zA-Z0-9\\-_]+")) -> {
+            !text.matches(RegexUtility.NAME_REGEX) -> {
                 error = getTextFromResource(R.string.error_wallet_name_bad_format)
                 false
             }
@@ -35,7 +38,7 @@ open class WalletNameValidator(
                 error = getTextFromResource(R.string.error_wallet_name_too_short)
                 false
             }
-            text.length > 255 -> { // check against R.integer.wallet_name_max_length
+            text.length > nameMaxLength -> {
                 error = getTextFromResource(R.string.error_wallet_name_too_long)
                 false
             }

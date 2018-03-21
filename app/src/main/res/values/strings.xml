@@ -121,7 +121,7 @@
     <string name="today_low">Today\'s Low</string>
     <string name="today_high">Today\'s High</string>
     <string name="qr_code_scanner_instructions">Tap to capture. Pinch to zoom</string>
-    <string name="is_an_invalid_address">is an invalid address</string>
+    <string name="formatter_is_an_invalid_address">%s is an invalid address</string>
     <string name="error_starting_camera">There was an error starting the camera</string>
     <string name="_7">7</string>
     <string name="_8">8</string>
@@ -134,7 +134,7 @@
     <string name="_3">3</string>
     <string name="decimal">.</string>
     <string name="_0">0</string>
-    <string name="max">Max</string>
+    <string name="use_max">Use Max</string>
     <string name="send">Send</string>
     <string name="content_description_send_swap">Swaps the input to be in terms of tokens instead of currency</string>
     <string name="recipient_address">Recipient Address</string>
@@ -202,9 +202,12 @@
     <string name="content_description_navigation_icon">This button allows you to navigate back to the most recent screen you were on</string>
     <string name="error_password_required">You must enter a password</string>
     <string name="error_wallet_name_required">You must enter a wallet name</string>
-    <string name="error_wallet_name_bad_format">The wallet name can only contain letters, numbers, dashes, (-), and underscores (_)</string>
+    <string name="error_contact_name_required">You must enter a contact name</string>
+    <string name="error_wallet_name_bad_format">The wallet must start with a letter or number and can only contain letters, numbers, spaces, dashes, (-), and underscores (_)</string>
+    <string name="error_contact_name_bad_format">The name must start with a letter or number and can only contain letters, numbers, spaces, dashes, (-), and underscores (_)</string>
     <string name="error_wallet_name_too_short">The wallet name should be at least 3 characters long</string>
     <string name="error_wallet_name_too_long">The wallet name cannot be longer than 255 characters</string>
+    <string name="error_contact_name_too_long">The contact name cannot be longer than 255 characters</string>
     <string name="error_password_too_short">Your password must be at least 9 characters long</string>
     <string name="error_too_long">This field is too long</string>
     <string name="confirm">Confirm</string>
@@ -228,7 +231,6 @@
     <string name="error_wallet_already_exists">A wallet with this name or private key already exists in this app</string>
     <string name="wallet_creation_successful">Wallet creation successful</string>
     <string name="error_keystore_unsupported">The selected keystore file is not supported</string>
-    <string name="error_unknown">An unknown error occurred, please try again or submit a bug report</string>
     <string name="error_password_invalid">The password is invalid</string>
     <string name="error_private_key_length">Your private key must be 64 characters long</string>
     <string name="error_private_key_format">Your private key must only contain the letters A–F and numbers 0–9</string>
@@ -248,4 +250,20 @@
     <string name="empty_state_no_contacts">No contacts found</string>
     <string name="unknown">Unknown</string>
     <string name="formatter_recipient">Recipient: %s</string>
+    <string name="create_contact">Create Contact</string>
+    <string name="content_description_add_contact">Allows you to add this unknown address as a contact</string>
+    <string name="default_current_eth_price">Current ETH Price: $760.43</string>
+    <string name="default_token_amount_available">Amount Available: 100 ETH</string>
+    <string name="loading_exchange_rate">Loading exchange rate…</string>
+    <string name="ticker_eth">ETH</string>
+    <string name="error_no_connection">No connection</string>
+    <string name="error_http_communication">A network error occurred. Please try again and report the error</string>
+    <string name="error_unknown">An unknown error occurred. Please try again or submit a bug report</string>
+    <string name="error_server_error">A network error occurred</string>
+    <string name="error_loading_exchange_rate">Unable to load exchange rate</string>
+    <string name="error_no_tokens_to_send">You have no tokens to send</string>
+    <string name="reload">Reload</string>
+    <string name="loading_price">Loading price…</string>
+    <string name="error_loading_price">Unable to load price</string>
+    <string name="current_ticker_price">Current %s Price: %s</string>
 </resources>

@@ -11,6 +11,9 @@
     <color name="tabText">#FEFEFE</color>
     <color name="tabTextDisabled">#B3FFFFFF</color>
 
+    <color name="blackTextColorDisabled">#43000000</color>
+    <color name="whiteTextColorDisabled">#4CFFFFFF</color>
+
     <!-- LIGHT THEME -->
 
     <color name="lightPrimary">#03A9F4</color>
@@ -24,7 +27,6 @@
     <color name="lightPrimaryText">#DE000000</color>
     <color name="lightSecondaryText">#8A000000</color>
     <color name="lightSubtitleText">#8A000000</color>
-    <color name="lightTextColorDisabled">#43000000</color>
 
     <!-- DARK THEME -->
 
@@ -39,6 +41,5 @@
     <color name="darkPrimaryText">#FFFEFEFE</color>
     <color name="darkSecondaryText">#B3FFFFFF</color>
     <color name="darkSubtitleText">#8AFFFFFF</color>
-    <color name="darkTextColorDisabled">#4DFFFFFF</color>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.dialogs
 
+import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.design.widget.BottomSheetBehavior
@@ -87,6 +88,10 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
     private val passwordMatcherValidator: PasswordMatcherValidator by lazy {
         val password = passwordBasedWallet.getWalletPassword()
         PasswordMatcherValidator(confirmPasswordInputLayout, this::onPasswordChange, password)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return BottomSheetDialog(context!!, this.theme)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

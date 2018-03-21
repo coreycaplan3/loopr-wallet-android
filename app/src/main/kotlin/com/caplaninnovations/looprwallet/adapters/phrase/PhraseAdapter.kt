@@ -5,8 +5,7 @@ import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.adapters.ItemTouchAdapter
 import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
-import com.caplaninnovations.looprwallet.utilities.inflate
-import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
+import com.caplaninnovations.looprwallet.extensions.inflate
 import java.util.*
 import kotlin.collections.ArrayList
 

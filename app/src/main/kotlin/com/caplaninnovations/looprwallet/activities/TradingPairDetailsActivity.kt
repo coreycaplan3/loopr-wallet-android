@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.models.wallet.TradingPair
+import com.caplaninnovations.looprwallet.models.trading.TradingPair
 
 class TradingPairDetailsActivity : BaseActivity() {
 

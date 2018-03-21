@@ -6,24 +6,24 @@ import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.adapters.phrase.PhraseAdapter
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.utilities.longToast
-import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.inputmethod.EditorInfo
-import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
-import com.caplaninnovations.looprwallet.handlers.SimpleItemTouchHandler
-import com.caplaninnovations.looprwallet.utilities.logd
-import kotlin.collections.ArrayList
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
+import com.caplaninnovations.looprwallet.adapters.phrase.PhraseAdapter
+import com.caplaninnovations.looprwallet.extensions.allEqual
+import com.caplaninnovations.looprwallet.extensions.logd
+import com.caplaninnovations.looprwallet.extensions.longToast
+import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import com.caplaninnovations.looprwallet.handlers.SimpleItemTouchHandler
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
-import com.caplaninnovations.looprwallet.utilities.allEqual
-import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
+import com.caplaninnovations.looprwallet.utilities.RegexUtility
+import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
+import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
 
 
 /**
@@ -162,7 +162,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
             phrase.size == PHRASE_SIZE -> {
                 submitPhrase()
             }
-            enteredWord.isEmpty() || !enteredWord.matches(Regex("[a-z]+")) -> {
+            enteredWord.isEmpty() || !enteredWord.matches(RegexUtility.LETTERS_REGEX) -> {
                 context?.longToast(R.string.error_phrase_enter_valid_word)
             }
             else -> {
@@ -206,7 +206,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
 
         when (fragmentType) {
             TYPE_CONFIRM_PHRASE -> {
-                if (phrase.allEqual(correctPhrase)) {
+                if (phrase.allEqual(correctPhrase) { one, two -> one == two }) {
                     walletGeneratorViewModel.loadPhraseWallet(walletName, password, phrase)
                 } else {
                     context?.longToast(R.string.error_incorrect_phrase)

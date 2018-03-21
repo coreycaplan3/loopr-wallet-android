@@ -3,9 +3,7 @@ package com.caplaninnovations.looprwallet.handlers
 import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
-import android.widget.TextView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
@@ -13,7 +11,9 @@ import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackH
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationTag
-import com.caplaninnovations.looprwallet.utilities.*
+import com.caplaninnovations.looprwallet.extensions.findFragmentByTagOrCreate
+import com.caplaninnovations.looprwallet.extensions.isExpanded
+import com.caplaninnovations.looprwallet.extensions.logv
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
@@ -113,7 +113,9 @@ class BottomNavigationHandler(private val activity: BaseActivity,
 
         fragmentStackHistory.push(newFragmentTag)
 
-        val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(newFragmentTag, fragmentTagPairs)
+        val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(newFragmentTag) { tag ->
+            fragmentTagPairs.find { it.tag == tag }?.fragment!!
+        }
 
         val baseFragment = currentFragment as? BaseFragment
         if (baseFragment?.appbarLayout?.isExpanded() == false) {

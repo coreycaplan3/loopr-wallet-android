@@ -3,8 +3,8 @@ package com.caplaninnovations.looprwallet.adapters.contacts
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.extensions.getResourceIdFromAttrId
 import com.caplaninnovations.looprwallet.models.user.Contact
-import com.caplaninnovations.looprwallet.utilities.getResourceIdFromAttrId
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_contact.*
 
@@ -27,9 +27,9 @@ class ContactsViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), L
         contactAddressLabel.text = item.address
 
         val backgroundColorResource = if (selectedContactAddress == item.address) {
-            itemView.context.getResourceIdFromAttrId(R.attr.colorPrimary)
+            itemView.context.theme.getResourceIdFromAttrId(R.attr.colorPrimary)
         } else {
-            itemView.context.getResourceIdFromAttrId(R.attr.cardBackgroundColor)
+            itemView.context.theme.getResourceIdFromAttrId(R.attr.cardBackgroundColor)
         }
 
         val backgroundColor = itemView.context.resources.getColor(backgroundColorResource)

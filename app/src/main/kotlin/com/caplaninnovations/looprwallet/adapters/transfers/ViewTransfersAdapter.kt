@@ -4,8 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.settings.TutorialTracker
-import com.caplaninnovations.looprwallet.models.wallet.transfer.LooprTransfer
-import com.caplaninnovations.looprwallet.utilities.inflate
+import com.caplaninnovations.looprwallet.models.transfers.LooprTransfer
+import com.caplaninnovations.looprwallet.extensions.inflate
 import io.realm.RealmList
 
 /**

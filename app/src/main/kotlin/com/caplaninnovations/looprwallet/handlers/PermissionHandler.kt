@@ -1,14 +1,11 @@
 package com.caplaninnovations.looprwallet.handlers
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.support.annotation.IntDef
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.ActivityCompat
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import kotlin.reflect.KProperty
+import com.caplaninnovations.looprwallet.fragments.BaseFragment
 
 /**
  * Created by Corey Caplan on 2/9/18.
@@ -17,7 +14,9 @@ import kotlin.reflect.KProperty
  *
  * Purpose of Class: To handle the requesting of permissions in a uniform manner.
  *
- * @param activity The activity instance in which the permission will be requested.
+ * @param activity The activity instance from which the permission will be requested.
+ * @param fragment THe fragment instance from which permissions can be requested. Can be null to
+ * request permissions from the activity instead.
  * @param permission The string permission that is being requested
  * @param requestCode The request code that will be used for a call to
  * [ActivityCompat.requestPermissions].
@@ -30,6 +29,7 @@ import kotlin.reflect.KProperty
  * are denied/granted).
  */
 open class PermissionHandler(private val activity: BaseActivity,
+                             private val fragment: BaseFragment? = null,
                              private val permission: String,
                              @Code private val requestCode: Int,
                              private val onPermissionGranted: () -> Unit,
@@ -46,10 +46,8 @@ open class PermissionHandler(private val activity: BaseActivity,
     companion object {
 
         @Code
-        const val REQUEST_CODE_CAMERA = 102
-        const val REQUEST_CODE_EXTERNAL_FILES = 203
-
-        val delegate: ActivityCompat.PermissionCompatDelegate = LooprPermissionDelegate()
+        const val REQUEST_CODE_CAMERA = 0x0040
+        const val REQUEST_CODE_EXTERNAL_FILES = 0x0041
     }
 
     var isPermissionGranted: Boolean
@@ -92,23 +90,11 @@ open class PermissionHandler(private val activity: BaseActivity,
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     open fun requestPermissionWrapper() {
-        ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
-    }
-
-    private class LooprPermissionDelegate : ActivityCompat.PermissionCompatDelegate {
-
-        override fun requestPermissions(activity: Activity, permissions: Array<out String>, requestCode: Int): Boolean {
-            // Allow the framework to handle the requesting of permissions
-            return false
+        if (fragment != null) {
+            fragment.requestPermissions(arrayOf(permission), requestCode)
+        } else {
+            ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
         }
-
-        override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-            return PermissionHandler.Companion::class.members
-                    .filterIsInstance<KProperty<Int>>()
-                    .filter { it.isConst }
-                    .any { it.getter.call(PermissionHandler.Companion) == requestCode }
-        }
-
     }
 
 }

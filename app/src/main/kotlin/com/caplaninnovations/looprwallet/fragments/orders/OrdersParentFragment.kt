@@ -1,20 +1,15 @@
 package com.caplaninnovations.looprwallet.fragments.orders
 
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
-import android.support.transition.TransitionManager
-import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.utilities.animateScaleBoth
-import com.caplaninnovations.looprwallet.utilities.animateScaleBothAndStart
-import com.caplaninnovations.looprwallet.utilities.inflate
-import com.caplaninnovations.looprwallet.utilities.logd
+import com.caplaninnovations.looprwallet.extensions.inflate
+import com.caplaninnovations.looprwallet.extensions.logd
 
 /**
  * Created by Corey on 1/17/2018.

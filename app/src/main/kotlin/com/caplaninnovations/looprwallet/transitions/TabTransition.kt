@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.transitions
 
-import android.animation.*
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.support.transition.TransitionSet
 import android.support.transition.TransitionValues
 import android.support.transition.Visibility
@@ -8,8 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.extensions.addMode
+import com.caplaninnovations.looprwallet.extensions.animateToHeight
+import com.caplaninnovations.looprwallet.extensions.getResourceIdFromAttrId
+import com.caplaninnovations.looprwallet.extensions.logd
 import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
-import com.caplaninnovations.looprwallet.utilities.*
 
 /**
  * Created by Corey Caplan on 2/18/18.
@@ -42,7 +46,7 @@ class TabTransition : Visibility() {
         logd("Tabs appearing...")
 
         return view?.let {
-            val height = it.context.getResourceIdFromAttrId(android.R.attr.actionBarSize)
+            val height = it.context.theme.getResourceIdFromAttrId(android.R.attr.actionBarSize)
             it.animateToHeight(height, R.integer.fragment_transition_duration)
         }
     }

@@ -14,7 +14,11 @@ import kotlinx.android.synthetic.main.fragment_restore_keystore.*
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.viewmodels.WalletGeneratorViewModel
+import com.caplaninnovations.looprwallet.extensions.loge
+import com.caplaninnovations.looprwallet.extensions.longToast
+import com.caplaninnovations.looprwallet.extensions.snackbar
+import com.caplaninnovations.looprwallet.extensions.snackbarWithAction
+import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.utilities.*
 import com.caplaninnovations.looprwallet.validators.PasswordValidator
@@ -48,6 +52,7 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
     private val filePermissionsHandler by lazy {
         PermissionHandler(
                 activity as BaseActivity,
+                this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 PermissionHandler.REQUEST_CODE_EXTERNAL_FILES,
                 this::onFilePermissionGranted,
@@ -144,6 +149,12 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
             keystoreUri = intent.data
             onFormChanged()
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        filePermissionsHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onFormChanged() {

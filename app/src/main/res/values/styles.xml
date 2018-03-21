@@ -92,6 +92,34 @@
         <item name="android:padding">@dimen/standard_padding_small</item>
     </style>
 
+    <!-- Dialogs -->
+
+    <style name="App.BottomSheetDialog" parent="Theme.Design.BottomSheetDialog">
+        <item name="colorButtonNormal">@color/lightButtonDisabled</item>
+        <item name="buttonStyle">@style/App.Button</item>
+        <item name="borderlessButtonColor">@color/borderless_button_color</item>
+        <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
+
+        <item name="colorPrimary">@color/darkPrimary</item>
+        <item name="colorAccent">@color/darkAccent</item>
+        <item name="colorControlHighlight">@color/darkAccent</item>
+
+        <item name="textColorDisabled">@color/whiteTextColorDisabled</item>
+    </style>
+
+    <style name="App.BottomSheetDialog.Light" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="colorButtonNormal">@color/darkButtonDisabled</item>
+        <item name="buttonStyle">@style/App.Button</item>
+        <item name="borderlessButtonColor">@color/borderless_button_color</item>
+        <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
+
+        <item name="colorPrimary">@color/lightPrimary</item>
+        <item name="colorAccent">@color/lightAccent</item>
+        <item name="colorControlHighlight">@color/lightAccent</item>
+
+        <item name="textColorDisabled">@color/blackTextColorDisabled</item>
+    </style>
+
     <!-- Input -->
 
     <style name="App.WhiteInputLayout" parent="AppTheme.Dark">

@@ -7,9 +7,9 @@ import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
 import android.view.View
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.extensions.getAttrColorStateList
 import com.caplaninnovations.looprwallet.models.android.fragments.LooprFragmentPagerAdapter
 import com.caplaninnovations.looprwallet.transitions.TabTransition
-import com.caplaninnovations.looprwallet.utilities.*
 import kotlinx.android.synthetic.main.fragment_markets_parent.*
 
 /**
@@ -62,7 +62,7 @@ abstract class BaseTabFragment : BaseFragment() {
         ViewCompat.setTransitionName(tabLayout, tabLayoutTransitionName)
 
         tabLayout?.setupWithViewPager(fragmentContainer)
-        tabLayout?.tabTextColors = context?.getAttrColorStateList(R.attr.tabTextColor)
+        tabLayout?.tabTextColors = context?.theme?.getAttrColorStateList(R.attr.tabTextColor)
 
         enableToolbarCollapsing()
     }

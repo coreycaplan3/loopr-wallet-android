@@ -8,11 +8,14 @@ import java.util.*
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class:
+ * Purpose of Class: To represent a wallet being used by the user when signed in.
  *
  */
-data class LooprWallet(val walletName: String, val realmKey: ByteArray,
-                       private val privateKey: String) {
+data class LooprWallet(
+        val walletName: String,
+        val realmKey: ByteArray,
+        private val privateKey: String
+) {
 
     val credentials: Credentials = Credentials.create(privateKey)
 

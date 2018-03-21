@@ -4,20 +4,23 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.DocumentsContract
+import android.provider.MediaStore
+import android.support.annotation.RequiresApi
 import android.support.annotation.RequiresPermission
 import android.support.annotation.StringRes
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.extensions.isKitkat
+import com.caplaninnovations.looprwallet.extensions.loge
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import java.io.File
-import android.provider.MediaStore
-import android.provider.DocumentsContract
-import android.content.ContentUris
-import android.net.Uri
-import android.os.Build
-import android.support.annotation.RequiresApi
 
 /**
  * Created by Corey on 2/21/2018
@@ -61,7 +64,7 @@ object FilesUtility {
     fun saveFileToDownloadFolder(fileToSave: File) {
         val allBytes = fileToSave.readBytes()
 
-        val service = (LooprWalletApp.getContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager)
+        val service = (LooprWalletApp.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager)
         service.addCompletedDownload(
                 fileToSave.name,
                 String.format(str(R.string.description_keystore_download), fileToSave.name),

@@ -2,10 +2,12 @@ package com.caplaninnovations.looprwallet.models.android.fragments
 
 import android.support.annotation.*
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.view.View
-import android.support.v4.app.FragmentManager
-import com.caplaninnovations.looprwallet.utilities.*
+import com.caplaninnovations.looprwallet.extensions.allNonNull
+import com.caplaninnovations.looprwallet.extensions.isBothNonNull
+import com.caplaninnovations.looprwallet.extensions.logv
 
 
 /**
@@ -69,7 +71,7 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
         Pair(enterAnimation, exitAnimation).allNonNull { enterExitPair ->
             val popEnterExitPair = Pair(popEnterAnimation, popExitAnimation)
 
-            if (popEnterExitPair.isAllNonNull()) {
+            if (popEnterExitPair.isBothNonNull()) {
                 popEnterExitPair.allNonNull {
                     transaction.setCustomAnimations(enterExitPair.first, enterExitPair.second, it.first, it.second)
                 }
@@ -78,7 +80,7 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
             }
         }
 
-        if (!Pair(enterAnimation, exitAnimation).isAllNonNull()) {
+        if (!Pair(enterAnimation, exitAnimation).isBothNonNull()) {
             transaction.setCustomAnimations(0, 0, 0, 0)
         }
 

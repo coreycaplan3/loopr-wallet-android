@@ -3,8 +3,8 @@ package com.caplaninnovations.looprwallet.handlers
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
-import com.caplaninnovations.looprwallet.utilities.loge
-import com.caplaninnovations.looprwallet.utilities.str
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
+import com.caplaninnovations.looprwallet.extensions.loge
 import org.web3j.crypto.Credentials
 import org.web3j.utils.Numeric
 
@@ -33,7 +33,7 @@ class WalletCreationHandler(
      */
     fun createWallet(): WalletCreationResult {
         if (walletClient == null) {
-            loge("Could not create wallet!", IllegalStateException())
+            loge("Could not factory currentWallet!", IllegalStateException())
             return WalletCreationResult(false, str(R.string.error_creating_wallet))
         }
 

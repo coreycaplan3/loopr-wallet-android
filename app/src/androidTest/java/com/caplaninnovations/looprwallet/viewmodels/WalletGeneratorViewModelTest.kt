@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.viewmodels
 
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
 import org.junit.Test
 
 import org.junit.Assert.*

@@ -66,5 +66,6 @@
     <dimen name="card_action_icon_size">36dp</dimen>
     <dimen name="fab_size">56dp</dimen>
     <dimen name="contact_height">64dp</dimen>
+    <dimen name="borderless_icon_button_size">48dp</dimen>
 
 </resources>

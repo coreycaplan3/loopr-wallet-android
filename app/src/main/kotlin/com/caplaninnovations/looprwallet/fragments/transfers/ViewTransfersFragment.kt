@@ -5,8 +5,8 @@ import android.support.design.widget.FloatingActionButton
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.utilities.logd
-import com.caplaninnovations.looprwallet.utilities.setupWithFab
+import com.caplaninnovations.looprwallet.extensions.logd
+import com.caplaninnovations.looprwallet.extensions.setupWithFab
 import kotlinx.android.synthetic.main.fragment_view_transfers.*
 
 /**

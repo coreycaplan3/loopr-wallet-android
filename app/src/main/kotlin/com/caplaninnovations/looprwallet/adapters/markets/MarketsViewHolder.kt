@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.adapters.markets
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.caplaninnovations.looprwallet.models.wallet.TradingPair
+import com.caplaninnovations.looprwallet.models.trading.TradingPair
 
 /**
  * Created by Corey Caplan on 1/29/18.

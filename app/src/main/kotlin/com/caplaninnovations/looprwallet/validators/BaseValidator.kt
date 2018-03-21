@@ -5,7 +5,7 @@ import android.support.annotation.VisibleForTesting
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
-import com.caplaninnovations.looprwallet.utilities.str
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 
 /**
  * Created by Corey on 2/20/2018
@@ -25,7 +25,7 @@ abstract class BaseValidator(
 ) : TextWatcher {
 
     companion object {
-        const val DEFAULT_ERROR = "error"
+        const val DEFAULT_ERROR = "addErrorObserver"
     }
 
     /**

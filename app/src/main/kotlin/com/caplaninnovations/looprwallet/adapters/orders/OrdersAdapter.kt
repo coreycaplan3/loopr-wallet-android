@@ -1,10 +1,9 @@
 package com.caplaninnovations.looprwallet.adapters.orders
 
-import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.models.wallet.LooprOrder
-import com.caplaninnovations.looprwallet.utilities.inflate
+import com.caplaninnovations.looprwallet.models.order.LooprOrder
+import com.caplaninnovations.looprwallet.extensions.inflate
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
 

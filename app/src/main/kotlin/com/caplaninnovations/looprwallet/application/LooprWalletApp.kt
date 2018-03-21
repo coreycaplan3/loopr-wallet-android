@@ -5,12 +5,12 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
-import android.support.v4.app.ActivityCompat
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.dagger.*
-import com.caplaninnovations.looprwallet.handlers.PermissionHandler
+import com.caplaninnovations.looprwallet.extensions.logi
+import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
-import com.caplaninnovations.looprwallet.utilities.logi
+import com.caplaninnovations.looprwallet.realm.RealmClient
 import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
 import org.web3j.protocol.Web3j
@@ -27,9 +27,15 @@ import javax.inject.Inject
 open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
 
     companion object {
+
         lateinit var application: LooprWalletApp
 
-        fun getContext(): Context = application.applicationContext
+        val context: Context
+            get() = application.applicationContext
+
+        val dagger: LooprProductionComponent
+            get() = application.looprProductionComponent
+
     }
 
     val looprProductionComponent: LooprProductionComponent by lazy {
@@ -40,7 +46,13 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
     lateinit var walletClient: WalletClient
 
     @Inject
+    lateinit var realmClient: RealmClient
+
+    @Inject
     lateinit var ethereumClient: Web3j
+
+    @Inject
+    lateinit var currencySettings: CurrencySettings
 
     override fun onCreate() {
         super.onCreate()
@@ -48,8 +60,6 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
         logi("Creating Application...")
 
         application = this
-
-        ActivityCompat.setPermissionCompatDelegate(PermissionHandler.delegate)
 
         Realm.init(this)
 

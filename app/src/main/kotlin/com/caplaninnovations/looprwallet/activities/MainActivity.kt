@@ -2,19 +2,18 @@ package com.caplaninnovations.looprwallet.activities
 
 import android.content.Intent
 import android.os.Bundle
-
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.fragments.markets.MarketsParentFragment
 import com.caplaninnovations.looprwallet.fragments.mywallet.MyWalletFragment
 import com.caplaninnovations.looprwallet.fragments.orders.OrdersParentFragment
 import com.caplaninnovations.looprwallet.fragments.transfers.ViewTransfersFragment
+import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
-import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
 
 /**
@@ -45,7 +44,7 @@ class MainActivity : BaseActivity() {
          * which may have pointed to here
          */
         fun createIntent(): Intent {
-            return Intent(LooprWalletApp.getContext(), MainActivity::class.java)
+            return Intent(LooprWalletApp.context, MainActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }

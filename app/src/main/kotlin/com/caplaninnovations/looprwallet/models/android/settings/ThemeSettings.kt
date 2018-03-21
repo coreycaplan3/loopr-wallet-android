@@ -8,9 +8,11 @@ import javax.inject.Inject
 
 /**
  * Created by Corey Caplan on 1/30/18.
+ *
  * Project: loopr-wallet-android
- * <p></p>
+ *
  * Purpose of Class:
+ *
  */
 class ThemeSettings(private val looprSettings: LooprSettings) {
 

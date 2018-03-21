@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.adapters.transfers
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.caplaninnovations.looprwallet.models.wallet.transfer.LooprTransfer
+import com.caplaninnovations.looprwallet.models.transfers.LooprTransfer
 import kotlinx.android.extensions.LayoutContainer
 
 /**

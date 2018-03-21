@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.dagger
 
 import android.content.Context
+import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
@@ -29,6 +30,12 @@ class LooprSettingsModule(private val context: Context) {
     @Provides
     fun provideLooprThemeSettings(): ThemeSettings {
         return ThemeSettings(LooprSettings.getInstance(context))
+    }
+
+    @Singleton
+    @Provides
+    fun provideCurrencySettings(): CurrencySettings {
+        return CurrencySettings(LooprSettings.getInstance(context))
     }
 
 }

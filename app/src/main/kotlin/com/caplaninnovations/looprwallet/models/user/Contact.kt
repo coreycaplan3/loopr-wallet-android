@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.models.user
 
 import io.realm.RealmObject
+import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 
 /**
@@ -12,7 +13,6 @@ import io.realm.annotations.PrimaryKey
  *
  */
 open class Contact(
-        @PrimaryKey var address: String = "",
-        var name: String = ""
-) : RealmObject() {
-}
+        @PrimaryKey @Index var address: String = "",
+        @Index var name: String = ""
+) : RealmObject()

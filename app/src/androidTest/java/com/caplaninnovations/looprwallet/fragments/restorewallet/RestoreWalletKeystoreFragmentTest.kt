@@ -44,8 +44,8 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerFragmentTest<RestoreWalletKe
     override val fragment = RestoreWalletKeystoreFragment()
     override val tag = RestoreWalletKeystoreFragment.TAG
 
-    private val goodName = "loopr-wallet-restore-keystore"
-    private val badName = "loopr-wallet$" // cannot contain special characters
+    private val goodName = "loopr-currentWallet-restore-keystore"
+    private val badName = "loopr-currentWallet$" // cannot contain special characters
 
     private val goodPassword = "looprwallet" // this is the actual password used to unlock the keystore
     private val badPassword = "loopr" // too short

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <RelativeLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/standard_padding">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/contactNameInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/barcodeScannerButton"
+            android:layout_toStartOf="@id/barcodeScannerButton"
+            app:errorEnabled="true">
+
+            <EditText
+                android:id="@+id/contactNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/contact_name"
+                tools:text="@string/default_contact_name" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/contactAddressInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contactNameInputLayout"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_toLeftOf="@id/barcodeScannerButton"
+            android:layout_toStartOf="@id/barcodeScannerButton"
+            app:errorEnabled="true">
+
+            <EditText
+                android:id="@+id/contactAddressEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/contact_address"
+                tools:text="@string/default_address" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <include
+            layout="@layout/barcode_button"
+            android:layout_width="@dimen/card_action_icon_size"
+            android:layout_height="@dimen/card_action_icon_size"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/contactNameInputLayout"
+            android:layout_marginTop="@dimen/vertical_margin_large" />
+
+        <Button
+            android:id="@+id/createContactButton"
+            android:enabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contactAddressInputLayout"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:text="@string/create_contact" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

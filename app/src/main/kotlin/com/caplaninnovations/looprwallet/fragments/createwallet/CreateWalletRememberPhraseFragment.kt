@@ -3,12 +3,11 @@ package com.caplaninnovations.looprwallet.fragments.createwallet
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
-import com.caplaninnovations.looprwallet.BuildConfig.*
+import com.caplaninnovations.looprwallet.BuildConfig.DEFAULT_READ_TIMEOUT
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
-import com.caplaninnovations.looprwallet.utilities.mkString
 import kotlinx.android.synthetic.main.fragment_create_wallet_phrase_remember.*
 
 /**
@@ -59,7 +58,9 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        phraseRememberLabel.text = walletCreationPhrase.phrase.mkString("\n")
+        phraseRememberLabel.text = walletCreationPhrase.phrase.joinToString("\n") {
+            it
+        }
 
         setupTimer(savedInstanceState)
 

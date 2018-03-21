@@ -56,7 +56,7 @@ class FilesUtilityTest : BaseDaggerTest() {
     fun saveFileToDownloadFolder() {
         val testFile = File(activityRule.activity.cacheDir, baseFileName)
         if (!testFile.exists() && !testFile.createNewFile()) {
-            throw IllegalStateException("Could not create test file!")
+            throw IllegalStateException("Could not factory test file!")
         }
 
         testFile.writeBytes("Hello World!".toByteArray())

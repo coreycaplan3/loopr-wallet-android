@@ -5,8 +5,8 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
         android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="@dimen/standard_padding">
@@ -15,32 +15,54 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.4"
-            android:padding="@dimen/standard_padding">
+            android:paddingLeft="@dimen/standard_horizontal_padding"
+            android:paddingRight="@dimen/standard_horizontal_padding">
 
             <TextView
-                android:id="@+id/createTransferMainText"
+                android:id="@+id/createTransferCurrentPriceLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="18sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                tools:text="@string/default_current_eth_price" />
+
+            <TextView
+                android:id="@+id/createTransferMainLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/createTransferCurrentPriceLabel"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 tools:text="@string/default_trading_pair_price" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignTop="@id/createTransferSwapButton"
+                android:layout_marginLeft="@dimen/borderless_icon_button_size"
+                android:layout_marginStart="@dimen/borderless_icon_button_size"
+                android:layout_marginTop="24dp"
+                android:layout_toLeftOf="@id/createTransferSwapButton"
+                android:layout_toStartOf="@id/createTransferSwapButton"
+                android:alpha="0.12"
+                android:background="?attr/dividerColor" />
 
             <ImageButton
                 android:id="@+id/createTransferSwapButton"
                 style="@style/App.Button.Borderless"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/borderless_icon_button_size"
+                android:layout_height="@dimen/borderless_icon_button_size"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/createTransferMainText"
+                android:layout_below="@id/createTransferMainLabel"
                 android:alpha="0.5"
                 android:contentDescription="@string/content_description_send_swap"
                 android:src="@drawable/ic_swap_vert_white_24dp"
                 android:tint="?android:attr/textColorPrimary" />
 
             <TextView
-                android:id="@+id/createTransferSecondaryText"
+                android:id="@+id/createTransferSecondaryLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/createTransferSwapButton"
@@ -49,24 +71,37 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 tools:text="@string/default_price_in_eth" />
 
-            <FrameLayout
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_below="@id/createTransferSecondaryText"
+                android:layout_below="@id/createTransferSecondaryLabel"
                 android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/createTransferAmountAvailableLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/createTransferMaxButton"
+                    android:layout_centerHorizontal="true"
+                    android:alpha="0.54"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    tools:text="@string/default_token_amount_available" />
+
 
                 <Button
                     android:id="@+id/createTransferMaxButton"
                     style="@style/App.Button.Borderless"
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_gravity="bottom"
-                    android:alpha="0.5"
-                    android:text="@string/max"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/vertical_margin_small"
+                    android:alpha="0.78"
+                    android:text="@string/use_max"
                     android:textColor="?android:attr/textColorPrimary" />
 
-            </FrameLayout>
+            </RelativeLayout>
 
         </RelativeLayout>
 

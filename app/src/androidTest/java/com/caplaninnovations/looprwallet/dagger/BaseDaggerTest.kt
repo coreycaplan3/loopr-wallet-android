@@ -19,7 +19,7 @@ import android.support.test.espresso.intent.Intents
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.utilities.logd
+import com.caplaninnovations.looprwallet.extensions.logd
 
 
 /**
@@ -64,7 +64,7 @@ open class BaseDaggerTest {
         wallet = walletClient.getCurrentWallet()
         assertNotNull(wallet)
 
-        logd("Created wallet...")
+        logd("Created currentWallet...")
     }
 
     @After

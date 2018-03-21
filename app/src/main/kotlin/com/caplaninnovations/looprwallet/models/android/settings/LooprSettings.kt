@@ -1,13 +1,8 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.util.Base64
 import com.caplaninnovations.looprwallet.BuildConfig
-import com.caplaninnovations.looprwallet.utilities.fromJson
-import com.caplaninnovations.looprwallet.utilities.logd
-import com.google.gson.Gson
-import io.realm.android.CipherClient
+import com.caplaninnovations.looprwallet.extensions.logd
 
 /**
  * Created by Corey Caplan on 2/3/18.

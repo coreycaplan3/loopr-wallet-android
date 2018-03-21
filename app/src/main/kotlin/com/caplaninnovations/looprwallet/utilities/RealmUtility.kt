@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.utilities
 
-import io.realm.Realm
 import java.security.SecureRandom
+import kotlin.reflect.KProperty
 
 /**
  * Created by Corey Caplan on 1/31/18.
@@ -27,13 +27,18 @@ object RealmUtility {
     }
 
     /**
-     * An optional function, used to remove listeners on a realm and close it, if it's not null
+     * Formats the fields together by appending [orderedNestedFields] to [lastField].
      */
-    fun removeListenersAndClose(realm: Realm?) {
-        if (realm != null && !realm.isClosed) {
-            realm.removeAllChangeListeners()
-            realm.close()
+    fun formatNestedFields(orderedNestedFields: List<KProperty<*>>,
+                           lastField: KProperty<*>): String {
+        if (orderedNestedFields.lastOrNull() == lastField) {
+            throw IllegalArgumentException("Invalid lastField! The last element of " +
+                    "orderedNestedFields cannot be the same as lastField")
         }
+
+        return orderedNestedFields.toMutableList()
+                .apply { add(lastField) }
+                .joinToString(".") { it.name }
     }
 
 }

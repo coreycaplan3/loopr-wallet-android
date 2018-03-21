@@ -7,23 +7,23 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
-import android.view.WindowManager.LayoutParams.*
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.WindowManager
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.dagger.LooprProductionComponent
+import com.caplaninnovations.looprwallet.extensions.loge
+import com.caplaninnovations.looprwallet.extensions.longToast
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
-import com.caplaninnovations.looprwallet.realm.RealmClient
-import com.caplaninnovations.looprwallet.utilities.*
-import io.realm.Realm
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.dimen
 import javax.inject.Inject
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
 
 /**
  * Created by Corey on 1/14/2018
@@ -46,7 +46,7 @@ abstract class BaseActivity : AppCompatActivity() {
         private const val KEY_IS_PROGRESS_DIALOG_SHOWING = "_IS_PROGRESS_DIALOG_SHOWING"
         private const val KEY_PROGRESS_DIALOG_MESSAGE = "_PROGRESS_DIALOG_MESSAGE"
 
-        private const val KEY_IS_KEYBOARD_SHOWING = "_IS_KEYBOARD_SHOWING"
+        private const val KEY_IS_KEYBOARD_HIDDEN = "_IS_KEYBOARD_HIDDEN"
     }
 
     /**
@@ -70,16 +70,13 @@ abstract class BaseActivity : AppCompatActivity() {
     @Inject
     lateinit var walletClient: WalletClient
 
-    @Inject
-    lateinit var realmClient: RealmClient
-
     private var isKeyboardHidden = true
 
     private val keyboardLayoutListener by lazy {
         object : ViewTreeObserver.OnGlobalLayoutListener {
 
             private val rect = Rect()
-            private val visibleThreshold = resources.getDimension(R.dimen.keyboard_threshold)
+            private val visibleThreshold = dimen(R.dimen.keyboard_threshold)
             private var wasOpened = false
 
             override fun onGlobalLayout() {
@@ -111,65 +108,63 @@ abstract class BaseActivity : AppCompatActivity() {
     var progressDialogMessage: String? = null
         private set
 
-    var realm: Realm? = null
-
     private lateinit var permissionHandlers: List<PermissionHandler>
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Setup the Dagger injection component
         looprProductionComponent = (application as LooprWalletApp).looprProductionComponent
         looprProductionComponent.inject(this)
 
+        // Setup the theme
         this.setTheme(themeSettings.getCurrentTheme())
 
+        // Setup the view hierarchy
         setContentView(contentView)
 
-        window.setSoftInputMode(SOFT_INPUT_ADJUST_RESIZE)
-
+        // Setup the fragment navigation pattern
         fragmentStackHistory = FragmentStackHistory(true, savedInstanceState)
 
+        // Setup the permission handlers
         permissionHandlers = getAllPermissionHandlers()
         permissionHandlers.filter { it.shouldRequestPermissionNow }.forEach { it.requestPermission() }
 
-        isKeyboardHidden = savedInstanceState?.getBoolean(KEY_IS_KEYBOARD_SHOWING, true) ?: true
+        // Setup keyboard related stuff
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        isKeyboardHidden = savedInstanceState?.getBoolean(KEY_IS_KEYBOARD_HIDDEN, true) ?: true
         getRootLayout().viewTreeObserver.addOnGlobalLayoutListener(keyboardLayoutListener)
 
+        // Setup the progress dialog
         setupProgressDialog(savedInstanceState)
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (isSecureActivity && !walletClient.isAndroidKeystoreUnlocked()) {
+        // Checks that we have a currentWallet, if necessary and takes appropriate action if there
+        // a "state" problem. Keep in mind, onResume could be called after the user WAS signed in
+        // but decided to clear all of their data. With this in mind, the user can be signed out
+        // at ANY moment
+        checkWalletStatus()
+    }
+
+    fun checkWalletStatus() {
+        if (!walletClient.isAndroidKeystoreUnlocked()) {
             this.longToast(R.string.unlock_device)
             walletClient.unlockAndroidKeystore()
-        } else if (isSecureActivity && realm == null) {
-            /*
-             * We can initialize the Realm now, since the Keystore is unlocked.
-             *
-             * NOTE, we check if it's null since we don't want to override an already-initialized
-             * realm.
-             */
-            val wallet = walletClient.getCurrentWallet()
-            if (wallet != null) {
-                logd("Opening wallet ${wallet.walletName}...")
-                realm = realmClient.getInstance(wallet.walletName, wallet.realmKey)
-            } else {
-                // There is no current wallet... we need to prompt the user to sign in.
-                // This should never happen, since we can't get to a "securityActivity" without
-                // passing through the SplashScreen first.
-                loge("There is no current wallet... prompting the user to sign in", IllegalStateException())
-                walletClient.onNoCurrentWalletSelected(this)
-            }
+        } else if (isSecureActivity && walletClient.getCurrentWallet() == null) {
+            // There is no current wallet... we need to prompt the user to sign in.
+            // This should never happen, since we can't get to a "securityActivity" without
+            // passing through the SplashScreen first.
+            loge("There is no current currentWallet... prompting the user to sign in", IllegalStateException())
+            walletClient.onNoCurrentWalletSelected(this)
         }
     }
 
     fun removeWalletCurrentWallet() {
         walletClient.getCurrentWallet()?.let {
-
-            RealmUtility.removeListenersAndClose(realm)
 
             walletClient.removeWallet(it.walletName)
             if (walletClient.getCurrentWallet() == null) {
@@ -235,7 +230,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
         fragmentStackHistory.saveState(outState)
 
-        outState?.putBoolean(KEY_IS_KEYBOARD_SHOWING, isKeyboardHidden)
+        outState?.putBoolean(KEY_IS_KEYBOARD_HIDDEN, isKeyboardHidden)
         outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)
         outState?.putString(KEY_PROGRESS_DIALOG_MESSAGE, progressDialogMessage)
 
@@ -247,8 +242,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
         val rootLayout = findViewById<ViewGroup>(R.id.activityContainer)
         rootLayout.viewTreeObserver.removeGlobalOnLayoutListener(keyboardLayoutListener)
-
-        RealmUtility.removeListenersAndClose(realm)
     }
 
     // MARK - Private Methods

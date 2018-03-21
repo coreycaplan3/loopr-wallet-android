@@ -36,8 +36,8 @@ class RestoreWalletPrivateKeyFragmentTest : BaseDaggerFragmentTest<RestoreWallet
     override val fragment = RestoreWalletPrivateKeyFragment()
     override val tag = RestoreWalletPrivateKeyFragment.TAG
 
-    private val goodName = "loopr-wallet-private-key"
-    private val badName = "loopr-wallet$"
+    private val goodName = "loopr-currentWallet-private-key"
+    private val badName = "loopr-currentWallet$"
 
     private val goodPrivateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e699"
     private val badPrivateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8ezzz"

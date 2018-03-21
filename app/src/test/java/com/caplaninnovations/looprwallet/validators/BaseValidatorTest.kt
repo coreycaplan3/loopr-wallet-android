@@ -37,7 +37,7 @@ class BaseValidatorTest {
     }
 
     private val defaultText = "hello"
-    private val defaultError = "hello-error"
+    private val defaultError = "hello-addErrorObserver"
 
     @Mock
     lateinit var textInputLayout: TextInputLayout

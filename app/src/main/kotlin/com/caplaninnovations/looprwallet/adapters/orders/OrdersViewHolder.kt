@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.adapters.orders
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.caplaninnovations.looprwallet.models.wallet.LooprOrder
+import com.caplaninnovations.looprwallet.models.order.LooprOrder
 
 /**
  * Created by Corey Caplan on 1/29/18.

@@ -20,7 +20,7 @@ internal class LooprMigration : RealmMigration {
         for (i in oldVersion..newVersion) {
             when (i) {
                 0L -> migrate0To1(realm)
-                else -> throw IllegalStateException("Developer did not create a migration plan!")
+                else -> throw IllegalStateException("Developer did not factory a migration plan!")
             }
         }
     }

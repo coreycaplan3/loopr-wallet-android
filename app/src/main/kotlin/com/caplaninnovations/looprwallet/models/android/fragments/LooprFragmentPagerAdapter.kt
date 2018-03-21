@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.utilities.logd
+import com.caplaninnovations.looprwallet.extensions.logd
 
 /**
  * Created by Corey Caplan on 1/24/18.

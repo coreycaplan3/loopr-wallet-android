@@ -29,6 +29,9 @@
         <!-- Cards -->
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
 
+        <!-- Dialogs -->
+        <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog.Light</item>
+
         <!-- Divider -->
         <item name="dividerColor">@android:color/black</item>
 
@@ -45,6 +48,7 @@
         </item>
         <item name="android:textColorSecondary">@color/lightSecondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
+        <item name="textColorDisabled">@color/blackTextColorDisabled</item>
         <item name="textColorError">@color/textColorError</item>
 
     </style>
@@ -71,11 +75,14 @@
         <!-- Button Style -->
         <item name="colorButtonNormal">@color/darkButtonDisabled</item>
         <item name="buttonStyle">@style/App.Button</item>
-        <item name="borderlessButtonColor">@color/darkPrimary</item>
+        <item name="borderlessButtonColor">@color/borderless_button_color</item>
         <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
 
         <!-- Cards -->
         <item name="cardBackgroundColor">@color/cardview_dark_background</item>
+
+        <!-- Dialogs -->
+        <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog</item>
 
         <!-- Divider -->
         <item name="dividerColor">@android:color/white</item>
@@ -93,7 +100,7 @@
         </item>
         <item name="android:textColorSecondary">@color/darkSecondaryText</item>
         <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
-        <item name="textColorDisabled">@color/textColorError</item>
+        <item name="textColorDisabled">@color/blackTextColorDisabled</item>
         <item name="textColorError">@color/textColorError</item>
 
     </style>

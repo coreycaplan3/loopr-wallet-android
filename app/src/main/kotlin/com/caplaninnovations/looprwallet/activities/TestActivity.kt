@@ -3,9 +3,11 @@ package com.caplaninnovations.looprwallet.activities
 import android.os.Bundle
 import android.support.annotation.RestrictTo
 import android.support.annotation.RestrictTo.Scope.TESTS
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.transfers.SelectTransferRecipientFragment
+import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferAmountFragment
+import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 
 /**
  * Created by Corey on 2/20/2018
@@ -28,22 +30,32 @@ class TestActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             // used for testing a sole fragment
+            val wallet = WalletCreationKeystore("loopr-currentWallet", "looprwallet")
+            walletClient.createWallet("loopr-wallet", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
             addFragment(
-                    SelectTransferRecipientFragment(),
-                    SelectTransferRecipientFragment.TAG
+                    CreateTransferAmountFragment.createInstance("0xabcdef1234567890abcdef123456789012345678"),
+                    CreateTransferAmountFragment.TAG
             )
         }
     }
 
     fun addFragment(fragment: Fragment, tag: String) {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.activityContainer, fragment, tag)
-                .commitNow()
+        if(fragment is DialogFragment) {
+            fragment.show(supportFragmentManager, tag)
+        } else {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.activityContainer, fragment, tag)
+                    .commitNow()
+        }
     }
 
     fun removeFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-                .remove(fragment)
-                .commit()
+        if(fragment is DialogFragment) {
+            fragment.dismiss()
+        } else {
+            supportFragmentManager.beginTransaction()
+                    .remove(fragment)
+                    .commit()
+        }
     }
 }

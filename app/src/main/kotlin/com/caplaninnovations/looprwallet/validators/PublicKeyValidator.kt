@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.validators
 
 import android.support.design.widget.TextInputLayout
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.utilities.RegexUtility
 import org.web3j.crypto.WalletUtils
 
 /**
@@ -23,7 +24,7 @@ open class PublicKeyValidator(
                 error = getTextFromResource(R.string.error_public_key_required)
                 false
             }
-            !text.toLowerCase().matches(Regex("0x[a-f0-9]+")) -> {
+            !text.toLowerCase().matches(RegexUtility.PUBLIC_KEY_REGEX) -> {
                 error = getTextFromResource(R.string.error_public_key_format)
                 false
             }

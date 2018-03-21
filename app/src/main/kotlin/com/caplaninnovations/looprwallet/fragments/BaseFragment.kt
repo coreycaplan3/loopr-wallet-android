@@ -1,12 +1,14 @@
 package com.caplaninnovations.looprwallet.fragments
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.Lifecycle.Event
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
-import android.support.design.widget.AppBarLayout.LayoutParams.*
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
-import android.support.transition.TransitionManager
 import android.support.transition.TransitionSet
 import android.support.transition.Visibility
 import android.support.v4.app.Fragment
@@ -14,11 +16,17 @@ import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
+import android.widget.ProgressBar
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.extensions.*
+import com.caplaninnovations.looprwallet.models.android.architecture.FragmentViewLifecycleOwner
+import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.transitions.FloatingActionButtonTransition
-import com.caplaninnovations.looprwallet.utilities.*
 import com.caplaninnovations.looprwallet.validators.BaseValidator
+import javax.inject.Inject
+
 
 /**
  * Created by Corey on 1/14/2018.
@@ -40,6 +48,9 @@ abstract class BaseFragment : Fragment() {
      */
     abstract val layoutResource: Int
 
+    @Inject
+    lateinit var walletClient: WalletClient
+
     var isToolbarCollapseEnabled: Boolean = false
         private set
 
@@ -47,6 +58,9 @@ abstract class BaseFragment : Fragment() {
         private set
 
     var toolbar: Toolbar? = null
+        private set
+
+    var progressBar: ProgressBar? = null
         private set
 
     var floatingActionButton: FloatingActionButton? = null
@@ -61,8 +75,14 @@ abstract class BaseFragment : Fragment() {
             onFormChanged()
         }
 
+    private val fragmentLifeCycleOwner = FragmentViewLifecycleOwner()
+
+    override fun getLifecycle(): Lifecycle = fragmentLifeCycleOwner.lifecycle
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+
+        LooprWalletApp.application.looprProductionComponent
 
         allowEnterTransitionOverlap = false
         allowReturnTransitionOverlap = false
@@ -85,15 +105,21 @@ abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Make sure that the user has a wallet, if necessary
+        (activity as? BaseActivity)?.checkWalletStatus()
+
         isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED) == true
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_CREATE)
+
         val fragmentView = inflater.inflate(layoutResource, container, false) as ViewGroup
 
         if (parentFragment == null) {
             // We are NOT in a child fragment
             createAppbar(fragmentView, savedInstanceState)
+            createProgressBar(fragmentView)
             createFab(fragmentView)
         }
 
@@ -110,10 +136,31 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+    }
+
+    open fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
+        return fragmentView.inflate(R.layout.appbar_main, false) as AppBarLayout?
+    }
+
+    /**
+     * Called when the [floatingActionButton] is safe to be initialized. This may include setting
+     * its visibility, click listeners, icons, etc.
+     *
+     * The default implementation sets the fab's visibility to GONE (it assumes the fragment does
+     * not need a fab).
+     */
+    open fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
+        floatingActionButton.visibility = View.GONE
+    }
+
     open fun onShowKeyboard() {
+        // Defaults to no-op
     }
 
     open fun onHideKeyboard() {
+        // Defaults to no-op
     }
 
     /**
@@ -127,31 +174,12 @@ abstract class BaseFragment : Fragment() {
         return validatorList != null && validatorList.all { it.isValid() }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu)
-    }
-
-    open fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
-        return fragmentView.inflate(R.layout.appbar_main, false) as AppBarLayout?
-    }
-
     /**
      * Propagates form changes to the rest of the UI, if necessary. This depends on the return
      * value of [isAllValidatorsValid].
      */
     open fun onFormChanged() {
         // Do nothing for now
-    }
-
-    /**
-     * Called when the [floatingActionButton] is safe to be initialized. This may include setting
-     * its visibility, click listeners, icons, etc.
-     *
-     * The default implementation sets the fab's visibility to GONE (it assumes the fragment does
-     * not need a fab).
-     */
-    open fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.visibility = View.GONE
     }
 
     /**
@@ -212,7 +240,7 @@ abstract class BaseFragment : Fragment() {
 
         (container.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
             // The container is underneath the toolbar, so we must add margin so it is below it instead
-            val topMarginResource = context?.getResourceIdFromAttrId(android.R.attr.actionBarSize)
+            val topMarginResource = context?.theme?.getResourceIdFromAttrId(android.R.attr.actionBarSize)
             if (topMarginResource != null) {
                 it.topMargin = resources.getDimension(topMarginResource).toInt()
             }
@@ -242,11 +270,34 @@ abstract class BaseFragment : Fragment() {
         return true
     }
 
+    override fun onStart() {
+        super.onStart()
+        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_START)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_RESUME)
+    }
+
+    override fun onPause() {
+        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_PAUSE)
+        super.onPause()
+    }
+
+    override fun onStop() {
+        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_STOP)
+        super.onStop()
+    }
+
     override fun onDestroyView() {
-        super.onDestroyView()
 
         validatorList?.forEach { it.destroy() }
         (activity as? BaseActivity)?.setSupportActionBar(null)
+
+        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_DESTROY)
+
+        super.onDestroyView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -255,7 +306,7 @@ abstract class BaseFragment : Fragment() {
         outState.putBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
     }
 
-    // MARK - Private Methods
+// MARK - Private Methods
 
     private fun createAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) {
         appbarLayout = createAppbarLayout(fragmentView, savedInstanceState)
@@ -275,6 +326,11 @@ abstract class BaseFragment : Fragment() {
                 toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
             }
         }
+    }
+
+    private fun createProgressBar(fragmentView: ViewGroup) {
+        progressBar = fragmentView.inflate(R.layout.fragment_progress_bar) as ProgressBar
+        fragmentView.addView(progressBar, 1) // goes right after the Appbar
     }
 
     private fun createFab(fragmentView: ViewGroup) {

@@ -3,9 +3,10 @@ package com.caplaninnovations.looprwallet.adapters.contacts
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.adapters.BaseRealmAdapter
 import com.caplaninnovations.looprwallet.models.user.Contact
-import com.caplaninnovations.looprwallet.utilities.indexOfFirstOrNull
-import com.caplaninnovations.looprwallet.utilities.inflate
+import com.caplaninnovations.looprwallet.extensions.indexOfFirstOrNull
+import com.caplaninnovations.looprwallet.extensions.inflate
 
 /**
  * Created by Corey Caplan on 3/11/18.
@@ -15,45 +16,30 @@ import com.caplaninnovations.looprwallet.utilities.inflate
  * Purpose of Class:
  *
  */
-class ContactsAdapter(
-        var contactList: List<Contact>,
-        private var selectedContactAddress: String?,
-        private var onContactSelected: (Contact) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    companion object {
-        private const val TYPE_EMPTY = 0
-        private const val TYPE_CONTACT = 1
-        private const val TYPE_NO_CONTACTS_FOUND = 2
-    }
+class ContactsAdapter(private var selectedContactAddress: String?,
+                      private var onContactSelected: (Contact) -> Unit
+) : BaseRealmAdapter<Contact>() {
 
     var isSearching = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            TYPE_EMPTY -> EmptyContactsViewHolder(parent.inflate(R.layout.view_holder_contact_empty))
-            TYPE_NO_CONTACTS_FOUND -> NoContactsFoundViewHolder(parent.inflate(R.layout.view_holder_no_contact_found))
-            TYPE_CONTACT -> ContactsViewHolder(parent.inflate(R.layout.view_holder_contact))
-            else -> throw IllegalArgumentException("Invalid type, found: $viewType")
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return if (contactList.isEmpty()) 1 else contactList.size
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? ContactsViewHolder)?.bind(contactList[position], selectedContactAddress, this::onContactViewHolderSelected)
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return if (position == 0 && contactList.isEmpty() && !isSearching) {
-            TYPE_EMPTY
-        } else if (position == 0 && contactList.isEmpty() && isSearching) {
-            TYPE_NO_CONTACTS_FOUND
+    override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        return if (isSearching) {
+            NoContactsFoundViewHolder(parent.inflate(R.layout.view_holder_no_contact_found))
         } else {
-            TYPE_CONTACT
+            EmptyContactsViewHolder(parent.inflate(R.layout.view_holder_contact_empty))
         }
+    }
+
+    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        return ContactsViewHolder(parent.inflate(R.layout.view_holder_contact))
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Contact) {
+        (holder as? ContactsViewHolder)?.bind(
+                item,
+                selectedContactAddress,
+                this::onContactViewHolderSelected
+        )
     }
 
     /**
@@ -61,13 +47,9 @@ class ContactsAdapter(
      * This method is only responsible for updating the data-model so the UI changes appropriately
      */
     fun onSelectedContactChanged(newSelectedContactAddress: String?) {
-        val oldSelectedAddress = this.selectedContactAddress
         this.selectedContactAddress = newSelectedContactAddress
 
-        val oldIndex = contactList.indexOfFirstOrNull { it.address == oldSelectedAddress }
-        oldIndex?.let { notifyItemChanged(it) }
-
-        val index = contactList.indexOfFirstOrNull { it.address == newSelectedContactAddress }
+        val index = data?.indexOfFirstOrNull { it.address == newSelectedContactAddress }
         index?.let {
             notifyItemChanged(it)
         }
@@ -76,6 +58,8 @@ class ContactsAdapter(
     // MARK - Private Methods
 
     private fun onContactViewHolderSelected(index: Int) {
+        val contactList = data ?: return
+
         if (index < contactList.size) {
             var oldSelectedContactIndex: Int? = null
             selectedContactAddress?.let { address ->

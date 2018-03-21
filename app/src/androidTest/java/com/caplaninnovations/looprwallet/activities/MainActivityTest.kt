@@ -19,8 +19,6 @@ import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companio
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.scaleYIs
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.textSizeIs
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.topPaddingIs
-import com.caplaninnovations.looprwallet.utilities.findTabByTag
-import kotlinx.android.synthetic.main.bottom_navigation.*
 import org.hamcrest.Matchers.*
 import org.junit.Before
 import org.junit.Test

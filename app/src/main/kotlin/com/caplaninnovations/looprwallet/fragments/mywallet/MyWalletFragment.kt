@@ -5,7 +5,7 @@ import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.utilities.logd
+import com.caplaninnovations.looprwallet.extensions.logd
 
 /**
  * Created by Corey on 1/17/2018.

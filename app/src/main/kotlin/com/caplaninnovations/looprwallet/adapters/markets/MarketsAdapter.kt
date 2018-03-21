@@ -1,11 +1,10 @@
 package com.caplaninnovations.looprwallet.adapters.markets
 
-import android.view.View
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.TradingPairDetailsActivity
-import com.caplaninnovations.looprwallet.models.wallet.TradingPair
-import com.caplaninnovations.looprwallet.utilities.inflate
+import com.caplaninnovations.looprwallet.models.trading.TradingPair
+import com.caplaninnovations.looprwallet.extensions.inflate
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
 

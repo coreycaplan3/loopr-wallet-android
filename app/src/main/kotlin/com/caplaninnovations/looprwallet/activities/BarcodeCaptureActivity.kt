@@ -28,9 +28,11 @@ import android.view.ScaleGestureDetector
 import android.widget.Toast
 
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.extensions.loge
+import com.caplaninnovations.looprwallet.extensions.logw
+import com.caplaninnovations.looprwallet.extensions.snackbar
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.barcode.*
-import com.caplaninnovations.looprwallet.utilities.*
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -60,7 +62,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
         get() = R.layout.activity_barcode_capture
 
     override val isSecureActivity: Boolean
-        get() = true
+        get() = false
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -89,10 +91,11 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
     override fun onBarcodeDetected(barcode: Barcode) {
         val value = barcode.rawValue
         if (WalletUtils.isValidAddress(value)) {
+            // TODO add private key functionality
             setResult(RESULT_OK, Intent().putExtra(KEY_BARCODE_VALUE, value))
             finish()
         } else {
-            val message = value + getString(R.string.is_an_invalid_address)
+            val message = String.format(getString(R.string.formatter_is_an_invalid_address), value)
             cameraSourcePreview.snackbar(message, Snackbar.LENGTH_LONG)
         }
     }
