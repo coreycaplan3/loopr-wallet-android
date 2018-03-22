@@ -1,6 +1,10 @@
 package com.caplaninnovations.looprwallet.realm
 
+import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.BuildConfig
+import com.caplaninnovations.looprwallet.utilities.BuildUtility.BUILD_DEBUG
+import com.caplaninnovations.looprwallet.utilities.BuildUtility.BUILD_RELEASE
+import com.caplaninnovations.looprwallet.utilities.BuildUtility.BUILD_STAGING
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -19,8 +23,8 @@ abstract class RealmClient {
         fun getInstance(): RealmClient {
             val buildType = BuildConfig.BUILD_TYPE
             return when (buildType) {
-                "debug" -> RealmClientDebugImpl()
-                "staging", "release" -> RealmClientProductionImpl()
+                BUILD_DEBUG -> RealmClientDebugImpl()
+                BUILD_STAGING, BUILD_RELEASE -> RealmClientProductionImpl()
                 else -> throw IllegalArgumentException("Invalid build type, found: $buildType")
             }
         }
@@ -30,7 +34,8 @@ abstract class RealmClient {
 
     abstract fun getInstance(realmName: String, encryptionKey: ByteArray): Realm
 
-    protected fun getRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
         return RealmConfiguration.Builder()
                 .name(realmName)
                 .migration(LooprMigration())
@@ -44,7 +49,7 @@ abstract class RealmClient {
             get() = 0
 
         override fun getInstance(realmName: String, encryptionKey: ByteArray): Realm {
-            val configuration = getRealmConfigurationBuilder("$realmName-in-memory")
+            val configuration = getRealmConfigurationBuilder("$realmName.in-memory")
                     .deleteRealmIfMigrationNeeded()
                     .inMemory()
                     .build()

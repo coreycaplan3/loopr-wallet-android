@@ -2,24 +2,29 @@ package com.caplaninnovations.looprwallet.dagger
 
 import android.app.Activity
 import android.app.Instrumentation
+import android.content.ComponentName
 import android.support.test.InstrumentationRegistry
+import android.support.test.InstrumentationRegistry.getTargetContext
+import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
-import junit.framework.Assert.assertTrue
-import org.junit.After
-import org.junit.Before
-import java.util.concurrent.FutureTask
-import javax.inject.Inject
-import org.junit.Assert.*
-import android.support.test.InstrumentationRegistry.getTargetContext
-import android.content.ComponentName
-import android.support.test.espresso.intent.Intents
+import com.caplaninnovations.looprwallet.extensions.logd
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.extensions.logd
+import junit.framework.Assert.assertTrue
+import kotlinx.coroutines.experimental.CompletableDeferred
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
+import org.junit.After
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Before
+import java.util.concurrent.FutureTask
+import javax.inject.Inject
 
 
 /**
@@ -39,7 +44,8 @@ open class BaseDaggerTest {
 
     private val walletName = "loopr-test-${BaseDaggerTest::class.java.simpleName}"
 
-    private var wallet: LooprWallet? = null
+    var wallet: LooprWallet? = null
+        private set
 
     val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
 
@@ -78,6 +84,28 @@ open class BaseDaggerTest {
         field.set(null, null)
 
         logd("Reset LooprSettings static instance")
+    }
+
+    /**
+     * @param block The block to be run on the UI thread.
+     */
+    protected fun runBlockingUiCode(block: suspend () -> Unit) {
+        val deferred = CompletableDeferred<Unit>()
+        launch(UI) {
+            try {
+                block()
+                deferred.complete(Unit)
+            } catch (e: Exception) {
+                deferred.completeExceptionally(e)
+            }
+        }
+        val isExceptionThrown = try {
+            runBlocking { deferred.await() }
+            false
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+        assertFalse(isExceptionThrown)
     }
 
     /**

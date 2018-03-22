@@ -3,14 +3,12 @@ package com.caplaninnovations.looprwallet.viewmodels
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.TestActivity
+import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
-import kotlinx.coroutines.experimental.CompletableDeferred
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.After
 import org.junit.Assert.*
@@ -28,7 +26,7 @@ import java.util.*
  * Purpose of Class:
  */
 @RunWith(AndroidJUnit4::class)
-open class OfflineFirstViewModelTest {
+open class OfflineFirstViewModelTest: BaseDaggerTest() {
 
     @get:Rule
     val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
@@ -38,28 +36,6 @@ open class OfflineFirstViewModelTest {
     private val parameter = "param"
 
     private lateinit var offlineFirstViewModel: OfflineFirstViewModelImplTest
-
-    /**
-     * @param block The block to be run on the UI thread.
-     */
-    private fun runBlockingUiCode(block: suspend () -> Unit) {
-        val deferred = CompletableDeferred<Unit>()
-        launch(UI) {
-            try {
-                block()
-                deferred.complete(Unit)
-            } catch (e: Exception) {
-                deferred.completeExceptionally(e)
-            }
-        }
-        val isExceptionThrown = try {
-            runBlocking { deferred.await() }
-            false
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
-        assertFalse(isExceptionThrown)
-    }
 
     @Before
     fun setUp() = runBlockingUiCode {

@@ -15,10 +15,13 @@ import io.realm.Realm
 object InitialRealmData {
 
     fun getInitialData() = Realm.Transaction {
+        // EthToken
         it.insertOrUpdate(EthToken.ETH)
         it.insertOrUpdate(EthToken.LRC)
         it.insertOrUpdate(EthToken.APPC)
         it.insertOrUpdate(EthToken.REQ)
+
+        // Currency Exchange Rate
         it.insertOrUpdate(CurrencyExchangeRate.USD)
     }
 

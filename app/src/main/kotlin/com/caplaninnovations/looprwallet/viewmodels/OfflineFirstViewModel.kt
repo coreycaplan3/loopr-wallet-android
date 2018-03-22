@@ -14,6 +14,7 @@ import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.isValid
+import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -75,7 +76,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     /**
      * This variable is setup in the call to [initializeData]
      */
-    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var mLiveData: LiveData<T>? = null
 
     /**
@@ -265,7 +266,8 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      *
      * @param parameter The parameter passed into [initializeData] for querying the repository.
      */
-    protected abstract fun getLiveDataFromRepository(parameter: U): LiveData<T>
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    abstract fun getLiveDataFromRepository(parameter: U): LiveData<T>
 
     /**
      * This method is called in [initializeData] after [liveData] has been initialized (it is
@@ -275,7 +277,8 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      *
      * @param liveData The [LiveData] object that was initialized
      */
-    protected open fun onLiveDataInitialized(liveData: LiveData<T>) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    open fun onLiveDataInitialized(liveData: LiveData<T>) {
     }
 
     /**
@@ -284,14 +287,16 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      *
      * @param parameter The parameter passed into [initializeData] for querying the network.
      */
-    protected abstract fun getDataFromNetwork(parameter: U): Deferred<T>
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    abstract fun getDataFromNetwork(parameter: U): Deferred<T>
 
     /**
      * Adds the given [data] to the repository so it can be cached and used offline.
      *
      * @param data The fresh data that was just retrieved from the network.
      */
-    protected abstract fun addNetworkDataToRepository(data: T)
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    abstract fun addNetworkDataToRepository(data: T)
 
     /**
      * Checks if the parameter for this [OfflineFirstViewModel] is the same as the parameter being
@@ -323,7 +328,8 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * - Check when the last refresh occurred for this data to see if the user is syncing too often.
      * - The user is trying to refreshing faster than blocks are confirmed.
      */
-    protected abstract fun isRefreshNecessary(): Boolean
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    abstract fun isRefreshNecessary(): Boolean
 
     /**
      * Checks if a refresh is necessary, based on the [lastRefreshTime] and the [waitTime] between
@@ -368,6 +374,21 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         is RealmModel -> !data.isValid()
         is RealmResults<*> -> !data.isValid || data.size == 0
         else -> throw NotImplementedError("Default implementation does not work!")
+    }
+
+    /**
+     * Waits for data to come back from the network
+     */
+    @VisibleForTesting
+    suspend fun blockingNetworkObserver(): T {
+        val deferred = CompletableDeferred<T?>()
+        mLiveData!!.observeForever({
+            if (!mIsNetworkOperationRunning) {
+                deferred.complete(it)
+            }
+        })
+
+        return deferred.await()!!
     }
 
     /**

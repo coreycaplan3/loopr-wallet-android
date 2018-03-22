@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import com.caplaninnovations.looprwallet.repositories.BaseRepository
-import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
@@ -46,20 +45,6 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
 
     var repositoryData: EthToken? = null
         private set
-
-    /**
-     * Waits for data to come back from the network
-     */
-    suspend fun blockingNetworkObserver(): EthToken {
-        val deferred = CompletableDeferred<EthToken?>()
-        mLiveData!!.observeForever({
-            if (!mIsNetworkOperationRunning) {
-                deferred.complete(it)
-            }
-        })
-
-        return deferred.await()!!
-    }
 
     fun createLiveData(parameter: String, onChange: (EthToken) -> Unit) {
         initializeDataForever(parameter, onChange)

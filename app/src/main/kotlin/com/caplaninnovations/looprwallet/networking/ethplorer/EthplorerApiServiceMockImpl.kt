@@ -18,24 +18,24 @@ import java.math.BigDecimal
 class EthplorerApiServiceMockImpl : EthplorerApiService {
 
     override fun getAddressInfo(address: String) = async {
-        delay(5000L)
+        delay(1000L)
 
         if (NetworkUtility.isNetworkAvailable()) {
             val eth = EthToken.ETH
+            eth.balance = BigDecimal("100")
             eth.priceInUsd = BigDecimal("1000.45")
-            eth.priceInNativeCurrency = BigDecimal("1000.45")
 
             val lrc = EthToken.LRC
+            lrc.balance = BigDecimal("25000")
             lrc.priceInUsd = BigDecimal("98.12")
-            lrc.priceInNativeCurrency = BigDecimal("98.12")
 
             val appc = EthToken.APPC
+            appc.balance = BigDecimal("25000")
             appc.priceInUsd = BigDecimal("400.00")
-            appc.priceInNativeCurrency = BigDecimal("400")
 
             val req = EthToken.REQ
-            req.priceInUsd = BigDecimal("100.45")
-            req.priceInNativeCurrency = BigDecimal("100.45")
+            req.balance = BigDecimal("25000")
+            req.priceInUsd = BigDecimal("100.38")
 
             listOf(eth, lrc, appc, req)
         } else {
