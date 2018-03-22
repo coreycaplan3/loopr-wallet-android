@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.viewmodels
 
 import android.arch.lifecycle.*
 import android.arch.lifecycle.Observer
+import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.extensions.loge
 import com.caplaninnovations.looprwallet.extensions.logw
@@ -34,7 +35,7 @@ import java.util.*
  * @param U The type of object used for querying and retrieving [T] (a primitive/object that stores
  * the predicates for data retrieval).
  */
-abstract class OfflineFirstViewModel<T, in U> : ViewModel() {
+abstract class OfflineFirstViewModel<T, U> : ViewModel() {
 
     companion object {
 
@@ -65,14 +66,17 @@ abstract class OfflineFirstViewModel<T, in U> : ViewModel() {
         const val DEFAULT_WAIT_TIME_MILLIS = 1000 * 30L
     }
 
-    protected abstract val repository: BaseRepository<*>
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    abstract val repository: BaseRepository<*>
 
-    private var mParameter: U? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var mParameter: U? = null
 
     /**
      * This variable is setup in the call to [initializeData]
      */
-    private var mLiveData: LiveData<T>? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    var mLiveData: LiveData<T>? = null
 
     /**
      * The data currently being monitored by this [ViewModel] or null if:
@@ -105,7 +109,8 @@ abstract class OfflineFirstViewModel<T, in U> : ViewModel() {
      * is used to distinguish between the repository being done loading vs. the network
      */
     @Volatile
-    private var mIsNetworkOperationRunning = false
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var mIsNetworkOperationRunning = false
 
     fun addDataObserver(owner: LifecycleOwner, onChange: (T) -> Unit) {
         mLiveData?.observe(owner, Observer {
@@ -167,20 +172,13 @@ abstract class OfflineFirstViewModel<T, in U> : ViewModel() {
      * a waste of resources
      */
     @Synchronized
-    fun refresh() = launch(UI) {
+    fun refresh() {
         val parameter = mParameter
         if (parameter == null) {
             logw("Parameter is null somehow...", IllegalStateException())
-            return@launch
+            return
         }
-
-        if (!mIsNetworkOperationRunning && isRefreshNecessary()) {
-            // We don't have a network operation already running and a refresh is necessary
-            mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
-            handleNetworkRequest(parameter).await()
-        } else {
-            mCurrentState.value = getCurrentIdleState(mLiveData?.value)
-        }
+        refreshInternal(parameter)
     }
 
     // MARK - Protected Methods
@@ -219,7 +217,8 @@ abstract class OfflineFirstViewModel<T, in U> : ViewModel() {
      * This observer is used solely with [foreverObserver] so we have a way to remember and remove
      * it when [initializeDataForever] is called.
      */
-    private var foreverObserver: Observer<T>? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var foreverObserver: Observer<T>? = null
 
     /**
      * This method initializes the offline-first data pipeline for the UI.
@@ -334,7 +333,8 @@ abstract class OfflineFirstViewModel<T, in U> : ViewModel() {
      * @param waitTime The wait time between refreshes.
      * @return True if a refresh is necessary or false if it's not.
      */
-    protected fun isDefaultRefreshNecessary(lastRefreshTime: Long, waitTime: Long): Boolean {
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    fun isDefaultRefreshNecessary(lastRefreshTime: Long, waitTime: Long): Boolean {
         return lastRefreshTime + waitTime < Date().time
     }
 
@@ -364,9 +364,9 @@ abstract class OfflineFirstViewModel<T, in U> : ViewModel() {
      * @param data The data to be checked for whether or not it's valid.
      */
     protected open fun isDataEmpty(data: T?) = when (data) {
-        null -> false
-        is RealmModel -> data.isValid()
-        is RealmResults<*> -> data.isValid
+        null -> true
+        is RealmModel -> !data.isValid()
+        is RealmResults<*> -> !data.isValid || data.size == 0
         else -> throw NotImplementedError("Default implementation does not work!")
     }
 
@@ -437,7 +437,17 @@ abstract class OfflineFirstViewModel<T, in U> : ViewModel() {
         onLiveDataInitialized(liveData)
 
         // Ping the network for fresh data
-        refresh()
+        refreshInternal(parameter)
+    }
+
+    private fun refreshInternal(parameter: U) = launch(UI) {
+        if (!mIsNetworkOperationRunning && isRefreshNecessary()) {
+            // We don't have a network operation already running and a refresh is necessary
+            mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
+            handleNetworkRequest(parameter).await()
+        } else {
+            mCurrentState.value = getCurrentIdleState(mLiveData?.value)
+        }
     }
 
     /**

@@ -6,6 +6,7 @@ import android.support.annotation.RestrictTo.Scope.TESTS
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.extensions.mapIfNull
 import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferAmountFragment
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 
@@ -19,6 +20,22 @@ import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKe
 @RestrictTo(TESTS)
 class TestActivity : BaseActivity() {
 
+    var isRunningTest: Boolean? = null
+
+    @Synchronized
+    fun isRunningTest(): Boolean {
+        return isRunningTest.mapIfNull {
+            try {
+                Class.forName("android.support.test.espresso.Espresso")
+                isRunningTest = true
+                true
+            } catch (e: ClassNotFoundException) {
+                isRunningTest = false
+                false
+            }
+        }
+    }
+
     override val contentView: Int
         get() = R.layout.activity_test_container
 
@@ -28,7 +45,7 @@ class TestActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null && !isRunningTest()) {
             // used for testing a sole fragment
             val wallet = WalletCreationKeystore("loopr-currentWallet", "looprwallet")
             walletClient.createWallet("loopr-wallet", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")

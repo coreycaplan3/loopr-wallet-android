@@ -20,7 +20,7 @@ interface EthplorerApiService {
     companion object {
 
         fun getInstance(): EthplorerApiService {
-            val buildType = BuildConfig.FLAVOR
+            val buildType = BuildConfig.ENVIRONMENT
             return when (buildType) {
                 FLAVOR_MOCKNET -> EthplorerApiServiceMockImpl()
                 FLAVOR_TESTNET, FLAVOR_MAINNET -> EthplorerApiServiceProdImpl()

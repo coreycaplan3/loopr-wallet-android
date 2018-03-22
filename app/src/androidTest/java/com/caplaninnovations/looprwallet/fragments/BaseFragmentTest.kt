@@ -2,14 +2,16 @@ package com.caplaninnovations.looprwallet.fragments
 
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
-import android.support.test.espresso.Espresso.*
-import android.support.test.espresso.matcher.ViewMatchers.*
+import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.matcher.ViewMatchers.isRoot
 import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
+import com.caplaninnovations.looprwallet.extensions.getResourceIdFromAttrId
 import com.caplaninnovations.looprwallet.utilities.OrientationChangeAction
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.FutureTask
@@ -69,7 +71,7 @@ class BaseFragmentTest : BaseDaggerFragmentTest<BaseFragmentTest.TestingBaseFrag
 
         val fragmentContainer = fragment.view?.findViewById<ViewGroup>(R.id.fragmentContainer)
         val topMargin = (fragmentContainer!!.layoutParams as CoordinatorLayout.LayoutParams).topMargin
-        val actionBarSizeResource = activity.getResourceIdFromAttrId(android.R.attr.actionBarSize)
+        val actionBarSizeResource = activity.theme.getResourceIdFromAttrId(android.R.attr.actionBarSize)
         val actionBarSize = activity.resources.getDimension(actionBarSizeResource).toInt()
         assertEquals(actionBarSize, topMargin)
     }

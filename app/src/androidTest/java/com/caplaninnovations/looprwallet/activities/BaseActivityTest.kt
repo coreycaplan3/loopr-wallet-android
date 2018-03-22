@@ -3,7 +3,6 @@ package com.caplaninnovations.looprwallet.activities
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.utilities.str
 import org.junit.Test
 
 import org.junit.Assert.*
