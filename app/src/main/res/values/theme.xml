@@ -30,10 +30,14 @@
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
 
         <!-- Dialogs -->
+        <item name="alertDialogTheme">@style/App.AlertDialog.Light</item>
         <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog.Light</item>
 
         <!-- Divider -->
         <item name="dividerColor">@android:color/black</item>
+
+        <!-- Settings -->
+        <item name="preferenceTheme">@style/App.SettingsTheme</item>
 
         <!-- Tabs -->
         <item name="tabTextColor">@color/tabs_text</item>
@@ -82,10 +86,14 @@
         <item name="cardBackgroundColor">@color/cardview_dark_background</item>
 
         <!-- Dialogs -->
+        <item name="alertDialogTheme">@style/App.AlertDialog</item>
         <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog</item>
 
         <!-- Divider -->
         <item name="dividerColor">@android:color/white</item>
+
+        <!-- Settings -->
+        <item name="preferenceTheme">@style/App.SettingsTheme</item>
 
         <!-- Tabs -->
         <item name="tabTextColor">@color/tabs_text</item>

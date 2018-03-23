@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="App" />
 
@@ -94,6 +94,26 @@
 
     <!-- Dialogs -->
 
+    <style name="App.AlertDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- To tint EditText and TimePicker -->
+        <item name="colorAccent">@color/darkAccent</item>
+    </style>
+
+    <style name="App.AlertDialog.Light" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- To tint EditText and TimePicker -->
+        <item name="colorAccent">@color/lightAccent</item>
+    </style>
+
+    <style name="App.AlertDialog.Content" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- To tint EditText and TimePicker -->
+        <item name="colorAccent">@color/darkAccent</item>
+    </style>
+
+    <style name="App.AlertDialog.Content.Light" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- To tint EditText and TimePicker -->
+        <item name="colorAccent">@color/lightAccent</item>
+    </style>
+
     <style name="App.BottomSheetDialog" parent="Theme.Design.BottomSheetDialog">
         <item name="colorButtonNormal">@color/lightButtonDisabled</item>
         <item name="buttonStyle">@style/App.Button</item>
@@ -144,6 +164,24 @@
         <item name="autoCompleteTextViewStyle">@style/App.AutoCompleteTextView</item>
         <item name="suggestionRowLayout">@layout/view_holder_contact</item>
         <item name="android:maxWidth">9999dp</item>
+    </style>
+
+    <!-- Settings -->
+
+    <style name="App.SettingsTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceFragmentCompatStyle">@style/App.FragmentSettingsStyle</item>
+    </style>
+
+    <!-- Custom Style for PreferenceFragmentCompat -->
+    <style name="App.FragmentSettingsStyle" parent="@style/PreferenceFragment.Material">
+        <!-- Custom layout for PreferenceFragmentCompat -->
+        <item name="android:layout">@layout/pref_screen</item>
+    </style>
+
+    <style name="App.Preference">
+        <item name="android:layout" tools:ignore="PrivateResource">
+            @layout/preference_material
+        </item>
     </style>
 
     <!-- Text -->

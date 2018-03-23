@@ -26,6 +26,9 @@
     <dimen name="card_padding_horizontal">16dp</dimen>
     <dimen name="card_padding_bottom">16dp</dimen>
 
+    <!-- Dialogs -->
+    <dimen name="alert_dialog_padding">18dp</dimen>
+
     <!-- Floating Action Button -->
 
     <dimen name="fab_margin">16dp</dimen>

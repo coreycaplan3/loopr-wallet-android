@@ -127,6 +127,7 @@ dependencies {
     implementation "com.android.support:design:$androidNativeVersion"
     implementation "com.android.support:recyclerview-v7:$androidNativeVersion"
     implementation "com.android.support:support-v4:$androidNativeVersion"
+    implementation "com.android.support:preference-v14:$androidNativeVersion"
     implementation "com.android.support:support-vector-drawable:$androidNativeVersion"
 
     // Architecture Components
