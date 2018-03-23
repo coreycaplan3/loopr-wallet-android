@@ -6,9 +6,11 @@ import com.caplaninnovations.looprwallet.extensions.allNonNull
 import com.caplaninnovations.looprwallet.extensions.loge
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
+import com.caplaninnovations.looprwallet.models.user.SyncData
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.networking.ethplorer.EthplorerApiService
 import com.caplaninnovations.looprwallet.repositories.eth.EthTokenRepository
+import com.caplaninnovations.looprwallet.repositories.sync.SyncRepository
 import com.caplaninnovations.looprwallet.viewmodels.StreamingViewModel
 import io.realm.RealmModel
 import kotlinx.coroutines.experimental.Deferred
@@ -27,6 +29,10 @@ import java.math.RoundingMode
 class TokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewModel<CryptoToken, String>() {
 
     override val repository = EthTokenRepository(currentWallet)
+
+    override val syncRepository = SyncRepository.getInstance(currentWallet)
+
+    override val syncType: String = SyncData.SYNC_TYPE_TOKEN_PRICE
 
     private var currencyExchangeRate: CurrencyExchangeRate? = null
 
@@ -68,11 +74,6 @@ class TokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewMode
 
     override fun addNetworkDataToRepository(data: CryptoToken) {
         (data as? RealmModel)?.let { repository.add(it) }
-    }
-
-    override fun isRefreshNecessary(): Boolean {
-        val data = data ?: return true
-        return isDefaultRefreshNecessary(data.lastUpdated.time, pingTime)
     }
 
     override fun onCleared() {

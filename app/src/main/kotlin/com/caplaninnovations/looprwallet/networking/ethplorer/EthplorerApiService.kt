@@ -30,6 +30,12 @@ interface EthplorerApiService {
 
     }
 
+    /**
+     * Gets a token's information like price and total supply from the network.
+     *
+     * @param contractAddress The token's [EthToken.contractAddress] used to get the proper token's
+     * information.
+     */
     fun getTokenInfo(contractAddress: String): Deferred<EthToken>
 
     /**

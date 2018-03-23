@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.networking.ethplorer
 
+import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import com.caplaninnovations.looprwallet.utilities.NetworkUtility
 import kotlinx.coroutines.experimental.async
@@ -22,20 +23,16 @@ class EthplorerApiServiceMockImpl : EthplorerApiService {
 
         if (NetworkUtility.isNetworkAvailable()) {
             val eth = EthToken.ETH
-            eth.balance = BigDecimal("100")
-            eth.priceInUsd = BigDecimal("1000.45")
+            setTokenInfo(eth)
 
             val lrc = EthToken.LRC
-            lrc.balance = BigDecimal("25000")
-            lrc.priceInUsd = BigDecimal("98.12")
+            setTokenInfo(lrc)
 
             val appc = EthToken.APPC
-            appc.balance = BigDecimal("25000")
-            appc.priceInUsd = BigDecimal("400.00")
+            setTokenInfo(appc)
 
             val req = EthToken.REQ
-            req.balance = BigDecimal("25000")
-            req.priceInUsd = BigDecimal("100.38")
+            setTokenInfo(req)
 
             listOf(eth, lrc, appc, req)
         } else {
@@ -44,15 +41,35 @@ class EthplorerApiServiceMockImpl : EthplorerApiService {
     }
 
     override fun getTokenInfo(contractAddress: String) = async {
-        delay(5000L)
+        delay(500L)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            val token = EthToken.ETH
-            token.priceInUsd = BigDecimal("1000.45")
-            token.priceInNativeCurrency = BigDecimal("1000.45")
-            token
+            val tokenList = listOf(EthToken.ETH, EthToken.LRC, EthToken.APPC, EthToken.REQ)
+            tokenList.forEach { setTokenInfo(it) }
+            tokenList.firstOrNull { it.contractAddress == contractAddress }!!
         } else {
             throw IOException("No connection!")
+        }
+    }
+
+    private fun setTokenInfo(token: CryptoToken) {
+        when (token.identifier) {
+            EthToken.ETH.identifier -> {
+                token.priceInUsd = BigDecimal("5000.00")
+                token.balance = BigDecimal("100")
+            }
+            EthToken.LRC.identifier -> {
+                token.priceInUsd = BigDecimal("100.00")
+                token.balance = BigDecimal("2500")
+            }
+            EthToken.APPC.identifier -> {
+                token.priceInUsd = BigDecimal("500.00")
+                token.balance = BigDecimal("0")
+            }
+            EthToken.REQ.identifier -> {
+                token.priceInUsd = BigDecimal("900.00")
+                token.balance = BigDecimal("2500")
+            }
         }
     }
 

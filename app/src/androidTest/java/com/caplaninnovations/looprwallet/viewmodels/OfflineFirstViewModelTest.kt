@@ -1,22 +1,20 @@
 package com.caplaninnovations.looprwallet.viewmodels
 
-import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
+import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.experimental.withTimeoutOrNull
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.*
 
 /**
  * Created by Corey Caplan on 3/21/18.
@@ -26,11 +24,11 @@ import java.util.*
  * Purpose of Class:
  */
 @RunWith(AndroidJUnit4::class)
-open class OfflineFirstViewModelTest: BaseDaggerTest() {
+open class OfflineFirstViewModelTest : BaseDaggerTest() {
 
-    @get:Rule
-    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
-
+    /**
+     * Used for testing [isDataEmpty] and [isDataValid]
+     */
     private lateinit var realm: Realm
 
     private val parameter = "param"
@@ -49,11 +47,105 @@ open class OfflineFirstViewModelTest: BaseDaggerTest() {
     }
 
     @After
-    fun tearDown() {
-        runBlockingUiCode {
-            realm.close()
-            offlineFirstViewModel.clear()
-        }
+    fun tearDown() = runBlockingUiCode {
+        realm.close()
+        offlineFirstViewModel.clear()
+    }
+
+    @Test
+    fun checkFullFunctionality_repositoryHasData() = runBlockingUiCode {
+        realm.close()
+        offlineFirstViewModel.clear()
+
+        offlineFirstViewModel = OfflineFirstViewModelImplTest()
+        offlineFirstViewModel.repositoryData = EthToken.ETH
+        assertTrue(offlineFirstViewModel.isRefreshNecessary(parameter))
+        assertEquals(OfflineFirstViewModel.STATE_IDLE_EMPTY, offlineFirstViewModel.currentState)
+
+        val repositoryDeferred = CompletableDeferred<EthToken>()
+        val networkDeferred = CompletableDeferred<EthToken>()
+
+        offlineFirstViewModel.createLiveData(parameter, {
+            if (offlineFirstViewModel.mIsNetworkOperationRunning) {
+                repositoryDeferred.complete(it)
+            } else if (!offlineFirstViewModel.isLoading()) {
+                networkDeferred.complete(it)
+            }
+        })
+
+        val repositoryData = withTimeoutOrNull(1000L) { repositoryDeferred.await() }
+        assertEquals(EthToken.ETH.identifier, repositoryData!!.identifier)
+        assertTrue(repositoryDeferred.isCompleted)
+        assertFalse(networkDeferred.isCompleted)
+
+        val networkData = withTimeoutOrNull(1000L) { networkDeferred.await() }
+        assertEquals(EthToken.ETH.identifier, networkData!!.identifier)
+
+        assertEquals(OfflineFirstViewModel.STATE_IDLE_HAVE_DATA, offlineFirstViewModel.currentState)
+    }
+
+    @Test
+    fun checkFullFunctionality_repositoryHasNoData() = runBlockingUiCode {
+        realm.close()
+        offlineFirstViewModel.clear()
+
+        offlineFirstViewModel = OfflineFirstViewModelImplTest()
+        assertTrue(offlineFirstViewModel.isRefreshNecessary(parameter))
+        assertEquals(OfflineFirstViewModel.STATE_IDLE_EMPTY, offlineFirstViewModel.currentState)
+
+        val repositoryDeferred = CompletableDeferred<EthToken>()
+        val networkDeferred = CompletableDeferred<EthToken>()
+
+        offlineFirstViewModel.createLiveData("hello", {
+            if (offlineFirstViewModel.isLoading() && offlineFirstViewModel.mIsNetworkOperationRunning) {
+                repositoryDeferred.complete(it)
+            }
+            if (!offlineFirstViewModel.mIsNetworkOperationRunning) {
+                networkDeferred.complete(it)
+            }
+        })
+
+        assertNull(withTimeoutOrNull(1000L) { repositoryDeferred.await() })
+
+        assertEquals(EthToken.ETH.identifier, networkDeferred.await().identifier)
+
+        // The repository deferred should not have been completed, since there was no data in the
+        // repository at first.
+        assertEquals(OfflineFirstViewModel.STATE_IDLE_HAVE_DATA, offlineFirstViewModel.currentState)
+    }
+
+    @Test
+    fun checkFullFunctionality_noDataAtAll() = runBlockingUiCode {
+        realm.close()
+        offlineFirstViewModel.clear()
+
+        offlineFirstViewModel = OfflineFirstViewModelImplTest()
+        // We are faking not having data by not needing the network call
+        offlineFirstViewModel.lastRefresh = offlineFirstViewModel.noRefresh
+        assertFalse(offlineFirstViewModel.isRefreshNecessary(parameter))
+        assertEquals(OfflineFirstViewModel.STATE_IDLE_EMPTY, offlineFirstViewModel.currentState)
+
+        val repositoryDeferred = CompletableDeferred<EthToken>()
+        val networkDeferred = CompletableDeferred<EthToken>()
+
+        offlineFirstViewModel.createLiveData("hello", {
+            if (offlineFirstViewModel.mIsNetworkOperationRunning) {
+                repositoryDeferred.complete(it)
+            }
+            if (!offlineFirstViewModel.mIsNetworkOperationRunning) {
+                networkDeferred.complete(it)
+            }
+        })
+
+        assertEquals(OfflineFirstViewModel.STATE_IDLE_EMPTY, offlineFirstViewModel.currentState)
+
+        val repositoryData = withTimeoutOrNull(1000L) { repositoryDeferred.await() }
+        assertNull(repositoryData)
+
+        val networkData = withTimeoutOrNull(1000L) { networkDeferred.await() }
+        assertNull(networkData)
+
+        assertEquals(OfflineFirstViewModel.STATE_IDLE_EMPTY, offlineFirstViewModel.currentState)
     }
 
     @Test
@@ -73,13 +165,13 @@ open class OfflineFirstViewModelTest: BaseDaggerTest() {
     }
 
     @Test
-    fun isIdle() {
+    fun isIdle() = runBlockingUiCode {
         // We should be loading as soon as we finish the setup method
         assertFalse(offlineFirstViewModel.isIdle())
     }
 
     @Test
-    fun isLoading() {
+    fun isLoading() = runBlockingUiCode {
         // We should be loading as soon as we finish the setup method
         assertTrue(offlineFirstViewModel.isLoading())
     }
@@ -153,20 +245,10 @@ open class OfflineFirstViewModelTest: BaseDaggerTest() {
     @Test
     fun isRefreshNecessary() {
         offlineFirstViewModel.lastRefresh = offlineFirstViewModel.noRefresh
-        assertFalse(offlineFirstViewModel.isRefreshNecessary())
+        assertFalse(offlineFirstViewModel.isRefreshNecessary(parameter))
 
         offlineFirstViewModel.lastRefresh = offlineFirstViewModel.requiresRefresh
-        assertTrue(offlineFirstViewModel.isRefreshNecessary())
-    }
-
-    @Test
-    fun isDefaultRefreshNecessary() {
-        val lastRefreshNoRefresh = Date().time
-        val waitTime = OfflineFirstViewModel.DEFAULT_WAIT_TIME_MILLIS
-        assertFalse(offlineFirstViewModel.isDefaultRefreshNecessary(lastRefreshNoRefresh, waitTime))
-
-        val lastRefreshRequireRefresh = Date().time - waitTime - 1000L
-        assertTrue(offlineFirstViewModel.isDefaultRefreshNecessary(lastRefreshRequireRefresh, waitTime))
+        assertTrue(offlineFirstViewModel.isRefreshNecessary(parameter))
     }
 
     @Test

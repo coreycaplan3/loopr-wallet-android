@@ -20,9 +20,9 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.After
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Before
+import java.util.*
 import java.util.concurrent.FutureTask
 import javax.inject.Inject
 
@@ -95,17 +95,15 @@ open class BaseDaggerTest {
             try {
                 block()
                 deferred.complete(Unit)
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 deferred.completeExceptionally(e)
             }
         }
-        val isExceptionThrown = try {
+        try {
             runBlocking { deferred.await() }
-            false
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             throw RuntimeException(e)
         }
-        assertFalse(isExceptionThrown)
     }
 
     /**
@@ -136,6 +134,21 @@ open class BaseDaggerTest {
     fun <T : Activity> assertActivityActive(activityClass: Class<T>, waitTime: Long = 5000) {
         Thread.sleep(waitTime)
         intended(hasComponent(ComponentName(getTargetContext(), activityClass)))
+    }
+
+    /**
+     * Checks that the two dates are within a certain millisecond range of each other.
+     *
+     * @param date1 The date that came before [date2]
+     * @param date2 The date that came after [date1]
+     * @param rangeMillis The range (in milliseconds) that should be applied to the two dates. This
+     * range must be >= 0.
+     */
+    fun assertDatesWithRange(date1: Date, date2: Date, rangeMillis: Long) {
+        assertTrue(rangeMillis >= 0)
+
+        assertTrue(date1.time - date2.time >= -rangeMillis)
+        assertTrue(date1.time - date2.time <= rangeMillis)
     }
 
 }

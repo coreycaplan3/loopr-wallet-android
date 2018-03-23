@@ -13,7 +13,7 @@ import kotlinx.coroutines.experimental.Deferred
  */
 class CurrencyExchangeServiceProdImpl: CurrencyExchangeService {
 
-    override fun getCurrentCurrencyExchangeRate(ticker: String): Deferred<CurrencyExchangeRate> {
+    override fun getCurrentCurrencyExchangeRate(currency: String): Deferred<CurrencyExchangeRate> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

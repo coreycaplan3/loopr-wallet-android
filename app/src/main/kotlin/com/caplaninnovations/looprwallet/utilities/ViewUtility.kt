@@ -1,6 +1,8 @@
 package com.caplaninnovations.looprwallet.utilities
 
 import android.content.Context
+import android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK
+import android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
@@ -28,6 +30,15 @@ object ViewUtility {
         } else {
             false
         }
+    }
+
+    /**
+     * Helper method to determine if the device has an extra-large screen. For
+     * example, 10" tablets are extra-large.
+     */
+    fun isXLargeTablet(): Boolean {
+        val screenLayout = LooprWalletApp.context.resources.configuration.screenLayout
+        return screenLayout and SCREENLAYOUT_SIZE_MASK >= SCREENLAYOUT_SIZE_XLARGE
     }
 
 }

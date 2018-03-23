@@ -16,7 +16,7 @@ import io.realm.RealmResults
  * Purpose of Class:
  *
  */
-class ContactsByNameViewModel(currentWallet: LooprWallet) : OfflineOnlyViewModel<RealmResults<Contact>, String>() {
+class ContactsByNameViewModel(currentWallet: LooprWallet) : OfflineOnlyViewModel<RealmResults<Contact>, String>(currentWallet) {
 
     override val repository = ContactsRepository(currentWallet)
 

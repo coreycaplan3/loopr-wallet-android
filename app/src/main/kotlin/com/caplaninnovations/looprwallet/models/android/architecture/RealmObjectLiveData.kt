@@ -22,19 +22,23 @@ import io.realm.kotlin.removeChangeListener
  * Purpose of Class: To use realm with [LiveData], to conform to Android's architecture
  * components. This class's only responsibility
  *
- * @param results The results from a query. Don't worry about it having data or not (from a query),
+ * @param result The result from a query. Don't worry about it having data or not (from a query),
  * since a [RealmChangeListener] is registered and updates this [LiveData]'s value on the fly.
  */
-class RealmObjectLiveData<T : RealmModel>(private val results: T) : LiveData<T>() {
+class RealmObjectLiveData<T : RealmModel>(private val result: T) : LiveData<T>() {
+
+    init {
+        value = result
+    }
 
     private val listener = RealmChangeListener<T> { results -> value = results }
 
     override fun onActive() {
-        results.addChangeListener(listener)
+        result.addChangeListener(listener)
     }
 
     override fun onInactive() {
-        results.removeChangeListener(listener)
+        result.removeChangeListener(listener)
     }
 
 }

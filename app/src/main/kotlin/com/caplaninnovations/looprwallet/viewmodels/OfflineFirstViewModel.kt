@@ -5,20 +5,21 @@ import android.arch.lifecycle.Observer
 import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.extensions.loge
-import com.caplaninnovations.looprwallet.extensions.logw
+import com.caplaninnovations.looprwallet.extensions.logi
+import com.caplaninnovations.looprwallet.extensions.observeForDoubleSpend
 import com.caplaninnovations.looprwallet.models.error.ErrorTypes
 import com.caplaninnovations.looprwallet.models.error.LooprError
 import com.caplaninnovations.looprwallet.models.error.UnknownLooprError
+import com.caplaninnovations.looprwallet.models.user.SyncData
 import com.caplaninnovations.looprwallet.repositories.BaseRepository
+import com.caplaninnovations.looprwallet.repositories.sync.SyncRepository
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.isValid
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.*
@@ -71,6 +72,11 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     abstract val repository: BaseRepository<*>
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    abstract val syncRepository: SyncRepository
+
+    open val waitTime = DEFAULT_WAIT_TIME_MILLIS
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var mParameter: U? = null
 
     /**
@@ -113,20 +119,20 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var mIsNetworkOperationRunning = false
 
-    fun addDataObserver(owner: LifecycleOwner, onChange: (T) -> Unit) {
-        mLiveData?.observe(owner, Observer {
-            if (it != null && isDataValid(it)) onChange(it)
-        })
-    }
+    /**
+     * True if there is currently a network operation running or false otherwise. This variable
+     * is used to distinguish between the repository being done loading vs. the network
+     */
+    @Volatile
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var mHasNetworkBeenCalled = false
 
     /**
      * An mError that may or may not have occurred. Should be used in conjunction with
      * *LiveData.observeForDoubleSpend* so you don't display the same mError *twice* to a user.
      */
     fun addErrorObserver(owner: LifecycleOwner, onChange: (LooprError) -> Unit) {
-        mError.observe(owner, Observer {
-            if (it != null) onChange(it)
-        })
+        mError.observeForDoubleSpend(owner, onChange)
     }
 
     /**
@@ -176,7 +182,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     fun refresh() {
         val parameter = mParameter
         if (parameter == null) {
-            logw("Parameter is null somehow...", IllegalStateException())
+            loge("Parameter is null somehow...", IllegalStateException())
             return
         }
         refreshInternal(parameter)
@@ -329,20 +335,19 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * - The user is trying to refreshing faster than blocks are confirmed.
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
-    abstract fun isRefreshNecessary(): Boolean
+    open fun isRefreshNecessary(parameter: U): Boolean {
+        val dateLastSynced = syncRepository.getLastSyncTime(syncType)?.time ?: return true
 
-    /**
-     * Checks if a refresh is necessary, based on the [lastRefreshTime] and the [waitTime] between
-     * refreshes.
-     *
-     * @param lastRefreshTime The last time at which data was refreshed.
-     * @param waitTime The wait time between refreshes.
-     * @return True if a refresh is necessary or false if it's not.
-     */
-    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
-    fun isDefaultRefreshNecessary(lastRefreshTime: Long, waitTime: Long): Boolean {
-        return lastRefreshTime + waitTime < Date().time
+        return isRefreshNecessary(dateLastSynced)
     }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    fun isRefreshNecessary(dateLastSynced: Long): Boolean {
+        return dateLastSynced + waitTime < Date().time
+    }
+
+    @SyncData.SyncType
+    abstract val syncType: String
 
     /**
      * Checks if the provided [data] is valid. Meaning data is **NOT** null and is ready to be used
@@ -353,7 +358,8 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      *
      * @param data The data to be checked for whether or not it's valid.
      */
-    protected open fun isDataValid(data: T?) = when (data) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    open fun isDataValid(data: T?) = when (data) {
         null -> false
         is RealmModel -> data.isValid()
         is RealmResults<*> -> data.isValid
@@ -369,7 +375,8 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      *
      * @param data The data to be checked for whether or not it's valid.
      */
-    protected open fun isDataEmpty(data: T?) = when (data) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    open fun isDataEmpty(data: T?) = when (data) {
         null -> true
         is RealmModel -> !data.isValid()
         is RealmResults<*> -> !data.isValid || data.size == 0
@@ -401,6 +408,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
 
         foreverObserver?.let { mLiveData?.removeObserver(it) }
         repository.clear()
+        syncRepository.clear()
     }
 
     // MARK - Private Methods
@@ -422,9 +430,10 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
 
             if (it != null && isDataValid(it)) {
                 onChange(it)
-            } else {
-                loge("Invalid data! {state: $mCurrentState, " +
-                        "isNetworkRunning: $mIsNetworkOperationRunning}", IllegalStateException())
+            } else if (isIdle()) {
+                // This can happen if we're unable to load data and the repository is empty
+                logi("Bad data state! {state: ${mCurrentState.value}, " +
+                        "isNetworkRunning: $mIsNetworkOperationRunning}")
             }
         }
     }
@@ -450,6 +459,12 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         // Reinitialize the state
         mCurrentState.value = STATE_LOADING_EMPTY
 
+        // We are going to ping a refresh. So we need to initialize the state with a network
+        // operation running. Reason being, there could be a brief period in which repository
+        // data has loaded but a network operation is NOT running (between the call to
+        // "refreshInternal" and the Observer's "onChange" method being called).
+        mIsNetworkOperationRunning = isRefreshNecessary(parameter)
+
         // Reinitialize data, observers, and notify via the call to onLiveDataInitialized
         this.mParameter = parameter
         val liveData = getLiveDataFromRepository(parameter)
@@ -457,14 +472,17 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         addObserver(liveData)
         onLiveDataInitialized(liveData)
 
-        // Ping the network for fresh data
-        refreshInternal(parameter)
+        if (mIsNetworkOperationRunning) {
+            // Ping the network for fresh data
+            mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
+            handleNetworkRequest(parameter)
+        }
     }
 
-    private fun refreshInternal(parameter: U) = launch(UI) {
-        if (!mIsNetworkOperationRunning && isRefreshNecessary()) {
+    private fun refreshInternal(parameter: U) = async {
+        if (!mIsNetworkOperationRunning && isRefreshNecessary(parameter)) {
             // We don't have a network operation already running and a refresh is necessary
-            mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
+            mCurrentState.postValue(getCurrentLoadingState(mLiveData?.value))
             handleNetworkRequest(parameter).await()
         } else {
             mCurrentState.value = getCurrentIdleState(mLiveData?.value)
@@ -492,6 +510,9 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
             // Update the current state and add the data to Realm
             mCurrentState.postValue(STATE_IDLE_HAVE_DATA)
             addNetworkDataToRepository(data)
+
+            // Add the successful sync to the logs
+            syncRepository.add(SyncData(syncType, Date()))
         } catch (exception: Exception) {
             val looprError = when (exception) {
                 is HttpException -> {

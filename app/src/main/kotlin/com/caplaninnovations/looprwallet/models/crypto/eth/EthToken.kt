@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.models.crypto.eth
 
+import com.caplaninnovations.looprwallet.extensions.equalsZero
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
@@ -18,6 +19,13 @@ import java.util.*
  * @param contractAddress The address used to locate the contract for this token. A value of "ETH"
  * means the token actually represents ethereum. This is because
  * @param ticker The ticker for this token. A value of "ETH" means the token is actually ethereum.
+ * @param totalSupply The total supply of the crypto. To get the [BigDecimal] version, we must
+ * assign this string value to a big decimal and divide it by (10^decimalPlaces). Said differently,
+ * this variable should have **NO** decimal places in it.
+ * @param priceInUsd The price of the token currently in USD. This [BigDecimal] should have a scale
+ * of exactly 2.
+ * @param priceInNativeCurrency The price of the token currently in the user's native currency.
+ * This [BigDecimal] should have a scale of exactly 2.
  */
 open class EthToken(
         @PrimaryKey var contractAddress: String = "ETH",
@@ -91,10 +99,14 @@ open class EthToken(
     final override var balance: BigDecimal?
         get() = mBalance?.let { BigDecimal(it) }
         set(value) {
-            mBalance = value?.toPlainString()
+            if(value?.equalsZero() == true) {
+                mBalance = "0"
+            } else {
+                mBalance = value?.toPlainString()
+            }
         }
 
-    private var mBalance: String? = balance?.toString()
+    private var mBalance: String?
 
     /**
      * This is a backing field.
@@ -114,10 +126,11 @@ open class EthToken(
     private var mPriceInUsd: String?
 
     init {
+        // needed to set backing fields initially. They will be overwritten by the two calls below
         this.mBalance = null
-        this.balance = balance // this will set mBalance
-
         this.mPriceInUsd = null
+
+        this.balance = balance // this will set mBalance
         this.priceInUsd = priceInUsd // this will set mPriceInUsd
     }
 

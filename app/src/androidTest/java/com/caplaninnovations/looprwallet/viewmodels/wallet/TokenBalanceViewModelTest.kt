@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.viewmodels.wallet
 
+import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import io.realm.RealmResults
@@ -7,6 +8,8 @@ import junit.framework.Assert.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import java.util.*
 
 /**
  * Created by Corey Caplan on 3/22/18.
@@ -15,19 +18,20 @@ import org.junit.Test
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class TokenBalanceViewModelTest : BaseDaggerTest() {
 
     private lateinit var tokenBalanceViewModel: TokenBalanceViewModel
     private lateinit var address: String
 
     @Before
-    fun setup() {
+    fun setup() = runBlockingUiCode {
         tokenBalanceViewModel = TokenBalanceViewModel(wallet!!)
         address = wallet!!.credentials.address
     }
 
     @After
-    fun tearDown() {
+    fun tearDown() = runBlockingUiCode {
         tokenBalanceViewModel.clear()
     }
 
@@ -35,7 +39,10 @@ class TokenBalanceViewModelTest : BaseDaggerTest() {
     fun getLiveDataFromRepository() = runBlockingUiCode {
         val data = tokenBalanceViewModel.getLiveDataFromRepository(address)
         val realmData = (data.value!! as RealmResults<CryptoToken>)
-        assertFalse(realmData.isValid)
+
+        assertTrue(realmData.load())
+
+        assertTrue(realmData.isValid)
         assertTrue(realmData.size > 0)
     }
 
@@ -50,16 +57,14 @@ class TokenBalanceViewModelTest : BaseDaggerTest() {
         val list = tokenBalanceViewModel.getDataFromNetwork(address).await()
         tokenBalanceViewModel.addNetworkDataToRepository(list)
 
-        val allTokens = tokenBalanceViewModel.repository.getAllTokens().value!!
+        val allTokens = (tokenBalanceViewModel.repository.getAllTokens().value as RealmResults<CryptoToken>)
+        assertTrue(allTokens.load())
+        val date = Date()
         allTokens.forEach {
+            assertDatesWithRange(it.lastUpdated, date, 10)
             assertNotNull(it.priceInUsd)
             assertNotNull(it.balance)
         }
-    }
-
-    @Test
-    fun isRefreshNecessary() {
-        // TODO refresh repository
     }
 
 }

@@ -1,5 +1,7 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
+import android.support.annotation.VisibleForTesting
+import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
@@ -10,13 +12,14 @@ import java.util.*
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class:
+ * Purpose of Class: This class is made open so it can be mocked.
  *
  */
-class CurrencySettings(private val looprSettings: LooprSettings) {
+open class CurrencySettings(private val looprSettings: LooprSettings) {
 
     companion object {
-        private const val DEFAULT_CURRENCY = "USD"
+        @VisibleForTesting
+        const val DEFAULT_CURRENCY = "USD"
 
         private const val KEY_CURRENT_CURRENCY = "_CURRENT_CURRENCY"
     }
@@ -36,11 +39,27 @@ class CurrencySettings(private val looprSettings: LooprSettings) {
     fun getTokenInstance(): NumberFormat {
         // Use the currency as a means to know how users format their decimal places and large
         // numbers. IE - 1,000,000.00 vs. 1.000.000,00
-        return DecimalFormat.getInstance(getCurrentLocale())
+        return (DecimalFormat.getInstance(getCurrentLocale()) as DecimalFormat)
                 .apply {
+                    isDecimalSeparatorAlwaysShown = true
+
+                    roundingMode = RoundingMode.HALF_UP
+
+                    minimumIntegerDigits = 1
                     maximumIntegerDigits = 10
+
+                    minimumFractionDigits = 0
                     maximumFractionDigits = 8
+
+                    isGroupingUsed = true
                 }
+    }
+
+    /**
+     * @return The currency symbol in use by the user
+     */
+    fun getCurrencySymbol(): String {
+        return getCurrencyInstance().currency.getSymbol(getCurrentLocale())
     }
 
     /**
@@ -52,7 +71,7 @@ class CurrencySettings(private val looprSettings: LooprSettings) {
         return Character.toString(separator)
     }
 
-    private fun getCurrentLocale(): Locale {
+    fun getCurrentLocale(): Locale {
         val currency = getCurrentCurrency()
 
         return when (currency) {

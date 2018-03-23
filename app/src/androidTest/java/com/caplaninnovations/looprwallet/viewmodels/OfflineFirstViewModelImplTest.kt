@@ -4,6 +4,8 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import com.caplaninnovations.looprwallet.repositories.BaseRepository
+import com.caplaninnovations.looprwallet.repositories.sync.SyncRepository
+import io.realm.RealmModel
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
@@ -14,14 +16,17 @@ import java.util.*
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class: A default instance of [OfflineFirstViewModel] that uses an in-memory
- * repository for storing one instance of a [String] as data.
+ * Purpose of Class: A default instance of [OfflineFirstViewModel] that uses a [String] instance as
+ * a parameter and an  an in-memory repository for storing one instance of an [EthToken] as data.
  */
 class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() {
 
     companion object {
         val DATA = EthToken.ETH
     }
+
+    // TODO hook into repository GET query
+    var repositoryData: EthToken? = null
 
     override val repository = object : BaseRepository<EthToken> {
 
@@ -43,8 +48,35 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
         }
     }
 
-    var repositoryData: EthToken? = null
-        private set
+    val requiresRefresh = Date(Date().time - (1000L * 40L))
+    val noRefresh = Date(Date().time - (1000L))
+
+    var lastRefresh: Date? = null
+
+    override val syncRepository = object : SyncRepository {
+        override fun add(data: RealmModel) {
+            lastRefresh = Date()
+        }
+
+        override fun addList(data: List<RealmModel>) {
+        }
+
+        override fun removeData(data: RealmModel) {
+        }
+
+        override fun getLastSyncTime(syncType: String): Date? {
+            return lastRefresh
+        }
+
+        override fun removeData(data: List<RealmModel>) {
+        }
+
+        override fun clear() {
+            lastRefresh = null
+        }
+    }
+
+    override val syncType: String = "TEST"
 
     fun createLiveData(parameter: String, onChange: (EthToken) -> Unit) {
         initializeDataForever(parameter, onChange)
@@ -54,29 +86,19 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
         initializeDataForever(parameter, onChange)
     }
 
-    public override fun getLiveDataFromRepository(parameter: String): LiveData<EthToken> {
-        return MutableLiveData<EthToken>()
+    override fun getLiveDataFromRepository(parameter: String): LiveData<EthToken> {
+        return MutableLiveData<EthToken>().apply {
+            value = repositoryData
+        }
     }
 
-    public override fun getDataFromNetwork(parameter: String): Deferred<EthToken> = async {
+    override fun getDataFromNetwork(parameter: String): Deferred<EthToken> = async {
         delay(500L)
         DATA
     }
 
-    public override fun addNetworkDataToRepository(data: EthToken) {
+    override fun addNetworkDataToRepository(data: EthToken) {
         (mLiveData as MutableLiveData).postValue(data)
-    }
-
-    val requiresRefresh = Date().time - (1000L * 40L)
-    val noRefresh = Date().time - (1000L)
-    var lastRefresh = requiresRefresh
-
-    public override fun isRefreshNecessary(): Boolean {
-        return isDefaultRefreshNecessary(lastRefresh, DEFAULT_WAIT_TIME_MILLIS)
-    }
-
-    public override fun onLiveDataInitialized(liveData: LiveData<EthToken>) {
-        super.onLiveDataInitialized(liveData)
     }
 
     public override fun isPredicatesEqual(oldParameter: String?, newParameter: String): Boolean {

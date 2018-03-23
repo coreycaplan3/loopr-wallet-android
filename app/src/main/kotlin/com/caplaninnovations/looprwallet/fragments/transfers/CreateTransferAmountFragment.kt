@@ -36,6 +36,8 @@ import javax.inject.Inject
  *
  * Purpose of Class: To perform the second (and final) part of a transfer event, which involves
  * entering the amount.
+ *
+ * TODO GAS
  */
 class CreateTransferAmountFragment : BaseFragment() {
 
@@ -85,20 +87,30 @@ class CreateTransferAmountFragment : BaseFragment() {
      */
     private var tokenAmount: String = "0"
 
+    private lateinit var ethToken: EthToken
     private lateinit var currentCryptoToken: CryptoToken
 
-    private var currentState: Int = OfflineFirstViewModel.STATE_IDLE_EMPTY
-
-    private val contact: Contact? by lazy {
-        val wallet = walletClient.getCurrentWallet()
-        wallet?.let { ContactsRepository(it).getContactByAddressNow(recipientAddress) }
-    }
-
-    private val tokenPriceCheckerViewModel: TokenPriceCheckerViewModel?
+    private var contact: Contact? = null
         get() {
+            if (field != null) {
+                return field
+            }
+
+            val wallet = walletClient.getCurrentWallet()
+            field = wallet?.let { ContactsRepository(it).getContactByAddressNow(recipientAddress) }
+            return field
+        }
+
+    private var tokenPriceCheckerViewModel: TokenPriceCheckerViewModel? = null
+        get() {
+            if (field != null) {
+                return field
+            }
+
             val wallet = walletClient.getCurrentWallet() ?: return null
 
             val model = LooprWalletViewModelFactory.get<TokenPriceCheckerViewModel>(this, wallet)
+            field = model
             model.addCurrentStateObserver(this) {
                 if (model.isLoading()) {
                     progressBar?.visibility = View.VISIBLE
@@ -106,7 +118,6 @@ class CreateTransferAmountFragment : BaseFragment() {
                     progressBar?.visibility = View.INVISIBLE
                 }
 
-                currentState = it
                 if (it == OfflineFirstViewModel.STATE_LOADING_EMPTY) {
                     createTransferCurrentPriceLabel?.text = getString(R.string.loading_price)
                     createTransferSecondaryLabel?.text = getString(R.string.loading_exchange_rate)
@@ -131,10 +142,21 @@ class CreateTransferAmountFragment : BaseFragment() {
             return model
         }
 
-    private val tokenBalanceViewModel: TokenBalanceViewModel?
+    private var tokenBalanceViewModel: TokenBalanceViewModel? = null
         get() {
+            if (field != null) {
+                return field
+            }
+
             val wallet = walletClient.getCurrentWallet() ?: return null
-            val model = TokenBalanceViewModel(wallet)
+            val model = LooprWalletViewModelFactory.get<TokenBalanceViewModel>(this, wallet)
+            field = model
+
+            model.addCurrentStateObserver(this) {
+                if (model.isLoading()) {
+
+                }
+            }
 
             model.addErrorObserver(this) {
                 view?.snackbarWithAction(
@@ -145,12 +167,10 @@ class CreateTransferAmountFragment : BaseFragment() {
                 )
             }
 
-            model.addDataObserver(this) {
-                logd("Valid token balance: ${it.size}")
-            }
-
             return model
         }
+
+    private var tokenBalanceList = listOf<CryptoToken>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -165,10 +185,24 @@ class CreateTransferAmountFragment : BaseFragment() {
         tokenAmount = savedInstanceState?.getString(KEY_TOKEN_AMOUNT) ?: "0"
         isCurrencyMainLabel = savedInstanceState?.getBoolean(KEY_IS_CURRENCY_MAIN_LABEL, true) != false
 
-        toolbar?.title = contact?.name
+        currentCryptoToken = tokenPriceCheckerViewModel?.currentCryptoToken ?: EthToken.ETH
+        ethToken = tokenBalanceViewModel?.getEthBalanceNow() ?: EthToken.ETH
+
+        toolbar?.title = null
+        toolbar?.subtitle = contact?.name ?: recipientAddress
+
+        val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
+        tokenBalanceViewModel?.getAllTokensWithBalances(this, address) {
+            tokenBalanceList = it
+            activity?.invalidateOptionsMenu()
+        }
 
         createTransferSwapButton.setOnClickListener {
             isCurrencyMainLabel = !isCurrencyMainLabel
+
+            currencyAmount = "0"
+            tokenAmount = "0"
+
             bindAmountsToText()
         }
 
@@ -182,22 +216,52 @@ class CreateTransferAmountFragment : BaseFragment() {
                 // MAX = balance * princeInCurrency
                 currencyAmount = (balance * priceInNativeCurrency)
                         .setScale(2, RoundingMode.HALF_DOWN).toPlainString()
+                currencyAmount = trimExtraZerosAfterDecimal(currencyAmount)
             } else {
                 // Calculate max based on token amount
                 // MAX is just the balance
                 tokenAmount = balance.setScale(8, RoundingMode.HALF_DOWN).toPlainString()
+                tokenAmount = trimExtraZerosAfterDecimal(tokenAmount)
             }
 
             bindAmountsToText()
         }
 
-        setupNumberPad()
+        createTransferSendButton.setOnClickListener {
+            val balance = currentCryptoToken.balance
+            val bdTokenAmount = BigDecimal(tokenAmount)
+            val gasAmount = BigDecimal.ZERO
 
-        currentCryptoToken = tokenPriceCheckerViewModel?.currentCryptoToken ?: EthToken.ETH
-        currentCryptoToken.priceInNativeCurrency?.let {
-            val bdTokenAmount = BigDecimal(currencyAmount) / it
-            tokenAmount = bdTokenAmount.toString()
+            when (currentCryptoToken.identifier) {
+                EthToken.ETH.identifier -> {
+                    if ((bdTokenAmount + gasAmount) > balance) {
+                        it.context.longToast("You cannot send more ${currentCryptoToken.ticker} than your balance minus gas")
+                    }
+                }
+                else -> {
+                    val ethBalance = ethToken.balance ?: BigDecimal.ZERO
+                    when {
+                        ethBalance == BigDecimal.ZERO -> {
+                            loge("Could not get user\'s ETH balance!", IllegalStateException())
+                            it.longSnackbarWithAction(R.string.error_retrieve_eth_balance, R.string.retry) {
+                                tokenBalanceViewModel?.refresh()
+                            }
+                        }
+                        gasAmount > ethToken.balance -> it.longSnackbarWithAction(R.string.error_insufficient_gas, R.string.settings) {
+                            // TODO go to send/receive gas settings
+                        }
+                        bdTokenAmount > balance -> {
+                            it.context.longToast(R.string.error_insufficient_token_balance)
+                        }
+                        else -> {
+                            // TODO initiate send
+                        }
+                    }
+                }
+            }
         }
+
+        setupNumberPad()
 
         setupTokenTicker(currentCryptoToken)
 
@@ -205,12 +269,13 @@ class CreateTransferAmountFragment : BaseFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.menu_create_transfer_amount, menu)
 
         val item = menu.findItem(R.id.createTransferAmountSpinner)
         val spinner = item.actionView as Spinner
 
-        val data = tokenBalanceViewModel?.data ?: listOf(EthToken.ETH, EthToken.LRC)
+        val data = tokenBalanceList
         val adapterList: List<String> = data.map { it.ticker }
         val selectedIndex = adapterList.indexOfFirstOrNull { it == currentCryptoToken.ticker } ?: 0
 
@@ -222,15 +287,21 @@ class CreateTransferAmountFragment : BaseFragment() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val balance = data[position].balance
+
+                currencyAmount = "0"
+                tokenAmount = "0"
+                bindAmountsToText()
+
                 setupTokenTicker(data[position])
+                if (balance == null || balance.equalsZero() && tokenBalanceViewModel?.isLoading() == false) {
+                    tokenBalanceViewModel?.refresh()
+                    spinner.context.longToast(R.string.error_send_tokens_with_zero_balance)
+                }
             }
         }
 
         spinner.setSelection(selectedIndex)
-    }
-
-    private fun setupSpinnerAdapter() {
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -239,6 +310,41 @@ class CreateTransferAmountFragment : BaseFragment() {
         outState.putString(KEY_CURRENCY_AMOUNT, currencyAmount)
         outState.putString(KEY_TOKEN_AMOUNT, tokenAmount)
         outState.putBoolean(KEY_IS_CURRENCY_MAIN_LABEL, isCurrencyMainLabel)
+    }
+
+    fun trimExtraZerosAfterDecimal(s: String): String {
+        if (!s.contains(".")) return s
+
+        for (i in (s.length - 1)..0) {
+            if (s[i] != '0') return s.substring(0, i + 1)
+        }
+
+        return s
+    }
+
+    /**
+     * Counts the number of digits before the decimal point. If there's no decimal point, it
+     * counts all the digits
+     */
+    fun getAmountBeforeDecimal(s: String): Int {
+        s.forEachIndexed { i, ch ->
+            if (ch == '.') return i
+        }
+        return s.length
+    }
+
+    /**
+     * Counts the number of digits after the decimal point. If there's no decimal point, 0 is
+     * returned.
+     */
+    fun getAmountAfterDecimal(s: String): Int {
+        var decimalFlag = false
+        var counter = 0
+        s.forEach { ch ->
+            if (decimalFlag) counter += 1
+            if (ch == '.') decimalFlag = true
+        }
+        return counter
     }
 
     // MARK - Private Methods
@@ -267,6 +373,11 @@ class CreateTransferAmountFragment : BaseFragment() {
     private fun setupTokenTicker(token: CryptoToken) {
         tokenPriceCheckerViewModel?.getTokenPrice(this, token.identifier) {
             currentCryptoToken = it
+
+            val balance = it.balance?.formatAsToken(currencySettings, it.ticker)
+                    ?: BigDecimal.ZERO.formatAsToken(currencySettings, it.ticker)
+            val balanceText = String.format(getString(R.string.formatter_balance), balance)
+            createTransferBalanceLabel.text = balanceText
 
             val price = it.priceInNativeCurrency?.formatAsCurrency(currencySettings)
 
@@ -300,9 +411,7 @@ class CreateTransferAmountFragment : BaseFragment() {
                 appendNumber(amount, "0")
             }
             R.id.numberPadBackspace -> {
-                if (amount.last() == '.') {
-                    amount.substring(0, amount.length - 2)
-                } else if (amount != "0") {
+                if (amount != "0") {
                     amount.substring(0, amount.length - 1)
                 } else {
                     amount
@@ -337,8 +446,8 @@ class CreateTransferAmountFragment : BaseFragment() {
      * @return The new string with the newly appended number
      */
     private fun appendNumber(amount: String, number: String): String {
-        val amountBefore = amount.getAmountBeforeDecimal()
-        val amountAfter = amount.getAmountAfterDecimal()
+        val amountBefore = getAmountBeforeDecimal(amount)
+        val amountAfter = getAmountAfterDecimal(amount)
         val hasDecimal = amount.contains(".")
 
         if (number == "0") {
@@ -371,31 +480,6 @@ class CreateTransferAmountFragment : BaseFragment() {
         }
     }
 
-    /**
-     * Counts the number of digits before the decimal point. If there's no decimal point, it
-     * counts all the digits
-     */
-    private fun String.getAmountBeforeDecimal(): Int {
-        forEachIndexed { i, ch ->
-            if (ch == '.') return i
-        }
-        return this.length
-    }
-
-    /**
-     * Counts the number of digits after the decimal point. If there's no decimal point, 0 is
-     * returned.
-     */
-    private fun String.getAmountAfterDecimal(): Int {
-        var decimalFlag = false
-        var counter = 0
-        forEach { ch ->
-            if (decimalFlag) counter += 1
-            if (ch == '.') decimalFlag = true
-        }
-        return counter
-    }
-
     private fun getMaxDecimalPlaces() =
             if (isCurrencyMainLabel) 2
             else CurrencyExchangeRate.maxExchangeRateFractionDigits
@@ -404,28 +488,32 @@ class CreateTransferAmountFragment : BaseFragment() {
         val ticker = currentCryptoToken.ticker
         when {
             isCurrencyMainLabel -> {
-                createTransferMainLabel.text = BigDecimal(currencyAmount).formatAsCurrency(currencySettings)
+                createTransferMainLabel.text = currencyAmount.formatAsCustomCurrency(currencySettings)
 
                 val priceInNativeCurrency = currentCryptoToken.priceInNativeCurrency ?: return
 
                 // We're setting the secondary label in terms of the token
                 // IE --> $500 / $1,000 (per ETH) = 0.5 tokens
-                val bdTokenAmount = BigDecimal(currencyAmount) / priceInNativeCurrency
-                tokenAmount = bdTokenAmount.setScale(8, RoundingMode.HALF_DOWN).toString()
+                val bdTokenAmount = (BigDecimal(currencyAmount).setScale(8)) / (priceInNativeCurrency.setScale(8))
+                tokenAmount = bdTokenAmount.setScale(8, RoundingMode.HALF_DOWN).toPlainString()
                 createTransferSecondaryLabel.text = bdTokenAmount.formatAsToken(currencySettings, ticker)
             }
             else -> {
-                createTransferMainLabel.text = BigDecimal(tokenAmount).formatAsToken(currencySettings, ticker)
+                createTransferMainLabel.text = tokenAmount.formatAsCustomToken(currencySettings, ticker)
 
                 val priceInNativeCurrency = currentCryptoToken.priceInNativeCurrency ?: return
 
                 // We're setting the secondary label in terms of the currency
                 // IE --> 0.5 (tokens) * $1,000 (per ETH) = $500
                 val bdCurrencyAmount = BigDecimal(tokenAmount) * priceInNativeCurrency
-                currencyAmount = bdCurrencyAmount.setScale(2, RoundingMode.HALF_DOWN).toString()
+                currencyAmount = bdCurrencyAmount.setScale(2, RoundingMode.HALF_DOWN).toPlainString()
                 createTransferSecondaryLabel.text = bdCurrencyAmount.formatAsCurrency(currencySettings)
             }
         }
+
+        val balance = currentCryptoToken.balance
+        val bdTokenAmount = BigDecimal(tokenAmount)
+        createTransferSendButton.isEnabled = balance != null && !bdTokenAmount.equalsZero()
     }
 
 }

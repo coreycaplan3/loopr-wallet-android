@@ -2,6 +2,9 @@ package com.caplaninnovations.looprwallet.networking.prices
 
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
+import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_MAINNET
+import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_MOCKNET
+import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_TESTNET
 import kotlinx.coroutines.experimental.Deferred
 
 /**
@@ -22,14 +25,19 @@ interface CurrencyExchangeService {
         fun getInstance(): CurrencyExchangeService {
             val environment = BuildConfig.ENVIRONMENT
             return when (environment) {
-                "mocknet" -> CurrencyExchangeServiceMockImpl()
-                "testnet", "mainnet" -> CurrencyExchangeServiceProdImpl()
+                FLAVOR_MOCKNET -> CurrencyExchangeServiceMockImpl()
+                FLAVOR_TESTNET, FLAVOR_MAINNET -> CurrencyExchangeServiceProdImpl()
                 else -> throw IllegalArgumentException("Invalid environment, found: $environment")
             }
         }
 
     }
 
-    fun getCurrentCurrencyExchangeRate(ticker: String): Deferred<CurrencyExchangeRate>
+    /**
+     * Gets the given [currency]'s exchange rate from the network.
+     *
+     * @param currency The currency whose exchange rate needs to be retrieved.
+     */
+    fun getCurrentCurrencyExchangeRate(currency: String): Deferred<CurrencyExchangeRate>
 
 }

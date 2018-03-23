@@ -37,6 +37,14 @@ class EthTokenRepository(currentWallet: LooprWallet) : BaseRealmRepository(curre
     }
 
     @Suppress("UNCHECKED_CAST")
+    fun getAllTokensWithoutZeroBalance(): LiveData<List<CryptoToken>> {
+        return uiRealm.where<EthToken>()
+                .notEqualTo(CryptoToken::balance.name, "0")
+                .findAllAsync()
+                .asLiveData() as LiveData<List<CryptoToken>>
+    }
+
+    @Suppress("UNCHECKED_CAST")
     fun getToken(contractAddress: String): LiveData<CryptoToken> {
         return uiRealm.where<EthToken>()
                 .equalTo(EthToken::contractAddress, contractAddress)

@@ -17,10 +17,15 @@ import java.math.RoundingMode
  */
 class CurrencyExchangeServiceMockImpl : CurrencyExchangeService {
 
-    override fun getCurrentCurrencyExchangeRate(ticker: String): Deferred<CurrencyExchangeRate> = async {
+    override fun getCurrentCurrencyExchangeRate(currency: String): Deferred<CurrencyExchangeRate> = async {
         delay(500L)
-        val rate = BigDecimal(Math.random()).setScale(CurrencyExchangeRate.maxExchangeRateFractionDigits, RoundingMode.HALF_UP)
-        CurrencyExchangeRate(ticker, rate)
+        val rate = if (currency != CurrencyExchangeRate.USD.currency) {
+            BigDecimal(Math.random())
+                    .setScale(CurrencyExchangeRate.maxExchangeRateFractionDigits, RoundingMode.HALF_UP)
+        } else {
+            CurrencyExchangeRate.USD.rateAgainstToUsd
+        }
+        CurrencyExchangeRate(currency, rate)
     }
 
 }

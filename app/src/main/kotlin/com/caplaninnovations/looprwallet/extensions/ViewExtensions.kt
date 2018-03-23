@@ -155,6 +155,24 @@ fun View.snackbarUnknownError() {
 }
 
 /**
+ * Creates a long snackbar by using this view to instantiate it and *automatically* call
+ * [Snackbar.show].
+ *
+ * @param message The string resource that is used to display the snackbar's message
+ * @param actionText The string resource that is used to display the snackbar's action
+ * @param listener The listener that will be called if the action button is clicked
+ * @see View.snackbar
+ * @see Snackbar.LENGTH_SHORT
+ * @see Snackbar.LENGTH_LONG
+ * @see Snackbar.LENGTH_INDEFINITE
+ */
+fun View.longSnackbarWithAction(@StringRes message: Int,
+                            @StringRes actionText: Int,
+                            listener: (View) -> Unit) {
+    this.snackbarWithAction(message, Snackbar.LENGTH_LONG, actionText, null, listener)
+}
+
+/**
  * Creates a snackbar by using this view to instantiate it and automatically calls show
  *
  * @param message The string resource that is used to display the snackbar's message
@@ -171,8 +189,8 @@ fun View.snackbarUnknownError() {
 fun View.snackbarWithAction(@StringRes message: Int,
                             length: Int = Snackbar.LENGTH_LONG,
                             @StringRes actionText: Int,
-                            listener: (View) -> Unit,
-                            @ColorInt color: Int? = null) {
+                            @ColorInt color: Int? = null,
+                            listener: (View) -> Unit) {
     val snackbar = Snackbar.make(this, str(message), length)
             .setAction(actionText, listener)
 

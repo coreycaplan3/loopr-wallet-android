@@ -14,7 +14,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.4"
+            android:layout_weight="0.45"
             android:paddingLeft="@dimen/standard_horizontal_padding"
             android:paddingRight="@dimen/standard_horizontal_padding">
 
@@ -79,24 +79,22 @@
                 android:layout_centerHorizontal="true">
 
                 <TextView
-                    android:id="@+id/createTransferAmountAvailableLabel"
+                    android:id="@+id/createTransferBalanceLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/createTransferMaxButton"
                     android:layout_centerHorizontal="true"
                     android:alpha="0.54"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    tools:text="@string/default_token_amount_available" />
-
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    tools:text="@string/default_token_balance" />
 
                 <Button
                     android:id="@+id/createTransferMaxButton"
                     style="@style/App.Button.Borderless"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="32dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/vertical_margin_small"
                     android:alpha="0.78"
                     android:text="@string/use_max"
                     android:textColor="?android:attr/textColorPrimary" />
@@ -109,7 +107,7 @@
             layout="@layout/number_pad"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.45" />
 
         <FrameLayout
             android:layout_width="match_parent"

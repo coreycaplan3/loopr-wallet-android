@@ -8,16 +8,11 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.preference.ListPreference
-import android.preference.Preference
-import android.preference.PreferenceActivity
-import android.preference.PreferenceFragment
-import android.preference.PreferenceManager
-import android.preference.RingtonePreference
+import android.preference.*
 import android.text.TextUtils
 import android.view.MenuItem
-
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
 
 /**
  * A [PreferenceActivity] that presents a set of application settings. On
@@ -205,14 +200,6 @@ class SettingsActivity : AppCompatPreferenceActivity() {
                 preference.summary = stringValue
             }
             true
-        }
-
-        /**
-         * Helper method to determine if the device has an extra-large screen. For
-         * example, 10" tablets are extra-large.
-         */
-        private fun isXLargeTablet(context: Context): Boolean {
-            return context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_XLARGE
         }
 
         /**

@@ -18,12 +18,10 @@ import kotlin.concurrent.scheduleAtFixedRate
  */
 abstract class StreamingViewModel<T, U> : OfflineFirstViewModel<T, U>() {
 
-    protected open val pingTime = DEFAULT_WAIT_TIME_MILLIS
-
     private val timer = Timer()
 
     override fun onLiveDataInitialized(liveData: LiveData<T>) {
-        timer.scheduleAtFixedRate(0L, pingTime, {
+        timer.scheduleAtFixedRate(0L, waitTime, {
             refresh()
         })
     }
