@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.extensions
 
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettingsDebugImpl
+import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettingsDebugImpl
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -20,7 +20,7 @@ import java.math.BigDecimal
 @RunWith(MockitoJUnitRunner::class)
 class CurrencyExtensionsKtTest {
 
-    private val looprSettings = LooprSettingsDebugImpl()
+    private val looprSettings = LooprSecureSettingsDebugImpl()
 
     private lateinit var settings: CurrencySettings
 

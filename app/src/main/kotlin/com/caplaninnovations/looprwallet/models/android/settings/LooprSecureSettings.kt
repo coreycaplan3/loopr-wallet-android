@@ -2,74 +2,50 @@ package com.caplaninnovations.looprwallet.models.android.settings
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import com.caplaninnovations.looprwallet.BuildConfig
+import com.caplaninnovations.looprwallet.extensions.fromJson
 import com.caplaninnovations.looprwallet.extensions.logd
-import com.caplaninnovations.looprwallet.utilities.BuildUtility
+import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_MAINNET
+import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_MOCKNET
+import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_TESTNET
+import com.google.gson.Gson
+import io.realm.android.CipherClient
 
 /**
- * Created by Corey on 3/24/2018
+ * Created by Corey Caplan on 2/3/18.
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class: A settings instance that is safe to be used with Android's *PreferenceManager*.
+ * Purpose of Class: To allow the user to save configurable settings easily and uniformly, while
+ * minding their privacy and encrypting all information.
+ *
  */
-interface LooprSettings {
+interface LooprSecureSettings : LooprSettings {
 
     companion object {
 
-        private var looprSettings: LooprSettings? = null
+        private var looprSecureSettings: LooprSecureSettings? = null
 
-        @Synchronized
-        fun getInstance(context: Context): LooprSettings {
-            if (looprSettings != null) {
-                return looprSettings as LooprSettings
+        fun getInstance(context: Context): LooprSecureSettings {
+            if (looprSecureSettings != null) {
+                return looprSecureSettings as LooprSecureSettings
             }
 
             val flavor = BuildConfig.ENVIRONMENT
-            looprSettings = when (flavor) {
-                BuildUtility.FLAVOR_MOCKNET -> LooprSettingsDebugImpl()
-                BuildUtility.FLAVOR_TESTNET, BuildUtility.FLAVOR_MAINNET -> LooprSettingsProductionImpl(context)
+            looprSecureSettings = when (flavor) {
+                FLAVOR_MOCKNET -> LooprSecureSettingsDebugImpl()
+                FLAVOR_TESTNET, FLAVOR_MAINNET -> LooprSecureSettingsProductionImpl(context)
                 else -> throw IllegalArgumentException("Invalid build type, found: $flavor")
             }
 
-            logd("Initialized $flavor LooprSettings to ${looprSettings!!::class.java.simpleName}")
+            logd("Initialized $flavor LooprSecureSettings to ${looprSecureSettings!!::class.java.simpleName}")
 
-            return looprSettings as LooprSecureSettings
+            return looprSecureSettings as LooprSecureSettings
         }
 
     }
 
-    fun getBoolean(key: String, defaultValue: Boolean): Boolean
-
-    fun getByteArray(key: String): ByteArray?
-
-    fun getInt(key: String, defaultValue: Int): Int
-
-    fun getLong(key: String, defaultValue: Long): Long
-
-    fun getDouble(key: String, defaultValue: Double): Double
-
-    fun getString(key: String): String?
-
-    fun getStringArray(key: String): Array<String>?
-
-    fun putBoolean(key: String, value: Boolean?)
-
-    fun putByteArray(key: String, value: ByteArray?)
-
-    fun putInt(key: String, value: Int?)
-
-    fun putDouble(key: String, value: Double?)
-
-    fun putLong(key: String, value: Long?)
-
-    fun putString(key: String, value: String?)
-
-    fun putStringArray(key: String, value: Array<String>?)
-
-    @Suppress("unused")
-    private class LooprSettingsDebugImpl : LooprSecureSettings {
+    private class LooprSecureSettingsDebugImpl : LooprSecureSettings {
 
         private val map = HashMap<String, Any>()
 
@@ -141,11 +117,18 @@ interface LooprSettings {
                 map.remove(key)
             }
         }
+
     }
 
-    // END DEBUG IMPL
+    private class LooprSecureSettingsProductionImpl(private val context: Context) : LooprSecureSettings {
 
-    private class LooprSettingsProductionImpl(private val context: Context) : LooprSecureSettings {
+        private companion object {
+
+            private const val SHARED_PREFERENCES_NAME = "_LooprWalletSecure"
+
+        }
+
+        private val cipherClient: CipherClient = CipherClient(context)
 
         //
         // GETS
@@ -174,11 +157,13 @@ interface LooprSettings {
         override fun getString(key: String): String? {
             val sharedPreferences = getSharedPreferences()
 
-            return sharedPreferences.getString(key, null)
+            return sharedPreferences.getString(key, null)?.let { cipherClient.decrypt(it) }
         }
 
         override fun getStringArray(key: String): Array<String>? {
-            return getSharedPreferences().getStringSet(key, null)?.toTypedArray()
+            val jsonArray = getString(key)
+
+            return jsonArray?.let { Gson().fromJson(it) }
         }
 
         //
@@ -209,7 +194,7 @@ interface LooprSettings {
             if (value != null) {
                 getSharedPreferences()
                         .edit()
-                        .putString(key, value)
+                        .putString(key, cipherClient.encrypt(value))
                         .apply()
             } else {
                 getSharedPreferences()
@@ -222,7 +207,7 @@ interface LooprSettings {
         override fun putStringArray(key: String, value: Array<String>?) {
             getSharedPreferences()
                     .edit()
-                    .putStringSet(key, value?.toSet())
+                    .putString(key, value?.let { cipherClient.encrypt(Gson().toJson(it)) })
                     .apply()
         }
 
@@ -230,14 +215,9 @@ interface LooprSettings {
         // MARK - Private Methods
 
         private fun getSharedPreferences(): SharedPreferences {
-            // WARNING!!! DO NOT CHANGE THIS. THE ANDROID PREFERENCE FRAMEWORK WRITES TO AND READS
-            // FROM THIS SHARED PREFERENCE INSTANCE. SOME THINGS, LIKE KEYS AND WALLET NAMES, ARE
-            // ENCRYPTED AND SAVED WITHOUT THE ANDROID FRAMEWORK EVER TOUCHING IT. THUS, VALUES FOR
-            // IMPORTANT DATA REMAINS ENCRYPTED AND UNTOUCHED BY THE SETTINGS ACTIVITY!
-            return PreferenceManager.getDefaultSharedPreferences(context)
+            return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
         }
-    }
 
-    // END PRODUCTION IMPL
+    }
 
 }

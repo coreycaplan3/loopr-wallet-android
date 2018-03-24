@@ -1,7 +1,6 @@
 package com.caplaninnovations.looprwallet.activities
 
 import android.content.Intent
-import android.os.Handler
 import com.caplaninnovations.looprwallet.R
 
 /**
@@ -23,19 +22,19 @@ class SplashScreenActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        Handler().postDelayed({
-            if (walletClient.isAndroidKeystoreUnlocked()) {
-                val intent = if (walletClient.getCurrentWallet() == null) {
-                    Intent(this, SignInActivity::class.java)
-                } else {
-                    Intent(this, MainActivity::class.java)
-                            .putExtra("AddFragment", true)
-                }
-
-                startActivity(intent)
-                finish()
+        if (walletClient.isAndroidKeystoreUnlocked()) {
+            val intent = if (walletClient.getCurrentWallet() == null) {
+                Intent(this, SignInActivity::class.java)
+            } else {
+                Intent(this, MainActivity::class.java)
+                        .putExtra("AddFragment", true)
             }
-        }, 500)
+
+            startActivity(intent)
+            finish()
+        } else {
+            walletClient.unlockAndroidKeystore()
+        }
     }
 
 }

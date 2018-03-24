@@ -5,11 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <!-- This ID is usable before v24, despite the lint saying otherwise-->
+    <!-- This ID is actually in APIs before v24 -->
     <FrameLayout
         android:id="@android:id/list_container"
         android:layout_width="match_parent"

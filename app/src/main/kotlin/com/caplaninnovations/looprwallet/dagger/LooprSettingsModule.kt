@@ -4,7 +4,6 @@ import android.content.Context
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
-import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -19,12 +18,6 @@ import javax.inject.Singleton
  */
 @Module
 class LooprSettingsModule(private val context: Context) {
-
-    @Singleton
-    @Provides
-    fun provideLooprWalletSettings(): WalletSettings {
-        return WalletSettings(LooprSettings.getInstance(context))
-    }
 
     @Singleton
     @Provides

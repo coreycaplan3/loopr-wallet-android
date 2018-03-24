@@ -1,0 +1,14 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/theme">
+
+        <ListPreference
+            android:defaultValue="@string/settings_theme_dark"
+            android:entries="@array/settings_theme_array_entries_ui"
+            android:entryValues="@array/settings_theme_array_entries_values"
+            android:key="@string/settings_theme_key"
+            android:title="Current Theme" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

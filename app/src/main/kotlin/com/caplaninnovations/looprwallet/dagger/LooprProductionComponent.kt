@@ -1,7 +1,9 @@
 package com.caplaninnovations.looprwallet.dagger
 
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.activities.SettingsActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.fragments.settings.SettingsFragment
 import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferAmountFragment
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
@@ -23,17 +25,21 @@ import javax.inject.Singleton
  *
  */
 @Singleton
-@Component(modules = [LooprSettingsModule::class, LooprRealmModule::class,
-    LooprSecurityModule::class, LooprEthModule::class])
+@Component(modules = [LooprSettingsModule::class, LooprSecureSettingsModule::class,
+    LooprRealmModule::class, LooprSecurityModule::class, LooprEthModule::class])
 interface LooprProductionComponent {
 
     // Activities
     fun inject(baseActivity: BaseActivity)
 
+    fun inject(settingsActivity: SettingsActivity)
+
     // Applications
     fun inject(looprWalletApp: LooprWalletApp)
 
     // Fragments
+    fun inject(settingsFragment: SettingsFragment)
+
     fun inject(createTransferAmountFragment: CreateTransferAmountFragment)
 
     // Repositories

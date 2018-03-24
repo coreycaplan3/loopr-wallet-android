@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Theme -->
+
+    <string name="settings_theme_key">loopr_theme</string>
+
+    <string-array name="settings_theme_array_entries_ui">
+        <item>Dark</item>
+        <item>Light</item>
+    </string-array>
+
+    <string name="settings_theme_dark">dark</string>
+    <string name="settings_theme_light">light</string>
+
+    <string-array name="settings_theme_array_entries_values">
+        <item>@string/settings_theme_dark</item>
+        <item>@string/settings_theme_light</item>
+    </string-array>
+
+</resources>

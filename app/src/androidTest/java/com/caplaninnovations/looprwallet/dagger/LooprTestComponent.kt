@@ -14,8 +14,8 @@ import javax.inject.Singleton
  *
  */
 @Singleton
-@Component(modules = [LooprSettingsModule::class, LooprRealmModule::class,
-    LooprSecurityModule::class, LooprEthModule::class])
+@Component(modules = [LooprSettingsModule::class, LooprSecureSettingsModule::class,
+    LooprRealmModule::class, LooprSecurityModule::class, LooprEthModule::class])
 interface LooprTestComponent : LooprProductionComponent {
 
     fun inject(baseDaggerTest: BaseDaggerTest)

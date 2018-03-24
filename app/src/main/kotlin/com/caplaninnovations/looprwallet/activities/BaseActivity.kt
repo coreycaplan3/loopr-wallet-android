@@ -72,32 +72,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private var isKeyboardHidden = true
 
-    private val keyboardLayoutListener by lazy {
-        object : ViewTreeObserver.OnGlobalLayoutListener {
+    private var keyboardLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
 
-            private val rect = Rect()
-            private val visibleThreshold = dimen(R.dimen.keyboard_threshold)
-            private var wasOpened = false
-
-            override fun onGlobalLayout() {
-                getRootLayout().getWindowVisibleDisplayFrame(rect)
-                val heightDiff = getRootLayout().rootView.height - rect.height()
-                val isOpen = heightDiff > visibleThreshold
-                if (isOpen == wasOpened) {
-                    // keyboard state has not changed
-                    return
-                }
-
-                wasOpened = isOpen
-
-                if (isOpen) {
-                    onShowKeyboard()
-                } else {
-                    onHideKeyboard()
-                }
-            }
-        }
-    }
     /**
      * A stack history used for creating a backstack for fragments. To start using it, call
      * [pushFragmentTransaction] in the activity's [onCreate] when the activity is created for
@@ -134,10 +110,40 @@ abstract class BaseActivity : AppCompatActivity() {
         // Setup keyboard related stuff
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         isKeyboardHidden = savedInstanceState?.getBoolean(KEY_IS_KEYBOARD_HIDDEN, true) ?: true
-        getRootLayout().viewTreeObserver.addOnGlobalLayoutListener(keyboardLayoutListener)
+        setupKeyboardLayoutListener()
 
         // Setup the progress dialog
         setupProgressDialog(savedInstanceState)
+    }
+
+    private fun setupKeyboardLayoutListener() {
+        keyboardLayoutListener = object : ViewTreeObserver.OnGlobalLayoutListener {
+
+            private val rect = Rect()
+            private val visibleThreshold = dimen(R.dimen.keyboard_threshold)
+            private var wasOpened = false
+
+            override fun onGlobalLayout() {
+                val root = getRootLayout()
+                root.getWindowVisibleDisplayFrame(rect)
+                val heightDiff = root.rootView.height - rect.height()
+                val isOpen = heightDiff > visibleThreshold
+                if (isOpen == wasOpened) {
+                    // keyboard state has not changed
+                    return
+                }
+
+                wasOpened = isOpen
+
+                if (isOpen) {
+                    onShowKeyboard()
+                } else {
+                    onHideKeyboard()
+                }
+            }
+        }
+
+        keyboardLayoutListener?.let { getRootLayout().viewTreeObserver.addOnGlobalLayoutListener(it) }
     }
 
     override fun onResume() {
@@ -241,7 +247,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onDestroy()
 
         val rootLayout = findViewById<ViewGroup>(R.id.activityContainer)
-        rootLayout.viewTreeObserver.removeGlobalOnLayoutListener(keyboardLayoutListener)
+        keyboardLayoutListener?.let { rootLayout.viewTreeObserver.removeGlobalOnLayoutListener(it) }
     }
 
     // MARK - Private Methods

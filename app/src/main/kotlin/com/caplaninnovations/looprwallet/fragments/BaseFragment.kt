@@ -3,6 +3,7 @@ package com.caplaninnovations.looprwallet.fragments
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Lifecycle.Event
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
@@ -19,6 +20,8 @@ import android.view.*
 import android.widget.ProgressBar
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.activities.MainActivity
+import com.caplaninnovations.looprwallet.activities.SettingsActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.*
 import com.caplaninnovations.looprwallet.models.android.architecture.FragmentViewLifecycleOwner
@@ -137,7 +140,12 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu)
+        if (activity is MainActivity) {
+            // Only the MainActivity can have the main_menu. This helps maintain the backstack in
+            // case the user needs to recreate the back stack inside the Settings Activity.
+            menu.clear()
+            inflater.inflate(R.menu.main_menu, menu)
+        }
     }
 
     open fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
@@ -252,22 +260,24 @@ abstract class BaseFragment : Fragment() {
         isToolbarCollapseEnabled = false
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when {
-            item?.itemId == android.R.id.home -> {
-                (activity as? BaseActivity)?.onBackPressed()
-            }
-            item?.itemId == R.id.menu_settings_2 -> {
-                /**
-                 * TODO This will be replaced down the road with a "select different wallet and
-                 * TODO remove wallet" feature
-                 */
-                (activity as? BaseActivity)?.removeWalletCurrentWallet()
-                return false
-            }
+    override fun onOptionsItemSelected(item: MenuItem?) = when {
+        item?.itemId == android.R.id.home -> {
+            (activity as? BaseActivity)?.onBackPressed()
+            true
         }
-
-        return true
+        item?.itemId == R.id.menu_settings -> {
+            context?.let { startActivity(Intent(it, SettingsActivity::class.java)) }
+            true
+        }
+        item?.itemId == R.id.menu_settings_2 -> {
+            /**
+             * TODO This will be replaced down the road with a "select different wallet and
+             * TODO remove wallet" feature
+             */
+            (activity as? BaseActivity)?.removeWalletCurrentWallet()
+            true
+        }
+        else -> false
     }
 
     override fun onStart() {

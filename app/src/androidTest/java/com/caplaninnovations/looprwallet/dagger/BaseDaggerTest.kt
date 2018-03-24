@@ -11,7 +11,7 @@ import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.logd
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
+import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import junit.framework.Assert.assertTrue
@@ -79,11 +79,11 @@ open class BaseDaggerTest {
 
         wallet?.let { walletClient.removeWallet(it.walletName) }
 
-        val field = LooprSettings.Companion::class.java.getDeclaredField("looprSettings")
+        val field = LooprSecureSettings.Companion::class.java.getDeclaredField("looprSecureSettings")
         field.isAccessible = true
         field.set(null, null)
 
-        logd("Reset LooprSettings static instance")
+        logd("Reset LooprSecureSettings static instance")
     }
 
     /**

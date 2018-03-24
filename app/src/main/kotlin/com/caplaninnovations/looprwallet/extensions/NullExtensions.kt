@@ -13,6 +13,15 @@ package com.caplaninnovations.looprwallet.extensions
 fun <T> Pair<T?, T?>.isBothNonNull() = this.first != null && this.second != null
 
 /**
+ * Runs a given [block] if [T] is null.
+ *
+ * @param block The code to run if [T] is null
+ */
+inline fun <T> T?.ifNull(block: () -> Unit) {
+    if (this == null) block()
+}
+
+/**
  * If [T] is null, this object is mapped to a non-optional type [T]. If it's not null, [T] is
  * just returned.
  *

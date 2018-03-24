@@ -20,9 +20,9 @@ interface WalletClient {
 
     companion object {
 
-        fun getInstance(context: Context, looprSettings: LooprSettings): WalletClient {
+        fun getInstance(context: Context, looprSecureSettings: LooprSecureSettings): WalletClient {
             logd("Initializing currentWallet client...")
-            return WalletClientProductionImpl(context, looprSettings)
+            return WalletClientProductionImpl(context, looprSecureSettings)
         }
 
     }

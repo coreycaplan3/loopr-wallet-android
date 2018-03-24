@@ -2,9 +2,9 @@ package com.caplaninnovations.looprwallet.models.android.settings
 
 import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
-import com.caplaninnovations.looprwallet.utilities.RealmUtility
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
+import com.caplaninnovations.looprwallet.utilities.RealmUtility
 
 /**
  * Created by Corey Caplan on 1/31/18.
@@ -16,7 +16,7 @@ import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
  * logic, just core essentials. Logic associated with this class can be seen in conjunction with
  * [WalletClient].
  */
-class WalletSettings(private val looprSettings: LooprSettings) {
+class WalletSettings(private val looprSecureSettings: LooprSecureSettings) {
 
     companion object {
 
@@ -42,7 +42,7 @@ class WalletSettings(private val looprSettings: LooprSettings) {
      * foreground.
      */
     fun getLockoutTime(): Long {
-        return looprSettings.getLong(KEY_SECURITY_LOCKOUT_TIME_MILLIS, DEFAULT_LOCKOUT_TIME_MILLIS)
+        return looprSecureSettings.getLong(KEY_SECURITY_LOCKOUT_TIME_MILLIS, DEFAULT_LOCKOUT_TIME_MILLIS)
     }
 
     /**
@@ -50,7 +50,7 @@ class WalletSettings(private val looprSettings: LooprSettings) {
      * leaving the foreground.
      */
     fun putLockoutTime(lockoutTime: Long) {
-        looprSettings.putLong(KEY_SECURITY_LOCKOUT_TIME_MILLIS, lockoutTime)
+        looprSecureSettings.putLong(KEY_SECURITY_LOCKOUT_TIME_MILLIS, lockoutTime)
     }
 
     /**
@@ -58,7 +58,7 @@ class WalletSettings(private val looprSettings: LooprSettings) {
      * current wallet and the user must create, select or recover one
      */
     fun getCurrentWallet(): LooprWallet? {
-        val walletName = looprSettings.getString(KEY_CURRENT_WALLET)
+        val walletName = looprSecureSettings.getString(KEY_CURRENT_WALLET)
         return walletName?.let {
             val realmKey = getRealmKey(it)
             val privateKey = getPrivateKey(it)
@@ -96,7 +96,7 @@ class WalletSettings(private val looprSettings: LooprSettings) {
         val doesContainWallet = getAllWallets().contains(newCurrentWallet)
 
         if (doesContainWallet) {
-            looprSettings.putString(KEY_CURRENT_WALLET, newCurrentWallet)
+            looprSecureSettings.putString(KEY_CURRENT_WALLET, newCurrentWallet)
         }
 
         return doesContainWallet
@@ -159,21 +159,21 @@ class WalletSettings(private val looprSettings: LooprSettings) {
     }
 
     fun getRealmKey(walletName: String): ByteArray? {
-        return looprSettings.getByteArray(KEY_REALM_KEY + walletName)
+        return looprSecureSettings.getByteArray(KEY_REALM_KEY + walletName)
     }
 
     // MARK - Private methods
 
     @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     fun getAllWallets(): Array<String> {
-        return looprSettings.getStringArray(KEY_ALL_WALLETS) ?: arrayOf()
+        return looprSecureSettings.getStringArray(KEY_ALL_WALLETS) ?: arrayOf()
     }
 
     /**
      * Adds the given wallet to the list of all wallets
      */
     private fun addWallet(wallet: String) {
-        val allWallets = looprSettings.getStringArray(KEY_ALL_WALLETS)?.toMutableList()
+        val allWallets = looprSecureSettings.getStringArray(KEY_ALL_WALLETS)?.toMutableList()
                 ?: ArrayList()
 
         if (!allWallets.contains(wallet)) {
@@ -183,24 +183,24 @@ class WalletSettings(private val looprSettings: LooprSettings) {
     }
 
     private fun getPrivateKey(walletName: String): String? {
-        return looprSettings.getString(KEY_PRIVATE_KEY + walletName)
+        return looprSecureSettings.getString(KEY_PRIVATE_KEY + walletName)
     }
 
 
     private fun putPrivateKey(walletName: String, privateKey: String?) {
-        looprSettings.putString(KEY_PRIVATE_KEY + walletName, privateKey)
+        looprSecureSettings.putString(KEY_PRIVATE_KEY + walletName, privateKey)
     }
 
     private fun putRealmKey(walletName: String, key: ByteArray?) {
-        looprSettings.putByteArray(KEY_REALM_KEY + walletName, key)
+        looprSecureSettings.putByteArray(KEY_REALM_KEY + walletName, key)
     }
 
     private fun putCurrentWallet(newWalletName: String?) {
-        looprSettings.putString(KEY_CURRENT_WALLET, newWalletName)
+        looprSecureSettings.putString(KEY_CURRENT_WALLET, newWalletName)
     }
 
     private fun putAllWallets(allWallets: Array<String>) {
-        looprSettings.putStringArray(KEY_ALL_WALLETS, allWallets)
+        looprSecureSettings.putStringArray(KEY_ALL_WALLETS, allWallets)
     }
 
 }

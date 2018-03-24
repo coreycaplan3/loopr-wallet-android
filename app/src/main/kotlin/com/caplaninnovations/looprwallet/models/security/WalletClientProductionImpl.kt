@@ -8,7 +8,7 @@ import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.SecurityActivity
 import com.caplaninnovations.looprwallet.activities.SignInActivity
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
+import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettings
 import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.extensions.loge
@@ -25,7 +25,7 @@ import io.realm.android.CipherClient
  *
  *
  */
-class WalletClientProductionImpl(context: Context, looprSettings: LooprSettings) : WalletClient {
+class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSecureSettings) : WalletClient {
 
     @Volatile
     private var isUnlocked = true
@@ -34,7 +34,7 @@ class WalletClientProductionImpl(context: Context, looprSettings: LooprSettings)
         Handler()
     }
 
-    private val walletSettings = WalletSettings(looprSettings)
+    private val walletSettings = WalletSettings(looprSecureSettings)
 
     private val cipherClient = CipherClient(context)
 

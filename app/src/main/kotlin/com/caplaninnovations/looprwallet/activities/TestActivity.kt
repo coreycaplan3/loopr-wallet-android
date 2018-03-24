@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.RestrictTo
 import android.support.annotation.RestrictTo.Scope.TESTS
@@ -7,7 +8,6 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.extensions.mapIfNull
-import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferAmountFragment
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 
 /**
@@ -22,20 +22,6 @@ class TestActivity : BaseActivity() {
 
     var isRunningTest: Boolean? = null
 
-    @Synchronized
-    fun isRunningTest(): Boolean {
-        return isRunningTest.mapIfNull {
-            try {
-                Class.forName("android.support.test.espresso.Espresso")
-                isRunningTest = true
-                true
-            } catch (e: ClassNotFoundException) {
-                isRunningTest = false
-                false
-            }
-        }
-    }
-
     override val contentView: Int
         get() = R.layout.activity_test_container
 
@@ -49,15 +35,23 @@ class TestActivity : BaseActivity() {
             // used for testing a sole fragment
             val wallet = WalletCreationKeystore("loopr-currentWallet", "looprwallet")
             walletClient.createWallet("loopr-wallet", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
-            addFragment(
-                    CreateTransferAmountFragment.createInstance("0xabcdef1234567890abcdef123456789012345678"),
-                    CreateTransferAmountFragment.TAG
-            )
+            startActivity(Intent(this@TestActivity, SettingsActivity::class.java))
+
+//            addFragment(
+//                    CreateTransferAmountFragment.createInstance("0xabcdef1234567890abcdef123456789012345678"),
+//                    CreateTransferAmountFragment.TAG
+//            )
+
+//            launch(UI) {
+//                delay(1000L)
+//                startActivity(Intent(this@TestActivity, SettingsActivity::class.java))
+//                finish()
+//            }
         }
     }
 
     fun addFragment(fragment: Fragment, tag: String) {
-        if(fragment is DialogFragment) {
+        if (fragment is DialogFragment) {
             fragment.show(supportFragmentManager, tag)
         } else {
             supportFragmentManager.beginTransaction()
@@ -67,7 +61,7 @@ class TestActivity : BaseActivity() {
     }
 
     fun removeFragment(fragment: Fragment) {
-        if(fragment is DialogFragment) {
+        if (fragment is DialogFragment) {
             fragment.dismiss()
         } else {
             supportFragmentManager.beginTransaction()
@@ -75,4 +69,21 @@ class TestActivity : BaseActivity() {
                     .commit()
         }
     }
+
+    // MARK - Private Methods
+
+    @Synchronized
+    private fun isRunningTest(): Boolean {
+        return isRunningTest.mapIfNull {
+            try {
+                Class.forName("android.support.test.espresso.Espresso")
+                isRunningTest = true
+                true
+            } catch (e: ClassNotFoundException) {
+                isRunningTest = false
+                false
+            }
+        }
+    }
+
 }

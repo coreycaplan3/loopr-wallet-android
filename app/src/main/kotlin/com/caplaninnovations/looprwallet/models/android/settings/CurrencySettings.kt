@@ -28,10 +28,6 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
         return looprSettings.getString(KEY_CURRENT_CURRENCY) ?: DEFAULT_CURRENCY
     }
 
-    fun setCurrentCurrency(currency: String) {
-        looprSettings.putString(KEY_CURRENT_CURRENCY, currency)
-    }
-
     fun getCurrencyInstance(): NumberFormat {
         return DecimalFormat.getCurrencyInstance(getCurrentLocale())
     }
