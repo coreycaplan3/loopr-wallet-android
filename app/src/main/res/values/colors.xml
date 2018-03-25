@@ -8,11 +8,8 @@
 
     <color name="textColorError">#F44336</color>
 
-    <color name="tabText">#FEFEFE</color>
+    <color name="tabText">#FFFFFFFF</color>
     <color name="tabTextDisabled">#B3FFFFFF</color>
-
-    <color name="blackTextColorDisabled">#43000000</color>
-    <color name="whiteTextColorDisabled">#4CFFFFFF</color>
 
     <!-- LIGHT THEME -->
 
@@ -24,9 +21,11 @@
     <color name="lightButtonDisabled">#1F000000</color>
     <color name="lightShadowColor">#999999</color>
 
-    <color name="lightPrimaryText">#DE000000</color>
-    <color name="lightSecondaryText">#8A000000</color>
-    <color name="lightSubtitleText">#8A000000</color>
+    <color name="blackDivider">#1F000000</color>
+
+    <color name="blackTextPrimary">#DE000000</color>
+    <color name="blackTextSecondary">#8A000000</color>
+    <color name="blackTextDisabled">#60000000</color>
 
     <!-- DARK THEME -->
 
@@ -38,8 +37,10 @@
     <color name="darkButtonDisabled">#1FFFFFFF</color>
     <color name="darkShadowColor">#555555</color>
 
-    <color name="darkPrimaryText">#FFFEFEFE</color>
-    <color name="darkSecondaryText">#B3FFFFFF</color>
-    <color name="darkSubtitleText">#8AFFFFFF</color>
+    <color name="whiteDivider">#1FFFFFFF</color>
+
+    <color name="whiteTextPrimary">#FFFFFFFF</color>
+    <color name="whiteTextSecondary">#B2FFFFFF</color>
+    <color name="whiteTextDisabled">#7FFFFFFF</color>
 
 </resources>

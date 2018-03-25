@@ -31,7 +31,6 @@ interface LooprProductionComponent {
 
     // Activities
     fun inject(baseActivity: BaseActivity)
-
     fun inject(settingsActivity: SettingsActivity)
 
     // Applications

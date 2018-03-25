@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.models.settings
+package com.caplaninnovations.looprwallet.models.misc
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

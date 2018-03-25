@@ -17,7 +17,7 @@
         <item name="circleBackgroundColor">@color/lightShadowColor</item>
 
         <!-- Actionbar -->
-        <item name="titleTextColor">@color/darkPrimaryText</item>
+        <item name="titleTextColor">@color/whiteTextPrimary</item>
         <item name="actionOverflowButtonStyle">@style/App.LightCustomOverflow</item>
 
         <!-- Button Style -->
@@ -34,7 +34,7 @@
         <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog.Light</item>
 
         <!-- Divider -->
-        <item name="dividerColor">@android:color/black</item>
+        <item name="dividerColor">@color/blackDivider</item>
 
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>
@@ -45,15 +45,16 @@
         <item name="tabIndicatorColor">@android:color/white</item>
 
         <!-- Text -->
-        <item name="android:textColorPrimary">@color/lightPrimaryText</item>
-        <item name="android:textColorPrimaryInverse">@color/darkSecondaryText</item>
-        <item name="android:textColorPrimaryInverseDisableOnly">
-            @color/text_color_light_primary_inverse
-        </item>
-        <item name="android:textColorSecondary">@color/lightSecondaryText</item>
-        <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
-        <item name="textColorDisabled">@color/blackTextColorDisabled</item>
+        <item name="android:textColorPrimary">@color/full_black_text_primary</item>
+        <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary</item>
+
+        <item name="android:textColorSecondary">@color/full_black_text_secondary</item>
+        <item name="android:textColorSecondaryInverse">@color/full_white_text_secondary</item>
+        <item name="textColorDisabled">@color/blackTextDisabled</item>
+
         <item name="textColorError">@color/textColorError</item>
+        <item name="android:listSeparatorTextViewStyle">@style/App.ListSeparatorTextViewStyle</item>
 
     </style>
 
@@ -73,7 +74,7 @@
         <item name="circleBackgroundColor">@color/darkShadowColor</item>
 
         <!-- Actionbar -->
-        <item name="titleTextColor">@color/darkPrimaryText</item>
+        <item name="titleTextColor">@color/whiteTextPrimary</item>
         <item name="actionOverflowButtonStyle">@style/App.DarkCustomOverflow</item>
 
         <!-- Button Style -->
@@ -90,7 +91,7 @@
         <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog</item>
 
         <!-- Divider -->
-        <item name="dividerColor">@android:color/white</item>
+        <item name="dividerColor">@color/whiteDivider</item>
 
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>
@@ -101,15 +102,16 @@
         <item name="tabIndicatorColor">@android:color/white</item>
 
         <!-- Text -->
-        <item name="android:textColorPrimary">@color/darkPrimaryText</item>
-        <item name="android:textColorPrimaryInverse">@color/darkPrimaryText</item>
-        <item name="android:textColorPrimaryInverseDisableOnly">
-            @color/text_color_dark_primary_inverse
-        </item>
-        <item name="android:textColorSecondary">@color/darkSecondaryText</item>
-        <item name="android:textColorSecondaryInverse">@color/darkSecondaryText</item>
-        <item name="textColorDisabled">@color/blackTextColorDisabled</item>
+        <item name="android:textColorPrimary">@color/full_white_text_primary</item>
+        <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary</item>
+
+        <item name="android:textColorSecondary">@color/full_white_text_secondary</item>
+        <item name="android:textColorSecondaryInverse">@color/full_white_text_secondary</item>
+        <item name="textColorDisabled">@color/whiteTextDisabled</item>
+
         <item name="textColorError">@color/textColorError</item>
+        <item name="android:listSeparatorTextViewStyle">@style/App.ListSeparatorTextViewStyle</item>
 
     </style>
 

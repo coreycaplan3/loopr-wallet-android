@@ -8,8 +8,6 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        app:collapseIcon="@drawable/ic_search_collapse"
-        android:theme="@style/App.Toolbar"
         android:layout_height="?android:attr/actionBarSize"
         app:title="@string/app_name" />
 

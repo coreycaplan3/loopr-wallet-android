@@ -3,7 +3,6 @@
     android:id="@+id/fragmentProgressBar"
     style="?android:attr/progressBarStyleHorizontal"
     android:layout_width="match_parent"
-    android:layout_height="12dp"
-    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_height="wrap_content"
     android:indeterminate="true"
     android:visibility="visible" />

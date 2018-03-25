@@ -9,7 +9,7 @@
         android:layout_height="25dp"
         android:layout_gravity="center_horizontal"
         android:alpha="0.3"
-        android:background="?attr/dividerColor" />
+        android:background="?android:attr/textColorPrimary" />
 
     <include layout="@layout/sell_circle" />
 
@@ -18,6 +18,6 @@
         android:layout_height="25dp"
         android:layout_gravity="center_horizontal"
         android:alpha="0.3"
-        android:background="?attr/dividerColor" />
+        android:background="?android:attr/textColorPrimary" />
 
 </LinearLayout>

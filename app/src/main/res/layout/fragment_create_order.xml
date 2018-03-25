@@ -77,14 +77,12 @@
 
                     </LinearLayout>
 
-                    <View
-                        android:id="@+id/createOrderDivider"
+                    <include
+                        layout="@layout/divider"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="@dimen/divider_height"
                         android:layout_marginBottom="@dimen/standard_vertical_padding"
-                        android:layout_marginTop="@dimen/standard_vertical_padding"
-                        android:alpha="0.12"
-                        android:background="?attr/dividerColor" />
+                        android:layout_marginTop="@dimen/standard_vertical_padding" />
 
                     <LinearLayout
                         android:id="@+id/totalContainer"

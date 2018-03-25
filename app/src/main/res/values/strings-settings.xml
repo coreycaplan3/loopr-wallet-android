@@ -3,12 +3,14 @@
 
     <!-- Theme -->
 
-    <string name="settings_theme_key">loopr_theme</string>
+    <string name="settings_theme_key">loopr_theme_key</string>
 
     <string-array name="settings_theme_array_entries_ui">
-        <item>Dark</item>
+        <item>@string/settings_theme_dark_ui</item>
         <item>Light</item>
     </string-array>
+
+    <string name="settings_theme_dark_ui">Dark</string>
 
     <string name="settings_theme_dark">dark</string>
     <string name="settings_theme_light">light</string>
@@ -16,6 +18,72 @@
     <string-array name="settings_theme_array_entries_values">
         <item>@string/settings_theme_dark</item>
         <item>@string/settings_theme_light</item>
+    </string-array>
+
+    <!-- Security -->
+
+    <string name="settings_security_screen_key">loopr_security_key</string>
+    <string name="settings_security_type_key">loopr_security_type_key</string>
+    <string name="settings_security_timeout_key">loopr_security_timeout_key</string>
+
+    <string name="settings_security_type_entries_ui_default">@string/none</string>
+    <string name="settings_security_type_entries_ui_pin">PIN</string>
+    <string name="settings_security_type_entries_values_default">none</string>
+    <string name="settings_security_type_entries_values_pin">pin</string>
+
+    <string-array name="settings_security_type_entries_ui">
+        <item>@string/settings_security_type_entries_ui_default</item>
+        <item>@string/settings_security_type_entries_ui_pin</item>
+    </string-array>
+
+    <string-array name="settings_security_type_entries_values">
+        <item>@string/settings_security_type_entries_values_default</item>
+        <item>@string/settings_security_type_entries_values_pin</item>
+    </string-array>
+
+    <!-- Ethereum Fees -->
+
+    <string name="settings_ethereum_fees_screen_key">loopr_ethereum_fees_key</string>
+
+    <!-- Loopring Fees -->
+
+    <string name="settings_loopring_fees_screen_key">loopr_loopring_fees_key</string>
+
+    <!-- Wallet -->
+
+    <!-- Currency -->
+
+    <string name="settings_currency_default_key">loopr_currency_default_key</string>
+    <string name="settings_currency_current_fiat_key">loopr_currency_current_fiat_key</string>
+    <string name="settings_currency_refresh_frequency_key">loopr_currency_refresh_frequency_key</string>
+
+    <string name="settings_currency_currencies_entries_values_default">USD</string>
+    <string-array name="settings_currency_currencies_entries_values">
+        <item>@string/settings_currency_currencies_entries_values_default</item>
+        <item>GBP</item>
+        <item>EUR</item>
+        <item>JPY</item>
+        <item>KRW</item>
+        <item>CNY</item>
+    </string-array>
+
+    <string name="settings_currency_refresh_frequency_ui_default">10 minutes</string>
+    <string name="ten">10</string>
+
+    <string-array name="settings_currency_refresh_frequency_entries_ui">
+        <item>2 minutes (uses more battery and data)</item>
+        <item>5 minutes</item>
+        <item>@string/settings_currency_refresh_frequency_ui_default</item>
+        <item>30 minutes</item>
+        <item>60 minutes (uses less battery and data, but currency exchange rate may not be 100% accurate)</item>
+    </string-array>
+
+    <string-array name="settings_currency_refresh_frequency_entries_values">
+        <item>2</item>
+        <item>5</item>
+        <item>@string/ten</item>
+        <item>30</item>
+        <item>60</item>
     </string-array>
 
 </resources>

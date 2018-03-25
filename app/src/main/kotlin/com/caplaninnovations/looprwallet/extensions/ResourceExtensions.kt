@@ -27,8 +27,8 @@ fun Resources.pixelsToDp(px: Float): Float {
 
 /**
  * @return The resource ID from a given attribute. For example, passing
- * [android.R.attr.actionBarSize] returns a resource that can be used with [Resources.getDimen]
- * to get the action bar's size
+ * [android.R.attr.actionBarSize] returns a resource that can be used with *Resources.getDimen*
+ * to get the action bar's size.
  */
 fun Resources.Theme.getResourceIdFromAttrId(@AttrRes attrRes: Int): Int {
     val outValue = TypedValue() // this value is mutated in the call to "resolveAttribute"

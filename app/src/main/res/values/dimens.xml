@@ -71,4 +71,5 @@
     <dimen name="contact_height">64dp</dimen>
     <dimen name="borderless_icon_button_size">48dp</dimen>
 
+    <dimen name="divider_height" format="float">0.5dp</dimen>
 </resources>

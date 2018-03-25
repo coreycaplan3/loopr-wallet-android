@@ -59,7 +59,7 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
 
         application = this
 
-        PreferenceManager.setDefaultValues(this, R.xml.settings_loopr_app, false)
+        PreferenceManager.setDefaultValues(this, R.xml.settings_main, false)
 
         Realm.init(this)
 

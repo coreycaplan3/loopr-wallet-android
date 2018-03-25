@@ -55,11 +55,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="1" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:alpha="0.12"
-        android:background="?attr/dividerColor" />
+    <include layout="@layout/divider" />
 
     <Button
         android:id="@+id/numberPadDecimal"

@@ -53,15 +53,14 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Subtitle"
         tools:text="@string/default_total_price" />
 
-    <View
+    <include
         android:id="@+id/dialogTransferDivider"
+        layout="@layout/divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/divider_height"
         android:layout_below="@id/dialogTransferPriceLabel"
         android:layout_marginBottom="@dimen/vertical_margin"
-        android:layout_marginTop="@dimen/vertical_margin"
-        android:alpha="0.12"
-        android:background="?attr/dividerColor" />
+        android:layout_marginTop="@dimen/vertical_margin" />
 
     <TextView
         android:id="@+id/dialogTransferDateDefaultLabel"

@@ -84,13 +84,12 @@
 
             </RelativeLayout>
 
-            <View
+            <include
+                layout="@layout/divider"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/divider_height"
                 android:layout_below="@id/recipientAddressContainer"
-                android:layout_marginTop="@dimen/vertical_margin_small"
-                android:alpha="0.12"
-                android:background="?attr/dividerColor" />
+                android:layout_marginTop="@dimen/vertical_margin_small" />
 
         </RelativeLayout>
 

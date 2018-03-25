@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.CoordinatorLayout.LayoutParams
 import android.support.design.widget.FloatingActionButton
 import android.support.transition.TransitionSet
 import android.support.transition.Visibility
@@ -27,6 +28,7 @@ import com.caplaninnovations.looprwallet.extensions.*
 import com.caplaninnovations.looprwallet.models.android.architecture.FragmentViewLifecycleOwner
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.transitions.FloatingActionButtonTransition
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 import javax.inject.Inject
 
@@ -217,7 +219,7 @@ abstract class BaseFragment : Fragment() {
         val container = view?.findViewById<View>(R.id.fragmentContainer)
                 ?: throw IllegalStateException("FragmentContainer cannot be null!")
 
-        (container.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
+        (container.layoutParams as? LayoutParams)?.let {
             // The container is put underneath the toolbar since it is going to be moved out of the
             // way after scrolling
             logd("Setting container layout params to enable scrolling behavior...")
@@ -246,7 +248,7 @@ abstract class BaseFragment : Fragment() {
         val container = view.findViewById<View>(R.id.fragmentContainer)
                 ?: throw IllegalStateException("FragmentContainer cannot be null!")
 
-        (container.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
+        (container.layoutParams as? LayoutParams)?.let {
             // The container is underneath the toolbar, so we must add margin so it is below it instead
             val topMarginResource = context?.theme?.getResourceIdFromAttrId(android.R.attr.actionBarSize)
             if (topMarginResource != null) {
@@ -340,7 +342,19 @@ abstract class BaseFragment : Fragment() {
 
     private fun createProgressBar(fragmentView: ViewGroup) {
         progressBar = fragmentView.inflate(R.layout.fragment_progress_bar) as ProgressBar
-        fragmentView.addView(progressBar, 1) // goes right after the Appbar
+
+        if (fragmentView is CoordinatorLayout) {
+            val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            params.leftMargin = ApplicationUtility.dimen(R.dimen.horizontal_margin).toInt()
+            params.rightMargin = ApplicationUtility.dimen(R.dimen.horizontal_margin).toInt()
+            params.anchorGravity = Gravity.BOTTOM
+            params.anchorId = R.id.appbarLayout
+            params.insetEdge = Gravity.TOP
+            params.dodgeInsetEdges = Gravity.TOP
+            fragmentView.addView(progressBar, 1, params)
+        } else {
+            fragmentView.addView(progressBar, 1)
+        }
     }
 
     private fun createFab(fragmentView: ViewGroup) {

@@ -36,17 +36,16 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 tools:text="@string/default_trading_pair_price" />
 
-            <View
+            <include
+                layout="@layout/divider"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/divider_height"
                 android:layout_alignTop="@id/createTransferSwapButton"
                 android:layout_marginLeft="@dimen/borderless_icon_button_size"
                 android:layout_marginStart="@dimen/borderless_icon_button_size"
                 android:layout_marginTop="24dp"
                 android:layout_toLeftOf="@id/createTransferSwapButton"
-                android:layout_toStartOf="@id/createTransferSwapButton"
-                android:alpha="0.12"
-                android:background="?attr/dividerColor" />
+                android:layout_toStartOf="@id/createTransferSwapButton" />
 
             <ImageButton
                 android:id="@+id/createTransferSwapButton"

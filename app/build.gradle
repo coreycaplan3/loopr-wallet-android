@@ -149,12 +149,12 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // Firebase
-    ext.firebaseVersion = '11.8.0'
-    implementation "com.google.firebase:firebase-core:$firebaseVersion"
-    implementation "com.google.firebase:firebase-appindexing:$firebaseVersion"
-    implementation "com.google.firebase:firebase-crash:$firebaseVersion"
-    implementation "com.google.firebase:firebase-invites:$firebaseVersion"
-    implementation "com.google.firebase:firebase-perf:$firebaseVersion"
+    ext.googleLibraryVersion = '11.8.0'
+    implementation "com.google.firebase:firebase-core:$googleLibraryVersion"
+    implementation "com.google.firebase:firebase-appindexing:$googleLibraryVersion"
+    implementation "com.google.firebase:firebase-crash:$googleLibraryVersion"
+    implementation "com.google.firebase:firebase-invites:$googleLibraryVersion"
+    implementation "com.google.firebase:firebase-perf:$googleLibraryVersion"
 
     // Glide Dependencies
     ext.glideVersion = '4.6.1'
@@ -177,7 +177,7 @@ dependencies {
     implementation "com.google.code.gson:gson:2.8.2"
 
     // QR Code Scanner
-    implementation "com.google.android.gms:play-services-vision:11.8.0"
+    implementation "com.google.android.gms:play-services-vision:$googleLibraryVersion"
 
     // Realm
     implementation "io.realm:android-adapters:2.1.1"

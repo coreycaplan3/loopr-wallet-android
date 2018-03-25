@@ -1,0 +1,79 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/general">
+
+        <ListPreference
+            android:defaultValue="@string/settings_theme_dark"
+            android:entries="@array/settings_theme_array_entries_ui"
+            android:entryValues="@array/settings_theme_array_entries_values"
+            android:icon="@drawable/ic_palette_white_24dp"
+            android:key="@string/settings_theme_key"
+            android:summary="@string/settings_theme_dark_ui"
+            android:title="Current Theme" />
+
+        <Preference
+            android:icon="@drawable/ic_lock_outline_white_24dp"
+            android:key="@string/settings_security_screen_key"
+            android:summary="@string/summary_security_screen"
+            android:title="@string/security" />
+
+        <Preference android:layout="@layout/divider" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/fee_settings">
+
+        <Preference
+            android:icon="@drawable/ic_local_gas_station_white_24dp"
+            android:key="@string/settings_ethereum_fees_screen_key"
+            android:summary="@string/summary_ethereum_fees_screen"
+            android:title="@string/ethereum_fees" />
+
+        <Preference
+            android:icon="@drawable/ic_lrc_white_24dp"
+            android:key="@string/settings_loopring_fees_screen_key"
+            android:summary="@string/summary_lrc_trading_fees"
+            android:title="@string/lrc_trading_fees" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/wallet_settings">
+
+        <!-- TODO -->
+
+        <ListPreference
+            android:defaultValue="@string/settings_currency_currencies_entries_values_default"
+            android:entries="@array/settings_currency_currencies_entries_values"
+            android:entryValues="@array/settings_currency_currencies_entries_values"
+            android:key="@string/settings_currency_current_fiat_key"
+            android:summary="@string/settings_currency_currencies_entries_values_default"
+            android:title="Default Native Currency" />
+
+        <ListPreference
+            android:defaultValue="@string/ten"
+            android:enabled="false"
+            android:entries="@array/settings_currency_refresh_frequency_entries_ui"
+            android:entryValues="@array/settings_currency_refresh_frequency_entries_values"
+            android:key="@string/settings_currency_default_key"
+            android:summary="@string/settings_currency_refresh_frequency_ui_default"
+            android:title="@string/refresh_frequency_of_exchange_rates" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Network Settings">
+
+        <Preference
+            android:icon="@drawable/ic_eth_white_24dp"
+            android:key="@string/settings_ethereum_fees_screen_key"
+            android:summary="@string/summary_ethereum_network"
+            android:title="Ethereum Network" />
+
+        <Preference
+            android:icon="@drawable/ic_loopring_white_24dp"
+            android:key="@string/settings_loopring_fees_screen_key"
+            android:summary="@string/summary_loopring_network"
+            android:title="Loopring Network" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
