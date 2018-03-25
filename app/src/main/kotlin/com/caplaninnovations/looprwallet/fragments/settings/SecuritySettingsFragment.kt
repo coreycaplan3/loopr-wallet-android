@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.extensions.loge
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
 
@@ -44,12 +45,12 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
 
         super.onPreferenceChange(preference, newValue)
 
-        return when (preference.key) {
+        return when (key) {
             PREFERENCE_KEY_SECURITY_TYPE -> {
                 if (stringValue == DEFAULT_VALUE_SECURITY_TYPE) {
                     onSecurityScreenDisabled()
                 } else if (stringValue == PIN_VALUE_SECURITY_TYPE) {
-                    onSecurityScreenEnabled()
+                    onSecurityScreenEnabled(stringValue)
                 }
                 false
             }
@@ -59,9 +60,7 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
         }
     }
 
-    override fun onPreferenceClick(preference: Preference?): Boolean {
-        return false
-    }
+    override fun onPreferenceClick(preference: Preference?) = false
 
     /**
      * Called when the security screen is now *disabled*, which will disable other settings in the
@@ -85,9 +84,9 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
      * Called when the security screen is now *enabled*, which will enable other settings in the
      * screen.
      */
-    fun onSecurityScreenEnabled() {
+    fun onSecurityScreenEnabled(securityType: String) {
         LooprSettings.getInstance(context!!)
-                .putString(PREFERENCE_KEY_SECURITY_TYPE, PIN_VALUE_SECURITY_TYPE)
+                .putString(PREFERENCE_KEY_SECURITY_TYPE, getSecurityType(securityType))
 
         val preference = findPreference(PREFERENCE_KEY_SECURITY_TYPE) as ListPreference
         bindListPreferenceValue(preference, PIN_VALUE_SECURITY_TYPE)
@@ -96,6 +95,16 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
             if (it.first != PREFERENCE_KEY_SECURITY_TYPE) {
                 findPreference(it.first).isEnabled = true
             }
+        }
+    }
+
+    // MARK - Private Methods
+
+    private fun getSecurityType(value: String)= when(value) {
+        PIN_VALUE_SECURITY_TYPE -> value
+        else -> {
+            loge("Invalid security type, found: $value")
+            DEFAULT_VALUE_SECURITY_TYPE
         }
     }
 
