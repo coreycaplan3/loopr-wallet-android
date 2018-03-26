@@ -12,7 +12,13 @@ import android.support.v7.preference.Preference
  *
  *
  */
-class EthereumNetworkSettings: BaseSettingsFragment() {
+class LoopringNetworkSettingsFragment : BaseSettingsFragment() {
+
+    companion object {
+
+        val TAG: String = LoopringNetworkSettingsFragment::class.java.simpleName
+
+    }
 
     override fun getPreferenceKeysAndDefaultValuesForListeners(): List<Pair<String, String>> {
         TODO("not implemented") // TODO

@@ -27,12 +27,24 @@ class ThemeSettings(private val looprSettings: LooprSettings) {
      */
     @StyleRes
     fun getCurrentTheme(): Int {
-        val theme = looprSettings.getString(KEY_THEME) ?: DARK_THEME
-        return getThemeFromSettings(theme)
+        return getThemeFromSettings(getCurrentThemeForSettings())
     }
 
+    /**
+     * @return The value of the current theme, as seen by the Android settings framework
+     */
+    fun getCurrentThemeForSettings(): String {
+        return looprSettings.getString(KEY_THEME) ?: DARK_THEME
+    }
+
+    // MARK - Private Methods
+
+    /**
+     * Gets the [StyleRes] theme from settings, based on the string (as it's stored in Android's
+     * settings).
+     */
     @StyleRes
-    fun getThemeFromSettings(themeValue: String): Int = when (themeValue) {
+    private fun getThemeFromSettings(themeValue: String): Int = when (themeValue) {
         DARK_THEME -> R.style.AppTheme_Dark
         LIGHT_THEME -> R.style.AppTheme_Light
         else -> {

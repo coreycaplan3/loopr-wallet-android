@@ -9,14 +9,12 @@ import android.support.v7.preference.Preference
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
- *
  */
-class EthereumFeeSettingsFragment : BaseSettingsFragment() {
+class LoopringFeeSettingsFragment(): BaseSettingsFragment() {
 
     companion object {
 
-        val TAG: String = EthereumFeeSettingsFragment::class.java.simpleName
+        val TAG: String = LoopringFeeSettingsFragment::class.java.simpleName
 
     }
 

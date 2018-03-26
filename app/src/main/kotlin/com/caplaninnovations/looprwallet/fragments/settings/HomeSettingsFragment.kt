@@ -9,7 +9,6 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.SettingsActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
 import kotlinx.coroutines.experimental.android.UI
@@ -29,11 +28,22 @@ class HomeSettingsFragment : BaseSettingsFragment() {
     companion object {
         val TAG: String = HomeSettingsFragment::class.java.simpleName
 
-        val PREFERENCE_KEY_CHANGE_THEME = ApplicationUtility.str(R.string.settings_theme_key)
-        val PREFERENCE_KEY_SECURITY_SCREEN = ApplicationUtility.str(R.string.settings_security_screen_key)
+        // Screen Keys
+        val SCREEN_KEY_SECURITY = ApplicationUtility.str(R.string.settings_security_screen_key)
+        val SCREEN_KEY_ETHEREUM_FEES = ApplicationUtility.str(R.string.settings_ethereum_fees_screen_key)
+        val SCREEN_KEY_LOOPRING_FEES = ApplicationUtility.str(R.string.settings_loopring_fees_screen_key)
+        val SCREEN_KEY_GENERAL_WALLET = ApplicationUtility.str(R.string.settings_general_wallet_screen_key)
+        val SCREEN_KEY_CURRENCY = ApplicationUtility.str(R.string.settings_currency_screen_key)
+        val SCREEN_KEY_ETHEREUM_NETWORK = ApplicationUtility.str(R.string.settings_ethereum_network_screen_key)
+        val SCREEN_KEY_LOOPRING_NETWORK = ApplicationUtility.str(R.string.settings_loopring_network_screen_key)
 
-        val DEFAULT_VALUE_THEME = ApplicationUtility.str(R.string.settings_theme_dark)
-        val DEFAULT_VALUE_SECURITY_SCREEN = ApplicationUtility.str(R.string.summary_security_screen)
+        val SUMMARY_VALUE_SECURITY_SCREEN = ApplicationUtility.str(R.string.summary_security_screen)
+        val SUMMARY_VALUE_ETHEREUM_FEES_SCREEN = ApplicationUtility.str(R.string.summary_ethereum_fees_screen)
+        val SUMMARY_VALUE_LOOPRING_FEES_SCREEN = ApplicationUtility.str(R.string.summary_loopring_trading_fees)
+        val SUMMARY_VALUE_GENERAL_WALLET_SCREEN = ApplicationUtility.str(R.string.summary_general_wallet_settings)
+        val SUMMARY_VALUE_CURRENCY_SCREEN = ApplicationUtility.str(R.string.summary_currency_settings)
+        val SUMMARY_VALUE_ETHEREUM_NETWORK_SCREEN = ApplicationUtility.str(R.string.summary_ethereum_network)
+        val SUMMARY_VALUE_LOOPRING_NETWORK_SCREEN = ApplicationUtility.str(R.string.summary_loopring_network)
     }
 
     @Inject
@@ -51,8 +61,14 @@ class HomeSettingsFragment : BaseSettingsFragment() {
     }
 
     override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
-            Pair(PREFERENCE_KEY_CHANGE_THEME, DEFAULT_VALUE_THEME),
-            Pair(PREFERENCE_KEY_SECURITY_SCREEN, DEFAULT_VALUE_SECURITY_SCREEN)
+            Pair(ThemeSettings.KEY_THEME, themeSettings.getCurrentThemeForSettings()),
+            Pair(SCREEN_KEY_SECURITY, SUMMARY_VALUE_SECURITY_SCREEN),
+            Pair(SCREEN_KEY_ETHEREUM_FEES, SUMMARY_VALUE_ETHEREUM_FEES_SCREEN),
+            Pair(SCREEN_KEY_LOOPRING_FEES, SUMMARY_VALUE_LOOPRING_FEES_SCREEN),
+            Pair(SCREEN_KEY_GENERAL_WALLET, SUMMARY_VALUE_GENERAL_WALLET_SCREEN),
+            Pair(SCREEN_KEY_CURRENCY, SUMMARY_VALUE_CURRENCY_SCREEN),
+            Pair(SCREEN_KEY_ETHEREUM_NETWORK, SUMMARY_VALUE_ETHEREUM_NETWORK_SCREEN),
+            Pair(SCREEN_KEY_LOOPRING_NETWORK, SUMMARY_VALUE_LOOPRING_NETWORK_SCREEN)
     )
 
     override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
@@ -60,14 +76,13 @@ class HomeSettingsFragment : BaseSettingsFragment() {
 
         val stringValue = newValue?.toString() ?: return false
 
-        if (preference?.key == themeChangeKey &&
-                themeSettings.getCurrentTheme() != themeSettings.getThemeFromSettings(stringValue)) {
-            LooprSettings.getInstance(LooprWalletApp.context).putString(preference.key, stringValue)
+        if (preference?.key == themeChangeKey && themeSettings.getCurrentThemeForSettings() != stringValue) {
             launch(UI) {
-                // We are switching themes and need to recreate the back stack
-                // We need to delay the launching so animations can finish
+                // We need to add a delay so the dialog close animations can finish
                 delay(150L)
 
+                // We are switching themes, so we need to relaunch the activity and recreate the
+                // back stack.
                 activity?.let {
                     TaskStackBuilder.create(it)
                             .addNextIntent(Intent(it, MainActivity::class.java))
@@ -83,8 +98,32 @@ class HomeSettingsFragment : BaseSettingsFragment() {
     override fun onPreferenceClick(preference: Preference?): Boolean {
         val activity = (activity as? SettingsActivity) ?: return false
         return when (preference?.key) {
-            PREFERENCE_KEY_SECURITY_SCREEN -> {
+            SCREEN_KEY_SECURITY -> {
                 activity.onNestedFragmentClick(SecuritySettingsFragment(), SecuritySettingsFragment.TAG)
+                true
+            }
+            SCREEN_KEY_ETHEREUM_FEES -> {
+                activity.onNestedFragmentClick(EthereumFeeSettingsFragment(), EthereumFeeSettingsFragment.TAG)
+                true
+            }
+            SCREEN_KEY_LOOPRING_FEES -> {
+                activity.onNestedFragmentClick(LoopringFeeSettingsFragment(), LoopringFeeSettingsFragment.TAG)
+                true
+            }
+            SCREEN_KEY_GENERAL_WALLET -> {
+                activity.onNestedFragmentClick(GeneralWalletSettingsFragment(), GeneralWalletSettingsFragment.TAG)
+                true
+            }
+            SCREEN_KEY_CURRENCY -> {
+                activity.onNestedFragmentClick(CurrencySettingsFragment(), CurrencySettingsFragment.TAG)
+                true
+            }
+            SCREEN_KEY_ETHEREUM_NETWORK -> {
+                activity.onNestedFragmentClick(EthereumNetworkSettingsFragment(), EthereumNetworkSettingsFragment.TAG)
+                true
+            }
+            SCREEN_KEY_LOOPRING_NETWORK -> {
+                activity.onNestedFragmentClick(LoopringNetworkSettingsFragment(), LoopringNetworkSettingsFragment.TAG)
                 true
             }
             else -> false

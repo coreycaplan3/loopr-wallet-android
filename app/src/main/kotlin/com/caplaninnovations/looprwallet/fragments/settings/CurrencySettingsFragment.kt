@@ -12,11 +12,11 @@ import android.support.v7.preference.Preference
  *
  *
  */
-class EthereumFeeSettingsFragment : BaseSettingsFragment() {
+class CurrencySettingsFragment: BaseSettingsFragment() {
 
     companion object {
 
-        val TAG: String = EthereumFeeSettingsFragment::class.java.simpleName
+        val TAG: String = CurrencySettingsFragment::class.java.simpleName
 
     }
 

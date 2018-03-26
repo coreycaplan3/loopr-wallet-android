@@ -9,8 +9,16 @@ import android.support.v7.preference.Preference
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
+ *
+ *
  */
-class LoopringFeeSettings(): BaseSettingsFragment() {
+class EthereumNetworkSettingsFragment: BaseSettingsFragment() {
+
+    companion object {
+
+        val TAG: String = EthereumNetworkSettingsFragment::class.java.simpleName
+
+    }
 
     override fun getPreferenceKeysAndDefaultValuesForListeners(): List<Pair<String, String>> {
         TODO("not implemented") // TODO

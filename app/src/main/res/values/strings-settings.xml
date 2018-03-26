@@ -22,7 +22,7 @@
 
     <!-- Security -->
 
-    <string name="settings_security_screen_key">loopr_security_key</string>
+    <string name="settings_security_screen_key">loopr_security_screen_key</string>
     <string name="settings_security_type_key">loopr_security_type_key</string>
     <string name="settings_security_timeout_key">loopr_security_timeout_key</string>
 
@@ -43,15 +43,15 @@
 
     <!-- Ethereum Fees -->
 
-    <string name="settings_ethereum_fees_screen_key">loopr_ethereum_fees_key</string>
+    <string name="settings_ethereum_fees_screen_key">loopr_ethereum_fees_screen_key</string>
 
     <!-- Loopring Fees -->
 
-    <string name="settings_loopring_fees_screen_key">loopr_loopring_fees_key</string>
+    <string name="settings_loopring_fees_screen_key">loopr_loopring_fees_screen_key</string>
 
     <!-- General Wallet -->
 
-    <string name="settings_general_wallet_screen_key">loopr_general_wallet_key</string>
+    <string name="settings_general_wallet_screen_key">loopr_general_wallet_screen_key</string>
 
     <!-- Currency -->
 
@@ -90,10 +90,10 @@
 
     <!-- Ethereum Network -->
 
-    <string name="settings_ethereum_network_screen_key">loopr_ethereum_network_key</string>
+    <string name="settings_ethereum_network_screen_key">loopr_ethereum_network_screen_key</string>
 
     <!-- Loopring Network -->
 
-    <string name="settings_loopring_network_screen_key">loopr_loopring_network_key</string>
+    <string name="settings_loopring_network_screen_key">loopr_loopring_network_screen_key</string>
 
 </resources>

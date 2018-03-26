@@ -29,6 +29,7 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Fix the divider resource
         val resourceId = view.context.theme.getResourceIdFromAttrId(R.attr.dividerColor)
         val color = ApplicationUtility.color(resourceId)
         this.setDivider(ColorDrawable(color))
@@ -37,6 +38,7 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
                 .let { Math.round(it) }
         this.setDividerHeight(height)
 
+        // Bind the default and current values
         val listOfKeysAndDefaultValues = getPreferenceKeysAndDefaultValuesForListeners()
         listOfKeysAndDefaultValues.forEach {
             bindPreferenceSummaryToValue(it.first, it.second)
@@ -52,33 +54,59 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
      */
     abstract fun getPreferenceKeysAndDefaultValuesForListeners(): List<Pair<String, String>>
 
-    override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
+    /**
+     * Called whenever a preference changes and when the fragment is initially setup via list
+     * return from [getPreferenceKeysAndDefaultValuesForListeners].
+     */
+    final override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
         val stringValue = newValue?.toString() ?: return false
 
-        if (preference is ListPreference) {
-            bindListPreferenceValue(preference, stringValue)
-        } else {
-            // For all other preferences, set the summary to the value's
-            // simple string representation.
-            preference?.summary = stringValue
+        // TODO Make call to preference summary change in appropriate place.
+        // TODO Keep in mind, we're only calling it now when we "successfully" change preference
+        // TODO values, as seen below
+
+        // TODO Make an abstract method that sets the summary's value based on the key, preference
+        // TODO value. This can use other preference's state to mutate the summary's value as
+        // TODO appropriate
+        preference?.let {
+            if (onPreferenceChange(preference, stringValue)) {
+                bindPreferenceValueToSummary(preference, stringValue)
+                savePreferenceToSettings(preference, stringValue)
+            }
         }
 
-        return true
+        return false
     }
 
     // MARK - Protected Methods
 
-    protected fun bindListPreferenceValue(preference: ListPreference, value: String) {
-        // For list preferences, look up the correct display value in
-        // the preference's 'entries' list.
-        val index = preference.findIndexOfValue(value)
+    /**
+     * @return True if the preference should be persisted to [LooprSettings] or false otherwise.
+     * It is expected that a return of false will be handled in the subclass for its own specific
+     * reasons.
+     */
+    protected abstract fun onPreferenceChange(preference: Preference, value: String): Boolean
 
-        val summary = if (index >= 0) preference.entries[index]
-        else null
+    // MARK - Protected Methods
 
-        // Set the summary to reflect the new value.
-        preference.summary = summary
+    protected fun bindPreferenceValueToSummary(preference: Preference?, value: String) {
+        if (preference is ListPreference) {
+            bindListPreferenceValue(preference, value)
+        } else {
+            // For all other preferences, set the summary to the value's
+            // simple string representation.
+            preference?.summary = value
+        }
     }
+
+    /**
+     * Use this method to persist values to preferences, instead of the PreferenceManager. Reason
+     * being, it allows us to decouple persisted settings (settings that are saved to disk) from
+     * testing, to make settings not interrupt testing. It also allows for more overall control.
+     */
+    protected fun savePreferenceToSettings(preference: Preference, value: String) =
+            LooprSettings.getInstance(LooprWalletApp.context)
+                    .putString(preference.key, value)
 
     // MARK - Private Methods
 
@@ -115,6 +143,20 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
         val settings = LooprSettings.getInstance(LooprWalletApp.context)
         val value = settings.getString(preference.key) ?: defaultValue
         this.onPreferenceChange(preference, value)
+    }
+
+    /**
+     * Looks up the correct display value in the preference's 'entries' list and binds it to the
+     * summary.
+     */
+    private fun bindListPreferenceValue(preference: ListPreference, value: String) {
+        val index = preference.findIndexOfValue(value)
+
+        val summary = if (index >= 0) preference.entries[index]
+        else null
+
+        // Set the summary to reflect the new value.
+        preference.summary = summary
     }
 
 }
