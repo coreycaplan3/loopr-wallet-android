@@ -3,6 +3,7 @@ package com.caplaninnovations.looprwallet.fragments.settings
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import android.support.v7.preference.Preference.OnPreferenceChangeListener
@@ -55,6 +56,22 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
     abstract fun getPreferenceKeysAndDefaultValuesForListeners(): List<Pair<String, String>>
 
     /**
+     * The title of the fragment, which will be bound to the action bar
+     */
+    abstract val fragmentTitle: String
+
+    /**
+     * Based on a key and preference value, returns the summary value (which is displayed in the UI
+     * to the user).
+     *
+     * This method is only called internally from within [bindPreferenceValueToSummary]
+     *
+     * @return A human-readable summary value for the user
+     * @see getSummaryForListPreference
+     */
+    abstract fun getSummaryValue(preference: Preference, value: String): String
+
+    /**
      * Called whenever a preference changes and when the fragment is initially setup via list
      * return from [getPreferenceKeysAndDefaultValuesForListeners].
      */
@@ -69,13 +86,19 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
         // TODO value. This can use other preference's state to mutate the summary's value as
         // TODO appropriate
         preference?.let {
-            if (onPreferenceChange(preference, stringValue)) {
+            if (onPreferenceValueChange(preference, stringValue)) {
                 bindPreferenceValueToSummary(preference, stringValue)
                 savePreferenceToSettings(preference, stringValue)
             }
         }
 
         return false
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        (activity as? AppCompatActivity)?.supportActionBar?.title = fragmentTitle
     }
 
     // MARK - Protected Methods
@@ -85,24 +108,47 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
      * It is expected that a return of false will be handled in the subclass for its own specific
      * reasons.
      */
-    protected abstract fun onPreferenceChange(preference: Preference, value: String): Boolean
+    protected abstract fun onPreferenceValueChange(preference: Preference, value: String): Boolean
 
     // MARK - Protected Methods
 
+    /**
+     * Binds the given preference's value to its summary. This method gets the summary's value by
+     * calling [getSummaryValue] on the [value] provided.
+     *
+     * @param preference The preference whose summary value will be set
+     * @param value The preference value that will be used in the call to [getSummaryValue] and
+     * bound to the preference's summary
+     */
     protected fun bindPreferenceValueToSummary(preference: Preference?, value: String) {
-        if (preference is ListPreference) {
-            bindListPreferenceValue(preference, value)
-        } else {
+        if (preference != null) {
             // For all other preferences, set the summary to the value's
             // simple string representation.
-            preference?.summary = value
+            preference.summary = getSummaryValue(preference, value)
         }
     }
 
     /**
+     * Looks up the correct display value in the preference's *entries* list and binds it to the
+     * summary.
+     *
+     * @param preference The list preference whose summary will be bound to a human-readable value
+     * @param value The entry-value, which will be used in the lookup in the [ListPreference]'s
+     * entries.
+     */
+    protected fun getSummaryForListPreference(preference: ListPreference, value: String): String {
+        val index = preference.findIndexOfValue(value)
+
+        // Set the summary to reflect the new value.
+        return if (index >= 0) preference.entries[index].toString()
+        else value
+    }
+
+    /**
      * Use this method to persist values to preferences, instead of the PreferenceManager. Reason
-     * being, it allows us to decouple persisted settings (settings that are saved to disk) from
-     * testing, to make settings not interrupt testing. It also allows for more overall control.
+     * being, it allows us to decouple persisted settings (settings that are saved to disk). This
+     * is idea for testing, to make settings not interrupt tests. It also allows for more overall
+     * control.
      */
     protected fun savePreferenceToSettings(preference: Preference, value: String) =
             LooprSettings.getInstance(LooprWalletApp.context)
@@ -143,20 +189,6 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
         val settings = LooprSettings.getInstance(LooprWalletApp.context)
         val value = settings.getString(preference.key) ?: defaultValue
         this.onPreferenceChange(preference, value)
-    }
-
-    /**
-     * Looks up the correct display value in the preference's 'entries' list and binds it to the
-     * summary.
-     */
-    private fun bindListPreferenceValue(preference: ListPreference, value: String) {
-        val index = preference.findIndexOfValue(value)
-
-        val summary = if (index >= 0) preference.entries[index]
-        else null
-
-        // Set the summary to reflect the new value.
-        preference.summary = summary
     }
 
 }

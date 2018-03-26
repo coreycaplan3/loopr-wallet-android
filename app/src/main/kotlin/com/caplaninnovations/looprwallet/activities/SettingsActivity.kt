@@ -6,6 +6,7 @@ import android.view.MenuItem
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.ifNull
+import com.caplaninnovations.looprwallet.fragments.security.BaseSecurityFragment
 import com.caplaninnovations.looprwallet.fragments.settings.BaseSettingsFragment
 import com.caplaninnovations.looprwallet.fragments.settings.HomeSettingsFragment
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
@@ -53,6 +54,16 @@ class SettingsActivity : AppCompatActivity() {
                 .replace(R.id.activityContainer, fragment, tag)
                 .addToBackStack(tag)
                 .commit()
+    }
+
+    /**
+     * Called when a security fragment needs to be pushed onto the fragment stack
+     *
+     * @param fragment The security fragment to be pushed to the front
+     * @param tag The tag to associate with the fragment and its position in the back-stack.
+     */
+    fun onSecuritySettingsFragmentClick(fragment: BaseSecurityFragment, tag: String) {
+        TODO("FIX THIS")
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {

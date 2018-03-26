@@ -28,6 +28,10 @@ class SecuritySettings(private val looprSettings: LooprSettings) {
          */
         val PREFERENCE_KEY_SECURITY_TIMEOUT = ApplicationUtility.str(R.string.settings_security_timeout_key)
 
+        // Timeout Types
+
+        val DEFAULT_SECURITY_TIMEOUT = ApplicationUtility.str(R.string.settings_security_timeout_entries_values_default)
+
         // Security Types
 
         /**
@@ -44,6 +48,11 @@ class SecuritySettings(private val looprSettings: LooprSettings) {
 
     fun getCurrentSecurityType(): String {
         return looprSettings.getString(PREFERENCE_KEY_SECURITY_TYPE) ?: TYPE_DEFAULT_VALUE_SECURITY
+    }
+
+    fun getCurrentSecurityTimeout(): Int {
+        val defaultValue = DEFAULT_SECURITY_TIMEOUT.toInt()
+        return looprSettings.getInt(PREFERENCE_KEY_SECURITY_TIMEOUT, defaultValue)
     }
 
     fun setCurrentSecurityType(securityType: String) {

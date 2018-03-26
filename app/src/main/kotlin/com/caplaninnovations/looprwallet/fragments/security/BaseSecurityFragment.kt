@@ -3,7 +3,6 @@ package com.caplaninnovations.looprwallet.fragments.security
 import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
 import kotlinx.android.synthetic.main.number_pad.*
@@ -22,10 +21,7 @@ abstract class BaseSecurityFragment : BaseFragment() {
      *
      * @see TYPE_PIN_SECURITY
      */
-    private val securityType: String
-        get() {
-            return LooprWalletApp.dagger.securitySettings.getCurrentSecurityType()
-        }
+    abstract val securityType: String
 
     final override val layoutResource: Int
         get() = when (securityType) {

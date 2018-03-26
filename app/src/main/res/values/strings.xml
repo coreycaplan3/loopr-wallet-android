@@ -215,7 +215,7 @@
     <string name="wallet_settings">Wallet Settings</string>
     <string name="refresh_frequency_of_exchange_rates">Refresh Frequency of Exchange Rates</string>
     <string name="general">General</string>
-    <string name="application_lock">Application Lock</string>
+    <string name="application_lock">Application lock</string>
     <string name="none">None</string>
     <string name="fee_settings">Fee Settings</string>
     <string name="summary_ethereum_fees_screen">Manage the gas price and gas limit for sending Ether and Tokens</string>
@@ -230,4 +230,10 @@
     <string name="summary_currency_settings">Change your native currency and its refresh frequency</string>
     <string name="summary_general_wallet_settings">Hide low balance tokens and customize other in-app experiences</string>
     <string name="general_wallet_customizations">General Wallet Customizations</string>
+    <string name="automatically_lock">Automatically lock</string>
+    <string name="formatter_automatically_lock_after_timeout">%s after exiting the app</string>
+    <string name="enter_new_pin">Enter a New PIN</string>
+    <string name="disabled_application_lock">This setting is disabled unless you turn on an application lock</string>
+    <string name="enter_a_new_pin">Enter a new PIN</string>
+    <string name="confirm_your_pin">Confirm your PIN</string>
 </resources>

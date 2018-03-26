@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.TaskStackBuilder
+import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.MainActivity
@@ -50,6 +51,9 @@ class HomeSettingsFragment : BaseSettingsFragment() {
     lateinit var themeSettings: ThemeSettings
     private val themeChangeKey = ApplicationUtility.str(R.string.settings_theme_key)
 
+    override val fragmentTitle: String
+        get() = ApplicationUtility.str(R.string.settings)
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
@@ -71,12 +75,8 @@ class HomeSettingsFragment : BaseSettingsFragment() {
             Pair(SCREEN_KEY_LOOPRING_NETWORK, SUMMARY_VALUE_LOOPRING_NETWORK_SCREEN)
     )
 
-    override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
-        super.onPreferenceChange(preference, newValue)
-
-        val stringValue = newValue?.toString() ?: return false
-
-        if (preference?.key == themeChangeKey && themeSettings.getCurrentThemeForSettings() != stringValue) {
+    override fun onPreferenceValueChange(preference: Preference, value: String): Boolean {
+        if (preference.key == themeChangeKey && themeSettings.getCurrentThemeForSettings() != value) {
             launch(UI) {
                 // We need to add a delay so the dialog close animations can finish
                 delay(150L)
@@ -93,6 +93,18 @@ class HomeSettingsFragment : BaseSettingsFragment() {
         }
 
         return true
+    }
+
+    override fun getSummaryValue(preference: Preference, value: String) = when (preference.key) {
+        ThemeSettings.KEY_THEME -> getSummaryForListPreference(preference as ListPreference, value)
+        SCREEN_KEY_CURRENCY -> SUMMARY_VALUE_CURRENCY_SCREEN
+        SCREEN_KEY_ETHEREUM_FEES -> SUMMARY_VALUE_ETHEREUM_FEES_SCREEN
+        SCREEN_KEY_LOOPRING_FEES -> SUMMARY_VALUE_LOOPRING_FEES_SCREEN
+        SCREEN_KEY_GENERAL_WALLET -> SUMMARY_VALUE_GENERAL_WALLET_SCREEN
+        SCREEN_KEY_CURRENCY -> SUMMARY_VALUE_CURRENCY_SCREEN
+        SCREEN_KEY_ETHEREUM_NETWORK -> SUMMARY_VALUE_ETHEREUM_NETWORK_SCREEN
+        SCREEN_KEY_LOOPRING_NETWORK -> SUMMARY_VALUE_LOOPRING_NETWORK_SCREEN
+        else -> throw IllegalArgumentException("Invalid key, found: ${preference.key}")
     }
 
     override fun onPreferenceClick(preference: Preference?): Boolean {

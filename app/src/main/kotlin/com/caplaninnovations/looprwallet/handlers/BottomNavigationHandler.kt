@@ -6,14 +6,15 @@ import android.os.Handler
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.extensions.findFragmentByTagOrCreate
+import com.caplaninnovations.looprwallet.extensions.isExpanded
+import com.caplaninnovations.looprwallet.extensions.logv
+import com.caplaninnovations.looprwallet.extensions.weakReference
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.models.android.fragments.BottomNavigationFragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationTag
-import com.caplaninnovations.looprwallet.extensions.findFragmentByTagOrCreate
-import com.caplaninnovations.looprwallet.extensions.isExpanded
-import com.caplaninnovations.looprwallet.extensions.logv
 import kotlinx.android.synthetic.main.bottom_navigation.*
 
 /**
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.bottom_navigation.*
  *
  * This class should be instantiated in the corresponding activity's [Activity.onCreate] method.
  */
-class BottomNavigationHandler(private val activity: BaseActivity,
+class BottomNavigationHandler(activity: BaseActivity,
                               private val fragmentTagPairs: List<BottomNavigationFragmentPair>,
                               @BottomNavigationTag private val initialTag: String,
                               private val bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory,
@@ -37,7 +38,9 @@ class BottomNavigationHandler(private val activity: BaseActivity,
         fun onBottomNavigationReselected()
     }
 
-    private val bottomNavigationView = activity.bottomNavigationView
+    private val activity by weakReference(activity)
+
+    private val bottomNavigationView by weakReference(activity.bottomNavigationView)
 
     private var currentFragment: Fragment? = null
 
@@ -62,13 +65,13 @@ class BottomNavigationHandler(private val activity: BaseActivity,
             }
         }
 
-        bottomNavigationView.inflateMenu(R.menu.bottom_navigation_menu)
-        bottomNavigationView.setOnNavigationItemSelectedListener {
+        bottomNavigationView?.inflateMenu(R.menu.bottom_navigation_menu)
+        bottomNavigationView?.setOnNavigationItemSelectedListener {
             executeFragmentTransaction(getTagFromMenuId(it.itemId))
             true
         }
 
-        bottomNavigationView.setOnNavigationItemReselectedListener {
+        bottomNavigationView?.setOnNavigationItemReselectedListener {
             val tag = getTagFromMenuId(it.itemId)
             val fragment = activity.supportFragmentManager.findFragmentByTag(tag)
             (fragment as? BottomNavigationReselectedLister)?.onBottomNavigationReselected()
@@ -83,7 +86,7 @@ class BottomNavigationHandler(private val activity: BaseActivity,
         bottomNavigationFragmentStackHistory.pop()
 
         bottomNavigationFragmentStackHistory.peek()?.let {
-            bottomNavigationView.selectedItemId = getMenuIdFromTag(it)
+            bottomNavigationView?.selectedItemId = getMenuIdFromTag(it)
             return false
         }
 
@@ -106,16 +109,21 @@ class BottomNavigationHandler(private val activity: BaseActivity,
     private fun executeFragmentTransaction(newFragmentTag: String) {
 
         fun commitTransaction(fragment: Fragment, fragmentTag: String) {
-            val controller = FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
-            controller.commitTransaction(activity.supportFragmentManager, currentFragment)
-            currentFragment = fragment
+            activity?.supportFragmentManager?.let {
+                val controller = FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
+                controller.commitTransaction(it, currentFragment)
+                currentFragment = fragment
+            }
         }
 
         bottomNavigationFragmentStackHistory.push(newFragmentTag)
 
-        val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(newFragmentTag) { tag ->
-            fragmentTagPairs.find { it.tag == tag }?.fragment!!
-        }
+        val newFragment = activity?.supportFragmentManager
+                ?.findFragmentByTagOrCreate(newFragmentTag) { tag ->
+                    // The fragment MUST be in the list (so it's ALWAYS safe to force the optional unwrap.
+                    fragmentTagPairs.find { it.tag == tag }?.fragment!!
+                }
+                ?: return // We return since we CANNOT commit the transaction without this fragment
 
         val baseFragment = currentFragment as? BaseFragment
         if (baseFragment?.appbarLayout?.isExpanded() == false) {

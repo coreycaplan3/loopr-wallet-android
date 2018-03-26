@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.fragments.security
 
 import android.os.Bundle
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
 
 /**
  * Created by Corey Caplan on 3/25/18.
@@ -17,6 +18,8 @@ import android.os.Bundle
 class ConfirmOldSecurityFragment : BaseSecurityFragment() {
 
     companion object {
+
+        val TAG: String = ConfirmOldSecurityFragment::class.java.simpleName
 
         /**
          * A key used to track the type of interaction being made with this
@@ -62,5 +65,10 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
                     arguments = Bundle().apply { putInt(KEY_CONFIRM_SECURITY_TYPE, type) }
                 }
     }
+
+    override val securityType: String
+        get() {
+            return LooprWalletApp.dagger.securitySettings.getCurrentSecurityType()
+        }
 
 }

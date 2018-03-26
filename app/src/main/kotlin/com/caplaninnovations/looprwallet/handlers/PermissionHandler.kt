@@ -5,6 +5,7 @@ import android.support.annotation.IntDef
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.ActivityCompat
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.extensions.weakReference
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 
 /**
@@ -28,12 +29,12 @@ import com.caplaninnovations.looprwallet.fragments.BaseFragment
  * variable to false. All other functionality will still be handled for you though (when permissions
  * are denied/granted).
  */
-open class PermissionHandler(private val activity: BaseActivity,
-                             private val fragment: BaseFragment? = null,
+open class PermissionHandler(activity: BaseActivity,
+                             fragment: BaseFragment? = null,
                              private val permission: String,
                              @Code private val requestCode: Int,
-                             private val onPermissionGranted: () -> Unit,
-                             private val onPermissionDenied: () -> Unit,
+                             onPermissionGranted: () -> Unit,
+                             onPermissionDenied: () -> Unit,
                              val shouldRequestPermissionNow: Boolean = true) :
         ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -50,6 +51,14 @@ open class PermissionHandler(private val activity: BaseActivity,
         const val REQUEST_CODE_EXTERNAL_FILES = 0x0041
     }
 
+    private val activity by weakReference(activity)
+
+    private val fragment by weakReference(fragment)
+
+    private val onPermissionGranted by weakReference(onPermissionGranted)
+
+    private val onPermissionDenied by weakReference(onPermissionDenied)
+
     var isPermissionGranted: Boolean
         private set
 
@@ -64,7 +73,7 @@ open class PermissionHandler(private val activity: BaseActivity,
      */
     fun requestPermission() {
         if (isPermissionGranted) {
-            onPermissionGranted.invoke()
+            onPermissionGranted?.invoke()
         } else {
             requestPermissionWrapper()
         }
@@ -78,9 +87,9 @@ open class PermissionHandler(private val activity: BaseActivity,
 
         if (grantResults[index] == PackageManager.PERMISSION_GRANTED) {
             isPermissionGranted = true
-            onPermissionGranted.invoke()
+            onPermissionGranted?.invoke()
         } else {
-            onPermissionDenied.invoke()
+            onPermissionDenied?.invoke()
         }
     }
 
@@ -91,9 +100,11 @@ open class PermissionHandler(private val activity: BaseActivity,
     @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     open fun requestPermissionWrapper() {
         if (fragment != null) {
-            fragment.requestPermissions(arrayOf(permission), requestCode)
+            fragment?.requestPermissions(arrayOf(permission), requestCode)
         } else {
-            ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
+            activity?.let {
+                ActivityCompat.requestPermissions(it, arrayOf(permission), requestCode)
+            }
         }
     }
 

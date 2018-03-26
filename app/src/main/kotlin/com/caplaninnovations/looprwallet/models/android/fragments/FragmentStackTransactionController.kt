@@ -55,8 +55,9 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
     var transitionStyle: Int? = null
 
     /**
-     * Creates a transaction, replaces the current container & commits it now. This **disallows**
-     * saving the back-stack, so it must be maintained manually, using [BottomNavigationFragmentStackHistory].
+     * Creates a transaction, replaces the current container & commits it via a call to
+     * [FragmentTransaction.commitAllowingStateLoss]. Reason being, it's okay to lose the commit,
+     * since the only user is the one who may disrupt the commit.
      */
     fun commitTransaction(fragmentManager: FragmentManager, oldFragment: Fragment?) {
         val transaction = fragmentManager.beginTransaction()
@@ -90,9 +91,9 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
 
         transaction.addToBackStack(newFragmentTag)
 
-        if (!fragmentManager.isStateSaved) {
-            transaction.commit()
-        }
+        // It's okay to lose the commit, since the user disrupted the delayed commit. The delay is
+        // only 125ms so it should RARELY EVER happen
+        transaction.commitAllowingStateLoss()
     }
 
 }

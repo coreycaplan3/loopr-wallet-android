@@ -41,6 +41,36 @@
         <item>@string/settings_security_type_entries_values_pin</item>
     </string-array>
 
+    <string name="settings_security_timeout_entries_ui_default">
+        5 seconds
+    </string>
+
+    <string name="settings_security_timeout_entries_values_default">5</string>
+
+    <string-array name="settings_security_timeout_entries_ui">
+        <item>Immediately</item>
+        <item>@string/settings_security_timeout_entries_ui_default</item>
+        <item>15 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+        <item>30 minutes</item>
+    </string-array>
+
+    <string-array name="settings_security_timeout_entries_values">
+        <item>-1</item>
+        <item>@string/settings_security_timeout_entries_values_default</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>300</item>
+        <item>600</item>
+        <item>1800</item>
+    </string-array>
+
     <!-- Ethereum Fees -->
 
     <string name="settings_ethereum_fees_screen_key">loopr_ethereum_fees_screen_key</string>
