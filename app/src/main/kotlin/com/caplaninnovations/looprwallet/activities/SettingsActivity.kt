@@ -7,8 +7,9 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.ifNull
 import com.caplaninnovations.looprwallet.fragments.settings.BaseSettingsFragment
-import com.caplaninnovations.looprwallet.fragments.settings.SettingsFragment
+import com.caplaninnovations.looprwallet.fragments.settings.HomeSettingsFragment
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
+import com.caplaninnovations.looprwallet.utilities.ViewUtility
 import kotlinx.android.synthetic.main.appbar_main.*
 import javax.inject.Inject
 
@@ -31,11 +32,12 @@ class SettingsActivity : AppCompatActivity() {
 
         savedInstanceState.ifNull {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.activityContainer, SettingsFragment(), SettingsFragment.TAG)
+                    .replace(R.id.activityContainer, HomeSettingsFragment(), HomeSettingsFragment.TAG)
                     .commit()
         }
 
         setSupportActionBar(toolbar)
+        toolbar?.navigationIcon = ViewUtility.getNavigationIcon(theme)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

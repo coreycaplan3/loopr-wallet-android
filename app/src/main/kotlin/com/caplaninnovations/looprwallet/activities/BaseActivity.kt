@@ -13,12 +13,11 @@ import android.view.ViewTreeObserver
 import android.view.WindowManager
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.dagger.LooprProductionComponent
+import com.caplaninnovations.looprwallet.dagger.LooprDaggerComponent
 import com.caplaninnovations.looprwallet.extensions.loge
 import com.caplaninnovations.looprwallet.extensions.longToast
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
@@ -60,7 +59,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     abstract val isSecureActivity: Boolean
 
-    private lateinit var looprProductionComponent: LooprProductionComponent
+    private lateinit var looprDaggerComponent: LooprDaggerComponent
 
     lateinit var progressDialog: ProgressDialog
 
@@ -74,13 +73,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private var keyboardLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
 
-    /**
-     * A stack history used for creating a backstack for fragments. To start using it, call
-     * [pushFragmentTransaction] in the activity's [onCreate] when the activity is created for
-     * the first time.
-     */
-    open lateinit var fragmentStackHistory: FragmentStackHistory
-
     var progressDialogMessage: String? = null
         private set
 
@@ -91,17 +83,14 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Setup the Dagger injection component
-        looprProductionComponent = (application as LooprWalletApp).looprProductionComponent
-        looprProductionComponent.inject(this)
+        looprDaggerComponent = (application as LooprWalletApp).looprDaggerComponent
+        looprDaggerComponent.inject(this)
 
         // Setup the theme
         this.setTheme(themeSettings.getCurrentTheme())
 
         // Setup the view hierarchy
         setContentView(contentView)
-
-        // Setup the fragment navigation pattern
-        fragmentStackHistory = FragmentStackHistory(true, savedInstanceState)
 
         // Setup the permission handlers
         permissionHandlers = getAllPermissionHandlers()
@@ -211,30 +200,29 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     open fun pushFragmentTransaction(fragment: BaseFragment, fragmentTag: String) {
         val oldFragment = supportFragmentManager.findFragmentById(R.id.activityContainer)
-        val controller = FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
-        controller.transition = FragmentTransaction.TRANSIT_FRAGMENT_OPEN
-        controller.commitTransaction(supportFragmentManager, oldFragment)
 
-        fragmentStackHistory.push(fragmentTag)
+        FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
+                .apply {
+                    transition = FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+                }
+                .commitTransaction(supportFragmentManager, oldFragment)
     }
 
     open fun popFragmentTransaction() {
-        supportFragmentManager.findFragmentByTag(fragmentStackHistory.pop())
-
-        val newFragmentTag = fragmentStackHistory.peek()
-        if (newFragmentTag == null) {
-            // There are no fragments left in the stack
-            finish()
-            return
+        if (!supportFragmentManager.isStateSaved) {
+            // We don't want to change the state after the fragment manager already saved its state.
+            // This would result in an IllegalStateException being thrown otherwise.
+            supportFragmentManager.popBackStackImmediate()
+            if (supportFragmentManager.backStackEntryCount == 0) {
+                // There are no fragments left in the stack
+                finish()
+                return
+            }
         }
-
-        supportFragmentManager.popBackStack()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-
-        fragmentStackHistory.saveState(outState)
 
         outState?.putBoolean(KEY_IS_KEYBOARD_HIDDEN, isKeyboardHidden)
         outState?.putBoolean(KEY_IS_PROGRESS_DIALOG_SHOWING, progressDialog.isShowing)

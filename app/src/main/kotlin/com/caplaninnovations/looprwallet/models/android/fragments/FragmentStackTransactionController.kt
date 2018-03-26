@@ -56,7 +56,7 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
 
     /**
      * Creates a transaction, replaces the current container & commits it now. This **disallows**
-     * saving the back-stack, so it must be maintained manually, using [FragmentStackHistory].
+     * saving the back-stack, so it must be maintained manually, using [BottomNavigationFragmentStackHistory].
      */
     fun commitTransaction(fragmentManager: FragmentManager, oldFragment: Fragment?) {
         val transaction = fragmentManager.beginTransaction()
@@ -90,7 +90,9 @@ class FragmentStackTransactionController(@IdRes private val container: Int,
 
         transaction.addToBackStack(newFragmentTag)
 
-        transaction.commitAllowingStateLoss()
+        if (!fragmentManager.isStateSaved) {
+            transaction.commit()
+        }
     }
 
 }

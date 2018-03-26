@@ -3,7 +3,6 @@ package com.caplaninnovations.looprwallet.models.android.fragments
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.extensions.logv
-import kotlin.collections.ArrayList
 
 /**
  * Created by Corey on 1/19/2018.
@@ -17,7 +16,7 @@ import kotlin.collections.ArrayList
  * of vertically.
  * @param savedInstanceState The bundle passed to the activity in its *onCreate*.
  */
-class FragmentStackHistory(private val isUpNavigationEnabled: Boolean, savedInstanceState: Bundle?) {
+class BottomNavigationFragmentStackHistory(private val isUpNavigationEnabled: Boolean, savedInstanceState: Bundle?) {
 
     companion object {
         const val KEY_STACK = "_STACK"

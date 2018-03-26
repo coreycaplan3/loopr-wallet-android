@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.dagger
 
 import android.content.Context
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettings
-import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
+import com.caplaninnovations.looprwallet.models.android.settings.UserWalletSettings
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -21,8 +21,8 @@ class LooprSecureSettingsModule(private val context: Context) {
 
     @Singleton
     @Provides
-    fun provideLooprWalletSettings(): WalletSettings {
-        return WalletSettings(LooprSecureSettings.getInstance(context))
+    fun provideLooprWalletSettings(): UserWalletSettings {
+        return UserWalletSettings(LooprSecureSettings.getInstance(context))
     }
 
 }

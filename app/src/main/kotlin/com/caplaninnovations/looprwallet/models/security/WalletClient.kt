@@ -98,7 +98,7 @@ interface WalletClient {
     /**
      * Begins a locking countdown. After the specified time, [isUnlocked] should return false and
      * the app should be inaccessible, without entering a password. The countdown is based on the
-     * time set using [WalletSettings]
+     * time set using [UserWalletSettings]
      */
     fun beginLockCountdown()
 

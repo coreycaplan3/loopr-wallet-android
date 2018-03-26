@@ -9,7 +9,7 @@ import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.SecurityActivity
 import com.caplaninnovations.looprwallet.activities.SignInActivity
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettings
-import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
+import com.caplaninnovations.looprwallet.models.android.settings.UserWalletSettings
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.extensions.loge
 import io.realm.Realm
@@ -34,7 +34,7 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
         Handler()
     }
 
-    private val walletSettings = WalletSettings(looprSecureSettings)
+    private val walletSettings = UserWalletSettings(looprSecureSettings)
 
     private val cipherClient = CipherClient(context)
 
@@ -75,7 +75,7 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
 
     override fun beginLockCountdown() {
         val lockoutTime = walletSettings.getLockoutTime()
-        if (lockoutTime != WalletSettings.LockoutTimes.NONE_MILLIS) {
+        if (lockoutTime != UserWalletSettings.LockoutTimes.NONE_MILLIS) {
             handler.postDelayed({ isUnlocked = false }, lockoutTime)
         }
     }

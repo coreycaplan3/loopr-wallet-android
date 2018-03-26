@@ -3,11 +3,10 @@ package com.caplaninnovations.looprwallet.dagger
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.SettingsActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.fragments.settings.SettingsFragment
+import com.caplaninnovations.looprwallet.fragments.settings.SecuritySettingsFragment
+import com.caplaninnovations.looprwallet.fragments.settings.HomeSettingsFragment
 import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferAmountFragment
-import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
-import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
-import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings
+import com.caplaninnovations.looprwallet.models.android.settings.*
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.realm.RealmClient
 import com.caplaninnovations.looprwallet.repositories.BaseRealmRepository
@@ -26,19 +25,21 @@ import javax.inject.Singleton
  */
 @Singleton
 @Component(modules = [LooprSettingsModule::class, LooprSecureSettingsModule::class,
-    LooprRealmModule::class, LooprSecurityModule::class, LooprEthModule::class])
-interface LooprProductionComponent {
+    LooprRealmModule::class, LooprWalletModule::class, LooprEthModule::class])
+interface LooprDaggerComponent {
 
     // Activities
     fun inject(baseActivity: BaseActivity)
+
     fun inject(settingsActivity: SettingsActivity)
 
     // Applications
     fun inject(looprWalletApp: LooprWalletApp)
 
     // Fragments
-    fun inject(settingsFragment: SettingsFragment)
+    fun inject(homeSettingsFragment: HomeSettingsFragment)
 
+    fun inject(securitySettingsFragment: SecuritySettingsFragment)
     fun inject(createTransferAmountFragment: CreateTransferAmountFragment)
 
     // Repositories
@@ -47,10 +48,16 @@ interface LooprProductionComponent {
     // View Models
     fun inject(currencyExchangeRateViewModel: CurrencyExchangeRateViewModel)
 
-    val walletSettings: WalletSettings
+    val userWalletSettings: UserWalletSettings
     val themeSettings: ThemeSettings
     val realmClient: RealmClient
     val currencySettings: CurrencySettings
+    val securitySettings: SecuritySettings
+    val ethereumFeeSettings: EthereumFeeSettings
+    val loopringFeeSettings: LoopringFeeSettings
+    val ethereumNetworkSettings: EthereumNetworkSettings
+    val loopringNetworkSettings: LoopringNetworkSettings
+    val generalWalletSettings: GeneralWalletSettings
     val walletClient: WalletClient
     val web3j: Web3j
 }

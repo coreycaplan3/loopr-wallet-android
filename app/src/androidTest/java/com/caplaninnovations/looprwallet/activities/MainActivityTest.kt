@@ -11,7 +11,7 @@ import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
+import com.caplaninnovations.looprwallet.models.android.fragments.BottomNavigationFragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
@@ -43,7 +43,7 @@ class MainActivityTest : BaseDaggerTest() {
     }
 
     private lateinit var bottomNavigationHandler: BottomNavigationHandler
-    private lateinit var fragmentStackHistory: FragmentStackHistory
+    private lateinit var bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory
 
     @Before
     fun setUp() {
@@ -52,7 +52,7 @@ class MainActivityTest : BaseDaggerTest() {
         waitForActivityToBeSetup()
 
         bottomNavigationHandler = activity.bottomNavigationHandler
-        fragmentStackHistory = activity.fragmentStackHistory
+        bottomNavigationFragmentStackHistory = activity.bottomNavigationFragmentStackHistory
 
         Thread.sleep(250) // wait the bottom navigation handler to be initialized
     }
@@ -87,7 +87,7 @@ class MainActivityTest : BaseDaggerTest() {
     @Test
     fun onBackPressedMultipleTimes() {
         // Current stack = MARKETS
-        assertEquals(BottomNavigationFragmentPair.KEY_MARKETS, fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_MARKETS, bottomNavigationFragmentStackHistory.peek())
 
         onView(withId(`is`(R.id.menu_orders)))
                 .perform(click())
@@ -96,7 +96,7 @@ class MainActivityTest : BaseDaggerTest() {
 
         // Assert the tab selection propagated successfully
         // Current stack = ORDERS -- MARKETS
-        assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, bottomNavigationFragmentStackHistory.peek())
 
         onView(withId(`is`(R.id.menu_my_wallet)))
                 .perform(click())
@@ -105,7 +105,7 @@ class MainActivityTest : BaseDaggerTest() {
 
         // Assert the tab selection propagated successfully
         // Current stack = MY_WALLET -- ORDERS -- MARKETS
-        assertEquals(BottomNavigationFragmentPair.KEY_MY_WALLET, fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_MY_WALLET, bottomNavigationFragmentStackHistory.peek())
 
         /*
          * For some reason espresso bugs out and won't let us click here... so we'll do it the "old
@@ -118,25 +118,25 @@ class MainActivityTest : BaseDaggerTest() {
 
         // Assert the tab selection propagated successfully
         // Current stack = MARKETS -- MY_WALLET -- ORDERS; markets should not have been added twice
-        assertEquals(BottomNavigationFragmentPair.KEY_MARKETS, fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_MARKETS, bottomNavigationFragmentStackHistory.peek())
 
         Espresso.pressBack()
-        assertEquals(BottomNavigationFragmentPair.KEY_MY_WALLET, fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_MY_WALLET, bottomNavigationFragmentStackHistory.peek())
 
         Espresso.pressBack()
-        assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, fragmentStackHistory.peek())
+        assertEquals(BottomNavigationFragmentPair.KEY_ORDERS, bottomNavigationFragmentStackHistory.peek())
 
         Espresso.pressBackUnconditionally()
-        assertTrue(fragmentStackHistory.isEmpty())
+        assertTrue(bottomNavigationFragmentStackHistory.isEmpty())
     }
 
     @Test
     fun onSaveInstanceState() {
         val bundle = Bundle()
 
-        fragmentStackHistory.saveState(bundle)
+        bottomNavigationFragmentStackHistory.saveState(bundle)
 
-        assertTrue(bundle.containsKey(FragmentStackHistory.KEY_STACK))
+        assertTrue(bundle.containsKey(BottomNavigationFragmentStackHistory.KEY_STACK))
         assertFalse(bundle.isEmpty)
     }
 

@@ -29,6 +29,7 @@ import com.caplaninnovations.looprwallet.models.android.architecture.FragmentVie
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.transitions.FloatingActionButtonTransition
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import com.caplaninnovations.looprwallet.utilities.ViewUtility
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 import javax.inject.Inject
 
@@ -80,6 +81,11 @@ abstract class BaseFragment : Fragment() {
             onFormChanged()
         }
 
+    /**
+     * True if the "up navigation" button should be shown in the toolbar or false otherwise
+     */
+    protected var isUpNavigationEnabled = true
+
     private val fragmentLifeCycleOwner = FragmentViewLifecycleOwner()
 
     override fun getLifecycle(): Lifecycle = fragmentLifeCycleOwner.lifecycle
@@ -87,7 +93,7 @@ abstract class BaseFragment : Fragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        LooprWalletApp.application.looprProductionComponent
+        LooprWalletApp.application.looprDaggerComponent
 
         allowEnterTransitionOverlap = false
         allowReturnTransitionOverlap = false
@@ -331,12 +337,11 @@ abstract class BaseFragment : Fragment() {
         val baseActivity = (activity as? BaseActivity)
 
         baseActivity?.setSupportActionBar(toolbar)
-        baseActivity?.fragmentStackHistory?.let {
-            if (it.isUpNavigationEnabled()) {
-                logi("Up navigation is enabled...")
-                toolbar?.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-                toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
-            }
+
+        if (isUpNavigationEnabled && baseActivity != null) {
+            logi("Up navigation is enabled...")
+            toolbar?.navigationIcon = ViewUtility.getNavigationIcon(baseActivity.theme)
+            toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
         }
     }
 

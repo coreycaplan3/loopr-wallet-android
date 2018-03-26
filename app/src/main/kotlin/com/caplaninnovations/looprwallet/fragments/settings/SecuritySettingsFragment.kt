@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.extensions.loge
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
+import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.PREFERENCE_KEY_SECURITY_TYPE
+import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
+import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
+import javax.inject.Inject
 
 
 /**
@@ -21,21 +24,19 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
     companion object {
 
         val TAG: String = SecuritySettingsFragment::class.java.simpleName
-
-        val PREFERENCE_KEY_SECURITY_TYPE = ApplicationUtility.str(R.string.settings_security_type_key)
-        val PREFERENCE_KEY_SECURITY_TIMEOUT = ApplicationUtility.str(R.string.settings_security_timeout_key)
-
-        // Security Types
-        val DEFAULT_VALUE_SECURITY_TYPE = ApplicationUtility.str(R.string.settings_security_type_entries_values_default)
-        val PIN_VALUE_SECURITY_TYPE = ApplicationUtility.str(R.string.settings_security_type_entries_values_pin)
     }
 
+    @Inject
+    lateinit var securitySettings: SecuritySettings
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        LooprWalletApp.dagger.inject(this)
+
         addPreferencesFromResource(R.xml.settings_security)
     }
 
     override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
-            Pair(PREFERENCE_KEY_SECURITY_TYPE, DEFAULT_VALUE_SECURITY_TYPE),
+            Pair(PREFERENCE_KEY_SECURITY_TYPE, TYPE_DEFAULT_VALUE_SECURITY),
             Pair("world-key", "HELLO WORLD!!!!")
     )
 
@@ -47,9 +48,9 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
 
         return when (key) {
             PREFERENCE_KEY_SECURITY_TYPE -> {
-                if (stringValue == DEFAULT_VALUE_SECURITY_TYPE) {
+                if (stringValue == TYPE_DEFAULT_VALUE_SECURITY) {
                     onSecurityScreenDisabled()
-                } else if (stringValue == PIN_VALUE_SECURITY_TYPE) {
+                } else if (stringValue == TYPE_PIN_SECURITY) {
                     onSecurityScreenEnabled(stringValue)
                 }
                 false
@@ -67,11 +68,10 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
      * screen.
      */
     fun onSecurityScreenDisabled() {
-        LooprSettings.getInstance(context!!)
-                .putString(PREFERENCE_KEY_SECURITY_TYPE, DEFAULT_VALUE_SECURITY_TYPE)
+        securitySettings.setCurrentSecurityType(TYPE_DEFAULT_VALUE_SECURITY)
 
         val preference = findPreference(PREFERENCE_KEY_SECURITY_TYPE) as ListPreference
-        bindListPreferenceValue(preference, DEFAULT_VALUE_SECURITY_TYPE)
+        bindListPreferenceValue(preference, TYPE_DEFAULT_VALUE_SECURITY)
 
         getPreferenceKeysAndDefaultValuesForListeners().forEach {
             if (it.first != PREFERENCE_KEY_SECURITY_TYPE) {
@@ -85,26 +85,15 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
      * screen.
      */
     fun onSecurityScreenEnabled(securityType: String) {
-        LooprSettings.getInstance(context!!)
-                .putString(PREFERENCE_KEY_SECURITY_TYPE, getSecurityType(securityType))
+        securitySettings.setCurrentSecurityType(securityType)
 
         val preference = findPreference(PREFERENCE_KEY_SECURITY_TYPE) as ListPreference
-        bindListPreferenceValue(preference, PIN_VALUE_SECURITY_TYPE)
+        bindListPreferenceValue(preference, TYPE_PIN_SECURITY)
 
         getPreferenceKeysAndDefaultValuesForListeners().forEach {
             if (it.first != PREFERENCE_KEY_SECURITY_TYPE) {
                 findPreference(it.first).isEnabled = true
             }
-        }
-    }
-
-    // MARK - Private Methods
-
-    private fun getSecurityType(value: String)= when(value) {
-        PIN_VALUE_SECURITY_TYPE -> value
-        else -> {
-            loge("Invalid security type, found: $value")
-            DEFAULT_VALUE_SECURITY_TYPE
         }
     }
 

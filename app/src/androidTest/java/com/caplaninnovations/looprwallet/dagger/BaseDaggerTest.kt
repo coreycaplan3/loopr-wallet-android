@@ -53,7 +53,7 @@ open class BaseDaggerTest {
     fun baseDaggerSetup() {
         val context = instrumentation.targetContext.applicationContext
         val app = (context as TestLooprWalletApp)
-        component = app.looprProductionComponent as LooprTestComponent
+        component = app.looprDaggerComponent as LooprTestComponent
         component.inject(this)
 
         Intents.init()

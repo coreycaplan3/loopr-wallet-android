@@ -9,7 +9,7 @@ import com.caplaninnovations.looprwallet.fragments.mywallet.MyWalletFragment
 import com.caplaninnovations.looprwallet.fragments.orders.OrdersParentFragment
 import com.caplaninnovations.looprwallet.fragments.transfers.ViewTransfersFragment
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
+import com.caplaninnovations.looprwallet.models.android.fragments.BottomNavigationFragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
@@ -55,7 +55,7 @@ class MainActivity : BaseActivity() {
     override val isSecureActivity: Boolean
         get() = true
 
-    override lateinit var fragmentStackHistory: FragmentStackHistory
+    lateinit var bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory
 
     lateinit var bottomNavigationHandler: BottomNavigationHandler
 
@@ -72,10 +72,10 @@ class MainActivity : BaseActivity() {
                 BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(), R.id.menu_my_wallet)
         )
 
-        fragmentStackHistory = FragmentStackHistory(false, savedInstanceState)
+        bottomNavigationFragmentStackHistory = BottomNavigationFragmentStackHistory(false, savedInstanceState)
 
         bottomNavigationHandler = BottomNavigationHandler(this, fragmentTagPairs,
-                KEY_MARKETS, fragmentStackHistory, savedInstanceState)
+                KEY_MARKETS, bottomNavigationFragmentStackHistory, savedInstanceState)
 
         isIntentForClosingApplication()
     }
@@ -84,6 +84,12 @@ class MainActivity : BaseActivity() {
         if (bottomNavigationHandler.onBackPressed()) {
             finish()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+
+        bottomNavigationFragmentStackHistory.saveState(outState)
     }
 
     // MARK - Private Methods

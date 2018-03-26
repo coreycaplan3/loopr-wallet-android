@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackHistory
+import com.caplaninnovations.looprwallet.models.android.fragments.BottomNavigationFragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationTag
@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.bottom_navigation.*
 class BottomNavigationHandler(private val activity: BaseActivity,
                               private val fragmentTagPairs: List<BottomNavigationFragmentPair>,
                               @BottomNavigationTag private val initialTag: String,
-                              private val fragmentStackHistory: FragmentStackHistory,
+                              private val bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory,
                               savedInstanceState: Bundle?) {
 
     interface BottomNavigationReselectedLister {
@@ -45,7 +45,7 @@ class BottomNavigationHandler(private val activity: BaseActivity,
 
         when {
             savedInstanceState != null -> {
-                val tag = fragmentStackHistory.peek()!!
+                val tag = bottomNavigationFragmentStackHistory.peek()!!
                 logv("Pushing $tag fragment...")
 
                 // We don't need to select the tab actually, just update the UI
@@ -80,14 +80,14 @@ class BottomNavigationHandler(private val activity: BaseActivity,
      * @return True if the activity should be finished or false otherwise
      */
     fun onBackPressed(): Boolean {
-        fragmentStackHistory.pop()
+        bottomNavigationFragmentStackHistory.pop()
 
-        fragmentStackHistory.peek()?.let {
+        bottomNavigationFragmentStackHistory.peek()?.let {
             bottomNavigationView.selectedItemId = getMenuIdFromTag(it)
             return false
         }
 
-        fragmentStackHistory.peek().let {
+        bottomNavigationFragmentStackHistory.peek().let {
             // The stack is empty. Time to finish the activity
             return true
         }
@@ -111,7 +111,7 @@ class BottomNavigationHandler(private val activity: BaseActivity,
             currentFragment = fragment
         }
 
-        fragmentStackHistory.push(newFragmentTag)
+        bottomNavigationFragmentStackHistory.push(newFragmentTag)
 
         val newFragment = activity.supportFragmentManager.findFragmentByTagOrCreate(newFragmentTag) { tag ->
             fragmentTagPairs.find { it.tag == tag }?.fragment!!

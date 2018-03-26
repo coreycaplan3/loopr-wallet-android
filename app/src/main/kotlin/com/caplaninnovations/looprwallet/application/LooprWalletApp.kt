@@ -34,12 +34,12 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
         val context: Context
             get() = application.applicationContext
 
-        val dagger: LooprProductionComponent
-            get() = application.looprProductionComponent
+        val dagger: LooprDaggerComponent
+            get() = application.looprDaggerComponent
 
     }
 
-    val looprProductionComponent: LooprProductionComponent by lazy {
+    val looprDaggerComponent: LooprDaggerComponent by lazy {
         provideDaggerComponent()
     }
 
@@ -59,21 +59,21 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
 
         application = this
 
-        PreferenceManager.setDefaultValues(this, R.xml.settings_main, false)
+        PreferenceManager.setDefaultValues(this, R.xml.settings_home, false)
 
         Realm.init(this)
 
-        looprProductionComponent.inject(this)
+        looprDaggerComponent.inject(this)
 
         FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }
 
-    open fun provideDaggerComponent(): LooprProductionComponent {
-        return DaggerLooprProductionComponent.builder()
+    open fun provideDaggerComponent(): LooprDaggerComponent {
+        return DaggerLooprDaggerComponent.builder()
                 .looprSettingsModule(LooprSettingsModule(applicationContext))
                 .looprSecureSettingsModule(LooprSecureSettingsModule(applicationContext))
                 .looprRealmModule(LooprRealmModule())
-                .looprSecurityModule(LooprSecurityModule(applicationContext))
+                .looprSecurityModule(LooprWalletModule(applicationContext))
                 .looprEthModule(LooprEthModule())
                 .build()
     }

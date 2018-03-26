@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
 import android.support.annotation.VisibleForTesting
-import com.caplaninnovations.looprwallet.models.android.settings.WalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
+import com.caplaninnovations.looprwallet.models.android.settings.UserWalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.utilities.RealmUtility
@@ -11,12 +11,12 @@ import com.caplaninnovations.looprwallet.utilities.RealmUtility
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class: **This class should not be touched directly. Instead, use [WalletClient]** To
+ * Purpose of Class: **This class should not be touched directly. Instead, use [WalletClient].** To
  * interact directly with settings, putting or getting values. This class does not contain much
  * logic, just core essentials. Logic associated with this class can be seen in conjunction with
  * [WalletClient].
  */
-class WalletSettings(private val looprSecureSettings: LooprSecureSettings) {
+class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
 
     companion object {
 

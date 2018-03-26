@@ -224,4 +224,10 @@
     <string name="summary_lrc_trading_fees">Manage LRC fees and margin splitting for submitting orders</string>
     <string name="summary_loopring_network">Connect to different relays or use different smart contract versions</string>
     <string name="summary_ethereum_network">Connect to a other Ethereum nodes or add a custom one</string>
+    <string name="currency_settings">Currency Settings</string>
+    <string name="loopring_network">Loopring Network</string>
+    <string name="ethereum_network">Ethereum Network</string>
+    <string name="summary_currency_settings">Change your native currency and its refresh frequency</string>
+    <string name="summary_general_wallet_settings">Hide low balance tokens and more</string>
+    <string name="general_wallet_settings">General Wallet Settings</string>
 </resources>

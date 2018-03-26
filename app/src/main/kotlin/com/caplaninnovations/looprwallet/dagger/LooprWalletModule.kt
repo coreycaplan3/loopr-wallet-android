@@ -16,7 +16,7 @@ import javax.inject.Singleton
  *
  */
 @Module
-class LooprSecurityModule(private val context: Context) {
+class LooprWalletModule(private val context: Context) {
 
     @Singleton
     @Provides

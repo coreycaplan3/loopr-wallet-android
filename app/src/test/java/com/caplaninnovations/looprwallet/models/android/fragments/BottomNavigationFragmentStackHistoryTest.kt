@@ -17,9 +17,9 @@ import org.mockito.junit.MockitoJUnitRunner
  *
  */
 @RunWith(MockitoJUnitRunner::class)
-class FragmentStackHistoryTest {
+class BottomNavigationFragmentStackHistoryTest {
 
-    private val fragmentStackHistory = FragmentStackHistory(true, null)
+    private val fragmentStackHistory = BottomNavigationFragmentStackHistory(true, null)
 
     private val tagOne = "one"
     private val tagTwo = "two"
@@ -87,12 +87,12 @@ class FragmentStackHistoryTest {
         fragmentStackHistory.push(tagTwo)
         fragmentStackHistory.push(tagThree)
 
-        Mockito.`when`(bundle.getStringArrayList(FragmentStackHistory.KEY_STACK))
+        Mockito.`when`(bundle.getStringArrayList(BottomNavigationFragmentStackHistory.KEY_STACK))
                 .thenReturn(fragmentStackHistory.stack)
 
         fragmentStackHistory.saveState(bundle)
 
-        val newStack = FragmentStackHistory(false, bundle)
+        val newStack = BottomNavigationFragmentStackHistory(false, bundle)
 
         assertEquals(3, newStack.getStackSize())
 
@@ -137,7 +137,7 @@ class FragmentStackHistoryTest {
         fragmentStackHistory.push(tagTwo)
         assertTrue(fragmentStackHistory.isUpNavigationEnabled())
 
-        val fragmentStackHistory = FragmentStackHistory(false, null)
+        val fragmentStackHistory = BottomNavigationFragmentStackHistory(false, null)
         assertFalse(fragmentStackHistory.isUpNavigationEnabled())
 
         fragmentStackHistory.push(tagOne)

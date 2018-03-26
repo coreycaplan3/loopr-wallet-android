@@ -3,9 +3,14 @@ package com.caplaninnovations.looprwallet.utilities
 import android.content.Context
 import android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK
 import android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import com.caplaninnovations.looprwallet.extensions.getResourceIdFromAttrId
 import com.caplaninnovations.looprwallet.extensions.isJellybeanR1
 
 
@@ -30,6 +35,13 @@ object ViewUtility {
         } else {
             false
         }
+    }
+
+    fun getNavigationIcon(theme: Resources.Theme): Drawable {
+        val drawable = ApplicationUtility.drawable(R.drawable.ic_arrow_back_white_24dp)
+        val colorResource = ApplicationUtility.color(theme.getResourceIdFromAttrId(R.attr.titleTextColor))
+        DrawableCompat.setTint(drawable, colorResource)
+        return drawable
     }
 
     /**

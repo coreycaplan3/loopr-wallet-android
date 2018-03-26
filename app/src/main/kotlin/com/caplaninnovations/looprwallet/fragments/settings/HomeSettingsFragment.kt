@@ -24,10 +24,10 @@ import javax.inject.Inject
  *
  * Purpose of Class:
  */
-class SettingsFragment : BaseSettingsFragment() {
+class HomeSettingsFragment : BaseSettingsFragment() {
 
     companion object {
-        val TAG: String = SettingsFragment::class.java.simpleName
+        val TAG: String = HomeSettingsFragment::class.java.simpleName
 
         val PREFERENCE_KEY_CHANGE_THEME = ApplicationUtility.str(R.string.settings_theme_key)
         val PREFERENCE_KEY_SECURITY_SCREEN = ApplicationUtility.str(R.string.settings_security_screen_key)
@@ -47,7 +47,7 @@ class SettingsFragment : BaseSettingsFragment() {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.settings_main)
+        addPreferencesFromResource(R.xml.settings_home)
     }
 
     override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(

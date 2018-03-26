@@ -1,9 +1,6 @@
 package com.caplaninnovations.looprwallet.utilities
 
-import android.support.annotation.ArrayRes
-import android.support.annotation.ColorRes
-import android.support.annotation.DimenRes
-import android.support.annotation.StringRes
+import android.support.annotation.*
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 
 /**
@@ -13,9 +10,6 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
  *
  * Purpose of Class: To create utility methods for commonly-done things, to streamline code and
  * make it more readable
- *
- *
- * TODO ADD MORE RESOURCE EASY RESOURCE RETRIEVAL
  */
 object ApplicationUtility {
 
@@ -44,5 +38,8 @@ object ApplicationUtility {
      */
     @Suppress("deprecation")
     fun color(@ColorRes resId: Int) = LooprWalletApp.application.resources.getColor(resId)
+
+    @Suppress("deprecation")
+    fun drawable(@DrawableRes resId: Int) = LooprWalletApp.application.resources.getDrawable(resId)
 
 }

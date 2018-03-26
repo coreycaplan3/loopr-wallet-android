@@ -1,8 +1,12 @@
 package com.caplaninnovations.looprwallet.fragments.security
 
+import android.os.Bundle
+import android.view.View
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
+import kotlinx.android.synthetic.main.number_pad.*
 
 /**
  * Created by Corey Caplan on 3/25/18.
@@ -13,20 +17,32 @@ import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
  */
 abstract class BaseSecurityFragment : BaseFragment() {
 
-    companion object {
-
-        const val KEY_SECURITY_TYPE = "_SECURITY_TYPE"
-
-        val SECURITY_TYPE_PIN = ApplicationUtility.str(R.string.settings_security_type_entries_values_pin)
-    }
+    /**
+     * The type of security page to show.
+     *
+     * @see TYPE_PIN_SECURITY
+     */
+    private val securityType: String
+        get() {
+            return LooprWalletApp.dagger.securitySettings.getCurrentSecurityType()
+        }
 
     final override val layoutResource: Int
-        get() {
-            val type = arguments?.getString(KEY_SECURITY_TYPE)
-            return when (type) {
-                SECURITY_TYPE_PIN -> R.layout.fragment_security_pin
-                else -> throw IllegalArgumentException("Invalid security type, found: $type")
+        get() = when (securityType) {
+            TYPE_PIN_SECURITY -> R.layout.fragment_security_pin
+            else -> throw IllegalArgumentException("Invalid security type, found: $securityType")
+        }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Perform view-specific setup
+        when (securityType) {
+            TYPE_PIN_SECURITY -> {
+                numberPadDecimal.visibility = View.GONE
             }
         }
+
+    }
 
 }

@@ -49,11 +49,13 @@
 
     <string name="settings_loopring_fees_screen_key">loopr_loopring_fees_key</string>
 
-    <!-- Wallet -->
+    <!-- General Wallet -->
+
+    <string name="settings_general_wallet_screen_key">loopr_general_wallet_key</string>
 
     <!-- Currency -->
 
-    <string name="settings_currency_default_key">loopr_currency_default_key</string>
+    <string name="settings_currency_screen_key">loopr_currency_screen_key</string>
     <string name="settings_currency_current_fiat_key">loopr_currency_current_fiat_key</string>
     <string name="settings_currency_refresh_frequency_key">loopr_currency_refresh_frequency_key</string>
 
@@ -85,5 +87,13 @@
         <item>30</item>
         <item>60</item>
     </string-array>
+
+    <!-- Ethereum Network -->
+
+    <string name="settings_ethereum_network_screen_key">loopr_ethereum_network_key</string>
+
+    <!-- Loopring Network -->
+
+    <string name="settings_loopring_network_screen_key">loopr_loopring_network_key</string>
 
 </resources>

@@ -12,10 +12,10 @@ import com.caplaninnovations.looprwallet.dagger.*
  */
 class TestLooprWalletApp : LooprWalletApp() {
 
-    override fun provideDaggerComponent(): LooprProductionComponent {
+    override fun provideDaggerComponent(): LooprDaggerComponent {
         return DaggerLooprTestComponent.builder()
                 .looprRealmModule(LooprRealmModule())
-                .looprSecurityModule(LooprSecurityModule(this.applicationContext))
+                .looprSecurityModule(LooprWalletModule(this.applicationContext))
                 .looprSettingsModule(LooprSettingsModule(this.applicationContext))
                 .looprSecureSettingsModule(LooprSecureSettingsModule(this.applicationContext))
                 .looprEthModule(LooprEthModule())
