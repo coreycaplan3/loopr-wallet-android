@@ -2,16 +2,13 @@ package com.caplaninnovations.looprwallet.fragments.security
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
+import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.longToast
 import com.caplaninnovations.looprwallet.handlers.NumberPadHandler
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
-import com.caplaninnovations.looprwallet.models.android.settings.UserPinSettings
 import kotlinx.android.synthetic.main.fragment_security_pin.*
-import javax.inject.Inject
 
 /**
  * Created by Corey Caplan on 3/25/18.
@@ -22,7 +19,7 @@ import javax.inject.Inject
  * for changing your PIN (after verifying your old one), creating a PIN (from scratch) or other
  * security features in the future.
  */
-class EnterNewSecurityFragment : BaseSecurityFragment(), NumberPadHandler.NumberPadActionListener {
+class EnterNewSecurityFragment : BaseSecurityFragment() {
 
     /**
      * An interface used for notifying listeners that a new secruity type has been successfully
@@ -43,12 +40,11 @@ class EnterNewSecurityFragment : BaseSecurityFragment(), NumberPadHandler.Number
         val TAG: String = EnterNewSecurityFragment::class.java.simpleName
 
         private const val KEY_ENTERED_PIN = "_ENTERED_PIN"
-        private const val KEY_CURRENT_INPUT = "_CURRENT_INPUT"
 
         private const val KEY_SECURITY_TYPE = "_SECURITY_TYPE"
 
         fun createPinInstance() = EnterNewSecurityFragment().apply {
-            arguments = Bundle().apply { putString(KEY_SECURITY_TYPE, TYPE_PIN_SECURITY) }
+            arguments = bundleOf(KEY_SECURITY_TYPE to TYPE_PIN_SECURITY)
         }
 
     }
@@ -61,66 +57,35 @@ class EnterNewSecurityFragment : BaseSecurityFragment(), NumberPadHandler.Number
      */
     var enteredPin: String? = null
 
-    /**
-     * The PIN that's currently being inputted by the user.
-     */
-    var currentPin: String = ""
-
     val isConfirmingEnteredPin: Boolean
         get() = enteredPin != null
-
-    override val isDecimalVisible = false
-
-    @Inject
-    lateinit var securitySettings: SecuritySettings
-
-    @Inject
-    lateinit var userPinSettings: UserPinSettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        LooprWalletApp.dagger.inject(this)
-
         enteredPin = savedInstanceState?.getString(KEY_ENTERED_PIN)
-        currentPin = savedInstanceState?.getString(KEY_CURRENT_INPUT) ?: ""
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindPinTitleText()
+        when (securityType) {
+            SecuritySettings.TYPE_PIN_SECURITY -> {
+                bindPinTitleText()
+                NumberPadHandler.setupNumberPad(this, this)
+            }
+            else -> throw IllegalArgumentException("Invalid securityType, found: $securityType")
+        }
 
-        NumberPadHandler.setupNumberPad(this, this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         outState.putString(KEY_ENTERED_PIN, enteredPin)
-        outState.putString(KEY_CURRENT_INPUT, currentPin)
     }
 
-    override fun onNumberClick(number: String) {
-        currentPin += number
-        bindCurrentPinToDrawable()
-        if (currentPin.length == 4) submitPin()
-    }
-
-    override fun onDecimalClick() = throw NotImplementedError()
-
-    override fun onBackspaceClick() {
-        when {
-            currentPin.isNotEmpty() -> {
-                currentPin = currentPin.substring(0, currentPin.length - 1)
-                bindCurrentPinToDrawable()
-            }
-        }
-    }
-
-// MARK - Private Methods
-
-    private fun submitPin() {
+    override fun onSubmitPin() {
 
         fun resetPins() {
             enteredPin = null
@@ -147,27 +112,14 @@ class EnterNewSecurityFragment : BaseSecurityFragment(), NumberPadHandler.Number
         bindCurrentPinToDrawable()
     }
 
+    // MARK - Private Methods
+
     private fun bindPinTitleText() = when (securityType) {
         TYPE_PIN_SECURITY -> when {
             isConfirmingEnteredPin -> fragmentSecurityPinTitleLabel.setText(R.string.confirm_your_pin)
             else -> fragmentSecurityPinTitleLabel.setText(R.string.enter_a_new_pin)
         }
         else -> throw IllegalArgumentException("Invalid security type, found: $securityType")
-    }
-
-    private fun bindCurrentPinToDrawable() {
-        setPinCircle(fragmentSecurityPinCircle1, 1)
-        setPinCircle(fragmentSecurityPinCircle2, 2)
-        setPinCircle(fragmentSecurityPinCircle3, 3)
-        setPinCircle(fragmentSecurityPinCircle4, 4)
-    }
-
-    /**
-     * Sets the PIN's circle (to filled or unfilled), based on the [minSize].
-     */
-    private fun setPinCircle(image: ImageView, minSize: Int) = when {
-        currentPin.length >= minSize -> image.setImageResource(R.drawable.primary_color_circle_filled)
-        else -> image.setImageResource(R.drawable.primary_color_circle)
     }
 
 }

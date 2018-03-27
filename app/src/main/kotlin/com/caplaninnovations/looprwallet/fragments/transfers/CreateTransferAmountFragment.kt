@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.*
@@ -55,7 +56,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
 
         fun createInstance(recipientAddress: String): CreateTransferAmountFragment {
             return CreateTransferAmountFragment().apply {
-                arguments = Bundle().apply { putString(KEY_RECIPIENT_ADDRESS, recipientAddress) }
+                arguments = bundleOf(KEY_RECIPIENT_ADDRESS to recipientAddress)
             }
         }
     }

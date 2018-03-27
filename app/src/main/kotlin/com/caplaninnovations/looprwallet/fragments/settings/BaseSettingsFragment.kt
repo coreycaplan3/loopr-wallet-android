@@ -166,10 +166,12 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
     ) {
         val preference = findPreference(preferenceKey)
 
-        val icon = preference.icon
-        val primaryTextColorResource = context?.theme?.getResourceIdFromAttrId(android.R.attr.textColorSecondary)
+        preference.preferenceDataStore = LooprSettings.getInstance(LooprWalletApp.context).preferenceDataStore
 
-        Pair(icon, primaryTextColorResource).allNonNull {
+        val icon = preference.icon
+        val textColorResource = context?.theme?.getResourceIdFromAttrId(android.R.attr.textColorSecondary)
+
+        Pair(icon, textColorResource).allNonNull {
             val primaryTextColor = ApplicationUtility.color(it.second)
             DrawableCompat.setTint(it.first, primaryTextColor)
         }

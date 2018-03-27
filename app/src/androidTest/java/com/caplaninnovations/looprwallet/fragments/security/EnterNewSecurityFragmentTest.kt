@@ -40,6 +40,9 @@ class EnterNewSecurityFragmentTest : BaseDaggerFragmentTest<EnterNewSecurityFrag
 
         clickView(numberPadOne)
         assertEquals("", fragment.currentPin)
+
+        // We should now be "confirming" the PIN we just entered
+        assertTrue(fragment.isConfirmingEnteredPin)
         assertEquals("1111", fragment.enteredPin)
 
         val numberPadTwo = fragment.numberPadTwo

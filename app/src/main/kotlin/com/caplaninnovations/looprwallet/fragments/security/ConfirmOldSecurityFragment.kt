@@ -1,7 +1,14 @@
 package com.caplaninnovations.looprwallet.fragments.security
 
+import android.content.Intent
 import android.os.Bundle
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import android.view.View
+import androidx.os.bundleOf
+import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import kotlinx.android.synthetic.main.fragment_security_pin.*
+
 
 /**
  * Created by Corey Caplan on 3/25/18.
@@ -16,6 +23,22 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
  * - When viewing sensitive information, like a private key
  */
 class ConfirmOldSecurityFragment : BaseSecurityFragment() {
+
+    /**
+     * A listener used to pass security confirmation events back to this implementor.
+     */
+    interface OnSecurityConfirmedListener {
+
+        /**
+         * Called when the user has successfully confirmed their credentials (IE their PIN). This
+         * should only occur while the user is trying to do the following operations:
+         * - Disabling security
+         * - Changing security settings
+         * - Unlocking the app
+         * - Viewing their private key
+         */
+        fun onSecurityConfirmed()
+    }
 
     companion object {
 
@@ -62,13 +85,75 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
 
         private fun createInstance(type: Int) =
                 ConfirmOldSecurityFragment().apply {
-                    arguments = Bundle().apply { putInt(KEY_CONFIRM_SECURITY_TYPE, type) }
+                    arguments = bundleOf(KEY_CONFIRM_SECURITY_TYPE to type)
                 }
     }
 
     override val securityType: String
         get() {
-            return LooprWalletApp.dagger.securitySettings.getCurrentSecurityType()
+            return securitySettings.getCurrentSecurityType()
         }
+
+    private val confirmationType: Int
+        get() = arguments?.getInt(KEY_CONFIRM_SECURITY_TYPE)!!
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        isUpNavigationEnabled = confirmationType != TYPE_UNLOCK_APP
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        when (securityType) {
+            SecuritySettings.TYPE_PIN_SECURITY -> {
+                val text = when (confirmationType) {
+                    TYPE_DISABLE_SECURITY -> ApplicationUtility.str(R.string.enter_old_pin_disable_security)
+                    TYPE_CHANGE_SECURITY_SETTINGS -> ApplicationUtility.str(R.string.enter_old_pin_create_new_one)
+                    TYPE_UNLOCK_APP -> ApplicationUtility.str(R.string.enter_pin_to_enter_app)
+                    TYPE_VIEWING_PRIVATE_KEY -> ApplicationUtility.str(R.string.enter_pin_view_private_key)
+                    else -> throw IllegalArgumentException("Invalid confirmationType, found: $confirmationType")
+                }
+
+                fragmentSecurityPinTitleLabel.text = text
+            }
+
+            else -> throw IllegalArgumentException("Invalid securityType, found: $securityType")
+        }
+
+    }
+
+    override fun onSubmitPin() {
+        when {
+            userPinSettings.checkPinAndIncrementAttemptsIfFailure(currentPin) -> {
+                (activity as? OnSecurityConfirmedListener)?.onSecurityConfirmed()
+            }
+            else -> if (userPinSettings.isUserLockedOut()) {
+                onUserLockout()
+            }
+        }
+    }
+
+    /**
+     * This method should be called when the back button is pressed. Reason being, we may need to
+     * exit the app if the user is attempting to go back while unlocking the app from a cold boot.
+     */
+    fun onBackButtonPressed() {
+        if (confirmationType == TYPE_UNLOCK_APP) {
+            val intent = Intent(Intent.ACTION_MAIN)
+                    .addCategory(Intent.CATEGORY_HOME)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            startActivity(intent)
+        }
+    }
+
+    // MARK - Private Methods
+
+    private fun onUserLockout() {
+        // TODO
+    }
 
 }

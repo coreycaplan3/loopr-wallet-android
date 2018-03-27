@@ -3,6 +3,7 @@ package com.caplaninnovations.looprwallet.fragments.signin
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
+import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
@@ -40,12 +41,12 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.Com
 
         fun createRestorationInstance() =
                 EnterPasswordForPhraseFragment().apply {
-                    arguments = Bundle().apply { putString(KEY_TYPE, TYPE_RESTORE_WALLET) }
+                    arguments = bundleOf(KEY_TYPE to TYPE_RESTORE_WALLET)
                 }
 
         fun createCreationInstance() =
                 EnterPasswordForPhraseFragment().apply {
-                    arguments = Bundle().apply { putString(KEY_TYPE, TYPE_CREATE_WALLET) }
+                    arguments = bundleOf(KEY_TYPE to TYPE_CREATE_WALLET)
                 }
 
     }

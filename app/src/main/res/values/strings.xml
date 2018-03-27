@@ -238,4 +238,8 @@
     <string name="confirm_your_pin">Confirm your PIN</string>
     <string name="error_confirm_pin_does_not_match">The 2 entered PINs do not match</string>
     <string name="your_new_pin_is_set">Your new PIN is set!</string>
+    <string name="enter_pin_to_enter_app">Enter your PIN to enter the app</string>
+    <string name="enter_old_pin_create_new_one">Enter your old PIN to create a new one</string>
+    <string name="enter_old_pin_disable_security">Enter your old PIN to disable security settings</string>
+    <string name="enter_pin_view_private_key">Enter your PIN to view your private key</string>
 </resources>

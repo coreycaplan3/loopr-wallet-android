@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
@@ -31,7 +32,7 @@ class CreateContactFragment : BaseFragment() {
 
         fun createInstance(address: String?): CreateContactFragment {
             return CreateContactFragment().apply {
-                arguments = Bundle().apply { putString(KEY_ADDRESS, address) }
+                arguments = bundleOf(KEY_ADDRESS to address)
             }
         }
     }

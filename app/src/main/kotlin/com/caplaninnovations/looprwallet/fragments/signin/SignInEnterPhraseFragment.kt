@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
+import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
 import com.caplaninnovations.looprwallet.adapters.phrase.PhraseAdapter
@@ -74,11 +75,11 @@ class SignInEnterPhraseFragment : BaseFragment() {
         private fun setupArguments(fragmentType: String,
                                    walletCreationPhrase: WalletCreationPhrase,
                                    correctPhrase: ArrayList<String>?) =
-                Bundle().apply {
-                    putString(KEY_FRAGMENT_TYPE, fragmentType)
-                    putParcelable(KEY_WALLET_CREATION, walletCreationPhrase)
-                    putStringArrayList(KEY_CORRECT_PHRASE, correctPhrase)
-                }
+                bundleOf(
+                        KEY_FRAGMENT_TYPE to fragmentType,
+                        KEY_WALLET_CREATION to walletCreationPhrase,
+                        KEY_CORRECT_PHRASE to correctPhrase
+                )
     }
 
     override val layoutResource: Int

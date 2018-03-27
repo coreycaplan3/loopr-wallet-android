@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.SignInActivity
 import com.caplaninnovations.looprwallet.models.wallet.creation.PasswordBasedWallet
@@ -55,10 +56,10 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
          */
         fun createInstance(currentFragmentTag: String, walletCreationKeystore: WalletCreationKeystore): ConfirmPasswordDialog {
             return ConfirmPasswordDialog().apply {
-                arguments = Bundle().apply {
-                    putString(KEY_CURRENT_FRAGMENT_TAG, currentFragmentTag)
-                    putParcelable(KEY_WALLET, walletCreationKeystore)
-                }
+                arguments = bundleOf(
+                        KEY_CURRENT_FRAGMENT_TAG to currentFragmentTag,
+                        KEY_WALLET to walletCreationKeystore
+                )
             }
         }
 
@@ -69,10 +70,10 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
          */
         fun createInstance(currentFragmentTag: String, walletCreationPhrase: WalletCreationPhrase): ConfirmPasswordDialog {
             return ConfirmPasswordDialog().apply {
-                arguments = Bundle().apply {
-                    putString(KEY_CURRENT_FRAGMENT_TAG, currentFragmentTag)
-                    putParcelable(KEY_WALLET, walletCreationPhrase)
-                }
+                arguments = bundleOf(
+                        KEY_CURRENT_FRAGMENT_TAG to currentFragmentTag,
+                        KEY_WALLET to walletCreationPhrase
+                )
             }
         }
     }

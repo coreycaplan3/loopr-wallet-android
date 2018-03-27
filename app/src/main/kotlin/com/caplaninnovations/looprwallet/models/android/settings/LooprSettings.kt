@@ -3,6 +3,7 @@ package com.caplaninnovations.looprwallet.models.android.settings
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.support.v7.preference.PreferenceDataStore
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.extensions.logd
 import com.caplaninnovations.looprwallet.utilities.BuildUtility
@@ -39,6 +40,71 @@ interface LooprSettings {
         }
 
     }
+
+    /**
+     * An instance of [PreferenceDataStore] that is implemented by converting the functionality
+     * of [LooprSettings] to match the preference framework's.
+     *
+     * The reason why we're not using [PreferenceDataStore] out of the box is because its API is
+     * unintuitive and has weird nullability issues when converting it to/from Kotlin.
+     */
+    val preferenceDataStore: PreferenceDataStore
+        get() {
+            val settings = this
+
+            return object : PreferenceDataStore() {
+                override fun getBoolean(key: String?, defValue: Boolean): Boolean {
+                    return settings.getBoolean(key ?: return defValue, defValue)
+                }
+
+                override fun putBoolean(key: String?, value: Boolean) {
+                    settings.putBoolean(key ?: return, value)
+                }
+
+                override fun getInt(key: String?, defValue: Int): Int {
+                    return settings.getInt(key ?: return defValue, defValue)
+                }
+
+                override fun putInt(key: String?, value: Int) {
+                    settings.putInt(key ?: return, value)
+                }
+
+                override fun getLong(key: String?, defValue: Long): Long {
+                    return settings.getLong(key ?: return defValue, defValue)
+                }
+
+                override fun putLong(key: String?, value: Long) {
+                    settings.putLong(key ?: return, value)
+                }
+
+                override fun getStringSet(key: String?, defValue: MutableSet<String>?): MutableSet<String> {
+                    val defaultSet = defValue ?: mutableSetOf()
+
+                    key ?: return defaultSet
+                    return settings.getStringArray(key)?.toMutableSet() ?: defaultSet
+                }
+
+                override fun putStringSet(key: String?, values: MutableSet<String>?) {
+                    settings.putStringArray(key ?: return, values?.toTypedArray())
+                }
+
+                override fun getFloat(key: String?, defValue: Float): Float {
+                    return settings.getDouble(key ?: return defValue, defValue.toDouble()).toFloat()
+                }
+
+                override fun putFloat(key: String?, value: Float) {
+                    settings.putDouble(key ?: return, value.toDouble())
+                }
+
+                override fun getString(key: String?, defValue: String?): String? {
+                    return settings.getString(key ?: return defValue)
+                }
+
+                override fun putString(key: String?, value: String?) {
+                    settings.putString(key ?: return, value)
+                }
+            }
+        }
 
     fun getBoolean(key: String, defaultValue: Boolean): Boolean
 

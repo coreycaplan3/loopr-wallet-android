@@ -84,7 +84,8 @@ abstract class BaseFragment : Fragment() {
     /**
      * True if the "up navigation" button should be shown in the toolbar or false otherwise
      */
-    protected var isUpNavigationEnabled = true
+    var isUpNavigationEnabled = true
+        protected set
 
     private val fragmentLifeCycleOwner = FragmentViewLifecycleOwner()
 

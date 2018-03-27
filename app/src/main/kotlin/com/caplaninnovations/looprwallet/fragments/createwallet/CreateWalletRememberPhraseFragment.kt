@@ -3,6 +3,7 @@ package com.caplaninnovations.looprwallet.fragments.createwallet
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
+import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.BuildConfig.DEFAULT_READ_TIMEOUT
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
@@ -28,7 +29,7 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
 
         fun createInstance(walletCreationPhrase: WalletCreationPhrase) =
                 CreateWalletRememberPhraseFragment().apply {
-                    arguments = Bundle().apply { putParcelable(KEY_WALLET_PHRASE, walletCreationPhrase) }
+                    arguments = bundleOf(KEY_WALLET_PHRASE to walletCreationPhrase)
                 }
     }
 
