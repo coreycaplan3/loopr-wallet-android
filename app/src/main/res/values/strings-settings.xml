@@ -75,6 +75,14 @@
 
     <string name="settings_ethereum_fees_screen_key">loopr_ethereum_fees_screen_key</string>
 
+    <string name="settings_ethereum_fees_gas_price_key">loopr_settings_ethereum_fees_gas_price_key</string>
+    <string name="settings_ethereum_fees_send_ether_gas_limit_key">settings_ethereum_fees_send_ether_gas_limit_key</string>
+    <string name="settings_ethereum_fees_send_token_gas_limit_key">loopr_settings_ethereum_fees_send_token_gas_limit_key</string>
+
+    <string name="settings_ethereum_fees_gas_price_default_value">10</string>
+    <string name="settings_ethereum_fees_default_send_ether_gas_limit_value">21000</string>
+    <string name="settings_ethereum_fees_default_send_token_gas_limit_value">90000</string>
+
     <!-- Loopring Fees -->
 
     <string name="settings_loopring_fees_screen_key">loopr_loopring_fees_screen_key</string>
@@ -118,7 +126,7 @@
         <item>60</item>
     </string-array>
 
-    <!-- Ethereum Network -->
+    <!-- Ethereum Fees -->
 
     <string name="settings_ethereum_network_screen_key">loopr_ethereum_network_screen_key</string>
 

@@ -244,4 +244,9 @@
     <string name="enter_pin_view_private_key">Enter your PIN to view your private key</string>
     <string name="formatter_locked_out_minutes">You are locked out for %s more minutes</string>
     <string name="formatter_locked_out_seconds">You are locked out for %s more seconds</string>
+    <string name="gas_limits">Gas Limits</string>
+    <string name="gas_price">Gas Price</string>
+    <string name="ether_transfer_default_gas_limit">Ether Transfer Default Gas Limit</string>
+    <string name="token_transfer_default_gas_limit">Token Transfer Default Gas Limit</string>
+    <string name="default_transaction_gas_price">Default Transaction Gas Price</string>
 </resources>

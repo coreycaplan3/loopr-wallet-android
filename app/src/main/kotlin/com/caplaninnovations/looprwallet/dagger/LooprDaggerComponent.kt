@@ -4,6 +4,7 @@ import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.SettingsActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.fragments.security.BaseSecurityFragment
+import com.caplaninnovations.looprwallet.fragments.settings.EthereumFeeSettingsFragment
 import com.caplaninnovations.looprwallet.fragments.settings.HomeSettingsFragment
 import com.caplaninnovations.looprwallet.fragments.settings.SecuritySettingsFragment
 import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferAmountFragment
@@ -42,6 +43,7 @@ interface LooprDaggerComponent {
     fun inject(securitySettingsFragment: SecuritySettingsFragment)
     fun inject(createTransferAmountFragment: CreateTransferAmountFragment)
     fun inject(baseSecurityFragment: BaseSecurityFragment)
+    fun inject(ethereumFeeSettingsFragment: EthereumFeeSettingsFragment)
 
     // Repositories
     fun inject(baseRealmRepository: BaseRealmRepository)
