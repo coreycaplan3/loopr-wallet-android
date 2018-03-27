@@ -66,4 +66,30 @@ object NumberPadHandler {
         baseFragment.numberPadBackspace.setOnClickListener { listener.onBackspaceClick() }
     }
 
+    fun enableNumberPad(baseFragment: BaseFragment) {
+        baseFragment.numberPadZero.isEnabled = true
+        baseFragment.numberPadOne.isEnabled = true
+        baseFragment.numberPadTwo.isEnabled = true
+        baseFragment.numberPadThree.isEnabled = true
+        baseFragment.numberPadFour.isEnabled = true
+        baseFragment.numberPadFive.isEnabled = true
+        baseFragment.numberPadSix.isEnabled = true
+        baseFragment.numberPadSeven.isEnabled = true
+        baseFragment.numberPadEight.isEnabled = true
+        baseFragment.numberPadNine.isEnabled = true
+    }
+
+    fun disableNumberPad(baseFragment: BaseFragment) {
+        baseFragment.numberPadZero.isEnabled = false
+        baseFragment.numberPadOne.isEnabled = false
+        baseFragment.numberPadTwo.isEnabled = false
+        baseFragment.numberPadThree.isEnabled = false
+        baseFragment.numberPadFour.isEnabled = false
+        baseFragment.numberPadFive.isEnabled = false
+        baseFragment.numberPadSix.isEnabled = false
+        baseFragment.numberPadSeven.isEnabled = false
+        baseFragment.numberPadEight.isEnabled = false
+        baseFragment.numberPadNine.isEnabled = false
+    }
+
 }

@@ -5,9 +5,12 @@ import android.app.Instrumentation
 import android.content.ComponentName
 import android.support.test.InstrumentationRegistry
 import android.support.test.InstrumentationRegistry.getTargetContext
+import android.support.test.espresso.Espresso
+import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import android.view.View
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.logd
@@ -19,6 +22,7 @@ import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
+import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -134,6 +138,10 @@ open class BaseDaggerTest {
     fun <T : Activity> assertActivityActive(activityClass: Class<T>, waitTime: Long = 5000) {
         Thread.sleep(waitTime)
         intended(hasComponent(ComponentName(getTargetContext(), activityClass)))
+    }
+
+    fun clickView(view: View) {
+        Espresso.onView(Matchers.`is`(view)).perform(ViewActions.click())
     }
 
     /**

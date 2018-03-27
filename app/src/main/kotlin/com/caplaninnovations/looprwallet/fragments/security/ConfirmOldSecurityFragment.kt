@@ -2,11 +2,14 @@ package com.caplaninnovations.looprwallet.fragments.security
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.handlers.NumberPadHandler
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import kotlinx.android.synthetic.main.fragment_security_pin.*
 
 
@@ -97,6 +100,7 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
     private val confirmationType: Int
         get() = arguments?.getInt(KEY_CONFIRM_SECURITY_TYPE)!!
 
+    var countDownTimer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,22 +111,11 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        when (securityType) {
-            SecuritySettings.TYPE_PIN_SECURITY -> {
-                val text = when (confirmationType) {
-                    TYPE_DISABLE_SECURITY -> ApplicationUtility.str(R.string.enter_old_pin_disable_security)
-                    TYPE_CHANGE_SECURITY_SETTINGS -> ApplicationUtility.str(R.string.enter_old_pin_create_new_one)
-                    TYPE_UNLOCK_APP -> ApplicationUtility.str(R.string.enter_pin_to_enter_app)
-                    TYPE_VIEWING_PRIVATE_KEY -> ApplicationUtility.str(R.string.enter_pin_view_private_key)
-                    else -> throw IllegalArgumentException("Invalid confirmationType, found: $confirmationType")
-                }
-
-                fragmentSecurityPinTitleLabel.text = text
-            }
-
-            else -> throw IllegalArgumentException("Invalid securityType, found: $securityType")
+        if (userPinSettings.isUserLockedOut()) {
+            onUserLockout()
+        } else {
+            bindSecurityLabel()
         }
-
     }
 
     override fun onSubmitPin() {
@@ -130,9 +123,10 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
             userPinSettings.checkPinAndIncrementAttemptsIfFailure(currentPin) -> {
                 (activity as? OnSecurityConfirmedListener)?.onSecurityConfirmed()
             }
-            else -> if (userPinSettings.isUserLockedOut()) {
+            userPinSettings.isUserLockedOut() ->
+                // By calling checkPinAndIncrementAttemptsIfFailure and reaching here, the user may
+                // be locked out.
                 onUserLockout()
-            }
         }
     }
 
@@ -150,10 +144,58 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        countDownTimer?.cancel()
+        countDownTimer = null
+    }
+
     // MARK - Private Methods
 
+    private fun bindSecurityLabel() = when (securityType) {
+        SecuritySettings.TYPE_PIN_SECURITY -> {
+            val text = when (confirmationType) {
+                TYPE_DISABLE_SECURITY -> ApplicationUtility.str(R.string.enter_old_pin_disable_security)
+                TYPE_CHANGE_SECURITY_SETTINGS -> ApplicationUtility.str(R.string.enter_old_pin_create_new_one)
+                TYPE_UNLOCK_APP -> ApplicationUtility.str(R.string.enter_pin_to_enter_app)
+                TYPE_VIEWING_PRIVATE_KEY -> ApplicationUtility.str(R.string.enter_pin_view_private_key)
+                else -> throw IllegalArgumentException("Invalid confirmationType, found: $confirmationType")
+            }
+
+            fragmentSecurityPinTitleLabel.text = text
+        }
+
+        else -> throw IllegalArgumentException("Invalid securityType, found: $securityType")
+    }
+
     private fun onUserLockout() {
-        // TODO
+        NumberPadHandler.disableNumberPad(this)
+
+        countDownTimer = object : CountDownTimer(userPinSettings.getLockoutTimeLeft(), 250L) {
+            override fun onFinish() {
+                bindSecurityLabel()
+                NumberPadHandler.enableNumberPad(this@ConfirmOldSecurityFragment)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                val minutesLeft = millisUntilFinished / (60L * 1000L)
+
+                val text = when (minutesLeft) {
+                    0L -> {
+                        val secondsLeft = millisUntilFinished / 1000L
+                        val formatterLockoutTimeSeconds = str(R.string.formatter_locked_out_seconds)
+                        String.format(formatterLockoutTimeSeconds, secondsLeft.toString())
+                    }
+                    else -> {
+                        val formatterLockoutTimeMinutes = str(R.string.formatter_locked_out_minutes)
+                        String.format(formatterLockoutTimeMinutes, minutesLeft.toString())
+                    }
+                }
+
+                fragmentSecurityPinTitleLabel.text = text
+            }
+        }.start()
     }
 
 }

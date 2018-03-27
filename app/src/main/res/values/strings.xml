@@ -242,4 +242,6 @@
     <string name="enter_old_pin_create_new_one">Enter your old PIN to create a new one</string>
     <string name="enter_old_pin_disable_security">Enter your old PIN to disable security settings</string>
     <string name="enter_pin_view_private_key">Enter your PIN to view your private key</string>
+    <string name="formatter_locked_out_minutes">You are locked out for %s more minutes</string>
+    <string name="formatter_locked_out_seconds">You are locked out for %s more seconds</string>
 </resources>

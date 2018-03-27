@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.RestrictTo
 import android.support.annotation.RestrictTo.Scope.TESTS
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.extensions.mapIfNull
+import com.caplaninnovations.looprwallet.fragments.security.ConfirmOldSecurityFragment
 
 /**
  * Created by Corey on 2/20/2018
@@ -17,7 +19,7 @@ import com.caplaninnovations.looprwallet.extensions.mapIfNull
  * Purpose of Class: Used as container to test fragments in isolation with Espresso
  */
 @RestrictTo(TESTS)
-class TestActivity : BaseActivity() {
+class TestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecurityConfirmedListener {
 
     var isRunningTest: Boolean? = null
 
@@ -67,6 +69,14 @@ class TestActivity : BaseActivity() {
                     .remove(fragment)
                     .commit()
         }
+    }
+
+    @VisibleForTesting
+    var isSecurityConfirmed = false
+        private set
+
+    override fun onSecurityConfirmed() {
+        isSecurityConfirmed = true
     }
 
     // MARK - Private Methods

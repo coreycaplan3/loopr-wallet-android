@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
+import com.caplaninnovations.looprwallet.BuildConfig
 import java.util.*
 
 /**
@@ -14,12 +15,16 @@ class UserPinSettings(private val looprSecureSettings: LooprSecureSettings) {
 
     companion object {
         private const val MAX_NUMBER_OF_SEQUENTIAL_GUESSES = 4
-        private const val LOCKOUT_TIME_MILLIS: Long = 1000 * 60 * 5
+        private val LOCKOUT_TIME_MILLIS: Long = BuildConfig.SECURITY_LOCKOUT_TIME
 
+        /**
+         * The key used to retrieve the user's PIN
+         */
         private const val KEY_USER_PIN = "_USER_PIN"
 
         /**
-         * A key that maps to a number between 0 and 4. At 4, the user becomes locked out
+         * A key that maps to a number between 0 and [MAX_NUMBER_OF_SEQUENTIAL_GUESSES]. At
+         * [MAX_NUMBER_OF_SEQUENTIAL_GUESSES], the user becomes locked out.
          */
         private const val KEY_NUMBER_OF_SEQUENTIAL_TRIES = "_NUMBER_OF_SEQUENTIAL_TRIES"
 
@@ -48,13 +53,19 @@ class UserPinSettings(private val looprSecureSettings: LooprSecureSettings) {
      * @return True if the PINs match or false if they don't.
      */
     fun checkPinAndIncrementAttemptsIfFailure(pin: String): Boolean {
-        if (isUserPinEqual(pin)) return true
+        if (isUserLockedOut()) {
+            return false
+        }
 
-        var numberOfTries = looprSecureSettings.getInt(KEY_NUMBER_OF_SEQUENTIAL_TRIES, 0)
-        numberOfTries += 1
+        if (isUserPinEqual(pin)) {
+            resetNumberOfSequentialTries()
+            return true
+        }
 
+        // We add one, since the the user just tried and failed
+        val numberOfTries = getNumberOfSequentialTries() + 1
         if (numberOfTries >= MAX_NUMBER_OF_SEQUENTIAL_GUESSES) {
-            numberOfTries = 0
+            resetNumberOfSequentialTries()
             looprSecureSettings.putLong(KEY_LAST_LOCKOUT_TIME, Date().time)
         }
 
@@ -66,7 +77,7 @@ class UserPinSettings(private val looprSecureSettings: LooprSecureSettings) {
      */
     fun isUserLockedOut(): Boolean {
         val lockoutTime = looprSecureSettings.getLong(KEY_LAST_LOCKOUT_TIME, -1)
-        return lockoutTime == -1L || lockoutTime + LOCKOUT_TIME_MILLIS >= Date().time
+        return lockoutTime + LOCKOUT_TIME_MILLIS >= Date().time
     }
 
     /**
@@ -79,6 +90,16 @@ class UserPinSettings(private val looprSecureSettings: LooprSecureSettings) {
             lockoutTime + LOCKOUT_TIME_MILLIS - Date().time
         }
         else -> -1
+    }
+
+    // MARK - Private Methods
+
+    private fun getNumberOfSequentialTries(): Int {
+        return looprSecureSettings.getInt(KEY_NUMBER_OF_SEQUENTIAL_TRIES, 0)
+    }
+
+    private fun resetNumberOfSequentialTries() {
+        looprSecureSettings.putInt(KEY_NUMBER_OF_SEQUENTIAL_TRIES, 0)
     }
 
 }

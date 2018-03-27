@@ -1,11 +1,7 @@
 package com.caplaninnovations.looprwallet.fragments.security
 
-import android.support.test.espresso.Espresso
-import android.support.test.espresso.action.ViewActions.click
-import android.view.View
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import kotlinx.android.synthetic.main.number_pad.*
-import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -19,8 +15,7 @@ import org.junit.Test
 class EnterNewSecurityFragmentTest : BaseDaggerFragmentTest<EnterNewSecurityFragment>() {
 
     override val fragment = EnterNewSecurityFragment.createPinInstance()
-
-    override val tag: String = EnterNewSecurityFragment.TAG
+    override val tag = EnterNewSecurityFragment.TAG
 
     @Test
     fun enterPin_thenEnterIncorrectPin() {
@@ -135,7 +130,5 @@ class EnterNewSecurityFragmentTest : BaseDaggerFragmentTest<EnterNewSecurityFrag
         assertEquals("", fragment.currentPin)
         assertEquals("1111", fragment.enteredPin)
     }
-
-    private fun clickView(view: View) = Espresso.onView(`is`(view)).perform(click())
 
 }

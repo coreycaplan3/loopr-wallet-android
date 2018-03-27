@@ -64,6 +64,7 @@ android {
         mocknet {
             buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mocknetServerUrl"]
 
+            buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 10L"
             buildConfigField "String", "ENVIRONMENT", "\"mocknet\""
 
             dimension "environment"
@@ -78,6 +79,7 @@ android {
         infuraTestnet {
             buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["testnetServerUrl"]
 
+            buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
             buildConfigField "String", "ENVIRONMENT", "\"testnet\""
 
             dimension "environment"
@@ -88,6 +90,7 @@ android {
         mainnet {
             buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mainnetServerUrl"]
 
+            buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
             buildConfigField "String", "ENVIRONMENT", "\"mainnet\""
 
             dimension "environment"
