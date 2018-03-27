@@ -33,6 +33,8 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
         val TAG: String = SecuritySettingsFragment::class.java.simpleName
     }
 
+    override val fragmentTitle = ApplicationUtility.str(R.string.security)
+
     @Inject
     lateinit var securitySettings: SecuritySettings
 
@@ -46,9 +48,6 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
             Pair(PREFERENCE_KEY_SECURITY_TYPE, TYPE_DEFAULT_VALUE_SECURITY),
             Pair(PREFERENCE_KEY_SECURITY_TIMEOUT, DEFAULT_SECURITY_TIMEOUT)
     )
-
-    override val fragmentTitle: String
-        get() = ApplicationUtility.str(R.string.security)
 
     override fun onPreferenceValueChange(preference: Preference, value: String): Boolean {
         return when (preference.key) {

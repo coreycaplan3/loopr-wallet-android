@@ -15,7 +15,7 @@ import javax.inject.Singleton
  */
 @Singleton
 @Component(modules = [LooprSettingsModule::class, LooprSecureSettingsModule::class,
-    LooprRealmModule::class, LooprWalletModule::class, LooprEthModule::class])
+    LooprRealmModule::class, LooprWalletModule::class, LooprEthereumBlockchainModule::class])
 interface LooprTestComponent : LooprDaggerComponent {
 
     fun inject(baseDaggerTest: BaseDaggerTest)

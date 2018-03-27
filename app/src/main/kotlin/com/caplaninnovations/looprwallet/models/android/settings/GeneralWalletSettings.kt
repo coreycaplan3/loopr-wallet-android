@@ -8,5 +8,5 @@ package com.caplaninnovations.looprwallet.models.android.settings
  * Purpose of Class: Settings that can be applied generally to all wallets on the device. Some
  * examples include showing 0-balance tokens by default.
  */
-class GeneralWalletSettings {
+class GeneralWalletSettings(private val looprSettings: LooprSettings) {
 }

@@ -35,7 +35,7 @@
             android:icon="@drawable/ic_lrc_white_24dp"
             android:key="@string/settings_loopring_fees_screen_key"
             android:summary="@string/summary_loopring_trading_fees"
-            android:title="@string/lrc_trading_fees" />
+            android:title="@string/trading_fees" />
 
     </PreferenceCategory>
 
@@ -45,7 +45,7 @@
             android:icon="@drawable/ic_account_balance_wallet_white_24dp"
             android:key="@string/settings_general_wallet_screen_key"
             android:summary="@string/summary_general_wallet_settings"
-            android:title="@string/general_wallet_customizations" />
+            android:title="@string/wallet_customizations" />
 
         <Preference
             android:icon="@drawable/ic_attach_money_white_24dp"

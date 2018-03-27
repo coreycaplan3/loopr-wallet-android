@@ -220,7 +220,7 @@
     <string name="fee_settings">Fee Settings</string>
     <string name="summary_ethereum_fees_screen">Manage the gas price and gas limit for sending Ether and Tokens</string>
     <string name="ethereum_fees">Ethereum Fees</string>
-    <string name="lrc_trading_fees">LRC Trading Fees</string>
+    <string name="trading_fees">Trading Fees</string>
     <string name="summary_loopring_trading_fees">Manage LRC fees and margin splitting for submitting orders</string>
     <string name="summary_loopring_network">Connect to different relays or use different smart contract versions</string>
     <string name="summary_ethereum_network">Connect to a other Ethereum nodes or add a custom one</string>
@@ -229,7 +229,7 @@
     <string name="ethereum_network">Ethereum Network</string>
     <string name="summary_currency_settings">Change your native currency and its refresh frequency</string>
     <string name="summary_general_wallet_settings">Hide low balance tokens and customize other in-app experiences</string>
-    <string name="general_wallet_customizations">General Wallet Customizations</string>
+    <string name="wallet_customizations">Wallet Customizations</string>
     <string name="automatically_lock">Automatically lock</string>
     <string name="formatter_automatically_lock_after_timeout">%s after exiting the app</string>
     <string name="enter_new_pin">Enter a New PIN</string>

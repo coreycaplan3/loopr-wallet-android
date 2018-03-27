@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.extensions.mapIfNull
-import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 
 /**
  * Created by Corey on 2/20/2018
@@ -33,7 +32,7 @@ class TestActivity : BaseActivity() {
 
         if (savedInstanceState == null && !isRunningTest()) {
             // used for testing a sole fragment
-            val wallet = WalletCreationKeystore("loopr-currentWallet", "looprwallet")
+//            val wallet = WalletCreationKeystore("loopr-currentWallet", "looprwallet")
             walletClient.createWallet("loopr-wallet", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
             startActivity(Intent(this@TestActivity, SettingsActivity::class.java))
 

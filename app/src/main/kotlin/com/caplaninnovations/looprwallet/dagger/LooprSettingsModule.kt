@@ -1,10 +1,7 @@
 package com.caplaninnovations.looprwallet.dagger
 
 import android.content.Context
-import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
-import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
+import com.caplaninnovations.looprwallet.models.android.settings.*
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -28,14 +25,44 @@ class LooprSettingsModule(private val context: Context) {
 
     @Singleton
     @Provides
+    fun provideSecuritySettings(): SecuritySettings {
+        return SecuritySettings(LooprSettings.getInstance(context))
+    }
+
+    @Singleton
+    @Provides
+    fun provideEthereumFeeSettings(): EthereumFeeSettings {
+        return EthereumFeeSettings(LooprSettings.getInstance(context))
+    }
+
+    @Singleton
+    @Provides
+    fun provideLoopringFeeSettings(): LoopringFeeSettings {
+        return LoopringFeeSettings(LooprSettings.getInstance(context))
+    }
+
+    @Singleton
+    @Provides
+    fun provideGeneralWalletSettings(): GeneralWalletSettings {
+        return GeneralWalletSettings(LooprSettings.getInstance(context))
+    }
+
+    @Singleton
+    @Provides
     fun provideCurrencySettings(): CurrencySettings {
         return CurrencySettings(LooprSettings.getInstance(context))
     }
 
     @Singleton
     @Provides
-    fun provideSecuritySettings(): SecuritySettings {
-        return SecuritySettings(LooprSettings.getInstance(context))
+    fun provideEthereumNetworkSettings(): EthereumNetworkSettings {
+        return EthereumNetworkSettings(LooprSettings.getInstance(context))
+    }
+
+    @Singleton
+    @Provides
+    fun provideLoopringNetworkSettings(): LoopringNetworkSettings {
+        return LoopringNetworkSettings(LooprSettings.getInstance(context))
     }
 
 }

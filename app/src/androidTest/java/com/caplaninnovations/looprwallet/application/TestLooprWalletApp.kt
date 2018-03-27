@@ -18,7 +18,7 @@ class TestLooprWalletApp : LooprWalletApp() {
                 .looprSecurityModule(LooprWalletModule(this.applicationContext))
                 .looprSettingsModule(LooprSettingsModule(this.applicationContext))
                 .looprSecureSettingsModule(LooprSecureSettingsModule(this.applicationContext))
-                .looprEthModule(LooprEthModule())
+                .looprEthModule(LooprEthereumBlockchainModule())
                 .build()
     }
 }
