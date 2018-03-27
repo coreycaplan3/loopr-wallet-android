@@ -12,10 +12,13 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.*
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import com.caplaninnovations.looprwallet.handlers.NumberPadHandler
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
+import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate.Companion.MAX_CURRENCY_FRACTION_DIGITS
+import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate.Companion.MAX_EXCHANGE_RATE_FRACTION_DIGITS
 import com.caplaninnovations.looprwallet.models.user.Contact
 import com.caplaninnovations.looprwallet.repositories.user.ContactsRepository
 import com.caplaninnovations.looprwallet.viewmodels.LooprWalletViewModelFactory
@@ -23,7 +26,6 @@ import com.caplaninnovations.looprwallet.viewmodels.OfflineFirstViewModel
 import com.caplaninnovations.looprwallet.viewmodels.price.TokenPriceCheckerViewModel
 import com.caplaninnovations.looprwallet.viewmodels.wallet.TokenBalanceViewModel
 import kotlinx.android.synthetic.main.fragment_create_transfer_amount.*
-import kotlinx.android.synthetic.main.number_pad.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -39,7 +41,7 @@ import javax.inject.Inject
  *
  * TODO GAS
  */
-class CreateTransferAmountFragment : BaseFragment() {
+class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadActionListener {
 
     companion object {
         val TAG: String = CreateTransferAmountFragment::class.java.simpleName
@@ -172,6 +174,14 @@ class CreateTransferAmountFragment : BaseFragment() {
 
     private var tokenBalanceList = listOf<CryptoToken>()
 
+    private val maxDecimalPlaces: Int
+        get() = when {
+            isCurrencyMainLabel -> 2
+            else -> MAX_EXCHANGE_RATE_FRACTION_DIGITS
+        }
+
+    override val isDecimalVisible = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -261,7 +271,7 @@ class CreateTransferAmountFragment : BaseFragment() {
             }
         }
 
-        setupNumberPad()
+        NumberPadHandler.setupNumberPad(this, this)
 
         setupTokenTicker(currentCryptoToken)
 
@@ -349,24 +359,6 @@ class CreateTransferAmountFragment : BaseFragment() {
 
     // MARK - Private Methods
 
-    private fun setupNumberPad() {
-        // Dynamically adjust the user's decimal point to their native  one
-        numberPadDecimal.text = currencySettings.getDecimalSeparator()
-
-        numberPadDecimal.setOnClickListener(this::onKeypadClick)
-        numberPadZero.setOnClickListener(this::onKeypadClick)
-        numberPadBackspace.setOnClickListener(this::onKeypadClick)
-        numberPadOne.setOnClickListener(this::onKeypadClick)
-        numberPadTwo.setOnClickListener(this::onKeypadClick)
-        numberPadThree.setOnClickListener(this::onKeypadClick)
-        numberPadFour.setOnClickListener(this::onKeypadClick)
-        numberPadFive.setOnClickListener(this::onKeypadClick)
-        numberPadSix.setOnClickListener(this::onKeypadClick)
-        numberPadSeven.setOnClickListener(this::onKeypadClick)
-        numberPadEight.setOnClickListener(this::onKeypadClick)
-        numberPadNine.setOnClickListener(this::onKeypadClick)
-    }
-
     /**
      * Sets up [TokenPriceCheckerViewModel] to watch an [EthToken].
      */
@@ -392,97 +384,73 @@ class CreateTransferAmountFragment : BaseFragment() {
         }
     }
 
-    private fun onKeypadClick(view: View) {
-        var amount = if (isCurrencyMainLabel) {
-            currencyAmount
-        } else {
-            tokenAmount
-        }
+    /**
+     * @return The new string with the newly appended number
+     */
+    override fun onNumberClick(number: String) {
+        var amount = getAmountBasedOnCurrencyMainLabel()
+        val amountBefore = getAmountBeforeDecimal(amount)
+        val amountAfter = getAmountAfterDecimal(amount)
+        val hasDecimal = amount.contains(".")
 
-        amount = when (view.id) {
-            R.id.numberPadDecimal -> {
-                if (!amount.contains(".")) {
-                    "$amount."
-                } else {
+        amount = when (number) {
+            "0" -> when {
+                hasDecimal && amountAfter < maxDecimalPlaces ->
+                    // Decimal that isn't using all possible decimal places
+                    "${amount}0"
+                !hasDecimal && amount != "0" && amountBefore < CurrencyExchangeRate.MAX_INTEGER_DIGITS ->
+                    // Whole number, the number isn't 0, and there's less than the number of fractional digits
+                    "${amount}0"
+                else ->
+                    // Default to just returning the number itself, without mutations
                     amount
+            }
+            else ->
+                when {
+                    amount == "0" -> number
+                    !hasDecimal && amountBefore < CurrencyExchangeRate.MAX_INTEGER_DIGITS ->
+                        // Whole number and there's less than the number of integer digits
+                        "$amount$number"
+                    hasDecimal ->
+                        when {
+                            isCurrencyMainLabel && amountAfter < MAX_CURRENCY_FRACTION_DIGITS ->
+                                // Currency decimal with less than the max currency digits
+                                "$amount$number"
+                            !isCurrencyMainLabel && amountAfter < MAX_EXCHANGE_RATE_FRACTION_DIGITS ->
+                                // Token decimal with less than the max token digits
+                                "$amount$number"
+                            else ->
+                                // Default to just returning the number itself, without mutations
+                                amount
+                        }
+                    else ->
+                        // Default to returning the number itself, without mutations
+                        amount
                 }
-            }
-            R.id.numberPadZero -> {
-                appendNumber(amount, "0")
-            }
-            R.id.numberPadBackspace -> {
-                if (amount != "0") {
-                    amount.substring(0, amount.length - 1)
-                } else {
-                    amount
-                }
-            }
-            R.id.numberPadOne -> appendNumber(amount, "1")
-            R.id.numberPadTwo -> appendNumber(amount, "2")
-            R.id.numberPadThree -> appendNumber(amount, "3")
-            R.id.numberPadFour -> appendNumber(amount, "4")
-            R.id.numberPadFive -> appendNumber(amount, "5")
-            R.id.numberPadSix -> appendNumber(amount, "6")
-            R.id.numberPadSeven -> appendNumber(amount, "7")
-            R.id.numberPadEight -> appendNumber(amount, "8")
-            R.id.numberPadNine -> appendNumber(amount, "9")
-            else -> throw IllegalArgumentException("Invalid view!")
         }
 
         if (amount.isEmpty()) {
             amount = "0"
         }
 
-        if (isCurrencyMainLabel) {
-            currencyAmount = amount
-        } else {
-            tokenAmount = amount
-        }
+        setAmountBasedOnCurrencyMainLabel(amount)
 
         bindAmountsToText()
     }
 
-    /**
-     * @return The new string with the newly appended number
-     */
-    private fun appendNumber(amount: String, number: String): String {
-        val amountBefore = getAmountBeforeDecimal(amount)
-        val amountAfter = getAmountAfterDecimal(amount)
-        val hasDecimal = amount.contains(".")
-
-        if (number == "0") {
-            return if (hasDecimal && amountAfter < getMaxDecimalPlaces()) {
-                // Decimal that isn't using all possible decimal places
-                "${amount}0"
-            } else if (!hasDecimal && amount != "0" && amountBefore < CurrencyExchangeRate.maxWholeDigits) {
-                // Whole number, it's not equal to 0, and we have less than the number of max digits
-                "${amount}0"
-            } else {
-                amount
-            }
-        }
-
-        return when {
-            amount == "0" -> number
-            !hasDecimal && amountBefore < CurrencyExchangeRate.maxWholeDigits -> "$amount$number"
-            hasDecimal -> {
-                if (isCurrencyMainLabel && amountAfter < CurrencyExchangeRate.maxCurrencyFractionDigits) {
-                    "$amount$number"
-                } else if (!isCurrencyMainLabel && amountAfter < CurrencyExchangeRate.maxExchangeRateFractionDigits) {
-                    "$amount$number"
-                } else {
-                    amount
-                }
-            }
-            else -> {
-                amount
-            }
+    override fun onBackspaceClick() {
+        val amount = getAmountBasedOnCurrencyMainLabel()
+        if (amount != "0") {
+            setAmountBasedOnCurrencyMainLabel(amount.substring(0, amount.length - 1))
         }
     }
 
-    private fun getMaxDecimalPlaces() =
-            if (isCurrencyMainLabel) 2
-            else CurrencyExchangeRate.maxExchangeRateFractionDigits
+    override fun onDecimalClick() {
+        val amount = getAmountBasedOnCurrencyMainLabel()
+        if (!amount.contains(".")) {
+            setAmountBasedOnCurrencyMainLabel("$amount.")
+        }
+    }
 
     private fun bindAmountsToText() {
         val ticker = currentCryptoToken.ticker
@@ -514,6 +482,20 @@ class CreateTransferAmountFragment : BaseFragment() {
         val balance = currentCryptoToken.balance
         val bdTokenAmount = BigDecimal(tokenAmount)
         createTransferSendButton.isEnabled = balance != null && !bdTokenAmount.equalsZero()
+    }
+
+    /**
+     * Gets either [currencyAmount] or [tokenAmount] depending on which one is currency the main
+     * label.
+     */
+    private fun getAmountBasedOnCurrencyMainLabel() = when {
+        isCurrencyMainLabel -> currencyAmount
+        else -> tokenAmount
+    }
+
+    private fun setAmountBasedOnCurrencyMainLabel(amount: String) = when {
+        isCurrencyMainLabel -> currencyAmount = amount
+        else -> tokenAmount = amount
     }
 
 }

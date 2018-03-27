@@ -25,9 +25,9 @@ open class CurrencyExchangeRate(
 ) : RealmObject(), TrackedRealmObject {
 
     companion object {
-        const val maxWholeDigits = 10
-        const val maxExchangeRateFractionDigits = 8
-        const val maxCurrencyFractionDigits = 2
+        const val MAX_INTEGER_DIGITS = 10
+        const val MAX_EXCHANGE_RATE_FRACTION_DIGITS = 8
+        const val MAX_CURRENCY_FRACTION_DIGITS = 2
 
         val USD = CurrencyExchangeRate("USD", BigDecimal("1.00000000"))
     }
@@ -37,11 +37,11 @@ open class CurrencyExchangeRate(
      */
     var rateAgainstToUsd: BigDecimal
         get() {
-            return BigDecimal(mRateComparedToUsd).setScale(maxExchangeRateFractionDigits, RoundingMode.HALF_UP)
+            return BigDecimal(mRateComparedToUsd).setScale(MAX_EXCHANGE_RATE_FRACTION_DIGITS, RoundingMode.HALF_UP)
         }
         set(value) {
-            if (value.scale() != maxExchangeRateFractionDigits) {
-                throw IllegalArgumentException("Scale should be set to $maxExchangeRateFractionDigits, found ${value.scale()}")
+            if (value.scale() != MAX_EXCHANGE_RATE_FRACTION_DIGITS) {
+                throw IllegalArgumentException("Scale should be set to $MAX_EXCHANGE_RATE_FRACTION_DIGITS, found ${value.scale()}")
             }
             mRateComparedToUsd = value.toString()
         }

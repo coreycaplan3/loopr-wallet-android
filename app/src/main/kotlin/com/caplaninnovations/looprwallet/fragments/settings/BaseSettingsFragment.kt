@@ -78,13 +78,6 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
     final override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
         val stringValue = newValue?.toString() ?: return false
 
-        // TODO Make call to preference summary change in appropriate place.
-        // TODO Keep in mind, we're only calling it now when we "successfully" change preference
-        // TODO values, as seen below
-
-        // TODO Make an abstract method that sets the summary's value based on the key, preference
-        // TODO value. This can use other preference's state to mutate the summary's value as
-        // TODO appropriate
         preference?.let {
             if (onPreferenceValueChange(preference, stringValue)) {
                 bindPreferenceValueToSummary(preference, stringValue)

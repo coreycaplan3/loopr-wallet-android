@@ -236,4 +236,6 @@
     <string name="disabled_application_lock">This setting is disabled unless you turn on an application lock</string>
     <string name="enter_a_new_pin">Enter a new PIN</string>
     <string name="confirm_your_pin">Confirm your PIN</string>
+    <string name="error_confirm_pin_does_not_match">The 2 entered PINs do not match</string>
+    <string name="your_new_pin_is_set">Your new PIN is set!</string>
 </resources>

@@ -21,7 +21,7 @@ class CurrencyExchangeServiceMockImpl : CurrencyExchangeService {
         delay(500L)
         val rate = if (currency != CurrencyExchangeRate.USD.currency) {
             BigDecimal(Math.random())
-                    .setScale(CurrencyExchangeRate.maxExchangeRateFractionDigits, RoundingMode.HALF_UP)
+                    .setScale(CurrencyExchangeRate.MAX_EXCHANGE_RATE_FRACTION_DIGITS, RoundingMode.HALF_UP)
         } else {
             CurrencyExchangeRate.USD.rateAgainstToUsd
         }

@@ -3,8 +3,9 @@ package com.caplaninnovations.looprwallet.dagger
 import com.caplaninnovations.looprwallet.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.SettingsActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.fragments.settings.SecuritySettingsFragment
+import com.caplaninnovations.looprwallet.fragments.security.EnterNewSecurityFragment
 import com.caplaninnovations.looprwallet.fragments.settings.HomeSettingsFragment
+import com.caplaninnovations.looprwallet.fragments.settings.SecuritySettingsFragment
 import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferAmountFragment
 import com.caplaninnovations.looprwallet.models.android.settings.*
 import com.caplaninnovations.looprwallet.models.security.WalletClient
@@ -41,6 +42,7 @@ interface LooprDaggerComponent {
 
     fun inject(securitySettingsFragment: SecuritySettingsFragment)
     fun inject(createTransferAmountFragment: CreateTransferAmountFragment)
+    fun inject(enterNewSecurityFragment: EnterNewSecurityFragment)
 
     // Repositories
     fun inject(baseRealmRepository: BaseRealmRepository)
@@ -58,6 +60,7 @@ interface LooprDaggerComponent {
     val ethereumNetworkSettings: EthereumNetworkSettings
     val loopringNetworkSettings: LoopringNetworkSettings
     val generalWalletSettings: GeneralWalletSettings
+    val userPinSettings: UserPinSettings
     val walletClient: WalletClient
     val web3j: Web3j
 }
