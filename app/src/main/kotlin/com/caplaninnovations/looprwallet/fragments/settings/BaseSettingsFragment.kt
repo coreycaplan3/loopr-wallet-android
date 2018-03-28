@@ -78,14 +78,13 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
     final override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
         val stringValue = newValue?.toString() ?: return false
 
-        preference?.let {
-            if (onPreferenceValueChange(preference, stringValue)) {
+        return when {
+            preference != null && onPreferenceValueChange(preference, stringValue) -> {
                 bindPreferenceValueToSummary(preference, stringValue)
-                savePreferenceToSettings(preference, stringValue)
+                true
             }
+            else -> false
         }
-
-        return false
     }
 
     override fun onResume() {
@@ -136,16 +135,6 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
         return if (index >= 0) preference.entries[index].toString()
         else value
     }
-
-    /**
-     * Use this method to persist values to preferences, instead of the PreferenceManager. Reason
-     * being, it allows us to decouple persisted settings (settings that are saved to disk). This
-     * is idea for testing, to make settings not interrupt tests. It also allows for more overall
-     * control.
-     */
-    protected fun savePreferenceToSettings(preference: Preference, value: String) =
-            LooprSettings.getInstance(LooprWalletApp.context)
-                    .putString(preference.key, value)
 
     // MARK - Private Methods
 

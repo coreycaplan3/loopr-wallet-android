@@ -62,7 +62,7 @@ interface CryptoToken : TrackedRealmObject, RealmModel {
      * @return A string representing the total supply of the [CryptoToken] that
      */
     fun formatTotalSupply(currencySettings: CurrencySettings): String {
-        val format = currencySettings.getTokenInstance()
+        val format = currencySettings.getNumberFormatter()
         val supply = (totalSupply.setScale(decimalPlaces)) / (BigDecimal(10).pow(decimalPlaces))
         return format.format(supply)
     }

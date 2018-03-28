@@ -249,4 +249,11 @@
     <string name="ether_transfer_default_gas_limit">Ether Transfer Default Gas Limit</string>
     <string name="token_transfer_default_gas_limit">Token Transfer Default Gas Limit</string>
     <string name="default_transaction_gas_price">Default Transaction Gas Price</string>
+    <string name="slow_and_cheap">Slow and cheap</string>
+    <string name="very_slow_and_very_cheap">Very slow and very cheap</string>
+    <string name="average_speed_and_average_price">Average speed and average price</string>
+    <string name="very_fast_very_expensive">Very fast and very expensive</string>
+    <string name="fast_and_pricey">Fast and pricey</string>
+    <string name="explain_gas_price">Gas price is how much you\'re willing to pay per unit of gas. Increasing this value will make your transactions run faster.</string>
+    <string name="explain_gas_limit">Gas limit is the max quantity of gas you\'re willing to spend on a transaction. Don\'t change these values unless you know what you\'re doing.</string>
 </resources>

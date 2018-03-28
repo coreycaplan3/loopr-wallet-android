@@ -24,15 +24,26 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
         private const val KEY_CURRENT_CURRENCY = "_CURRENT_CURRENCY"
     }
 
+    /**
+     * @return The currency symbol that the user currently has selected for themselves
+     */
     fun getCurrentCurrency(): String {
         return looprSettings.getString(KEY_CURRENT_CURRENCY) ?: DEFAULT_CURRENCY
     }
 
-    fun getCurrencyInstance(): NumberFormat {
+    /**
+     * @return A [DecimalFormat] that can format currency appropriately, using separators and the
+     * correct symbol appropriately.
+     */
+    fun getCurrencyFormatter(): NumberFormat {
         return DecimalFormat.getCurrencyInstance(getCurrentLocale())
     }
 
-    fun getTokenInstance(): NumberFormat {
+    /**
+     * @return A [DecimalFormat] that can format tokens and numbers appropriately, using separators
+     * as appropriate.
+     */
+    fun getNumberFormatter(): NumberFormat {
         // Use the currency as a means to know how users format their decimal places and large
         // numbers. IE - 1,000,000.00 vs. 1.000.000,00
         return (DecimalFormat.getInstance(getCurrentLocale()) as DecimalFormat)
@@ -55,7 +66,7 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
      * @return The currency symbol in use by the user
      */
     fun getCurrencySymbol(): String {
-        return getCurrencyInstance().currency.getSymbol(getCurrentLocale())
+        return getCurrencyFormatter().currency.getSymbol(getCurrentLocale())
     }
 
     /**
@@ -67,6 +78,9 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
         return Character.toString(separator)
     }
 
+    /**
+     * @return The [Locale] in which the user would like to view their currency information.
+     */
     fun getCurrentLocale(): Locale {
         val currency = getCurrentCurrency()
 

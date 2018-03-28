@@ -1,10 +1,12 @@
 package com.caplaninnovations.looprwallet.fragments.settings
 
 import android.os.Bundle
+import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.Preference
+import android.support.v7.preference.SeekBarPreference
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings
+import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings.Companion.DEFAULT_GAS_PRICE
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings.Companion.DEFAULT_TRANSFER_ETHER_GAS_LIMIT
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings.Companion.DEFAULT_TRANSFER_TOKEN_GAS_LIMIT
@@ -12,6 +14,7 @@ import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSett
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings.Companion.KEY_TRANSFER_ETHER_GAS_LIMIT
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings.Companion.KEY_TRANSFER_TOKEN_GAS_LIMIT
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import javax.inject.Inject
 
 /**
@@ -33,7 +36,7 @@ class EthereumFeeSettingsFragment : BaseSettingsFragment() {
     override val fragmentTitle = ApplicationUtility.str(R.string.ethereum_fees)
 
     @Inject
-    lateinit var ethereumFeeSettings: EthereumFeeSettings
+    lateinit var currencySettings: CurrencySettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,16 +54,48 @@ class EthereumFeeSettingsFragment : BaseSettingsFragment() {
             KEY_TRANSFER_TOKEN_GAS_LIMIT to DEFAULT_TRANSFER_TOKEN_GAS_LIMIT
     )
 
-    override fun onPreferenceClick(preference: Preference?): Boolean {
-        TODO("not implemented") // TODO
-    }
+    override fun onPreferenceClick(preference: Preference?) = false
 
     override fun onPreferenceValueChange(preference: Preference, value: String): Boolean {
-        TODO("not implemented") // TODO
+        when (preference) {
+            is SeekBarPreference -> when (preference.key) {
+                KEY_GAS_PRICE -> {
+                    preference.value = value.toInt()
+                    preference.summary = getSummaryForGasPrice(value.toInt())
+                }
+            }
+            is EditTextPreference -> when (preference.key) {
+                KEY_TRANSFER_ETHER_GAS_LIMIT -> {
+                    preference.summary = value
+                }
+                KEY_TRANSFER_TOKEN_GAS_LIMIT -> {
+                    preference.text = value
+                }
+            }
+        }
+        return true
     }
 
-    override fun getSummaryValue(preference: Preference, value: String): String {
-        TODO("not implemented") // TODO
+    override fun getSummaryValue(preference: Preference, value: String) = when (preference.key) {
+        KEY_GAS_PRICE -> value
+        KEY_TRANSFER_ETHER_GAS_LIMIT -> formatStringValueAsNumber(value)
+        KEY_TRANSFER_TOKEN_GAS_LIMIT -> formatStringValueAsNumber(value)
+        else -> throw IllegalArgumentException("Invalid key, found: ${preference.key}")
+    }
+
+    // MARK -
+
+    private fun formatStringValueAsNumber(value: String): String {
+        return currencySettings.getNumberFormatter().format(value.toDouble())
+    }
+
+    private fun getSummaryForGasPrice(value: Int) = when {
+        value == 1 -> str(R.string.very_slow_and_very_cheap)
+        value <= 5 -> str(R.string.slow_and_cheap)
+        value <= 10 -> str(R.string.average_speed_and_average_price)
+        value <= 20 -> str(R.string.fast_and_pricey)
+        value <= 50 -> str(R.string.very_fast_very_expensive)
+        else -> throw IllegalArgumentException("Invalid value, found: $value")
     }
 
 }

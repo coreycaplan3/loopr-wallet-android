@@ -63,7 +63,7 @@ fun String.formatAsCustomToken(currencySettings: CurrencySettings, ticker: Strin
  * Formats a [BigDecimal] in the user's native currency
  */
 fun BigDecimal.formatAsCurrency(settings: CurrencySettings): String {
-    val value = settings.getCurrencyInstance().format(this)
+    val value = settings.getCurrencyFormatter().format(this)
     return when {
         this.isIntegerValue() -> value.substring(0, value.length - 3)
         value.last() == '0' -> value
@@ -75,7 +75,7 @@ fun BigDecimal.formatAsCurrency(settings: CurrencySettings): String {
  * Formats a [BigDecimal] in the user's native currency
  */
 fun BigDecimal.formatAsToken(settings: CurrencySettings, tokenTicker: String): String {
-    val value = settings.getTokenInstance().format(this)
+    val value = settings.getNumberFormatter().format(this)
     return when {
         this.equalsZero() -> {
             "${value}00 $tokenTicker"

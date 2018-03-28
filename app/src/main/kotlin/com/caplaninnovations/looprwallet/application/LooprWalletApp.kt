@@ -5,13 +5,12 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
-import android.support.v7.preference.PreferenceManager
 import com.caplaninnovations.looprwallet.BuildConfig
-import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.*
 import com.caplaninnovations.looprwallet.extensions.logi
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
+import com.caplaninnovations.looprwallet.utilities.PreferenceUtility
 import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
 import org.web3j.protocol.Web3j
@@ -59,7 +58,7 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
 
         application = this
 
-        PreferenceManager.setDefaultValues(this, R.xml.settings_home, false)
+        PreferenceUtility.setDefaultValues()
 
         Realm.init(this)
 

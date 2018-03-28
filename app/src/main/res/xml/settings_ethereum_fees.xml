@@ -4,6 +4,10 @@
 
     <PreferenceCategory android:title="@string/gas_price">
 
+        <Preference
+            android:selectable="false"
+            android:summary="@string/explain_gas_price" />
+
         <!--suppress AndroidElementNotAllowed -->
         <android.support.v7.preference.SeekBarPreference
             android:defaultValue="@string/settings_ethereum_fees_gas_price_default_value"
@@ -20,6 +24,10 @@
     <!-- Gas Limits -->
 
     <PreferenceCategory android:title="@string/gas_limits">
+
+        <Preference
+            android:selectable="false"
+            android:summary="@string/explain_gas_limit" />
 
         <EditTextPreference
             android:defaultValue="@string/settings_ethereum_fees_default_send_ether_gas_limit_value"
