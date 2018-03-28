@@ -7,8 +7,10 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.ifNull
 import com.caplaninnovations.looprwallet.fragments.security.BaseSecurityFragment
+import com.caplaninnovations.looprwallet.fragments.security.OnSecurityChangeListener
 import com.caplaninnovations.looprwallet.fragments.settings.BaseSettingsFragment
 import com.caplaninnovations.looprwallet.fragments.settings.HomeSettingsFragment
+import com.caplaninnovations.looprwallet.fragments.settings.SecuritySettingsFragment
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.utilities.ViewUtility
 import kotlinx.android.synthetic.main.appbar_main.*
@@ -17,7 +19,7 @@ import javax.inject.Inject
 /**
  * Purpose of class: To allow the user to interact with his/her configurable settings
  */
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
 
     @Inject
     lateinit var themeSettings: ThemeSettings
@@ -63,7 +65,25 @@ class SettingsActivity : AppCompatActivity() {
      * @param tag The tag to associate with the fragment and its position in the back-stack.
      */
     fun onSecuritySettingsFragmentClick(fragment: BaseSecurityFragment, tag: String) {
-        TODO("FIX THIS")
+        supportFragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_up, 0, 0, R.anim.slide_down)
+                .replace(R.id.activityContainer, fragment, tag)
+                .addToBackStack(tag)
+                .commit()
+    }
+
+    override fun onSecurityEnabled(securityType: String) {
+        val fragment = supportFragmentManager.findFragmentByTag(SecuritySettingsFragment.TAG)
+        (fragment as? SecuritySettingsFragment)?.onSecurityEnabled(securityType)
+
+        supportFragmentManager.popBackStack()
+    }
+
+    override fun onSecurityDisabled() {
+        val fragment = supportFragmentManager.findFragmentByTag(SecuritySettingsFragment.TAG)
+        (fragment as? SecuritySettingsFragment)?.onSecurityScreenDisabled()
+
+        supportFragmentManager.popBackStack()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
@@ -73,4 +93,5 @@ class SettingsActivity : AppCompatActivity() {
         }
         else -> super.onOptionsItemSelected(item)
     }
+
 }
