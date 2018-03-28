@@ -11,7 +11,7 @@
         <!--suppress AndroidElementNotAllowed -->
         <android.support.v7.preference.SeekBarPreference
             android:defaultValue="@string/settings_ethereum_fees_gas_price_default_value"
-            android:key="keyName"
+            android:key="@string/settings_ethereum_fees_gas_price_key"
             android:max="50"
             android:min="1"
             android:seekBarIncrement="1"

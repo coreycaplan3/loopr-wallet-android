@@ -1,7 +1,6 @@
 package com.caplaninnovations.looprwallet.fragments.settings
 
 import android.os.Bundle
-import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.Preference
 import android.support.v7.preference.SeekBarPreference
 import com.caplaninnovations.looprwallet.R
@@ -23,8 +22,6 @@ import javax.inject.Inject
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
- *
  */
 class EthereumFeeSettingsFragment : BaseSettingsFragment() {
 
@@ -61,15 +58,6 @@ class EthereumFeeSettingsFragment : BaseSettingsFragment() {
             is SeekBarPreference -> when (preference.key) {
                 KEY_GAS_PRICE -> {
                     preference.value = value.toInt()
-                    preference.summary = getSummaryForGasPrice(value.toInt())
-                }
-            }
-            is EditTextPreference -> when (preference.key) {
-                KEY_TRANSFER_ETHER_GAS_LIMIT -> {
-                    preference.summary = value
-                }
-                KEY_TRANSFER_TOKEN_GAS_LIMIT -> {
-                    preference.text = value
                 }
             }
         }
@@ -77,7 +65,7 @@ class EthereumFeeSettingsFragment : BaseSettingsFragment() {
     }
 
     override fun getSummaryValue(preference: Preference, value: String) = when (preference.key) {
-        KEY_GAS_PRICE -> value
+        KEY_GAS_PRICE -> getSummaryForGasPrice(value.toInt())
         KEY_TRANSFER_ETHER_GAS_LIMIT -> formatStringValueAsNumber(value)
         KEY_TRANSFER_TOKEN_GAS_LIMIT -> formatStringValueAsNumber(value)
         else -> throw IllegalArgumentException("Invalid key, found: ${preference.key}")

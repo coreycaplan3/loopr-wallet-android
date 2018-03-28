@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.models.android.settings
 
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
+import java.math.BigInteger
 
 /**
  * Created by Corey on 3/25/2018
@@ -9,8 +10,6 @@ import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
- *
  */
 class EthereumFeeSettings(private val looprSettings: LooprSettings) {
 
@@ -25,6 +24,21 @@ class EthereumFeeSettings(private val looprSettings: LooprSettings) {
         val DEFAULT_GAS_PRICE = str(R.string.settings_ethereum_fees_gas_price_default_value)
         val DEFAULT_TRANSFER_ETHER_GAS_LIMIT = str(R.string.settings_ethereum_fees_default_send_ether_gas_limit_value)
         val DEFAULT_TRANSFER_TOKEN_GAS_LIMIT = str(R.string.settings_ethereum_fees_default_send_token_gas_limit_value)
+    }
+
+    val currentGasPrice: BigInteger
+        get() = getValue(KEY_GAS_PRICE, DEFAULT_GAS_PRICE)
+
+    val currentEthTransferGasLimit: BigInteger
+        get() = getValue(KEY_TRANSFER_ETHER_GAS_LIMIT, DEFAULT_TRANSFER_ETHER_GAS_LIMIT)
+
+    val currentTokenTransferGasLimit: BigInteger
+        get() = getValue(KEY_TRANSFER_TOKEN_GAS_LIMIT, DEFAULT_TRANSFER_TOKEN_GAS_LIMIT)
+
+    // MARK - Private Methods
+
+    private fun getValue(key: String, defaultValue: String): BigInteger {
+        return BigInteger(looprSettings.getString(key) ?: defaultValue)
     }
 
 }

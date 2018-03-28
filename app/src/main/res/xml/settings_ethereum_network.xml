@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory>
+
+        <Preference
+            android:selectable="false"
+            android:summary="@string/explain_ethereum_node" />
+
+        <ListPreference
+            android:entries="@array/settings_ethereum_network_node_entries_ui"
+            android:entryValues="@array/settings_ethereum_network_node_entries_values"
+            android:key="@string/settings_ethereum_network_node_key"
+            android:summary="@string/settings_ethereum_network_node_ui_default_value"
+            android:title="@string/ethereum_node" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

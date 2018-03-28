@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
-import android.support.annotation.VisibleForTesting
+import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -18,17 +19,25 @@ import java.util.*
 open class CurrencySettings(private val looprSettings: LooprSettings) {
 
     companion object {
-        @VisibleForTesting
-        const val DEFAULT_CURRENCY = "USD"
+        val KEY_CURRENT_CURRENCY = str(R.string.settings_currency_current_fiat_key)
+        val KEY_REFRESH_FREQUENCY = str(R.string.settings_currency_refresh_frequency_key)
 
-        private const val KEY_CURRENT_CURRENCY = "_CURRENT_CURRENCY"
+        val DEFAULT_VALUE_CURRENCY = str(R.string.settings_currency_currencies_entries_values_default)
+        val DEFAULT_VALUE_REFRESH_FREQUENCY = str(R.string.settings_currency_refresh_frequency_default_value)
+
+        val USD = str(R.string.settings_currency_values_usd)
+        val GBP = str(R.string.settings_currency_values_gbp)
+        val EUR = str(R.string.settings_currency_values_eur)
+        val JPY = str(R.string.settings_currency_values_jpy)
+        val KRW = str(R.string.settings_currency_values_krw)
+        val CNY = str(R.string.settings_currency_values_cny)
     }
 
     /**
      * @return The currency symbol that the user currently has selected for themselves
      */
     fun getCurrentCurrency(): String {
-        return looprSettings.getString(KEY_CURRENT_CURRENCY) ?: DEFAULT_CURRENCY
+        return looprSettings.getString(KEY_CURRENT_CURRENCY) ?: DEFAULT_VALUE_CURRENCY
     }
 
     /**
@@ -85,12 +94,12 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
         val currency = getCurrentCurrency()
 
         return when (currency) {
-            "USD" -> Locale.US
-            "GBP" -> Locale.UK
-            "EUR" -> Locale.GERMAN // Default to German since they use the Euro
-            "JPY" -> Locale.JAPANESE
-            "KRW" -> Locale.KOREAN
-            "CNY" -> Locale.CHINESE
+            USD -> Locale.US
+            GBP -> Locale.UK
+            EUR -> Locale.GERMAN // Default to German since they use the Euro
+            JPY -> Locale.JAPANESE
+            KRW -> Locale.KOREAN
+            CNY -> Locale.CHINESE
             else -> throw IllegalArgumentException("Invalid currency, found: $currency")
         }
     }

@@ -99,6 +99,8 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
      * @return True if the preference should be persisted to [LooprSettings] or false otherwise.
      * It is expected that a return of false will be handled in the subclass for its own specific
      * reasons.
+     *
+     * Note: If you return true, a call to [getSummaryValue] will occur right after.
      */
     protected abstract fun onPreferenceValueChange(preference: Preference, value: String): Boolean
 

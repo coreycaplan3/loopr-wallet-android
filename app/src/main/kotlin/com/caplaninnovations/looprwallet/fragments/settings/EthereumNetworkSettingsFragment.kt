@@ -1,8 +1,11 @@
 package com.caplaninnovations.looprwallet.fragments.settings
 
 import android.os.Bundle
+import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.models.android.settings.EthereumNetworkSettings.Companion.DEFAULT_VALUE_NODE
+import com.caplaninnovations.looprwallet.models.android.settings.EthereumNetworkSettings.Companion.KEY_NODE
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
 
 /**
@@ -11,37 +14,34 @@ import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
- *
  */
-class EthereumNetworkSettingsFragment: BaseSettingsFragment() {
+class EthereumNetworkSettingsFragment : BaseSettingsFragment() {
 
     companion object {
 
         val TAG: String = EthereumNetworkSettingsFragment::class.java.simpleName
-
     }
 
     override val fragmentTitle = ApplicationUtility.str(R.string.ethereum_network)
 
-    override fun getPreferenceKeysAndDefaultValuesForListeners(): List<Pair<String, String>> {
-        TODO("not implemented") // TODO
-    }
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        TODO("not implemented") // TODO
+        addPreferencesFromResource(R.xml.settings_ethereum_network)
     }
 
-    override fun onPreferenceValueChange(preference: Preference, value: String): Boolean {
-        TODO("not implemented") // TODO
+    override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
+            KEY_NODE to DEFAULT_VALUE_NODE
+    )
+
+    override fun onPreferenceValueChange(preference: Preference, value: String) = when (preference.key) {
+        KEY_NODE -> true
+        else -> throw IllegalArgumentException("Invalid preference key, found: ${preference.key}")
     }
 
-    override fun getSummaryValue(preference: Preference, value: String): String {
-        TODO("not implemented") // TODO
+    override fun getSummaryValue(preference: Preference, value: String) = when (preference.key) {
+        KEY_NODE -> getSummaryForListPreference(preference as ListPreference, value)
+        else -> throw IllegalArgumentException("Invalid preference key, found: ${preference.key}")
     }
 
-    override fun onPreferenceClick(preference: Preference?): Boolean {
-        TODO("not implemented") // TODO
-    }
+    override fun onPreferenceClick(preference: Preference?) = false
 
 }

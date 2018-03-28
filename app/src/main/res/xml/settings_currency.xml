@@ -10,12 +10,12 @@
         android:title="Default Native Currency" />
 
     <ListPreference
-        android:defaultValue="@string/ten"
+        android:defaultValue="@string/settings_currency_refresh_frequency_default_value"
         android:enabled="false"
         android:entries="@array/settings_currency_refresh_frequency_entries_ui"
         android:entryValues="@array/settings_currency_refresh_frequency_entries_values"
         android:key="@string/settings_currency_refresh_frequency_key"
-        android:summary="@string/settings_currency_refresh_frequency_ui_default"
+        android:summary="@string/settings_currency_refresh_frequency_ui_default_value"
         android:title="@string/refresh_frequency_of_exchange_rates" />
 
 </PreferenceScreen>

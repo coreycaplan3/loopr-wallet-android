@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/relay_settings">
+
+        <Preference
+            android:selectable="false"
+            android:summary="@string/explain_relays" />
+
+        <ListPreference
+            android:defaultValue="@string/settings_loopring_network_relay_default_value"
+            android:entries="@array/settings_loopring_network_relay_entries_ui"
+            android:entryValues="@array/settings_loopring_network_relay_entries_values"
+            android:summary="@string/settings_loopring_network_relay_ui_default_value"
+            android:title="@string/relay" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/smart_contract_settings">
+
+        <Preference
+            android:selectable="false"
+            android:summary="@string/explain_loopring_contract_version" />
+
+        <ListPreference
+            android:defaultValue="@string/settings_loopring_network_contract_version_default_value"
+            android:entries="@array/settings_loopring_network_contract_version_entries_ui"
+            android:entryValues="@array/settings_loopring_network_contract_version_entries_values"
+            android:summary="@string/settings_loopring_network_contract_version_ui_default_value"
+            android:title="@string/smart_contract_version" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -256,4 +256,21 @@
     <string name="fast_and_pricey">Fast and pricey</string>
     <string name="explain_gas_price">Gas price is how much you\'re willing to pay per unit of gas. Increasing this value will make your transactions run faster.</string>
     <string name="explain_gas_limit">Gas limit is the max quantity of gas you\'re willing to spend on a transaction. Don\'t change these values unless you know what you\'re doing.</string>
+    <string name="lrc_order_fee">LRC order fee</string>
+    <string name="order_margin_split_percentage">Order Margin Split %</string>
+    <string name="explain_lrc_trade_fee">The LRC trade fee is the fee paid to fulfill an order. Setting a higher LRC fee will help fulfill your orders faster but may have marginal benefits beyond a certain point.</string>
+    <string name="explain_margin_split">Margin splitting is the percentage paid if a better deal is found than in your order. Margin splitting will never result in you getting less than what you specified in the order. For more information on margin splitting, check the FAQ.</string>
+    <string name="margin_splitting">Margin Splitting</string>
+    <string name="zero_balance_tokens">0-balance tokens</string>
+    <string name="hidden_initially">Hidden initially</string>
+    <string name="shown_initially">Shown initially</string>
+    <string name="this_setting_is_disabled_usd_selected">This setting is disabled if you have USD selected</string>
+    <string name="relay_settings">Relay Settings</string>
+    <string name="explain_relays">A relay is a market that provides liquidity. There are many benefits to connecting to different relays. For more information on relays and their differences, see the FAQ.</string>
+    <string name="relay">Relay</string>
+    <string name="smart_contract_settings">Smart Contract Settings</string>
+    <string name="smart_contract_version">Smart Contract Version</string>
+    <string name="explain_loopring_contract_version">The smart contract version you select is meant to provide a set of standards and features for trading. You should rarely (if ever) have to retrace back to old versions.</string>
+    <string name="explain_ethereum_node">An Ethereum Node is your entry-point for accessing the Ethereum network.</string>
+    <string name="ethereum_node">Ethereum Node</string>
 </resources>
