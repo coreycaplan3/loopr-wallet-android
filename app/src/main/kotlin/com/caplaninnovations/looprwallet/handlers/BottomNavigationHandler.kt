@@ -12,7 +12,7 @@ import com.caplaninnovations.looprwallet.extensions.logv
 import com.caplaninnovations.looprwallet.extensions.weakReference
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.models.android.fragments.BottomNavigationFragmentStackHistory
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentTransactionController
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationTag
 import kotlinx.android.synthetic.main.bottom_navigation.*
@@ -110,8 +110,8 @@ class BottomNavigationHandler(activity: BaseActivity,
 
         fun commitTransaction(fragment: Fragment, fragmentTag: String) {
             activity?.supportFragmentManager?.let {
-                val controller = FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
-                controller.commitTransaction(it, currentFragment)
+                val controller = FragmentTransactionController(R.id.activityContainer, fragment, fragmentTag)
+                controller.commitTransaction(it)
                 currentFragment = fragment
             }
         }

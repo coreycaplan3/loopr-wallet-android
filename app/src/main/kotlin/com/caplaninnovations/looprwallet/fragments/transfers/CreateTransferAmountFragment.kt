@@ -13,8 +13,11 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.*
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import com.caplaninnovations.looprwallet.fragments.settings.EthereumFeeSettingsFragment
 import com.caplaninnovations.looprwallet.handlers.NumberPadHandler
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentTransactionController
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
+import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
@@ -39,8 +42,6 @@ import javax.inject.Inject
  *
  * Purpose of Class: To perform the second (and final) part of a transfer event, which involves
  * entering the amount.
- *
- * TODO GAS
  */
 class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadActionListener {
 
@@ -79,6 +80,9 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
 
     @Inject
     lateinit var currencySettings: CurrencySettings
+
+    @Inject
+    lateinit var ethereumFeeSettings: EthereumFeeSettings
 
     /**
      * The amount that the user has entered, in their native currency
@@ -239,17 +243,26 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
         }
 
         createTransferSendButton.setOnClickListener {
-            val balance = currentCryptoToken.balance
+            val balance = currentCryptoToken.balance ?: BigDecimal.ZERO
+            // TODO balance error
+
             val bdTokenAmount = BigDecimal(tokenAmount)
-            val gasAmount = BigDecimal.ZERO
+            val gasPrice = ethereumFeeSettings.currentGasPrice
+            val totalEtherTransferAmount = gasPrice * ethereumFeeSettings.currentEthTransferGasLimit
+            val totalTokenTransferAmount = gasPrice * ethereumFeeSettings.currentTokenTransferGasLimit
 
             when (currentCryptoToken.identifier) {
                 EthToken.ETH.identifier -> {
-                    if ((bdTokenAmount + gasAmount) > balance) {
-                        it.context.longToast("You cannot send more ${currentCryptoToken.ticker} than your balance minus gas")
+                    when {
+                        balance < (bdTokenAmount + totalEtherTransferAmount) -> it.context.longToast("You cannot send more ${currentCryptoToken.ticker} than your balance minus gas")
+                        else -> {
+                            // TODO initiate ETH send
+                        }
                     }
                 }
                 else -> {
+                    // TODO make this with more methods
+                    // We're transferring a token
                     val ethBalance = ethToken.balance ?: BigDecimal.ZERO
                     when {
                         ethBalance == BigDecimal.ZERO -> {
@@ -258,8 +271,15 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
                                 tokenBalanceViewModel?.refresh()
                             }
                         }
-                        gasAmount > ethToken.balance -> it.longSnackbarWithAction(R.string.error_insufficient_gas, R.string.settings) {
-                            // TODO go to send/receive gas settings
+                        totalTokenTransferAmount > ethToken.balance -> it.longSnackbarWithAction(R.string.error_insufficient_gas, R.string.gas_settings) {
+                            val fragment = EthereumFeeSettingsFragment()
+                            val tag = EthereumFeeSettingsFragment.TAG
+
+                            FragmentTransactionController(R.id.activityContainer, fragment, tag)
+                                    .apply {
+                                        slideUpAndDownAnimation()
+                                        commitTransaction(requireFragmentManager())
+                                    }
                         }
                         bdTokenAmount > balance -> {
                             it.context.longToast(R.string.error_insufficient_token_balance)

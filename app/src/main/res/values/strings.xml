@@ -273,4 +273,5 @@
     <string name="explain_loopring_contract_version">The smart contract version you select is meant to provide a set of standards and features for trading. You should rarely (if ever) have to retrace back to old versions.</string>
     <string name="explain_ethereum_node">An Ethereum Node is your entry-point for accessing the Ethereum network.</string>
     <string name="ethereum_node">Ethereum Node</string>
+    <string name="gas_settings">Gas Settings</string>
 </resources>

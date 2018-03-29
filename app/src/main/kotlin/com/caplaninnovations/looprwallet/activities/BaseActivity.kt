@@ -18,7 +18,7 @@ import com.caplaninnovations.looprwallet.extensions.loge
 import com.caplaninnovations.looprwallet.extensions.longToast
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentStackTransactionController
+import com.caplaninnovations.looprwallet.models.android.fragments.FragmentTransactionController
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.dimen
@@ -199,13 +199,11 @@ abstract class BaseActivity : AppCompatActivity() {
      * Pushes the given fragment onto the stack and saves the old one
      */
     open fun pushFragmentTransaction(fragment: BaseFragment, fragmentTag: String) {
-        val oldFragment = supportFragmentManager.findFragmentById(R.id.activityContainer)
-
-        FragmentStackTransactionController(R.id.activityContainer, fragment, fragmentTag)
+        FragmentTransactionController(R.id.activityContainer, fragment, fragmentTag)
                 .apply {
                     transition = FragmentTransaction.TRANSIT_FRAGMENT_OPEN
                 }
-                .commitTransaction(supportFragmentManager, oldFragment)
+                .commitTransaction(supportFragmentManager)
     }
 
     open fun popFragmentTransaction() {
