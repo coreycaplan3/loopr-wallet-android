@@ -18,8 +18,8 @@ class ThemeSettings(private val looprSettings: LooprSettings) {
     companion object {
         val KEY_THEME = ApplicationUtility.str(R.string.settings_theme_key)
 
-        private val DARK_THEME = ApplicationUtility.str(R.string.settings_theme_dark)
-        private val LIGHT_THEME = ApplicationUtility.str(R.string.settings_theme_light)
+        val DARK_THEME = ApplicationUtility.str(R.string.settings_theme_dark)
+        val LIGHT_THEME = ApplicationUtility.str(R.string.settings_theme_light)
     }
 
     /**
