@@ -31,7 +31,7 @@ class LoopringNetworkSettingsFragment : BaseSettingsFragment() {
         addPreferencesFromResource(R.xml.settings_loopring_network)
     }
 
-    override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
+    override fun getPreferenceKeysAndDefaultValues() = listOf(
             KEY_RELAY to DEFAULT_VALUE_RELAY,
             KEY_CONTRACT_VERSION to DEFAULT_VALUE_CONTRACT_VERSION
     )

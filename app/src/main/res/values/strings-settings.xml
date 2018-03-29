@@ -79,7 +79,7 @@
     <string name="settings_ethereum_fees_send_ether_gas_limit_key">settings_ethereum_fees_send_ether_gas_limit_key</string>
     <string name="settings_ethereum_fees_send_token_gas_limit_key">loopr_settings_ethereum_fees_send_token_gas_limit_key</string>
 
-    <string name="settings_ethereum_fees_gas_price_default_value">10</string>
+    <integer name="settings_ethereum_fees_gas_price_default_value">10</integer>
     <string name="settings_ethereum_fees_default_send_ether_gas_limit_value">21000</string>
     <string name="settings_ethereum_fees_default_send_token_gas_limit_value">90000</string>
 
@@ -91,7 +91,7 @@
     <string name="settings_loopring_fees_margin_split_key">loopr_settings_loopring_fees_margin_split_key</string>
 
     <string name="settings_loopring_fees_lrc_fee_default_value">3</string>
-    <string name="settings_loopring_fees_margin_split_default_value">25</string>
+    <integer name="settings_loopring_fees_margin_split_default_value">25</integer>
 
     <!-- General Wallet -->
 
@@ -154,10 +154,18 @@
 
     <string-array name="settings_ethereum_network_node_entries_values">
         <item>@string/settings_ethereum_network_node_default_value</item>
+        <item>MyEtherApi TODO</item>
+        <item>EtherScan TODO</item>
+        <item>Giveth TODO</item>
+        <item>Ethereum Commonwealth MEW TODO</item>
     </string-array>
 
     <string-array name="settings_ethereum_network_node_entries_ui">
         <item>@string/settings_ethereum_network_node_ui_default_value</item>
+        <item>ETH - MyEtherApi.com</item>
+        <item>ETH - EtherScan.io</item>
+        <item>ETH - Giveth.io</item>
+        <item>ETH - Ethereum Commonwealth</item>
     </string-array>
 
     <!-- Loopring Network -->

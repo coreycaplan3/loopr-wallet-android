@@ -7,8 +7,7 @@ package com.caplaninnovations.looprwallet.fragments.security
  *
  * Purpose of Class: A listener used for transferring security change events back to the
  * implementor. This includes things like:
- * - The user enabling a PIN
- * - The user disabling their PIN
+ * - The user enabling or disabling a PIN
  * - The user enabling or disabling other forms of security
  */
 interface OnSecurityChangeListener {

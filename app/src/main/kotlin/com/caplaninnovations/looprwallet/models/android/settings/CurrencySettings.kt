@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.models.android.settings
 
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.strArray
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -24,6 +25,8 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
 
         val DEFAULT_VALUE_CURRENCY = str(R.string.settings_currency_currencies_entries_values_default)
         val DEFAULT_VALUE_REFRESH_FREQUENCY = str(R.string.settings_currency_refresh_frequency_default_value)
+
+        val ARRAY_REFRESH_FREQUENCY = strArray(R.array.settings_currency_refresh_frequency_entries_values)
 
         val USD = str(R.string.settings_currency_values_usd)
         val GBP = str(R.string.settings_currency_values_gbp)

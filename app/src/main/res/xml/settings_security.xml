@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/security">
+    <Preference
+        android:selectable="false"
+        android:summary="@string/explain_application_lock" />
 
-        <ListPreference
-            android:defaultValue="@string/settings_security_type_entries_values_default"
-            android:entries="@array/settings_security_type_entries_ui"
-            android:entryValues="@array/settings_security_type_entries_values"
-            android:key="@string/settings_security_type_key"
-            android:summary="@string/settings_security_type_entries_ui_default"
-            android:title="@string/application_lock" />
+    <ListPreference
+        android:defaultValue="@string/settings_security_type_entries_values_default"
+        android:entries="@array/settings_security_type_entries_ui"
+        android:entryValues="@array/settings_security_type_entries_values"
+        android:key="@string/settings_security_type_key"
+        android:summary="@string/settings_security_type_entries_ui_default"
+        android:title="@string/application_lock" />
 
-        <ListPreference
-            android:defaultValue="@string/settings_security_timeout_key"
-            android:entries="@array/settings_security_timeout_entries_ui"
-            android:entryValues="@array/settings_security_timeout_entries_values"
-            android:key="@string/settings_security_timeout_key"
-            android:summary="@string/settings_security_timeout_entries_ui_default"
-            android:title="@string/automatically_lock" />
-
-    </PreferenceCategory>
+    <ListPreference
+        android:defaultValue="@string/settings_security_timeout_key"
+        android:entries="@array/settings_security_timeout_entries_ui"
+        android:entryValues="@array/settings_security_timeout_entries_values"
+        android:key="@string/settings_security_timeout_key"
+        android:summary="@string/settings_security_timeout_entries_ui_default"
+        android:title="@string/automatically_lock" />
 
 </PreferenceScreen>

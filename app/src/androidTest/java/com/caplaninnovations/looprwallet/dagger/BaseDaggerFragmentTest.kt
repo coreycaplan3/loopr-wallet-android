@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.dagger
 
+import android.support.annotation.IdRes
 import android.support.test.rule.ActivityTestRule
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.activities.TestActivity
@@ -35,6 +36,16 @@ abstract class BaseDaggerFragmentTest<out T : Fragment> : BaseDaggerTest() {
     fun checkPreferenceKeyAndValue(key: String, expectedValue: String) {
         val value = LooprSettings.getInstance(fragment.context!!).getString(key)
         assertEquals(expectedValue, value)
+    }
+
+    fun checkPreferenceKeyAndValue(key: String, expectedValue: Int) {
+        val value = LooprSettings.getInstance(fragment.context!!).getInt(key, -1)
+        assertEquals(expectedValue, value)
+    }
+
+    fun checkCurrentFragmentByContainer(@IdRes container: Int, tag: String) {
+        val fragment = activity.supportFragmentManager.findFragmentById(container)
+        assertEquals(tag, fragment.tag)
     }
 
 }

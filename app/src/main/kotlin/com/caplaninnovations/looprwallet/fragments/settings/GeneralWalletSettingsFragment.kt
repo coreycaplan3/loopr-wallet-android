@@ -23,7 +23,7 @@ class GeneralWalletSettingsFragment : BaseSettingsFragment() {
 
     override val fragmentTitle = str(R.string.wallet_customizations)
 
-    override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
+    override fun getPreferenceKeysAndDefaultValues() = listOf(
             KEY_SHOW_ZERO_BALANCES to DEFAULT_VALUE_SHOW_ZERO_BALANCES
     )
 

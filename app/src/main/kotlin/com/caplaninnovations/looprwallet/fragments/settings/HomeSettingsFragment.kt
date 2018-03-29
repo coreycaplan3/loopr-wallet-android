@@ -64,7 +64,7 @@ class HomeSettingsFragment : BaseSettingsFragment() {
         addPreferencesFromResource(R.xml.settings_home)
     }
 
-    override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
+    override fun getPreferenceKeysAndDefaultValues() = listOf(
             Pair(ThemeSettings.KEY_THEME, themeSettings.getCurrentThemeForSettings()),
             Pair(SCREEN_KEY_SECURITY, SUMMARY_VALUE_SECURITY_SCREEN),
             Pair(SCREEN_KEY_ETHEREUM_FEES, SUMMARY_VALUE_ETHEREUM_FEES_SCREEN),

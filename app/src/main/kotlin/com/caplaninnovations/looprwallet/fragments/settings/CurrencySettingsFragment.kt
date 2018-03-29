@@ -33,14 +33,14 @@ class CurrencySettingsFragment : BaseSettingsFragment() {
         addPreferencesFromResource(R.xml.settings_currency)
     }
 
-    override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
+    override fun getPreferenceKeysAndDefaultValues() = listOf(
             KEY_CURRENT_CURRENCY to DEFAULT_VALUE_CURRENCY,
             KEY_REFRESH_FREQUENCY to DEFAULT_VALUE_REFRESH_FREQUENCY
     )
 
     override fun onPreferenceValueChange(preference: Preference, value: String) = when (preference.key) {
         KEY_CURRENT_CURRENCY -> {
-            getPreferenceKeysAndDefaultValuesForListeners().forEach {
+            getPreferenceKeysAndDefaultValues().forEach {
                 if (it.first != KEY_CURRENT_CURRENCY) {
                     val otherPreferences = findPreference(CurrencySettings.KEY_REFRESH_FREQUENCY)
                     otherPreferences.isEnabled = value != CurrencySettings.DEFAULT_VALUE_CURRENCY

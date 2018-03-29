@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
+    <!--suppress AndroidElementNotAllowed -->
+    <android.support.v14.preference.SwitchPreference
         android:defaultValue="@string/settings_general_wallet_zero_balance_default_value"
         android:key="@string/settings_general_wallet_zero_balance_key"
         android:summary="@string/hidden_initially"

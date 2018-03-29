@@ -45,7 +45,7 @@ class EthereumFeeSettingsFragment : BaseSettingsFragment() {
         addPreferencesFromResource(R.xml.settings_ethereum_fees)
     }
 
-    override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
+    override fun getPreferenceKeysAndDefaultValues() = listOf(
             KEY_GAS_PRICE to DEFAULT_GAS_PRICE,
             KEY_TRANSFER_ETHER_GAS_LIMIT to DEFAULT_TRANSFER_ETHER_GAS_LIMIT,
             KEY_TRANSFER_TOKEN_GAS_LIMIT to DEFAULT_TRANSFER_TOKEN_GAS_LIMIT

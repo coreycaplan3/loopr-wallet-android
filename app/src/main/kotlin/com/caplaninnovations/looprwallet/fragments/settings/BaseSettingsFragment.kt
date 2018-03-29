@@ -40,7 +40,7 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
         this.setDividerHeight(height)
 
         // Bind the default and current values
-        val listOfKeysAndDefaultValues = getPreferenceKeysAndDefaultValuesForListeners()
+        val listOfKeysAndDefaultValues = getPreferenceKeysAndDefaultValues()
         listOfKeysAndDefaultValues.forEach {
             bindPreferenceSummaryToValue(it.first, it.second)
         }
@@ -53,7 +53,7 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
      * @return A list of pairs which contains the preference's key and its default value in the
      * first and second position, respectively.
      */
-    abstract fun getPreferenceKeysAndDefaultValuesForListeners(): List<Pair<String, String>>
+    abstract fun getPreferenceKeysAndDefaultValues(): List<Pair<String, String>>
 
     /**
      * The title of the fragment, which will be bound to the action bar
@@ -73,7 +73,7 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
 
     /**
      * Called whenever a preference changes and when the fragment is initially setup via list
-     * return from [getPreferenceKeysAndDefaultValuesForListeners].
+     * return from [getPreferenceKeysAndDefaultValues].
      */
     final override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
         val stringValue = newValue?.toString() ?: return false

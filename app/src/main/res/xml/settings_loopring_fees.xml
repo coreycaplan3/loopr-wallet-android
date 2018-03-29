@@ -24,8 +24,8 @@
             android:summary="@string/explain_margin_split" />
 
         <!--suppress AndroidElementNotAllowed -->
-        <android.support.v7.preference.SeekBarPreference
-            android:defaultValue="@string/settings_loopring_fees_margin_split_default_value"
+        <SeekBarPreference
+            android:defaultValue="@integer/settings_loopring_fees_margin_split_default_value"
             android:key="@string/settings_loopring_fees_margin_split_key"
             android:max="100"
             android:min="0"

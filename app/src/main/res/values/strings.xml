@@ -276,4 +276,5 @@
     <string name="ethereum_node">Ethereum Node</string>
     <string name="gas_settings">Gas Settings</string>
     <string name="cannot_send_more_eth_than_balance_and_gas">You cannot send more ETH than your balance minus gas</string>
+    <string name="explain_application_lock">An application lock protects the assets on your device by adding a lock screen before opening this app, or when you want to view your private key.</string>
 </resources>

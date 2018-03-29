@@ -28,7 +28,7 @@ class EthereumNetworkSettingsFragment : BaseSettingsFragment() {
         addPreferencesFromResource(R.xml.settings_ethereum_network)
     }
 
-    override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
+    override fun getPreferenceKeysAndDefaultValues() = listOf(
             KEY_NODE to DEFAULT_VALUE_NODE
     )
 

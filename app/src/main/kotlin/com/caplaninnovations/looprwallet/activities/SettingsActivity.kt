@@ -81,7 +81,7 @@ class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
 
     override fun onSecurityDisabled() {
         val fragment = supportFragmentManager.findFragmentByTag(SecuritySettingsFragment.TAG)
-        (fragment as? SecuritySettingsFragment)?.onSecurityScreenDisabled()
+        (fragment as? SecuritySettingsFragment)?.onSecurityDisabled()
 
         supportFragmentManager.popBackStack()
     }

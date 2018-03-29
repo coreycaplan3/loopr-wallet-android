@@ -34,7 +34,7 @@ class LoopringFeeSettingsFragment : BaseSettingsFragment() {
         addPreferencesFromResource(R.xml.settings_loopring_fees)
     }
 
-    override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
+    override fun getPreferenceKeysAndDefaultValues() = listOf(
             KEY_LRC_FEE to DEFAULT_VALUE_LRC_FEE,
             KEY_MARGIN_SPLIT to DEFAULT_VALUE_MARGIN_SPLIT
     )

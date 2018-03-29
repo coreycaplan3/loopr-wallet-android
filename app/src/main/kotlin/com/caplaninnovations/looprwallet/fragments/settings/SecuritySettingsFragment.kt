@@ -9,10 +9,11 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.fragments.security.BaseSecurityFragment
 import com.caplaninnovations.looprwallet.fragments.security.ConfirmOldSecurityFragment
 import com.caplaninnovations.looprwallet.fragments.security.EnterNewSecurityFragment
+import com.caplaninnovations.looprwallet.fragments.security.OnSecurityChangeListener
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.DEFAULT_SECURITY_TIMEOUT
-import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.PREFERENCE_KEY_SECURITY_TIMEOUT
-import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.PREFERENCE_KEY_SECURITY_TYPE
+import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.KEY_SECURITY_TIMEOUT
+import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.KEY_SECURITY_TYPE
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
@@ -26,7 +27,7 @@ import javax.inject.Inject
  *
  * Purpose of Class: For showing nested settings screens
  */
-class SecuritySettingsFragment : BaseSettingsFragment() {
+class SecuritySettingsFragment : BaseSettingsFragment(), OnSecurityChangeListener {
 
     companion object {
 
@@ -44,14 +45,14 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
         addPreferencesFromResource(R.xml.settings_security)
     }
 
-    override fun getPreferenceKeysAndDefaultValuesForListeners() = listOf(
-            Pair(PREFERENCE_KEY_SECURITY_TYPE, TYPE_DEFAULT_VALUE_SECURITY),
-            Pair(PREFERENCE_KEY_SECURITY_TIMEOUT, DEFAULT_SECURITY_TIMEOUT)
+    override fun getPreferenceKeysAndDefaultValues() = listOf(
+            Pair(KEY_SECURITY_TYPE, TYPE_DEFAULT_VALUE_SECURITY),
+            Pair(KEY_SECURITY_TIMEOUT, DEFAULT_SECURITY_TIMEOUT)
     )
 
     override fun onPreferenceValueChange(preference: Preference, value: String): Boolean {
         return when (preference.key) {
-            PREFERENCE_KEY_SECURITY_TYPE -> {
+            KEY_SECURITY_TYPE -> {
                 val currentSecurityType = securitySettings.getCurrentSecurityType()
                 if (value == currentSecurityType && value == TYPE_DEFAULT_VALUE_SECURITY) {
                     // We aren't changing the preference and the type of security is set to NONE
@@ -79,7 +80,7 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
                     }
                     else -> throw IllegalArgumentException("Invalid security type, found: $value")
                 }
-                
+
                 (activity as? SettingsActivity)?.onSecuritySettingsFragmentClick(fragment, tag)
                 false
             }
@@ -90,8 +91,8 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
     }
 
     override fun getSummaryValue(preference: Preference, value: String) = when (preference.key) {
-        PREFERENCE_KEY_SECURITY_TYPE -> getSummaryForListPreference(preference as ListPreference, value)
-        PREFERENCE_KEY_SECURITY_TIMEOUT -> {
+        KEY_SECURITY_TYPE -> getSummaryForListPreference(preference as ListPreference, value)
+        KEY_SECURITY_TIMEOUT -> {
             val uiEntry = getSummaryForListPreference(preference as ListPreference, value)
             val summaryFormatter = ApplicationUtility.str(R.string.formatter_automatically_lock_after_timeout)
             String.format(summaryFormatter, uiEntry)
@@ -101,49 +102,41 @@ class SecuritySettingsFragment : BaseSettingsFragment() {
 
     override fun onPreferenceClick(preference: Preference?) = false
 
-    /**
-     * Called when the security screen is now *disabled*, which will disable other settings in the
-     * screen.
-     */
-    fun onSecurityScreenDisabled() {
+    override fun onSecurityEnabled(securityType: String) {
+        securitySettings.setCurrentSecurityType(securityType)
+
+        (findPreference(KEY_SECURITY_TYPE) as? ListPreference)?.let {
+            it.summary = getSummaryForListPreference(it, TYPE_PIN_SECURITY)
+        }
+
+        findPreference(KEY_SECURITY_TIMEOUT)?.let {
+            it.summary = getSummaryValue(it, securitySettings.getCurrentSecurityTimeout().toString())
+            it.isEnabled = true
+        }
+
+        getPreferenceKeysAndDefaultValues().forEach {
+            if (it.first != KEY_SECURITY_TYPE) {
+                findPreference(it.first).isEnabled = true
+            }
+        }
+    }
+
+    override fun onSecurityDisabled() {
         securitySettings.setCurrentSecurityType(TYPE_DEFAULT_VALUE_SECURITY)
 
-        (findPreference(PREFERENCE_KEY_SECURITY_TYPE) as? ListPreference)?.let {
+        (findPreference(KEY_SECURITY_TYPE) as? ListPreference)?.let {
             it.summary = getSummaryForListPreference(it, TYPE_DEFAULT_VALUE_SECURITY)
         }
 
-        findPreference(PREFERENCE_KEY_SECURITY_TIMEOUT)?.let {
+        findPreference(KEY_SECURITY_TIMEOUT)?.let {
             it.summary = getString(R.string.disabled_application_lock)
             it.isEnabled = false
         }
 
 
-        getPreferenceKeysAndDefaultValuesForListeners().forEach {
-            if (it.first != PREFERENCE_KEY_SECURITY_TYPE) {
+        getPreferenceKeysAndDefaultValues().forEach {
+            if (it.first != KEY_SECURITY_TYPE) {
                 findPreference(it.first)?.isEnabled = false
-            }
-        }
-    }
-
-    /**
-     * Called when the security screen is now *enabled*, which will enable other settings in the
-     * screen.
-     */
-    fun onSecurityEnabled(securityType: String) {
-        securitySettings.setCurrentSecurityType(securityType)
-
-        (findPreference(PREFERENCE_KEY_SECURITY_TYPE) as? ListPreference)?.let {
-            it.summary = getSummaryForListPreference(it, TYPE_PIN_SECURITY)
-        }
-
-        findPreference(PREFERENCE_KEY_SECURITY_TIMEOUT)?.let {
-            it.summary = getSummaryValue(it, securitySettings.getCurrentSecurityTimeout().toString())
-            it.isEnabled = true
-        }
-
-        getPreferenceKeysAndDefaultValuesForListeners().forEach {
-            if (it.first != PREFERENCE_KEY_SECURITY_TYPE) {
-                findPreference(it.first).isEnabled = true
             }
         }
     }
