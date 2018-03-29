@@ -204,6 +204,7 @@
     <string name="error_send_tokens_with_zero_balance">You may only send tokens that do not have a 0 balance</string>
     <string name="formatter_balance">Balance: %s</string>
     <string name="error_retrieve_eth_balance">There was an error getting your ETH balance</string>
+    <string name="error_retrieve_token_balance">There was an error getting your token\'s balance</string>
     <string name="retry">retry</string>
     <string name="error_insufficient_gas">You need more ETH to send this transaction, or you can try lowering your gas settings</string>
     <string name="settings">Settings</string>
@@ -274,4 +275,5 @@
     <string name="explain_ethereum_node">An Ethereum Node is your entry-point for accessing the Ethereum network.</string>
     <string name="ethereum_node">Ethereum Node</string>
     <string name="gas_settings">Gas Settings</string>
+    <string name="cannot_send_more_eth_than_balance_and_gas">You cannot send more ETH than your balance minus gas</string>
 </resources>

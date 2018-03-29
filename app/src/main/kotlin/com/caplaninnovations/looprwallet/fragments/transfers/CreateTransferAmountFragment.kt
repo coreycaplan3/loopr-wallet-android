@@ -25,6 +25,7 @@ import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate.Co
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate.Companion.MAX_EXCHANGE_RATE_FRACTION_DIGITS
 import com.caplaninnovations.looprwallet.models.user.Contact
 import com.caplaninnovations.looprwallet.repositories.user.ContactsRepository
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import com.caplaninnovations.looprwallet.viewmodels.LooprWalletViewModelFactory
 import com.caplaninnovations.looprwallet.viewmodels.OfflineFirstViewModel
 import com.caplaninnovations.looprwallet.viewmodels.price.TokenPriceCheckerViewModel
@@ -119,21 +120,23 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
             val model = LooprWalletViewModelFactory.get<TokenPriceCheckerViewModel>(this, wallet)
             field = model
             model.addCurrentStateObserver(this) {
-                if (model.isLoading()) {
-                    progressBar?.visibility = View.VISIBLE
-                } else {
-                    progressBar?.visibility = View.INVISIBLE
+                when {
+                    model.isLoading() -> progressBar?.visibility = View.VISIBLE
+                    else -> progressBar?.visibility = View.INVISIBLE
                 }
 
-                if (it == OfflineFirstViewModel.STATE_LOADING_EMPTY) {
-                    createTransferCurrentPriceLabel?.text = getString(R.string.loading_price)
-                    createTransferSecondaryLabel?.text = getString(R.string.loading_exchange_rate)
-                } else if (it == OfflineFirstViewModel.STATE_IDLE_EMPTY) {
-                    createTransferCurrentPriceLabel?.text = getString(R.string.error_loading_price)
-                    createTransferSecondaryLabel?.text = getString(R.string.error_loading_exchange_rate)
+                when (it) {
+                    OfflineFirstViewModel.STATE_LOADING_EMPTY -> {
+                        createTransferCurrentPriceLabel?.text = getString(R.string.loading_price)
+                        createTransferSecondaryLabel?.text = getString(R.string.loading_exchange_rate)
+                    }
+                    OfflineFirstViewModel.STATE_IDLE_EMPTY -> {
+                        createTransferCurrentPriceLabel?.text = getString(R.string.error_loading_price)
+                        createTransferSecondaryLabel?.text = getString(R.string.error_loading_exchange_rate)
 
-                    createTransferSwapButton.isEnabled = false
-                    createTransferMaxButton.isEnabled = false
+                        createTransferSwapButton.isEnabled = false
+                        createTransferMaxButton.isEnabled = false
+                    }
                 }
 
                 if (model.hasValidData()) {
@@ -200,8 +203,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
         tokenAmount = savedInstanceState?.getString(KEY_TOKEN_AMOUNT) ?: "0"
         isCurrencyMainLabel = savedInstanceState?.getBoolean(KEY_IS_CURRENCY_MAIN_LABEL, true) != false
 
-        currentCryptoToken = tokenPriceCheckerViewModel?.currentCryptoToken ?: EthToken.ETH
         ethToken = tokenBalanceViewModel?.getEthBalanceNow() ?: EthToken.ETH
+        currentCryptoToken = tokenPriceCheckerViewModel?.currentCryptoToken ?: ethToken
 
         toolbar?.title = null
         toolbar?.subtitle = contact?.name ?: recipientAddress
@@ -230,65 +233,27 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
                 // calculate max based on currency
                 // MAX = balance * princeInCurrency
                 currencyAmount = (balance * priceInNativeCurrency)
-                        .setScale(2, RoundingMode.HALF_DOWN).toPlainString()
-                currencyAmount = trimExtraZerosAfterDecimal(currencyAmount)
+                        .setScale(2, RoundingMode.HALF_DOWN)
+                        .toPlainString()
             } else {
                 // Calculate max based on token amount
                 // MAX is just the balance
-                tokenAmount = balance.setScale(8, RoundingMode.HALF_DOWN).toPlainString()
-                tokenAmount = trimExtraZerosAfterDecimal(tokenAmount)
+                tokenAmount = balance.setScale(8, RoundingMode.HALF_DOWN)
+                        .toPlainString()
             }
 
             bindAmountsToText()
         }
 
         createTransferSendButton.setOnClickListener {
-            val balance = currentCryptoToken.balance ?: BigDecimal.ZERO
-            // TODO balance error
-
             val bdTokenAmount = BigDecimal(tokenAmount)
             val gasPrice = ethereumFeeSettings.currentGasPrice
             val totalEtherTransferAmount = gasPrice * ethereumFeeSettings.currentEthTransferGasLimit
             val totalTokenTransferAmount = gasPrice * ethereumFeeSettings.currentTokenTransferGasLimit
 
             when (currentCryptoToken.identifier) {
-                EthToken.ETH.identifier -> {
-                    when {
-                        balance < (bdTokenAmount + totalEtherTransferAmount) -> it.context.longToast("You cannot send more ${currentCryptoToken.ticker} than your balance minus gas")
-                        else -> {
-                            // TODO initiate ETH send
-                        }
-                    }
-                }
-                else -> {
-                    // TODO make this with more methods
-                    // We're transferring a token
-                    val ethBalance = ethToken.balance ?: BigDecimal.ZERO
-                    when {
-                        ethBalance == BigDecimal.ZERO -> {
-                            loge("Could not get user\'s ETH balance!", IllegalStateException())
-                            it.longSnackbarWithAction(R.string.error_retrieve_eth_balance, R.string.retry) {
-                                tokenBalanceViewModel?.refresh()
-                            }
-                        }
-                        totalTokenTransferAmount > ethToken.balance -> it.longSnackbarWithAction(R.string.error_insufficient_gas, R.string.gas_settings) {
-                            val fragment = EthereumFeeSettingsFragment()
-                            val tag = EthereumFeeSettingsFragment.TAG
-
-                            FragmentTransactionController(R.id.activityContainer, fragment, tag)
-                                    .apply {
-                                        slideUpAndDownAnimation()
-                                        commitTransaction(requireFragmentManager())
-                                    }
-                        }
-                        bdTokenAmount > balance -> {
-                            it.context.longToast(R.string.error_insufficient_token_balance)
-                        }
-                        else -> {
-                            // TODO initiate send
-                        }
-                    }
-                }
+                EthToken.ETH.identifier -> onSendEth(bdTokenAmount, totalEtherTransferAmount)
+                else -> onSendToken(bdTokenAmount, totalTokenTransferAmount)
             }
         }
 
@@ -343,16 +308,6 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
         outState.putBoolean(KEY_IS_CURRENCY_MAIN_LABEL, isCurrencyMainLabel)
     }
 
-    fun trimExtraZerosAfterDecimal(s: String): String {
-        if (!s.contains(".")) return s
-
-        for (i in (s.length - 1)..0) {
-            if (s[i] != '0') return s.substring(0, i + 1)
-        }
-
-        return s
-    }
-
     /**
      * Counts the number of digits before the decimal point. If there's no decimal point, it
      * counts all the digits
@@ -376,33 +331,6 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
             if (ch == '.') decimalFlag = true
         }
         return counter
-    }
-
-    // MARK - Private Methods
-
-    /**
-     * Sets up [TokenPriceCheckerViewModel] to watch an [EthToken].
-     */
-    private fun setupTokenTicker(token: CryptoToken) {
-        tokenPriceCheckerViewModel?.getTokenPrice(this, token.identifier) {
-            currentCryptoToken = it
-
-            val balance = it.balance?.formatAsToken(currencySettings, it.ticker)
-                    ?: BigDecimal.ZERO.formatAsToken(currencySettings, it.ticker)
-            val balanceText = String.format(getString(R.string.formatter_balance), balance)
-            createTransferBalanceLabel.text = balanceText
-
-            val price = it.priceInNativeCurrency?.formatAsCurrency(currencySettings)
-
-            if (price != null) {
-                createTransferCurrentPriceLabel?.text = String.format(
-                        getString(R.string.current_ticker_price),
-                        it.ticker,
-                        price)
-
-                bindAmountsToText()
-            }
-        }
     }
 
     /**
@@ -473,6 +401,81 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
         }
     }
 
+    // MARK - Private Methods
+
+    /**
+     * Sets up [TokenPriceCheckerViewModel] to watch an [EthToken].
+     */
+    private fun setupTokenTicker(token: CryptoToken) {
+        tokenPriceCheckerViewModel?.getTokenPrice(this, token.identifier) {
+            currentCryptoToken = it
+
+            val balance = it.balance?.formatAsToken(currencySettings, it.ticker) ?: NEGATIVE_ONE
+            createTransferBalanceLabel.text = when (balance) {
+                NEGATIVE_ONE -> String.format(str(R.string.formatter_balance), balance)
+                else -> ""
+            }
+
+            val price = it.priceInNativeCurrency?.formatAsCurrency(currencySettings)
+
+            if (price != null) {
+                createTransferCurrentPriceLabel?.text = String.format(
+                        getString(R.string.current_ticker_price),
+                        it.ticker,
+                        price)
+
+                bindAmountsToText()
+            }
+        }
+    }
+
+    /**
+     * Called when a user is attempting to send ETH. This method checks for insufficient balance
+     * issues.
+     */
+    private fun onSendEth(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
+        val ethBalance = ethToken.balance ?: NEGATIVE_ONE
+        when {
+            ethBalance == NEGATIVE_ONE -> onEthBalanceError()
+            ethBalance < (amountToSend + totalTransactionCost) ->
+                view?.context?.longToast(R.string.cannot_send_more_eth_than_balance_and_gas)
+            else -> {
+                // TODO initiate ETH send
+            }
+        }
+    }
+
+    private fun onSendToken(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
+        val tokenToSendBalance = currentCryptoToken.balance ?: NEGATIVE_ONE
+        val ethBalance = ethToken.balance ?: NEGATIVE_ONE
+        when {
+            ethBalance == NEGATIVE_ONE -> onEthBalanceError()
+            tokenToSendBalance == NEGATIVE_ONE -> {
+                // This should not happen, since the button is disabled until a balance was loaded
+                loge("Could not get the user\'s token balance!", IllegalStateException())
+                view?.longSnackbarWithAction(R.string.error_retrieve_token_balance, R.string.retry) {
+                    tokenBalanceViewModel?.refresh()
+                }
+            }
+            ethBalance < totalTransactionCost -> view?.longSnackbarWithAction(R.string.error_insufficient_gas, R.string.gas_settings) {
+                val fragment = EthereumFeeSettingsFragment()
+                val tag = EthereumFeeSettingsFragment.TAG
+
+                FragmentTransactionController(R.id.activityContainer, fragment, tag)
+                        .apply {
+                            slideUpAndDownAnimation()
+                            commitTransaction(requireFragmentManager())
+                        }
+            }
+            tokenToSendBalance < amountToSend -> {
+                view?.context?.longToast(R.string.error_insufficient_token_balance)
+            }
+            else -> {
+                // TODO initiate send
+            }
+        }
+    }
+
     private fun bindAmountsToText() {
         val ticker = currentCryptoToken.ticker
         when {
@@ -517,6 +520,14 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
     private fun setAmountBasedOnCurrencyMainLabel(amount: String) = when {
         isCurrencyMainLabel -> currencyAmount = amount
         else -> tokenAmount = amount
+    }
+
+    private fun onEthBalanceError() {
+        // This should not happen, since the button is disabled until a balance was loaded
+        loge("Could not get user\'s ETH balance!", IllegalStateException())
+        view?.longSnackbarWithAction(R.string.error_retrieve_eth_balance, R.string.retry) {
+            tokenBalanceViewModel?.refresh()
+        }
     }
 
 }

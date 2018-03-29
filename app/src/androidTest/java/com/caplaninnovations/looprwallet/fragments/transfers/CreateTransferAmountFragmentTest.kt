@@ -27,16 +27,6 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
     }
 
     @Test
-    fun stringExtension_trimExtraZeros() {
-        assertEquals("0.", fragment.trimExtraZerosAfterDecimal("0.0000"))
-        assertEquals("0", fragment.trimExtraZerosAfterDecimal("0"))
-        assertEquals("0.101", fragment.trimExtraZerosAfterDecimal("0.101"))
-        assertEquals("0.101", fragment.trimExtraZerosAfterDecimal("0.1010"))
-        assertEquals("5.001", fragment.trimExtraZerosAfterDecimal("5.0010"))
-        assertEquals("5.11", fragment.trimExtraZerosAfterDecimal("5.11"))
-    }
-
-    @Test
     fun stringExtension_countIntegersBeforeDecimal() {
         assertEquals(1, fragment.getAmountBeforeDecimal("0.0000"))
         assertEquals(1, fragment.getAmountBeforeDecimal("0"))

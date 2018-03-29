@@ -2,8 +2,7 @@ package com.caplaninnovations.looprwallet.viewmodels.price
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
-import com.caplaninnovations.looprwallet.extensions.allNonNull
-import com.caplaninnovations.looprwallet.extensions.loge
+import com.caplaninnovations.looprwallet.extensions.logw
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
 import com.caplaninnovations.looprwallet.models.user.SyncData
@@ -90,26 +89,32 @@ class TokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewMode
      *
      * @return A new function that takes [CryptoToken] as a parameter and returns nothing.
      */
-    private inline fun interceptOnChange(crossinline onChange: (CryptoToken) -> Unit): (CryptoToken) -> Unit {
-        return { token: CryptoToken ->
+    private fun interceptOnChange(onChange: (CryptoToken) -> Unit): (CryptoToken) -> Unit {
+        return inlineFunction@{ token: CryptoToken ->
             currentCryptoToken = token
 
             val rateAgainstUsd = currencyExchangeRate?.rateAgainstToUsd
-            if(rateAgainstUsd == null) {
-                loge("Invalid rate!", IllegalStateException())
+            if (rateAgainstUsd == null) {
+                logw("rateAgainstToUsd has not loaded yet or we are in an invalid state!",
+                        IllegalStateException())
                 onChange(token)
+                return@inlineFunction
             }
 
-            Pair(token.priceInUsd, rateAgainstUsd).allNonNull {
-                val priceInUsd = it.first
-                val nativeCurrencyExchangeRate = it.second
-                val priceInNativeCurrency = (priceInUsd * nativeCurrencyExchangeRate)
-                        .setScale(8, RoundingMode.HALF_UP)
-
-                token.priceInNativeCurrency = priceInNativeCurrency
-
+            val priceInUsd = token.priceInUsd
+            if (priceInUsd == null) {
+                logw("priceInUsd has not loaded yet or we are in an invalid state!",
+                        IllegalStateException())
                 onChange(token)
+                return@inlineFunction
             }
+
+            val priceInNativeCurrency = (priceInUsd * rateAgainstUsd)
+                    .setScale(8, RoundingMode.HALF_EVEN)
+
+            token.priceInNativeCurrency = priceInNativeCurrency
+
+            onChange(token)
         }
     }
 

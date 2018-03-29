@@ -59,6 +59,8 @@ fun String.formatAsCustomToken(currencySettings: CurrencySettings, ticker: Strin
     return "$entireNumber $ticker"
 }
 
+val NEGATIVE_ONE = BigDecimal(-1)
+
 /**
  * Formats a [BigDecimal] in the user's native currency
  */
