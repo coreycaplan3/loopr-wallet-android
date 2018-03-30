@@ -65,13 +65,13 @@ class ViewContactsFragment : BaseFragment() {
                     }
         }
 
+    var selectedContactAddress: String? = null
+
     var onContactClickedListener: OnContactClickedListener? by weakReference(null)
 
     private var contactList: RealmList<Contact>? = null
 
-    private var selectedContactAddress: String? = null
-
-    private lateinit var adapter: ContactsAdapter
+    private var adapter: ContactsAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,18 +92,19 @@ class ViewContactsFragment : BaseFragment() {
         queryRealmForContactsByAddress(address)
 
         // If it's not empty, we're searching!
-        adapter.isSearching = !TextUtils.isEmpty(address)
-        adapter.notifyDataSetChanged()
+        adapter?.isSearching = !TextUtils.isEmpty(address)
+        adapter?.notifyDataSetChanged()
     }
 
     fun resetRecyclerViewPosition() {
+        val adapter = adapter ?: return
         if (adapter.itemCount > 0) {
             viewContactsRecyclerView?.smoothScrollToPosition(0)
         }
     }
 
     fun searchContactsByName(name: String) {
-        adapter.isSearching = !TextUtils.isEmpty(name)
+        adapter?.isSearching = !TextUtils.isEmpty(name)
         queryRealmForContactsByName(name)
     }
 
@@ -113,13 +114,25 @@ class ViewContactsFragment : BaseFragment() {
                 ?.findFirst()
     }
 
-    fun scrollToSelectedContact() = selectedContactAddress?.let { address ->
+    /**
+     * Scrolls to the selected contact, if a contact is selected
+     *
+     * @param address The address of the selected contact or null if there isn't one.
+     */
+    fun scrollToSelectedContact(address: String?) {
+        address ?: return
+
         val index = contactList?.indexOfFirstOrNull { it.address == address }
         index?.let { viewContactsRecyclerView?.scrollToPosition(it) }
     }
 
-    fun onSelectedContactChanged(selectedContactAddress: String?) {
-        adapter.onSelectedContactChanged(selectedContactAddress)
+    /**
+     * Called when the contact that is selected in the RecyclerView changes.
+     *
+     * @param address The address of the selected contact or null if there isn't a selected contact.
+     */
+    fun onSelectedContactChanged(address: String?) {
+        adapter?.onSelectedContactChanged(address)
     }
 
     // MARK - Private Methods
@@ -133,13 +146,13 @@ class ViewContactsFragment : BaseFragment() {
 
     private fun queryRealmForContactsByName(name: String) {
         contactsByNameViewModel?.getAllContactsByName(this, name) {
-            adapter.updateData(it)
+            adapter?.updateData(it)
         }
     }
 
     private fun queryRealmForContactsByAddress(address: String) {
         contactsByAddressViewModel?.getAllContactsByAddress(this, address) {
-            adapter.updateData(it)
+            adapter?.updateData(it)
         }
     }
 

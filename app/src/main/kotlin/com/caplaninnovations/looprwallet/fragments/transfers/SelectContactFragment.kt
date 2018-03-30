@@ -64,10 +64,13 @@ class SelectContactFragment : BaseFragment(), ViewContactsFragment.OnContactClic
             childFragmentManager.beginTransaction()
                     .replace(R.id.viewContactsFragmentContainer, fragment, ViewContactsFragment.TAG)
                     .commit()
-            fragment
+
+            return@findFragmentByTagOrCreate fragment
         }
 
         viewContactsFragment.onContactClickedListener = this
+
+        viewContactsFragment.selectedContactAddress = selectedContactAddress
 
         viewContactsFragment.searchContactsByAddress(recipientAddressEditText.text.toString())
 
@@ -110,7 +113,7 @@ class SelectContactFragment : BaseFragment(), ViewContactsFragment.OnContactClic
 
 
     override fun onHideKeyboard() {
-        viewContactsFragment.scrollToSelectedContact()
+        viewContactsFragment.scrollToSelectedContact(selectedContactAddress)
     }
 
     override fun onContactSelected(contact: Contact) {
@@ -211,7 +214,7 @@ class SelectContactFragment : BaseFragment(), ViewContactsFragment.OnContactClic
                 createTransferRecipientInputContainer.visibility = View.VISIBLE
                 createTransferContinueButton.visibility = View.VISIBLE
 
-                viewContactsFragment.scrollToSelectedContact()
+                viewContactsFragment.scrollToSelectedContact(selectedContactAddress)
 
                 if (item.isActionViewExpanded) {
                     ToolbarToSearchAnimation.animateToToolbar(

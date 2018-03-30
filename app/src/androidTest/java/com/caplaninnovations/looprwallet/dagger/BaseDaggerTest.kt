@@ -61,8 +61,7 @@ open class BaseDaggerTest {
         private set(value) {
             field = value
             value?.let {
-                val realmClient = LooprWalletApp.dagger.realmClient
-                inMemoryRealm = realmClient.getInstance(it.walletName, it.realmKey)
+                inMemoryRealm = createRealm()
             }
         }
 
@@ -105,6 +104,10 @@ open class BaseDaggerTest {
         field.set(null, null)
 
         logd("Reset LooprSecureSettings static instance")
+    }
+
+    protected fun createRealm(): Realm {
+        return LooprWalletApp.dagger.realmClient.getInstance(wallet!!.walletName, wallet!!.realmKey)
     }
 
     /**

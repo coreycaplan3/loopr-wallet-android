@@ -1,9 +1,7 @@
 package com.caplaninnovations.looprwallet.dialogs
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,10 +47,6 @@ class CreateContactDialog : BaseBottomSheetDialog() {
             val wallet = LooprWalletApp.dagger.walletClient.getCurrentWallet() ?: return null
             return ContactsRepository(wallet).apply { field = this }
         }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(context!!, this.theme)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dialog_confirm_password, container, false)

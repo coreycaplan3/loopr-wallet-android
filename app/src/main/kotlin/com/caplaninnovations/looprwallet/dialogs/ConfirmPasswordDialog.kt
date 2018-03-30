@@ -1,9 +1,7 @@
 package com.caplaninnovations.looprwallet.dialogs
 
-import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.design.widget.BottomSheetDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,10 +79,6 @@ class ConfirmPasswordDialog : BaseBottomSheetDialog() {
 
     private val passwordBasedWallet: PasswordBasedWallet by lazy {
         arguments!!.getParcelable<Parcelable>(KEY_WALLET) as PasswordBasedWallet
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(context!!, this.theme)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.dialogs
 
+import android.app.Dialog
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
@@ -23,6 +24,10 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
             field = value
             onFormChanged()
         }
+
+    final override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return BottomSheetDialog(context!!, this.theme)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
