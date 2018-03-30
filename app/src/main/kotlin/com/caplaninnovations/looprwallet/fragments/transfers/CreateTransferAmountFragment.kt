@@ -354,28 +354,27 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
                     // Default to just returning the number itself, without mutations
                     amount
             }
-            else ->
-                when {
-                    amount == "0" -> number
-                    !hasDecimal && amountBefore < CurrencyExchangeRate.MAX_INTEGER_DIGITS ->
-                        // Whole number and there's less than the number of integer digits
-                        "$amount$number"
-                    hasDecimal ->
-                        when {
-                            isCurrencyMainLabel && amountAfter < MAX_CURRENCY_FRACTION_DIGITS ->
-                                // Currency decimal with less than the max currency digits
-                                "$amount$number"
-                            !isCurrencyMainLabel && amountAfter < MAX_EXCHANGE_RATE_FRACTION_DIGITS ->
-                                // Token decimal with less than the max token digits
-                                "$amount$number"
-                            else ->
-                                // Default to just returning the number itself, without mutations
-                                amount
-                        }
-                    else ->
-                        // Default to returning the number itself, without mutations
-                        amount
-                }
+            else -> when {
+                amount == "0" -> number
+                !hasDecimal && amountBefore < CurrencyExchangeRate.MAX_INTEGER_DIGITS ->
+                    // Whole number and there's less than the number of integer digits
+                    "$amount$number"
+                hasDecimal ->
+                    when {
+                        isCurrencyMainLabel && amountAfter < MAX_CURRENCY_FRACTION_DIGITS ->
+                            // Currency decimal with less than the max currency digits
+                            "$amount$number"
+                        !isCurrencyMainLabel && amountAfter < MAX_EXCHANGE_RATE_FRACTION_DIGITS ->
+                            // Token decimal with less than the max token digits
+                            "$amount$number"
+                        else ->
+                            // Default to just returning the number itself, without mutations
+                            amount
+                    }
+                else ->
+                    // Default to returning the number itself, without mutations
+                    amount
+            }
         }
 
         if (amount.isEmpty()) {
@@ -511,6 +510,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
     /**
      * Gets either [currencyAmount] or [tokenAmount] depending on which one is currency the main
      * label.
+     *
+     * @see isCurrencyMainLabel
      */
     private fun getAmountBasedOnCurrencyMainLabel() = when {
         isCurrencyMainLabel -> currencyAmount

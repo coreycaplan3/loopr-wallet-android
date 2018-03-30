@@ -93,14 +93,13 @@
 
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/contactsRecyclerView"
+        <FrameLayout
+            android:id="@+id/viewContactsFragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/createTransferContinueButton"
             android:layout_below="@id/createTransferRecipientInputContainer"
-            android:layout_marginTop="@dimen/vertical_margin_small"
-            tools:listitem="@layout/view_holder_contact" />
+            android:layout_marginTop="@dimen/vertical_margin_small" />
 
         <Button
             android:id="@+id/createTransferContinueButton"

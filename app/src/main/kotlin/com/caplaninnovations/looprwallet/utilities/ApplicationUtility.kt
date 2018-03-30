@@ -17,6 +17,12 @@ object ApplicationUtility {
      * @param resId The string resource
      * @return Gets a string using the [LooprWalletApp] application instance
      */
+    fun int(@IntegerRes resId: Int) = LooprWalletApp.application.resources.getInteger(resId)
+
+    /**
+     * @param resId The string resource
+     * @return Gets a string using the [LooprWalletApp] application instance
+     */
     fun str(@StringRes resId: Int) = LooprWalletApp.application.getString(resId)!!
 
     /**

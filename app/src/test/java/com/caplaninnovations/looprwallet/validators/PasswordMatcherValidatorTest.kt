@@ -33,7 +33,7 @@ class PasswordMatcherValidatorTest {
 
     @Before
     fun setup() {
-        passwordMatcherValidator = PasswordMatcherValidator(textInputLayout, {}, validPassword)
+        passwordMatcherValidator = PasswordMatcherValidator(textInputLayout, validPassword) {}
         passwordMatcherValidator = Mockito.spy(passwordMatcherValidator)
         Mockito.doReturn("incorrect").`when`(passwordMatcherValidator).getTextFromResource(R.string.error_password_incorrect)
         Mockito.doReturn("short").`when`(passwordMatcherValidator).getTextFromResource(R.string.error_password_too_short)

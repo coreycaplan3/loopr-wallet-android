@@ -1,15 +1,18 @@
-package com.caplaninnovations.looprwallet.fragments.contacts
+package com.caplaninnovations.looprwallet.dialogs
 
-import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialog
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.handlers.BarcodeCaptureHandler
 import com.caplaninnovations.looprwallet.models.user.Contact
+import com.caplaninnovations.looprwallet.repositories.user.ContactsRepository
 import com.caplaninnovations.looprwallet.validators.ContactNameValidator
 import com.caplaninnovations.looprwallet.validators.PublicKeyValidator
 import kotlinx.android.synthetic.main.barcode_button.*
@@ -20,30 +23,43 @@ import kotlinx.android.synthetic.main.fragment_create_contact.*
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class:
+ * Purpose of Class: To allow the user to create a new contact for their address book.
  *
  */
-class CreateContactFragment : BaseFragment() {
+class CreateContactDialog : BaseBottomSheetDialog() {
 
     companion object {
-        val TAG: String = CreateContactFragment::class.java.simpleName
+        val TAG: String = CreateContactDialog::class.java.simpleName
 
         private const val KEY_ADDRESS = "_ADDRESS"
 
-        fun createInstance(address: String?): CreateContactFragment {
-            return CreateContactFragment().apply {
+        fun create(address: String?): CreateContactDialog {
+            return CreateContactDialog().apply {
                 arguments = bundleOf(KEY_ADDRESS to address)
             }
         }
     }
 
-    override val layoutResource: Int
-        get() = R.layout.fragment_create_contact
+    private var repository: ContactsRepository? = null
+        get() {
+            if (field != null) {
+                return field
+            }
+
+            val wallet = LooprWalletApp.dagger.walletClient.getCurrentWallet() ?: return null
+            return ContactsRepository(wallet).apply { field = this }
+        }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return BottomSheetDialog(context!!, this.theme)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.dialog_confirm_password, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        toolbar?.setTitle(R.string.create_contact)
 
         activity?.let { BarcodeCaptureHandler.setupBarcodeScanner(it, barcodeScannerButton) }
 
@@ -57,24 +73,19 @@ class CreateContactFragment : BaseFragment() {
         )
 
         createContactButton.setOnClickListener {
-            val activity = activity as? BaseActivity
-            activity?.let {
-                val contactName = contactNameEditText.text.toString()
-                val address = contactAddressEditText.text.toString()
-                val contact = Contact(address, contactName)
+            val contactName = contactNameEditText.text.toString()
+            val address = contactAddressEditText.text.toString()
+            val contact = Contact(address, contactName)
 
-                // TODO
-
-
-                it.setResult(Activity.RESULT_OK)
-                it.finish()
+            repository?.let {
+                it.add(contact)
+                dismissAllowingStateLoss()
             }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         BarcodeCaptureHandler.handleActivityResult(contactAddressEditText, requestCode, resultCode, data)
     }
 

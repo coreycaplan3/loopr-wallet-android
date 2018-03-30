@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_sign_in_enter_password.*
  * Purpose of Class: First step in the create/restore phrase wallet process.
  *
  */
-class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.Communicator {
+class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnPasswordConfirmedListener {
 
     companion object {
         val TAG: String = EnterPasswordForPhraseFragment::class.simpleName!!

@@ -3,13 +3,10 @@ package com.caplaninnovations.looprwallet.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.SignInActivity
@@ -27,12 +24,12 @@ import kotlinx.android.synthetic.main.dialog_confirm_password.*
  * Purpose of Class: A dialog that prompts the user to reenter his/her text password.
  *
  */
-class ConfirmPasswordDialog : BottomSheetDialogFragment() {
+class ConfirmPasswordDialog : BaseBottomSheetDialog() {
 
     /**
      * An interface used to communicate with the activity that a password has been confirmed
      */
-    interface Communicator {
+    interface OnPasswordConfirmedListener {
 
         /**
          * Called when the password has been confirmed by the user and is able to proceed with the
@@ -86,11 +83,6 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
         arguments!!.getParcelable<Parcelable>(KEY_WALLET) as PasswordBasedWallet
     }
 
-    private val passwordMatcherValidator: PasswordMatcherValidator by lazy {
-        val password = passwordBasedWallet.getWalletPassword()
-        PasswordMatcherValidator(confirmPasswordInputLayout, this::onPasswordChange, password)
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return BottomSheetDialog(context!!, this.theme)
     }
@@ -102,19 +94,12 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dialog?.let {
-            it.setOnShowListener {
-                val bottomSheetDialog = dialog as? BottomSheetDialog
-                val bottomSheet = bottomSheetDialog?.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
-                bottomSheet?.let {
-                    BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
-                }
-            }
-        }
-
         cancelButton.setOnClickListener { dismiss() }
 
-        onPasswordChange()
+        val correctPassword = passwordBasedWallet.getWalletPassword()
+        validatorList = listOf(
+                PasswordMatcherValidator(confirmPasswordInputLayout, correctPassword, this::onFormChanged)
+        )
 
         confirmButton.setOnClickListener {
             (activity as? SignInActivity)?.onPasswordConfirmed(currentFragmentTag)
@@ -122,10 +107,8 @@ class ConfirmPasswordDialog : BottomSheetDialogFragment() {
         }
     }
 
-    // MARK - Private Methods
-
-    private fun onPasswordChange() {
-        confirmButton.isEnabled = passwordMatcherValidator.isValid()
+    override fun onFormChanged() {
+        confirmButton.isEnabled = isAllValidatorsValid()
     }
 
 }

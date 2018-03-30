@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/contact_name"
+                android:inputType="textCapWords"
                 tools:text="@string/default_contact_name" />
 
         </android.support.design.widget.TextInputLayout>
@@ -44,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/contact_address"
+                android:inputType="textMultiLine"
                 tools:text="@string/default_address" />
 
         </android.support.design.widget.TextInputLayout>
@@ -59,11 +61,12 @@
 
         <Button
             android:id="@+id/createContactButton"
-            android:enabled="false"
+            style="@style/App.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/contactAddressInputLayout"
             android:layout_marginTop="@dimen/vertical_margin"
+            android:enabled="false"
             android:text="@string/create_contact" />
 
     </RelativeLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory android:title="@string/gas_price">
 
@@ -9,12 +10,12 @@
             android:summary="@string/explain_gas_price" />
 
         <!--suppress AndroidElementNotAllowed -->
-        <SeekBarPreference
+        <android.support.v7.preference.SeekBarPreference
             android:defaultValue="@integer/settings_ethereum_fees_gas_price_default_value"
             android:key="@string/settings_ethereum_fees_gas_price_key"
             android:max="50"
             android:min="1"
-            android:seekBarIncrement="1"
+            app:seekBarIncrement="1"
             android:summary="Fast"
             android:title="@string/default_transaction_gas_price"
             tools:targetApi="o" />

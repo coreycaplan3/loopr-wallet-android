@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.utilities
 
 import android.content.Context
 import android.net.ConnectivityManager
+import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 
 
@@ -15,11 +16,16 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
  */
 object NetworkUtility {
 
-    fun isNetworkAvailable(): Boolean {
-        val context = LooprWalletApp.context
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    var mockIsNetworkAvailable = true
+
+    fun isNetworkAvailable() = when {
+        BuildConfig.DEBUG -> mockIsNetworkAvailable
+        else -> {
+            val context = LooprWalletApp.context
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
+        }
     }
 
 }

@@ -3,29 +3,22 @@ package com.caplaninnovations.looprwallet.fragments.transfers
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.CreateContactActivity
-import com.caplaninnovations.looprwallet.adapters.contacts.ContactsAdapter
 import com.caplaninnovations.looprwallet.animations.ToolbarToSearchAnimation
-import com.caplaninnovations.looprwallet.extensions.indexOfFirstOrNull
+import com.caplaninnovations.looprwallet.dialogs.CreateContactDialog
+import com.caplaninnovations.looprwallet.extensions.findFragmentByTagOrCreate
 import com.caplaninnovations.looprwallet.extensions.logd
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import com.caplaninnovations.looprwallet.fragments.contacts.ViewContactsFragment
 import com.caplaninnovations.looprwallet.handlers.BarcodeCaptureHandler
 import com.caplaninnovations.looprwallet.models.user.Contact
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import com.caplaninnovations.looprwallet.validators.PublicKeyValidator
-import com.caplaninnovations.looprwallet.viewmodels.LooprWalletViewModelFactory
-import com.caplaninnovations.looprwallet.viewmodels.contacts.ContactsByAddressViewModel
-import com.caplaninnovations.looprwallet.viewmodels.contacts.ContactsByNameViewModel
-import io.realm.RealmList
 import kotlinx.android.synthetic.main.barcode_button.*
 import kotlinx.android.synthetic.main.fragment_select_address.*
 
@@ -34,10 +27,10 @@ import kotlinx.android.synthetic.main.fragment_select_address.*
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class:
- *
+ * Purpose of Class: The first step in the transfer process. This fragment allows you to enter an
+ * address or select one from your address book.
  */
-class SelectAddressFragment : BaseFragment() {
+class SelectContactFragment : BaseFragment(), ViewContactsFragment.OnContactClickedListener {
 
     companion object {
         val TAG: String = CreateTransferAmountFragment::class.java.simpleName
@@ -49,26 +42,12 @@ class SelectAddressFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_select_address
 
-    private lateinit var adapter: ContactsAdapter
-
     private var searchQuery: String? = null
     private lateinit var searchItem: MenuItem
 
-    private var contactList: RealmList<Contact>? = null
-
-    private val contactsByAddressViewModel: ContactsByAddressViewModel?
-        get() {
-            val wallet = walletClient.getCurrentWallet()
-            return wallet?.let { LooprWalletViewModelFactory.get(this, it) }
-        }
-
-    private val contactsByNameViewModel: ContactsByNameViewModel?
-        get() {
-            val wallet = walletClient.getCurrentWallet()
-            return wallet?.let { LooprWalletViewModelFactory.get(this, it) }
-        }
-
     private var selectedContactAddress: String? = null
+
+    private lateinit var viewContactsFragment: ViewContactsFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,20 +57,23 @@ class SelectAddressFragment : BaseFragment() {
         searchQuery = savedInstanceState?.getString(KEY_SEARCH_QUERY)
         selectedContactAddress = savedInstanceState?.getString(KEY_SELECTED_CONTACT)
 
-        val layoutManager = LinearLayoutManager(context)
-        contactsRecyclerView.layoutManager = layoutManager
-        contactsRecyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
-
-        adapter = ContactsAdapter(selectedContactAddress, this::onContactSelected)
-        contactsRecyclerView.adapter = adapter
-
-        queryRealmForContactsByAddress()
-
         validatorList = listOf(PublicKeyValidator(recipientAddressInputLayout, this::onFormChanged))
+
+        viewContactsFragment = childFragmentManager.findFragmentByTagOrCreate(ViewContactsFragment.TAG) {
+            val fragment = ViewContactsFragment()
+            childFragmentManager.beginTransaction()
+                    .replace(R.id.viewContactsFragmentContainer, fragment, ViewContactsFragment.TAG)
+                    .commit()
+            fragment
+        }
+
+        viewContactsFragment.onContactClickedListener = this
+
+        viewContactsFragment.searchContactsByAddress(recipientAddressEditText.text.toString())
 
         addContactButton.setOnClickListener {
             val currentAddress = recipientAddressEditText.text.toString()
-            startActivity(CreateContactActivity.createIntent(currentAddress))
+            CreateContactDialog.create(currentAddress).show(fragmentManager, CreateContactDialog.TAG)
         }
 
         createTransferContinueButton.setOnClickListener {
@@ -128,7 +110,15 @@ class SelectAddressFragment : BaseFragment() {
 
 
     override fun onHideKeyboard() {
-        scrollToSelectedContact()
+        viewContactsFragment.scrollToSelectedContact()
+    }
+
+    override fun onContactSelected(contact: Contact) {
+        // We set the text on the EditText, since it'll trigger #onFormChanged
+        recipientAddressEditText.setText(contact.address)
+        if (searchItem.isActionViewExpanded) {
+            searchItem.collapseActionView()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -149,21 +139,15 @@ class SelectAddressFragment : BaseFragment() {
         val recipientAddress = recipientAddressEditText.text.toString()
         val recipientName: String?
 
-        queryRealmForContactsByAddress()
-
-        // If it's not empty, we're searching!
-        adapter.isSearching = !TextUtils.isEmpty(recipientAddress)
-        adapter.notifyDataSetChanged()
-
         if (isValid) {
-            val contact = contactList?.find { it.address == recipientAddress }
+            val contact = viewContactsFragment.getContactByAddress(recipientAddress)
             selectedContactAddress = contact?.address
 
-            addContactButton.visibility = if (contact == null) {
-                // We cannot find the contact, so we can allow the user to add this new address
-                View.VISIBLE
-            } else {
-                View.GONE
+            addContactButton.visibility = when (contact) {
+                null ->
+                    // We can't find the contact, so we can allow the user to add this new address
+                    View.VISIBLE
+                else -> View.GONE
             }
 
             recipientName = contact?.name ?: str(R.string.unknown)
@@ -173,35 +157,23 @@ class SelectAddressFragment : BaseFragment() {
             addContactButton.visibility = View.GONE
         }
 
-        adapter.onSelectedContactChanged(selectedContactAddress)
+        viewContactsFragment.onSelectedContactChanged(selectedContactAddress)
 
-        recipientNameLabel?.text = if (recipientName != null) {
-            String.format(str(R.string.formatter_recipient), recipientName)
-        } else {
-            null
+        viewContactsFragment.searchContactsByAddress(recipientAddress)
+
+        recipientNameLabel?.text = when {
+            recipientName != null -> str(R.string.formatter_recipient).format(recipientName)
+            else -> null
         }
 
         createTransferContinueButton.isEnabled = isValid
-    }
-
-    /**
-     * Called from the [adapter] when a user selected a contact
-     */
-    private fun onContactSelected(contact: Contact) {
-        // We set the text on the EditText, since it'll trigger #onFormChanged
-        recipientAddressEditText.setText(contact.address)
-        if (searchItem.isActionViewExpanded) {
-            searchItem.collapseActionView()
-        }
     }
 
     private fun setupSearchView(searchItem: MenuItem, searchView: SearchView) {
 
         searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                if (adapter.itemCount > 0) {
-                    contactsRecyclerView?.smoothScrollToPosition(0)
-                }
+                viewContactsFragment.resetRecyclerViewPosition()
             }
         }
 
@@ -215,9 +187,7 @@ class SelectAddressFragment : BaseFragment() {
                     wasInitialized = true
                 }
 
-                adapter.isSearching = !TextUtils.isEmpty(newText)
-
-                queryRealmForContactsByName(newText)
+                viewContactsFragment.searchContactsByName(newText)
 
                 return true
             }
@@ -241,11 +211,11 @@ class SelectAddressFragment : BaseFragment() {
                 createTransferRecipientInputContainer.visibility = View.VISIBLE
                 createTransferContinueButton.visibility = View.VISIBLE
 
-                scrollToSelectedContact()
+                viewContactsFragment.scrollToSelectedContact()
 
                 if (item.isActionViewExpanded) {
                     ToolbarToSearchAnimation.animateToToolbar(
-                            fragment = this@SelectAddressFragment,
+                            fragment = this@SelectContactFragment,
                             numberOfMenuIcon = 1,
                             containsOverflow = false
                     )
@@ -257,13 +227,13 @@ class SelectAddressFragment : BaseFragment() {
                 // Called when SearchView is expanding
                 logd("Expanding MenuItem...")
 
-                queryRealmForContactsByName("")
+                viewContactsFragment.searchContactsByName("")
 
                 createTransferRecipientInputContainer.visibility = View.GONE
                 createTransferContinueButton.visibility = View.GONE
 
                 ToolbarToSearchAnimation.animateToSearch(
-                        fragment = this@SelectAddressFragment,
+                        fragment = this@SelectContactFragment,
                         numberOfMenuIcon = 1,
                         containsOverflow = false
                 )
@@ -271,31 +241,6 @@ class SelectAddressFragment : BaseFragment() {
             }
         })
 
-    }
-
-    private fun queryRealmForContactsByName(name: String) {
-        contactsByNameViewModel?.getAllContactsByName(
-                this,
-                name,
-                { adapter.updateData(it) }
-        )
-    }
-
-    private fun queryRealmForContactsByAddress() {
-        val recipientAddress = recipientAddressEditText.text.toString()
-
-        contactsByAddressViewModel?.getAllContactsByAddress(
-                this,
-                recipientAddress,
-                { adapter.updateData(it) }
-        )
-    }
-
-    private fun scrollToSelectedContact() {
-        selectedContactAddress?.let { address ->
-            val index = contactList?.indexOfFirstOrNull { it.address == address }
-            index?.let { contactsRecyclerView?.scrollToPosition(it) }
-        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.int
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import java.math.BigDecimal
 
@@ -20,14 +21,14 @@ class LoopringFeeSettings(private val looprSettings: LooprSettings) {
         val KEY_MARGIN_SPLIT = str(R.string.settings_loopring_fees_margin_split_key)
 
         val DEFAULT_VALUE_LRC_FEE = str(R.string.settings_loopring_fees_lrc_fee_default_value)
-        val DEFAULT_VALUE_MARGIN_SPLIT = str(R.string.settings_loopring_fees_margin_split_default_value)
+        val DEFAULT_VALUE_MARGIN_SPLIT = int(R.integer.settings_loopring_fees_margin_split_default_value).toString()
     }
 
     val currentLrcFee: BigDecimal
         get() = getValue(KEY_LRC_FEE, DEFAULT_VALUE_LRC_FEE)
 
     val currentMarginSplit: BigDecimal
-        get() = getValue(KEY_MARGIN_SPLIT, DEFAULT_VALUE_MARGIN_SPLIT)
+        get() = getValue(KEY_MARGIN_SPLIT, DEFAULT_VALUE_MARGIN_SPLIT) / BigDecimal(100)
 
     // MARK - Private Methods
 

@@ -118,12 +118,10 @@ class BottomNavigationHandler(activity: BaseActivity,
 
         bottomNavigationFragmentStackHistory.push(newFragmentTag)
 
-        val newFragment = activity?.supportFragmentManager
-                ?.findFragmentByTagOrCreate(newFragmentTag) { tag ->
-                    // The fragment MUST be in the list (so it's ALWAYS safe to force the optional unwrap.
-                    fragmentTagPairs.find { it.tag == tag }?.fragment!!
-                }
-                ?: return // We return since we CANNOT commit the transaction without this fragment
+        val newFragment = activity?.supportFragmentManager?.findFragmentByTagOrCreate(newFragmentTag) { tag ->
+            // The fragment MUST be in the list (so it's ALWAYS safe to force the optional unwrap.
+            fragmentTagPairs.find { it.tag == tag }?.fragment!!
+        } ?: return // We return since we CANNOT commit the transaction without this fragment
 
         val baseFragment = currentFragment as? BaseFragment
         if (baseFragment?.appbarLayout?.isExpanded() == false) {

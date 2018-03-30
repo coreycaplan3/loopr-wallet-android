@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.activities
 
 import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.transfers.CreateTransferAmountFragment
+import com.caplaninnovations.looprwallet.fragments.transfers.SelectContactFragment
 
 /**
  * Created by Corey Caplan on 2/18/18.
@@ -25,7 +25,7 @@ class CreateTransferActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            pushFragmentTransaction(CreateTransferAmountFragment(), CreateTransferAmountFragment.TAG)
+            pushFragmentTransaction(SelectContactFragment(), SelectContactFragment.TAG)
         }
     }
 

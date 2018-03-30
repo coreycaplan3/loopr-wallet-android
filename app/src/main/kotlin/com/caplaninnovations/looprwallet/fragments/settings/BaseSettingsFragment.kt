@@ -9,6 +9,7 @@ import android.support.v7.preference.Preference
 import android.support.v7.preference.Preference.OnPreferenceChangeListener
 import android.support.v7.preference.Preference.OnPreferenceClickListener
 import android.support.v7.preference.PreferenceFragmentCompat
+import android.support.v7.preference.SeekBarPreference
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
@@ -173,8 +174,14 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
 
         // Trigger the listener immediately with the preference's current value.
         val settings = LooprSettings.getInstance(LooprWalletApp.context)
-        val value = settings.getString(preference.key) ?: defaultValue
-        this.onPreferenceChange(preference, value)
+
+        if (preference is SeekBarPreference) {
+            val value = settings.getInt(preference.key, defaultValue.toInt())
+            this.onPreferenceChange(preference, value)
+        } else {
+            val value = settings.getString(preference.key) ?: defaultValue
+            this.onPreferenceChange(preference, value)
+        }
     }
 
 }

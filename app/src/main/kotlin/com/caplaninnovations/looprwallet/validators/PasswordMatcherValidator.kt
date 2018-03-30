@@ -13,8 +13,8 @@ import com.caplaninnovations.looprwallet.R
  */
 open class PasswordMatcherValidator(
         textInputLayout: TextInputLayout,
-        onChangeListener: () -> Unit,
-        private val otherPassword: String
+        private val otherPassword: String,
+        onChangeListener: () -> Unit
 ) : BaseValidator(textInputLayout, onChangeListener) {
 
     override fun isValid(text: String?): Boolean {

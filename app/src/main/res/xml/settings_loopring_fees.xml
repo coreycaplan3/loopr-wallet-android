@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory android:title="LRC Trade Fee">
@@ -24,13 +25,13 @@
             android:summary="@string/explain_margin_split" />
 
         <!--suppress AndroidElementNotAllowed -->
-        <SeekBarPreference
+        <android.support.v7.preference.SeekBarPreference
             android:defaultValue="@integer/settings_loopring_fees_margin_split_default_value"
             android:key="@string/settings_loopring_fees_margin_split_key"
             android:max="100"
             android:min="0"
-            android:seekBarIncrement="1"
             android:title="@string/order_margin_split_percentage"
+            app:seekBarIncrement="1"
             tools:targetApi="o" />
 
     </PreferenceCategory>

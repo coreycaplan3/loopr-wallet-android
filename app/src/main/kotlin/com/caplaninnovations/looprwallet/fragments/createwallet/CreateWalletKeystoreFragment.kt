@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.card_enter_wallet_password.*
  * Purpose of Class:
  *
  */
-class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.Communicator {
+class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.OnPasswordConfirmedListener {
 
     companion object {
         val TAG: String = CreateWalletKeystoreFragment::class.simpleName!!

@@ -21,6 +21,6 @@ import android.support.v4.app.FragmentManager
  * @param block The block that will be executed, passing in the [tag], if the fragment was not
  * found.
  */
-inline fun FragmentManager.findFragmentByTagOrCreate(tag: String, block: (String) -> Fragment): Fragment {
-    return this.findFragmentByTag(tag) ?: block(tag)
+inline fun <reified T : Fragment> FragmentManager.findFragmentByTagOrCreate(tag: String, block: (String) -> T): T {
+    return (this.findFragmentByTag(tag) as? T) ?: block(tag)
 }

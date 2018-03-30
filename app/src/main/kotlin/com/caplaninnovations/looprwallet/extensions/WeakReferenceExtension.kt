@@ -36,4 +36,4 @@ class WeakRefHolder<T>(private var _value: WeakReference<T?>) {
  *     context = weakContext
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun <T> weakReference(value: T) = WeakRefHolder<T>(WeakReference(value))
+inline fun <T> weakReference(value: T?) = WeakRefHolder(WeakReference(value))

@@ -39,10 +39,10 @@ class SignInActivity : BaseActivity() {
     fun onPasswordConfirmed(fragmentTag: String) {
         val fragment = supportFragmentManager.findFragmentByTag(fragmentTag)
 
-        if(fragment is ConfirmPasswordDialog.Communicator) {
+        if(fragment is ConfirmPasswordDialog.OnPasswordConfirmedListener) {
             fragment.onPasswordConfirmed()
         } else {
-            loge("Invalid fragment type; could not cast to Communicator!", IllegalStateException())
+            loge("Invalid fragment type; could not cast to OnPasswordConfirmedListener!", IllegalStateException())
         }
     }
 

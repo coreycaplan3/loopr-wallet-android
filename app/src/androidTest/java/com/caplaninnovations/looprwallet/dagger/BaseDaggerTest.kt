@@ -12,11 +12,14 @@ import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.view.View
 import com.caplaninnovations.looprwallet.activities.BaseActivity
+import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
 import com.caplaninnovations.looprwallet.extensions.logd
+import com.caplaninnovations.looprwallet.extensions.removeAllListenersAndClose
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
+import io.realm.Realm
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.android.UI
@@ -48,8 +51,20 @@ open class BaseDaggerTest {
 
     private val walletName = "loopr-test-${BaseDaggerTest::class.java.simpleName}"
 
+    /**
+     * This realm is only opened and used because in memory realms are WIPED after the last one is
+     * closed. So, we keep this one open throughout the full length of the test.
+     */
+    private var inMemoryRealm: Realm? = null
+
     var wallet: LooprWallet? = null
-        private set
+        private set(value) {
+            field = value
+            value?.let {
+                val realmClient = LooprWalletApp.dagger.realmClient
+                inMemoryRealm = realmClient.getInstance(it.walletName, it.realmKey)
+            }
+        }
 
     val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
 
@@ -80,6 +95,8 @@ open class BaseDaggerTest {
     @After
     fun baseDaggerTearDown() {
         Intents.release()
+
+        inMemoryRealm.removeAllListenersAndClose()
 
         wallet?.let { walletClient.removeWallet(it.walletName) }
 

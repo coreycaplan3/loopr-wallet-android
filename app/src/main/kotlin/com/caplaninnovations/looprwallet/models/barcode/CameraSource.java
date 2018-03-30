@@ -660,6 +660,7 @@ public class CameraSource {
     /**
      * Wraps the camera1 shutter callback so that the deprecated API isn't exposed.
      */
+    @SuppressWarnings("deprecation")
     private class PictureStartCallback implements Camera.ShutterCallback {
         private ShutterCallback mDelegate;
 
