@@ -21,8 +21,16 @@ import java.util.*
 open class SyncRepositoryImpl(currentWallet: LooprWallet) : BaseRealmRepository(currentWallet), SyncRepository {
 
     override fun getLastSyncTime(@SyncData.SyncType syncType: String): Date? {
-        return uiRealm.where<SyncData>()
+        return uiSharedRealm.where<SyncData>()
                 .equalTo(SyncData::syncType, syncType)
+                .findFirst()
+                ?.lastSyncTime
+    }
+
+    override fun getLastSyncTimeForWallet(address: String, syncType: String): Date? {
+        return uiSharedRealm.where<SyncData>()
+                .equalTo(SyncData::syncType, syncType)
+                .equalTo(SyncData::address, address)
                 .findFirst()
                 ?.lastSyncTime
     }

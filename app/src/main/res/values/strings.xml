@@ -194,7 +194,7 @@
     <string name="error_no_connection">No connection</string>
     <string name="error_http_communication">A network error occurred. Please try again and report the error</string>
     <string name="error_unknown">An unknown error occurred. Please try again or submit a bug report</string>
-    <string name="error_server_error">A network error occurred</string>
+    <string name="error_network_error">A network error occurred</string>
     <string name="error_loading_exchange_rate">Unable to load exchange rate</string>
     <string name="error_no_tokens_to_send">You have no tokens to send</string>
     <string name="reload">Reload</string>

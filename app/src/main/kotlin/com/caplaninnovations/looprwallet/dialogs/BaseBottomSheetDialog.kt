@@ -33,6 +33,10 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (dialog as? BottomSheetDialog)?.let { dialog ->
+
+            dialog.setCancelable(true)
+            dialog.setCanceledOnTouchOutside(true)
+
             dialog.setOnShowListener {
                 val bottomSheet = dialog.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
                 bottomSheet?.let {

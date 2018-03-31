@@ -89,33 +89,31 @@ class TokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewMode
      *
      * @return A new function that takes [CryptoToken] as a parameter and returns nothing.
      */
-    private fun interceptOnChange(onChange: (CryptoToken) -> Unit): (CryptoToken) -> Unit {
-        return inlineFunction@{ token: CryptoToken ->
-            currentCryptoToken = token
+    private fun interceptOnChange(onChange: (CryptoToken) -> Unit) = function@{ token: CryptoToken ->
+        currentCryptoToken = token
 
-            val rateAgainstUsd = currencyExchangeRate?.rateAgainstToUsd
-            if (rateAgainstUsd == null) {
-                logw("rateAgainstToUsd has not loaded yet or we are in an invalid state!",
-                        IllegalStateException())
-                onChange(token)
-                return@inlineFunction
-            }
-
-            val priceInUsd = token.priceInUsd
-            if (priceInUsd == null) {
-                logw("priceInUsd has not loaded yet or we are in an invalid state!",
-                        IllegalStateException())
-                onChange(token)
-                return@inlineFunction
-            }
-
-            val priceInNativeCurrency = (priceInUsd * rateAgainstUsd)
-                    .setScale(8, RoundingMode.HALF_EVEN)
-
-            token.priceInNativeCurrency = priceInNativeCurrency
-
+        val rateAgainstUsd = currencyExchangeRate?.rateAgainstToUsd
+        if (rateAgainstUsd == null) {
+            logw("rateAgainstToUsd has not loaded yet or we are in an invalid state!",
+                    IllegalStateException())
             onChange(token)
+            return@function
         }
+
+        val priceInUsd = token.priceInUsd
+        if (priceInUsd == null) {
+            logw("priceInUsd has not loaded yet or we are in an invalid state!",
+                    IllegalStateException())
+            onChange(token)
+            return@function
+        }
+
+        val priceInNativeCurrency = (priceInUsd * rateAgainstUsd)
+                .setScale(8, RoundingMode.HALF_EVEN)
+
+        token.priceInNativeCurrency = priceInNativeCurrency
+
+        onChange(token)
     }
 
 }

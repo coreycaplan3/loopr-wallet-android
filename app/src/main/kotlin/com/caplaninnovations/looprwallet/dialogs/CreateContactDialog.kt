@@ -14,7 +14,7 @@ import com.caplaninnovations.looprwallet.repositories.user.ContactsRepository
 import com.caplaninnovations.looprwallet.validators.ContactNameValidator
 import com.caplaninnovations.looprwallet.validators.PublicKeyValidator
 import kotlinx.android.synthetic.main.barcode_button.*
-import kotlinx.android.synthetic.main.fragment_create_contact.*
+import kotlinx.android.synthetic.main.dialog_create_contact.*
 
 /**
  * Created by Corey Caplan on 3/12/18.
@@ -49,7 +49,7 @@ class CreateContactDialog : BaseBottomSheetDialog() {
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_confirm_password, container, false)
+        return inflater.inflate(R.layout.dialog_create_contact, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

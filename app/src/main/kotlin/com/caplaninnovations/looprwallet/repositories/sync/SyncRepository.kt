@@ -15,12 +15,22 @@ import java.util.*
  *
  *
  */
-interface SyncRepository: BaseRepository<RealmModel> {
+interface SyncRepository : BaseRepository<RealmModel> {
 
     companion object {
-        fun getInstance(currentWallet: LooprWallet) = SyncRepositoryImpl(currentWallet)
+
+        fun getInstance(currentWallet: LooprWallet): SyncRepository = SyncRepositoryImpl(currentWallet)
+
     }
 
+    /**
+     * Gets the last sync time for a given [SyncData.SyncType].
+     */
     fun getLastSyncTime(@SyncData.SyncType syncType: String): Date?
+
+    /**
+     * Gets the last sync time for a given address's [SyncData.SyncType].
+     */
+    fun getLastSyncTimeForWallet(address: String, @SyncData.SyncType syncType: String): Date?
 
 }

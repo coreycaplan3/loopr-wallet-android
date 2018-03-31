@@ -107,7 +107,7 @@ open class BaseDaggerTest {
     }
 
     protected fun createRealm(): Realm {
-        return LooprWalletApp.dagger.realmClient.getInstance(wallet!!.walletName, wallet!!.realmKey)
+        return LooprWalletApp.dagger.realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
     }
 
     /**

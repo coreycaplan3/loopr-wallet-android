@@ -42,10 +42,11 @@ class SelectContactFragment : BaseFragment(), ViewContactsFragment.OnContactClic
     override val layoutResource: Int
         get() = R.layout.fragment_select_address
 
-    private var searchQuery: String? = null
-    private lateinit var searchItem: MenuItem
+    var selectedContactAddress: String? = null
 
-    private var selectedContactAddress: String? = null
+    private var searchQuery: String? = null
+
+    lateinit var searchItem: MenuItem
 
     private lateinit var viewContactsFragment: ViewContactsFragment
 
@@ -208,7 +209,8 @@ class SelectContactFragment : BaseFragment(), ViewContactsFragment.OnContactClic
                 searchQuery = null
 
                 // By calling onFormChanged we can restore the state of things based on the
-                // address input
+                // address input. Meaning, we won't reset the content to display ALL contacts.
+                // Instead, the contacts displayed will be NOW based on the address input
                 onFormChanged()
 
                 createTransferRecipientInputContainer.visibility = View.VISIBLE

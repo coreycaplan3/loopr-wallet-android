@@ -20,7 +20,7 @@ class CurrencyExchangeRateRepository(currentWallet: LooprWallet)
     : BaseRealmRepository(currentWallet) {
 
     fun getCurrencyExchangeRate(currency: String): LiveData<CurrencyExchangeRate> {
-        return uiRealm.where<CurrencyExchangeRate>()
+        return uiSharedRealm.where<CurrencyExchangeRate>()
                 .equalTo(CurrencyExchangeRate::currency, currency)
                 .findFirstAsync()
                 .asLiveData()

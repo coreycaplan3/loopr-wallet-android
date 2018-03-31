@@ -4,9 +4,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.adapters.BaseRealmAdapter
-import com.caplaninnovations.looprwallet.models.user.Contact
 import com.caplaninnovations.looprwallet.extensions.indexOfFirstOrNull
 import com.caplaninnovations.looprwallet.extensions.inflate
+import com.caplaninnovations.looprwallet.models.user.Contact
 
 /**
  * Created by Corey Caplan on 3/11/18.
@@ -35,11 +35,9 @@ class ContactsAdapter(private var selectedContactAddress: String?,
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Contact) {
-        (holder as? ContactsViewHolder)?.bind(
-                item,
-                selectedContactAddress,
-                this::onContactViewHolderSelected
-        )
+        (holder as? ContactsViewHolder)?.bind(item, selectedContactAddress) {
+            onContactViewHolderSelected(it)
+        }
     }
 
     /**

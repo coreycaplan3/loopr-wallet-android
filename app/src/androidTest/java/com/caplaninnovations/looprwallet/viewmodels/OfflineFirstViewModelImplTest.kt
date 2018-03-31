@@ -37,10 +37,10 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
         override fun addList(data: List<EthToken>) {
         }
 
-        override fun removeData(data: EthToken) {
+        override fun remove(data: EthToken) {
         }
 
-        override fun removeData(data: List<EthToken>) {
+        override fun remove(data: List<EthToken>) {
         }
 
         override fun clear() {
@@ -61,14 +61,14 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
         override fun addList(data: List<RealmModel>) {
         }
 
-        override fun removeData(data: RealmModel) {
+        override fun remove(data: RealmModel) {
         }
 
         override fun getLastSyncTime(syncType: String): Date? {
             return lastRefresh
         }
 
-        override fun removeData(data: List<RealmModel>) {
+        override fun remove(data: List<RealmModel>) {
         }
 
         override fun clear() {

@@ -20,7 +20,7 @@ class ContactsByNameViewModel(currentWallet: LooprWallet) : OfflineOnlyViewModel
 
     override val repository = ContactsRepository(currentWallet)
 
-    fun getAllContactsByName(
+    fun  getAllContactsByName(
             owner: LifecycleOwner,
             address: String,
             onChange: (RealmResults<Contact>) -> Unit

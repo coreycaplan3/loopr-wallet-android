@@ -1,6 +1,6 @@
 package com.caplaninnovations.looprwallet.viewmodels.eth
 
-import android.arch.lifecycle.ViewModelProvider
+import com.caplaninnovations.looprwallet.viewmodels.TransactionViewModel
 
 /**
  * Created by Corey Caplan on 2/28/18.
@@ -10,6 +10,7 @@ import android.arch.lifecycle.ViewModelProvider
  * Purpose of Class:
  *
  */
-class TokenTransactionViewModel : ViewModelProvider.NewInstanceFactory() {
+class TokenTransactionViewModel : TransactionViewModel<Any>() {
+
 
 }

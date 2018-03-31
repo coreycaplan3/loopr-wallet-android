@@ -12,7 +12,7 @@ import io.realm.Realm
  * Purpose of Class: To setup a newly-created [Realm] with starter data.
  *
  */
-object InitialRealmData {
+object InitialRealmSharedData {
 
     fun getInitialData() = Realm.Transaction {
         // EthToken

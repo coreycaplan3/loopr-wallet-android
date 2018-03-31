@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.adapters.contacts.ContactsAdapter
+import com.caplaninnovations.looprwallet.extensions.equalTo
 import com.caplaninnovations.looprwallet.extensions.indexOfFirstOrNull
 import com.caplaninnovations.looprwallet.extensions.weakReference
 import com.caplaninnovations.looprwallet.fragments.BaseFragment
@@ -14,7 +15,6 @@ import com.caplaninnovations.looprwallet.models.user.Contact
 import com.caplaninnovations.looprwallet.viewmodels.LooprWalletViewModelFactory
 import com.caplaninnovations.looprwallet.viewmodels.contacts.ContactsByAddressViewModel
 import com.caplaninnovations.looprwallet.viewmodels.contacts.ContactsByNameViewModel
-import io.realm.Case
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.fragment_view_contacts.*
 
@@ -110,7 +110,7 @@ class ViewContactsFragment : BaseFragment() {
 
     fun getContactByAddress(address: String): Contact? {
         return contactList?.where()
-                ?.equalTo(Contact::address.name, address, Case.INSENSITIVE)
+                ?.equalTo(Contact::address, address)
                 ?.findFirst()
     }
 

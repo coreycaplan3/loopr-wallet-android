@@ -20,7 +20,24 @@ abstract class RealmClient {
 
     companion object {
 
-        fun getInstance(): RealmClient {
+        private const val SHARED_REALM_NAME = "shared-loopr"
+
+        /**
+         * An instance of [RealmClient] that can be used for the any user (not private info).
+         */
+        fun getSharedInstance(): RealmClient {
+            val buildType = BuildConfig.BUILD_TYPE
+            return when (buildType) {
+                BUILD_DEBUG -> RealmClientDebugImpl()
+                BUILD_STAGING, BUILD_RELEASE -> RealmClientProductionImpl()
+                else -> throw IllegalArgumentException("Invalid build type, found: $buildType")
+            }
+        }
+
+        /**
+         * An instance of [RealmClient] that can be used for the user's private Realm instance.
+         */
+        fun getPrivateInstance(): RealmClient {
             val buildType = BuildConfig.BUILD_TYPE
             return when (buildType) {
                 BUILD_DEBUG -> RealmClientDebugImpl()
@@ -32,14 +49,25 @@ abstract class RealmClient {
 
     abstract val schemaVersion: Long
 
-    abstract fun getInstance(realmName: String, encryptionKey: ByteArray): Realm
+    abstract fun getSharedInstance(): Realm
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun getRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
+    abstract fun getPrivateInstance(realmName: String, encryptionKey: ByteArray): Realm
+
+    @VisibleForTesting
+    fun getPrivateRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
         return RealmConfiguration.Builder()
                 .name(realmName)
-                .migration(LooprMigration())
-                .initialData(InitialRealmData.getInitialData())
+                .migration(LooprPrivateInstanceMigration())
+                .initialData(InitialRealmPrivateData.getInitialData())
+                .schemaVersion(schemaVersion)
+    }
+
+    @VisibleForTesting
+    fun getSharedRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
+        return RealmConfiguration.Builder()
+                .name(realmName)
+                .migration(LooprSharedInstanceMigration())
+                .initialData(InitialRealmSharedData.getInitialData())
                 .schemaVersion(schemaVersion)
     }
 
@@ -48,8 +76,8 @@ abstract class RealmClient {
         override val schemaVersion: Long
             get() = 0
 
-        override fun getInstance(realmName: String, encryptionKey: ByteArray): Realm {
-            val configuration = getRealmConfigurationBuilder("$realmName.in-memory")
+        override fun getPrivateInstance(realmName: String, encryptionKey: ByteArray): Realm {
+            val configuration = getPrivateRealmConfigurationBuilder("$realmName-in-memory")
                     .deleteRealmIfMigrationNeeded()
                     .inMemory()
                     .build()
@@ -57,6 +85,14 @@ abstract class RealmClient {
             return Realm.getInstance(configuration)
         }
 
+        override fun getSharedInstance(): Realm {
+            val configuration = getSharedRealmConfigurationBuilder(SHARED_REALM_NAME)
+                    .deleteRealmIfMigrationNeeded()
+                    .inMemory()
+                    .build()
+
+            return Realm.getInstance(configuration)
+        }
     }
 
     private class RealmClientProductionImpl : RealmClient() {
@@ -64,9 +100,16 @@ abstract class RealmClient {
         override val schemaVersion: Long
             get() = 0
 
-        override fun getInstance(realmName: String, encryptionKey: ByteArray): Realm {
-            val configuration = getRealmConfigurationBuilder(realmName)
+        override fun getPrivateInstance(realmName: String, encryptionKey: ByteArray): Realm {
+            val configuration = getPrivateRealmConfigurationBuilder(realmName)
                     .encryptionKey(encryptionKey)
+                    .build()
+
+            return Realm.getInstance(configuration)
+        }
+
+        override fun getSharedInstance(): Realm {
+            val configuration = getSharedRealmConfigurationBuilder(SHARED_REALM_NAME)
                     .build()
 
             return Realm.getInstance(configuration)

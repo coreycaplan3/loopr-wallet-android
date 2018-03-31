@@ -1,7 +1,8 @@
 package com.caplaninnovations.looprwallet.models.crypto.eth
 
-import com.caplaninnovations.looprwallet.extensions.equalsZero
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
+import com.caplaninnovations.looprwallet.models.crypto.TokenBalanceInfo
+import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.Index
@@ -22,6 +23,8 @@ import java.util.*
  * @param totalSupply The total supply of the crypto. To get the [BigDecimal] version, we must
  * assign this string value to a big decimal and divide it by (10^decimalPlaces). Said differently,
  * this variable should have **NO** decimal places in it.
+ * @param binary The binary for the contract. This can be retrieved by viewing the contract
+ * creation's transaction.
  * @param priceInUsd The price of the token currently in USD. This [BigDecimal] should have a scale
  * of exactly 2.
  * @param priceInNativeCurrency The price of the token currently in the user's native currency.
@@ -36,7 +39,9 @@ open class EthToken(
 
         override var decimalPlaces: Int = 18,
 
-        balance: BigDecimal? = null,
+        var binary: String? = null,
+
+        override var tokenBalances: RealmList<TokenBalanceInfo> = RealmList(),
 
         priceInUsd: BigDecimal? = null,
 
@@ -96,18 +101,6 @@ open class EthToken(
 
     private var mTotalSupply: String = totalSupply
 
-    final override var balance: BigDecimal?
-        get() = mBalance?.let { BigDecimal(it) }
-        set(value) {
-            if(value?.equalsZero() == true) {
-                mBalance = "0"
-            } else {
-                mBalance = value?.toPlainString()
-            }
-        }
-
-    private var mBalance: String?
-
     /**
      * This is a backing field.
      *
@@ -126,12 +119,11 @@ open class EthToken(
     private var mPriceInUsd: String?
 
     init {
-        // needed to set backing fields initially. They will be overwritten by the two calls below
-        this.mBalance = null
+        // Needed to set backing fields initially. They will be overwritten by the two calls below
         this.mPriceInUsd = null
 
-        this.balance = balance // this will set mBalance
-        this.priceInUsd = priceInUsd // this will set mPriceInUsd
+        // This will set mPriceInUsd
+        this.priceInUsd = priceInUsd
     }
 
     override fun equals(other: Any?): Boolean {

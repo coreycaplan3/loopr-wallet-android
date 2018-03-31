@@ -1,21 +1,17 @@
 package com.caplaninnovations.looprwallet.dialogs
 
 import android.support.test.espresso.Espresso
-import android.support.test.espresso.assertion.ViewAssertions.*
-import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.espresso.action.ViewActions.*
-import android.support.test.rule.ActivityTestRule
+import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
-import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
+import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.isDisabled
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
 import org.hamcrest.Matchers.`is`
-
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Rule
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 

@@ -20,9 +20,9 @@ abstract class BaseRealmAdapter<T : RealmModel> :
         RealmRecyclerViewAdapter<T, RecyclerView.ViewHolder>(null, true, true) {
 
     companion object {
-        private const val TYPE_LOADING = 0
-        private const val TYPE_EMPTY = 1
-        private const val TYPE_DATA = 2
+        const val TYPE_LOADING = 0
+        const val TYPE_EMPTY = 1
+        const val TYPE_DATA = 2
     }
 
     final override fun getItemViewType(position: Int): Int {
@@ -56,7 +56,7 @@ abstract class BaseRealmAdapter<T : RealmModel> :
     abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: T)
 
     final override fun getItemCount(): Int {
-        return data.let { it?.size ?: 1 }
+        return data?.size ?: 1
     }
 
     class LoadingViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)

@@ -12,8 +12,8 @@ import com.caplaninnovations.looprwallet.adapters.phrase.PhraseEmptyViewHolder
 import com.caplaninnovations.looprwallet.adapters.phrase.PhraseViewHolder
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
-import com.caplaninnovations.looprwallet.utilities.CustomViewActions.Companion.dragDownViewHolder
-import com.caplaninnovations.looprwallet.utilities.CustomViewActions.Companion.dragUpViewHolder
+import com.caplaninnovations.looprwallet.utilities.CustomViewActions.dragDownViewHolder
+import com.caplaninnovations.looprwallet.utilities.CustomViewActions.dragUpViewHolder
 import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
 import kotlinx.android.synthetic.main.view_holder_phrase.*
 import kotlinx.android.synthetic.main.view_holder_phrase.view.*

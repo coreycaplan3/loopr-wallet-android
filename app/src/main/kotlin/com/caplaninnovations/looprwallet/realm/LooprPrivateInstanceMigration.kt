@@ -14,7 +14,7 @@ import io.realm.RealmMigration
  * app is running a  lower version of the database from the newer one (in the newly-downloaded
  * version).
  */
-internal class LooprMigration : RealmMigration {
+class LooprPrivateInstanceMigration : RealmMigration {
 
     override fun migrate(realm: DynamicRealm?, oldVersion: Long, newVersion: Long) {
         for (i in oldVersion..newVersion) {
@@ -28,14 +28,6 @@ internal class LooprMigration : RealmMigration {
     // MARK - Private Methods
 
     private fun migrate0To1(realm: DynamicRealm?) {
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.simpleName.hashCode()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other != null && other.javaClass == this.javaClass
     }
 
 }

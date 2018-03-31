@@ -2,8 +2,8 @@ package com.caplaninnovations.looprwallet.handlers
 
 import android.app.Activity
 import android.content.Intent
-import android.widget.ImageButton
 import android.widget.EditText
+import android.widget.ImageButton
 import com.caplaninnovations.looprwallet.activities.BarcodeCaptureActivity
 
 /**
@@ -16,7 +16,7 @@ import com.caplaninnovations.looprwallet.activities.BarcodeCaptureActivity
  */
 object BarcodeCaptureHandler {
 
-    private const val REQUEST_CODE_START_BARCODE_ACTIVITY = 1323
+    const val REQUEST_CODE_START_BARCODE_ACTIVITY = 1323
 
     fun setupBarcodeScanner(activity: Activity, barcodeScannerButton: ImageButton) {
         barcodeScannerButton.setOnClickListener {

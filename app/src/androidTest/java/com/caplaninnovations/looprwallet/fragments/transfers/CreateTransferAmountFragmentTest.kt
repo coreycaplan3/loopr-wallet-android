@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.fragments.transfers
 
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
+import com.caplaninnovations.looprwallet.utilities.NetworkUtility
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -58,7 +59,8 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
 
     @Test
     fun noConnection_checkErrorStates() {
-
+        // We are mocking not having a connection
+        NetworkUtility.mockIsNetworkAvailable = false
     }
 
     @Test

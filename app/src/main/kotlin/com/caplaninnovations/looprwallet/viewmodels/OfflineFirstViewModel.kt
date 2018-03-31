@@ -9,7 +9,6 @@ import com.caplaninnovations.looprwallet.extensions.logi
 import com.caplaninnovations.looprwallet.extensions.observeForDoubleSpend
 import com.caplaninnovations.looprwallet.models.error.ErrorTypes
 import com.caplaninnovations.looprwallet.models.error.LooprError
-import com.caplaninnovations.looprwallet.models.error.UnknownLooprError
 import com.caplaninnovations.looprwallet.models.user.SyncData
 import com.caplaninnovations.looprwallet.repositories.BaseRepository
 import com.caplaninnovations.looprwallet.repositories.sync.SyncRepository
@@ -20,6 +19,7 @@ import io.realm.kotlin.isValid
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.delay
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.*
@@ -75,6 +75,12 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     abstract val syncRepository: SyncRepository
 
     open val waitTime = DEFAULT_WAIT_TIME_MILLIS
+
+    /**
+     * True if the data from this [ViewModel] needs a refresh and is stale or false otherwise.
+     */
+    val isDataStale: Boolean
+        get() = mParameter?.let { isRefreshNecessary(it) } ?: true
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var mParameter: U? = null
@@ -341,6 +347,10 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         return isRefreshNecessary(dateLastSynced)
     }
 
+    open fun addSyncDataToRepository() {
+        syncRepository.add(SyncData(syncType, null, Date()))
+    }
+
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     fun isRefreshNecessary(dateLastSynced: Long): Boolean {
         return dateLastSynced + waitTime < Date().time
@@ -512,13 +522,13 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
             addNetworkDataToRepository(data)
 
             // Add the successful sync to the logs
-            syncRepository.add(SyncData(syncType, Date()))
+            addSyncDataToRepository()
         } catch (exception: Exception) {
             val looprError = when (exception) {
                 is HttpException -> {
                     loge("Network communication addErrorObserver: ", exception)
                     if (exception.code() >= 500) {
-                        LooprError(R.string.error_server_error, ErrorTypes.SERVER_ERROR)
+                        LooprError(R.string.error_network_error, ErrorTypes.SERVER_ERROR)
                     } else {
                         LooprError(R.string.error_http_communication, ErrorTypes.SERVER_COMMUNICATION_ERROR)
                     }
@@ -528,7 +538,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
                 }
                 else -> {
                     loge("Unknown error: ", exception)
-                    UnknownLooprError()
+                    LooprError.UNKNOWN_ERROR
                 }
             }
 
@@ -536,6 +546,9 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
 
             val state = getCurrentIdleState(mLiveData?.value)
             mCurrentState.postValue(state)
+
+            // We need to make sure that the state is transferred before the error
+            delay(16L)
             mError.postValue(looprError)
         }
     }

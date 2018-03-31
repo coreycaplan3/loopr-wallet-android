@@ -10,7 +10,7 @@ import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
-import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
+import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.isDisabled
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.card_enter_wallet_password.*

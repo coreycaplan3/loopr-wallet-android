@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.models.user
 
 import android.support.annotation.StringDef
 import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
+import io.realm.annotations.Index
 import java.util.*
 
 /**
@@ -12,10 +12,10 @@ import java.util.*
  *
  * Purpose of Class:
  *
- *
  */
 open class SyncData(
-        @PrimaryKey var syncType: String = "",
+        @Index var syncType: String = "",
+        @Index var address: String? = null,
         var lastSyncTime: Date? = null
 ) : RealmObject() {
 

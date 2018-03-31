@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.fragments.transfers
 
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.design.widget.Snackbar
 import android.view.Menu
 import android.view.MenuInflater
@@ -24,6 +25,7 @@ import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate.Companion.MAX_CURRENCY_FRACTION_DIGITS
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate.Companion.MAX_EXCHANGE_RATE_FRACTION_DIGITS
 import com.caplaninnovations.looprwallet.models.user.Contact
+import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.repositories.user.ContactsRepository
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import com.caplaninnovations.looprwallet.viewmodels.LooprWalletViewModelFactory
@@ -56,11 +58,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
 
         private const val KEY_RECIPIENT_ADDRESS = "_RECIPIENT_ADDRESS"
 
-        fun createInstance(recipientAddress: String): CreateTransferAmountFragment {
-            return CreateTransferAmountFragment().apply {
-                arguments = bundleOf(KEY_RECIPIENT_ADDRESS to recipientAddress)
-            }
-        }
+        fun createInstance(recipientAddress: String) =
+                CreateTransferAmountFragment().apply {
+                    arguments = bundleOf(KEY_RECIPIENT_ADDRESS to recipientAddress)
+                }
     }
 
     override val layoutResource: Int
@@ -95,10 +96,12 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
      */
     private var tokenAmount: String = "0"
 
+    private lateinit var address: String
     private lateinit var ethToken: EthToken
     private lateinit var currentCryptoToken: CryptoToken
 
-    private var contact: Contact? = null
+    @VisibleForTesting
+    var contact: Contact? = null
         get() {
             if (field != null) {
                 return field
@@ -120,10 +123,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
             val model = LooprWalletViewModelFactory.get<TokenPriceCheckerViewModel>(this, wallet)
             field = model
             model.addCurrentStateObserver(this) {
-                when {
-                    model.isLoading() -> progressBar?.visibility = View.VISIBLE
-                    else -> progressBar?.visibility = View.INVISIBLE
-                }
+
+                model.updateProgressBar()
 
                 when (it) {
                     OfflineFirstViewModel.STATE_LOADING_EMPTY -> {
@@ -139,15 +140,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
                     }
                 }
 
-                if (model.hasValidData()) {
-                    createTransferSwapButton.isEnabled = true
-                    createTransferMaxButton.isEnabled = true
-                }
+                updateUiBasedOnValidData()
             }
 
-            model.addErrorObserver(this) {
-                view?.snackbar(it.errorMessage)
-            }
+            model.addCreateTransferErrorObserver()
 
             return model
         }
@@ -163,30 +159,28 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
             field = model
 
             model.addCurrentStateObserver(this) {
-                if (model.isLoading()) {
+                model.updateProgressBar()
 
-                }
+                updateUiBasedOnValidData()
             }
 
-            model.addErrorObserver(this) {
-                view?.snackbarWithAction(
-                        message = it.errorMessage,
-                        actionText = R.string.reload,
-                        length = Snackbar.LENGTH_INDEFINITE,
-                        listener = { model.refresh() }
-                )
-            }
+            model.addCreateTransferErrorObserver()
 
             return model
         }
 
-    private var tokenBalanceList = listOf<CryptoToken>()
+    @VisibleForTesting
+    var tokenBalanceList = listOf<CryptoToken>()
 
-    private val maxDecimalPlaces: Int
+    @VisibleForTesting
+    val maxDecimalPlaces: Int
         get() = when {
             isCurrencyMainLabel -> 2
             else -> MAX_EXCHANGE_RATE_FRACTION_DIGITS
         }
+
+    @VisibleForTesting
+    var spinnerActionView: Spinner? = null
 
     override val isDecimalVisible = true
 
@@ -202,6 +196,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
         currencyAmount = savedInstanceState?.getString(KEY_CURRENCY_AMOUNT) ?: "0"
         tokenAmount = savedInstanceState?.getString(KEY_TOKEN_AMOUNT) ?: "0"
         isCurrencyMainLabel = savedInstanceState?.getBoolean(KEY_IS_CURRENCY_MAIN_LABEL, true) != false
+
+        address = walletClient.getCurrentWallet()?.credentials?.address ?: LooprWallet.WATCH_ONLY_WALLET.credentials.address
 
         ethToken = tokenBalanceViewModel?.getEthBalanceNow() ?: EthToken.ETH
         currentCryptoToken = tokenPriceCheckerViewModel?.currentCryptoToken ?: ethToken
@@ -225,7 +221,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
         }
 
         createTransferMaxButton.setOnClickListener {
-            val balance = currentCryptoToken.balance ?: return@setOnClickListener
+            val balance = currentCryptoToken.getBalanceOf(address) ?: return@setOnClickListener
             val priceInNativeCurrency = currentCryptoToken.priceInNativeCurrency
                     ?: return@setOnClickListener
 
@@ -268,8 +264,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
         menu.clear()
         inflater.inflate(R.menu.menu_create_transfer_amount, menu)
 
-        val item = menu.findItem(R.id.createTransferAmountSpinner)
-        val spinner = item.actionView as Spinner
+        val spinnerItem = menu.findItem(R.id.createTransferAmountSpinner)
+        val spinner = (spinnerItem.actionView as Spinner).apply {
+            spinnerActionView = this
+        }
 
         val data = tokenBalanceList
         val adapterList: List<String> = data.map { it.ticker }
@@ -283,7 +281,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val balance = data[position].balance
+                val balance = data[position].getBalanceOf(address)
 
                 currencyAmount = "0"
                 tokenAmount = "0"
@@ -402,6 +400,11 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
 
     // MARK - Private Methods
 
+    private fun refreshAll() {
+        tokenPriceCheckerViewModel?.refresh()
+        tokenBalanceViewModel?.refresh()
+    }
+
     /**
      * Sets up [TokenPriceCheckerViewModel] to watch an [EthToken].
      */
@@ -409,7 +412,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
         tokenPriceCheckerViewModel?.getTokenPrice(this, token.identifier) {
             currentCryptoToken = it
 
-            val balance = it.balance?.formatAsToken(currencySettings, it.ticker) ?: NEGATIVE_ONE
+            val balance = it.getBalanceOf(address)?.formatAsToken(currencySettings, it.ticker)
+                    ?: NEGATIVE_ONE
             createTransferBalanceLabel.text = when (balance) {
                 NEGATIVE_ONE -> String.format(str(R.string.formatter_balance), balance)
                 else -> ""
@@ -433,7 +437,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
      * issues.
      */
     private fun onSendEth(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
-        val ethBalance = ethToken.balance ?: NEGATIVE_ONE
+        val ethBalance = ethToken.getBalanceOf(address) ?: NEGATIVE_ONE
         when {
             ethBalance == NEGATIVE_ONE -> onEthBalanceError()
             ethBalance < (amountToSend + totalTransactionCost) ->
@@ -445,8 +449,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
     }
 
     private fun onSendToken(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
-        val tokenToSendBalance = currentCryptoToken.balance ?: NEGATIVE_ONE
-        val ethBalance = ethToken.balance ?: NEGATIVE_ONE
+        val tokenToSendBalance = currentCryptoToken.getBalanceOf(address) ?: NEGATIVE_ONE
+        val ethBalance = ethToken.getBalanceOf(address) ?: NEGATIVE_ONE
         when {
             ethBalance == NEGATIVE_ONE -> onEthBalanceError()
             tokenToSendBalance == NEGATIVE_ONE -> {
@@ -502,7 +506,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
             }
         }
 
-        val balance = currentCryptoToken.balance
+        val balance = currentCryptoToken.getBalanceOf(address)
         val bdTokenAmount = BigDecimal(tokenAmount)
         createTransferSendButton.isEnabled = balance != null && !bdTokenAmount.equalsZero()
     }
@@ -521,6 +525,48 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
     private fun setAmountBasedOnCurrencyMainLabel(amount: String) = when {
         isCurrencyMainLabel -> currencyAmount = amount
         else -> tokenAmount = amount
+    }
+
+    private var indefiniteSnackbar: Snackbar? = null
+
+    /**
+     * Updates the swap, max, and number pad based on whether the two essential data providers,
+     * [tokenBalanceViewModel] and [tokenPriceCheckerViewModel], have valid data.
+     */
+    private fun updateUiBasedOnValidData() {
+        if (tokenBalanceViewModel?.hasValidData() == true && tokenPriceCheckerViewModel?.hasValidData() == true) {
+            createTransferSwapButton.isEnabled = true
+            createTransferMaxButton.isEnabled = true
+            NumberPadHandler.enableNumberPad(this)
+
+            indefiniteSnackbar?.dismiss()
+            indefiniteSnackbar = null
+        } else {
+            createTransferSwapButton.isEnabled = false
+            createTransferMaxButton.isEnabled = false
+            NumberPadHandler.disableNumberPad(this)
+
+            indefiniteSnackbar = view?.indefiniteSnackbarWithAction(R.string.error_no_connection, R.string.reload) {
+                refreshAll()
+            }
+        }
+    }
+
+    private fun <T, U> OfflineFirstViewModel<T, U>.addCreateTransferErrorObserver() {
+        this.addErrorObserver(this@CreateTransferAmountFragment) {
+            val snackbar = indefiniteSnackbar
+            if (snackbar == null || !snackbar.isShownOrQueued) {
+                // If we aren't already showing the refreshAll snackbar, let's show it
+                view?.longSnackbarWithAction(it.errorMessage, R.string.reload) { refreshAll() }
+            }
+        }
+    }
+
+    private fun <T, U> OfflineFirstViewModel<T, U>.updateProgressBar() {
+        progressBar?.visibility = when {
+            this.isLoading() -> View.VISIBLE
+            else -> View.GONE
+        }
     }
 
     private fun onEthBalanceError() {

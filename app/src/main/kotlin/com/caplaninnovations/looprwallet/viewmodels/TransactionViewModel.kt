@@ -9,7 +9,8 @@ import android.arch.lifecycle.ViewModel
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class: A [ViewModel] used for running basic transactions.
+ * Purpose of Class: A [ViewModel] used for running basic transactions. This could be a network
+ * request or
  *
  */
 abstract class TransactionViewModel<T> : ViewModel() {

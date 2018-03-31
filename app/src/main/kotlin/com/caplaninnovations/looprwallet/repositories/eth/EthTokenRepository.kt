@@ -4,7 +4,9 @@ import android.arch.lifecycle.LiveData
 import com.caplaninnovations.looprwallet.extensions.asLiveData
 import com.caplaninnovations.looprwallet.extensions.equalTo
 import com.caplaninnovations.looprwallet.extensions.mapIfNull
+import com.caplaninnovations.looprwallet.extensions.notEqualTo
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
+import com.caplaninnovations.looprwallet.models.crypto.TokenBalanceInfo
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.repositories.BaseRealmRepository
@@ -24,29 +26,32 @@ class EthTokenRepository(currentWallet: LooprWallet) : BaseRealmRepository(curre
      * Finds [EthToken.ETH] synchronously. If not found, it is inserted and returned from realm.
      */
     fun getEthNow(): EthToken =
-            uiRealm.where<EthToken>()
+            uiSharedRealm.where<EthToken>()
                     .equalTo(EthToken::ticker, EthToken.ETH.ticker)
                     .findFirst()
-                    .mapIfNull { uiRealm.copyToRealm(EthToken.ETH) }
+                    .mapIfNull { uiSharedRealm.copyToRealm(EthToken.ETH) }
 
     @Suppress("UNCHECKED_CAST")
     fun getAllTokens(): LiveData<List<CryptoToken>> {
-        return uiRealm.where<EthToken>()
+        return uiSharedRealm.where<EthToken>()
                 .findAllAsync()
                 .asLiveData() as LiveData<List<CryptoToken>>
     }
 
+    /**
+     * @param address The address of the wallet whose addres s
+     */
     @Suppress("UNCHECKED_CAST")
-    fun getAllTokensWithoutZeroBalance(): LiveData<List<CryptoToken>> {
-        return uiRealm.where<EthToken>()
-                .notEqualTo(CryptoToken::balance.name, "0")
+    fun getAllTokensWithoutZeroBalance(address: String): LiveData<List<CryptoToken>> {
+        return uiSharedRealm.where<EthToken>()
+                .notEqualTo(listOf(EthToken::tokenBalances), TokenBalanceInfo::mBalance, "0")
                 .findAllAsync()
                 .asLiveData() as LiveData<List<CryptoToken>>
     }
 
     @Suppress("UNCHECKED_CAST")
     fun getToken(contractAddress: String): LiveData<CryptoToken> {
-        return uiRealm.where<EthToken>()
+        return uiSharedRealm.where<EthToken>()
                 .equalTo(EthToken::contractAddress, contractAddress)
                 .findFirstAsync()
                 .asLiveData() as LiveData<CryptoToken>

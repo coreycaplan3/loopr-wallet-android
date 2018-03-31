@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.models.error
 
 import android.support.annotation.StringRes
+import com.caplaninnovations.looprwallet.R
 
 /**
  * Created by Corey Caplan on 3/14/18.
@@ -17,4 +18,12 @@ import android.support.annotation.StringRes
  * @see ErrorTypes.SERVER_COMMUNICATION_ERROR
  * @see ErrorTypes.SERVER_ERROR
  */
-open class LooprError(@StringRes val errorMessage: Int, val errorType: Int)
+open class LooprError(@StringRes val errorMessage: Int, val errorType: Int) {
+
+    companion object {
+
+        val UNKNOWN_ERROR = LooprError(R.string.error_unknown, ErrorTypes.UNKNOWN)
+
+    }
+
+}

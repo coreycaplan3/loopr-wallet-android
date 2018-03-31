@@ -31,7 +31,7 @@ class RealmObjectChangeListenerTest : BaseDaggerTest() {
 
     @Before
     fun setup() = runBlockingUiCode {
-        realm = component.realmClient.getInstance(wallet!!.walletName, wallet!!.realmKey)
+        realm = component.realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
     }
 
     @After

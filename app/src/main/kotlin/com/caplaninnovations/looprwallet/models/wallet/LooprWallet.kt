@@ -17,6 +17,12 @@ data class LooprWallet(
         private val privateKey: String
 ) {
 
+    companion object {
+
+        private const val privateKey = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+        val WATCH_ONLY_WALLET = LooprWallet("watch-only", ByteArray(0), privateKey)
+    }
+
     val credentials: Credentials = Credentials.create(privateKey)
 
     override fun equals(other: Any?): Boolean {

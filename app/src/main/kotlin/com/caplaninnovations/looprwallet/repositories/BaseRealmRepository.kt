@@ -19,15 +19,20 @@ import io.realm.kotlin.deleteFromRealm
  * [Realm] as well.
  *
  */
-open class BaseRealmRepository(private val currentWallet: LooprWallet)
+open class BaseRealmRepository(val currentWallet: LooprWallet)
     : BaseRepository<RealmModel> {
 
     private val realmClient = LooprWalletApp.dagger.realmClient
 
     /**
-     * A realm instance that can only be accessed from the main thread.
+     * A private realm instance that can only be accessed from the main thread.
      */
-    val uiRealm = realmClient.getInstance(currentWallet.walletName, currentWallet.realmKey)
+    val uiPrivateRealm = realmClient.getPrivateInstance(currentWallet.walletName, currentWallet.realmKey)
+
+    /**
+     * A shared realm instance that can only be accessed from the main thread.
+     */
+    val uiSharedRealm = realmClient.getSharedInstance()
 
     /**
      * ** THIS METHOD MUST BE CALLED FROM THE MAIN THREAD**
@@ -37,43 +42,87 @@ open class BaseRealmRepository(private val currentWallet: LooprWallet)
      * @param data The data to copy into the [Realm]
      */
     fun <T : RealmModel> addAndReturn(data: T): T {
-        executeRealmTransaction { it.upsertCopyToRealm(data) }
+        executeSharedRealmTransaction { it.upsertCopyToRealm(data) }
         return data
     }
 
     final override fun add(data: RealmModel) {
-        executeRealmTransaction { it.upsert(data) }
+        executeSharedRealmTransaction { it.upsert(data) }
     }
 
     final override fun addList(data: List<RealmModel>) {
-        executeRealmTransaction { it.upsert(data) }
+        executeSharedRealmTransaction { it.upsert(data) }
     }
 
-    final override fun removeData(data: RealmModel) {
-        executeRealmTransaction { data.deleteFromRealm() }
+    final override fun remove(data: RealmModel) {
+        executeSharedRealmTransaction { data.deleteFromRealm() }
     }
 
-    final override fun removeData(data: List<RealmModel>) {
+    final override fun remove(data: List<RealmModel>) {
         if (data is RealmResults) {
-            executeRealmTransaction { data.deleteAllFromRealm() }
+            executeSharedRealmTransaction { data.deleteAllFromRealm() }
+        }
+    }
+
+    /**
+     * ** THIS METHOD MUST BE CALLED FROM THE MAIN THREAD**
+     *
+     * Copies [data] to the [Realm] and returns it.
+     *
+     * @param data The data to copy into the [Realm]
+     */
+    fun <T : RealmModel> addAndReturnPrivateTransaction(data: T): T {
+        executePrivateRealmTransaction { it.upsertCopyToRealm(data) }
+        return data
+    }
+
+    fun addPrivateData(data: RealmModel) {
+        executePrivateRealmTransaction { it.upsert(data) }
+    }
+
+    fun addListPrivateData(data: List<RealmModel>) {
+        executePrivateRealmTransaction { it.upsert(data) }
+    }
+
+    fun removePrivateData(data: RealmModel) {
+        executePrivateRealmTransaction { data.deleteFromRealm() }
+    }
+
+    fun removePrivateData(data: List<RealmModel>) {
+        if (data is RealmResults) {
+            executePrivateRealmTransaction { data.deleteAllFromRealm() }
         }
     }
 
     final override fun clear() {
-        uiRealm.removeAllListenersAndClose()
+        uiPrivateRealm.removeAllListenersAndClose()
+        uiSharedRealm.removeAllListenersAndClose()
     }
 
     // MARK - Private Methods
 
     /**
-     * Executes a realm transaction with a one-time-use [Realm] (not [uiRealm]).
+     * Executes a realm transaction with a one-time-use [Realm] (not [uiPrivateRealm]).
      *
      * @param transaction A function that is executed from **within** a [Realm] transaction
      */
-    private inline fun <T> executeRealmTransaction(crossinline transaction: (Realm) -> T) {
-        val realm = realmClient.getInstance(currentWallet.walletName, currentWallet.realmKey)
-        realm.executeTransaction { transaction(it) }
-        realm.close()
+    private inline fun <T> executeSharedRealmTransaction(crossinline transaction: (Realm) -> T) {
+        realmClient.getSharedInstance()
+                .use {
+                    it.executeTransaction { transaction(it) }
+                }
+    }
+
+    /**
+     * Executes a realm transaction with a one-time-use [Realm] (not a UI realm).
+     *
+     * @param transaction A function that is executed from **within** a [Realm] transaction
+     */
+    private inline fun <T> executePrivateRealmTransaction(crossinline transaction: (Realm) -> T) {
+        realmClient.getPrivateInstance(currentWallet.walletName, currentWallet.realmKey)
+                .use {
+                    it.executeTransaction { transaction(it) }
+                }
     }
 
 }

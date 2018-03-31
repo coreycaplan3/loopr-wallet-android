@@ -23,13 +23,13 @@ interface BaseRepository<T> {
     /**
      * Removes the data from the database. This method may be called from a background thread.
      */
-    fun removeData(data: T)
+    fun remove(data: T)
 
     /**
      * Removes the list of data from the database. This method may be called from a background
      * thread.
      */
-    fun removeData(data: List<T>)
+    fun remove(data: List<T>)
 
     /**
      * Called when this repository is no longer need and can be garbage-collected.

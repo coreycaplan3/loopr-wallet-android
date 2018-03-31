@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.networking.eth
 
 import com.caplaninnovations.looprwallet.utilities.NetworkUtility
+import com.caplaninnovations.looprwallet.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import org.web3j.protocol.core.methods.response.TransactionReceipt
@@ -20,7 +21,7 @@ class EtherServiceMockImpl : EtherService {
     override fun sendEther(recipient: String, amount: BigDecimal) = async {
 
         // Make a fake delay of 500ms
-        delay(500L)
+        delay(MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
             TransactionReceipt()

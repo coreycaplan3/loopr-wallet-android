@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.networking.prices
 
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
+import com.caplaninnovations.looprwallet.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
@@ -18,7 +19,9 @@ import java.math.RoundingMode
 class CurrencyExchangeServiceMockImpl : CurrencyExchangeService {
 
     override fun getCurrentCurrencyExchangeRate(currency: String): Deferred<CurrencyExchangeRate> = async {
-        delay(500L)
+
+        delay(MOCK_SERVICE_CALL_DURATION)
+
         val rate = if (currency != CurrencyExchangeRate.USD.currency) {
             BigDecimal(Math.random())
                     .setScale(CurrencyExchangeRate.MAX_EXCHANGE_RATE_FRACTION_DIGITS, RoundingMode.HALF_UP)

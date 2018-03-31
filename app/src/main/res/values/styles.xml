@@ -47,6 +47,11 @@
         <item name="android:background">@drawable/button_background_material</item>
     </style>
 
+    <!-- There's no shapes with a radius that intrinsically limits the size -->
+    <style name="App.Button.NoClipping" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/button_background_full_size</item>
+    </style>
+
     <style name="App.Button.NumberPad" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:background">@drawable/ripple_effect_accent</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>

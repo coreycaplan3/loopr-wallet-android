@@ -10,6 +10,7 @@ import com.caplaninnovations.looprwallet.repositories.eth.EthTokenRepository
 import com.caplaninnovations.looprwallet.repositories.sync.SyncRepository
 import com.caplaninnovations.looprwallet.viewmodels.OfflineFirstViewModel
 import kotlinx.coroutines.experimental.Deferred
+import java.util.*
 
 /**
  * Created by Corey Caplan on 3/18/18.
@@ -43,12 +44,24 @@ class TokenBalanceViewModel(private val currentWallet: LooprWallet) : OfflineFir
         return repository.getAllTokens()
     }
 
+    override fun isRefreshNecessary(parameter: String): Boolean {
+        val address = currentWallet.credentials.address
+        val dateLastSynced = syncRepository.getLastSyncTimeForWallet(address, syncType)?.time ?: return true
+
+        return isRefreshNecessary(dateLastSynced)
+    }
+
     override fun getDataFromNetwork(parameter: String): Deferred<List<CryptoToken>> {
         return ethplorerApiService.getAddressInfo(currentWallet.credentials.address)
     }
 
     override fun addNetworkDataToRepository(data: List<CryptoToken>) {
         repository.addList(data)
+    }
+
+    override fun addSyncDataToRepository() {
+        val address = currentWallet.credentials.address
+        syncRepository.add(SyncData(syncType, address, Date()))
     }
 
 }

@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.models.crypto
 
 import com.caplaninnovations.looprwallet.models.TrackedRealmObject
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
+import io.realm.RealmList
 import io.realm.RealmModel
 import java.math.BigDecimal
 
@@ -39,9 +40,12 @@ interface CryptoToken : TrackedRealmObject, RealmModel {
     /**
      * The 3 to 7 letter symbol that represents the crypto
      */
-    val ticker: String
+    var ticker: String
 
-    var balance: BigDecimal?
+    /**
+     * One token can have many balances from different wallets
+     */
+    var tokenBalances: RealmList<TokenBalanceInfo>
 
     /**
      * The price of the token, in terms of USD.
@@ -53,6 +57,8 @@ interface CryptoToken : TrackedRealmObject, RealmModel {
      * This variable should go out 8 decimal places.
      */
     var priceInNativeCurrency: BigDecimal?
+
+    fun getBalanceOf(address: String) = tokenBalances.find { it.address == address }?.balance
 
     /**
      * Formats the total supply so it can be presented to the user.

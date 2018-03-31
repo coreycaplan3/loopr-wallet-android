@@ -16,6 +16,8 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
  */
 object NetworkUtility {
 
+    const val MOCK_SERVICE_CALL_DURATION = 1000L
+
     var mockIsNetworkAvailable = true
 
     fun isNetworkAvailable() = when {

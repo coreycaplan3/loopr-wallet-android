@@ -21,13 +21,13 @@ import org.junit.runner.RunWith
 class RealmClientTest {
 
     private val realmName = "loopr-test"
-    private val realmClient = RealmClient.getInstance()
+    private val realmClient = RealmClient.getPrivateInstance()
 
     private lateinit var realm: Realm
 
     @Before
     fun setup() {
-        realm = Realm.getInstance(realmClient.getRealmConfigurationBuilder(realmName).build())
+        realm = Realm.getInstance(realmClient.getPrivateRealmConfigurationBuilder(realmName).build())
     }
 
     @Test

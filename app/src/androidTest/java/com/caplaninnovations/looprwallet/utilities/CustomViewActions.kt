@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.utilities
 
 import android.support.test.espresso.ViewAction
 import android.support.test.espresso.action.*
-import android.support.test.espresso.action.GeneralLocation.*
+import android.support.test.espresso.action.GeneralLocation.CENTER
 import android.view.View
 
 /**
@@ -15,50 +15,46 @@ import android.view.View
  * stack overflow post.
  *
  */
-class CustomViewActions {
+object CustomViewActions {
 
-    companion object {
+    /**
+     * @param itemView The view holder's item view
+     * @param by The number of positions that the view holder should be dragged
+     */
+    fun dragUpViewHolder(itemView: View, by: Int): ViewAction {
+        val endCoordinates = CoordinatesProvider {
+            val xy = IntArray(2)
+            it.getLocationOnScreen(xy)
 
-        /**
-         * @param itemView The view holder's item view
-         * @param by The number of positions that the view holder should be dragged
-         */
-        fun dragUpViewHolder(itemView: View, by: Int): ViewAction {
-            val endCoordinates = CoordinatesProvider {
-                val xy = IntArray(2)
-                it.getLocationOnScreen(xy)
-
-                val floatArray = FloatArray(2)
-                floatArray[0] = xy[0].toFloat()
-                floatArray[1] = xy[1] - (itemView.measuredHeight * 2F * by)
-                floatArray
-            }
-
-            return ViewActions.actionWithAssertions(
-                    GeneralSwipeAction(Swipe.FAST, CENTER, endCoordinates, Press.FINGER)
-            )
+            val floatArray = FloatArray(2)
+            floatArray[0] = xy[0].toFloat()
+            floatArray[1] = xy[1] - (itemView.measuredHeight * 2F * by)
+            floatArray
         }
 
-        /**
-         * @param itemView The view holder's item view
-         * @param by The number of positions that the view holder should be dragged
-         */
-        fun dragDownViewHolder(itemView: View, by: Int): ViewAction {
-            val endCoordinates = CoordinatesProvider {
-                val xy = IntArray(2)
-                it.getLocationOnScreen(xy)
+        return ViewActions.actionWithAssertions(
+                GeneralSwipeAction(Swipe.FAST, CENTER, endCoordinates, Press.FINGER)
+        )
+    }
 
-                val floatArray = FloatArray(2)
-                floatArray[0] = xy[0].toFloat()
-                floatArray[1] = xy[1] + (itemView.height * 2F * by)
-                floatArray
-            }
+    /**
+     * @param itemView The view holder's item view
+     * @param by The number of positions that the view holder should be dragged
+     */
+    fun dragDownViewHolder(itemView: View, by: Int): ViewAction {
+        val endCoordinates = CoordinatesProvider {
+            val xy = IntArray(2)
+            it.getLocationOnScreen(xy)
 
-            return ViewActions.actionWithAssertions(
-                    GeneralSwipeAction(Swipe.FAST, CENTER, endCoordinates, Press.FINGER)
-            )
+            val floatArray = FloatArray(2)
+            floatArray[0] = xy[0].toFloat()
+            floatArray[1] = xy[1] + (itemView.height * 2F * by)
+            floatArray
         }
 
+        return ViewActions.actionWithAssertions(
+                GeneralSwipeAction(Swipe.FAST, CENTER, endCoordinates, Press.FINGER)
+        )
     }
 
 }

@@ -23,7 +23,7 @@ import io.realm.kotlin.where
 class ContactsRepository(currentWallet: LooprWallet) : BaseRealmRepository(currentWallet) {
 
     fun getAllContactsByName(name: String): LiveData<RealmResults<Contact>> {
-        return uiRealm.where<Contact>()
+        return uiSharedRealm.where<Contact>()
                 .like(Contact::name, name)
                 .sort(Contact::name)
                 .findAllAsync()
@@ -31,7 +31,7 @@ class ContactsRepository(currentWallet: LooprWallet) : BaseRealmRepository(curre
     }
 
     fun getAllContactsByAddress(address: String): LiveData<RealmResults<Contact>> {
-        return uiRealm.where<Contact>()
+        return uiSharedRealm.where<Contact>()
                 .like(Contact::address, address)
                 .sort(Contact::name)
                 .findAllAsync()
@@ -39,7 +39,7 @@ class ContactsRepository(currentWallet: LooprWallet) : BaseRealmRepository(curre
     }
 
     fun getContactByAddressNow(address: String): Contact? {
-        return uiRealm.where<Contact>()
+        return uiSharedRealm.where<Contact>()
                 .equalTo(Contact::address, address, Case.INSENSITIVE)
                 .findFirst()
     }

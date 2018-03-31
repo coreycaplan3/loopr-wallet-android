@@ -1,5 +1,6 @@
 package com.caplaninnovations.looprwallet.extensions
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
 import android.support.annotation.ColorInt
@@ -120,6 +121,16 @@ fun TabLayout.findTabByTag(tag: String): TabLayout.Tab? {
             .firstOrNull { it?.tag == tag }
 }
 
+// SNACKBAR stuff
+
+private val snackbarMap = HashMap<String, Boolean?>()
+
+/**
+ * @param text The text displayed in the snackbar, which is used as a key to find it.
+ * @return True if the provided snackbar is visible or false otherwise.
+ */
+fun isSnackbarVisible(text: String) = snackbarMap[text] == true
+
 /**
  * Creates a snackbar by using this view to instantiate it and automatically calls show
  *
@@ -129,8 +140,11 @@ fun TabLayout.findTabByTag(tag: String): TabLayout.Tab? {
  * @see Snackbar.LENGTH_LONG
  * @see Snackbar.LENGTH_INDEFINITE
  */
+@SuppressLint("Range")
 fun View.snackbar(message: String, @Duration length: Int = Snackbar.LENGTH_LONG) {
-    Snackbar.make(this, message, length).show()
+    Snackbar.make(this, message, length)
+            .addCallback(getSnackbarCallback(message))
+            .show()
 }
 
 /**
@@ -142,6 +156,7 @@ fun View.snackbar(message: String, @Duration length: Int = Snackbar.LENGTH_LONG)
  * @see Snackbar.LENGTH_LONG
  * @see Snackbar.LENGTH_INDEFINITE
  */
+@SuppressLint("Range")
 fun View.snackbar(@StringRes message: Int, @Duration length: Int = Snackbar.LENGTH_LONG) {
     this.snackbar(str(message), length)
 }
@@ -167,9 +182,27 @@ fun View.snackbarUnknownError() {
  * @see Snackbar.LENGTH_INDEFINITE
  */
 fun View.longSnackbarWithAction(@StringRes message: Int,
-                            @StringRes actionText: Int,
-                            listener: (View) -> Unit) {
-    this.snackbarWithAction(message, Snackbar.LENGTH_LONG, actionText, null, listener)
+                                @StringRes actionText: Int,
+                                listener: (View) -> Unit): Snackbar {
+    return snackbarWithAction(message, Snackbar.LENGTH_LONG, actionText, null, listener)
+}
+
+/**
+ * Creates an indefinite snackbar by using this view to instantiate it and *automatically* call
+ * [Snackbar.show].
+ *
+ * @param message The string resource that is used to display the snackbar's message
+ * @param actionText The string resource that is used to display the snackbar's action
+ * @param listener The listener that will be called if the action button is clicked
+ * @see View.snackbar
+ * @see Snackbar.LENGTH_SHORT
+ * @see Snackbar.LENGTH_LONG
+ * @see Snackbar.LENGTH_INDEFINITE
+ */
+fun View.indefiniteSnackbarWithAction(@StringRes message: Int,
+                                      @StringRes actionText: Int,
+                                      listener: (View) -> Unit): Snackbar {
+    return snackbarWithAction(message, Snackbar.LENGTH_INDEFINITE, actionText, null, listener)
 }
 
 /**
@@ -190,11 +223,26 @@ fun View.snackbarWithAction(@StringRes message: Int,
                             length: Int = Snackbar.LENGTH_LONG,
                             @StringRes actionText: Int,
                             @ColorInt color: Int? = null,
-                            listener: (View) -> Unit) {
+                            listener: (View) -> Unit): Snackbar {
     val snackbar = Snackbar.make(this, str(message), length)
             .setAction(actionText, listener)
+            .addCallback(getSnackbarCallback(str(message)))
 
     color?.let { snackbar.setActionTextColor(color) }
 
     snackbar.show()
+
+    return snackbar
+}
+
+private fun getSnackbarCallback(message: String) = object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+    override fun onShown(transientBottomBar: Snackbar?) {
+        super.onShown(transientBottomBar)
+        snackbarMap[message] = true
+    }
+
+    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+        super.onDismissed(transientBottomBar, event)
+        snackbarMap.remove(message)
+    }
 }

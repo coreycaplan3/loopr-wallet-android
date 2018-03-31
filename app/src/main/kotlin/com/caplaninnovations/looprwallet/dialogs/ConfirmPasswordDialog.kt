@@ -88,8 +88,6 @@ class ConfirmPasswordDialog : BaseBottomSheetDialog() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cancelButton.setOnClickListener { dismiss() }
-
         val correctPassword = passwordBasedWallet.getWalletPassword()
         validatorList = listOf(
                 PasswordMatcherValidator(confirmPasswordInputLayout, correctPassword, this::onFormChanged)

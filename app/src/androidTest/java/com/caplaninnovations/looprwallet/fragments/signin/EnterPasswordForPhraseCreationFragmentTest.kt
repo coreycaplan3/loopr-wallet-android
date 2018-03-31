@@ -10,7 +10,7 @@ import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletRememberPhraseFragment
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions
-import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.Companion.isDisabled
+import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.isDisabled
 import com.caplaninnovations.looprwallet.validators.BaseValidator
 import kotlinx.android.synthetic.main.card_enter_wallet_password.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
