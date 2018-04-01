@@ -200,7 +200,7 @@
     <string name="reload">Reload</string>
     <string name="loading_price">Loading price…</string>
     <string name="error_loading_price">Unable to load price</string>
-    <string name="current_ticker_price">Current %s Price: %s</string>
+    <string name="formatter_current_ticker_price">Current %s Price: %s</string>
     <string name="error_send_tokens_with_zero_balance">You may only send tokens that do not have a 0 balance</string>
     <string name="formatter_balance">Balance: %s</string>
     <string name="error_retrieve_eth_balance">There was an error getting your ETH balance</string>
@@ -277,4 +277,7 @@
     <string name="gas_settings">Gas Settings</string>
     <string name="cannot_send_more_eth_than_balance_and_gas">You cannot send more ETH than your balance minus gas</string>
     <string name="explain_application_lock">An application lock protects the assets on your device by adding a lock screen before opening this app, or when you want to view your private key.</string>
+    <string name="question_send_tokens">Send Tokens?</string>
+    <string name="formatter_confirm_token_send">You are about to send %s tokens, which is worth about %s. Are you sure you want to send these tokens to %s?</string>
+    <string name="sending">Sending...</string>
 </resources>

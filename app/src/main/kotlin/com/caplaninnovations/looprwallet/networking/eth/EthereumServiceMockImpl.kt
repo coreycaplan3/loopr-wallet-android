@@ -1,7 +1,6 @@
 package com.caplaninnovations.looprwallet.networking.eth
 
 import com.caplaninnovations.looprwallet.utilities.NetworkUtility
-import com.caplaninnovations.looprwallet.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import org.web3j.protocol.core.methods.response.TransactionReceipt
@@ -16,12 +15,22 @@ import java.math.BigDecimal
  * Purpose of Class:
  *
  */
-class EtherServiceMockImpl : EtherService {
+class EthereumServiceMockImpl : EthereumService {
 
-    override fun sendEther(recipient: String, amount: BigDecimal) = async {
+    override fun sendEther(recipient: String, amount: BigDecimal, gasLimit: BigDecimal, gasPrice: BigDecimal) = async {
 
-        // Make a fake delay of 500ms
-        delay(MOCK_SERVICE_CALL_DURATION)
+        delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
+
+        if (NetworkUtility.isNetworkAvailable()) {
+            TransactionReceipt()
+        } else {
+            throw IOException("No Connection!")
+        }
+    }
+
+    override fun sendToken(contractAddress: String, recipient: String, amount: BigDecimal, gasLimit: BigDecimal, gasPrice: BigDecimal) = async {
+
+        delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
             TransactionReceipt()

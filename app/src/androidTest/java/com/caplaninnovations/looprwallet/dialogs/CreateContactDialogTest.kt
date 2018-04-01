@@ -28,7 +28,6 @@ class CreateContactDialogTest : BaseDaggerFragmentTest<CreateContactDialog>() {
     override val tag = CreateContactDialog.TAG
 
     val name = "Loopr Contact"
-    val address = "0x0123456701234567012345670123456701234567"
 
     @Test
     fun createContact() = runBlockingUiCode {

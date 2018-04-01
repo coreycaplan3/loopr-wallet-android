@@ -1,6 +1,7 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.bool
 import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 
 /**
@@ -17,7 +18,7 @@ class GeneralWalletSettings(private val looprSettings: LooprSettings) {
 
         val KEY_SHOW_ZERO_BALANCES = str(R.string.settings_general_wallet_zero_balance_key)
 
-        val DEFAULT_VALUE_SHOW_ZERO_BALANCES = str(R.string.settings_general_wallet_zero_balance_default_value)
+        val DEFAULT_VALUE_SHOW_ZERO_BALANCES = bool(R.bool.settings_general_wallet_zero_balance_default_value).toString()
     }
 
 }

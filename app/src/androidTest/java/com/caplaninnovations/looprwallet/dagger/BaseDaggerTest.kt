@@ -20,7 +20,6 @@ import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSett
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import io.realm.Realm
-import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -28,6 +27,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import java.util.*
 import java.util.concurrent.FutureTask
@@ -49,7 +49,10 @@ open class BaseDaggerTest {
 
     lateinit var component: LooprTestComponent
 
-    private val walletName = "loopr-test-${BaseDaggerTest::class.java.simpleName}"
+    val walletName = "loopr-test-${BaseDaggerTest::class.java.simpleName}"
+
+    protected lateinit var address: String
+        private set
 
     /**
      * This realm is only opened and used because in memory realms are WIPED after the last one is
@@ -76,17 +79,21 @@ open class BaseDaggerTest {
 
         Intents.init()
 
-        putDefaultWallet()
+        runBlockingUiCode {
+            putDefaultWallet()
+        }
         waitForActivityToBeSetup()
     }
 
     open fun putDefaultWallet() {
-        val privateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e493"
+        val privateKey = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 
         assertTrue(walletClient.createWallet(walletName, privateKey))
 
         wallet = walletClient.getCurrentWallet()
         assertNotNull(wallet)
+
+        address = wallet!!.credentials.address
 
         logd("Created currentWallet...")
     }
@@ -95,7 +102,9 @@ open class BaseDaggerTest {
     fun baseDaggerTearDown() {
         Intents.release()
 
-        inMemoryRealm.removeAllListenersAndClose()
+        runBlockingUiCode {
+            inMemoryRealm.removeAllListenersAndClose()
+        }
 
         wallet?.let { walletClient.removeWallet(it.walletName) }
 

@@ -49,10 +49,6 @@ interface LooprSecureSettings : LooprSettings {
 
         private val map = HashMap<String, Any>()
 
-        fun clear() {
-            map.clear()
-        }
-
         override fun getBoolean(key: String, defaultValue: Boolean): Boolean {
             return map[key] as? Boolean ?: defaultValue
         }

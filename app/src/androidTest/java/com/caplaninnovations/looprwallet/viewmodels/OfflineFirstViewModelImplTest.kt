@@ -68,6 +68,10 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
             return lastRefresh
         }
 
+        override fun getLastSyncTimeForWallet(address: String, syncType: String): Date? {
+            return lastRefresh
+        }
+
         override fun remove(data: List<RealmModel>) {
         }
 

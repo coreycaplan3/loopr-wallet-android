@@ -3,6 +3,7 @@ package com.caplaninnovations.looprwallet.models.crypto
 import com.caplaninnovations.looprwallet.extensions.equalsZero
 import com.caplaninnovations.looprwallet.models.TrackedRealmObject
 import io.realm.RealmObject
+import io.realm.annotations.Index
 import java.math.BigDecimal
 import java.util.*
 
@@ -18,7 +19,7 @@ import java.util.*
  */
 open class TokenBalanceInfo(
 
-        var address: String = "",
+        @Index var address: String = "",
 
         balance: BigDecimal = BigDecimal.ZERO,
 

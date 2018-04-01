@@ -19,18 +19,19 @@ import java.text.NumberFormat
  */
 fun String.formatAsCustomCurrency(currencySettings: CurrencySettings): String {
     val decimalIndex = this.indexOf('.')
+    val isDecimal = decimalIndex != -1
     val integerFormat = NumberFormat.getIntegerInstance(currencySettings.getCurrentLocale())
 
-    val wholeNumberFormatted = if (decimalIndex != -1) {
-        integerFormat.format(BigDecimal(this.substring(0, decimalIndex)))
-    } else {
-        integerFormat.format(BigDecimal(this))
+    val wholeNumberFormatted = when {
+        isDecimal -> integerFormat.format(BigDecimal(this.substring(0, decimalIndex)))
+        else -> integerFormat.format(BigDecimal(this))
     }
 
-    val entireNumber = if (decimalIndex != -1) {
-        wholeNumberFormatted + this.substring(decimalIndex, length)
-    } else {
-        wholeNumberFormatted
+    val entireNumber = when {
+        isDecimal ->
+            // We only append the numbers that are ACTUALLY there, meaning there's no padded 0's
+            wholeNumberFormatted + this.substring(decimalIndex, length)
+        else -> wholeNumberFormatted
     }
 
     return "${currencySettings.getCurrencySymbol()}$entireNumber"
@@ -42,18 +43,19 @@ fun String.formatAsCustomCurrency(currencySettings: CurrencySettings): String {
  */
 fun String.formatAsCustomToken(currencySettings: CurrencySettings, ticker: String): String {
     val decimalIndex = this.indexOf('.')
+    val isDecimal = decimalIndex != -1
     val integerFormat = NumberFormat.getIntegerInstance(currencySettings.getCurrentLocale())
 
-    val integersFormatted = if (decimalIndex != -1) {
-        integerFormat.format(BigDecimal(this.substring(0, decimalIndex)))
-    } else {
-        integerFormat.format(BigDecimal(this))
+    val integersFormatted = when {
+        isDecimal -> integerFormat.format(BigDecimal(this.substring(0, decimalIndex)))
+        else -> integerFormat.format(BigDecimal(this))
     }
 
-    val entireNumber = if (decimalIndex != -1) {
-        integersFormatted + this.substring(decimalIndex, length)
-    } else {
-        integersFormatted
+    val entireNumber = when {
+        isDecimal ->
+            // We only append the numbers that are ACTUALLY there, meaning there's no padded 0's
+            integersFormatted + this.substring(decimalIndex, length)
+        else -> integersFormatted
     }
 
     return "$entireNumber $ticker"

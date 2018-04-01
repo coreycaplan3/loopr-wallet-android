@@ -1,6 +1,8 @@
 package com.caplaninnovations.looprwallet.utilities
 
+import io.realm.RealmConfiguration.KEY_LENGTH
 import java.security.SecureRandom
+import javax.crypto.KeyGenerator
 import kotlin.reflect.KProperty
 
 /**
@@ -21,9 +23,9 @@ object RealmUtility {
      * @return A 64-byte long array, to be used as an encryption key for the Realm database.
      */
     fun createKey(): ByteArray {
-        val bytes = ByteArray(64)
-        SecureRandom().nextBytes(bytes)
-        return bytes
+        val kg = KeyGenerator.getInstance("AES")
+        kg.init(KEY_LENGTH)
+        return kg.generateKey().encoded
     }
 
     /**

@@ -16,7 +16,7 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
  */
 object NetworkUtility {
 
-    const val MOCK_SERVICE_CALL_DURATION = 1000L
+    val MOCK_SERVICE_CALL_DURATION = BuildConfig.DEFAULT_NETWORK_TIMEOUT - 200L
 
     var mockIsNetworkAvailable = true
 

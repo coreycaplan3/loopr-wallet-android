@@ -15,15 +15,15 @@ import kotlinx.coroutines.experimental.Deferred
  * Purpose of Class:
  *
  */
-interface EthplorerApiService {
+interface EthplorerService {
 
     companion object {
 
-        fun getInstance(): EthplorerApiService {
+        fun getInstance(): EthplorerService {
             val buildType = BuildConfig.ENVIRONMENT
             return when (buildType) {
-                FLAVOR_MOCKNET -> EthplorerApiServiceMockImpl()
-                FLAVOR_TESTNET, FLAVOR_MAINNET -> EthplorerApiServiceProdImpl()
+                FLAVOR_MOCKNET -> EthplorerServiceMockImpl()
+                FLAVOR_TESTNET, FLAVOR_MAINNET -> EthplorerServiceProdImpl()
                 else -> throw IllegalArgumentException("Invalid build type, found: $buildType")
             }
         }

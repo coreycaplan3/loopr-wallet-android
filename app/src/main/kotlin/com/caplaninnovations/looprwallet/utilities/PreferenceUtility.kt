@@ -2,9 +2,12 @@ package com.caplaninnovations.looprwallet.utilities
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v7.preference.PreferenceManager
+import android.support.v14.preference.MultiSelectListPreference
+import android.support.v14.preference.SwitchPreference
+import android.support.v7.preference.*
 import android.support.v7.preference.PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES
 import com.caplaninnovations.looprwallet.R
+import com.caplaninnovations.looprwallet.R.xml
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 
@@ -19,14 +22,14 @@ import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
 object PreferenceUtility {
 
     fun setDefaultValues() {
-        setDefaultValues(R.xml.settings_home)
-        setDefaultValues(R.xml.settings_security)
-        setDefaultValues(R.xml.settings_ethereum_fees)
-        // TODO LRC fees
-        // TODO wallet
-        setDefaultValues(R.xml.settings_currency)
-        // TODO Ethereum Network
-        // TODO Loopring Network
+        setDefaultValues(R.xml.settings_home, xml::settings_home.name)
+        setDefaultValues(R.xml.settings_security, xml::settings_security.name)
+        setDefaultValues(R.xml.settings_ethereum_fees, xml::settings_ethereum_fees.name)
+        setDefaultValues(R.xml.settings_loopring_fees, xml::settings_loopring_fees.name)
+        setDefaultValues(R.xml.settings_general_wallet, xml::settings_general_wallet.name)
+        setDefaultValues(R.xml.settings_currency, xml::settings_currency.name)
+        setDefaultValues(R.xml.settings_ethereum_network, xml::settings_ethereum_network.name)
+        setDefaultValues(R.xml.settings_loopring_network, xml::settings_loopring_network.name)
     }
 
     /**
@@ -47,21 +50,56 @@ object PreferenceUtility {
      * @see .setSharedPreferencesMode
      */
     @SuppressLint("RestrictedApi")
-    private fun setDefaultValues(resId: Int) {
+    private fun setDefaultValues(resId: Int, resourceName: String) {
         val context = LooprWalletApp.context
-        val defaultValueSp = context.getSharedPreferences(
-                KEY_HAS_SET_DEFAULT_VALUES, Context.MODE_PRIVATE)
+        val settings = LooprSettings.getInstance(context)
 
-        if (!defaultValueSp.getBoolean(KEY_HAS_SET_DEFAULT_VALUES, false)) {
+        val key = KEY_HAS_SET_DEFAULT_VALUES + resourceName
+        if (!settings.getBoolean(key, false)) {
             val pm = PreferenceManager(context)
-            pm.preferenceDataStore = LooprSettings.getInstance(context).preferenceDataStore
+            pm.preferenceDataStore = settings.preferenceDataStore
             pm.sharedPreferencesName = getDefaultSharedPreferencesName(context)
             pm.sharedPreferencesMode = defaultSharedPreferencesMode
-            pm.inflateFromResource(context, resId, null)
 
-            defaultValueSp.edit()
-                    .putBoolean(KEY_HAS_SET_DEFAULT_VALUES, true)
-                    .apply()
+            val preferenceScreen = pm.inflateFromResource(context, resId, null)
+            persistPreferenceGroup(preferenceScreen, resourceName)
+
+            settings.putBoolean(key, true)
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun persistPreferenceGroup(preferenceGroup: PreferenceGroup, resourceName: String) {
+        loop@ for (i in 0..(preferenceGroup.preferenceCount - 1)) {
+            val preference = preferenceGroup.getPreference(i)
+            when {
+                preference is PreferenceGroup -> persistPreferenceGroup(preference, resourceName)
+
+                Preference::class.simpleName != preference::class.simpleName -> {
+                    // Plain old Preference tags aren't used with default values.
+                    if (!preference.hasKey()) {
+                        throw IllegalStateException("No key found, was it forgotten? Resource: $resourceName Class: ${preference::class.simpleName}")
+                    }
+
+                    val field = Preference::class.java.getDeclaredField("mDefaultValue")
+                    field.isAccessible = true
+
+                    if (field.get(preference) == null) {
+                        throw IllegalStateException("Invalid default value for preference with key: ${preference.key}")
+                    }
+
+                    val value = field.get(preference).toString()
+                    when (preference) {
+                        is ListPreference -> preference.value = value
+                        is EditTextPreference -> preference.text = value
+                        is SeekBarPreference -> preference.value = value.toInt()
+                        is SwitchPreference -> preference.isChecked = value.toBoolean()
+                        is CheckBoxPreference -> preference.isChecked = value.toBoolean()
+                        is DropDownPreference -> preference.value = value
+                        is MultiSelectListPreference -> preference.values = field.get(preference) as Set<String>
+                    }
+                }
+            }
         }
     }
 

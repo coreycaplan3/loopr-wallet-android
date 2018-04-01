@@ -11,7 +11,7 @@ import kotlinx.coroutines.experimental.Deferred
  * Purpose of Class:
  *
  */
-class EthplorerApiServiceProdImpl: EthplorerApiService {
+class EthplorerServiceProdImpl: EthplorerService {
 
     override fun getAddressInfo(address: String): Deferred<List<EthToken>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

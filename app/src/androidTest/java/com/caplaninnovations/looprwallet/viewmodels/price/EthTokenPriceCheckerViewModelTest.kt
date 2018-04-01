@@ -2,11 +2,8 @@ package com.caplaninnovations.looprwallet.viewmodels.price
 
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import com.caplaninnovations.looprwallet.models.user.SyncData
-import io.realm.RealmObject
-import io.realm.kotlin.load
 import junit.framework.Assert.*
 import kotlinx.coroutines.experimental.delay
 import org.junit.After
@@ -19,40 +16,38 @@ import java.util.*
 /**
  * Created by Corey on 3/22/2018.
  *
- *
  * Project: loopr-wallet-android
- *
  *
  * Purpose of Class:
  */
 @RunWith(AndroidJUnit4::class)
-class TokenPriceCheckerViewModelTest : BaseDaggerTest() {
+class EthTokenPriceCheckerViewModelTest : BaseDaggerTest() {
 
-    private lateinit var tokenPriceCheckerViewModel: TokenPriceCheckerViewModel
+    private lateinit var ethTokenPriceCheckerViewModel: EthTokenPriceCheckerViewModel
 
     @Before
     fun setup() = runBlockingUiCode {
-        tokenPriceCheckerViewModel = TokenPriceCheckerViewModel(wallet!!)
+        ethTokenPriceCheckerViewModel = EthTokenPriceCheckerViewModel(wallet!!)
     }
 
     @After
     fun tearDown() = runBlockingUiCode {
-        tokenPriceCheckerViewModel.clear()
+        ethTokenPriceCheckerViewModel.clear()
     }
 
     @Test
     fun getLiveDataFromRepository() = runBlockingUiCode {
-        val liveData = tokenPriceCheckerViewModel.getLiveDataFromRepository(EthToken.LRC.contractAddress)
-        val data = (liveData.value as RealmObject)
+        val liveData = ethTokenPriceCheckerViewModel.getLiveDataFromRepository(EthToken.LRC.contractAddress)
+        val data = liveData.value!!
 
         assertTrue(data.load())
-        assertTrue(tokenPriceCheckerViewModel.isDataValid(data as? CryptoToken))
+        assertTrue(ethTokenPriceCheckerViewModel.isDataValid(data))
     }
 
     @Test
     fun getDataFromNetwork() = runBlockingUiCode {
         val lrc = EthToken.LRC
-        val data = tokenPriceCheckerViewModel.getDataFromNetwork(lrc.contractAddress).await()
+        val data = ethTokenPriceCheckerViewModel.getDataFromNetwork(lrc.contractAddress).await()
 
         assertEquals(lrc.contractAddress, data.identifier)
         assertEquals(lrc.ticker, data.ticker)
@@ -66,11 +61,11 @@ class TokenPriceCheckerViewModelTest : BaseDaggerTest() {
         val priceInUsd = BigDecimal("104.25")
         val date = Date()
         val data = EthToken(lrc.contractAddress, lrc.ticker, priceInUsd = priceInUsd, lastUpdated = date)
-        tokenPriceCheckerViewModel.addNetworkDataToRepository(data)
+        ethTokenPriceCheckerViewModel.addNetworkDataToRepository(data)
 
         delay(100)
 
-        val insertedData = tokenPriceCheckerViewModel.repository.getToken(data.contractAddress).value!!
+        val insertedData = ethTokenPriceCheckerViewModel.repository.getToken(data.contractAddress).value!!
 
         assertTrue(insertedData.load())
 
@@ -81,7 +76,7 @@ class TokenPriceCheckerViewModelTest : BaseDaggerTest() {
 
     @Test
     fun getSyncType() {
-        assertEquals(SyncData.SYNC_TYPE_TOKEN_PRICE, tokenPriceCheckerViewModel.syncType)
+        assertEquals(SyncData.SYNC_TYPE_TOKEN_PRICE, ethTokenPriceCheckerViewModel.syncType)
     }
 
 }

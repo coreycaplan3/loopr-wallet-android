@@ -3,11 +3,11 @@ package com.caplaninnovations.looprwallet.viewmodels.price
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import com.caplaninnovations.looprwallet.extensions.logw
-import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
+import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
 import com.caplaninnovations.looprwallet.models.user.SyncData
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.networking.ethplorer.EthplorerApiService
+import com.caplaninnovations.looprwallet.networking.ethplorer.EthplorerService
 import com.caplaninnovations.looprwallet.repositories.eth.EthTokenRepository
 import com.caplaninnovations.looprwallet.repositories.sync.SyncRepository
 import com.caplaninnovations.looprwallet.viewmodels.StreamingViewModel
@@ -25,7 +25,7 @@ import java.math.RoundingMode
  *
  * @param currentWallet The wallet of the user that is currently signed in.
  */
-class TokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewModel<CryptoToken, String>() {
+class EthTokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewModel<EthToken, String>() {
 
     override val repository = EthTokenRepository(currentWallet)
 
@@ -40,38 +40,38 @@ class TokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewMode
                 this.start { currencyExchangeRate = it }
             }
 
-    var currentCryptoToken: CryptoToken? = null
+    var currentCryptoToken: EthToken? = null
         private set
 
-    private val ethplorerTokenApiService = EthplorerApiService.getInstance()
+    private val ethplorerTokenApiService = EthplorerService.getInstance()
 
     /**
      * Gets the current price of the provided ticker by hitting the database first, followed by
      * the network. This method kicks off a "stream" event that will forward price changes every
      *
      * @param owner The [LifecycleOwner] that will be observing this ViewModel
-     * @param identifier The identifier that's used to get the [CryptoToken] from the repository
+     * @param identifier The identifier that's used to get the [EthToken] from the repository
      * and network. For Ethereum, this is the contract's address.
-     * @param onChange A function that is called whenever the [CryptoToken] changes to a valid
+     * @param onChange A function that is called whenever the [EthToken] changes to a valid
      * value.
      */
     fun getTokenPrice(owner: LifecycleOwner,
                       identifier: String,
-                      onChange: (CryptoToken) -> Unit
+                      onChange: (EthToken) -> Unit
     ) {
         val interceptedChange = interceptOnChange(onChange)
         initializeData(owner, identifier, interceptedChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: String): LiveData<CryptoToken> {
+    override fun getLiveDataFromRepository(parameter: String): LiveData<EthToken> {
         return repository.getToken(parameter)
     }
 
-    override fun getDataFromNetwork(parameter: String): Deferred<CryptoToken> {
+    override fun getDataFromNetwork(parameter: String): Deferred<EthToken> {
         return ethplorerTokenApiService.getTokenInfo(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: CryptoToken) {
+    override fun addNetworkDataToRepository(data: EthToken) {
         (data as? RealmModel)?.let { repository.add(it) }
     }
 
@@ -87,9 +87,9 @@ class TokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewMode
      * Intercepts the supplied [onChange] method to multiply the token price by the current
      * [currencyExchangeRate].
      *
-     * @return A new function that takes [CryptoToken] as a parameter and returns nothing.
+     * @return A new function that takes [EthToken] as a parameter and returns nothing.
      */
-    private fun interceptOnChange(onChange: (CryptoToken) -> Unit) = function@{ token: CryptoToken ->
+    private fun interceptOnChange(onChange: (EthToken) -> Unit) = function@{ token: EthToken ->
         currentCryptoToken = token
 
         val rateAgainstUsd = currencyExchangeRate?.rateAgainstToUsd

@@ -28,7 +28,7 @@ class EthereumFeeSettings(private val looprSettings: LooprSettings) {
     }
 
     val currentGasPrice: BigDecimal
-        get() = getValue(KEY_GAS_PRICE, DEFAULT_GAS_PRICE.toString())
+        get() = getValue(KEY_GAS_PRICE, DEFAULT_GAS_PRICE)
 
     val currentEthTransferGasLimit: BigDecimal
         get() = getValue(KEY_TRANSFER_ETHER_GAS_LIMIT, DEFAULT_TRANSFER_ETHER_GAS_LIMIT)

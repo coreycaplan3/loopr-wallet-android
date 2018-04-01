@@ -99,7 +99,7 @@
 
     <string name="settings_general_wallet_zero_balance_key">loopr_settings_general_wallet_zero_balance_key</string>
 
-    <string name="settings_general_wallet_zero_balance_default_value">false</string>
+    <bool name="settings_general_wallet_zero_balance_default_value">false</bool>
 
     <!-- Currency -->
 

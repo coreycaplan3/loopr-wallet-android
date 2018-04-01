@@ -134,14 +134,11 @@ interface LooprSettings {
 
     fun putStringArray(key: String, value: Array<String>?)
 
-    @Suppress("unused")
+    // START DEBUG CLASS
+
     private class LooprSettingsDebugImpl : LooprSecureSettings {
 
-        private val map = HashMap<String, Any>()
-
-        fun clear() {
-            map.clear()
-        }
+        val map = HashMap<String, Any>()
 
         override fun getBoolean(key: String, defaultValue: Boolean): Boolean {
             return map[key] as? Boolean ?: defaultValue
@@ -298,8 +295,7 @@ interface LooprSettings {
         private fun getSharedPreferences(): SharedPreferences {
             // WARNING!!! DO NOT CHANGE THIS. THE ANDROID PREFERENCE FRAMEWORK WRITES TO AND READS
             // FROM THIS SHARED PREFERENCE INSTANCE. SOME THINGS, LIKE KEYS AND WALLET NAMES, ARE
-            // ENCRYPTED AND SAVED WITHOUT THE ANDROID FRAMEWORK EVER TOUCHING IT. THUS, VALUES FOR
-            // IMPORTANT DATA REMAINS ENCRYPTED AND UNTOUCHED BY THE SETTINGS ACTIVITY!
+            // ENCRYPTED AND SAVED TO A
             return PreferenceManager.getDefaultSharedPreferences(context)
         }
     }

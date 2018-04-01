@@ -47,7 +47,8 @@ abstract class RealmClient {
         }
     }
 
-    abstract val schemaVersion: Long
+    abstract val privateSchemaVersion: Long
+    abstract val sharedSchemaVersion: Long
 
     abstract fun getSharedInstance(): Realm
 
@@ -59,7 +60,7 @@ abstract class RealmClient {
                 .name(realmName)
                 .migration(LooprPrivateInstanceMigration())
                 .initialData(InitialRealmPrivateData.getInitialData())
-                .schemaVersion(schemaVersion)
+                .schemaVersion(privateSchemaVersion)
     }
 
     @VisibleForTesting
@@ -68,13 +69,13 @@ abstract class RealmClient {
                 .name(realmName)
                 .migration(LooprSharedInstanceMigration())
                 .initialData(InitialRealmSharedData.getInitialData())
-                .schemaVersion(schemaVersion)
+                .schemaVersion(sharedSchemaVersion)
     }
 
     private class RealmClientDebugImpl : RealmClient() {
 
-        override val schemaVersion: Long
-            get() = 0
+        override val privateSchemaVersion = 0L
+        override val sharedSchemaVersion = 0L
 
         override fun getPrivateInstance(realmName: String, encryptionKey: ByteArray): Realm {
             val configuration = getPrivateRealmConfigurationBuilder("$realmName-in-memory")
@@ -97,8 +98,8 @@ abstract class RealmClient {
 
     private class RealmClientProductionImpl : RealmClient() {
 
-        override val schemaVersion: Long
-            get() = 0
+        override val privateSchemaVersion = 0L
+        override val sharedSchemaVersion = 0L
 
         override fun getPrivateInstance(realmName: String, encryptionKey: ByteArray): Realm {
             val configuration = getPrivateRealmConfigurationBuilder(realmName)

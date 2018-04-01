@@ -2,10 +2,10 @@ package com.caplaninnovations.looprwallet.viewmodels.wallet
 
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
+import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import io.realm.RealmResults
-import junit.framework.Assert.*
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,26 +19,24 @@ import java.util.*
  * Purpose of Class:
  */
 @RunWith(AndroidJUnit4::class)
-class TokenBalanceViewModelTest : BaseDaggerTest() {
+class EthTokenBalanceViewModelTest : BaseDaggerTest() {
 
-    private lateinit var tokenBalanceViewModel: TokenBalanceViewModel
-    private lateinit var address: String
+    private lateinit var ethTokenBalanceViewModel: EthTokenBalanceViewModel
 
     @Before
     fun setup() = runBlockingUiCode {
-        tokenBalanceViewModel = TokenBalanceViewModel(wallet!!)
-        address = wallet!!.credentials.address
+        ethTokenBalanceViewModel = EthTokenBalanceViewModel(wallet!!)
     }
 
     @After
     fun tearDown() = runBlockingUiCode {
-        tokenBalanceViewModel.clear()
+        ethTokenBalanceViewModel.clear()
     }
 
     @Test
     fun getLiveDataFromRepository() = runBlockingUiCode {
-        val data = tokenBalanceViewModel.getLiveDataFromRepository(address)
-        val realmData = (data.value!! as RealmResults<CryptoToken>)
+        val data = ethTokenBalanceViewModel.getLiveDataFromRepository(address)
+        val realmData = data.value as RealmResults<EthToken>
 
         assertTrue(realmData.load())
 
@@ -48,22 +46,22 @@ class TokenBalanceViewModelTest : BaseDaggerTest() {
 
     @Test
     fun getDataFromNetwork() = runBlockingUiCode {
-        val list = tokenBalanceViewModel.getDataFromNetwork(address).await()
+        val list = ethTokenBalanceViewModel.getDataFromNetwork(address).await()
         assertEquals(4, list.size)
     }
 
     @Test
     fun addNetworkDataToRepository() = runBlockingUiCode {
-        val list = tokenBalanceViewModel.getDataFromNetwork(address).await()
-        tokenBalanceViewModel.addNetworkDataToRepository(list)
+        val list = ethTokenBalanceViewModel.getDataFromNetwork(address).await()
+        ethTokenBalanceViewModel.addNetworkDataToRepository(list)
 
-        val allTokens = (tokenBalanceViewModel.repository.getAllTokens().value as RealmResults<CryptoToken>)
+        val allTokens = (ethTokenBalanceViewModel.repository.getAllTokens().value as RealmResults<EthToken>)
         assertTrue(allTokens.load())
         val date = Date()
         allTokens.forEach {
             assertDatesWithRange(it.lastUpdated, date, 10)
             assertNotNull(it.priceInUsd)
-            assertNotNull(it.balance)
+            assertNotNull(it.tokenBalances.find { it.address == address })
         }
     }
 

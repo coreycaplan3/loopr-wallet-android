@@ -1,5 +1,7 @@
 package com.caplaninnovations.looprwallet.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.transfers.SelectContactFragment
@@ -12,7 +14,18 @@ import com.caplaninnovations.looprwallet.fragments.transfers.SelectContactFragme
  * Purpose of Class:
  *
  */
-class CreateTransferActivity: BaseActivity() {
+class CreateTransferActivity : BaseActivity() {
+
+    companion object {
+
+        const val RC_CREATE_TRANSFER = 132
+
+        fun route(activity: Activity) {
+            val intent = Intent(activity, CreateTransferActivity::class.java)
+            activity.startActivityForResult(intent, RC_CREATE_TRANSFER)
+        }
+
+    }
 
     override val contentView: Int
         get() = R.layout.activity_create_transfer

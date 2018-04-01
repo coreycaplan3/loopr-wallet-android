@@ -18,7 +18,7 @@ import java.math.BigDecimal
  * Purpose of Class:
  *
  */
-class EthplorerApiServiceMockImpl : EthplorerApiService {
+class EthplorerServiceMockImpl : EthplorerService {
 
     override fun getAddressInfo(address: String) = async {
         delay(MOCK_SERVICE_CALL_DURATION)
@@ -71,9 +71,9 @@ class EthplorerApiServiceMockImpl : EthplorerApiService {
     private fun setTokenBalanceInfo(address: String, token: CryptoToken) {
         val balanceAmount = when (token.identifier) {
             EthToken.ETH.identifier -> BigDecimal("100")
-            EthToken.LRC.identifier -> BigDecimal("2500")
+            EthToken.LRC.identifier -> BigDecimal("250")
             EthToken.APPC.identifier -> BigDecimal("0")
-            EthToken.REQ.identifier -> BigDecimal("2500")
+            EthToken.REQ.identifier -> BigDecimal("250")
             else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
         }
 

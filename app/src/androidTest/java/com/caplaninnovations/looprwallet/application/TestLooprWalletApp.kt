@@ -15,10 +15,10 @@ class TestLooprWalletApp : LooprWalletApp() {
     override fun provideDaggerComponent(): LooprDaggerComponent {
         return DaggerLooprTestComponent.builder()
                 .looprRealmModule(LooprRealmModule())
-                .looprSecurityModule(LooprWalletModule(this.applicationContext))
+                .looprWalletModule(LooprWalletModule(this.applicationContext))
                 .looprSettingsModule(LooprSettingsModule(this.applicationContext))
                 .looprSecureSettingsModule(LooprSecureSettingsModule(this.applicationContext))
-                .looprEthModule(LooprEthereumBlockchainModule())
+                .looprEthereumBlockchainModule(LooprEthereumBlockchainModule())
                 .build()
     }
 }

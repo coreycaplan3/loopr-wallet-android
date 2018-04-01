@@ -46,6 +46,14 @@ open class BaseRealmRepository(val currentWallet: LooprWallet)
         return data
     }
 
+    fun runSharedTransaction(transaction: Realm.Transaction) {
+        uiSharedRealm.executeTransaction(transaction)
+    }
+
+    fun runPrivateTransaction(transaction: Realm.Transaction) {
+        uiPrivateRealm.executeTransaction(transaction)
+    }
+
     final override fun add(data: RealmModel) {
         executeSharedRealmTransaction { it.upsert(data) }
     }

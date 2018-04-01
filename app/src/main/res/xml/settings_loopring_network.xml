@@ -11,6 +11,7 @@
             android:defaultValue="@string/settings_loopring_network_relay_default_value"
             android:entries="@array/settings_loopring_network_relay_entries_ui"
             android:entryValues="@array/settings_loopring_network_relay_entries_values"
+            android:key="@string/settings_loopring_network_relay_key"
             android:summary="@string/settings_loopring_network_relay_ui_default_value"
             android:title="@string/relay" />
 
@@ -26,6 +27,7 @@
             android:defaultValue="@string/settings_loopring_network_contract_version_default_value"
             android:entries="@array/settings_loopring_network_contract_version_entries_ui"
             android:entryValues="@array/settings_loopring_network_contract_version_entries_values"
+            android:key="@string/settings_loopring_network_contract_version_key"
             android:summary="@string/settings_loopring_network_contract_version_ui_default_value"
             android:title="@string/smart_contract_version" />
 

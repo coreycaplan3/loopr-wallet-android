@@ -81,6 +81,34 @@ object NumberPadHandler {
         baseFragment.numberPadBackspace.isEnabled = true
     }
 
+    fun isNumberPadEnabled(baseFragment: BaseFragment) = listOf(
+            baseFragment.numberPadZero.isEnabled,
+            baseFragment.numberPadOne.isEnabled,
+            baseFragment.numberPadTwo.isEnabled,
+            baseFragment.numberPadThree.isEnabled,
+            baseFragment.numberPadFour.isEnabled,
+            baseFragment.numberPadFive.isEnabled,
+            baseFragment.numberPadSix.isEnabled,
+            baseFragment.numberPadSeven.isEnabled,
+            baseFragment.numberPadEight.isEnabled,
+            baseFragment.numberPadNine.isEnabled,
+            baseFragment.numberPadBackspace.isEnabled
+    ).all { it }
+
+    fun isNumberPadDisabled(baseFragment: BaseFragment) = listOf(
+            baseFragment.numberPadZero.isEnabled,
+            baseFragment.numberPadOne.isEnabled,
+            baseFragment.numberPadTwo.isEnabled,
+            baseFragment.numberPadThree.isEnabled,
+            baseFragment.numberPadFour.isEnabled,
+            baseFragment.numberPadFive.isEnabled,
+            baseFragment.numberPadSix.isEnabled,
+            baseFragment.numberPadSeven.isEnabled,
+            baseFragment.numberPadEight.isEnabled,
+            baseFragment.numberPadNine.isEnabled,
+            baseFragment.numberPadBackspace.isEnabled
+    ).all { !it }
+
     fun disableNumberPad(baseFragment: BaseFragment) {
         baseFragment.numberPadZero.isEnabled = false
         baseFragment.numberPadOne.isEnabled = false

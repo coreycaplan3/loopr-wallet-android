@@ -26,11 +26,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ConfirmPasswordDialogTest : BaseDaggerFragmentTest<ConfirmPasswordDialog>() {
 
-    /**
-     * The wallet name is okay
-     */
-    private val walletName = "loopr-currentWallet"
-
     private val password = "looprloopr"
     private val incorrectPassword = "abcdeabcde"
 

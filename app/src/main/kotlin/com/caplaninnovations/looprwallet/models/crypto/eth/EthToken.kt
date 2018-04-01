@@ -1,12 +1,15 @@
 package com.caplaninnovations.looprwallet.models.crypto.eth
 
+import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import com.caplaninnovations.looprwallet.models.crypto.TokenBalanceInfo
+import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.Required
 import java.math.BigDecimal
 import java.util.*
 
@@ -41,6 +44,7 @@ open class EthToken(
 
         var binary: String? = null,
 
+        @Required
         override var tokenBalances: RealmList<TokenBalanceInfo> = RealmList(),
 
         priceInUsd: BigDecimal? = null,
@@ -63,21 +67,25 @@ open class EthToken(
                 "0xef68e7c694f40c8202821edf525de3782458639f",
                 "LRC",
                 "13950760545238578922746031",
-                18
+                18,
+                str(R.string.lrc_binary)
+
         )
 
         val APPC = EthToken(
                 "0x1a7a8bd9106f2b8d977e08582dc7d24c723ab0db",
                 "APPC",
                 "246203093000000000000000000",
-                18
+                18,
+                str(R.string.appc_binary)
         )
 
         val REQ = EthToken(
                 "0x8f8221afbb33998d8584a2b05749ba73c37a938a",
                 "REQ",
                 "999999999244592134526985951",
-                18
+                18,
+                str(R.string.req_binary)
         )
     }
 

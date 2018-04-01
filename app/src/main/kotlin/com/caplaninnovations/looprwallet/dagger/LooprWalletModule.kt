@@ -23,4 +23,5 @@ class LooprWalletModule(private val context: Context) {
     fun provideSecurityModule(): WalletClient {
         return WalletClient.getInstance(context, LooprSecureSettings.getInstance(context))
     }
+
 }

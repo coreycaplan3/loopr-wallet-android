@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
-        android:defaultValue="@string/settings_general_wallet_zero_balance_default_value"
+        android:defaultValue="@bool/settings_general_wallet_zero_balance_default_value"
         android:key="@string/settings_general_wallet_zero_balance_key"
         android:summary="@string/hidden_initially"
         android:title="@string/zero_balance_tokens" />

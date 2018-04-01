@@ -23,7 +23,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CreateWalletRememberPhraseFragmentTest : BaseDaggerFragmentTest<CreateWalletRememberPhraseFragment>() {
 
-    private val walletName = "loopr-currentWallet"
     private val password = "looprloopr"
     private val phrase = arrayListOf(
             "address",
