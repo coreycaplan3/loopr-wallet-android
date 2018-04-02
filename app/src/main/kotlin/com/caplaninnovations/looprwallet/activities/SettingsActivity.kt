@@ -5,14 +5,14 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.extensions.ifNull
+import org.loopring.looprwallet.core.extensions.ifNull
 import com.caplaninnovations.looprwallet.fragments.security.BaseSecurityFragment
 import com.caplaninnovations.looprwallet.fragments.security.OnSecurityChangeListener
 import com.caplaninnovations.looprwallet.fragments.settings.BaseSettingsFragment
 import com.caplaninnovations.looprwallet.fragments.settings.HomeSettingsFragment
 import com.caplaninnovations.looprwallet.fragments.settings.SecuritySettingsFragment
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
-import com.caplaninnovations.looprwallet.utilities.ViewUtility
+import org.loopring.looprwallet.core.utilities.ViewUtility
 import kotlinx.android.synthetic.main.appbar_main.*
 import javax.inject.Inject
 

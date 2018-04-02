@@ -9,16 +9,16 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.animations.ToolbarToSearchAnimation
+import org.loopring.looprwallet.core.animations.ToolbarToSearchAnimation
 import com.caplaninnovations.looprwallet.dialogs.CreateContactDialog
-import com.caplaninnovations.looprwallet.extensions.findFragmentByTagOrCreate
-import com.caplaninnovations.looprwallet.extensions.logd
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
+import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.contacts.ViewContactsFragment
 import com.caplaninnovations.looprwallet.handlers.BarcodeCaptureHandler
 import com.caplaninnovations.looprwallet.models.user.Contact
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
-import com.caplaninnovations.looprwallet.validators.PublicKeyValidator
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.validators.PublicKeyValidator
 import kotlinx.android.synthetic.main.barcode_button.*
 import kotlinx.android.synthetic.main.fragment_select_address.*
 

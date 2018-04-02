@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':module.wallet-sign-in', ':library.core'

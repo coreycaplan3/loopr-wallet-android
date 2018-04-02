@@ -4,7 +4,7 @@ import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.models.android.settings.UserWalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.utilities.RealmUtility
+import org.loopring.looprwallet.core.utilities.RealmUtility
 
 /**
  * Created by Corey Caplan on 1/31/18.

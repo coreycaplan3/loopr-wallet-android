@@ -1,8 +1,8 @@
 package com.caplaninnovations.looprwallet.repositories.currency
 
 import android.arch.lifecycle.LiveData
-import com.caplaninnovations.looprwallet.extensions.asLiveData
-import com.caplaninnovations.looprwallet.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.asLiveData
+import org.loopring.looprwallet.core.extensions.equalTo
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.repositories.BaseRealmRepository

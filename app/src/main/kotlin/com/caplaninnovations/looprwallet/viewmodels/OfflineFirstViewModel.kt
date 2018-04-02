@@ -4,9 +4,9 @@ import android.arch.lifecycle.*
 import android.arch.lifecycle.Observer
 import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.extensions.loge
-import com.caplaninnovations.looprwallet.extensions.logi
-import com.caplaninnovations.looprwallet.extensions.observeForDoubleSpend
+import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.extensions.logi
+import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import com.caplaninnovations.looprwallet.models.error.ErrorTypes
 import com.caplaninnovations.looprwallet.models.error.LooprError
 import com.caplaninnovations.looprwallet.models.user.SyncData

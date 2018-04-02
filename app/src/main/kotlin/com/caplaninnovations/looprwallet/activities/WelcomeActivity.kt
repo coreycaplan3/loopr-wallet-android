@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.activities
 
-import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**
  * Created by Corey on 1/30/2018.

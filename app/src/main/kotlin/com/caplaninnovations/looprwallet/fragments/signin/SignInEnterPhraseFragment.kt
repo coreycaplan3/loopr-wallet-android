@@ -14,17 +14,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
+import org.loopring.looprwallet.core.adapters.OnStartDragListener
 import com.caplaninnovations.looprwallet.adapters.phrase.PhraseAdapter
-import com.caplaninnovations.looprwallet.extensions.allEqual
-import com.caplaninnovations.looprwallet.extensions.logd
-import com.caplaninnovations.looprwallet.extensions.longToast
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.extensions.allEqual
+import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.SimpleItemTouchHandler
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
-import com.caplaninnovations.looprwallet.utilities.RegexUtility
+import org.loopring.looprwallet.core.utilities.RegexUtility
 import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
-import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
 
 
 /**

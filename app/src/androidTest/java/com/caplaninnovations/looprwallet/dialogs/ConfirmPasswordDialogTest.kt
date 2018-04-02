@@ -7,7 +7,7 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
-import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.isDisabled
+import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert.assertFalse

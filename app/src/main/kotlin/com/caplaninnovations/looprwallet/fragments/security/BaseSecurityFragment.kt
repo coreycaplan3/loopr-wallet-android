@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.NumberPadHandler
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY

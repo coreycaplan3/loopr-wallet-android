@@ -13,10 +13,10 @@ import android.support.v7.preference.SeekBarPreference
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.extensions.allNonNull
-import com.caplaninnovations.looprwallet.extensions.getResourceIdFromAttrId
+import org.loopring.looprwallet.core.extensions.allNonNull
+import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 
 /**
  * Created by Corey on 3/25/2018

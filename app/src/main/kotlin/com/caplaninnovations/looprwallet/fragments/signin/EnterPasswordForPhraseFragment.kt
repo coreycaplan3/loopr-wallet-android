@@ -5,21 +5,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
+import org.loopring.looprwallet.core.activities.BaseActivity
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
-import com.caplaninnovations.looprwallet.extensions.loge
-import com.caplaninnovations.looprwallet.extensions.longToast
-import com.caplaninnovations.looprwallet.extensions.observeForDoubleSpend
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.extensions.longToast
+import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletRememberPhraseFragment
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
-import com.caplaninnovations.looprwallet.utilities.ViewUtility
-import com.caplaninnovations.looprwallet.validators.PasswordValidator
-import com.caplaninnovations.looprwallet.validators.WalletNameValidator
+import org.loopring.looprwallet.core.utilities.ViewUtility
+import org.loopring.looprwallet.core.validators.PasswordValidator
+import org.loopring.looprwallet.core.validators.WalletNameValidator
 import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
-import kotlinx.android.synthetic.main.card_enter_wallet_password.*
-import kotlinx.android.synthetic.main.card_wallet_name.*
-import kotlinx.android.synthetic.main.fragment_sign_in_enter_password.*
 
 /**
  * Created by Corey on 3/2/2018

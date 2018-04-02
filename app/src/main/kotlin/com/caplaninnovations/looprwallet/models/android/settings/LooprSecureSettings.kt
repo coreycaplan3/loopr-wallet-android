@@ -3,11 +3,11 @@ package com.caplaninnovations.looprwallet.models.android.settings
 import android.content.Context
 import android.content.SharedPreferences
 import com.caplaninnovations.looprwallet.BuildConfig
-import com.caplaninnovations.looprwallet.extensions.fromJson
-import com.caplaninnovations.looprwallet.extensions.logd
-import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_MAINNET
-import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_MOCKNET
-import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_TESTNET
+import org.loopring.looprwallet.core.extensions.fromJson
+import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MAINNET
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MOCKNET
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
 import com.google.gson.Gson
 import io.realm.android.CipherClient
 

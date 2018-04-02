@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.models.android.fragments
 
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
-import com.caplaninnovations.looprwallet.extensions.logv
+import org.loopring.looprwallet.core.extensions.logv
 
 /**
  * Created by Corey on 1/19/2018.

@@ -1,6 +1,6 @@
 package com.caplaninnovations.looprwallet.dagger
 
-import com.caplaninnovations.looprwallet.activities.BaseActivity
+import org.loopring.looprwallet.core.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.SettingsActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.fragments.security.BaseSecurityFragment

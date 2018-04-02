@@ -8,10 +8,10 @@ import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletRememberPhraseFragment
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
-import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions
-import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions.isDisabled
-import com.caplaninnovations.looprwallet.validators.BaseValidator
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.CustomViewAssertions
+import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
+import org.loopring.looprwallet.core.validators.BaseValidator
 import kotlinx.android.synthetic.main.card_enter_wallet_password.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.fragment_sign_in_enter_password.*

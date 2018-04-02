@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.networking.prices
 
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
-import com.caplaninnovations.looprwallet.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
+import org.loopring.looprwallet.core.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay

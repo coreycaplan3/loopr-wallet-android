@@ -4,12 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
+import org.loopring.looprwallet.core.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.MainActivity
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletSelectionFragment
 import com.caplaninnovations.looprwallet.fragments.restorewallet.RestoreWalletSelectionFragment
-import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 /**
  * Created by Corey on 2/18/2018

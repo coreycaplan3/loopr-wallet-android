@@ -6,7 +6,7 @@ import android.support.v7.preference.Preference
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumNetworkSettings.Companion.DEFAULT_VALUE_NODE
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumNetworkSettings.Companion.KEY_NODE
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 
 /**
  * Created by Corey on 3/26/2018

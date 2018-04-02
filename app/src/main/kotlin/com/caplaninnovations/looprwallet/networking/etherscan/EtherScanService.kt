@@ -1,9 +1,9 @@
 package com.caplaninnovations.looprwallet.networking.etherscan
 
 import com.caplaninnovations.looprwallet.BuildConfig
-import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_MAINNET
-import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_MOCKNET
-import com.caplaninnovations.looprwallet.utilities.BuildUtility.FLAVOR_TESTNET
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MAINNET
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MOCKNET
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
 import kotlinx.coroutines.experimental.Deferred
 
 /**

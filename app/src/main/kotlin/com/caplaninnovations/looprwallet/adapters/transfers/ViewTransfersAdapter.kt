@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.misc.TutorialTracker
 import com.caplaninnovations.looprwallet.models.transfers.LooprTransfer
-import com.caplaninnovations.looprwallet.extensions.inflate
+import org.loopring.looprwallet.core.extensions.inflate
 import io.realm.RealmList
 
 /**

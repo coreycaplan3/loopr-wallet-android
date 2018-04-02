@@ -3,9 +3,9 @@ package com.caplaninnovations.looprwallet.adapters.contacts
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.adapters.BaseRealmAdapter
-import com.caplaninnovations.looprwallet.extensions.indexOfFirstOrNull
-import com.caplaninnovations.looprwallet.extensions.inflate
+import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
+import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
+import org.loopring.looprwallet.core.extensions.inflate
 import com.caplaninnovations.looprwallet.models.user.Contact
 
 /**

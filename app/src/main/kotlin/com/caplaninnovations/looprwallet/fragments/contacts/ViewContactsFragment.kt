@@ -7,10 +7,10 @@ import android.text.TextUtils
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.adapters.contacts.ContactsAdapter
-import com.caplaninnovations.looprwallet.extensions.equalTo
-import com.caplaninnovations.looprwallet.extensions.indexOfFirstOrNull
-import com.caplaninnovations.looprwallet.extensions.weakReference
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
+import org.loopring.looprwallet.core.extensions.weakReference
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.models.user.Contact
 import com.caplaninnovations.looprwallet.viewmodels.LooprWalletViewModelFactory
 import com.caplaninnovations.looprwallet.viewmodels.contacts.ContactsByAddressViewModel

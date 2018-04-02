@@ -4,14 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
-import com.caplaninnovations.looprwallet.activities.BaseActivity
+import org.loopring.looprwallet.core.activities.BaseActivity
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.SecurityActivity
 import com.caplaninnovations.looprwallet.activities.SignInActivity
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettings
 import com.caplaninnovations.looprwallet.models.android.settings.UserWalletSettings
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.extensions.loge
+import org.loopring.looprwallet.core.extensions.loge
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.android.CipherClient

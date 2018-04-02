@@ -11,7 +11,7 @@ import com.caplaninnovations.looprwallet.activities.SignInActivity
 import com.caplaninnovations.looprwallet.models.wallet.creation.PasswordBasedWallet
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
-import com.caplaninnovations.looprwallet.validators.PasswordMatcherValidator
+import org.loopring.looprwallet.core.validators.PasswordMatcherValidator
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
 
 /**

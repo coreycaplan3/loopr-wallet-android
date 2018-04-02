@@ -6,7 +6,7 @@ import android.view.View
 import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.BuildConfig.DEFAULT_READ_TIMEOUT
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
 import kotlinx.android.synthetic.main.fragment_create_wallet_phrase_remember.*

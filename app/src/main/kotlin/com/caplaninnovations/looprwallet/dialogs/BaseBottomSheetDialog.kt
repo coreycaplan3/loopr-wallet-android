@@ -7,7 +7,7 @@ import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.view.View
 import android.widget.FrameLayout
-import com.caplaninnovations.looprwallet.validators.BaseValidator
+import org.loopring.looprwallet.core.validators.BaseValidator
 
 /**
  * Created by Corey on 3/30/2018

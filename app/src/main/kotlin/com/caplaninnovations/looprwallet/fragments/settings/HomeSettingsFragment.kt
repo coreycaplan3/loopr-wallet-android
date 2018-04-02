@@ -11,7 +11,7 @@ import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.activities.SettingsActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch

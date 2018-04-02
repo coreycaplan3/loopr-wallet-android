@@ -16,7 +16,7 @@ import com.caplaninnovations.looprwallet.models.android.settings.SecuritySetting
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.KEY_SECURITY_TYPE
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import javax.inject.Inject
 
 

@@ -8,7 +8,7 @@ import com.caplaninnovations.looprwallet.models.android.settings.LoopringNetwork
 import com.caplaninnovations.looprwallet.models.android.settings.LoopringNetworkSettings.Companion.DEFAULT_VALUE_RELAY
 import com.caplaninnovations.looprwallet.models.android.settings.LoopringNetworkSettings.Companion.KEY_CONTRACT_VERSION
 import com.caplaninnovations.looprwallet.models.android.settings.LoopringNetworkSettings.Companion.KEY_RELAY
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 
 /**
  * Created by Corey on 3/26/2018

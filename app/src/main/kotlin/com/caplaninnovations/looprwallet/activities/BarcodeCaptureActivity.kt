@@ -28,9 +28,9 @@ import android.view.ScaleGestureDetector
 import android.widget.Toast
 
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.extensions.loge
-import com.caplaninnovations.looprwallet.extensions.logw
-import com.caplaninnovations.looprwallet.extensions.snackbar
+import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.extensions.logw
+import org.loopring.looprwallet.core.extensions.snackbar
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
 import com.caplaninnovations.looprwallet.models.barcode.*
 import com.google.android.gms.common.ConnectionResult
@@ -41,6 +41,7 @@ import com.google.android.gms.vision.MultiProcessor
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.activity_barcode_capture.*
+import org.loopring.looprwallet.core.activities.BaseActivity
 import org.web3j.crypto.WalletUtils
 
 import java.io.IOException

@@ -2,9 +2,9 @@ package com.caplaninnovations.looprwallet.realm
 
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.extensions.equalTo
-import com.caplaninnovations.looprwallet.extensions.removeAllListenersAndClose
-import com.caplaninnovations.looprwallet.extensions.upsert
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
+import org.loopring.looprwallet.core.extensions.upsert
 import com.caplaninnovations.looprwallet.models.crypto.TokenBalanceInfo
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import io.realm.Realm

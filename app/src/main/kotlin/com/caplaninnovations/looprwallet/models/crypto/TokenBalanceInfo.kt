@@ -1,6 +1,6 @@
 package com.caplaninnovations.looprwallet.models.crypto
 
-import com.caplaninnovations.looprwallet.extensions.equalsZero
+import org.loopring.looprwallet.core.extensions.equalsZero
 import com.caplaninnovations.looprwallet.models.TrackedRealmObject
 import io.realm.RealmObject
 import io.realm.annotations.Index

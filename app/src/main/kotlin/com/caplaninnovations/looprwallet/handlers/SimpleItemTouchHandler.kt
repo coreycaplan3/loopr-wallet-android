@@ -20,8 +20,8 @@ import android.graphics.Canvas
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import com.caplaninnovations.looprwallet.adapters.ItemTouchAdapter
-import com.caplaninnovations.looprwallet.adapters.ItemTouchViewHolder
+import org.loopring.looprwallet.core.adapters.ItemTouchAdapter
+import org.loopring.looprwallet.core.adapters.ItemTouchViewHolder
 
 /**
  * An implementation of [ItemTouchHelper.Callback] that enables basic drag & drop and

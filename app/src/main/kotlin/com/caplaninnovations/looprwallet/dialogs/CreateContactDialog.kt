@@ -11,8 +11,8 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.handlers.BarcodeCaptureHandler
 import com.caplaninnovations.looprwallet.models.user.Contact
 import com.caplaninnovations.looprwallet.repositories.user.ContactsRepository
-import com.caplaninnovations.looprwallet.validators.ContactNameValidator
-import com.caplaninnovations.looprwallet.validators.PublicKeyValidator
+import org.loopring.looprwallet.core.validators.ContactNameValidator
+import org.loopring.looprwallet.core.validators.PublicKeyValidator
 import kotlinx.android.synthetic.main.barcode_button.*
 import kotlinx.android.synthetic.main.dialog_create_contact.*
 

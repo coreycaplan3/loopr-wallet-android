@@ -5,8 +5,8 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.support.v7.preference.PreferenceDataStore
 import com.caplaninnovations.looprwallet.BuildConfig
-import com.caplaninnovations.looprwallet.extensions.logd
-import com.caplaninnovations.looprwallet.utilities.BuildUtility
+import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.utilities.BuildUtility
 
 /**
  * Created by Corey on 3/24/2018

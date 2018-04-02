@@ -3,8 +3,8 @@ package com.caplaninnovations.looprwallet.dialogs
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.extensions.equalTo
-import com.caplaninnovations.looprwallet.extensions.removeAllListenersAndClose
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
 import com.caplaninnovations.looprwallet.models.user.Contact
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.dialog_create_contact.*

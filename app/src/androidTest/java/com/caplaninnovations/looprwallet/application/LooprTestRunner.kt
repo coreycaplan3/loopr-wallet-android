@@ -3,7 +3,7 @@ package com.caplaninnovations.looprwallet.application
 import android.app.Application
 import android.content.Context
 import android.support.test.runner.AndroidJUnitRunner
-import com.caplaninnovations.looprwallet.extensions.logv
+import org.loopring.looprwallet.core.extensions.logv
 
 /**
  * Created by Corey Caplan on 2/3/18.

@@ -1,6 +1,6 @@
 package com.caplaninnovations.looprwallet.networking.eth
 
-import com.caplaninnovations.looprwallet.utilities.NetworkUtility
+import org.loopring.looprwallet.core.utilities.NetworkUtility
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import org.web3j.protocol.core.methods.response.TransactionReceipt

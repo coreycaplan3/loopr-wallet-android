@@ -1,8 +1,8 @@
 package com.caplaninnovations.looprwallet.models.android.settings
 
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.strArray
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.strArray
 
 /**
  * Created by Corey on 3/25/2018

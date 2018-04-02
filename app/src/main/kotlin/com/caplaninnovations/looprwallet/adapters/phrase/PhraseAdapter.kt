@@ -3,9 +3,9 @@ package com.caplaninnovations.looprwallet.adapters.phrase
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.adapters.ItemTouchAdapter
-import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
-import com.caplaninnovations.looprwallet.extensions.inflate
+import org.loopring.looprwallet.core.adapters.ItemTouchAdapter
+import org.loopring.looprwallet.core.adapters.OnStartDragListener
+import org.loopring.looprwallet.core.extensions.inflate
 import java.util.*
 import kotlin.collections.ArrayList
 

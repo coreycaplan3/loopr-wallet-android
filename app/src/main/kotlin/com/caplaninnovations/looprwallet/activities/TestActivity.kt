@@ -8,8 +8,9 @@ import android.support.annotation.VisibleForTesting
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.extensions.mapIfNull
+import org.loopring.looprwallet.core.extensions.mapIfNull
 import com.caplaninnovations.looprwallet.fragments.security.ConfirmOldSecurityFragment
+import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**
  * Created by Corey on 2/20/2018

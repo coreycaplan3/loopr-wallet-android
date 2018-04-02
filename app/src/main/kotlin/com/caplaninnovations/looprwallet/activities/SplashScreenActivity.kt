@@ -2,6 +2,7 @@ package com.caplaninnovations.looprwallet.activities
 
 import android.content.Intent
 import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**
  * Created by Corey Caplan on 2/1/18.

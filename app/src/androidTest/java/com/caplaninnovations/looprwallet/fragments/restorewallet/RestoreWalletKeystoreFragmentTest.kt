@@ -12,10 +12,10 @@ import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.utilities.CustomViewAssertions
-import com.caplaninnovations.looprwallet.utilities.FilesUtility
-import com.caplaninnovations.looprwallet.utilities.OrientationChangeAction
-import com.caplaninnovations.looprwallet.validators.BaseValidator
+import org.loopring.looprwallet.core.utilities.CustomViewAssertions
+import org.loopring.looprwallet.core.utilities.FilesUtility
+import org.loopring.looprwallet.core.utilities.OrientationChangeAction
+import org.loopring.looprwallet.core.validators.BaseValidator
 import kotlinx.android.synthetic.main.fragment_restore_keystore.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import org.hamcrest.Matchers.*

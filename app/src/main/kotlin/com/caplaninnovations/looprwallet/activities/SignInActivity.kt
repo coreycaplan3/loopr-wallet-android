@@ -4,7 +4,8 @@ import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.signin.SignInSelectionFragment
-import com.caplaninnovations.looprwallet.extensions.loge
+import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.extensions.loge
 
 /**
  * Created by Corey on 1/14/2018

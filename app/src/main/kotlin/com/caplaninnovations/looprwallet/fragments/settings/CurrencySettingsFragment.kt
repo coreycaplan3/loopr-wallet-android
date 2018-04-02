@@ -9,7 +9,7 @@ import com.caplaninnovations.looprwallet.models.android.settings.CurrencySetting
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings.Companion.DEFAULT_VALUE_REFRESH_FREQUENCY
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings.Companion.KEY_CURRENT_CURRENCY
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings.Companion.KEY_REFRESH_FREQUENCY
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 
 /**
  * Created by Corey on 3/26/2018

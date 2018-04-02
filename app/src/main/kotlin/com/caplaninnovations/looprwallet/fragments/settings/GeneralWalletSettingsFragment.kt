@@ -5,7 +5,7 @@ import android.support.v7.preference.Preference
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.android.settings.GeneralWalletSettings.Companion.DEFAULT_VALUE_SHOW_ZERO_BALANCES
 import com.caplaninnovations.looprwallet.models.android.settings.GeneralWalletSettings.Companion.KEY_SHOW_ZERO_BALANCES
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 
 /**
  * Created by Corey on 3/26/2018

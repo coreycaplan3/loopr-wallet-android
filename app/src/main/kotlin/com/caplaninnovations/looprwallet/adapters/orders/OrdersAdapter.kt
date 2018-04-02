@@ -3,7 +3,7 @@ package com.caplaninnovations.looprwallet.adapters.orders
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.order.LooprOrder
-import com.caplaninnovations.looprwallet.extensions.inflate
+import org.loopring.looprwallet.core.extensions.inflate
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
 

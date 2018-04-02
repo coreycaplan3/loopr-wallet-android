@@ -4,9 +4,9 @@ import android.content.pm.PackageManager
 import android.support.annotation.IntDef
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.ActivityCompat
-import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.extensions.weakReference
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.extensions.weakReference
+import org.loopring.looprwallet.core.fragments.BaseFragment
 
 /**
  * Created by Corey Caplan on 2/9/18.

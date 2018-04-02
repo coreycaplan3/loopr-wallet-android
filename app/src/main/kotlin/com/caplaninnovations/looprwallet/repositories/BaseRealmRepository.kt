@@ -1,9 +1,9 @@
 package com.caplaninnovations.looprwallet.repositories
 
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.extensions.removeAllListenersAndClose
-import com.caplaninnovations.looprwallet.extensions.upsert
-import com.caplaninnovations.looprwallet.extensions.upsertCopyToRealm
+import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
+import org.loopring.looprwallet.core.extensions.upsert
+import org.loopring.looprwallet.core.extensions.upsertCopyToRealm
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import io.realm.Realm
 import io.realm.RealmModel

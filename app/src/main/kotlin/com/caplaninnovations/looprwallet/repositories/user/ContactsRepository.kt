@@ -1,10 +1,10 @@
 package com.caplaninnovations.looprwallet.repositories.user
 
 import android.arch.lifecycle.LiveData
-import com.caplaninnovations.looprwallet.extensions.asLiveData
-import com.caplaninnovations.looprwallet.extensions.equalTo
-import com.caplaninnovations.looprwallet.extensions.like
-import com.caplaninnovations.looprwallet.extensions.sort
+import org.loopring.looprwallet.core.extensions.asLiveData
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.like
+import org.loopring.looprwallet.core.extensions.sort
 import com.caplaninnovations.looprwallet.models.user.Contact
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import com.caplaninnovations.looprwallet.repositories.BaseRealmRepository

@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.validators.PrivateKeyValidator
-import com.caplaninnovations.looprwallet.validators.WalletNameValidator
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.validators.PrivateKeyValidator
+import org.loopring.looprwallet.core.validators.WalletNameValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.fragment_restore_private_key.*
 

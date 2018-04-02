@@ -11,20 +11,16 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.extensions.loge
-import com.caplaninnovations.looprwallet.extensions.longToast
-import com.caplaninnovations.looprwallet.extensions.snackbar
-import com.caplaninnovations.looprwallet.extensions.snackbarWithAction
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.extensions.snackbar
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.PermissionHandler
-import com.caplaninnovations.looprwallet.utilities.DialogUtility
-import com.caplaninnovations.looprwallet.utilities.FilesUtility
-import com.caplaninnovations.looprwallet.validators.PasswordValidator
-import com.caplaninnovations.looprwallet.validators.WalletNameValidator
+import org.loopring.looprwallet.core.utilities.DialogUtility
+import org.loopring.looprwallet.core.utilities.FilesUtility
+import org.loopring.looprwallet.core.validators.PasswordValidator
+import org.loopring.looprwallet.core.validators.WalletNameValidator
 import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
-import kotlinx.android.synthetic.main.card_wallet_name.*
-import kotlinx.android.synthetic.main.fragment_restore_keystore.*
 import java.io.File
 
 

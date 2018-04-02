@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.viewmodels.price
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
-import com.caplaninnovations.looprwallet.extensions.logw
+import org.loopring.looprwallet.core.extensions.logw
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
 import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
 import com.caplaninnovations.looprwallet.models.user.SyncData

@@ -7,12 +7,13 @@ import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.dagger.*
-import com.caplaninnovations.looprwallet.extensions.logi
 import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
-import com.caplaninnovations.looprwallet.utilities.PreferenceUtility
 import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.extensions.logi
+import org.loopring.looprwallet.core.utilities.PreferenceUtility
 import org.web3j.protocol.Web3j
 import javax.inject.Inject
 
@@ -28,13 +29,11 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
 
     companion object {
 
-        lateinit var application: LooprWalletApp
-
         val context: Context
-            get() = application.applicationContext
+            get() = LooprWalletCoreApp.application.applicationContext
 
         val dagger: LooprDaggerComponent
-            get() = application.looprDaggerComponent
+            get() = LooprWalletCoreApp.application.looprDaggerComponent
 
     }
 
@@ -56,7 +55,7 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
 
         logi("Creating Application...")
 
-        application = this
+        LooprWalletCoreApp.application = this
 
         PreferenceUtility.setDefaultValues()
 

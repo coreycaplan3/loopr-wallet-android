@@ -5,7 +5,8 @@ import android.content.Context
 import com.caplaninnovations.looprwallet.activities.*
 import com.caplaninnovations.looprwallet.models.android.settings.*
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.extensions.logd
+import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.extensions.logd
 
 /**
  *  Created by Corey on 2/4/2018

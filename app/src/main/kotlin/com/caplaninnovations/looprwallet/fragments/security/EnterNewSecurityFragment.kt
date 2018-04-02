@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.extensions.longToast
+import org.loopring.looprwallet.core.extensions.longToast
 import com.caplaninnovations.looprwallet.handlers.NumberPadHandler
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY

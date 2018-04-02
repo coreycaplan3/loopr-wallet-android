@@ -5,8 +5,8 @@ import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.extensions.logd
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.extensions.logd
 
 /**
  * Created by Corey Caplan on 1/24/18.

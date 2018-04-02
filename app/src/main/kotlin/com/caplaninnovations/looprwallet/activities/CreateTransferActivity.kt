@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.fragments.transfers.SelectContactFragment
+import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**
  * Created by Corey Caplan on 2/18/18.

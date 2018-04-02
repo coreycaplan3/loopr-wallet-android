@@ -15,6 +15,7 @@ import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigat
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
+import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**
  * Created by Corey on 1/14/2018

@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.extensions.findFragmentByTagOrCreate
-import com.caplaninnovations.looprwallet.extensions.isExpanded
-import com.caplaninnovations.looprwallet.extensions.logv
-import com.caplaninnovations.looprwallet.extensions.weakReference
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
+import org.loopring.looprwallet.core.extensions.logv
+import org.loopring.looprwallet.core.extensions.weakReference
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.models.android.fragments.BottomNavigationFragmentStackHistory
 import com.caplaninnovations.looprwallet.models.android.fragments.FragmentTransactionController
 import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair

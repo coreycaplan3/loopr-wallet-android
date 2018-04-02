@@ -8,8 +8,8 @@ import androidx.os.bundleOf
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.handlers.NumberPadHandler
 import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import kotlinx.android.synthetic.main.fragment_security_pin.*
 
 

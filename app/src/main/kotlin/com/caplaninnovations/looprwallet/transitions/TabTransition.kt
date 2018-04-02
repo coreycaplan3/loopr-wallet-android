@@ -9,11 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.extensions.addMode
-import com.caplaninnovations.looprwallet.extensions.animateToHeight
-import com.caplaninnovations.looprwallet.extensions.getResourceIdFromAttrId
-import com.caplaninnovations.looprwallet.extensions.logd
-import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
+import org.loopring.looprwallet.core.extensions.addMode
+import org.loopring.looprwallet.core.extensions.animateToHeight
+import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
+import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.fragments.BaseTabFragment
 
 /**
  * Created by Corey Caplan on 2/18/18.

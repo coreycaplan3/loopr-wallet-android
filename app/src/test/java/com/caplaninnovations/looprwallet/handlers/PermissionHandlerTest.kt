@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.handlers
 
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
-import com.caplaninnovations.looprwallet.activities.BaseActivity
+import org.loopring.looprwallet.core.activities.BaseActivity
 import junit.framework.Assert.*
 import org.junit.Test
 

@@ -1,9 +1,9 @@
 package com.caplaninnovations.looprwallet.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**
  * Created by Corey on 1/14/2018

@@ -3,8 +3,8 @@ package com.caplaninnovations.looprwallet.handlers
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
-import com.caplaninnovations.looprwallet.extensions.loge
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.extensions.loge
 import org.web3j.crypto.Credentials
 import org.web3j.utils.Numeric
 

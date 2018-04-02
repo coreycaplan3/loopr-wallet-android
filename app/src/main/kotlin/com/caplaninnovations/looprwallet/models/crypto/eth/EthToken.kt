@@ -3,7 +3,7 @@ package com.caplaninnovations.looprwallet.models.crypto.eth
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import com.caplaninnovations.looprwallet.models.crypto.TokenBalanceInfo
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Ignore

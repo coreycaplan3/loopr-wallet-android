@@ -2,8 +2,8 @@ package com.caplaninnovations.looprwallet.models.android.settings
 
 import android.support.annotation.StyleRes
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.extensions.loge
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 
 /**
  * Created by Corey Caplan on 1/30/18.

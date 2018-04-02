@@ -8,7 +8,7 @@ import com.caplaninnovations.looprwallet.models.android.settings.LoopringFeeSett
 import com.caplaninnovations.looprwallet.models.android.settings.LoopringFeeSettings.Companion.DEFAULT_VALUE_MARGIN_SPLIT
 import com.caplaninnovations.looprwallet.models.android.settings.LoopringFeeSettings.Companion.KEY_LRC_FEE
 import com.caplaninnovations.looprwallet.models.android.settings.LoopringFeeSettings.Companion.KEY_MARGIN_SPLIT
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import javax.inject.Inject
 
 /**

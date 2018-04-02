@@ -1,10 +1,10 @@
 package com.caplaninnovations.looprwallet.repositories.eth
 
 import android.arch.lifecycle.LiveData
-import com.caplaninnovations.looprwallet.extensions.asLiveData
-import com.caplaninnovations.looprwallet.extensions.equalTo
-import com.caplaninnovations.looprwallet.extensions.mapIfNull
-import com.caplaninnovations.looprwallet.extensions.notEqualTo
+import org.loopring.looprwallet.core.extensions.asLiveData
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.mapIfNull
+import org.loopring.looprwallet.core.extensions.notEqualTo
 import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
 import com.caplaninnovations.looprwallet.models.crypto.TokenBalanceInfo
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken

@@ -27,7 +27,7 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 
 import com.caplaninnovations.looprwallet.R;
-import com.caplaninnovations.looprwallet.extensions.ViewExtensionsKt;
+import org.loopring.looprwallet.core.extensions.ViewExtensionsKt;
 import com.google.android.gms.common.images.Size;
 
 import java.io.IOException;

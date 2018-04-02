@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.handlers
 
 import android.view.View
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import kotlinx.android.synthetic.main.number_pad.*
 
 /**

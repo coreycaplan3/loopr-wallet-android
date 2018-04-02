@@ -5,11 +5,11 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.fragments.BaseTabFragment
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.BaseTabFragment
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.extensions.inflate
-import com.caplaninnovations.looprwallet.extensions.logd
+import org.loopring.looprwallet.core.extensions.inflate
+import org.loopring.looprwallet.core.extensions.logd
 
 /**
  * Created by Corey on 1/17/2018.

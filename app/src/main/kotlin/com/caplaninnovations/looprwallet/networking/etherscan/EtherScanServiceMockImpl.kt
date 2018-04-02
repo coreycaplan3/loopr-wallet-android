@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.networking.etherscan
 
 import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
-import com.caplaninnovations.looprwallet.utilities.NetworkUtility
+import org.loopring.looprwallet.core.utilities.NetworkUtility
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import java.io.IOException

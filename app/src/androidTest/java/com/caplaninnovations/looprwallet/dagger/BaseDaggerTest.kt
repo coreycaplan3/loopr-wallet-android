@@ -11,11 +11,11 @@ import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.view.View
-import com.caplaninnovations.looprwallet.activities.BaseActivity
+import org.loopring.looprwallet.core.activities.BaseActivity
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
-import com.caplaninnovations.looprwallet.extensions.logd
-import com.caplaninnovations.looprwallet.extensions.removeAllListenersAndClose
+import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
 import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettings
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.LooprWallet

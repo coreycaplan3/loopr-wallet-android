@@ -2,9 +2,9 @@ package com.caplaninnovations.looprwallet.realm
 
 import android.support.annotation.VisibleForTesting
 import com.caplaninnovations.looprwallet.BuildConfig
-import com.caplaninnovations.looprwallet.utilities.BuildUtility.BUILD_DEBUG
-import com.caplaninnovations.looprwallet.utilities.BuildUtility.BUILD_RELEASE
-import com.caplaninnovations.looprwallet.utilities.BuildUtility.BUILD_STAGING
+import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_DEBUG
+import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_RELEASE
+import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_STAGING
 import io.realm.Realm
 import io.realm.RealmConfiguration
 

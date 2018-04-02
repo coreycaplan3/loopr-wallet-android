@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.models.trading.TradingPair
+import org.loopring.looprwallet.core.activities.BaseActivity
 
 class TradingPairDetailsActivity : BaseActivity() {
 

@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.extensions.logd
-import com.caplaninnovations.looprwallet.extensions.setupWithFab
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.extensions.setupWithFab
 import kotlinx.android.synthetic.main.fragment_view_transfers.*
 
 /**

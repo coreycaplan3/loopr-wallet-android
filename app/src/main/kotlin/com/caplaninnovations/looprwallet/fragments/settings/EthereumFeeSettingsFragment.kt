@@ -12,8 +12,8 @@ import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSett
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings.Companion.KEY_GAS_PRICE
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings.Companion.KEY_TRANSFER_ETHER_GAS_LIMIT
 import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings.Companion.KEY_TRANSFER_TOKEN_GAS_LIMIT
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility
-import com.caplaninnovations.looprwallet.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import javax.inject.Inject
 
 /**

@@ -3,9 +3,9 @@ package com.caplaninnovations.looprwallet.fragments.mywallet
 import android.os.Bundle
 import android.view.View
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.extensions.logd
+import org.loopring.looprwallet.core.extensions.logd
 
 /**
  * Created by Corey on 1/17/2018.

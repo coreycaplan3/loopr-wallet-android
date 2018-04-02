@@ -2,13 +2,13 @@ package com.caplaninnovations.looprwallet.adapters.phrase
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.caplaninnovations.looprwallet.adapters.ItemTouchViewHolder
+import org.loopring.looprwallet.core.adapters.ItemTouchViewHolder
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_phrase.*
 import android.support.annotation.DimenRes
 import android.view.MotionEvent
 import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.adapters.OnStartDragListener
+import org.loopring.looprwallet.core.adapters.OnStartDragListener
 
 
 /**
