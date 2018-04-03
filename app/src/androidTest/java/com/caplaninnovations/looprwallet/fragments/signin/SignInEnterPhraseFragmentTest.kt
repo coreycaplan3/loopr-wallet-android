@@ -8,14 +8,13 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.activities.MainActivity
-import com.caplaninnovations.looprwallet.adapters.phrase.PhraseEmptyViewHolder
-import com.caplaninnovations.looprwallet.adapters.phrase.PhraseViewHolder
+import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseEmptyViewHolder
+import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseViewHolder
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import org.loopring.looprwallet.core.utilities.CustomViewActions.dragDownViewHolder
 import org.loopring.looprwallet.core.utilities.CustomViewActions.dragUpViewHolder
 import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
-import kotlinx.android.synthetic.main.view_holder_phrase.*
 import kotlinx.android.synthetic.main.view_holder_phrase.view.*
 import org.hamcrest.Matchers.*
 import org.junit.Assert.*
@@ -25,6 +24,7 @@ import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.Espresso.onView
 import org.junit.After
+import org.loopring.looprwallet.walletsignin.fragments.signin.SignInEnterPhraseFragment
 import java.util.concurrent.FutureTask
 
 

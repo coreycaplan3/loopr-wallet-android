@@ -5,8 +5,8 @@ import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
 import org.loopring.looprwallet.core.extensions.upsert
-import com.caplaninnovations.looprwallet.models.crypto.TokenBalanceInfo
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
+import org.loopring.looprwallet.core.cryptotokens.TokenBalanceInfo
+import org.loopring.looprwallet.core.cryptotokens.EthToken
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where

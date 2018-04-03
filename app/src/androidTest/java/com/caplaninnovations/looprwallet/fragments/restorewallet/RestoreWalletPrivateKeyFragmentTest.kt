@@ -7,7 +7,6 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.MainActivity
-import com.caplaninnovations.looprwallet.activities.TestActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions
 import org.loopring.looprwallet.core.validators.BaseValidator
@@ -19,7 +18,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.FutureTask
+import org.loopring.looprwallet.walletsignin.fragments.restorewallet.RestoreWalletPrivateKeyFragment
 
 /**
  * Created by Corey on 2/25/2018.

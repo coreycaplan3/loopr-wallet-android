@@ -4,7 +4,7 @@ import android.support.annotation.IdRes
 import android.support.test.rule.ActivityTestRule
 import android.support.v4.app.Fragment
 import com.caplaninnovations.looprwallet.activities.TestActivity
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
+import org.loopring.looprwallet.core.models.settings.LooprSettings
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

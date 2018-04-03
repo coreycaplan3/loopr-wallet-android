@@ -1,1 +1,1 @@
-include ':app', ':module.wallet-sign-in', ':library.core'
+include ':app', ':module.wallet-sign-in', ':library.core', ':module.barcode', ':module.home', ':module.settings', ':module.order', ':module.transfer', ':module.intro', ':module.trade-details', ':module.app-security', ':module.contacts'

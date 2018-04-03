@@ -3,7 +3,7 @@ package com.caplaninnovations.looprwallet.fragments.settings
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.SeekBarPreference
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.models.android.settings.EthereumFeeSettings
+import org.loopring.looprwallet.core.models.settings.EthereumFeeSettings
 import org.junit.Test
 
 /**

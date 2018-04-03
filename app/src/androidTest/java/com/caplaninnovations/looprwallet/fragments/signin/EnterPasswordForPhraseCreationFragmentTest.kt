@@ -6,8 +6,8 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
-import com.caplaninnovations.looprwallet.fragments.createwallet.CreateWalletRememberPhraseFragment
+import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
+import org.loopring.looprwallet.walletsignin.fragments.CreateWalletRememberPhraseFragment
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_sign_in_enter_password.*
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
 import org.junit.Test
+import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
 import java.util.concurrent.FutureTask
 
 /**

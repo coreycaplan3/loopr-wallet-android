@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.fragments
+package org.loopring.looprwallet.core.fragments
 
 import android.content.Context
 import android.os.Bundle

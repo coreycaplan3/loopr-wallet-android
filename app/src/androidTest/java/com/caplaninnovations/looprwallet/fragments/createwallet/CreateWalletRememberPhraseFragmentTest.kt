@@ -3,7 +3,7 @@ package com.caplaninnovations.looprwallet.fragments.createwallet
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationPhrase
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import kotlinx.android.synthetic.main.fragment_create_wallet_phrase_remember.*
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
@@ -11,6 +11,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.walletsignin.fragments.CreateWalletRememberPhraseFragment
 
 /**
  * Created by Corey on 3/5/2018.

@@ -4,11 +4,11 @@ import android.support.v7.preference.ListPreference
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
 import com.caplaninnovations.looprwallet.fragments.security.EnterNewSecurityFragment
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSettings
-import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings
-import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.KEY_SECURITY_TYPE
-import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
-import com.caplaninnovations.looprwallet.models.android.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
+import org.loopring.looprwallet.core.models.settings.LooprSettings
+import org.loopring.looprwallet.core.models.settings.SecuritySettings
+import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.KEY_SECURITY_TYPE
+import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
+import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
 import kotlinx.coroutines.experimental.delay
 import org.junit.Assert.*
 import org.junit.Test

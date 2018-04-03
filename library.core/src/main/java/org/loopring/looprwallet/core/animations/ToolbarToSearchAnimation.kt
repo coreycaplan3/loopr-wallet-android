@@ -11,7 +11,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationSet
 import android.view.animation.TranslateAnimation
 import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.isLollipop
 import org.loopring.looprwallet.core.utilities.ViewUtility

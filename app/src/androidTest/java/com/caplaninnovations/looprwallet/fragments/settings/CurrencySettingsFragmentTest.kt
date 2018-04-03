@@ -3,7 +3,7 @@ package com.caplaninnovations.looprwallet.fragments.settings
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.preference.ListPreference
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
+import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

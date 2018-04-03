@@ -4,7 +4,7 @@ import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
+import org.loopring.looprwallet.core.cryptotokens.EthToken
 import io.realm.Realm
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.CompletableDeferred

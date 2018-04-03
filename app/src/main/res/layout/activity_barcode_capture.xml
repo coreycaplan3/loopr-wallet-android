@@ -6,16 +6,16 @@
     android:keepScreenOn="true"
     android:orientation="vertical">
 
-    <com.caplaninnovations.looprwallet.models.barcode.CameraSourcePreview
+    <org.loopring.looprwallet.barcode.models.barcode.CameraSourcePreview
         android:id="@+id/cameraSourcePreview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.caplaninnovations.looprwallet.models.barcode.GraphicOverlay
+        <org.loopring.looprwallet.barcode.models.barcode.GraphicOverlay
             android:id="@+id/graphicOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.caplaninnovations.looprwallet.models.barcode.CameraSourcePreview>
+    </org.loopring.looprwallet.barcode.models.barcode.CameraSourcePreview>
 
 </LinearLayout>

@@ -8,7 +8,6 @@ import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.fragments.BaseFragment
 import org.loopring.looprwallet.core.utilities.OrientationChangeAction
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

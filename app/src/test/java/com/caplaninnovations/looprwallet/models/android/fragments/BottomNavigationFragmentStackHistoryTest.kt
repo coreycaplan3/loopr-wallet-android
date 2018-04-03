@@ -5,6 +5,7 @@ import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 

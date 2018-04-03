@@ -18,12 +18,8 @@ android {
     }
 
     buildTypes {
-        debug {
-
-        }
-        staging {
-
-        }
+        debug {}
+        staging {}
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -37,8 +33,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Dagger Dependency Injection
-    api gradle.dagger
+    // We must redeclare annotation processors
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler
 }

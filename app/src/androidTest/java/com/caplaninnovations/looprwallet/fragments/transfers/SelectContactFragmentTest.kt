@@ -16,9 +16,9 @@ import com.caplaninnovations.looprwallet.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import com.caplaninnovations.looprwallet.adapters.contacts.ContactsAdapter
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.handlers.BarcodeCaptureHandler
+import org.loopring.looprwallet.core.handlers.BarcodeCaptureHandler
 import com.caplaninnovations.looprwallet.models.user.Contact
-import com.caplaninnovations.looprwallet.repositories.BaseRealmRepository
+import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions
 import org.hamcrest.Matchers.`is`
@@ -33,11 +33,11 @@ import org.junit.Test
  *
  * Purpose of Class:
  */
-class SelectContactFragmentTest : BaseDaggerFragmentTest<SelectContactFragment>() {
+class SelectContactFragmentTest : BaseDaggerFragmentTest<SelectTransferContactFragment>() {
 
-    override val fragment = SelectContactFragment()
+    override val fragment = SelectTransferContactFragment()
 
-    override val tag = SelectContactFragment.TAG
+    override val tag = SelectTransferContactFragment.TAG
 
     private val addressOne = "0x0123456701234567012345670123456701234567"
     private val addressTwo = "0x0123456701234567012345670123456701234568"

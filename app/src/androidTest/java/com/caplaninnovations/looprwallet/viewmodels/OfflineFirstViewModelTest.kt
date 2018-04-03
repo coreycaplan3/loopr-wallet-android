@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.viewmodels
 
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
+import org.loopring.looprwallet.core.cryptotokens.EthToken
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
@@ -15,6 +15,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 
 /**
  * Created by Corey Caplan on 3/21/18.

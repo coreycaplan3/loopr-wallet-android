@@ -2,13 +2,14 @@ package com.caplaninnovations.looprwallet.viewmodels
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
-import com.caplaninnovations.looprwallet.repositories.BaseRepository
-import com.caplaninnovations.looprwallet.repositories.sync.SyncRepository
+import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.repositories.BaseRepository
+import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 import io.realm.RealmModel
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.util.*
 
 /**

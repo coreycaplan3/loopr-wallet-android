@@ -5,12 +5,15 @@ import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.*
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.fragments.signin.EnterPasswordForPhraseFragment
+import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
 import kotlinx.android.synthetic.main.fragment_restore_wallet_selection.*
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.junit.Assert.*
 import org.junit.Test
+import org.loopring.looprwallet.walletsignin.fragments.restorewallet.RestoreWalletKeystoreFragment
+import org.loopring.looprwallet.walletsignin.fragments.restorewallet.RestoreWalletPrivateKeyFragment
+import org.loopring.looprwallet.walletsignin.fragments.restorewallet.RestoreWalletSelectionFragment
 
 /**
  * Created by Corey on 3/5/2018.

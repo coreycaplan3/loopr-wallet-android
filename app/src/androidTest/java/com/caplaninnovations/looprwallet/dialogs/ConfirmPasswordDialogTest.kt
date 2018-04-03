@@ -6,7 +6,7 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationKeystore
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationKeystore
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
 import org.hamcrest.Matchers.`is`
@@ -14,6 +14,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
 
 /**
  * Created by Corey Caplan on 2/25/18.

@@ -9,7 +9,7 @@ import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.activities.MainActivity
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
+import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
 import org.loopring.looprwallet.core.validators.BaseValidator
 import kotlinx.android.synthetic.main.card_wallet_name.*
@@ -21,6 +21,7 @@ import org.junit.Rule
 
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.walletsignin.fragments.CreateWalletKeystoreFragment
 import java.util.concurrent.FutureTask
 
 /**

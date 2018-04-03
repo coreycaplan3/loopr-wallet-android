@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-            android:name=".activities.CreateTransferActivity"
+            android:name="org.loopring.looprwallet.transfer.CreateTransferActivity"
             android:label="@string/transfer"
             android:screenOrientation="portrait" />
 
@@ -53,33 +53,27 @@
         </activity>
 
         <activity
-            android:name=".activities.IntroActivity"
+            android:name="org.loopring.looprwallet.intro.IntroActivity"
             android:label="@string/title_activity_intro" />
         <activity
-            android:name=".activities.SignInActivity"
+            android:name="org.loopring.looprwallet.walletsignin.SignInActivity"
             android:label="@string/title_activity_sign_in" />
 
         <activity
-            android:name=".activities.ViewTransfersActivity"
+            android:name="org.loopring.looprwallet.transfer.ViewTransfersActivity"
             android:label="@string/transfer" />
-
-        <activity
-            android:name=".activities.SearchActivity"
-            android:label="@string/search" />
 
         <activity
             android:name=".activities.TradingPairDetailsActivity"
             android:label="@string/trading_pair" />
 
         <activity
-            android:name=".activities.WelcomeActivity"
+            android:name="org.loopring.looprwallet.intro.WelcomeActivity"
             android:label="@string/welcome" />
 
         <activity
-            android:name=".activities.SecurityActivity"
+            android:name="org.loopring.looprwallet.appsecurity.activities.SecurityActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".activities.BarcodeCaptureActivity" />
 
     </application>
 

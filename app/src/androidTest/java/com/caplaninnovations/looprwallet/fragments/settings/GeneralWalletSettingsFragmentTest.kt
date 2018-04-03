@@ -2,7 +2,7 @@ package com.caplaninnovations.looprwallet.fragments.settings
 
 import android.support.v14.preference.SwitchPreference
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.models.android.settings.GeneralWalletSettings
+import org.loopring.looprwallet.core.models.settings.GeneralWalletSettings
 import org.junit.Test
 
 /**

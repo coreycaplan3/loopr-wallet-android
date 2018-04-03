@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.loopring.looprwallet.barcode">
+
+    <application>
+
+        <activity android:name=".activities.BarcodeCaptureActivity" />
+
+    </application>
+
+</manifest>

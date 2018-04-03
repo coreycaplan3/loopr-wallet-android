@@ -4,6 +4,7 @@ import com.caplaninnovations.looprwallet.R
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
 import org.web3j.crypto.CipherException
 
 /**

@@ -2,14 +2,15 @@ package com.caplaninnovations.looprwallet.viewmodels.price
 
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
-import com.caplaninnovations.looprwallet.models.user.SyncData
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
+import org.loopring.looprwallet.core.models.sync.SyncData
 import kotlinx.coroutines.experimental.delay
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.viewmodels.price.CurrencyExchangeRateViewModel
 import java.util.*
 
 /**

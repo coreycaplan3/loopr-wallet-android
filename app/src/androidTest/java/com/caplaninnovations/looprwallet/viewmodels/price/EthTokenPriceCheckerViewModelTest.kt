@@ -2,14 +2,15 @@ package com.caplaninnovations.looprwallet.viewmodels.price
 
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
-import com.caplaninnovations.looprwallet.models.user.SyncData
+import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.sync.SyncData
 import junit.framework.Assert.*
 import kotlinx.coroutines.experimental.delay
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.viewmodels.price.EthTokenPriceCheckerViewModel
 import java.math.BigDecimal
 import java.util.*
 

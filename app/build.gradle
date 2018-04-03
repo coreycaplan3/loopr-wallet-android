@@ -47,11 +47,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
-        androidTest.java.srcDirs += 'src/androidTest/kotlin'
-    }
     buildToolsVersion '27.0.3'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -132,6 +127,7 @@ androidExtensions {
 dependencies {
     implementation project(':library.core')
     implementation project(':module.wallet-sign-in')
+    implementation project(':module.barcode')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 

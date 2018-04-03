@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/activityCreateOrderFragment"
-        android:name="com.caplaninnovations.looprwallet.fragments.orders.CreateOrderFragment"
+        android:name="org.loopring.looprwallet.order.fragments.CreateOrderFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:attr/actionBarSize" />

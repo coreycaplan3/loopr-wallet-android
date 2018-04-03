@@ -6,7 +6,7 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
+import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
@@ -19,6 +19,8 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
+import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
+import org.loopring.looprwallet.walletsignin.fragments.signin.SignInEnterPhraseFragment
 
 /**
  * Created by Corey on 3/7/2018

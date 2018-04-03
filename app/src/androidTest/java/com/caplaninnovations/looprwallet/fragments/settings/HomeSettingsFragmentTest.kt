@@ -3,7 +3,7 @@ package com.caplaninnovations.looprwallet.fragments.settings
 import android.support.v7.preference.ListPreference
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
+import org.loopring.looprwallet.core.models.settings.ThemeSettings
 import kotlinx.coroutines.experimental.delay
 import org.junit.Test
 

@@ -1,14 +1,15 @@
 package com.caplaninnovations.looprwallet.realm
 
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
-import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
+import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import io.realm.Realm
 import io.realm.kotlin.where
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.realm.RealmClient
 
 /**
  * Created by Corey Caplan on 3/22/18.

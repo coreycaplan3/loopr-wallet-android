@@ -16,9 +16,9 @@ import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettings
-import com.caplaninnovations.looprwallet.models.security.WalletClient
-import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.models.settings.LooprSecureSettings
+import org.loopring.looprwallet.core.wallet.WalletClient
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import io.realm.Realm
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.android.UI

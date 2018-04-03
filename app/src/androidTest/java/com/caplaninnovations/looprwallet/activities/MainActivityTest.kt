@@ -10,9 +10,9 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.R
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.handlers.BottomNavigationHandler
-import com.caplaninnovations.looprwallet.models.android.fragments.BottomNavigationFragmentStackHistory
-import com.caplaninnovations.looprwallet.models.android.navigation.BottomNavigationFragmentPair
+import org.loopring.looprwallet.core.handlers.BottomNavigationHandler
+import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
+import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
 import org.junit.Before

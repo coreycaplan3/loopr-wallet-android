@@ -8,6 +8,7 @@ import org.junit.Test
 
 import org.junit.Before
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.handlers.PermissionHandler
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner

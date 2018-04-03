@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.fragments
+package org.loopring.looprwallet.core.fragments
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Lifecycle.Event
@@ -19,15 +19,7 @@ import android.support.v4.view.ViewGroupCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ProgressBar
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BaseActivity
-import com.caplaninnovations.looprwallet.activities.MainActivity
-import com.caplaninnovations.looprwallet.activities.SettingsActivity
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import org.loopring.looprwallet.core.extensions.*
-import com.caplaninnovations.looprwallet.models.android.architecture.FragmentViewLifecycleOwner
-import com.caplaninnovations.looprwallet.models.security.WalletClient
-import com.caplaninnovations.looprwallet.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ViewUtility
 import org.loopring.looprwallet.core.validators.BaseValidator

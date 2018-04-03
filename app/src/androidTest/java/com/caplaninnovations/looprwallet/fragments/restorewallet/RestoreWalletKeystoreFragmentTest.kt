@@ -24,6 +24,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Rule
+import org.loopring.looprwallet.walletsignin.fragments.restorewallet.RestoreWalletKeystoreFragment
 import java.io.File
 import java.util.concurrent.FutureTask
 

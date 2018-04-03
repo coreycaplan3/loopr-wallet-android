@@ -2,13 +2,14 @@ package com.caplaninnovations.looprwallet.viewmodels.wallet
 
 import android.support.test.runner.AndroidJUnit4
 import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
+import org.loopring.looprwallet.core.cryptotokens.EthToken
 import io.realm.RealmResults
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
 import java.util.*
 
 /**
