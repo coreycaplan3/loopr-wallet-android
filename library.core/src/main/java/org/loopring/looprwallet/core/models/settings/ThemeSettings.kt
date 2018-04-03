@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.models.settings
 
 import android.support.annotation.StyleRes
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 

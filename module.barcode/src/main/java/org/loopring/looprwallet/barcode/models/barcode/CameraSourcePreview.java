@@ -26,7 +26,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 
-import com.caplaninnovations.looprwallet.R;
+import org.loopring.looprwallet.core.R;
 import org.loopring.looprwallet.core.extensions.ViewExtensionsKt;
 import com.google.android.gms.common.images.Size;
 

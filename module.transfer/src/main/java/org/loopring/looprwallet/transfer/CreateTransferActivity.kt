@@ -3,7 +3,7 @@ package org.loopring.looprwallet.transfer
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import com.caplaninnovations.looprwallet.fragments.transfers.SelectContactFragment
 import org.loopring.looprwallet.core.activities.BaseActivity
 

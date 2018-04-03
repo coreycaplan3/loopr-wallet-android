@@ -13,7 +13,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.os.bundleOf
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.adapters.OnStartDragListener
 import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseAdapter
 import org.loopring.looprwallet.core.extensions.allEqual

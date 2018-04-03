@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.viewmodels.price
 
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.models.sync.SyncData
 import kotlinx.coroutines.experimental.delay

@@ -18,7 +18,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "com.caplaninnovations.looprwallet.application.LooprTestRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -126,8 +126,15 @@ androidExtensions {
 
 dependencies {
     implementation project(':library.core')
-    implementation project(':module.wallet-sign-in')
+    implementation project(':module.app-security')
     implementation project(':module.barcode')
+    implementation project(':module.contacts')
+    implementation project(':module.home')
+    implementation project(':module.intro')
+    implementation project(':module.order')
+    implementation project(':module.trade-details')
+    implementation project(':module.transfer')
+    implementation project(':module.wallet-sign-in')
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 

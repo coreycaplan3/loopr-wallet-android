@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.intro
 
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**

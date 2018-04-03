@@ -1,7 +1,7 @@
 package com.caplaninnovations.looprwallet.viewmodels.wallet
 
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.cryptotokens.EthToken
 import io.realm.RealmResults
 import org.junit.After

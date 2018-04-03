@@ -19,10 +19,14 @@ import android.support.v4.view.ViewGroupCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ProgressBar
+import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.*
+import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
+import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ViewUtility
 import org.loopring.looprwallet.core.validators.BaseValidator
+import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
 
 
@@ -85,8 +89,6 @@ abstract class BaseFragment : Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-
-        LooprWalletApp.application.looprDaggerComponent
 
         allowEnterTransitionOverlap = false
         allowReturnTransitionOverlap = false

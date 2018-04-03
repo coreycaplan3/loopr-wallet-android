@@ -6,8 +6,7 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.matcher.ViewMatchers.isRoot
 import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.utilities.OrientationChangeAction
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

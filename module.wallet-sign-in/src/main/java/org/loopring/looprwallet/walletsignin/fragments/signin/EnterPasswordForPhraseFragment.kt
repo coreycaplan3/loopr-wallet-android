@@ -4,13 +4,13 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
 import androidx.os.bundleOf
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.walletsignin.fragments.CreateWalletRememberPhraseFragment
+import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletRememberPhraseFragment
 import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import org.loopring.looprwallet.core.utilities.ViewUtility
 import org.loopring.looprwallet.core.validators.PasswordValidator

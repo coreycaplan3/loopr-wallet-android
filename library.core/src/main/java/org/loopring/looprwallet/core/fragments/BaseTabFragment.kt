@@ -6,7 +6,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
 import android.view.View
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.getAttrColorStateList
 import com.caplaninnovations.looprwallet.models.android.fragments.LooprFragmentPagerAdapter
 import com.caplaninnovations.looprwallet.transitions.TabTransition

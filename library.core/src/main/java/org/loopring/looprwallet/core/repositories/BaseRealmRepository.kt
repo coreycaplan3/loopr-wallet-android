@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.core.repositories
 
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.extensions.upsertCopyToRealm
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
@@ -8,6 +7,7 @@ import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.deleteFromRealm
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 
 /**
  * Created by Corey Caplan on 3/17/18.
@@ -21,7 +21,7 @@ import io.realm.kotlin.deleteFromRealm
 open class BaseRealmRepository(val currentWallet: LooprWallet)
     : BaseRepository<RealmModel> {
 
-    private val realmClient = LooprWalletApp.dagger.realmClient
+    private val realmClient = LooprWalletCoreApp.dagger.realmClient
 
     /**
      * A private realm instance that can only be accessed from the main thread.

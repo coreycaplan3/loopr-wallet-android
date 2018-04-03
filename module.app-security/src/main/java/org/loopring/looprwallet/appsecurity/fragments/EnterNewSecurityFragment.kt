@@ -3,7 +3,7 @@ package org.loopring.looprwallet.appsecurity.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.os.bundleOf
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.handlers.NumberPadHandler
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY

@@ -2,11 +2,11 @@ package org.loopring.looprwallet.contacts.adapters.contacts
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.contacts.R
+import org.loopring.looprwallet.contacts.models.Contact
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.extensions.inflate
-import com.caplaninnovations.looprwallet.models.user.Contact
 
 /**
  * Created by Corey Caplan on 3/11/18.

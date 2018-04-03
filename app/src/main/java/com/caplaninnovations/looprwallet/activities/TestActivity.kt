@@ -7,7 +7,7 @@ import android.support.annotation.RestrictTo.Scope.TESTS
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.mapIfNull
 import com.caplaninnovations.looprwallet.fragments.security.ConfirmOldSecurityFragment
 import org.loopring.looprwallet.core.activities.BaseActivity

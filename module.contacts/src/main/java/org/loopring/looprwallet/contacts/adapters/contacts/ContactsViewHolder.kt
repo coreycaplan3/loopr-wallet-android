@@ -2,11 +2,10 @@ package org.loopring.looprwallet.contacts.adapters.contacts
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.caplaninnovations.looprwallet.R
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
-import com.caplaninnovations.looprwallet.models.user.Contact
-import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_contact.*
+import org.loopring.looprwallet.contacts.R
+import org.loopring.looprwallet.contacts.models.Contact
 
 /**
  * Created by Corey Caplan on 3/11/18.

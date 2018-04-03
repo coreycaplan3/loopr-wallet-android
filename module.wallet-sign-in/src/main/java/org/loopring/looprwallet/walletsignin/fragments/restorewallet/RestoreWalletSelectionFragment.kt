@@ -2,7 +2,7 @@ package org.loopring.looprwallet.walletsignin.fragments.restorewallet
 
 import android.os.Bundle
 import android.view.View
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.EnterPasswordForPhraseFragment
 import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment

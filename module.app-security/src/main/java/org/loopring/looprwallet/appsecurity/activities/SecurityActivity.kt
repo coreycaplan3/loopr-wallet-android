@@ -2,7 +2,7 @@ package org.loopring.looprwallet.appsecurity.activities
 
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**

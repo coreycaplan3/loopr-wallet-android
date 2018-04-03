@@ -3,7 +3,7 @@ package org.loopring.looprwallet.tokendetails
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import com.caplaninnovations.looprwallet.models.trading.TradingPair
 import org.loopring.looprwallet.core.activities.BaseActivity
 

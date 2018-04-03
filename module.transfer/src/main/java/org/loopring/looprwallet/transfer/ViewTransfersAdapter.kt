@@ -2,7 +2,7 @@ package org.loopring.looprwallet.transfer
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import com.caplaninnovations.looprwallet.models.misc.TutorialTracker
 import com.caplaninnovations.looprwallet.models.transfers.LooprTransfer
 import io.realm.RealmList

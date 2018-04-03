@@ -2,7 +2,7 @@ package org.loopring.looprwallet.home.fragments.wallet
 
 import android.os.Bundle
 import android.view.View
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.handlers.BottomNavigationHandler
 import org.loopring.looprwallet.core.extensions.logd

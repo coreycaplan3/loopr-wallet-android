@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.walletsignin.handlers
 
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import com.caplaninnovations.looprwallet.models.security.WalletClient
 import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str

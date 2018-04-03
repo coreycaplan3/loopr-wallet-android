@@ -3,8 +3,8 @@ package org.loopring.looprwallet.appsecurity.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.handlers.NumberPadHandler
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
@@ -55,7 +55,7 @@ abstract class BaseSecurityFragment : BaseFragment(), NumberPadHandler.NumberPad
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        LooprWalletApp.dagger.inject(this)
+        LooprWalletCoreApp.dagger.inject(this)
 
         currentPin = savedInstanceState?.getString(KEY_CURRENT_INPUT) ?: ""
     }

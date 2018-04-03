@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.animations.ToolbarToSearchAnimation
 import com.caplaninnovations.looprwallet.dialogs.CreateContactDialog
 import org.loopring.looprwallet.core.extensions.logd

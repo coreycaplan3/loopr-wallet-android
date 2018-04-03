@@ -3,7 +3,7 @@ package org.loopring.looprwallet.home.fragments.markets
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_markets_all.*
 

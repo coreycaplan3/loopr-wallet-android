@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.models.error
 
 import android.support.annotation.StringRes
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 
 /**
  * Created by Corey Caplan on 3/14/18.

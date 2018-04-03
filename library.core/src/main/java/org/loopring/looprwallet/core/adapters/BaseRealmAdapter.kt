@@ -3,7 +3,6 @@ package org.loopring.looprwallet.core.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.R
 import io.realm.RealmModel
 import io.realm.RealmRecyclerViewAdapter
 import org.loopring.looprwallet.core.extensions.inflate

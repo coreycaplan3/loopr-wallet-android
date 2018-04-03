@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.home.adapters.markets
 
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import com.caplaninnovations.looprwallet.activities.TradingPairDetailsActivity
 import com.caplaninnovations.looprwallet.models.trading.TradingPair
 import org.loopring.looprwallet.core.extensions.inflate

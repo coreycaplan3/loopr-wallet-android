@@ -2,18 +2,18 @@ package com.caplaninnovations.looprwallet.application
 
 import android.app.Activity
 import android.app.Application
-import android.content.Context
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import com.caplaninnovations.looprwallet.BuildConfig
-import com.caplaninnovations.looprwallet.dagger.*
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.wallet.WalletClient
 import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
 import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.dagger.*
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.utilities.PreferenceUtility
+import org.loopring.looprwallet.home.activities.MainActivity
 import org.web3j.protocol.Web3j
 import javax.inject.Inject
 
@@ -26,16 +26,6 @@ import javax.inject.Inject
  *
  */
 open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallbacks {
-
-    companion object {
-
-        val context: Context
-            get() = LooprWalletCoreApp.application.applicationContext
-
-        val dagger: LooprDaggerComponent
-            get() = LooprWalletCoreApp.application.looprDaggerComponent
-
-    }
 
     val looprDaggerComponent: LooprDaggerComponent by lazy {
         provideDaggerComponent()
@@ -56,6 +46,8 @@ open class LooprWalletApp : MultiDexApplication(), Application.ActivityLifecycle
         logi("Creating Application...")
 
         LooprWalletCoreApp.application = this
+        LooprWalletCoreApp.dagger = this
+        LooprWalletCoreApp.MainApplicationUtility.setupMainActivity<MainActivity>()
 
         PreferenceUtility.setDefaultValues()
 

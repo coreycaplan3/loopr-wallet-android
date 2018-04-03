@@ -2,7 +2,7 @@ package org.loopring.looprwallet.walletsignin.adapters.phrase
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.adapters.ItemTouchAdapter
 import org.loopring.looprwallet.core.adapters.OnStartDragListener
 import org.loopring.looprwallet.core.extensions.inflate

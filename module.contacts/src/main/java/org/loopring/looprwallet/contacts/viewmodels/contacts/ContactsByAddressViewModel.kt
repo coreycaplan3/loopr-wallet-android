@@ -2,11 +2,11 @@ package org.loopring.looprwallet.contacts.viewmodels.contacts
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
-import com.caplaninnovations.looprwallet.models.user.Contact
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineOnlyViewModel
 import io.realm.RealmResults
+import org.loopring.looprwallet.contacts.models.Contact
+import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
 
 /**
  * Created by Corey Caplan on 3/18/18.

@@ -8,8 +8,9 @@ import android.support.v7.preference.*
 import android.support.v7.preference.PreferenceManager.KEY_HAS_SET_DEFAULT_VALUES
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.R.xml
-import org.loopring.looprwallet.core.application.LooprWalletApp
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.loopring.looprwallet.core.models.android.settings.LooprSettings
+import org.loopring.looprwallet.core.models.settings.LooprSettings
 
 /**
  * Created by Corey Caplan on 3/27/18.
@@ -51,7 +52,7 @@ object PreferenceUtility {
      */
     @SuppressLint("RestrictedApi")
     private fun setDefaultValues(resId: Int, resourceName: String) {
-        val context = LooprWalletApp.context
+        val context = LooprWalletCoreApp.context
         val settings = LooprSettings.getInstance(context)
 
         val key = KEY_HAS_SET_DEFAULT_VALUES + resourceName

@@ -30,4 +30,5 @@ dependencies {
     implementation project(':library.core')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':module.barcode')
 }

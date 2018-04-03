@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.models.settings
 
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.bool
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 

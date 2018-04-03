@@ -1,15 +1,15 @@
 package org.loopring.looprwallet.core.viewmodels.price
 
 import android.arch.lifecycle.LiveData
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
-import com.caplaninnovations.looprwallet.models.user.SyncData
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.networking.prices.CurrencyExchangeService
-import com.caplaninnovations.looprwallet.repositories.currency.CurrencyExchangeRateRepository
 import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
+import org.loopring.looprwallet.core.models.sync.SyncData
+import org.loopring.looprwallet.core.networking.prices.CurrencyExchangeService
+import org.loopring.looprwallet.core.repositories.currency.CurrencyExchangeRateRepository
 
 /**
  * Created by Corey Caplan on 3/15/18.
@@ -35,7 +35,7 @@ class CurrencyExchangeRateViewModel(currentWallet: LooprWallet) : StreamingViewM
 
     override val waitTime: Long = TEN_MINUTES_MILLIS
 
-    private val currencySettings = LooprWalletApp.dagger.currencySettings
+    private val currencySettings = LooprWalletCoreApp.dagger.currencySettings
 
     fun start(onChange: (CurrencyExchangeRate) -> Unit) {
         initializeDataForever(currencySettings.getCurrentCurrency(), onChange)

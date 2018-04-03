@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.home
 
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import com.caplaninnovations.looprwallet.models.order.LooprOrder
 import org.loopring.looprwallet.core.extensions.inflate
 import io.realm.OrderedRealmCollection

@@ -3,7 +3,7 @@ package org.loopring.looprwallet.walletsignin.fragments.restorewallet
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.validators.PrivateKeyValidator

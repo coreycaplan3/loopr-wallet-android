@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.models.settings
 
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.strArray
 import java.math.RoundingMode

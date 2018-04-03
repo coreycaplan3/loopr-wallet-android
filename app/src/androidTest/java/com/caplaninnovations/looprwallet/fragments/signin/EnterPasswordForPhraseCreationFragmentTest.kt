@@ -4,10 +4,10 @@ import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
-import org.loopring.looprwallet.walletsignin.fragments.CreateWalletRememberPhraseFragment
+import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletRememberPhraseFragment
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled

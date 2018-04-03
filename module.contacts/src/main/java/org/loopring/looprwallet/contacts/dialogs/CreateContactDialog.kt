@@ -6,15 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.os.bundleOf
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import org.loopring.looprwallet.core.handlers.BarcodeCaptureHandler
-import com.caplaninnovations.looprwallet.models.user.Contact
-import com.caplaninnovations.looprwallet.repositories.user.ContactsRepository
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.validators.ContactNameValidator
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
 import kotlinx.android.synthetic.main.barcode_button.*
 import kotlinx.android.synthetic.main.dialog_create_contact.*
+import org.loopring.looprwallet.contacts.R
+import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 
 /**
@@ -45,7 +44,7 @@ class CreateContactDialog : BaseBottomSheetDialog() {
                 return field
             }
 
-            val wallet = LooprWalletApp.dagger.walletClient.getCurrentWallet() ?: return null
+            val wallet = LooprWalletCoreApp.dagger.walletClient.getCurrentWallet() ?: return null
             return ContactsRepository(wallet).apply { field = this }
         }
 

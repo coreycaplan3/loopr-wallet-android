@@ -8,8 +8,8 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.handlers.BottomNavigationHandler
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
@@ -19,6 +19,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.home.activities.MainActivity
 import java.util.concurrent.FutureTask
 
 /**

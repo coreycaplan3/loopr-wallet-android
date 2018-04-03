@@ -3,7 +3,7 @@ package org.loopring.looprwallet.core.viewmodels
 import android.arch.lifecycle.*
 import android.arch.lifecycle.Observer
 import android.support.annotation.VisibleForTesting
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend

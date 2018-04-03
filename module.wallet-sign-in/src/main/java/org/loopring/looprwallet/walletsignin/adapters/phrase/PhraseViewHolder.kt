@@ -4,7 +4,7 @@ import android.support.annotation.DimenRes
 import android.support.v7.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_phrase.*
 import org.loopring.looprwallet.core.adapters.ItemTouchViewHolder

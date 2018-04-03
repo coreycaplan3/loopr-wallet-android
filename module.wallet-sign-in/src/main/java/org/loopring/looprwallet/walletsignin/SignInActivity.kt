@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.walletsignin
 
 import android.os.Bundle
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import com.caplaninnovations.looprwallet.dialogs.ConfirmPasswordDialog
 import com.caplaninnovations.looprwallet.fragments.signin.SignInSelectionFragment
 import org.loopring.looprwallet.core.activities.BaseActivity

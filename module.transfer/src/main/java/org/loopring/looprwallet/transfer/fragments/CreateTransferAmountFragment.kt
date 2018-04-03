@@ -12,30 +12,19 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.os.bundleOf
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.fragments.settings.EthereumFeeSettingsFragment
 import org.loopring.looprwallet.core.handlers.NumberPadHandler
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.settings.EthereumFeeSettings
-import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
-import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
-import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate.Companion.MAX_CURRENCY_FRACTION_DIGITS
-import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate.Companion.MAX_EXCHANGE_RATE_FRACTION_DIGITS
-import com.caplaninnovations.looprwallet.models.user.Contact
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
-import com.caplaninnovations.looprwallet.viewmodels.eth.EthereumTransactionViewModel
-import com.caplaninnovations.looprwallet.viewmodels.price.EthTokenPriceCheckerViewModel
-import com.caplaninnovations.looprwallet.viewmodels.wallet.EthTokenBalanceViewModel
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -202,7 +191,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        LooprWalletApp.dagger.inject(this)
+        LooprWalletCoreApp.dagger.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

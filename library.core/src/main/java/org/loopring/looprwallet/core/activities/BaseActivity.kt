@@ -11,17 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowManager
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.dagger.LooprDaggerComponent
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.handlers.PermissionHandler
-import com.caplaninnovations.looprwallet.models.android.fragments.FragmentTransactionController
-import com.caplaninnovations.looprwallet.models.android.settings.ThemeSettings
-import com.caplaninnovations.looprwallet.models.security.WalletClient
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.handlers.PermissionHandler
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
+import org.loopring.looprwallet.core.models.settings.ThemeSettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
+import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
 
 /**
@@ -29,14 +27,8 @@ import javax.inject.Inject
  *
  * Project: LooprWallet
  *
- * Purpose of Class:
- *
- * To run any necessary initialization code before starting a standardized
- * activity. A standardized activity is an activity that is core to the application and is not one
- * of the following:
- * - [SignInActivity]
- * - [IntroActivity]
- * - [WelcomeActivity]
+ * Purpose of Class: To run any necessary initialization code before starting a standardized
+ * activity.
  */
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -83,7 +75,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Setup the Dagger injection component
-        looprDaggerComponent = (application as LooprWalletApp).looprDaggerComponent
+        looprDaggerComponent = LooprWalletCoreApp.dagger
         looprDaggerComponent.inject(this)
 
         // Setup the theme

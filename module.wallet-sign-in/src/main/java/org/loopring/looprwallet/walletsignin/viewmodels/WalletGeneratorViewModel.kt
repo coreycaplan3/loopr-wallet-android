@@ -5,10 +5,8 @@ import android.arch.lifecycle.ViewModel
 import android.support.annotation.StringRes
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
-import com.caplaninnovations.looprwallet.activities.MainActivity
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.snackbar
 import org.loopring.looprwallet.core.extensions.toArrayList
@@ -19,6 +17,7 @@ import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationResult
 import org.loopring.looprwallet.core.utilities.*
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import kotlinx.coroutines.experimental.async
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.web3j.crypto.CipherException
 import org.web3j.crypto.Credentials
 import org.web3j.crypto.MnemonicUtils
@@ -86,7 +85,7 @@ class WalletGeneratorViewModel : ViewModel() {
 
     }
 
-    private val securityClient = LooprWalletApp.application.walletClient
+    private val securityClient = LooprWalletCoreApp.application.walletClient
 
     /**
      * Tracks whether or not wallet creation is running.
@@ -230,7 +229,7 @@ class WalletGeneratorViewModel : ViewModel() {
      * not being Android compatible
      */
     private fun populateWordListFromAssets() {
-        val stream = LooprWalletApp.context.assets.open("en-mnemonic-word-list.txt")
+        val stream = LooprWalletCoreApp.context.assets.open("en-mnemonic-word-list.txt")
         val lines = stream.bufferedReader().readLines()
 
         val field = MnemonicUtils::class.java.getDeclaredField("WORD_LIST")

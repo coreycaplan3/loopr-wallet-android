@@ -8,7 +8,7 @@ import android.support.transition.Visibility
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.addMode
 import org.loopring.looprwallet.core.extensions.animateToHeight
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId

@@ -8,8 +8,8 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.matcher.ViewMatchers.*
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.handlers.NumberPadHandler
 import com.caplaninnovations.looprwallet.mocknet.test.BuildConfig
@@ -24,6 +24,7 @@ import org.hamcrest.Matchers.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.loopring.looprwallet.transfer.fragments.CreateTransferAmountFragment
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.math.BigDecimal
 

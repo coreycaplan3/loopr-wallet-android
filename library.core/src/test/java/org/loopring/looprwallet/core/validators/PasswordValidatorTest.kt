@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.validators
 
 import android.support.design.widget.TextInputLayout
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.junit.Test
 
 import org.junit.Assert.*

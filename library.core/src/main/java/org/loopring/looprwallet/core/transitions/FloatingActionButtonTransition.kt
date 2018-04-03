@@ -5,7 +5,7 @@ import android.support.transition.TransitionValues
 import android.support.transition.Visibility
 import android.view.View
 import android.view.ViewGroup
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.animateScaleBoth
 
 /**

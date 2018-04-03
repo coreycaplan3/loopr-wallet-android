@@ -11,13 +11,9 @@ import android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
 import android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.v7.widget.RecyclerView
-import com.caplaninnovations.looprwallet.R
-import com.caplaninnovations.looprwallet.activities.BarcodeCaptureActivity
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
-import com.caplaninnovations.looprwallet.adapters.contacts.ContactsAdapter
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.core.handlers.BarcodeCaptureHandler
-import com.caplaninnovations.looprwallet.models.user.Contact
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions
@@ -25,6 +21,10 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
+import org.loopring.looprwallet.contacts.adapters.contacts.ContactsAdapter
+import org.loopring.looprwallet.contacts.models.Contact
+import org.loopring.looprwallet.transfer.fragments.SelectTransferContactFragment
 
 /**
  * Created by Corey on 3/30/2018.
@@ -135,7 +135,7 @@ class SelectContactFragmentTest : BaseDaggerFragmentTest<SelectTransferContactFr
     @Test
     fun enterFullAddress_fromBarcode() {
         runBlockingUiCode {
-            val intent = Intent().putExtra(BarcodeCaptureActivity.KEY_BARCODE_VALUE, addressOne)
+            val intent = Intent().putExtra(BarcodeCaptureHandler.KEY_BARCODE_VALUE, addressOne)
             fragment.onActivityResult(BarcodeCaptureHandler.REQUEST_CODE_START_BARCODE_ACTIVITY, RESULT_OK, intent)
         }
 
