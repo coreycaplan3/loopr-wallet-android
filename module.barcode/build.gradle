@@ -31,6 +31,12 @@ androidExtensions {
     experimental = true
 }
 
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
 dependencies {
     implementation project(':library.core')
     implementation fileTree(dir: 'libs', include: ['*.jar'])

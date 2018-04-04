@@ -37,11 +37,6 @@ kotlin {
     }
 }
 
-kapt {
-    useBuildCache = true
-}
-
-
 dependencies {
     implementation project(':library.core')
 

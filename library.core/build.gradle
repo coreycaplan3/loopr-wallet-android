@@ -50,10 +50,6 @@ kotlin {
     }
 }
 
-kapt {
-    useBuildCache = true
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

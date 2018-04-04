@@ -8,7 +8,6 @@ import android.support.multidex.MultiDexApplication
 import com.caplaninnovations.looprwallet.BuildConfig
 import com.caplaninnovations.looprwallet.dagger.AppLooprComponent
 import com.caplaninnovations.looprwallet.dagger.DaggerAppLooprComponent
-import com.caplaninnovations.looprwallet.realm.AppRealmModule
 import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
 import org.loopring.looprwallet.contacts.dagger.ContactsLooprComponent
@@ -17,7 +16,6 @@ import org.loopring.looprwallet.contacts.dagger.DaggerContactsLooprComponent
 import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.loopring.looprwallet.core.dagger.*
 import org.loopring.looprwallet.core.extensions.logi
-import org.loopring.looprwallet.core.realm.RealmClient
 import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.PreferenceUtility
 import org.loopring.looprwallet.core.wallet.WalletClient
@@ -56,8 +54,6 @@ open class LooprWalletApp : MultiDexApplication(), ActivityLifecycleCallbacks,
         BuildUtility.BUILD_TYPE = BuildConfig.BUILD_TYPE
         BuildUtility.BUILD_FLAVOR = BuildConfig.ENVIRONMENT
         BuildUtility.SECURITY_LOCKOUT_TIME = BuildConfig.SECURITY_LOCKOUT_TIME
-
-        RealmClient.allRealmModules = AppRealmModule.ALL_MODULES
 
         PreferenceUtility.setDefaultValues()
 

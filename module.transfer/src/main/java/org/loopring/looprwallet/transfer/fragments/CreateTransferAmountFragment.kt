@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_create_transfer_amount.*
-import org.loopring.looprwallet.contacts.models.Contact
+import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.transfer.R
 import org.loopring.looprwallet.core.activities.BaseActivity

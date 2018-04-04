@@ -22,8 +22,6 @@ abstract class RealmClient {
 
         private const val SHARED_REALM_NAME = "shared-loopr"
 
-        var allRealmModules: Array<*>? = null
-
         /**
          * An instance of [RealmClient] that can be used for the any user (not private info).
          */
@@ -60,8 +58,7 @@ abstract class RealmClient {
     fun getPrivateRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
         return RealmConfiguration.Builder()
                 .name(realmName)
-                .modules(allRealmModules
-                        ?: throw IllegalArgumentException("Realm modules cannot be null"))
+                .modules(CoreLooprRealmModule())
                 .migration(LooprPrivateInstanceMigration())
                 .initialData(InitialRealmPrivateData.getInitialData())
                 .schemaVersion(privateSchemaVersion)
@@ -71,11 +68,9 @@ abstract class RealmClient {
     fun getSharedRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
         return RealmConfiguration.Builder()
                 .name(realmName)
-                .modules(allRealmModules
-                        ?: throw IllegalArgumentException("Realm modules cannot be null"))
+                .modules(CoreLooprRealmModule())
                 .migration(LooprSharedInstanceMigration())
                 .initialData(InitialRealmSharedData.getInitialData())
-                .modules(CoreLooprRealmModule())
                 .schemaVersion(sharedSchemaVersion)
     }
 
