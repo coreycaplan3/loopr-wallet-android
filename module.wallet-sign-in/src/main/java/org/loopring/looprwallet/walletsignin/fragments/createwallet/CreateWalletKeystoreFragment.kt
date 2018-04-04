@@ -5,18 +5,22 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.View
-import org.loopring.looprwallet.core.R
+import kotlinx.android.synthetic.main.card_enter_wallet_password.*
+import kotlinx.android.synthetic.main.card_wallet_name.*
+import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
-import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.handlers.PermissionHandler
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationKeystore
-import org.loopring.looprwallet.core.utilities.DialogUtility
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.extensions.snackbar
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.handlers.PermissionHandler
+import org.loopring.looprwallet.core.utilities.DialogUtility
 import org.loopring.looprwallet.core.validators.PasswordValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
-import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
+import org.loopring.looprwallet.walletsignin.R
+import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationKeystore
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
 
 /**
  * Created by Corey Caplan on 2/19/18.

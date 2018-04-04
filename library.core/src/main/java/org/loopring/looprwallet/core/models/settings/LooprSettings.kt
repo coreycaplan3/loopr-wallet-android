@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.support.v7.preference.PreferenceDataStore
-import com.caplaninnovations.looprwallet.BuildConfig
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.utilities.BuildUtility
 
@@ -27,7 +26,7 @@ interface LooprSettings {
                 return looprSettings as LooprSettings
             }
 
-            val flavor = BuildConfig.ENVIRONMENT
+            val flavor = BuildUtility.BUILD_FLAVOR
             looprSettings = when (flavor) {
                 BuildUtility.FLAVOR_MOCKNET -> LooprSettingsDebugImpl()
                 BuildUtility.FLAVOR_TESTNET, BuildUtility.FLAVOR_MAINNET -> LooprSettingsProductionImpl(context)

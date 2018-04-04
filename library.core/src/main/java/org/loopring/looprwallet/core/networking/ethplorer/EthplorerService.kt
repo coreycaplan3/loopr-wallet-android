@@ -1,11 +1,11 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
-import com.caplaninnovations.looprwallet.BuildConfig
+import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MAINNET
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MOCKNET
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
-import kotlinx.coroutines.experimental.Deferred
 
 /**
  * Created by Corey Caplan on 3/17/18.
@@ -20,7 +20,7 @@ interface EthplorerService {
     companion object {
 
         fun getInstance(): EthplorerService {
-            val buildType = BuildConfig.ENVIRONMENT
+            val buildType = BuildUtility.BUILD_TYPE
             return when (buildType) {
                 FLAVOR_MOCKNET -> EthplorerServiceMockImpl()
                 FLAVOR_TESTNET, FLAVOR_MAINNET -> EthplorerServiceProdImpl()

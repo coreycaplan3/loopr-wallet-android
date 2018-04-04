@@ -1,8 +1,8 @@
 package org.loopring.looprwallet.core.realm
 
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
-import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
 import io.realm.Realm
+import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 
 /**
  * Created by Corey Caplan on 3/17/18.

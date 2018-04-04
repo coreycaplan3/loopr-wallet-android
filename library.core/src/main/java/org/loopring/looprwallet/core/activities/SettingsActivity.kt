@@ -1,14 +1,21 @@
 package org.loopring.looprwallet.core.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import kotlinx.android.synthetic.main.appbar_main.*
 import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.ifNull
+import org.loopring.looprwallet.core.fragments.security.BaseSecurityFragment
+import org.loopring.looprwallet.core.fragments.security.OnSecurityChangeListener
+import org.loopring.looprwallet.core.fragments.settings.BaseSettingsFragment
+import org.loopring.looprwallet.core.fragments.settings.HomeSettingsFragment
+import org.loopring.looprwallet.core.fragments.settings.SecuritySettingsFragment
 import org.loopring.looprwallet.core.models.settings.ThemeSettings
 import org.loopring.looprwallet.core.utilities.ViewUtility
-import kotlinx.android.synthetic.main.appbar_main.*
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import javax.inject.Inject
 
 /**
@@ -16,12 +23,27 @@ import javax.inject.Inject
  */
 class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
 
+    companion object {
+
+        const val KEY_FINISH_ALL = "_FINISH_ALL"
+
+        /**
+         * @return An intent used to kill the entire application, if started
+         */
+        fun createIntentToFinishApp(): Intent {
+            return Intent(LooprWalletCoreApp.application.applicationContext, SettingsActivity::class.java)
+                    .putExtra(KEY_FINISH_ALL, true)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+    }
+
     @Inject
     lateinit var themeSettings: ThemeSettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LooprWalletCoreApp.dagger.inject(this)
+        coreLooprComponent.inject(this)
 
         // We MUST set the theme before the call to setContentView
         setTheme(themeSettings.getCurrentTheme())
@@ -37,6 +59,8 @@ class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
         setSupportActionBar(toolbar)
         toolbar?.navigationIcon = ViewUtility.getNavigationIcon(theme)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        isIntentForClosingApplication()
     }
 
     /**
@@ -87,6 +111,22 @@ class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    // MARK - Private Methods
+
+    /**
+     * @return True if the intent from [getIntent] was sent to close the application (and the
+     * application will close) or false otherwise.
+     */
+    private fun isIntentForClosingApplication(): Boolean {
+        return if (intent.getBooleanExtra(KEY_FINISH_ALL, false)) {
+            // The user requested to exit the app
+            finish()
+            true
+        } else {
+            false
+        }
     }
 
 }

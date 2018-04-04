@@ -1,9 +1,9 @@
 package org.loopring.looprwallet.core.handlers
 
 import android.view.View
-import org.loopring.looprwallet.core.fragments.BaseFragment
 import kotlinx.android.synthetic.main.number_pad.*
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
+import org.loopring.looprwallet.core.fragments.BaseFragment
 
 /**
  * Created by Corey Caplan on 3/26/18.
@@ -56,7 +56,7 @@ object NumberPadHandler {
         baseFragment.numberPadNine.setOnClickListener { listener.onNumberClick("9") }
 
         if (listener.isDecimalVisible) {
-            baseFragment.numberPadDecimal.text = LooprWalletCoreApp.dagger.currencySettings.getDecimalSeparator()
+            baseFragment.numberPadDecimal.text = coreLooprComponent.currencySettings.getDecimalSeparator()
             baseFragment.numberPadDecimal.visibility = View.VISIBLE
             baseFragment.numberPadDecimal.setOnClickListener { listener.onDecimalClick() }
         } else {

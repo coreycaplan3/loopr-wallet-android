@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.Fragment
 import org.loopring.looprwallet.core.extensions.loge
-import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
 
 /**
  * Created by Corey Caplan on 3/14/18.

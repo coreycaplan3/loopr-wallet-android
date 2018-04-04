@@ -1,10 +1,10 @@
 package org.loopring.looprwallet.core.networking.etherscan
 
-import com.caplaninnovations.looprwallet.BuildConfig
+import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MAINNET
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MOCKNET
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
-import kotlinx.coroutines.experimental.Deferred
 
 /**
  * Created by Corey Caplan on 3/31/18.
@@ -18,7 +18,7 @@ interface EtherScanService {
 
     companion object {
         fun getInstance(): EtherScanService {
-            val environment = BuildConfig.ENVIRONMENT
+            val environment = BuildUtility.BUILD_FLAVOR
             return when (environment) {
                 FLAVOR_MOCKNET -> EtherScanServiceMockImpl()
                 FLAVOR_TESTNET, FLAVOR_MAINNET -> EtherScanServiceProdImpl()

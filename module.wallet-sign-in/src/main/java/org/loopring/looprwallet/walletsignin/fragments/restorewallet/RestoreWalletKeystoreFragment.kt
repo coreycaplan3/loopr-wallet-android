@@ -10,19 +10,22 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.view.View
-import org.loopring.looprwallet.core.R
+import kotlinx.android.synthetic.main.card_wallet_name.*
+import kotlinx.android.synthetic.main.fragment_restore_keystore.*
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.extensions.snackbar
+import org.loopring.looprwallet.core.extensions.snackbarWithAction
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.handlers.PermissionHandler
 import org.loopring.looprwallet.core.utilities.DialogUtility
 import org.loopring.looprwallet.core.utilities.FilesUtility
 import org.loopring.looprwallet.core.validators.PasswordValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
-import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
+import org.loopring.looprwallet.walletsignin.R
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
 import java.io.File
-
 
 /**
  * Created by Corey Caplan on 2/22/18.

@@ -12,19 +12,30 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.os.bundleOf
-import org.loopring.looprwallet.core.R
+import kotlinx.android.synthetic.main.fragment_create_transfer_amount.*
+import org.loopring.looprwallet.contacts.models.Contact
+import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
+import org.loopring.looprwallet.transfer.R
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.cryptotokens.CryptoToken
+import org.loopring.looprwallet.core.cryptotokens.EthToken
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.settings.EthereumFeeSettingsFragment
 import org.loopring.looprwallet.core.handlers.NumberPadHandler
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate.Companion.MAX_CURRENCY_FRACTION_DIGITS
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate.Companion.MAX_EXCHANGE_RATE_FRACTION_DIGITS
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.settings.EthereumFeeSettings
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
+import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
+import org.loopring.looprwallet.core.viewmodels.eth.EthereumTransactionViewModel
+import org.loopring.looprwallet.core.viewmodels.price.EthTokenPriceCheckerViewModel
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -191,7 +202,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        LooprWalletCoreApp.dagger.inject(this)
+//        Core.dagger.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,11 +1,16 @@
 package org.loopring.looprwallet.contacts.repositories.contacts
 
 import android.arch.lifecycle.LiveData
-import com.caplaninnovations.looprwallet.models.user.Contact
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import io.realm.Case
 import io.realm.RealmResults
+import io.realm.kotlin.where
+import org.loopring.looprwallet.contacts.models.Contact
+import org.loopring.looprwallet.core.extensions.asLiveData
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.like
+import org.loopring.looprwallet.core.extensions.sort
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
  * Created by Corey Caplan on 3/18/18.

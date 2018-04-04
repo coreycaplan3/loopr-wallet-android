@@ -11,10 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowManager
+import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.loopring.looprwallet.core.handlers.PermissionHandler
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.settings.ThemeSettings
@@ -51,8 +52,6 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     abstract val isSecureActivity: Boolean
 
-    private lateinit var looprDaggerComponent: LooprDaggerComponent
-
     lateinit var progressDialog: ProgressDialog
 
     @Inject
@@ -75,8 +74,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Setup the Dagger injection component
-        looprDaggerComponent = LooprWalletCoreApp.dagger
-        looprDaggerComponent.inject(this)
+        coreLooprComponent.inject(this)
 
         // Setup the theme
         this.setTheme(themeSettings.getCurrentTheme())
@@ -152,7 +150,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun removeWalletCurrentWallet() {
         walletClient.getCurrentWallet()?.let {
-
             walletClient.removeWallet(it.walletName)
             if (walletClient.getCurrentWallet() == null) {
                 walletClient.onNoCurrentWalletSelected(this)

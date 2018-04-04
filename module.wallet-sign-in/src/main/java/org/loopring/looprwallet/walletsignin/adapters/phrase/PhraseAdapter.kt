@@ -2,13 +2,12 @@ package org.loopring.looprwallet.walletsignin.adapters.phrase
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.adapters.ItemTouchAdapter
 import org.loopring.looprwallet.core.adapters.OnStartDragListener
 import org.loopring.looprwallet.core.extensions.inflate
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 /**
  * Created by Corey on 3/2/2018

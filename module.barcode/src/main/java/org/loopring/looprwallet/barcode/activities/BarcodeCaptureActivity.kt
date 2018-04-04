@@ -28,23 +28,26 @@ import android.view.ScaleGestureDetector
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.vision.MultiProcessor
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import kotlinx.android.synthetic.main.activity_barcode_capture.*
+import org.loopring.looprwallet.barcode.R
+import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
+import org.loopring.looprwallet.barcode.views.barcode.BarcodeGraphicTracker
+import org.loopring.looprwallet.barcode.views.barcode.BarcodeTrackerFactory
+import org.loopring.looprwallet.barcode.views.barcode.CameraSource
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.extensions.snackbar
-import org.loopring.looprwallet.core.handlers.BarcodeCaptureHandler
 import org.loopring.looprwallet.core.handlers.PermissionHandler
 import org.web3j.crypto.WalletUtils
 import java.io.IOException
 
 /**
- * Activity for the multi-tracker app.  This app detects barcodes and displays the value with the
- * rear facing camera. During detection overlay graphics are drawn to indicate the position,
- * size, and ID of each barcode.
+ * This activity detects barcodes and displays the value with the rear facing camera. During
+ * detection overlay graphics are drawn to indicate the position, size, and ID of each barcode.
  */
 class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpdateListener {
 

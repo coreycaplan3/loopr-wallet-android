@@ -2,11 +2,10 @@ package org.loopring.looprwallet.walletsignin.fragments.createwallet
 
 import android.os.Bundle
 import android.view.View
-import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.fragments.signin.EnterPasswordForPhraseFragment
-import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
 import kotlinx.android.synthetic.main.fragment_create_wallet_selection.*
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.walletsignin.R
+import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
 
 /**
  * Created by Corey Caplan on 2/18/18.

@@ -2,14 +2,14 @@ package org.loopring.looprwallet.core.models.settings
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.caplaninnovations.looprwallet.BuildConfig
+import com.google.gson.Gson
+import io.realm.android.CipherClient
 import org.loopring.looprwallet.core.extensions.fromJson
 import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MAINNET
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MOCKNET
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
-import com.google.gson.Gson
-import io.realm.android.CipherClient
 
 /**
  * Created by Corey Caplan on 2/3/18.
@@ -31,7 +31,7 @@ interface LooprSecureSettings : LooprSettings {
                 return looprSecureSettings as LooprSecureSettings
             }
 
-            val flavor = BuildConfig.ENVIRONMENT
+            val flavor = BuildUtility.BUILD_FLAVOR
             looprSecureSettings = when (flavor) {
                 FLAVOR_MOCKNET -> LooprSecureSettingsDebugImpl()
                 FLAVOR_TESTNET, FLAVOR_MAINNET -> LooprSecureSettingsProductionImpl(context)

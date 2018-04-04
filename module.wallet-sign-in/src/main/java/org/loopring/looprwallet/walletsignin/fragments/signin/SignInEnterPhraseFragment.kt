@@ -13,17 +13,18 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.os.bundleOf
-import org.loopring.looprwallet.core.R
+import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
 import org.loopring.looprwallet.core.adapters.OnStartDragListener
-import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseAdapter
 import org.loopring.looprwallet.core.extensions.allEqual
 import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.handlers.SimpleItemTouchHandler
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import org.loopring.looprwallet.core.utilities.RegexUtility
-import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
-
+import org.loopring.looprwallet.walletsignin.R
+import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseAdapter
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
 
 /**
  * Created by Corey on 2/22/2018

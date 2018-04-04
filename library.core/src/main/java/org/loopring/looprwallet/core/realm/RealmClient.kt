@@ -1,12 +1,12 @@
 package org.loopring.looprwallet.core.realm
 
 import android.support.annotation.VisibleForTesting
-import com.caplaninnovations.looprwallet.BuildConfig
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_DEBUG
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_RELEASE
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_STAGING
-import io.realm.Realm
-import io.realm.RealmConfiguration
 
 /**
  * Created by Corey Caplan on 1/30/18.
@@ -22,11 +22,13 @@ abstract class RealmClient {
 
         private const val SHARED_REALM_NAME = "shared-loopr"
 
+        var allRealmModules: Array<*>? = null
+
         /**
          * An instance of [RealmClient] that can be used for the any user (not private info).
          */
         fun getSharedInstance(): RealmClient {
-            val buildType = BuildConfig.BUILD_TYPE
+            val buildType = BuildUtility.BUILD_TYPE
             return when (buildType) {
                 BUILD_DEBUG -> RealmClientDebugImpl()
                 BUILD_STAGING, BUILD_RELEASE -> RealmClientProductionImpl()
@@ -38,7 +40,7 @@ abstract class RealmClient {
          * An instance of [RealmClient] that can be used for the user's private Realm instance.
          */
         fun getPrivateInstance(): RealmClient {
-            val buildType = BuildConfig.BUILD_TYPE
+            val buildType = BuildUtility.BUILD_TYPE
             return when (buildType) {
                 BUILD_DEBUG -> RealmClientDebugImpl()
                 BUILD_STAGING, BUILD_RELEASE -> RealmClientProductionImpl()
@@ -58,6 +60,8 @@ abstract class RealmClient {
     fun getPrivateRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
         return RealmConfiguration.Builder()
                 .name(realmName)
+                .modules(allRealmModules
+                        ?: throw IllegalArgumentException("Realm modules cannot be null"))
                 .migration(LooprPrivateInstanceMigration())
                 .initialData(InitialRealmPrivateData.getInitialData())
                 .schemaVersion(privateSchemaVersion)
@@ -67,8 +71,11 @@ abstract class RealmClient {
     fun getSharedRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
         return RealmConfiguration.Builder()
                 .name(realmName)
+                .modules(allRealmModules
+                        ?: throw IllegalArgumentException("Realm modules cannot be null"))
                 .migration(LooprSharedInstanceMigration())
                 .initialData(InitialRealmSharedData.getInitialData())
+                .modules(CoreLooprRealmModule())
                 .schemaVersion(sharedSchemaVersion)
     }
 

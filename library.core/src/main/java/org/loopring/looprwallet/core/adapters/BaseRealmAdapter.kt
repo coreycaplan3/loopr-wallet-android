@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.realm.RealmModel
 import io.realm.RealmRecyclerViewAdapter
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.inflate
 
 /**

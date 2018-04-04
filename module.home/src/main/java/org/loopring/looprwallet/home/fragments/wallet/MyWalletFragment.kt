@@ -2,9 +2,9 @@ package org.loopring.looprwallet.home.fragments.wallet
 
 import android.os.Bundle
 import android.view.View
-import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.handlers.BottomNavigationHandler
+import org.loopring.looprwallet.home.handlers.BottomNavigationHandler
 import org.loopring.looprwallet.core.extensions.logd
 
 /**

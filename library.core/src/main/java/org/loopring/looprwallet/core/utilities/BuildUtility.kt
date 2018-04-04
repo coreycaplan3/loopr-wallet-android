@@ -18,4 +18,8 @@ object BuildUtility {
     const val FLAVOR_TESTNET = "testnet"
     const val FLAVOR_MAINNET = "mainnet"
 
+    var BUILD_TYPE = BUILD_DEBUG
+    var BUILD_FLAVOR = FLAVOR_MOCKNET
+    var SECURITY_LOCKOUT_TIME = -1L
+
 }

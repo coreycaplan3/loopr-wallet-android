@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.os.bundleOf
-import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.walletsignin.SignInActivity
+import org.loopring.looprwallet.walletsignin.R
+import org.loopring.looprwallet.walletsignin.activities.SignInActivity
 import org.loopring.looprwallet.walletsignin.models.wallet.PasswordBasedWallet
 import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationKeystore
 import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase

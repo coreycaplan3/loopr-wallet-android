@@ -1,7 +1,9 @@
 package org.loopring.looprwallet.core.repositories.sync
 
 import android.support.annotation.VisibleForTesting
-import com.caplaninnovations.looprwallet.models.user.SyncData
+import io.realm.kotlin.where
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import java.util.*

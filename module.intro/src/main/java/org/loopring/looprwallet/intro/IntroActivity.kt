@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.intro
 
-import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**

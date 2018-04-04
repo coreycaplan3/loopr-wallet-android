@@ -1,11 +1,9 @@
 package org.loopring.looprwallet.walletsignin.fragments.signin
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.activities.BaseActivity
-import com.caplaninnovations.looprwallet.activities.MainActivity
+import kotlinx.android.synthetic.main.fragment_sign_in.*
+import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletSelectionFragment
 import org.loopring.looprwallet.walletsignin.fragments.restorewallet.RestoreWalletSelectionFragment
@@ -16,8 +14,6 @@ import org.loopring.looprwallet.walletsignin.fragments.restorewallet.RestoreWall
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
- *
  */
 class SignInSelectionFragment : BaseFragment() {
 
@@ -37,16 +33,6 @@ class SignInSelectionFragment : BaseFragment() {
 
         restoreWalletButton.setOnClickListener {
             pushFragmentTransaction(RestoreWalletSelectionFragment(), RestoreWalletSelectionFragment.TAG)
-        }
-
-        restoreWalletButton.setOnLongClickListener {
-            // TODO delete me
-            val walletName = "debug-loopr-currentWallet"
-            val privateKey = "e8ef822b865355634d5fc82a693174680acf5cc7beaf19bea33ee62581d8e439"
-            (activity as? BaseActivity)?.walletClient?.createWallet(walletName, privateKey)
-            startActivity(Intent(context, MainActivity::class.java))
-            activity?.finish()
-            true
         }
     }
 

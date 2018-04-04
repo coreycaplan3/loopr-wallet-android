@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
+import android.support.v4.view.ViewPager
 import android.view.View
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.getAttrColorStateList
-import com.caplaninnovations.looprwallet.models.android.fragments.LooprFragmentPagerAdapter
-import com.caplaninnovations.looprwallet.transitions.TabTransition
-import kotlinx.android.synthetic.main.fragment_markets_parent.*
+import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentPagerAdapter
+import org.loopring.looprwallet.core.transitions.TabTransition
 
 /**
  * Created by Corey Caplan on 1/24/18.
@@ -35,6 +35,8 @@ abstract class BaseTabFragment : BaseFragment() {
 
     private var tabLayout: TabLayout? = null
 
+    private lateinit var fragmentContainer: ViewPager
+
     private lateinit var adapter: LooprFragmentPagerAdapter
 
     override fun onAttach(context: Context?) {
@@ -52,6 +54,7 @@ abstract class BaseTabFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fragmentContainer = view.findViewById(R.id.fragmentContainer)
         fragmentContainer.adapter = adapter
 
         tabLayout = view.findViewById(tabLayoutId)

@@ -157,7 +157,7 @@ fun View.snackbar(message: String, @Duration length: Int = Snackbar.LENGTH_LONG)
  * @see Snackbar.LENGTH_INDEFINITE
  */
 @SuppressLint("Range")
-fun View.snackbar(@StringRes message: Int, @Duration length: Int = Snackbar.LENGTH_LONG) {
+fun View.snackbar(@StringRes message: Int, length: Int = Snackbar.LENGTH_LONG) {
     this.snackbar(str(message), length)
 }
 

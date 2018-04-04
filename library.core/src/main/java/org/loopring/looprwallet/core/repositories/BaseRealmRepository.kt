@@ -1,13 +1,16 @@
 package org.loopring.looprwallet.core.repositories
 
-import org.loopring.looprwallet.core.extensions.upsert
-import org.loopring.looprwallet.core.extensions.upsertCopyToRealm
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.deleteFromRealm
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
+import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
+import org.loopring.looprwallet.core.extensions.upsert
+import org.loopring.looprwallet.core.extensions.upsertCopyToRealm
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.realm.RealmClient
+import javax.inject.Inject
 
 /**
  * Created by Corey Caplan on 3/17/18.
@@ -21,7 +24,8 @@ import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 open class BaseRealmRepository(val currentWallet: LooprWallet)
     : BaseRepository<RealmModel> {
 
-    private val realmClient = LooprWalletCoreApp.dagger.realmClient
+    @Inject
+    lateinit var realmClient: RealmClient
 
     /**
      * A private realm instance that can only be accessed from the main thread.
@@ -32,6 +36,10 @@ open class BaseRealmRepository(val currentWallet: LooprWallet)
      * A shared realm instance that can only be accessed from the main thread.
      */
     val uiSharedRealm = realmClient.getSharedInstance()
+
+    init {
+        coreLooprComponent.inject(this)
+    }
 
     /**
      * ** THIS METHOD MUST BE CALLED FROM THE MAIN THREAD**

@@ -1,9 +1,10 @@
 package com.caplaninnovations.looprwallet.activities
 
 import android.content.Intent
-import org.loopring.looprwallet.core.R
+import com.caplaninnovations.looprwallet.R
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.walletsignin.SignInActivity
+import org.loopring.looprwallet.home.activities.MainActivity
+import org.loopring.looprwallet.walletsignin.activities.SignInActivity
 
 /**
  * Created by Corey Caplan on 2/1/18.

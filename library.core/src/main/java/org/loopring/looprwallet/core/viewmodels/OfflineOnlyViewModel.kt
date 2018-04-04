@@ -1,8 +1,8 @@
 package org.loopring.looprwallet.core.viewmodels
 
-import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.repositories.sync.SyncRepository
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 
 /**
  * Created by Corey Caplan on 3/14/18.

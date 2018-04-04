@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'realm-android'
 apply plugin: 'com.novoda.build-properties'
 
 buildProperties {
@@ -22,14 +21,8 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
-        debug {
-            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "2000L"
-            buildConfigField "Long", "DEFAULT_NETWORK_TIMEOUT", "1000L" // Used for testing
-        }
+        debug {}
         staging {
-            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "15000L"
-            buildConfigField "Long", "DEFAULT_NETWORK_TIMEOUT", "3000L" // Used for testing
-
             debuggable false
             minifyEnabled true
             shrinkResources true
@@ -37,9 +30,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
-            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "15000L"
-            buildConfigField "Long", "DEFAULT_NETWORK_TIMEOUT", "3000L" // Used for testing
-
             debuggable false
             minifyEnabled true
             shrinkResources true
@@ -58,31 +48,34 @@ android {
 
     flavorDimensions "environment"
 
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
+
     productFlavors {
+
         mocknet {
             buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mocknetServerUrl"]
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 10L"
             buildConfigField "String", "ENVIRONMENT", "\"mocknet\""
 
-            dimension "environment"
             applicationIdSuffix ".mocknet"
             versionNameSuffix "-mocknet"
 
-            // Only include English packages and xxhdpi resources to speed up build times
-            resConfigs("en", "xxhdpi")
+            dimension "environment"
         }
 
-        // Flavor name cannot start with "test"
         infuraTestnet {
             buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["testnetServerUrl"]
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
             buildConfigField "String", "ENVIRONMENT", "\"testnet\""
 
-            dimension "environment"
             applicationIdSuffix ".infuraTestnet"
             versionNameSuffix "-testnet"
+
+            dimension "environment"
         }
 
         mainnet {
@@ -91,42 +84,16 @@ android {
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
             buildConfigField "String", "ENVIRONMENT", "\"mainnet\""
 
-            dimension "environment"
             applicationIdSuffix ".mainnet"
             versionNameSuffix "-mainnet"
+
+            dimension "environment"
         }
     }
-
-    dexOptions {
-        javaMaxHeapSize "2g"
-    }
-
-    if (project.hasProperty("mockNet")) {
-        apptOptions.cruncherEnabled = false
-    }
-}
-
-realm {
-    kotlinExtensionsEnabled = true
-}
-
-kapt {
-    useBuildCache = true
-}
-
-kotlin {
-    experimental {
-        coroutines 'enable'
-    }
-}
-
-androidExtensions {
-    experimental = true
 }
 
 dependencies {
     implementation project(':library.core')
-    implementation project(':module.app-security')
     implementation project(':module.barcode')
     implementation project(':module.contacts')
     implementation project(':module.home')
@@ -141,26 +108,14 @@ dependencies {
     // Android Multidex for apps with more than 65,536 methods
     implementation 'com.android.support:multidex:1.0.3'
 
-    // Android Native Libraries
-    implementation gradle.support
-    implementation gradle.appcompat
-    implementation gradle.cardview
-    implementation gradle.constraint
-    implementation gradle.customtabs
-    implementation gradle.design
-    implementation gradle.recyclerview
-    implementation gradle.support
-    implementation gradle.preference
-
     // Dagger Dependency Injection
-    api gradle.dagger
+    implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler
-
 }
+
 repositories {
     mavenCentral()
 }
 
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'

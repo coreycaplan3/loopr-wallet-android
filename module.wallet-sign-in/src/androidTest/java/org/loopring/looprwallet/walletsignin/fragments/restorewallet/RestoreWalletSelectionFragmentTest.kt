@@ -3,7 +3,7 @@ package org.loopring.looprwallet.walletsignin.fragments.restorewallet
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.*
-import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
 import kotlinx.android.synthetic.main.fragment_restore_wallet_selection.*

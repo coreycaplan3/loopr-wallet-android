@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.LooprWalletCoreApp
-import org.loopring.looprwallet.core.handlers.BottomNavigationHandler
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
@@ -15,6 +14,7 @@ import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.home.fragments.markets.MarketsParentFragment
 import org.loopring.looprwallet.home.fragments.orders.OrdersParentFragment
 import org.loopring.looprwallet.home.fragments.wallet.MyWalletFragment
+import org.loopring.looprwallet.home.handlers.BottomNavigationHandler
 import org.loopring.looprwallet.transfer.fragments.ViewTransfersFragment
 
 /**
@@ -28,17 +28,6 @@ import org.loopring.looprwallet.transfer.fragments.ViewTransfersFragment
 class MainActivity : BaseActivity() {
 
     companion object {
-
-        const val KEY_FINISH_ALL = "_FINISH_ALL"
-
-        /**
-         * @return An intent used to kill the entire application, if started
-         */
-        fun createIntentToFinishApp(): Intent {
-            return Intent(LooprWalletCoreApp.application.applicationContext, MainActivity::class.java)
-                    .putExtra(KEY_FINISH_ALL, true)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
 
         /**
          * @return An intent used to start this activity (as normal), clearing any previous tasks
@@ -77,8 +66,6 @@ class MainActivity : BaseActivity() {
 
         bottomNavigationHandler = BottomNavigationHandler(this, fragmentTagPairs,
                 KEY_MARKETS, bottomNavigationFragmentStackHistory, savedInstanceState)
-
-        isIntentForClosingApplication()
     }
 
     override fun onBackPressed() {
@@ -91,22 +78,6 @@ class MainActivity : BaseActivity() {
         super.onSaveInstanceState(outState)
 
         bottomNavigationFragmentStackHistory.saveState(outState)
-    }
-
-    // MARK - Private Methods
-
-    /**
-     * @return True if the intent for [getIntent] was sent to close the application or false
-     * otherwise.
-     */
-    private fun isIntentForClosingApplication(): Boolean {
-        return if (intent.getBooleanExtra(KEY_FINISH_ALL, false)) {
-            // The user requested to exit the app
-            finish()
-            true
-        } else {
-            false
-        }
     }
 
 }

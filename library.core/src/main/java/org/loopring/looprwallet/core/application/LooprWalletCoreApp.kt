@@ -14,26 +14,14 @@ import org.loopring.looprwallet.core.activities.BaseActivity
  */
 object LooprWalletCoreApp {
 
-    object MainApplicationUtility {
+    /**
+     * The class representing the *MainActivity* for the app
+     */
+    lateinit var mainClass: Class<out BaseActivity>
 
-        /**
-         * The class representing the *MainActivity* for the app
-         */
-        lateinit var clazz: Class<out BaseActivity>
-
-        /**
-         * Sets up the main activity class and assigns it to [clazz] so it can be referenced
-         * throughout the app.
-         */
-        inline fun <reified T : BaseActivity> setupMainActivity() {
-            clazz = T::class.java
-        }
-
-    }
+    lateinit var signInClass: Class<out BaseActivity>
 
     lateinit var application: Application
-
-    lateinit var dagger: Application
 
     val context: Context
         get() = application

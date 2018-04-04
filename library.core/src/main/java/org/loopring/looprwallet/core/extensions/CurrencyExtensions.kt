@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.extensions
 
-import org.loopring.looprwallet.core.models.android.settings.CurrencySettings
+import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import java.math.BigDecimal
 import java.text.NumberFormat
 

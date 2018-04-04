@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import androidx.os.bundleOf
-import com.caplaninnovations.looprwallet.BuildConfig.DEFAULT_READ_TIMEOUT
-import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.fragments.signin.SignInEnterPhraseFragment
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import kotlinx.android.synthetic.main.fragment_create_wallet_phrase_remember.*
+import org.loopring.looprwallet.core.BuildConfig.DEFAULT_READ_TIMEOUT
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.walletsignin.R
+import org.loopring.looprwallet.walletsignin.fragments.signin.SignInEnterPhraseFragment
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 
 /**
  * Created by Corey on 3/4/2018

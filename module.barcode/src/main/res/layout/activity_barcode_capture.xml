@@ -6,16 +6,16 @@
     android:keepScreenOn="true"
     android:orientation="vertical">
 
-    <org.loopring.looprwallet.barcode.models.barcode.CameraSourcePreview
+    <org.loopring.looprwallet.barcode.views.barcode.CameraSourcePreview
         android:id="@+id/cameraSourcePreview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <org.loopring.looprwallet.barcode.models.barcode.GraphicOverlay
+        <org.loopring.looprwallet.barcode.views.barcode.GraphicOverlay
             android:id="@+id/graphicOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </org.loopring.looprwallet.barcode.models.barcode.CameraSourcePreview>
+    </org.loopring.looprwallet.barcode.views.barcode.CameraSourcePreview>
 
 </LinearLayout>

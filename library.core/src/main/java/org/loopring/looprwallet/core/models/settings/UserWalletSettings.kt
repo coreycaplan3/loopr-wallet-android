@@ -1,10 +1,10 @@
 package org.loopring.looprwallet.core.models.settings
 
 import android.support.annotation.VisibleForTesting
-import com.caplaninnovations.looprwallet.models.android.settings.UserWalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
-import org.loopring.looprwallet.core.wallet.WalletClient
-import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.models.settings.UserWalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.utilities.RealmUtility
+import org.loopring.looprwallet.core.wallet.WalletClient
 
 /**
  * Created by Corey Caplan on 1/31/18.

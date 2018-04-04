@@ -3,13 +3,13 @@ package org.loopring.looprwallet.walletsignin.fragments.restorewallet
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
-import org.loopring.looprwallet.core.R
-import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
+import kotlinx.android.synthetic.main.card_wallet_name.*
+import kotlinx.android.synthetic.main.fragment_restore_private_key.*
+import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.validators.PrivateKeyValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
-import kotlinx.android.synthetic.main.card_wallet_name.*
-import kotlinx.android.synthetic.main.fragment_restore_private_key.*
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
 
 /**
  * Created by Corey on 2/22/2018
@@ -17,8 +17,6 @@ import kotlinx.android.synthetic.main.fragment_restore_private_key.*
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
- *
  */
 class RestoreWalletPrivateKeyFragment : BaseFragment() {
 

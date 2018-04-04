@@ -3,7 +3,7 @@ package org.loopring.looprwallet.transfer.fragments
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.view.View
-import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.transfer.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.setupWithFab

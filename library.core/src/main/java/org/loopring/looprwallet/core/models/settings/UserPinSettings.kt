@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.models.settings
 
-import com.caplaninnovations.looprwallet.BuildConfig
+import org.loopring.looprwallet.core.utilities.BuildUtility
 import java.util.*
 
 /**
@@ -15,7 +15,7 @@ class UserPinSettings(private val looprSecureSettings: LooprSecureSettings) {
 
     companion object {
         private const val MAX_NUMBER_OF_SEQUENTIAL_GUESSES = 4
-        private val LOCKOUT_TIME_MILLIS: Long = BuildConfig.SECURITY_LOCKOUT_TIME
+        private val LOCKOUT_TIME_MILLIS: Long = BuildUtility.SECURITY_LOCKOUT_TIME
 
         /**
          * The key used to retrieve the user's PIN

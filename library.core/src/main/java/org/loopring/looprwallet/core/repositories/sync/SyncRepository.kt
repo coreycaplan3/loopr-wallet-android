@@ -1,9 +1,9 @@
 package org.loopring.looprwallet.core.repositories.sync
 
-import com.caplaninnovations.looprwallet.models.user.SyncData
+import io.realm.RealmModel
+import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRepository
-import io.realm.RealmModel
 import java.util.*
 
 /**

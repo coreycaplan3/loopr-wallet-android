@@ -8,16 +8,18 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import org.loopring.looprwallet.core.R
+import kotlinx.android.synthetic.main.fragment_select_address.*
+import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
+import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
+import org.loopring.looprwallet.contacts.fragments.contacts.ViewContactsFragment
+import org.loopring.looprwallet.contacts.models.Contact
 import org.loopring.looprwallet.core.animations.ToolbarToSearchAnimation
-import com.caplaninnovations.looprwallet.dialogs.CreateContactDialog
+import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import com.caplaninnovations.looprwallet.fragments.contacts.ViewContactsFragment
-import org.loopring.looprwallet.core.handlers.BarcodeCaptureHandler
-import com.caplaninnovations.looprwallet.models.user.Contact
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
+import org.loopring.looprwallet.transfer.R
 
 /**
  * Created by Corey Caplan on 3/10/18.
@@ -50,7 +52,10 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.let { BarcodeCaptureHandler.setupBarcodeScanner(it, barcodeScannerButton) }
+        activity?.let {
+//            TODO
+//            BarcodeCaptureHandler.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, barcodeScannerButton)
+        }
 
         searchQuery = savedInstanceState?.getString(KEY_SEARCH_QUERY)
         selectedContactAddress = savedInstanceState?.getString(KEY_SELECTED_CONTACT)

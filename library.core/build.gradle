@@ -19,34 +19,39 @@ android {
 
     buildTypes {
         debug {
-
+            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "2000L"
+            buildConfigField "Long", "DEFAULT_NETWORK_TIMEOUT", "1000L" // Used for testing
         }
         staging {
-
+            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "15000L"
+            buildConfigField "Long", "DEFAULT_NETWORK_TIMEOUT", "3000L" // Used for testing
         }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "15000L"
+            buildConfigField "Long", "DEFAULT_NETWORK_TIMEOUT", "3000L" // Used for testing
         }
     }
+
+    publishNonDefault true
+
 }
 
 realm {
     kotlinExtensionsEnabled = true
 }
 
-kapt {
-    useBuildCache = true
+androidExtensions {
+    experimental = true
 }
 
 kotlin {
     experimental {
-        coroutines 'enable'
+        coroutines "enable"
     }
 }
 
-androidExtensions {
-    experimental = true
+kapt {
+    useBuildCache = true
 }
 
 dependencies {
@@ -73,7 +78,7 @@ dependencies {
     api gradle.web3j
 
     // Dagger Dependency Injection
-    api gradle.dagger
+    implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler
 
@@ -112,17 +117,17 @@ dependencies {
      */
 
     // Unit Testing
-    testImplementation gradle.junit
-    testImplementation gradle.mockito
+    testApi gradle.junit
+    testApi gradle.mockito
     kaptTest gradle.daggerCompiler
 
     // Android Testing and Integration Tests
-    androidTestImplementation gradle.junit
-    androidTestImplementation gradle.mockito
-    androidTestImplementation gradle.rules
-    androidTestImplementation gradle.runner
-    androidTestImplementation gradle.espressoContrib
-    androidTestImplementation gradle.espressoCore
-    androidTestImplementation gradle.espressoIntents
+    androidTestApi gradle.junit
+    androidTestApi gradle.mockito
+    androidTestApi gradle.rules
+    androidTestApi gradle.runner
+    androidTestApi gradle.espressoContrib
+    androidTestApi gradle.espressoCore
+    androidTestApi gradle.espressoIntents
     kaptAndroidTest gradle.daggerCompiler
 }

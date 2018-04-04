@@ -6,15 +6,15 @@ import android.os.Bundle
 import android.support.v4.app.TaskStackBuilder
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
-import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.models.settings.ThemeSettings
-import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.SettingsActivity
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp.MainApplicationUtility
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
+import org.loopring.looprwallet.core.models.settings.ThemeSettings
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import javax.inject.Inject
 
 /**
@@ -57,7 +57,7 @@ class HomeSettingsFragment : BaseSettingsFragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        LooprWalletCoreApp.dagger.inject(this)
+        coreLooprComponent.inject(this)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -85,7 +85,7 @@ class HomeSettingsFragment : BaseSettingsFragment() {
                 // back stack.
                 activity?.let {
                     TaskStackBuilder.create(it)
-                            .addNextIntent(Intent(it, MainApplicationUtility.clazz))
+                            .addNextIntent(Intent(it, LooprWalletCoreApp.mainClass))
                             .addNextIntent(Intent(it, SettingsActivity::class.java))
                             .startActivities()
                 }

@@ -4,17 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
-import org.loopring.looprwallet.core.activities.BaseActivity
-import com.caplaninnovations.looprwallet.activities.MainActivity
-import com.caplaninnovations.looprwallet.activities.SecurityActivity
-import com.caplaninnovations.looprwallet.activities.SignInActivity
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettings
-import com.caplaninnovations.looprwallet.models.android.settings.UserWalletSettings
-import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
-import org.loopring.looprwallet.core.extensions.loge
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.android.CipherClient
+import org.loopring.looprwallet.appsecurity.activities.SecurityActivity
+import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.models.settings.LooprSecureSettings
+import org.loopring.looprwallet.core.models.settings.UserWalletSettings
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
 
 /**
  * Created by Corey on 3/5/2018
@@ -45,7 +44,7 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
     override fun selectNewCurrentWallet(newCurrentWallet: String, currentActivity: BaseActivity) {
         walletSettings.selectCurrentWallet(newCurrentWallet)
 
-        val intent = Intent(currentActivity, MainActivity::class.java)
+        val intent = Intent(currentActivity, LooprWalletCoreApp.mainClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         currentActivity.startActivity(intent)
     }
@@ -53,7 +52,7 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
     override fun getCurrentWallet(): LooprWallet? = walletSettings.getCurrentWallet()
 
     override fun onNoCurrentWalletSelected(currentActivity: BaseActivity) {
-        val intent = Intent(currentActivity, SignInActivity::class.java)
+        val intent = Intent(currentActivity, LooprWalletCoreApp.signInClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         currentActivity.startActivity(intent)
         currentActivity.finish()
@@ -97,7 +96,7 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
         return try {
             Realm.deleteRealm(configuration)
         } catch (e: Exception) {
-            loge("An addErrorObserver occurred while deleting the Realm!", e)
+            loge("An error occurred while deleting the Realm!", e)
             false
         }
     }

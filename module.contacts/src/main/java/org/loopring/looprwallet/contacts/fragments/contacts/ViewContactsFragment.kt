@@ -5,16 +5,18 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.View
-import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
-import org.loopring.looprwallet.core.extensions.weakReference
-import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
 import io.realm.RealmList
+import kotlinx.android.synthetic.main.fragment_view_contacts.*
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.adapters.contacts.ContactsAdapter
 import org.loopring.looprwallet.contacts.models.Contact
 import org.loopring.looprwallet.contacts.viewmodels.contacts.ContactsByAddressViewModel
 import org.loopring.looprwallet.contacts.viewmodels.contacts.ContactsByNameViewModel
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
+import org.loopring.looprwallet.core.extensions.weakReference
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
 
 /**
  * Created by Corey on 3/30/2018

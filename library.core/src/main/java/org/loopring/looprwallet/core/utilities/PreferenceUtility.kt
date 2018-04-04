@@ -9,7 +9,6 @@ import android.support.v7.preference.PreferenceManager.KEY_HAS_SET_DEFAULT_VALUE
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.R.xml
 import org.loopring.looprwallet.core.application.LooprWalletCoreApp
-import org.loopring.looprwallet.core.models.android.settings.LooprSettings
 import org.loopring.looprwallet.core.models.settings.LooprSettings
 
 /**

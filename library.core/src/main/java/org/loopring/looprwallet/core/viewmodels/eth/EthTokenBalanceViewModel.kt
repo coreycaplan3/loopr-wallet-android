@@ -2,17 +2,18 @@ package org.loopring.looprwallet.core.viewmodels.eth
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
-import com.caplaninnovations.looprwallet.models.crypto.CryptoToken
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
-import com.caplaninnovations.looprwallet.models.user.SyncData
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.networking.ethplorer.EthplorerService
-import com.caplaninnovations.looprwallet.repositories.eth.EthTokenRepository
-import org.loopring.looprwallet.core.repositories.sync.SyncRepository
-import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import io.realm.Realm
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.runBlocking
+import org.loopring.looprwallet.core.cryptotokens.CryptoToken
+import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.extensions.update
+import org.loopring.looprwallet.core.models.sync.SyncData
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
+import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
+import org.loopring.looprwallet.core.repositories.sync.SyncRepository
+import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.util.*
 
 /**

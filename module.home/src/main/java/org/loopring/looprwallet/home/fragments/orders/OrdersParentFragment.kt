@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
 import android.view.ViewGroup
-import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
-import org.loopring.looprwallet.core.handlers.BottomNavigationHandler
+import org.loopring.looprwallet.home.handlers.BottomNavigationHandler
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.logd
 

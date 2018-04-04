@@ -4,18 +4,22 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
 import androidx.os.bundleOf
-import org.loopring.looprwallet.core.R
+import kotlinx.android.synthetic.main.card_enter_wallet_password.*
+import kotlinx.android.synthetic.main.card_wallet_name.*
+import kotlinx.android.synthetic.main.fragment_sign_in_enter_password.*
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.longToast
+import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletRememberPhraseFragment
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import org.loopring.looprwallet.core.utilities.ViewUtility
 import org.loopring.looprwallet.core.validators.PasswordValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
-import com.caplaninnovations.looprwallet.viewmodels.wallet.WalletGeneratorViewModel
+import org.loopring.looprwallet.walletsignin.R
+import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
+import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletRememberPhraseFragment
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
 
 /**
  * Created by Corey on 3/2/2018

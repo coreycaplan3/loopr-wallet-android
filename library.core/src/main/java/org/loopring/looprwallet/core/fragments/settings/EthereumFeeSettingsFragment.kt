@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.preference.Preference
 import android.support.v7.preference.SeekBarPreference
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.settings.EthereumFeeSettings.Companion.DEFAULT_GAS_PRICE
 import org.loopring.looprwallet.core.models.settings.EthereumFeeSettings.Companion.DEFAULT_TRANSFER_ETHER_GAS_LIMIT
@@ -38,7 +38,7 @@ class EthereumFeeSettingsFragment : BaseSettingsFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        LooprWalletCoreApp.dagger.inject(this)
+        coreLooprComponent.inject(this)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

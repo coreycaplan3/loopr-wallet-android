@@ -1,8 +1,8 @@
 package org.loopring.looprwallet.core.viewmodels.eth
 
-import com.caplaninnovations.looprwallet.networking.eth.EthereumService
-import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import kotlinx.coroutines.experimental.async
+import org.loopring.looprwallet.core.networking.eth.EthereumService
+import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import org.web3j.crypto.Credentials
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.math.BigDecimal

@@ -19,7 +19,10 @@ import android.support.v4.view.ViewGroupCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ProgressBar
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
@@ -143,7 +146,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if (activity is MainActivity) {
+        if (LooprWalletCoreApp.mainClass.isInstance(activity)) {
             // Only the MainActivity can have the main_menu. This helps maintain the backstack in
             // case the user needs to recreate the back stack inside the Settings Activity.
             menu.clear()

@@ -4,7 +4,12 @@ import android.os.Bundle
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
+import org.loopring.looprwallet.core.fragments.security.BaseSecurityFragment
+import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
+import org.loopring.looprwallet.core.fragments.security.EnterNewSecurityFragment
+import org.loopring.looprwallet.core.fragments.security.OnSecurityChangeListener
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.DEFAULT_SECURITY_TIMEOUT
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.KEY_SECURITY_TIMEOUT
@@ -12,7 +17,6 @@ import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
-import org.loopring.looprwallet.settings.R
 import javax.inject.Inject
 
 
@@ -36,7 +40,7 @@ class SecuritySettingsFragment : BaseSettingsFragment(), OnSecurityChangeListene
     lateinit var securitySettings: SecuritySettings
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        LooprWalletCoreApp.dagger.inject(this)
+        coreLooprComponent.inject(this)
 
         addPreferencesFromResource(R.xml.settings_security)
     }

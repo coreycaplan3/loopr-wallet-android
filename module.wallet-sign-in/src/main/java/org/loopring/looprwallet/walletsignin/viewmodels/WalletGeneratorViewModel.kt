@@ -2,28 +2,33 @@ package org.loopring.looprwallet.walletsignin.viewmodels
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.content.Intent
 import android.support.annotation.StringRes
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
-import org.loopring.looprwallet.core.R
+import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.extensions.snackbar
 import org.loopring.looprwallet.core.extensions.toArrayList
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.FilesUtility
+import org.loopring.looprwallet.core.utilities.RegexUtility
+import org.loopring.looprwallet.core.wallet.WalletClient
+import org.loopring.looprwallet.walletsignin.R
+import org.loopring.looprwallet.walletsignin.dagger.walletLooprComponent
 import org.loopring.looprwallet.walletsignin.handlers.WalletCreationHandler
-import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationResult
-import org.loopring.looprwallet.core.utilities.*
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
-import kotlinx.coroutines.experimental.async
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
 import org.web3j.crypto.CipherException
 import org.web3j.crypto.Credentials
 import org.web3j.crypto.MnemonicUtils
 import org.web3j.crypto.WalletUtils
 import java.io.File
 import java.security.SecureRandom
+import javax.inject.Inject
 
 /**
  * Created by Corey on 2/25/2018
@@ -62,8 +67,10 @@ class WalletGeneratorViewModel : ViewModel() {
 
             walletGeneratorViewModel.walletCreation.observeForDoubleSpend(fragment, {
                 if (it.isSuccessful) {
-                    activity?.startActivity(MainActivity.createIntent())
-                    activity?.finish()
+                    activity?.let {
+                        it.startActivity(Intent(it, LooprWalletCoreApp.mainClass))
+                        it.finish()
+                    }
                 } else {
                     it.error?.let { fragment.view?.snackbar(it) }
                 }
@@ -85,7 +92,8 @@ class WalletGeneratorViewModel : ViewModel() {
 
     }
 
-    private val securityClient = LooprWalletCoreApp.application.walletClient
+    @Inject
+    lateinit var walletClient: WalletClient
 
     /**
      * Tracks whether or not wallet creation is running.
@@ -100,9 +108,13 @@ class WalletGeneratorViewModel : ViewModel() {
 
     val walletPhraseGeneration = MutableLiveData<WalletCreationPhrase>()
 
+    init {
+        walletLooprComponent.inject(this)
+    }
+
     fun createCredentialsWallet(walletName: String, privateKey: String) = createWalletAsync {
         val credentials = Credentials.create(privateKey)
-        WalletCreationHandler(walletName, credentials, securityClient).createWallet()
+        WalletCreationHandler(walletName, credentials, walletClient).createWallet()
     }
 
     /**
@@ -121,7 +133,7 @@ class WalletGeneratorViewModel : ViewModel() {
             when (generatedFile.renameTo(credentialFile)) {
                 true -> {
                     val credentials = WalletUtils.loadCredentials(password, credentialFile)
-                    WalletCreationHandler(walletName, credentials, securityClient).createWallet()
+                    WalletCreationHandler(walletName, credentials, walletClient).createWallet()
                 }
                 false -> {
                     loge("Could not rename generated currentWallet file in filesDirectory!", IllegalStateException())
@@ -141,7 +153,7 @@ class WalletGeneratorViewModel : ViewModel() {
     fun loadKeystoreWallet(walletName: String, password: String, file: File) = createWalletAsync {
         try {
             val credentials = WalletUtils.loadCredentials(password, file)
-            WalletCreationHandler(walletName, credentials, securityClient).createWallet()
+            WalletCreationHandler(walletName, credentials, walletClient).createWallet()
         } catch (e: Exception) {
             if (e is CipherException) {
                 WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
@@ -198,7 +210,7 @@ class WalletGeneratorViewModel : ViewModel() {
             }
 
             val credentials = WalletUtils.loadBip39Credentials(password, phraseAsString.toString())
-            WalletCreationHandler(walletName, credentials, securityClient).createWallet()
+            WalletCreationHandler(walletName, credentials, walletClient).createWallet()
         } catch (e: Exception) {
             if (e is CipherException) {
                 WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))

@@ -1,13 +1,15 @@
 package org.loopring.looprwallet.core.repositories.eth
 
 import android.arch.lifecycle.LiveData
-import org.loopring.looprwallet.core.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.cryptotokens.TokenBalanceInfo
-import org.loopring.looprwallet.core.cryptotokens.EthToken
 import io.realm.Realm
 import io.realm.kotlin.where
+import org.loopring.looprwallet.core.cryptotokens.CryptoToken
+import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.cryptotokens.TokenBalanceInfo
+import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.mapIfNull
+import org.loopring.looprwallet.core.extensions.notEqualTo
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 

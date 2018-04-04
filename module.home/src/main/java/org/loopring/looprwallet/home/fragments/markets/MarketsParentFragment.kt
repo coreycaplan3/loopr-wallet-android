@@ -3,12 +3,12 @@ package org.loopring.looprwallet.home.fragments.markets
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.view.ViewGroup
-import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
-import org.loopring.looprwallet.core.handlers.BottomNavigationHandler
+import org.loopring.looprwallet.home.handlers.BottomNavigationHandler
 
 /**
  * Created by Corey on 1/17/2018.

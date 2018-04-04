@@ -1,10 +1,10 @@
 package org.loopring.looprwallet.walletsignin.handlers
 
-import org.loopring.looprwallet.core.R
-import com.caplaninnovations.looprwallet.models.security.WalletClient
-import com.caplaninnovations.looprwallet.models.wallet.creation.WalletCreationResult
+import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.wallet.WalletClient
 import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationResult
 import org.web3j.crypto.Credentials
 import org.web3j.utils.Numeric
 
@@ -41,7 +41,7 @@ class WalletCreationHandler(
 
         return when (walletClient.createWallet(walletName.toLowerCase(), privateKey)) {
             true -> WalletCreationResult(true, null)
-            false -> WalletCreationResult(false, str(R.string.error_wallet_already_exists))
+            else -> WalletCreationResult(false, str(R.string.error_wallet_already_exists))
         }
     }
 

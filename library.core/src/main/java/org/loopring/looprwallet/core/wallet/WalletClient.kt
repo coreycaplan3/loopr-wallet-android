@@ -2,11 +2,10 @@ package org.loopring.looprwallet.core.wallet
 
 import android.app.Activity
 import android.content.Context
-import com.caplaninnovations.looprwallet.activities.*
-import com.caplaninnovations.looprwallet.models.android.settings.*
-import com.caplaninnovations.looprwallet.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.models.settings.LooprSecureSettings
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
 
 /**
  *  Created by Corey on 2/4/2018

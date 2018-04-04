@@ -3,23 +3,22 @@ package org.loopring.looprwallet.tokendetails
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import org.loopring.looprwallet.core.R
-import com.caplaninnovations.looprwallet.models.trading.TradingPair
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.models.trading.TradingPair
 
 class TradingPairDetailsActivity : BaseActivity() {
 
-    object IntentCreator {
+    companion object {
 
-        private const val tagTradingPair = "_TradingPair"
+        private const val KEY_TRADING_PAIR = "_TRADING_PAIR"
 
-        fun createIntent(tradingPair: TradingPair, context: Context): Intent {
+        fun route(tradingPair: TradingPair, context: Context): Intent {
             return Intent(context, TradingPairDetailsActivity::class.java)
-                    .putExtra(tagTradingPair, tradingPair.ticker)
+                    .putExtra(KEY_TRADING_PAIR, tradingPair.ticker)
         }
 
-        internal fun getFromIntent(intent: Intent): String {
-            return intent.getStringExtra(tagTradingPair)
+        private fun getPairFromIntent(intent: Intent): String {
+            return intent.getStringExtra(KEY_TRADING_PAIR)
         }
 
     }
@@ -33,7 +32,7 @@ class TradingPairDetailsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val tradingPairPrimaryKey = IntentCreator.getFromIntent(intent)
+        val tradingPairPrimaryKey = getPairFromIntent(intent)
     }
 
 }

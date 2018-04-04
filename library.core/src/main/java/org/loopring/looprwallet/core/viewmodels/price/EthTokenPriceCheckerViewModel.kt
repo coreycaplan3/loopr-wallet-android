@@ -2,17 +2,17 @@ package org.loopring.looprwallet.core.viewmodels.price
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
-import org.loopring.looprwallet.core.extensions.logw
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
-import com.caplaninnovations.looprwallet.models.currency.CurrencyExchangeRate
-import com.caplaninnovations.looprwallet.models.user.SyncData
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.networking.ethplorer.EthplorerService
-import com.caplaninnovations.looprwallet.repositories.eth.EthTokenRepository
-import org.loopring.looprwallet.core.repositories.sync.SyncRepository
-import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
 import io.realm.RealmModel
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.extensions.logw
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
+import org.loopring.looprwallet.core.models.sync.SyncData
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
+import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
+import org.loopring.looprwallet.core.repositories.sync.SyncRepository
+import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
 import java.math.RoundingMode
 
 /**

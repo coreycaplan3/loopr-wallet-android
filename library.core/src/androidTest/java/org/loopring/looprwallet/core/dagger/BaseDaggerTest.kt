@@ -47,7 +47,7 @@ open class BaseDaggerTest {
     @Inject
     lateinit var walletClient: WalletClient
 
-    lateinit var component: LooprTestComponent
+    lateinit var component: CoreLooprTestComponent
 
     val walletName = "loopr-test-${BaseDaggerTest::class.java.simpleName}"
 
@@ -74,7 +74,7 @@ open class BaseDaggerTest {
     fun baseDaggerSetup() {
         val context = instrumentation.targetContext.applicationContext
         val app = (context as TestLooprWalletApp)
-        component = app.looprDaggerComponent as LooprTestComponent
+        component = app.looprDaggerComponent as CoreLooprTestComponent
         component.inject(this)
 
         Intents.init()

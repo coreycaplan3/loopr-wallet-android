@@ -1,12 +1,12 @@
 package org.loopring.looprwallet.core.viewmodels.eth
 
-import com.caplaninnovations.looprwallet.models.crypto.eth.EthToken
+import kotlinx.coroutines.experimental.async
+import org.loopring.looprwallet.core.cryptotokens.EthToken
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import com.caplaninnovations.looprwallet.networking.etherscan.EtherScanService
-import com.caplaninnovations.looprwallet.networking.ethplorer.EthplorerService
+import org.loopring.looprwallet.core.networking.etherscan.EtherScanService
+import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
-import kotlinx.coroutines.experimental.async
 
 /**
  * Created by Corey Caplan on 3/31/18.
