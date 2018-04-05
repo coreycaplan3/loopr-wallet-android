@@ -14,6 +14,8 @@ android {
 
         testInstrumentationRunner "com.caplaninnovations.looprwallet.application.LooprTestRunner"
         vectorDrawables.useSupportLibrary = true
+
+        publishNonDefault true
     }
 
     buildTypes {
@@ -35,6 +37,10 @@ kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+kapt {
+    useBuildCache = true
 }
 
 dependencies {

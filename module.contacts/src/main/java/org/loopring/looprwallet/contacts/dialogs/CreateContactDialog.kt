@@ -5,14 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_create_contact.*
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.dagger.contactsLooprComponent
-import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
+import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.validators.ContactNameValidator
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
 import org.loopring.looprwallet.core.wallet.WalletClient
@@ -67,8 +69,8 @@ class CreateContactDialog : BaseBottomSheetDialog() {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let {
-            //TODO
-//            BarcodeCaptureHandler.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, barcodeScannerButton)
+            val barcodeButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
+            BarcodeCaptureHandler.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, barcodeButton)
         }
 
         if (savedInstanceState == null) {

@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import kotlinx.android.synthetic.main.barcode_button.*
+import android.widget.ImageButton
 import kotlinx.android.synthetic.main.fragment_select_address.*
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
@@ -55,7 +55,8 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let {
-            BarcodeCaptureHandler.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, barcodeScannerButton)
+            val imageButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
+            BarcodeCaptureHandler.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, imageButton)
         }
 
         searchQuery = savedInstanceState?.getString(KEY_SEARCH_QUERY)

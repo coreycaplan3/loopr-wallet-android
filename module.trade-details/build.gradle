@@ -6,8 +6,6 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 27
 
-
-
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 27
@@ -16,6 +14,7 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        publishNonDefault true
     }
 
     buildTypes {
@@ -37,6 +36,10 @@ kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+kapt {
+    useBuildCache = true
 }
 
 dependencies {
