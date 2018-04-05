@@ -1,13 +1,12 @@
 package org.loopring.looprwallet.core.cryptotokens
 
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
-import io.realm.annotations.Required
 import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import java.math.BigDecimal
 import java.util.*
 
@@ -42,7 +41,6 @@ open class EthToken(
 
         var binary: String? = null,
 
-        @Required
         override var tokenBalances: RealmList<TokenBalanceInfo> = RealmList(),
 
         priceInUsd: BigDecimal? = null,

@@ -12,9 +12,9 @@ import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.dagger.contactsLooprComponent
+import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
-import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.validators.ContactNameValidator
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
 import org.loopring.looprwallet.core.wallet.WalletClient

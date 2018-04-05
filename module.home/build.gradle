@@ -48,4 +48,8 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compile project(path: ':module.trade-details')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

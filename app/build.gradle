@@ -93,7 +93,6 @@ android {
 }
 
 dependencies {
-    implementation project(':library.core')
     implementation project(':module.barcode')
     implementation project(':module.contacts')
     implementation project(':module.home')
@@ -102,7 +101,6 @@ dependencies {
     implementation project(':module.trade-details')
     implementation project(':module.transfer')
     implementation project(':module.wallet-sign-in')
-
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Android Multidex for apps with more than 65,536 methods
@@ -112,6 +110,8 @@ dependencies {
     implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 repositories {

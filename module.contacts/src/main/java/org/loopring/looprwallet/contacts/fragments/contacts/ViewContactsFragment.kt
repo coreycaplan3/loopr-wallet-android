@@ -9,13 +9,13 @@ import io.realm.RealmList
 import kotlinx.android.synthetic.main.fragment_view_contacts.*
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.adapters.contacts.ContactsAdapter
-import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.contacts.viewmodels.contacts.ContactsByAddressViewModel
 import org.loopring.looprwallet.contacts.viewmodels.contacts.ContactsByNameViewModel
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
 
 /**

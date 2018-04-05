@@ -1,13 +1,14 @@
 // Android Native Libraries
+gradle.ext.constraint = "com.android.support.constraint:constraint-layout:1.0.2"
+
 ext.androidNativeVersion = '27.1.0'
 gradle.ext.support = "com.android.support:support-v4:$androidNativeVersion"
 gradle.ext.appcompat = "com.android.support:appcompat-v7:$androidNativeVersion"
 gradle.ext.cardview = "com.android.support:cardview-v7:$androidNativeVersion"
-gradle.ext.constraint = 'com.android.support.constraint:constraint-layout:1.0.2'
 gradle.ext.customtabs = "com.android.support:customtabs:$androidNativeVersion"
 gradle.ext.design = "com.android.support:design:$androidNativeVersion"
 gradle.ext.recyclerview = "com.android.support:recyclerview-v7:$androidNativeVersion"
-gradle.ext.support = "com.android.support:support-vector-drawable:$androidNativeVersion"
+gradle.ext.vectorDrawable = "com.android.support:support-vector-drawable:$androidNativeVersion"
 gradle.ext.preference = "com.android.support:preference-v14:$androidNativeVersion"
 
 // Architecture Components

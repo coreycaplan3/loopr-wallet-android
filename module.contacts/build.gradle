@@ -7,8 +7,6 @@ apply plugin: 'realm-android'
 android {
     compileSdkVersion 27
 
-
-
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 27
@@ -45,13 +43,21 @@ kapt {
     useBuildCache = true
 }
 
+realm {
+    kotlinExtensionsEnabled = true
+}
+
 dependencies {
-    implementation project(':library.core')
-    implementation project(path: ':module.barcode')
+    compile project(':library.core')
+    compile project(':module.barcode')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

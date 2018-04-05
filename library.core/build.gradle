@@ -37,10 +37,6 @@ android {
 
 }
 
-realm {
-    kotlinExtensionsEnabled = true
-}
-
 androidExtensions {
     experimental = true
 }
@@ -55,6 +51,10 @@ kapt {
     useBuildCache = true
 }
 
+realm {
+    kotlinExtensionsEnabled = true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -66,7 +66,7 @@ dependencies {
     api gradle.customtabs
     api gradle.design
     api gradle.recyclerview
-    api gradle.support
+    api gradle.vectorDrawable
     api gradle.preference
 
     // Architecture Components
@@ -131,4 +131,8 @@ dependencies {
     androidTestApi gradle.espressoCore
     androidTestApi gradle.espressoIntents
     kaptAndroidTest gradle.daggerCompiler
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

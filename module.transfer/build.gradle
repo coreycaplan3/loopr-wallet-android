@@ -54,4 +54,8 @@ dependencies {
     implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
