@@ -5,7 +5,7 @@ import android.arch.lifecycle.LiveData
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.viewmodels.OfflineOnlyViewModel
 import io.realm.RealmResults
-import org.loopring.looprwallet.contacts.models.Contact
+import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
 
 /**

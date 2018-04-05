@@ -3,7 +3,7 @@ package org.loopring.looprwallet.contacts.adapters.contacts
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import org.loopring.looprwallet.contacts.R
-import org.loopring.looprwallet.contacts.models.Contact
+import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.extensions.inflate

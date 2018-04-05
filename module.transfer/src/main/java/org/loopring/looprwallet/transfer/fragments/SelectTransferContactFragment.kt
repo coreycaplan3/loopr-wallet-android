@@ -8,13 +8,11 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import kotlinx.android.synthetic.main.fragment_select_address.*
 import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.contacts.fragments.contacts.ViewContactsFragment
-import org.loopring.looprwallet.contacts.models.Contact
+import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.animations.ToolbarToSearchAnimation
-import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
