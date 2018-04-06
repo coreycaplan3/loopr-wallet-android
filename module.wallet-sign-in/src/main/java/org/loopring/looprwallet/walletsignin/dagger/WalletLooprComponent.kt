@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.walletsignin.dagger
 
 import dagger.Component
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.CoreLooprComponent
 import org.loopring.looprwallet.core.dagger.LooprComponentScope
 import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
@@ -27,4 +27,4 @@ interface WalletLooprComponentProvider {
 }
 
 val walletLooprComponent: WalletLooprComponent
-    get() = (LooprWalletCoreApp.application as WalletLooprComponentProvider).provideWalletLooprComponent()
+    get() = (CoreLooprWalletApp.application as WalletLooprComponentProvider).provideWalletLooprComponent()

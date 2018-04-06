@@ -3,8 +3,6 @@ package org.loopring.looprwallet.core.utilities
 import android.Manifest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
-import com.caplaninnovations.looprwallet.activities.TestActivity
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
 import org.junit.After
 
 import org.junit.Test
@@ -12,6 +10,8 @@ import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
+import org.loopring.looprwallet.core.activities.TestActivity
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import java.io.File
 
 /**

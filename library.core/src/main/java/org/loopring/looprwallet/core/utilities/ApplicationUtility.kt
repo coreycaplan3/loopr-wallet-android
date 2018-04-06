@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.utilities
 
 import android.support.annotation.*
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 
 /**
  * Created by Corey Caplan on 1/19/18.
@@ -15,43 +15,43 @@ object ApplicationUtility {
 
     /**
      * @param resId The string resource
-     * @return Gets a string using the [LooprWalletCoreApp] application instance
+     * @return Gets a string using the [CoreLooprWalletApp] application instance
      */
-    fun bool(@BoolRes resId: Int) = LooprWalletCoreApp.application.resources.getBoolean(resId)
+    fun bool(@BoolRes resId: Int) = CoreLooprWalletApp.application.resources.getBoolean(resId)
 
     /**
      * @param resId The string resource
-     * @return Gets a string using the [LooprWalletCoreApp] application instance
+     * @return Gets a string using the [CoreLooprWalletApp] application instance
      */
-    fun int(@IntegerRes resId: Int) = LooprWalletCoreApp.application.resources.getInteger(resId)
+    fun int(@IntegerRes resId: Int) = CoreLooprWalletApp.application.resources.getInteger(resId)
 
     /**
      * @param resId The string resource
-     * @return Gets a string using the [LooprWalletCoreApp] application instance
+     * @return Gets a string using the [CoreLooprWalletApp] application instance
      */
-    fun str(@StringRes resId: Int) = LooprWalletCoreApp.application.getString(resId)!!
+    fun str(@StringRes resId: Int) = CoreLooprWalletApp.application.getString(resId)!!
 
     /**
      * @param resId The string resource
-     * @return Gets a string array using the [LooprWalletCoreApp] application instance
+     * @return Gets a string array using the [CoreLooprWalletApp] application instance
      */
-    fun strArray(@ArrayRes resId: Int) = LooprWalletCoreApp.application.resources.getStringArray(resId)!!
+    fun strArray(@ArrayRes resId: Int) = CoreLooprWalletApp.application.resources.getStringArray(resId)!!
 
 
     /**
      * @param resId The dimension resource
-     * @return Gets a dimension using the [LooprWalletCoreApp] application instance
+     * @return Gets a dimension using the [CoreLooprWalletApp] application instance
      */
-    fun dimen(@DimenRes resId: Int) = LooprWalletCoreApp.application.resources.getDimension(resId)
+    fun dimen(@DimenRes resId: Int) = CoreLooprWalletApp.application.resources.getDimension(resId)
 
     /**
      * @param resId The dimension resource
-     * @return Gets a dimension using the [LooprWalletCoreApp] application instance
+     * @return Gets a dimension using the [CoreLooprWalletApp] application instance
      */
     @Suppress("deprecation")
-    fun color(@ColorRes resId: Int) = LooprWalletCoreApp.application.resources.getColor(resId)
+    fun color(@ColorRes resId: Int) = CoreLooprWalletApp.application.resources.getColor(resId)
 
     @Suppress("deprecation")
-    fun drawable(@DrawableRes resId: Int) = LooprWalletCoreApp.application.resources.getDrawable(resId)
+    fun drawable(@DrawableRes resId: Int) = CoreLooprWalletApp.application.resources.getDrawable(resId)
 
 }

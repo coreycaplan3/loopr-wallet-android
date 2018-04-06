@@ -12,6 +12,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import java.util.concurrent.FutureTask
 
 /**

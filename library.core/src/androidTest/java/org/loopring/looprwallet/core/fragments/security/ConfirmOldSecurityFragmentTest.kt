@@ -3,7 +3,8 @@ package org.loopring.looprwallet.core.fragments.security
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.withText
-import com.caplaninnovations.looprwallet.BuildConfig.SECURITY_LOCKOUT_TIME
+import kotlinx.android.synthetic.main.fragment_security_pin.*
+import kotlinx.android.synthetic.main.number_pad.*
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.containsString
@@ -11,6 +12,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.loopring.looprwallet.core.utilities.BuildUtility.SECURITY_LOCKOUT_TIME
 
 /**
  * Created by Corey on 3/27/2018.

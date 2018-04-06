@@ -2,7 +2,7 @@ package org.loopring.looprwallet.contacts.dagger
 
 import dagger.Component
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.CoreLooprComponent
 import org.loopring.looprwallet.core.dagger.LooprComponentScope
 
@@ -27,4 +27,4 @@ interface ContactsLooprComponentProvider {
 }
 
 val contactsLooprComponent: ContactsLooprComponent
-    get() = (LooprWalletCoreApp.application as ContactsLooprComponentProvider).provideContactsLooprComponent()
+    get() = (CoreLooprWalletApp.application as ContactsLooprComponentProvider).provideContactsLooprComponent()

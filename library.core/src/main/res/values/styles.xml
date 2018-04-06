@@ -167,7 +167,6 @@
         <item name="layout">@layout/toolbar_search_view</item>
         <item name="commitIcon">@drawable/ic_search_commit</item>
         <item name="autoCompleteTextViewStyle">@style/App.AutoCompleteTextView</item>
-        <item name="suggestionRowLayout">@layout/view_holder_contact</item>
         <item name="android:maxWidth">9999dp</item>
     </style>
 

@@ -3,7 +3,7 @@ package org.loopring.looprwallet.home.activities
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
@@ -34,7 +34,7 @@ class MainActivity : BaseActivity() {
          * which may have pointed to here
          */
         fun createIntent(): Intent {
-            return Intent(LooprWalletCoreApp.context, MainActivity::class.java)
+            return Intent(CoreLooprWalletApp.context, MainActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }

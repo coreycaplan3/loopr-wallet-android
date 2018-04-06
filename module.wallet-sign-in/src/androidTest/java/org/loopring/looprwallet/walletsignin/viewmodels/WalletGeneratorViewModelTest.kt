@@ -1,10 +1,9 @@
-package org.loopring.looprwallet.core.viewmodels.wallet
+package org.loopring.looprwallet.walletsignin.viewmodels
 
 import org.loopring.looprwallet.core.R
 import org.junit.Test
 
 import org.junit.Assert.*
-import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
 import org.web3j.crypto.CipherException
 
 /**

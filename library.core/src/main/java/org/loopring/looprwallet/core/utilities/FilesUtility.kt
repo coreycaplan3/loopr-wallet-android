@@ -16,7 +16,7 @@ import android.support.annotation.RequiresApi
 import android.support.annotation.RequiresPermission
 import android.support.annotation.StringRes
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.isKitkat
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -64,7 +64,7 @@ object FilesUtility {
     fun saveFileToDownloadFolder(fileToSave: File) {
         val allBytes = fileToSave.readBytes()
 
-        val service = (LooprWalletCoreApp.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager)
+        val service = (CoreLooprWalletApp.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager)
         service.addCompletedDownload(
                 fileToSave.name,
                 String.format(str(R.string.description_keystore_download), fileToSave.name),

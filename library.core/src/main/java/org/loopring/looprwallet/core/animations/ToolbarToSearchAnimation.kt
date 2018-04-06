@@ -11,7 +11,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationSet
 import android.view.animation.TranslateAnimation
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.isLollipop
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.utilities.ViewUtility
@@ -102,7 +102,7 @@ object ToolbarToSearchAnimation {
     }
 
     private fun getOverflowWidth(containsOverflow: Boolean): Int {
-        val resources = LooprWalletCoreApp.context.resources
+        val resources = CoreLooprWalletApp.context.resources
         return if (containsOverflow) {
             resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_overflow_material)
         } else {
@@ -111,7 +111,7 @@ object ToolbarToSearchAnimation {
     }
 
     private fun getMenuWidth(numberOfMenuIcon: Int): Int {
-        val resources = LooprWalletCoreApp.context.resources
+        val resources = CoreLooprWalletApp.context.resources
         val buttonWidth = resources.getDimensionPixelSize(R.dimen.abc_action_button_min_width_material)
         return buttonWidth * numberOfMenuIcon / 2
     }

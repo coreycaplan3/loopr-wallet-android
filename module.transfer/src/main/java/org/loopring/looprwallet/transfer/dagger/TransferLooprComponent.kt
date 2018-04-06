@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.transfer.dagger
 
 import dagger.Component
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.CoreLooprComponent
 import org.loopring.looprwallet.core.dagger.LooprComponentScope
 import org.loopring.looprwallet.transfer.fragments.CreateTransferAmountFragment
@@ -26,4 +26,4 @@ interface TransferLooprComponentProvider {
 }
 
 val transferLooprComponent: TransferLooprComponent
-    get() = (LooprWalletCoreApp.application as TransferLooprComponentProvider).provideTransferLooprComponent()
+    get() = (CoreLooprWalletApp.application as TransferLooprComponentProvider).provideTransferLooprComponent()

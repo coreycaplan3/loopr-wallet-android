@@ -26,7 +26,7 @@ import org.junit.After
 class BaseActivityTest : BaseDaggerTest() {
 
     @get:Rule
-    val activityRule = ActivityTestRule<MainActivity>(MainActivity::class.java, false, false)
+    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java, false, false)
 
     private val activity by lazy {
         activityRule.activity
@@ -39,7 +39,7 @@ class BaseActivityTest : BaseDaggerTest() {
     @Before
     fun setup() {
         activityRule.launchActivity(null)
-        activityMonitor = instrumentation.addMonitor(MainActivity::class.java.name, null, false)
+        activityMonitor = instrumentation.addMonitor(TestActivity::class.java.name, null, false)
 
         waitForActivityToBeSetup()
     }

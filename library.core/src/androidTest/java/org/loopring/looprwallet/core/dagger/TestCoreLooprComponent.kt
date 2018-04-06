@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.dagger
 
-import dagger.Subcomponent
+import dagger.Component
 import org.loopring.looprwallet.core.models.settings.ThemeSettingsTest
 import org.loopring.looprwallet.core.models.settings.UserWalletSettingsTest
 
@@ -12,10 +12,13 @@ import org.loopring.looprwallet.core.models.settings.UserWalletSettingsTest
  * Purpose of Class:
  *
  */
-@Subcomponent
-interface CoreLooprTestComponent : CoreLooprComponent {
+@LooprComponentScope
+@Component(dependencies = [CoreLooprComponent::class])
+interface TestCoreLooprComponent {
 
     fun inject(baseDaggerTest: BaseDaggerTest)
+
     fun inject(themeSettingsTest: ThemeSettingsTest)
+
     fun inject(walletSettingsTest: UserWalletSettingsTest)
 }

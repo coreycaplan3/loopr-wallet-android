@@ -2,6 +2,7 @@
     package="org.loopring.looprwallet.barcode">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application>
 
         <activity android:name=".activities.BarcodeCaptureActivity" />

@@ -2,7 +2,7 @@ package org.loopring.looprwallet.core.validators
 
 import android.support.design.widget.TextInputLayout
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.utilities.RegexUtility
 
 /**
@@ -22,7 +22,7 @@ open class WalletNameValidator(
         onChangeListener: () -> Unit
 ) : BaseValidator(textInputLayout, onChangeListener) {
 
-    private val nameMaxLength = LooprWalletCoreApp.context.resources.getInteger(R.integer.name_max_length)
+    private val nameMaxLength = CoreLooprWalletApp.context.resources.getInteger(R.integer.name_max_length)
 
     override fun isValid(text: String?): Boolean {
         return when {

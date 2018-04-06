@@ -8,7 +8,7 @@ import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.extensions.snackbar
@@ -68,7 +68,7 @@ class WalletGeneratorViewModel : ViewModel() {
             walletGeneratorViewModel.walletCreation.observeForDoubleSpend(fragment, {
                 if (it.isSuccessful) {
                     activity?.let {
-                        it.startActivity(Intent(it, LooprWalletCoreApp.mainClass))
+                        it.startActivity(Intent(it, CoreLooprWalletApp.mainClass))
                         it.finish()
                     }
                 } else {
@@ -241,7 +241,7 @@ class WalletGeneratorViewModel : ViewModel() {
      * not being Android compatible
      */
     private fun populateWordListFromAssets() {
-        val stream = LooprWalletCoreApp.context.assets.open("en-mnemonic-word-list.txt")
+        val stream = CoreLooprWalletApp.context.assets.open("en-mnemonic-word-list.txt")
         val lines = stream.bufferedReader().readLines()
 
         val field = MnemonicUtils::class.java.getDeclaredField("WORD_LIST")

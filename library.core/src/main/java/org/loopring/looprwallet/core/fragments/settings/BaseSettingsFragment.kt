@@ -12,7 +12,7 @@ import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.SeekBarPreference
 import android.view.View
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.allNonNull
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.models.settings.LooprSettings
@@ -158,7 +158,7 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
     ) {
         val preference = findPreference(preferenceKey)
 
-        preference.preferenceDataStore = LooprSettings.getInstance(LooprWalletCoreApp.context).preferenceDataStore
+        preference.preferenceDataStore = LooprSettings.getInstance(CoreLooprWalletApp.context).preferenceDataStore
 
         val icon = preference.icon
         val textColorResource = context?.theme?.getResourceIdFromAttrId(android.R.attr.textColorSecondary)
@@ -173,7 +173,7 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
         preference.onPreferenceClickListener = this
 
         // Trigger the listener immediately with the preference's current value.
-        val settings = LooprSettings.getInstance(LooprWalletCoreApp.context)
+        val settings = LooprSettings.getInstance(CoreLooprWalletApp.context)
 
         if (preference is SeekBarPreference) {
             val value = settings.getInt(preference.key, defaultValue.toInt())

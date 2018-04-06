@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.activities
+package org.loopring.looprwallet.core.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,9 +7,7 @@ import android.support.annotation.RestrictTo.Scope.TESTS
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
-import com.caplaninnovations.looprwallet.R
-import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.mapIfNull
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
 

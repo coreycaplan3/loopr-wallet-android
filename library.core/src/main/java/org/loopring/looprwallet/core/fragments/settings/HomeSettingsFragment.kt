@@ -11,7 +11,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.SettingsActivity
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.models.settings.ThemeSettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
@@ -85,7 +85,7 @@ class HomeSettingsFragment : BaseSettingsFragment() {
                 // back stack.
                 activity?.let {
                     TaskStackBuilder.create(it)
-                            .addNextIntent(Intent(it, LooprWalletCoreApp.mainClass))
+                            .addNextIntent(Intent(it, CoreLooprWalletApp.mainClass))
                             .addNextIntent(Intent(it, SettingsActivity::class.java))
                             .startActivities()
                 }

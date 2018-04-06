@@ -11,7 +11,7 @@ import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.
 import kotlinx.coroutines.experimental.delay
 import org.junit.Assert.*
 import org.junit.Test
-import org.loopring.looprwallet.appsecurity.fragments.EnterNewSecurityFragment
+import org.loopring.looprwallet.core.fragments.security.EnterNewSecurityFragment
 
 /**
  * Created by Corey Caplan on 3/29/18.

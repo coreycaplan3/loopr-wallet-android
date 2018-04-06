@@ -9,7 +9,7 @@ import io.realm.RealmConfiguration
 import io.realm.android.CipherClient
 import org.loopring.looprwallet.appsecurity.activities.SecurityActivity
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.models.settings.LooprSecureSettings
 import org.loopring.looprwallet.core.models.settings.UserWalletSettings
@@ -44,7 +44,7 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
     override fun selectNewCurrentWallet(newCurrentWallet: String, currentActivity: BaseActivity) {
         walletSettings.selectCurrentWallet(newCurrentWallet)
 
-        val intent = Intent(currentActivity, LooprWalletCoreApp.mainClass)
+        val intent = Intent(currentActivity, CoreLooprWalletApp.mainClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         currentActivity.startActivity(intent)
     }
@@ -52,7 +52,7 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
     override fun getCurrentWallet(): LooprWallet? = walletSettings.getCurrentWallet()
 
     override fun onNoCurrentWalletSelected(currentActivity: BaseActivity) {
-        val intent = Intent(currentActivity, LooprWalletCoreApp.signInClass)
+        val intent = Intent(currentActivity, CoreLooprWalletApp.signInClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         currentActivity.startActivity(intent)
         currentActivity.finish()

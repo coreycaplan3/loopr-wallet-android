@@ -33,7 +33,7 @@ class RealmOneToManyTest : BaseDaggerTest() {
     @Before
     fun setup() = runBlockingUiCode {
         println("FIRST")
-        realm = component.realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
+        realm = realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
     }
 
     @After

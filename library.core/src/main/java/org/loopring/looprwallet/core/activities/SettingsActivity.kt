@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.appbar_main.*
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.ifNull
 import org.loopring.looprwallet.core.fragments.security.BaseSecurityFragment
@@ -31,7 +31,7 @@ class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
          * @return An intent used to kill the entire application, if started
          */
         fun createIntentToFinishApp(): Intent {
-            return Intent(LooprWalletCoreApp.application.applicationContext, SettingsActivity::class.java)
+            return Intent(CoreLooprWalletApp.application.applicationContext, SettingsActivity::class.java)
                     .putExtra(KEY_FINISH_ALL, true)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         }

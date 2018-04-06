@@ -2,22 +2,19 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.novoda.build-properties'
-
-buildProperties {
-    secrets.file rootProject.file('secrets/secrets.properties')
-}
 
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.caplaninnovations.looprwallet"
+
         multiDexEnabled true
-        minSdkVersion 15
+
+        minSdkVersion min_sdk
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "org.loopring.looprwallet.core.application.LooprJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -49,43 +46,40 @@ android {
     flavorDimensions "environment"
 
     dexOptions {
-        javaMaxHeapSize "2g"
+        preDexLibraries true
+        javaMaxHeapSize "6g"
     }
 
     productFlavors {
 
         mocknet {
-            buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mocknetServerUrl"]
+            applicationIdSuffix ".mocknet"
+            versionNameSuffix "-mocknet"
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 10L"
             buildConfigField "String", "ENVIRONMENT", "\"mocknet\""
 
-            applicationIdSuffix ".mocknet"
-            versionNameSuffix "-mocknet"
-
+            missingDimensionStrategy "environment", "mainnet", "infuraTestnet"
             dimension "environment"
         }
 
         infuraTestnet {
-            buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["testnetServerUrl"]
+            applicationIdSuffix ".infuraTestnet"
+            versionNameSuffix "-testnet"
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
             buildConfigField "String", "ENVIRONMENT", "\"testnet\""
 
-            applicationIdSuffix ".infuraTestnet"
-            versionNameSuffix "-testnet"
-
+            missingDimensionStrategy "environment", "mainnet"
             dimension "environment"
         }
 
         mainnet {
-            buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mainnetServerUrl"]
+            applicationIdSuffix ".mainnet"
+            versionNameSuffix "-mainnet"
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
             buildConfigField "String", "ENVIRONMENT", "\"mainnet\""
-
-            applicationIdSuffix ".mainnet"
-            versionNameSuffix "-mainnet"
 
             dimension "environment"
         }
@@ -93,6 +87,7 @@ android {
 }
 
 dependencies {
+    implementation project(':library.core')
     implementation project(':module.barcode')
     implementation project(':module.contacts')
     implementation project(':module.home')
@@ -111,7 +106,15 @@ dependencies {
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // Android Testing and Integration Tests
+    androidTestImplementation gradle.junit
+    androidTestImplementation gradle.mockito
+    androidTestImplementation gradle.rules
+    androidTestImplementation gradle.runner
+    androidTestImplementation gradle.espressoContrib
+    androidTestImplementation gradle.espressoCore
+    androidTestImplementation gradle.espressoIntents
+    kaptAndroidTest gradle.daggerCompiler
 }
 
 repositories {

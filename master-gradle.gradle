@@ -42,8 +42,8 @@ gradle.ext.glideOkhttp = "com.github.bumptech.glide:okhttp3-integration:$glideVe
 gradle.ext.glideCompiler = "com.github.bumptech.glide:compiler:$glideVersion"
 
 // Kotlin
-gradle.ext.kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-gradle.ext.kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+gradle.ext.kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+gradle.ext.kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 gradle.ext.kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.3"
 gradle.ext.kotlinKtx = "androidx.core:core-ktx:0.2"
 

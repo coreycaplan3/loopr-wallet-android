@@ -3,7 +3,7 @@ package org.loopring.looprwallet.core.dagger
 import dagger.Component
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.fragments.security.BaseSecurityFragment
 import org.loopring.looprwallet.core.fragments.settings.EthereumFeeSettingsFragment
 import org.loopring.looprwallet.core.fragments.settings.HomeSettingsFragment
@@ -72,4 +72,4 @@ interface CoreLooprComponentProvider {
 }
 
 val coreLooprComponent: CoreLooprComponent
-    get() = (LooprWalletCoreApp.application as CoreLooprComponentProvider).provideCoreLooprComponent()
+    get() = (CoreLooprWalletApp.application as CoreLooprComponentProvider).provideCoreLooprComponent()

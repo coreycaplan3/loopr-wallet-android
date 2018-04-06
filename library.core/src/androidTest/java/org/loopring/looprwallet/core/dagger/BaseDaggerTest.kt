@@ -12,8 +12,6 @@ import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.view.View
 import org.loopring.looprwallet.core.activities.BaseActivity
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
-import com.caplaninnovations.looprwallet.application.TestLooprWalletApp
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
 import org.loopring.looprwallet.core.models.settings.LooprSecureSettings
@@ -29,6 +27,8 @@ import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.realm.RealmClient
 import java.util.*
 import java.util.concurrent.FutureTask
 import javax.inject.Inject
@@ -44,10 +44,26 @@ import javax.inject.Inject
  */
 open class BaseDaggerTest {
 
+    companion object {
+
+        val testCoreLooprComponent: TestCoreLooprComponent by lazy {
+            val context = CoreLooprWalletApp.context
+            val component = DaggerCoreLooprComponent.builder()
+                    .looprSettingsModule(LooprSettingsModule(context))
+                    .looprSecureSettingsModule(LooprSecureSettingsModule(context))
+                    .looprRealmModule(LooprRealmModule())
+                    .looprWalletModule(LooprWalletModule(context))
+                    .build()
+
+            return@lazy DaggerTestCoreLooprComponent.builder()
+                    .coreLooprComponent(component)
+                    .build()
+        }
+
+    }
+
     @Inject
     lateinit var walletClient: WalletClient
-
-    lateinit var component: CoreLooprTestComponent
 
     val walletName = "loopr-test-${BaseDaggerTest::class.java.simpleName}"
 
@@ -70,12 +86,12 @@ open class BaseDaggerTest {
 
     val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
 
+    @Inject
+    lateinit var realmClient: RealmClient
+
     @Before
     fun baseDaggerSetup() {
-        val context = instrumentation.targetContext.applicationContext
-        val app = (context as TestLooprWalletApp)
-        component = app.looprDaggerComponent as CoreLooprTestComponent
-        component.inject(this)
+        testCoreLooprComponent.inject(this)
 
         Intents.init()
 
@@ -116,7 +132,7 @@ open class BaseDaggerTest {
     }
 
     protected fun createRealm(): Realm {
-        return LooprWalletApp.dagger.realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
+        return realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
     }
 
     /**

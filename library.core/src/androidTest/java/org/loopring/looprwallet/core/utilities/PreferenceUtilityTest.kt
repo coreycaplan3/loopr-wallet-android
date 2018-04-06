@@ -1,12 +1,12 @@
 package org.loopring.looprwallet.core.utilities
 
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.dagger.BaseDaggerTest
-import com.caplaninnovations.looprwallet.models.android.settings.*
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.models.settings.*
 
 /**
  * Created by Corey Caplan on 3/31/18.

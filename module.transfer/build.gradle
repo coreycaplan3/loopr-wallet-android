@@ -7,7 +7,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion min_sdk
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -25,6 +25,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    flavorDimensions "environment"
+    productFlavors {
+        mainnet {
+            versionNameSuffix "-mainnet"
+            dimension "environment"
+        }
+
     }
 
 }
@@ -54,7 +63,21 @@ dependencies {
     implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Unit Testing
+    testImplementation gradle.junit
+    testImplementation gradle.mockito
+    kaptTest gradle.daggerCompiler
+
+    // Android Testing and Integration Tests
+    androidTestImplementation gradle.junit
+    androidTestImplementation gradle.mockito
+    androidTestImplementation gradle.rules
+    androidTestImplementation gradle.runner
+    androidTestImplementation gradle.espressoContrib
+    androidTestImplementation gradle.espressoCore
+    androidTestImplementation gradle.espressoIntents
+    kaptAndroidTest gradle.daggerCompiler
 }
 repositories {
     mavenCentral()

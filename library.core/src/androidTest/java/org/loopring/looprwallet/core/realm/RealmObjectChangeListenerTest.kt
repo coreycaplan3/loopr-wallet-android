@@ -14,6 +14,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
 
 /**
  * Created by Corey on 3/22/2018
@@ -31,7 +32,7 @@ class RealmObjectChangeListenerTest : BaseDaggerTest() {
 
     @Before
     fun setup() = runBlockingUiCode {
-        realm = component.realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
+        realm = realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
     }
 
     @After

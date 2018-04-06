@@ -3,7 +3,7 @@ package org.loopring.looprwallet.core.utilities
 import android.content.Context
 import android.net.ConnectivityManager
 import org.loopring.looprwallet.core.BuildConfig
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 
 /**
  * Created by Corey Caplan on 3/10/18.
@@ -22,7 +22,7 @@ object NetworkUtility {
     fun isNetworkAvailable() = when {
         BuildConfig.DEBUG -> mockIsNetworkAvailable
         else -> {
-            val context = LooprWalletCoreApp.context
+            val context = CoreLooprWalletApp.context
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetworkInfo = connectivityManager.activeNetworkInfo
             activeNetworkInfo != null && activeNetworkInfo.isConnected

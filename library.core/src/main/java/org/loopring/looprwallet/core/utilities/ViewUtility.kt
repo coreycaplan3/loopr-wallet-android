@@ -9,7 +9,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.application.LooprWalletCoreApp
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.isJellybeanR1
 
@@ -31,7 +31,7 @@ object ViewUtility {
 
     fun isRtl(): Boolean {
         return if (isJellybeanR1()) {
-            LooprWalletCoreApp.context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+            CoreLooprWalletApp.context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
         } else {
             false
         }
@@ -49,7 +49,7 @@ object ViewUtility {
      * example, 10" tablets are extra-large.
      */
     fun isXLargeTablet(): Boolean {
-        val screenLayout = LooprWalletCoreApp.context.resources.configuration.screenLayout
+        val screenLayout = CoreLooprWalletApp.context.resources.configuration.screenLayout
         return screenLayout and SCREENLAYOUT_SIZE_MASK >= SCREENLAYOUT_SIZE_XLARGE
     }
 

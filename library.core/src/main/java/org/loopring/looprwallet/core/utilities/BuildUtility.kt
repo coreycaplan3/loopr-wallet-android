@@ -1,5 +1,7 @@
 package org.loopring.looprwallet.core.utilities
 
+import org.loopring.looprwallet.core.BuildConfig
+
 /**
  * Created by Corey Caplan on 3/18/18.
  *
@@ -18,8 +20,8 @@ object BuildUtility {
     const val FLAVOR_TESTNET = "testnet"
     const val FLAVOR_MAINNET = "mainnet"
 
-    var BUILD_TYPE = BUILD_DEBUG
-    var BUILD_FLAVOR = FLAVOR_MOCKNET
-    var SECURITY_LOCKOUT_TIME = -1L
+    var BUILD_TYPE = BuildConfig.BUILD_TYPE
+    var BUILD_FLAVOR = BuildConfig.ENVIRONMENT
+    var SECURITY_LOCKOUT_TIME = BuildConfig.SECURITY_LOCKOUT_TIME
 
 }

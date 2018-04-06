@@ -10,8 +10,7 @@
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingLeft="@dimen/standard_horizontal_padding"
-    android:paddingRight="@dimen/standard_horizontal_padding"
-    tools:showIn="@layout/fragment_select_address">
+    android:paddingRight="@dimen/standard_horizontal_padding">
 
     <TextView
         android:id="@+id/contactNameLabel"

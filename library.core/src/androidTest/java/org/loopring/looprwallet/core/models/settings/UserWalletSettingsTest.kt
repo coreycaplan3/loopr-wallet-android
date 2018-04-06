@@ -8,7 +8,6 @@ import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.runner.RunWith
-import org.loopring.looprwallet.core.models.settings.UserWalletSettings
 import java.util.*
 import javax.inject.Inject
 
@@ -30,7 +29,7 @@ class UserWalletSettingsTest : BaseDaggerTest() {
 
     @Before
     fun setup() {
-        component.inject(this)
+        testCoreLooprComponent.inject(this)
     }
 
     override fun putDefaultWallet() {
