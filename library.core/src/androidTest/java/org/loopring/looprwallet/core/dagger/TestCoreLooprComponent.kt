@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.dagger
 
 import dagger.Component
+import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragmentTest
 import org.loopring.looprwallet.core.models.settings.ThemeSettingsTest
 import org.loopring.looprwallet.core.models.settings.UserWalletSettingsTest
 
@@ -17,6 +18,7 @@ import org.loopring.looprwallet.core.models.settings.UserWalletSettingsTest
 interface TestCoreLooprComponent {
 
     fun inject(baseDaggerTest: BaseDaggerTest)
+    fun inject(confirmOldSecurityFragmentTest: ConfirmOldSecurityFragmentTest)
 
     fun inject(themeSettingsTest: ThemeSettingsTest)
 

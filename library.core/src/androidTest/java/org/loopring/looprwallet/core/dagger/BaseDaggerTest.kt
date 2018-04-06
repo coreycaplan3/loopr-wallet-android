@@ -7,6 +7,7 @@ import android.support.test.InstrumentationRegistry
 import android.support.test.InstrumentationRegistry.getTargetContext
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions
+import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
@@ -23,6 +24,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -186,7 +188,7 @@ open class BaseDaggerTest {
     }
 
     fun clickView(view: View) {
-        Espresso.onView(Matchers.`is`(view)).perform(ViewActions.click())
+        Espresso.onView(`is`(view)).perform(click())
     }
 
     /**

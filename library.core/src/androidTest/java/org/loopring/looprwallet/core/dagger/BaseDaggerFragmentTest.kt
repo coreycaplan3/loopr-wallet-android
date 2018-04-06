@@ -30,10 +30,13 @@ abstract class BaseDaggerFragmentTest<out T : Fragment> : BaseDaggerTest() {
     abstract val tag: String
 
     @Before
-    fun setUpBaseFragmentTestForFragment() = runBlockingUiCode {
-        activity.addFragment(fragment, tag)
-    }
+    fun setUpBaseFragmentTestForFragment() {
+        runBlockingUiCode {
+            activity.addFragment(fragment, tag)
+        }
 
+        instrumentation.waitForIdleSync()
+    }
     @After
     fun tearDownFragment() = runBlockingUiCode {
         activity.removeFragment(fragment)

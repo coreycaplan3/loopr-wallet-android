@@ -15,7 +15,9 @@ import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.models.settings.LooprSettings
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
+import org.loopring.looprwallet.core.models.settings.UserPinSettings
 import org.loopring.looprwallet.core.utilities.BuildUtility.SECURITY_LOCKOUT_TIME
+import javax.inject.Inject
 
 /**
  * Created by Corey on 3/27/2018.
@@ -38,39 +40,36 @@ class ConfirmOldSecurityFragmentTest : BaseDaggerFragmentTest<ConfirmOldSecurity
 
     override val tag = ConfirmOldSecurityFragment.TAG
 
+    @Inject
+    lateinit var userPinSettings: UserPinSettings
+
     @Before
-    fun setUp() = runBlockingUiCode {
-        fragment.userPinSettings.setUserPin("1234")
+    fun setUp() {
+        testCoreLooprComponent.inject(this)
+
+        userPinSettings.setUserPin("1234")
     }
 
     @Test
-    fun enterIncorrectPin() {
+    fun enterIncorrectPin() = runBlockingUiCode {
         clickView(fragment.numberPadOne)
         clickView(fragment.numberPadOne)
         clickView(fragment.numberPadOne)
         clickView(fragment.numberPadOne)
 
         assertTrue(fragment.currentPin.isEmpty())
-        assertFalse(fragment.userPinSettings.isUserLockedOut())
+        assertFalse(userPinSettings.isUserLockedOut())
     }
 
     @Test
-    fun enterIncorrectPin_lockout() {
+    fun enterIncorrectPin_lockout() = runBlockingUiCode {
         clickView(fragment.numberPadOne)
         clickView(fragment.numberPadOne)
         clickView(fragment.numberPadOne)
         clickView(fragment.numberPadOne)
 
         assertTrue(fragment.currentPin.isEmpty())
-        assertFalse(fragment.userPinSettings.isUserLockedOut())
-
-        clickView(fragment.numberPadOne)
-        clickView(fragment.numberPadOne)
-        clickView(fragment.numberPadOne)
-        clickView(fragment.numberPadOne)
-
-        assertTrue(fragment.currentPin.isEmpty())
-        assertFalse(fragment.userPinSettings.isUserLockedOut())
+        assertFalse(userPinSettings.isUserLockedOut())
 
         clickView(fragment.numberPadOne)
         clickView(fragment.numberPadOne)
@@ -78,7 +77,7 @@ class ConfirmOldSecurityFragmentTest : BaseDaggerFragmentTest<ConfirmOldSecurity
         clickView(fragment.numberPadOne)
 
         assertTrue(fragment.currentPin.isEmpty())
-        assertFalse(fragment.userPinSettings.isUserLockedOut())
+        assertFalse(userPinSettings.isUserLockedOut())
 
         clickView(fragment.numberPadOne)
         clickView(fragment.numberPadOne)
@@ -86,9 +85,17 @@ class ConfirmOldSecurityFragmentTest : BaseDaggerFragmentTest<ConfirmOldSecurity
         clickView(fragment.numberPadOne)
 
         assertTrue(fragment.currentPin.isEmpty())
-        assertTrue(fragment.userPinSettings.isUserLockedOut())
+        assertFalse(userPinSettings.isUserLockedOut())
 
-        assertTrue(fragment.userPinSettings.getLockoutTimeLeft() >= SECURITY_LOCKOUT_TIME)
+        clickView(fragment.numberPadOne)
+        clickView(fragment.numberPadOne)
+        clickView(fragment.numberPadOne)
+        clickView(fragment.numberPadOne)
+
+        assertTrue(fragment.currentPin.isEmpty())
+        assertTrue(userPinSettings.isUserLockedOut())
+
+        assertTrue(userPinSettings.getLockoutTimeLeft() >= SECURITY_LOCKOUT_TIME)
 
         Espresso.onView(`is`(fragment.fragmentSecurityPinTitleLabel))
                 .check(matches(withText(containsString("You are locked out for"))))
@@ -108,7 +115,7 @@ class ConfirmOldSecurityFragmentTest : BaseDaggerFragmentTest<ConfirmOldSecurity
     }
 
     @Test
-    fun enterCorrectPin() {
+    fun enterCorrectPin() = runBlockingUiCode {
         clickView(fragment.numberPadOne)
         clickView(fragment.numberPadTwo)
         clickView(fragment.numberPadThree)
