@@ -6,25 +6,22 @@ import android.content.Intent
 import android.net.Uri
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
-import android.support.test.espresso.assertion.ViewAssertions.*
+import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.activities.MainActivity
+import kotlinx.android.synthetic.main.card_wallet_name.*
+import kotlinx.android.synthetic.main.fragment_restore_keystore.*
+import org.hamcrest.Matchers.`is`
+import org.junit.Assert.*
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions
 import org.loopring.looprwallet.core.utilities.FilesUtility
-import org.loopring.looprwallet.core.utilities.OrientationChangeAction
 import org.loopring.looprwallet.core.validators.BaseValidator
-import kotlinx.android.synthetic.main.fragment_restore_keystore.*
-import kotlinx.android.synthetic.main.card_wallet_name.*
-import org.hamcrest.Matchers.*
-import org.junit.Assert.*
-import org.junit.Test
-import org.junit.runner.RunWith
-
-import org.junit.Rule
-import org.loopring.looprwallet.walletsignin.fragments.restorewallet.RestoreWalletKeystoreFragment
 import java.io.File
 import java.util.concurrent.FutureTask
 
@@ -120,7 +117,7 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerFragmentTest<RestoreWalletKe
                 .check(matches(hasErrorText(nullString)))
 
         val task = FutureTask { fragment.keystoreUri = Uri.fromFile(getKeystoreFile()) }
-        waitForTask(activityRule.activity, task, true)
+        waitForTask(activity, task, true)
 
         Espresso.onView(`is`(fragment.fragmentContainer))
                 .perform(swipeUp())
@@ -129,20 +126,19 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerFragmentTest<RestoreWalletKe
                 .check(matches(isEnabled()))
                 .perform(click())
 
-        assertActivityActive(MainActivity::class.java, 7000)
+        assertActivityActive(CoreLooprWalletApp.mainClass, 7000)
     }
 
     @Test
-    fun rotation_fileShouldBePersisted() {
+    fun rotation_fileShouldBePersisted() = runBlockingUiCode {
         val file = getKeystoreFile()
 
         val task = FutureTask { fragment.keystoreUri = Uri.fromFile(file) }
-        waitForTask(activityRule.activity, task, false)
+        waitForTask(activity, task, false)
 
-        Espresso.onView(isRoot()).perform(OrientationChangeAction.changeOrientationToLandscape())
+        activity.recreate()
 
-        val recreatedFragment = activityRule.activity
-                .supportFragmentManager
+        val recreatedFragment = activity.supportFragmentManager
                 .findFragmentByTag(RestoreWalletKeystoreFragment.TAG) as RestoreWalletKeystoreFragment
 
         assertNotNull(recreatedFragment.keystoreFile)
@@ -150,15 +146,12 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerFragmentTest<RestoreWalletKe
     }
 
     @Test
-    fun rotation_dialogShouldShow() {
-        val task = FutureTask { fragment.filePermissionsDialog?.show() }
-        activityRule.activity.runOnUiThread(task)
-        task.get()
+    fun rotation_dialogShouldShow() = runBlockingUiCode {
+        fragment.filePermissionsDialog?.show()
 
-        Espresso.onView(isRoot()).perform(OrientationChangeAction.changeOrientationToLandscape())
+        activity.recreate()
 
-        val recreatedFragment = activityRule.activity
-                .supportFragmentManager
+        val recreatedFragment = activity.supportFragmentManager
                 .findFragmentByTag(RestoreWalletKeystoreFragment.TAG) as RestoreWalletKeystoreFragment
 
         assertTrue(recreatedFragment.filePermissionsDialog?.isShowing == true)
@@ -173,7 +166,7 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerFragmentTest<RestoreWalletKe
         val intent = Intent().setData(Uri.fromFile(file))
 
         val task = FutureTask { fragment.onActivityResult(requestCode, resultCode, intent) }
-        waitForTask(activityRule.activity, task, false)
+        waitForTask(activity, task, false)
 
         assertNotNull(fragment.keystoreUri)
         assertEquals(file.name, fragment.keystoreFile?.name)
@@ -182,11 +175,11 @@ class RestoreWalletKeystoreFragmentTest : BaseDaggerFragmentTest<RestoreWalletKe
     // Mark - Private Methods
 
     private fun getKeystoreFile(): File {
-        val assetManager = activityRule.activity.assets
+        val assetManager = activity.assets
         // This is the "real" file's name. Do NOT change it.
         val content = assetManager.open("loopr-wallet.json").use { it.reader().readText() }
 
-        val file = File(activityRule.activity.cacheDir, fileName)
+        val file = File(activity.cacheDir, fileName)
         file.writeBytes(content.toByteArray())
 
         FilesUtility.saveFileToDownloadFolder(file)

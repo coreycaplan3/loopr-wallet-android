@@ -47,19 +47,21 @@ android {
 
     dexOptions {
         preDexLibraries true
-        javaMaxHeapSize "6g"
+        javaMaxHeapSize "2g"
+        maxProcessCount 4
     }
 
     productFlavors {
 
         mocknet {
+            resConfigs ("en", "xxhdpi")
+
             applicationIdSuffix ".mocknet"
             versionNameSuffix "-mocknet"
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 10L"
             buildConfigField "String", "ENVIRONMENT", "\"mocknet\""
 
-            missingDimensionStrategy "environment", "mainnet", "infuraTestnet"
             dimension "environment"
         }
 
@@ -97,9 +99,6 @@ dependencies {
     implementation project(':module.transfer')
     implementation project(':module.wallet-sign-in')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    // Android Multidex for apps with more than 65,536 methods
-    implementation 'com.android.support:multidex:1.0.3'
 
     // Dagger Dependency Injection
     implementation gradle.dagger

@@ -2,19 +2,14 @@ package org.loopring.looprwallet.core.fragments
 
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.matcher.ViewMatchers.isRoot
 import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
-import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.utilities.OrientationChangeAction
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
-import java.util.concurrent.FutureTask
 
 /**
  * Created by Corey on 2/20/2018
@@ -36,21 +31,19 @@ class BaseFragmentTest : BaseDaggerFragmentTest<BaseFragmentTest.TestingBaseFrag
     override val fragment = TestingBaseFragment()
     override val tag = "BaseFragment"
 
+//    @Test
+//    fun checkToolbarModeAfterRotation() = runBlockingUiCode {
+//        fragment.enableToolbarCollapsing()
+//
+//        activity.recreate()
+//
+//        val recreatedFragment = activity.supportFragmentManager.findFragmentById(R.id.activityContainer) as BaseFragment
+//        assertTrue(recreatedFragment.isToolbarCollapseEnabled)
+//    }
+
     @Test
-    fun checkToolbarModeAfterRotation() {
-        val enableToolbarCollapsingTask = FutureTask { fragment.enableToolbarCollapsing() }
-        waitForTask(activity, enableToolbarCollapsingTask, true)
-
-        onView(isRoot()).perform(OrientationChangeAction.changeOrientationToLandscape())
-
-        val recreatedFragment = activity.supportFragmentManager.findFragmentById(R.id.activityContainer) as BaseFragment
-        assertTrue(recreatedFragment.isToolbarCollapseEnabled)
-    }
-
-    @Test
-    fun enableToolbarCollapsing__checkUi() {
-        val task = FutureTask { fragment.enableToolbarCollapsing() }
-        waitForTask(activity, task, false)
+    fun enableToolbarCollapsing__checkUi() = runBlockingUiCode {
+        fragment.enableToolbarCollapsing()
 
         val toolbarLayoutParams = fragment.toolbar!!.layoutParams as AppBarLayout.LayoutParams
         val flags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
@@ -62,9 +55,8 @@ class BaseFragmentTest : BaseDaggerFragmentTest<BaseFragmentTest.TestingBaseFrag
     }
 
     @Test
-    fun disableToolbarCollapsing_checkUi() {
-        val task = FutureTask { fragment.disableToolbarCollapsing() }
-        waitForTask(activity, task, false)
+    fun disableToolbarCollapsing_checkUi() = runBlockingUiCode {
+        fragment.disableToolbarCollapsing()
 
         val toolbarLayoutParams = fragment.toolbar!!.layoutParams as AppBarLayout.LayoutParams
         assertEquals(0, toolbarLayoutParams.scrollFlags)

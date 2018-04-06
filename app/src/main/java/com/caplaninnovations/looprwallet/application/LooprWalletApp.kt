@@ -1,12 +1,18 @@
 package com.caplaninnovations.looprwallet.application
 
+import com.google.firebase.FirebaseApp
+import com.google.firebase.crash.FirebaseCrash
+import org.loopring.looprwallet.contacts.dagger.ContactsLooprComponent
 import org.loopring.looprwallet.contacts.dagger.ContactsLooprComponentProvider
 import org.loopring.looprwallet.contacts.dagger.DaggerContactsLooprComponent
+import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.home.activities.MainActivity
 import org.loopring.looprwallet.transfer.dagger.DaggerTransferLooprComponent
+import org.loopring.looprwallet.transfer.dagger.TransferLooprComponent
 import org.loopring.looprwallet.transfer.dagger.TransferLooprComponentProvider
 import org.loopring.looprwallet.walletsignin.dagger.DaggerWalletLooprComponent
+import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponent
 import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponentProvider
 
 /**
@@ -17,20 +23,20 @@ import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponentProvider
  * Purpose of Class:
  *
  */
-class LooprWalletApp : CoreLooprWalletApp(), ContactsLooprComponentProvider,
+open class LooprWalletApp : CoreLooprWalletApp(), ContactsLooprComponentProvider,
         TransferLooprComponentProvider, WalletLooprComponentProvider {
 
     companion object {
 
-        val contactsLooprComponent by lazy {
+        val contactsLooprComponent: ContactsLooprComponent by lazy {
             DaggerContactsLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
         }
 
-        val transferLooprComponent by lazy {
+        val transferLooprComponent: TransferLooprComponent by lazy {
             DaggerTransferLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
         }
 
-        val walletLooprComponent by lazy {
+        val walletLooprComponent: WalletLooprComponent by lazy {
             DaggerWalletLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
         }
 
@@ -46,6 +52,9 @@ class LooprWalletApp : CoreLooprWalletApp(), ContactsLooprComponentProvider,
         super.onCreate()
 
         CoreLooprWalletApp.mainClass = MainActivity::class.java
+
+        FirebaseApp.initializeApp(this)
+        FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }
 
 }

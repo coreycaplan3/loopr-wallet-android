@@ -1,17 +1,15 @@
 package org.loopring.looprwallet.core.activities
 
+import android.app.Instrumentation.ActivityMonitor
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.junit.Test
-
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.FutureTask
-import android.app.Instrumentation.ActivityMonitor
-import org.junit.After
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 
 
 /**
@@ -50,20 +48,20 @@ class BaseActivityTest : BaseDaggerTest() {
     }
 
     @Test
-    fun startProgressDialog() {
-        val showTask = FutureTask {
-            activity.progressDialog.setMessage(progressMessage)
-            activity.progressDialog.show()
-        }
-
-        waitForTask(activity, showTask, false)
+    fun startProgressDialog() = runBlockingUiCode {
+        activity.progressDialog.setMessage(progressMessage)
+        activity.progressDialog.show()
 
         // Assert it's still showing, after the orientation change
         assertTrue(activity.progressDialog.isShowing)
         assertEquals(progressMessage, activity.progressDialogMessage)
 
-        val dismissTask = FutureTask { activity.progressDialog.dismiss() }
-        waitForTask(activity, dismissTask, false)
+        activity.recreate()
+
+        assertTrue(activity.progressDialog.isShowing)
+        assertEquals(progressMessage, activity.progressDialogMessage)
+
+        activity.progressDialog.dismiss()
 
         assertFalse(activity.progressDialog.isShowing)
     }

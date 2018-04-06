@@ -5,13 +5,16 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import kotlinx.android.synthetic.main.fragment_security_pin.*
 import kotlinx.android.synthetic.main.number_pad.*
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.containsString
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.models.settings.LooprSettings
+import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.utilities.BuildUtility.SECURITY_LOCKOUT_TIME
 
 /**
@@ -25,11 +28,18 @@ import org.loopring.looprwallet.core.utilities.BuildUtility.SECURITY_LOCKOUT_TIM
  */
 class ConfirmOldSecurityFragmentTest : BaseDaggerFragmentTest<ConfirmOldSecurityFragment>() {
 
-    override val fragment = ConfirmOldSecurityFragment.createUnlockAppInstance()
+    override val fragment: ConfirmOldSecurityFragment
+        get() {
+            LooprSettings.getInstance(CoreLooprWalletApp.context)
+                    .putString(SecuritySettings.KEY_SECURITY_TYPE, SecuritySettings.TYPE_PIN_SECURITY)
+
+            return ConfirmOldSecurityFragment.createUnlockAppInstance()
+        }
+
     override val tag = ConfirmOldSecurityFragment.TAG
 
     @Before
-    fun setUp() {
+    fun setUp() = runBlockingUiCode {
         fragment.userPinSettings.setUserPin("1234")
     }
 

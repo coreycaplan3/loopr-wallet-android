@@ -5,9 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
-import com.google.firebase.crash.FirebaseCrash
 import io.realm.Realm
-import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.TestActivity
 import org.loopring.looprwallet.core.dagger.*
@@ -68,8 +66,6 @@ open class CoreLooprWalletApp : MultiDexApplication(), Application.ActivityLifec
         PreferenceUtility.setDefaultValues()
 
         Realm.init(this)
-
-        FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)
     }
 
     override fun provideCoreLooprComponent() = coreLooprComponent

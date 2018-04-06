@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.core.application
 
-import android.support.multidex.MultiDexApplication
 import org.loopring.looprwallet.core.extensions.logi
 
 /**
@@ -12,13 +11,12 @@ import org.loopring.looprwallet.core.extensions.logi
  *
  *
  */
-class TestLooprWalletApp : MultiDexApplication() {
+class TestCoreLooprWalletApp : CoreLooprWalletApp() {
 
     override fun onCreate() {
         super.onCreate()
-        CoreLooprWalletApp.application = this
 
-        logi("Creating ${TestLooprWalletApp::class.simpleName}...")
+        logi("Creating ${TestCoreLooprWalletApp::class.simpleName}...")
     }
 
 }

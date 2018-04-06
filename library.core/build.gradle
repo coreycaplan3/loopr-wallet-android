@@ -48,6 +48,8 @@ android {
     productFlavors {
 
         mocknet {
+            resConfigs ("en", "xxhdpi")
+
             buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mocknetServerUrl"]
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 10L"
@@ -113,6 +115,9 @@ realm {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Android Multidex for apps with more than 65,536 methods
+    api 'com.android.support:multidex:1.0.3'
 
     // Android Native Libraries
     api gradle.support

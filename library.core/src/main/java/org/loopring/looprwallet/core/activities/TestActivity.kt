@@ -3,7 +3,6 @@ package org.loopring.looprwallet.core.activities
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.RestrictTo
-import android.support.annotation.RestrictTo.Scope.TESTS
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
@@ -18,7 +17,7 @@ import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragme
  *
  * Purpose of Class: Used as container to test fragments in isolation with Espresso
  */
-@RestrictTo(TESTS)
+@RestrictTo(RestrictTo.Scope.TESTS)
 class TestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecurityConfirmedListener {
 
     var isRunningTest: Boolean? = null

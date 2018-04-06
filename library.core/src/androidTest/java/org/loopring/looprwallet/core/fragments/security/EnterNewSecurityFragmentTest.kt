@@ -1,9 +1,9 @@
 package org.loopring.looprwallet.core.fragments.security
 
 import kotlinx.android.synthetic.main.number_pad.*
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.junit.Assert.*
 import org.junit.Test
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 
 /**
  * Created by Corey on 3/26/2018.

@@ -28,6 +28,10 @@ android {
 
     flavorDimensions "environment"
     productFlavors {
+        mocknet {
+            versionNameSuffix "-mocknet"
+            dimension "environment"
+        }
         mainnet {
             versionNameSuffix "-mainnet"
             dimension "environment"

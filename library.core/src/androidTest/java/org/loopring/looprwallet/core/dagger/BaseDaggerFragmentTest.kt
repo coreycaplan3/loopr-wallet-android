@@ -3,11 +3,12 @@ package org.loopring.looprwallet.core.dagger
 import android.support.annotation.IdRes
 import android.support.test.rule.ActivityTestRule
 import android.support.v4.app.Fragment
-import org.loopring.looprwallet.core.models.settings.LooprSettings
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.loopring.looprwallet.core.activities.TestActivity
+import org.loopring.looprwallet.core.models.settings.LooprSettings
 
 /**
  * Created by Corey on 3/5/2018
@@ -31,6 +32,11 @@ abstract class BaseDaggerFragmentTest<out T : Fragment> : BaseDaggerTest() {
     @Before
     fun setUpBaseFragmentTestForFragment() = runBlockingUiCode {
         activity.addFragment(fragment, tag)
+    }
+
+    @After
+    fun tearDownFragment() = runBlockingUiCode {
+        activity.removeFragment(fragment)
     }
 
     fun checkPreferenceKeyAndValue(key: String, expectedValue: String) {
