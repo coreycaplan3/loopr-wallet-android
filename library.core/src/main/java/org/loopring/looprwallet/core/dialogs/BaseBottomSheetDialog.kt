@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import org.loopring.looprwallet.core.validators.BaseValidator
 
@@ -19,6 +21,8 @@ import org.loopring.looprwallet.core.validators.BaseValidator
  */
 abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
 
+    abstract val layoutResource: Int
+
     var validatorList: List<BaseValidator>? = null
         set(value) {
             field = value
@@ -27,6 +31,10 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
 
     final override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return BottomSheetDialog(context!!, this.theme)
+    }
+
+    final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(layoutResource, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

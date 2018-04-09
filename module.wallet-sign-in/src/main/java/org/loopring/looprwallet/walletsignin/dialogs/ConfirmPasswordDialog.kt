@@ -74,16 +74,15 @@ class ConfirmPasswordDialog : BaseBottomSheetDialog() {
         }
     }
 
+    override val layoutResource: Int
+        get() = R.layout.dialog_confirm_password
+
     private val currentFragmentTag: String by lazy {
         arguments!!.getString(KEY_CURRENT_FRAGMENT_TAG)
     }
 
     private val passwordBasedWallet: PasswordBasedWallet by lazy {
         arguments!!.getParcelable<Parcelable>(KEY_WALLET) as PasswordBasedWallet
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_confirm_password, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

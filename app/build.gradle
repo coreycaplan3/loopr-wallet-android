@@ -110,7 +110,7 @@ dependencies {
     implementation project(':module.home-markets')
     implementation project(':module.home-orders')
     implementation project(':module.intro')
-    implementation project(':module.order')
+    implementation project(':module.create-order')
     implementation project(':module.trade-details')
     implementation project(':module.transfer')
     implementation project(':module.wallet-sign-in')

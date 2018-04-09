@@ -5,5 +5,5 @@
     android:background="@drawable/sell_circle"
     android:gravity="center"
     android:text="@string/letter_s"
-    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
     android:textColor="@android:color/white" />

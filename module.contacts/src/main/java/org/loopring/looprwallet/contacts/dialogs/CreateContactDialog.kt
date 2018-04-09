@@ -42,6 +42,9 @@ class CreateContactDialog : BaseBottomSheetDialog() {
         }
     }
 
+    override val layoutResource: Int
+        get() = R.layout.dialog_create_contact
+
     @Inject
     lateinit var walletClient: WalletClient
 
@@ -59,10 +62,6 @@ class CreateContactDialog : BaseBottomSheetDialog() {
         super.onCreate(savedInstanceState)
 
         contactsLooprComponent.inject(this)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_create_contact, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

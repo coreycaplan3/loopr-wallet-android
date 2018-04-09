@@ -29,19 +29,6 @@ class GeneralOrderAdapter(private val isOpen: Boolean) : BaseRealmAdapter<EthTok
         const val TYPE_FILTER = 3
     }
 
-    @Inject
-    lateinit var realmClient: RealmClient
-
-    init {
-        homeOrdersLooprComponent.inject(this)
-        runBlocking {
-            delay(1000)
-
-            val data = realmClient.getSharedInstance().where<EthToken>().findAll()
-            updateData(data)
-        }
-    }
-
     override val totalItems: Int?
         get() = null
 
@@ -68,12 +55,8 @@ class GeneralOrderAdapter(private val isOpen: Boolean) : BaseRealmAdapter<EthTok
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: EthToken) {
         (holder as? EmptyGeneralOrderViewHolder)?.bind()
 
-        // TODO
         (holder as? GeneralOrderViewHolder)?.bind("") {
-            holder.orderProgress.progress += 10
-            if (holder.orderProgress.progress == 100) {
-                holder.orderProgress.progress = 0
-            }
+            TODO("Order clicked. Start OrderDetails dialog")
         }
     }
 

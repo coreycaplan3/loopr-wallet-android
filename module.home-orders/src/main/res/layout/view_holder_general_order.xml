@@ -8,25 +8,41 @@
     android:paddingRight="@dimen/standard_padding_small"
     android:paddingTop="@dimen/standard_padding_small">
 
-    <org.loopring.looprwallet.core.views.OrderProgressView
-        android:id="@+id/orderProgress"
+    <FrameLayout
+        android:id="@+id/orderSymbolContainer"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/horizontal_margin_small"
-        android:layout_marginRight="@dimen/horizontal_margin_small"
-        android:saveEnabled="true" />
+        android:layout_marginRight="@dimen/horizontal_margin_small">
+
+
+        <org.loopring.looprwallet.core.views.OrderProgressView
+            android:id="@+id/generalOrderProgress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:contentDescription="@string/content_description_completed_trade"
+            android:id="@+id/generalOrderCompleteImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border"
+            android:src="@drawable/ic_swap_horiz_white_24dp"
+            android:tint="?android:attr/textColorPrimary" />
+
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/genericOrderPrimaryContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/orderProgress"
+        android:layout_toEndOf="@id/orderSymbolContainer"
         android:layout_toLeftOf="@id/genericOrderSecondaryContainer"
-        android:layout_toRightOf="@id/orderProgress"
+        android:layout_toRightOf="@id/orderSymbolContainer"
         android:layout_toStartOf="@id/genericOrderSecondaryContainer">
 
         <LinearLayout
@@ -50,22 +66,28 @@
                 android:layout_marginLeft="@dimen/horizontal_margin_small"
                 android:layout_marginStart="@dimen/horizontal_margin_small">
 
-                <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                <TextView
+                    android:id="@+id/generalOrderSellCircle"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:background="@drawable/sell_circle"
                     android:gravity="center"
                     android:text="@string/letter_s"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/generalOrderBuyCircle"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/buy_circle"
+                    android:gravity="center"
+                    android:text="@string/letter_b"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
-
-                <include
-                    android:id="@+id/genericOrderBuyCircle"
-                    layout="@layout/buy_circle"
-                    android:layout_width="@dimen/order_circle_size"
-                    android:layout_height="@dimen/order_circle_size"
-                    android:visibility="gone" />
 
             </FrameLayout>
 

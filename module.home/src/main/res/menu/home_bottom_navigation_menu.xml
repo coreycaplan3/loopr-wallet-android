@@ -10,7 +10,7 @@
         android:title="@string/orders" />
     <item
         android:id="@+id/menu_transfers"
-        android:icon="@drawable/ic_swap_horiz_white_24dp"
+        android:icon="@drawable/ic_swap_vert_white_24dp"
         android:title="@string/transfers" />
     <item
         android:id="@+id/menu_my_wallet"

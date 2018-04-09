@@ -2,6 +2,7 @@
     <string name="empty_general_open_orders">You have no open orders. Go make some trades to get started!</string>
     <string name="empty_general_closed_orders">You have no past orders</string>
     <string name="cancel_all">Cancel All</string>
+    <string name="content_description_completed_trade">An icon representing a completed trade</string>
 
     <array name="filter_order_dates">
         <item>All</item>
