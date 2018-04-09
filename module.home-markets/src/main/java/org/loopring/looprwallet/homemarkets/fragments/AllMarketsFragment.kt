@@ -3,9 +3,9 @@ package org.loopring.looprwallet.homemarkets.fragments
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import org.loopring.looprwallet.home.R
-import org.loopring.looprwallet.core.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_markets_all.*
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.homemarkets.R
 
 /**
  * Created by Corey Caplan on 1/19/18.

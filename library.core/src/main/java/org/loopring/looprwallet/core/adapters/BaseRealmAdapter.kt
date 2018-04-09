@@ -32,13 +32,13 @@ abstract class BaseRealmAdapter<T : RealmModel> :
      * whether or not we should "load more" data after scrolling beyond the current data's
      * capacity.
      *
-     * Set this field to *null* if it shouldn't be used, like if we're loading data only locally.
+     * Set this field to *null* if it shouldn't be used, like if we're loading data only locally
+     * and we know there's nothing more to load.
      */
     abstract val totalItems: Int?
 
-    final override fun getItemViewType(position: Int): Int {
+    override fun getItemViewType(position: Int): Int {
         val data = data ?: return TYPE_LOADING
-        val totalItems = totalItems
 
         return when {
             !data.isValid -> TYPE_LOADING
@@ -54,8 +54,7 @@ abstract class BaseRealmAdapter<T : RealmModel> :
         return when (viewType) {
             TYPE_LOADING -> LoadingViewHolder(parent.inflate(R.layout.view_holder_loading))
             TYPE_EMPTY -> onCreateEmptyViewHolder(parent)
-            TYPE_DATA -> onCreateDataViewHolder(parent)
-            else -> throw IllegalArgumentException("Invalid viewType, found: $viewType")
+            else -> onCreateDataViewHolder(parent)
         }
     }
 
@@ -71,7 +70,7 @@ abstract class BaseRealmAdapter<T : RealmModel> :
 
     abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: T)
 
-    final override fun getItemCount(): Int {
+    override fun getItemCount(): Int {
         // We return an extra item to account for the loading view holder
         return data?.size?.let {
             when {

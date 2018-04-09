@@ -2,10 +2,14 @@ package org.loopring.looprwallet.core.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.AttributeSet
+import android.view.View
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.order_progress.view.*
 import org.loopring.looprwallet.core.R
+
 
 /**
  * Created by Corey Caplan on 4/7/18.
@@ -24,13 +28,12 @@ class OrderProgressView
         set(value) {
             field = value
 
-            openOrderProgress.progress = value
             openOrderProgressLabel.text = "$value%"
+            openOrderProgress.progress = value
         }
 
     init {
         inflate(context, R.layout.order_progress, this)
     }
-
 
 }

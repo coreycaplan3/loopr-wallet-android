@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import io.realm.Realm
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.activities.TestActivity
+import org.loopring.looprwallet.core.activities.CoreTestActivity
 import org.loopring.looprwallet.core.dagger.*
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.utilities.PreferenceUtility
@@ -61,7 +61,7 @@ open class CoreLooprWalletApp : MultiDexApplication(), Application.ActivityLifec
         logi("Creating Application...")
 
         CoreLooprWalletApp.application = this
-        CoreLooprWalletApp.mainClass = TestActivity::class.java
+        CoreLooprWalletApp.mainClass = CoreTestActivity::class.java
 
         PreferenceUtility.setDefaultValues()
 

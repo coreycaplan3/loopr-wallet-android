@@ -1,10 +1,11 @@
-package org.loopring.looprwallet.tokendetails
+package org.loopring.looprwallet.tradedetails.activities
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.models.trading.TradingPair
+import org.loopring.looprwallet.tradedetails.R
 
 class TradingPairDetailsActivity : BaseActivity() {
 
@@ -12,9 +13,11 @@ class TradingPairDetailsActivity : BaseActivity() {
 
         private const val KEY_TRADING_PAIR = "_TRADING_PAIR"
 
-        fun route(tradingPair: TradingPair, context: Context): Intent {
-            return Intent(context, TradingPairDetailsActivity::class.java)
+        fun route(tradingPair: TradingPair, activity: BaseActivity) {
+            val intent = Intent(activity, TradingPairDetailsActivity::class.java)
                     .putExtra(KEY_TRADING_PAIR, tradingPair.ticker)
+
+            activity.startActivity(intent)
         }
 
         private fun getPairFromIntent(intent: Intent): String {

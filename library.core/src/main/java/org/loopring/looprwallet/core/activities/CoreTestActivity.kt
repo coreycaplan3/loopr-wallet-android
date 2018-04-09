@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.core.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.RestrictTo
 import android.support.annotation.VisibleForTesting
@@ -18,7 +17,7 @@ import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragme
  * Purpose of Class: Used as container to test fragments in isolation with Espresso
  */
 @RestrictTo(RestrictTo.Scope.TESTS)
-class TestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecurityConfirmedListener {
+open class CoreTestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecurityConfirmedListener {
 
     var isRunningTest: Boolean? = null
 
@@ -34,23 +33,13 @@ class TestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecurityConfir
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null && !isRunningTest()) {
-            // used for testing a sole fragment
-//            val wallet = WalletCreationKeystore("loopr-currentWallet", "looprwallet")
-            walletClient.createWallet("loopr-wallet", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
-            startActivity(Intent(this@TestActivity, SettingsActivity::class.java))
-
-//            addFragment(
-//                    CreateTransferAmountFragment.createInstance("0xabcdef1234567890abcdef123456789012345678"),
-//                    CreateTransferAmountFragment.TAG
-//            )
-
-//            launch(UI) {
-//                delay(1000L)
-//                startActivity(Intent(this@TestActivity, SettingsActivity::class.java))
-//                finish()
-//            }
+        if (!isRunningTest()) {
+            executeHumanTestCode(savedInstanceState)
         }
+    }
+
+    open fun executeHumanTestCode(savedInstanceState: Bundle?) {
+        walletClient.createWallet("loopr-wallet", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
     }
 
     fun addFragment(fragment: Fragment, tag: String) {

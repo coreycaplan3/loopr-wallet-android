@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:id="@id/orderProgressView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:saveEnabled="true">
 
     <ProgressBar
         android:id="@+id/openOrderProgress"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:indeterminate="false"
-        android:progress="0" />
+        android:progressDrawable="@drawable/progress_circle" />
 
     <TextView
         android:id="@+id/openOrderProgressLabel"
-        style="@style/Base.TextAppearance.AppCompat.Caption"
+        style="@style/TextAppearance.AppCompat.Caption"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:gravity="center" />
 
 </FrameLayout>

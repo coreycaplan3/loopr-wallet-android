@@ -9,6 +9,8 @@ import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
+import org.loopring.looprwallet.homemarkets.fragments.AllMarketsFragment
+import org.loopring.looprwallet.homemarkets.fragments.FavoriteMarketsFragment
 
 /**
  * Created by Corey on 1/17/2018.

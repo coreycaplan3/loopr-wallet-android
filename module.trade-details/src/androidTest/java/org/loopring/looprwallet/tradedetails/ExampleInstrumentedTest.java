@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.tokendetails;
+package org.loopring.looprwallet.tradedetails;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -10,7 +10,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
-import org.loopring.looprwallet.core.activities.TestActivity
+import org.loopring.looprwallet.core.activities.CoreTestActivity
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import java.io.File
 
@@ -26,7 +26,7 @@ import java.io.File
 class FilesUtilityTest : BaseDaggerTest() {
 
     @get:Rule
-    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
+    val activityRule = ActivityTestRule<CoreTestActivity>(CoreTestActivity::class.java)
 
     @get:Rule
     val grantFilePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)

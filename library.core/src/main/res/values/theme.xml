@@ -48,6 +48,9 @@
         <item name="tabIndicatorColor">@android:color/white</item>
 
         <!-- Text -->
+        <!-- TODO raise min SDK to 16 to get font support -->
+        <!--<item name="android:fontFamily"></item>-->
+
         <item name="android:textColorPrimary">@color/full_black_text_primary</item>
         <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
         <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary</item>
@@ -108,6 +111,9 @@
         <item name="tabIndicatorColor">@android:color/white</item>
 
         <!-- Text -->
+        <!-- TODO raise min SDK to 16 to get font support -->
+        <!--<item name="android:fontFamily"></item>-->
+
         <item name="android:textColorPrimary">@color/full_white_text_primary</item>
         <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
         <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary</item>

@@ -3,10 +3,12 @@ package org.loopring.looprwallet.homemarkets.adapters
 import android.view.ViewGroup
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
+import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.inflate
+import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.trading.TradingPair
-import org.loopring.looprwallet.home.R
-import org.loopring.looprwallet.tokendetails.TradingPairDetailsActivity
+import org.loopring.looprwallet.homemarkets.R
+import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 
 /**
  * Created by Corey Caplan on 1/29/18.
@@ -16,19 +18,19 @@ import org.loopring.looprwallet.tokendetails.TradingPairDetailsActivity
  * Purpose of Class:
  *
  */
-class MarketsAdapter(collection: OrderedRealmCollection<TradingPair>) :
+class MarketsAdapter(collection: OrderedRealmCollection<TradingPair>?, activity: BaseActivity) :
         RealmRecyclerViewAdapter<TradingPair, MarketsViewHolder>(collection, true) {
 
+    private val activity by weakReference(activity)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarketsViewHolder {
-        return MarketsViewHolder(parent.inflate(R.layout.view_holder_trading_pair_general))
+        return MarketsViewHolder(parent.inflate(R.layout.view_holder_markets))
     }
 
     override fun onBindViewHolder(holder: MarketsViewHolder, position: Int) {
-        holder.onBind(data!![position], clickListener = {
-            val context = holder.itemView.context
-            val intent = TradingPairDetailsActivity.route(it, context)
-            context.startActivity(intent)
-        })
+        holder.onBind(data!![position]) { tradingPair ->
+            activity?.let { TradingPairDetailsActivity.route(tradingPair, it) }
+        }
     }
 
 }

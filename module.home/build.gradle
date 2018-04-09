@@ -36,7 +36,6 @@ android {
             versionNameSuffix "-mainnet"
             dimension "environment"
         }
-
     }
 
 }
@@ -57,11 +56,15 @@ kapt {
 
 dependencies {
     implementation project(':library.core')
+    implementation project(path: ':module.home-markets')
     implementation project(path: ':module.home-orders')
     implementation project(path: ':module.transfer')
-    implementation project(path: ':module.trade-details')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation gradle.dagger
+    kapt gradle.daggerProcessor
+    kapt gradle.daggerCompiler
 
     // Unit Testing
     testImplementation gradle.junit

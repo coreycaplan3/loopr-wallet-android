@@ -8,6 +8,9 @@ import org.loopring.looprwallet.contacts.dagger.DaggerContactsLooprComponent
 import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.home.activities.MainActivity
+import org.loopring.looprwallet.homeorders.dagger.DaggerHomeOrdersLooprComponent
+import org.loopring.looprwallet.homeorders.dagger.HomeOrdersLooprComponent
+import org.loopring.looprwallet.homeorders.dagger.HomeOrdersLooprComponentProvider
 import org.loopring.looprwallet.transfer.dagger.DaggerTransferLooprComponent
 import org.loopring.looprwallet.transfer.dagger.TransferLooprComponent
 import org.loopring.looprwallet.transfer.dagger.TransferLooprComponentProvider
@@ -24,12 +27,17 @@ import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponentProvider
  *
  */
 open class LooprWalletApp : CoreLooprWalletApp(), ContactsLooprComponentProvider,
-        TransferLooprComponentProvider, WalletLooprComponentProvider {
+        HomeOrdersLooprComponentProvider, TransferLooprComponentProvider,
+        WalletLooprComponentProvider {
 
     companion object {
 
         val contactsLooprComponent: ContactsLooprComponent by lazy {
             DaggerContactsLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
+        }
+
+        val homeOrdersLooprComponent: HomeOrdersLooprComponent by lazy {
+            DaggerHomeOrdersLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
         }
 
         val transferLooprComponent: TransferLooprComponent by lazy {
@@ -43,6 +51,8 @@ open class LooprWalletApp : CoreLooprWalletApp(), ContactsLooprComponentProvider
     }
 
     override fun provideContactsLooprComponent() = contactsLooprComponent
+
+    override fun provideHomeOrdersLooprComponent() = homeOrdersLooprComponent
 
     override fun provideTransferLooprComponent() = transferLooprComponent
 

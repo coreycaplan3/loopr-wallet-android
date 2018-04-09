@@ -14,7 +14,7 @@ import java.math.BigDecimal
  * Purpose of Class:
  *
  */
-interface CryptoToken : TrackedRealmObject, RealmModel {
+interface CryptoToken : TrackedRealmObject {
 
     /**
      * The identifier used to uniquely distinguish between different crypto. For example, on

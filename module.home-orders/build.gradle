@@ -61,6 +61,10 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation gradle.dagger
+    kapt gradle.daggerProcessor
+    kapt gradle.daggerCompiler
+
     // Unit Testing
     testImplementation gradle.junit
     testImplementation gradle.mockito

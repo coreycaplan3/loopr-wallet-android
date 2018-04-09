@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.tokendetails;
+package org.loopring.looprwallet.tradedetails;
 
 import org.junit.Test;
 

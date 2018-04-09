@@ -47,7 +47,7 @@ android {
 
     dexOptions {
         preDexLibraries true
-        javaMaxHeapSize "2g"
+        javaMaxHeapSize "1g"
         maxProcessCount 4
     }
 
@@ -88,11 +88,27 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+kapt {
+    useBuildCache = true
+}
+
 dependencies {
     implementation project(':library.core')
     implementation project(':module.barcode')
     implementation project(':module.contacts')
     implementation project(':module.home')
+    implementation project(':module.home-markets')
+    implementation project(':module.home-orders')
     implementation project(':module.intro')
     implementation project(':module.order')
     implementation project(':module.trade-details')

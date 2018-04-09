@@ -7,7 +7,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
-import org.loopring.looprwallet.core.activities.TestActivity
+import org.loopring.looprwallet.core.activities.CoreTestActivity
 import org.loopring.looprwallet.core.models.settings.LooprSettings
 
 /**
@@ -22,8 +22,8 @@ abstract class BaseDaggerFragmentTest<out T : Fragment> : BaseDaggerTest() {
 
     @Suppress("MemberVisibilityCanBePrivate")
     @get:Rule
-    val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
-    val activity: TestActivity by lazy {
+    val activityRule = ActivityTestRule<CoreTestActivity>(CoreTestActivity::class.java)
+    val activity: CoreTestActivity by lazy {
         activityRule.activity
     }
 

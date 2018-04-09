@@ -3,7 +3,7 @@
 
     <application android:name=".application.CoreLooprWalletApp">
 
-        <activity android:name=".activities.TestActivity" />
+        <activity android:name=".activities.CoreTestActivity" />
 
     </application>
 
