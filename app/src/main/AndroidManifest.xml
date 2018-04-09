@@ -74,7 +74,7 @@
             android:label="@string/welcome" />
 
         <activity
-            android:name="org.loopring.looprwallet.appsecurity.activities.SecurityActivity"
+            android:name="org.loopring.looprwallet.core.activities.SecurityActivity"
             android:screenOrientation="portrait" />
 
     </application>

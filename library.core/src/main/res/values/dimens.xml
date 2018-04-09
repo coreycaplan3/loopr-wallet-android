@@ -29,6 +29,10 @@
     <!-- Dialogs -->
     <dimen name="alert_dialog_padding">18dp</dimen>
 
+    <!-- Empty State -->
+    <dimen name="empty_image_size">72dp</dimen>
+    <dimen name="empty_title_text_size">18sp</dimen>
+
     <!-- Floating Action Button -->
 
     <dimen name="fab_margin">16dp</dimen>

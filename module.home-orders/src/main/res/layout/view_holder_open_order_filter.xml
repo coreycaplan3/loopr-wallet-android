@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/standard_padding">
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/openOrderFilterDateSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="@dimen/horizontal_margin"
+        android:layout_marginRight="@dimen/horizontal_margin" />
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/openOrderFilterStatusSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/horizontal_margin"
+        android:layout_marginRight="@dimen/horizontal_margin"
+        android:layout_toLeftOf="@id/openOrderCancelAllButton"
+        android:layout_toStartOf="@id/openOrderCancelAllButton" />
+
+    <Button
+        android:id="@+id/openOrderCancelAllButton"
+        style="@style/App.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="31dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/cancel_all"
+        android:textSize="12sp" />
+
+</RelativeLayout>

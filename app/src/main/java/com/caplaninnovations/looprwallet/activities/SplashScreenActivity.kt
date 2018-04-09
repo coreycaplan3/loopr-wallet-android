@@ -16,8 +16,11 @@ import org.loopring.looprwallet.walletsignin.activities.SignInActivity
  */
 class SplashScreenActivity : BaseActivity() {
 
-    override val contentView: Int
+    override val contentViewRes: Int
         get() = R.layout.activity_splash
+
+    override val activityContainerId: Int
+        get() = R.id.activityContainer
 
     override val isSecureActivity: Boolean
         get() = false

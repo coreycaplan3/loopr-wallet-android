@@ -20,23 +20,29 @@ import org.loopring.looprwallet.core.models.settings.LooprSettings
  */
 abstract class BaseDaggerFragmentTest<out T : Fragment> : BaseDaggerTest() {
 
+    @Suppress("MemberVisibilityCanBePrivate")
     @get:Rule
     val activityRule = ActivityTestRule<TestActivity>(TestActivity::class.java)
     val activity: TestActivity by lazy {
         activityRule.activity
     }
 
-    abstract val fragment: T
+    abstract fun provideFragment(): T
+
+    @Suppress("UNCHECKED_CAST")
+    val fragment: T
+        get() {
+            val fragment = activity.supportFragmentManager.findFragmentByTag(tag)
+            return fragment as? T ?: provideFragment()
+        }
+
     abstract val tag: String
 
     @Before
-    fun setUpBaseFragmentTestForFragment() {
-        runBlockingUiCode {
-            activity.addFragment(fragment, tag)
-        }
-
-        instrumentation.waitForIdleSync()
+    fun setUpBaseFragmentTestForFragment() = runBlockingUiCode {
+        activity.addFragment(fragment, tag)
     }
+
     @After
     fun tearDownFragment() = runBlockingUiCode {
         activity.removeFragment(fragment)

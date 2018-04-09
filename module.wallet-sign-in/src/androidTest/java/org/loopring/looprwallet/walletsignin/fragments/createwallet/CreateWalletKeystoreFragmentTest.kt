@@ -3,25 +3,23 @@ package org.loopring.looprwallet.walletsignin.fragments.createwallet
 import android.Manifest
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
-import android.support.test.espresso.assertion.ViewAssertions.*
+import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.activities.MainActivity
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
-import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
-import org.loopring.looprwallet.core.validators.BaseValidator
-import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.card_enter_wallet_password.*
+import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.fragment_create_wallet_keystore.*
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
 import org.junit.Rule
-
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletKeystoreFragment
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
+import org.loopring.looprwallet.core.validators.BaseValidator
+import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
 import java.util.concurrent.FutureTask
 
 /**
@@ -40,7 +38,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerFragmentTest<CreateWalletKeys
     @JvmField
     val grantFilePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-    override val fragment = CreateWalletKeystoreFragment()
+    override fun provideFragment() = CreateWalletKeystoreFragment()
     override val tag = CreateWalletKeystoreFragment.TAG
 
     private val goodName = "loopr"
@@ -158,7 +156,7 @@ class CreateWalletKeystoreFragmentTest : BaseDaggerFragmentTest<CreateWalletKeys
         val task = FutureTask { fragment.onPasswordConfirmed() }
         waitForTask(activity, task, false)
 
-        assertActivityActive(MainActivity::class.java, 7500)
+        assertActivityActive(CoreLooprWalletApp.mainClass, 7500)
     }
 
 }

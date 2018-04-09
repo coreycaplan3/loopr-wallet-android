@@ -2,12 +2,12 @@ package org.loopring.looprwallet.core.fragments.settings
 
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.preference.ListPreference
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.models.settings.CurrencySettings
 
 /**
  * Created by Corey Caplan on 3/29/18.
@@ -19,8 +19,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CurrencySettingsFragmentTest : BaseDaggerFragmentTest<CurrencySettingsFragment>() {
 
-    override val fragment = CurrencySettingsFragment()
-
+    override fun provideFragment() = CurrencySettingsFragment()
     override val tag = CurrencySettingsFragment.TAG
 
     @Test

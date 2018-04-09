@@ -8,22 +8,28 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.matcher.ViewMatchers.*
-import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.core.extensions.upsert
-import org.loopring.looprwallet.core.handlers.NumberPadHandler
-import com.caplaninnovations.looprwallet.mocknet.test.BuildConfig
-import org.loopring.looprwallet.core.cryptotokens.EthToken
-import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
-import com.caplaninnovations.looprwallet.models.user.Contact
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
-import org.loopring.looprwallet.core.utilities.NetworkUtility
+import android.support.test.runner.AndroidJUnit4
+import kotlinx.android.synthetic.main.fragment_create_transfer_amount.*
+import kotlinx.android.synthetic.main.number_pad.*
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.withTimeout
 import org.hamcrest.Matchers.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.BuildConfig
+import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.extensions.formatAsCurrency
+import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.extensions.upsert
+import org.loopring.looprwallet.core.presenters.NumberPadPresenter
+import org.loopring.looprwallet.core.models.contact.Contact
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.math.BigDecimal
 
@@ -35,13 +41,14 @@ import java.math.BigDecimal
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAmountFragment>() {
 
     companion object {
         const val name = "Daniel"
     }
 
-    override val fragment = CreateTransferAmountFragment.createInstance(address)
+    override fun provideFragment() = CreateTransferAmountFragment.createInstance(address)
     override val tag = CreateTransferAmountFragment.TAG
 
     @Before
@@ -361,7 +368,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
         assertTrue(fragment.createTransferSwapButton.isEnabled)
         assertTrue(fragment.createTransferMaxButton.isEnabled)
 
-        assertTrue(NumberPadHandler.isNumberPadEnabled(fragment))
+        assertTrue(NumberPadPresenter.isNumberPadEnabled(fragment))
 
         val balance = token.getBalanceOf(address)!!.formatAsToken(fragment.currencySettings, token.ticker)
         val formattedBalance = str(R.string.formatter_balance).format(balance)
@@ -382,7 +389,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
         assertFalse(fragment.createTransferSwapButton.isEnabled)
         assertFalse(fragment.createTransferMaxButton.isEnabled)
 
-        assertTrue(NumberPadHandler.isNumberPadDisabled(fragment))
+        assertTrue(NumberPadPresenter.isNumberPadDisabled(fragment))
 
         Espresso.onView(`is`(fragment.createTransferCurrentPriceLabel))
                 .check(matches(withText(R.string.error_loading_price)))

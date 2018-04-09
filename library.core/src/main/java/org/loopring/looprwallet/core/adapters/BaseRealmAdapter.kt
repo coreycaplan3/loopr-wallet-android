@@ -25,11 +25,27 @@ abstract class BaseRealmAdapter<T : RealmModel> :
         const val TYPE_DATA = 2
     }
 
+    /**
+     * The total number of items that can be loaded and stored in *data*. This represents the total
+     * amount of data, not the current page size or the amount loaded in a network call. This  field
+     * is then used to create/check the viewType, given a position. Mainly to distinguish between
+     * whether or not we should "load more" data after scrolling beyond the current data's
+     * capacity.
+     *
+     * Set this field to *null* if it shouldn't be used, like if we're loading data only locally.
+     */
+    abstract val totalItems: Int?
+
     final override fun getItemViewType(position: Int): Int {
         val data = data ?: return TYPE_LOADING
+        val totalItems = totalItems
 
         return when {
-            data.isEmpty() -> TYPE_EMPTY
+            !data.isValid -> TYPE_LOADING
+            data.size == 0 -> TYPE_EMPTY
+            position == itemCount - 1 && containsMoreData() ->
+                // We are at the last item, and there's still more data to load
+                TYPE_LOADING
             else -> TYPE_DATA
         }
     }
@@ -56,9 +72,27 @@ abstract class BaseRealmAdapter<T : RealmModel> :
     abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: T)
 
     final override fun getItemCount(): Int {
-        return data?.size ?: 1
+        // We return an extra item to account for the loading view holder
+        return data?.size?.let {
+            when {
+                containsMoreData() ->
+                    // There's still some items left to load
+                    it + 1
+                else -> it
+            }
+        } ?: 1
     }
 
-    class LoadingViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+    // MARK - Private Methods
+
+    /**
+     * @return True if this adapter contains more data to load from the network or false otherwise
+     */
+    private fun containsMoreData(): Boolean {
+        val totalItems = totalItems ?: return false
+        return data?.size?.let { it < totalItems } ?: false
+    }
+
+    private class LoadingViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
 
 }

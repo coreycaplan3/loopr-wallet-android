@@ -39,6 +39,9 @@
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>
 
+        <!-- Spinner -->
+        <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner</item>
+
         <!-- Tabs -->
         <item name="tabTextColor">@color/tabs_text</item>
         <item name="tabSelectedTextColor">@color/tabs_text</item>
@@ -95,6 +98,9 @@
 
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>
+
+        <!-- Spinner -->
+        <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner</item>
 
         <!-- Tabs -->
         <item name="tabTextColor">@color/tabs_text</item>

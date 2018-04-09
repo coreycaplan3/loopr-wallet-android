@@ -7,7 +7,7 @@ import android.os.Handler
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.android.CipherClient
-import org.loopring.looprwallet.appsecurity.activities.SecurityActivity
+import org.loopring.looprwallet.core.activities.SecurityActivity
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.loge

@@ -22,7 +22,7 @@ import org.loopring.looprwallet.core.cryptotokens.EthToken
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.settings.EthereumFeeSettingsFragment
-import org.loopring.looprwallet.core.handlers.NumberPadHandler
+import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate.Companion.MAX_CURRENCY_FRACTION_DIGITS
@@ -49,7 +49,7 @@ import javax.inject.Inject
  * Purpose of Class: To perform the second (and final) part of a transfer event, which involves
  * entering the amount.
  */
-class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadActionListener {
+class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPadActionListener {
 
     companion object {
         val TAG: String = CreateTransferAmountFragment::class.java.simpleName
@@ -269,7 +269,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
             }
         }
 
-        NumberPadHandler.setupNumberPad(this, this)
+        NumberPadPresenter.setupNumberPad(this, this)
 
         setupTokenTicker(currentToken)
 
@@ -599,14 +599,14 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadHandler.NumberPadA
         if (ethTokenBalanceViewModel?.hasValidData() == true && ethTokenPriceCheckerViewModel?.hasValidData() == true) {
             createTransferSwapButton.isEnabled = true
             createTransferMaxButton.isEnabled = true
-            NumberPadHandler.enableNumberPad(this)
+            NumberPadPresenter.enableNumberPad(this)
 
             indefiniteSnackbar?.dismiss()
             indefiniteSnackbar = null
         } else {
             createTransferSwapButton.isEnabled = false
             createTransferMaxButton.isEnabled = false
-            NumberPadHandler.disableNumberPad(this)
+            NumberPadPresenter.disableNumberPad(this)
 
             indefiniteSnackbar = view?.indefiniteSnackbarWithAction(R.string.error_no_connection, R.string.reload) {
                 refreshAll()

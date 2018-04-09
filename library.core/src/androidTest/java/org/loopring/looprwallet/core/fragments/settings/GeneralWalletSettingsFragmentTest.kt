@@ -1,9 +1,11 @@
 package org.loopring.looprwallet.core.fragments.settings
 
+import android.support.test.runner.AndroidJUnit4
 import android.support.v14.preference.SwitchPreference
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.models.settings.GeneralWalletSettings
-import org.junit.Test
 
 /**
  * Created by Corey Caplan on 3/29/18.
@@ -12,9 +14,10 @@ import org.junit.Test
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class GeneralWalletSettingsFragmentTest : BaseDaggerFragmentTest<GeneralWalletSettingsFragment>() {
 
-    override val fragment = GeneralWalletSettingsFragment()
+    override fun provideFragment() = GeneralWalletSettingsFragment()
     override val tag = GeneralWalletSettingsFragment.TAG
 
     @Test

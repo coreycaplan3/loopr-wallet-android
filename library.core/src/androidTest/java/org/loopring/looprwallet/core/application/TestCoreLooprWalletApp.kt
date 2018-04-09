@@ -9,7 +9,6 @@ import org.loopring.looprwallet.core.extensions.logi
  *
  * Purpose of Class:
  *
- *
  */
 class TestCoreLooprWalletApp : CoreLooprWalletApp() {
 

@@ -1,12 +1,13 @@
 package org.loopring.looprwallet.core.fragments.settings
 
+import android.support.test.runner.AndroidJUnit4
 import android.support.v7.preference.ListPreference
+import kotlinx.coroutines.experimental.delay
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.models.settings.ThemeSettings
-import kotlinx.coroutines.experimental.delay
-import org.junit.Test
-import org.loopring.looprwallet.core.fragments.settings.*
 
 /**
  * Created by Corey Caplan on 3/29/18.
@@ -15,10 +16,10 @@ import org.loopring.looprwallet.core.fragments.settings.*
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class HomeSettingsFragmentTest : BaseDaggerFragmentTest<HomeSettingsFragment>() {
 
-    override val fragment = HomeSettingsFragment()
-
+    override fun provideFragment() = HomeSettingsFragment()
     override val tag = HomeSettingsFragment.TAG
 
     @Test

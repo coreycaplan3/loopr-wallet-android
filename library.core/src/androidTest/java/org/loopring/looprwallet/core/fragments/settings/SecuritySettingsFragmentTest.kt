@@ -1,17 +1,19 @@
 package org.loopring.looprwallet.core.fragments.settings
 
+import android.support.test.runner.AndroidJUnit4
 import android.support.v7.preference.ListPreference
+import kotlinx.coroutines.experimental.delay
+import org.junit.Assert.*
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.fragments.security.EnterNewSecurityFragment
 import org.loopring.looprwallet.core.models.settings.LooprSettings
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.KEY_SECURITY_TYPE
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
-import kotlinx.coroutines.experimental.delay
-import org.junit.Assert.*
-import org.junit.Test
-import org.loopring.looprwallet.core.fragments.security.EnterNewSecurityFragment
 
 /**
  * Created by Corey Caplan on 3/29/18.
@@ -20,10 +22,10 @@ import org.loopring.looprwallet.core.fragments.security.EnterNewSecurityFragment
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class SecuritySettingsFragmentTest : BaseDaggerFragmentTest<SecuritySettingsFragment>() {
 
-    override val fragment = SecuritySettingsFragment()
-
+    override fun provideFragment() = SecuritySettingsFragment()
     override val tag = SecuritySettingsFragment.TAG
 
     @Test

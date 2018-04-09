@@ -28,8 +28,11 @@ class CreateTransferActivity : BaseActivity() {
 
     }
 
-    override val contentView: Int
+    override val contentViewRes: Int
         get() = R.layout.activity_create_transfer
+
+    override val activityContainerId: Int
+        get() = R.id.activityContainer
 
     override val isSecureActivity: Boolean
         get() = true

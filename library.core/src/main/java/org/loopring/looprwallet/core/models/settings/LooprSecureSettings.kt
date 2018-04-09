@@ -2,6 +2,7 @@ package org.loopring.looprwallet.core.models.settings
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.support.annotation.VisibleForTesting
 import com.google.gson.Gson
 import io.realm.android.CipherClient
 import org.loopring.looprwallet.core.extensions.fromJson
@@ -26,6 +27,11 @@ interface LooprSecureSettings : LooprSettings {
 
         private var looprSecureSettings: LooprSecureSettings? = null
 
+        @VisibleForTesting
+        fun clear() {
+            (looprSecureSettings as? LooprSecureSettingsDebugImpl)?.map?.clear()
+        }
+
         fun getInstance(context: Context): LooprSecureSettings {
             if (looprSecureSettings != null) {
                 return looprSecureSettings as LooprSecureSettings
@@ -47,7 +53,7 @@ interface LooprSecureSettings : LooprSettings {
 
     private class LooprSecureSettingsDebugImpl : LooprSecureSettings {
 
-        private val map = HashMap<String, Any>()
+        val map = HashMap<String, Any>()
 
         override fun getBoolean(key: String, defaultValue: Boolean): Boolean {
             return map[key] as? Boolean ?: defaultValue

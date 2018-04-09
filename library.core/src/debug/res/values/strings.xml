@@ -24,10 +24,9 @@
     <string name="default_buy_order_pair">LRC → ETH</string>
     <string name="default_sell_order_pair">ETH → LRC</string>
     <string name="default_order_percentage_complete">90% Complete</string>
-    <string name="default_ask_eth">Ask: 0.00079059 ETH</string>
-    <string name="default_bid_eth">Bid: 0.00079059 ETH</string>
-    <string name="default_order_quantity_with_label">Quantity: 1320.425</string>
-    <string name="default_order_placed_time">2/7/2018 at 4:15 pm</string>
+    <string name="default_ask_eth">0.00079059 ETH</string>
+    <string name="default_bid_eth">0.00079059 ETH</string>
+    <string name="default_order_quantity_with_label">Vol 1,320.425</string>
     <string name="default_order_completion_time">Completed: 2/7/2018 at 4:17 PM</string>
     <string name="default_total_cost_eth">Cost: 1.04391 ETH</string>
     <string name="default_price">$0.6294309</string>

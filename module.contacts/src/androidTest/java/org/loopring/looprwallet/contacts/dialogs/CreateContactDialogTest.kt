@@ -2,9 +2,7 @@ package org.loopring.looprwallet.contacts.dialogs
 
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import com.caplaninnovations.looprwallet.models.user.Contact
+import android.support.test.runner.AndroidJUnit4
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.dialog_create_contact.*
 import kotlinx.coroutines.experimental.CompletableDeferred
@@ -12,6 +10,11 @@ import kotlinx.coroutines.experimental.withTimeout
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
+import org.loopring.looprwallet.core.models.contact.Contact
 
 /**
  * Created by Corey on 3/30/2018.
@@ -20,9 +23,10 @@ import org.junit.Test
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class CreateContactDialogTest : BaseDaggerFragmentTest<CreateContactDialog>() {
 
-    override val fragment = CreateContactDialog.create(null)
+    override fun provideFragment() = CreateContactDialog.create(null)
 
     override val tag = CreateContactDialog.TAG
 

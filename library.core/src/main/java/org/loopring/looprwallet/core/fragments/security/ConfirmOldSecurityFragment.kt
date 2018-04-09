@@ -7,7 +7,7 @@ import android.view.View
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_security_pin.*
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.handlers.NumberPadHandler
+import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -119,14 +119,16 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
 
     override fun onSubmitPin() {
         when {
-            userPinSettings.checkPinAndIncrementAttemptsIfFailure(currentPin) -> {
+            userPinSettings.checkIsPinCorrectAndIncrementAttemptsIfFailure(currentPin) -> {
                 (activity as? OnSecurityConfirmedListener)?.onSecurityConfirmed()
             }
             userPinSettings.isUserLockedOut() ->
-                // By calling checkPinAndIncrementAttemptsIfFailure and reaching here, the user may
-                // be locked out.
+                // By calling checkIsPinCorrectAndIncrementAttemptsIfFailure and reaching here, the
+                // user may be locked out.
                 onUserLockout()
         }
+
+        currentPin = ""
     }
 
     /**
@@ -168,13 +170,13 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
         else -> throw IllegalArgumentException("Invalid securityType, found: $securityType")
     }
 
-    private fun onUserLockout() {
-        NumberPadHandler.disableNumberPad(this)
+    private fun /**/onUserLockout() {
+        NumberPadPresenter.disableNumberPad(this)
 
         countDownTimer = object : CountDownTimer(userPinSettings.getLockoutTimeLeft(), 250L) {
             override fun onFinish() {
                 bindSecurityLabel()
-                NumberPadHandler.enableNumberPad(this@ConfirmOldSecurityFragment)
+                NumberPadPresenter.enableNumberPad(this@ConfirmOldSecurityFragment)
             }
 
             override fun onTick(millisUntilFinished: Long) {

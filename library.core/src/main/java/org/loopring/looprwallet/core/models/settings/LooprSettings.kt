@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.models.settings
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.support.annotation.VisibleForTesting
 import android.support.v7.preference.PreferenceDataStore
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.utilities.BuildUtility
@@ -19,6 +20,11 @@ interface LooprSettings {
     companion object {
 
         private var looprSettings: LooprSettings? = null
+
+        @VisibleForTesting
+        fun clear() {
+            (looprSettings as? LooprSettingsDebugImpl)?.map?.clear()
+        }
 
         @Synchronized
         fun getInstance(context: Context): LooprSettings {
@@ -135,7 +141,7 @@ interface LooprSettings {
 
     // START DEBUG CLASS
 
-    private class LooprSettingsDebugImpl : LooprSecureSettings {
+    class LooprSettingsDebugImpl : LooprSecureSettings {
 
         val map = HashMap<String, Any>()
 

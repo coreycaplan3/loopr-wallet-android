@@ -57,8 +57,11 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
     private var scaleGestureDetector: ScaleGestureDetector? = null
     private var gestureDetector: GestureDetector? = null
 
-    override val contentView: Int
+    override val contentViewRes: Int
         get() = R.layout.activity_barcode_capture
+
+    override val activityContainerId: Int
+        get() = R.id.activityContainer
 
     override val isSecureActivity: Boolean
         get() = false
@@ -87,6 +90,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
         )
     }
 
+    @SuppressLint("Range")
     override fun onBarcodeDetected(barcode: Barcode) {
         val value = barcode.rawValue
         when {

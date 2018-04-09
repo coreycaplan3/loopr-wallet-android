@@ -22,6 +22,8 @@ class ContactsAdapter(private var selectedContactAddress: String?,
 
     var isSearching = false
 
+    override val totalItems: Int? = null
+
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return if (isSearching) {
             NoContactsFoundViewHolder(parent.inflate(R.layout.view_holder_no_contact_found))

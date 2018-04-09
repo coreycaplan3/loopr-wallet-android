@@ -20,10 +20,12 @@ open class SyncData(
         var lastSyncTime: Date? = null
 ) : RealmObject() {
 
-    @StringDef(SYNC_TYPE_TOKEN_BALANCE)
+    @StringDef(SYNC_TYPE_NONE, SYNC_TYPE_TOKEN_BALANCE, SYNC_TYPE_CURRENCY_EXCHANGE_RATE)
     annotation class SyncType
 
     companion object {
+        const val SYNC_TYPE_NONE = "_NONE"
+
         const val SYNC_TYPE_TOKEN_BALANCE = "_TOKEN_BALANCE"
         const val SYNC_TYPE_TOKEN_PRICE = "_TOKEN_PRICE"
         const val SYNC_TYPE_CURRENCY_EXCHANGE_RATE = "_CURRENCY_EXCHANGE_RATE"

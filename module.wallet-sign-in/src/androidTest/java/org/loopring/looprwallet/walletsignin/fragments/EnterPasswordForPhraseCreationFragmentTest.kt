@@ -4,20 +4,20 @@ import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
-import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
-import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletRememberPhraseFragment
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
-import org.loopring.looprwallet.core.utilities.CustomViewAssertions
-import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
-import org.loopring.looprwallet.core.validators.BaseValidator
 import kotlinx.android.synthetic.main.card_enter_wallet_password.*
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.fragment_sign_in_enter_password.*
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
 import org.junit.Test
+import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.CustomViewAssertions
+import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
+import org.loopring.looprwallet.core.validators.BaseValidator
+import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
+import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletRememberPhraseFragment
 import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
 import java.util.concurrent.FutureTask
 
@@ -31,7 +31,7 @@ import java.util.concurrent.FutureTask
  */
 class EnterPasswordForPhraseCreationFragmentTest : BaseDaggerFragmentTest<EnterPasswordForPhraseFragment>() {
 
-    override val fragment = EnterPasswordForPhraseFragment.createCreationInstance()
+    override fun provideFragment() = EnterPasswordForPhraseFragment.createCreationInstance()
     override val tag = EnterPasswordForPhraseFragment.TAG
 
     private val badName = "loopr$" // bad character

@@ -6,31 +6,30 @@ import android.content.ComponentName
 import android.support.test.InstrumentationRegistry
 import android.support.test.InstrumentationRegistry.getTargetContext
 import android.support.test.espresso.Espresso
-import android.support.test.espresso.action.ViewActions
-import android.support.test.espresso.action.ViewActions.*
+import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.view.View
-import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.extensions.logd
-import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import org.loopring.looprwallet.core.models.settings.LooprSecureSettings
-import org.loopring.looprwallet.core.wallet.WalletClient
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import io.realm.Realm
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
+import org.loopring.looprwallet.core.models.settings.LooprSecureSettings
+import org.loopring.looprwallet.core.models.settings.LooprSettings
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.realm.RealmClient
+import org.loopring.looprwallet.core.wallet.WalletClient
 import java.util.*
 import java.util.concurrent.FutureTask
 import javax.inject.Inject
@@ -126,10 +125,10 @@ open class BaseDaggerTest {
 
         wallet?.let { walletClient.removeWallet(it.walletName) }
 
-        val field = LooprSecureSettings.Companion::class.java.getDeclaredField("looprSecureSettings")
-        field.isAccessible = true
-        field.set(null, null)
+        LooprSettings.clear()
+        logd("Reset LooprSettings static instance")
 
+        LooprSecureSettings.clear()
         logd("Reset LooprSecureSettings static instance")
     }
 

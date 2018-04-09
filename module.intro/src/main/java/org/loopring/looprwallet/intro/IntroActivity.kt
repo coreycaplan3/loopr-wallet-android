@@ -12,8 +12,11 @@ import org.loopring.looprwallet.core.activities.BaseActivity
  */
 class IntroActivity : BaseActivity() {
 
-    override val contentView: Int
+    override val contentViewRes: Int
         get() = R.layout.activity_intro
+
+    override val activityContainerId: Int
+        get() = R.id.activityContainer
 
     override val isSecureActivity: Boolean
         get() = false

@@ -1,9 +1,9 @@
 package org.loopring.looprwallet.core.fragments.settings
 
 import android.support.v7.preference.ListPreference
+import org.junit.Test
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.models.settings.EthereumNetworkSettings
-import org.junit.Test
 
 /**
  * Created by Corey Caplan on 3/29/18.
@@ -14,8 +14,7 @@ import org.junit.Test
  */
 class EthereumNetworkSettingsFragmentTest : BaseDaggerFragmentTest<EthereumNetworkSettingsFragment>() {
 
-    override val fragment = EthereumNetworkSettingsFragment()
-
+    override fun provideFragment() = EthereumNetworkSettingsFragment()
     override val tag = EthereumNetworkSettingsFragment.TAG
 
     @Test

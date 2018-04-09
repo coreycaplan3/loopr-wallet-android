@@ -1,16 +1,15 @@
 package org.loopring.looprwallet.walletsignin.fragments.createwallet
 
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.BuildConfig
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import kotlinx.android.synthetic.main.fragment_create_wallet_phrase_remember.*
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
-
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.BuildConfig
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 
 /**
  * Created by Corey on 3/5/2018.
@@ -39,9 +38,10 @@ class CreateWalletRememberPhraseFragmentTest : BaseDaggerFragmentTest<CreateWall
             "appear"
     )
 
-    override val fragment = CreateWalletRememberPhraseFragment.createInstance(
-            WalletCreationPhrase(walletName, password, phrase)
-    )
+    override fun provideFragment(): CreateWalletRememberPhraseFragment {
+        val wallet = WalletCreationPhrase(walletName, password, phrase)
+        return CreateWalletRememberPhraseFragment.createInstance(wallet)
+    }
 
     override val tag = CreateWalletRememberPhraseFragment.TAG
 

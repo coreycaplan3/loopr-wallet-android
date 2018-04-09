@@ -164,6 +164,7 @@ dependencies {
 
     // QR Code Scanner
     api gradle.googleVision
+    api gradle.qrCodeGeneration
 
     // Realm
     api gradle.realmAdapters

@@ -2,7 +2,6 @@ package org.loopring.looprwallet.transfer.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
@@ -14,11 +13,10 @@ import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.contacts.fragments.contacts.ViewContactsFragment
-import org.loopring.looprwallet.core.animations.ToolbarToSearchAnimation
 import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
-import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.contact.Contact
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
 import org.loopring.looprwallet.transfer.R
@@ -31,12 +29,12 @@ import org.loopring.looprwallet.transfer.R
  * Purpose of Class: The first step in the transfer process. This fragment allows you to enter an
  * address or select one from your address book.
  */
-class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnContactClickedListener {
+class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnContactClickedListener,
+        SearchViewPresenter.OnSearchViewChangeListener {
 
     companion object {
         val TAG: String = CreateTransferAmountFragment::class.java.simpleName
 
-        private const val KEY_SEARCH_QUERY = "_SEARCH_QUERY"
         private const val KEY_SELECTED_CONTACT = "_SELECTED_CONTACT"
     }
 
@@ -45,9 +43,12 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
 
     var selectedContactAddress: String? = null
 
-    private var searchQuery: String? = null
+    var searchQuery: String? = null
+        private set
 
     lateinit var searchItem: MenuItem
+
+    private lateinit var searchViewPresenter: SearchViewPresenter
 
     private lateinit var viewContactsFragment: ViewContactsFragment
 
@@ -59,7 +60,14 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
             BarcodeCaptureHandler.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, imageButton)
         }
 
-        searchQuery = savedInstanceState?.getString(KEY_SEARCH_QUERY)
+        searchViewPresenter = SearchViewPresenter(
+                containsOverflowMenu = false,
+                numberOfVisibleMenuItems = 1,
+                baseFragment = this,
+                savedInstanceState = savedInstanceState,
+                listener = this
+        )
+
         selectedContactAddress = savedInstanceState?.getString(KEY_SELECTED_CONTACT)
 
         validatorList = listOf(PublicKeyValidator(recipientAddressInputLayout, this::onFormChanged))
@@ -98,16 +106,35 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
 
         searchItem = menu.findItem(R.id.menu_search_contacts)
 
-        (searchItem.actionView as? SearchView)?.let { setupSearchView(searchItem, it) }
+        val searchView = (searchItem.actionView as SearchView)
+        searchViewPresenter.setupSearchView(searchItem, searchView)
+    }
 
-        if (searchQuery != null) {
-            Handler().postDelayed({
-                // Wait fo the item and fragment to be setup
-                searchItem.expandActionView()
-                (searchItem.actionView as SearchView).setQuery(searchQuery, false)
-            }, 300)
-        }
+    override fun onQueryTextGainFocus() {
+        viewContactsFragment.resetRecyclerViewPosition()
+    }
 
+    override fun onQueryTextChangeListener(searchQuery: String) {
+        viewContactsFragment.searchContactsByName(searchQuery)
+    }
+
+    override fun onSearchItemExpanded() {
+        viewContactsFragment.searchContactsByName("")
+
+        createTransferRecipientInputContainer.visibility = View.GONE
+        createTransferContinueButton.visibility = View.GONE
+    }
+
+    override fun onSearchItemCollapsed() {
+        // By calling onFormChanged we can restore the state of things based on the
+        // address input. Meaning, we won't reset the content to display ALL contacts.
+        // Instead, the contacts displayed will be NOW based on the address input
+        onFormChanged()
+
+        createTransferRecipientInputContainer.visibility = View.VISIBLE
+        createTransferContinueButton.visibility = View.VISIBLE
+
+        viewContactsFragment.scrollToSelectedContact(selectedContactAddress)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -131,13 +158,9 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
-        val queryString = searchQuery?.let {
-            if (it.trim().isEmpty()) null
-            else it
-        }
-        outState.putString(KEY_SEARCH_QUERY, queryString)
         outState.putString(KEY_SELECTED_CONTACT, selectedContactAddress)
+
+        searchViewPresenter.onSaveInstanceState(outState)
     }
 
     // MARK - Private Methods
@@ -175,81 +198,6 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         }
 
         createTransferContinueButton.isEnabled = isValid
-    }
-
-    private fun setupSearchView(searchItem: MenuItem, searchView: SearchView) {
-
-        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                viewContactsFragment.resetRecyclerViewPosition()
-            }
-        }
-
-        var wasInitialized = false
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String): Boolean {
-                if (wasInitialized) {
-                    searchQuery = newText
-                } else {
-                    wasInitialized = true
-                }
-
-                viewContactsFragment.searchContactsByName(newText)
-
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return true
-            }
-        })
-
-        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-
-            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                logd("Collapsing MenuItem...")
-
-                searchQuery = null
-
-                // By calling onFormChanged we can restore the state of things based on the
-                // address input. Meaning, we won't reset the content to display ALL contacts.
-                // Instead, the contacts displayed will be NOW based on the address input
-                onFormChanged()
-
-                createTransferRecipientInputContainer.visibility = View.VISIBLE
-                createTransferContinueButton.visibility = View.VISIBLE
-
-                viewContactsFragment.scrollToSelectedContact(selectedContactAddress)
-
-                if (item.isActionViewExpanded) {
-                    ToolbarToSearchAnimation.animateToToolbar(
-                            fragment = this@SelectTransferContactFragment,
-                            numberOfMenuIcon = 1,
-                            containsOverflow = false
-                    )
-                }
-                return true
-            }
-
-            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                // Called when SearchView is expanding
-                logd("Expanding MenuItem...")
-
-                viewContactsFragment.searchContactsByName("")
-
-                createTransferRecipientInputContainer.visibility = View.GONE
-                createTransferContinueButton.visibility = View.GONE
-
-                ToolbarToSearchAnimation.animateToSearch(
-                        fragment = this@SelectTransferContactFragment,
-                        numberOfMenuIcon = 1,
-                        containsOverflow = false
-                )
-                return true
-            }
-        })
-
     }
 
 }

@@ -2,15 +2,15 @@ package org.loopring.looprwallet.walletsignin.fragments.createwallet
 
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions
-import org.loopring.looprwallet.walletsignin.R
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
+import android.support.test.runner.AndroidJUnit4
 import kotlinx.android.synthetic.main.fragment_create_wallet_selection.*
 import org.hamcrest.Matchers
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletKeystoreFragment
-import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletSelectionFragment
+import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.walletsignin.R
+import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
 
 /**
  * Created by Corey on 3/5/2018.
@@ -21,9 +21,10 @@ import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWallet
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class CreateWalletSelectionFragmentTest : BaseDaggerFragmentTest<CreateWalletSelectionFragment>() {
 
-    override val fragment = CreateWalletSelectionFragment()
+    override fun provideFragment() = CreateWalletSelectionFragment()
     override val tag = CreateWalletSelectionFragment.TAG
 
     @Test

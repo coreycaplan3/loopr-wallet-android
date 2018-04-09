@@ -2,6 +2,7 @@ package org.loopring.looprwallet.home.activities
 
 import android.content.Intent
 import android.os.Bundle
+import kotlinx.android.synthetic.main.bottom_navigation.*
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
@@ -10,11 +11,11 @@ import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationF
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
+import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.home.fragments.markets.MarketsParentFragment
-import org.loopring.looprwallet.home.fragments.orders.OrdersParentFragment
-import org.loopring.looprwallet.home.fragments.wallet.MyWalletFragment
-import org.loopring.looprwallet.home.handlers.BottomNavigationHandler
+import org.loopring.looprwallet.home.fragments.MyWalletFragment
+import org.loopring.looprwallet.home.fragments.GeneralOrdersParentFragment
 import org.loopring.looprwallet.transfer.fragments.ViewTransfersFragment
 
 /**
@@ -33,21 +34,24 @@ class MainActivity : BaseActivity() {
          * @return An intent used to start this activity (as normal), clearing any previous tasks
          * which may have pointed to here
          */
-        fun createIntent(): Intent {
+        fun routeAndClearOldTasks(): Intent {
             return Intent(CoreLooprWalletApp.context, MainActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }
 
-    override val contentView: Int
+    override val contentViewRes: Int
         get() = R.layout.activity_main
+
+    override val activityContainerId: Int
+        get() = R.id.activityContainer
 
     override val isSecureActivity: Boolean
         get() = true
 
     lateinit var bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory
 
-    lateinit var bottomNavigationHandler: BottomNavigationHandler
+    lateinit var bottomNavigationPresenter: BottomNavigationPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +59,7 @@ class MainActivity : BaseActivity() {
         val fragmentTagPairs: List<BottomNavigationFragmentPair> = listOf(
                 BottomNavigationFragmentPair(KEY_MARKETS, MarketsParentFragment(), R.id.menu_markets),
 
-                BottomNavigationFragmentPair(KEY_ORDERS, OrdersParentFragment(), R.id.menu_orders),
+                BottomNavigationFragmentPair(KEY_ORDERS, GeneralOrdersParentFragment(), R.id.menu_orders),
 
                 BottomNavigationFragmentPair(KEY_TRANSFERS, ViewTransfersFragment(), R.id.menu_transfers),
 
@@ -64,12 +68,20 @@ class MainActivity : BaseActivity() {
 
         bottomNavigationFragmentStackHistory = BottomNavigationFragmentStackHistory(false, savedInstanceState)
 
-        bottomNavigationHandler = BottomNavigationHandler(this, fragmentTagPairs,
-                KEY_MARKETS, bottomNavigationFragmentStackHistory, savedInstanceState)
+        bottomNavigationView.inflateMenu(R.menu.home_bottom_navigation_menu)
+
+        bottomNavigationPresenter = BottomNavigationPresenter(
+                activity = this,
+                bottomNavigationView = bottomNavigationView,
+                fragmentTagPairs = fragmentTagPairs,
+                initialTag = KEY_MARKETS,
+                bottomNavigationFragmentStackHistory = bottomNavigationFragmentStackHistory,
+                savedInstanceState = savedInstanceState
+        )
     }
 
     override fun onBackPressed() {
-        if (bottomNavigationHandler.onBackPressed()) {
+        if (bottomNavigationPresenter.onBackPressed()) {
             finish()
         }
     }

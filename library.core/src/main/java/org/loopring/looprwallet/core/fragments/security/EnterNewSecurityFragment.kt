@@ -6,7 +6,7 @@ import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_security_pin.*
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.longToast
-import org.loopring.looprwallet.core.handlers.NumberPadHandler
+import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
 
@@ -72,7 +72,7 @@ class EnterNewSecurityFragment : BaseSecurityFragment() {
         when (securityType) {
             SecuritySettings.TYPE_PIN_SECURITY -> {
                 bindPinTitleText()
-                NumberPadHandler.setupNumberPad(this, this)
+                NumberPadPresenter.setupNumberPad(this, this)
             }
             else -> throw IllegalArgumentException("Invalid securityType, found: $securityType")
         }

@@ -1,8 +1,10 @@
 package org.loopring.looprwallet.core.fragments.security
 
+import android.support.test.runner.AndroidJUnit4
 import kotlinx.android.synthetic.main.number_pad.*
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 
 /**
@@ -12,9 +14,10 @@ import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class EnterNewSecurityFragmentTest : BaseDaggerFragmentTest<EnterNewSecurityFragment>() {
 
-    override val fragment = EnterNewSecurityFragment.createPinInstance()
+    override fun provideFragment() = EnterNewSecurityFragment.createPinInstance()
     override val tag = EnterNewSecurityFragment.TAG
 
     @Test

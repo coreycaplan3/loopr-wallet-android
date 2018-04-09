@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.number_pad.*
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.handlers.NumberPadHandler
+import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
 import org.loopring.looprwallet.core.models.settings.UserPinSettings
@@ -21,7 +21,7 @@ import javax.inject.Inject
  *
  * Purpose of Class:
  */
-abstract class BaseSecurityFragment : BaseFragment(), NumberPadHandler.NumberPadActionListener {
+abstract class BaseSecurityFragment : BaseFragment(), NumberPadPresenter.NumberPadActionListener {
 
     companion object {
 
@@ -69,7 +69,7 @@ abstract class BaseSecurityFragment : BaseFragment(), NumberPadHandler.NumberPad
         when (securityType) {
             TYPE_PIN_SECURITY -> {
                 numberPadDecimal.visibility = View.GONE
-                NumberPadHandler.setupNumberPad(this, this)
+                NumberPadPresenter.setupNumberPad(this, this)
             }
         }
 

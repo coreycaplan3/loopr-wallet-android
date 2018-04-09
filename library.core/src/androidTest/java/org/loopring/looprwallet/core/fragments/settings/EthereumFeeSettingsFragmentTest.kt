@@ -2,9 +2,9 @@ package org.loopring.looprwallet.core.fragments.settings
 
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.SeekBarPreference
+import org.junit.Test
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.models.settings.EthereumFeeSettings
-import org.junit.Test
 
 /**
  * Created by Corey Caplan on 3/29/18.
@@ -15,8 +15,7 @@ import org.junit.Test
  */
 class EthereumFeeSettingsFragmentTest : BaseDaggerFragmentTest<EthereumFeeSettingsFragment>() {
 
-    override val fragment = EthereumFeeSettingsFragment()
-
+    override fun provideFragment() = EthereumFeeSettingsFragment()
     override val tag = EthereumFeeSettingsFragment.TAG
 
     @Test

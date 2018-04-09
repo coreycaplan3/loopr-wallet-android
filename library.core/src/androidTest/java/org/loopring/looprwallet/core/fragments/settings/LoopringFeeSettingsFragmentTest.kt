@@ -1,10 +1,12 @@
 package org.loopring.looprwallet.core.fragments.settings
 
+import android.support.test.runner.AndroidJUnit4
 import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.SeekBarPreference
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings
-import org.junit.Test
 
 /**
  * Created by Corey Caplan on 3/29/18.
@@ -13,10 +15,10 @@ import org.junit.Test
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class LoopringFeeSettingsFragmentTest : BaseDaggerFragmentTest<LoopringFeeSettingsFragment>() {
 
-    override val fragment = LoopringFeeSettingsFragment()
-
+    override fun provideFragment() = LoopringFeeSettingsFragment()
     override val tag = LoopringFeeSettingsFragment.TAG
 
     @Test

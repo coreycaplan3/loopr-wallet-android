@@ -8,17 +8,18 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.home.handlers.BottomNavigationHandler
-import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
-import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
+import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
+import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import java.util.concurrent.FutureTask
 
 /**
@@ -42,7 +43,7 @@ class MainActivityTest : BaseDaggerTest() {
         activityRule.activity
     }
 
-    private lateinit var bottomNavigationHandler: BottomNavigationHandler
+    private lateinit var bottomNavigationPresenter: BottomNavigationPresenter
     private lateinit var bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory
 
     @Before
@@ -51,7 +52,7 @@ class MainActivityTest : BaseDaggerTest() {
 
         waitForActivityToBeSetup()
 
-        bottomNavigationHandler = activity.bottomNavigationHandler
+        bottomNavigationPresenter = activity.bottomNavigationPresenter
         bottomNavigationFragmentStackHistory = activity.bottomNavigationFragmentStackHistory
 
         Thread.sleep(250) // wait the bottom navigation handler to be initialized
@@ -59,8 +60,8 @@ class MainActivityTest : BaseDaggerTest() {
 
     @Test
     fun createIntentToFinishApplication() {
-        val intent = MainActivity.createIntentToFinishApp()
-        assertTrue(intent.getBooleanExtra(MainActivity.KEY_FINISH_ALL, false))
+        val intent = SettingsActivity.createIntentToFinishApp()
+        assertTrue(intent.getBooleanExtra(SettingsActivity.KEY_FINISH_ALL, false))
         assertEquals(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK, intent.flags)
         assertEquals(activityRule.activity.packageName, intent.component.packageName)
         assertEquals(MainActivity::class.java.name, intent.component.className)
@@ -68,17 +69,17 @@ class MainActivityTest : BaseDaggerTest() {
 
     @Test
     fun onFinishApplication() {
-        val launchIntent = MainActivity.createIntentToFinishApp()
+        val launchIntent = SettingsActivity.createIntentToFinishApp()
         activityIntentRule.launchActivity(launchIntent)
 
         val activityIntent = activityIntentRule.activity.intent
-        assertTrue(activityIntent.getBooleanExtra(MainActivity.KEY_FINISH_ALL, false))
+        assertTrue(activityIntent.getBooleanExtra(SettingsActivity.KEY_FINISH_ALL, false))
         assertTrue(activityIntentRule.activity.isFinishing)
     }
 
     @Test
     fun onBackPressedOnce() {
-        val task = FutureTask<Boolean> { bottomNavigationHandler.onBackPressed() }
+        val task = FutureTask<Boolean> { bottomNavigationPresenter.onBackPressed() }
         activityRule.activity.runOnUiThread(task)
 
         assertTrue(task.get())

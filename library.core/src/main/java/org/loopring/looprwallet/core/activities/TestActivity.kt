@@ -22,8 +22,11 @@ class TestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecurityConfir
 
     var isRunningTest: Boolean? = null
 
-    override val contentView: Int
+    override val contentViewRes: Int
         get() = R.layout.activity_test_container
+
+    override val activityContainerId: Int
+        get() = R.id.activityContainer
 
     override val isSecureActivity: Boolean
         get() = false

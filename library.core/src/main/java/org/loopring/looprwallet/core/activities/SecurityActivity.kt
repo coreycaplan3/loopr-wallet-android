@@ -1,10 +1,8 @@
-package org.loopring.looprwallet.appsecurity.activities
+package org.loopring.looprwallet.core.activities
 
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.activities.SettingsActivity
 
 /**
  * Created by Corey on 1/14/2018
@@ -20,8 +18,11 @@ class SecurityActivity : BaseActivity() {
         private const val KEY_IS_DIALOG_SHOWING = "_IS_DIALOG_SHOWING"
     }
 
-    override val contentView: Int
+    override val contentViewRes: Int
         get() = R.layout.activity_security
+
+    override val activityContainerId: Int
+        get() = R.id.activityContainer
 
     override val isSecureActivity: Boolean
         get() = false

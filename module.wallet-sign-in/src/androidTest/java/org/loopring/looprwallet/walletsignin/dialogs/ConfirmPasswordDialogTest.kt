@@ -5,16 +5,15 @@ import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationKeystore
-import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
+import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
+import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
+import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationKeystore
 
 /**
  * Created by Corey Caplan on 2/25/18.
@@ -30,9 +29,9 @@ class ConfirmPasswordDialogTest : BaseDaggerFragmentTest<ConfirmPasswordDialog>(
     private val password = "looprloopr"
     private val incorrectPassword = "abcdeabcde"
 
-    override val fragment: ConfirmPasswordDialog = ConfirmPasswordDialog.createInstance(
-            "null", WalletCreationKeystore(walletName, password)
-    )
+    override fun provideFragment(): ConfirmPasswordDialog {
+        return ConfirmPasswordDialog.createInstance("null", WalletCreationKeystore(walletName, password))
+    }
 
     override val tag = ConfirmPasswordDialog.TAG
 

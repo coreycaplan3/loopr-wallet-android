@@ -1,9 +1,11 @@
 package org.loopring.looprwallet.core.fragments.settings
 
+import android.support.test.runner.AndroidJUnit4
 import android.support.v7.preference.ListPreference
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.models.settings.LoopringNetworkSettings
-import org.junit.Test
 
 /**
  * Created by Corey Caplan on 3/29/18.
@@ -12,10 +14,10 @@ import org.junit.Test
  *
  * Purpose of Class:
  */
+@RunWith(AndroidJUnit4::class)
 class LoopringNetworkSettingsFragmentTest : BaseDaggerFragmentTest<LoopringNetworkSettingsFragment>() {
 
-    override val fragment = LoopringNetworkSettingsFragment()
-
+    override fun provideFragment() = LoopringNetworkSettingsFragment()
     override val tag = LoopringNetworkSettingsFragment.TAG
 
     @Test

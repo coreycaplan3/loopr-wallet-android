@@ -17,11 +17,14 @@ import org.loopring.looprwallet.walletsignin.fragments.signin.SignInSelectionFra
  */
 class SignInActivity : BaseActivity() {
 
-    override val contentView: Int
+    override val contentViewRes: Int
         get() = R.layout.activity_sign_in
 
     override val isSecureActivity: Boolean
         get() = false
+
+    override val activityContainerId: Int
+        get() = R.id.activityContainer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +43,7 @@ class SignInActivity : BaseActivity() {
     fun onPasswordConfirmed(fragmentTag: String) {
         val fragment = supportFragmentManager.findFragmentByTag(fragmentTag)
 
-        if(fragment is ConfirmPasswordDialog.OnPasswordConfirmedListener) {
+        if (fragment is ConfirmPasswordDialog.OnPasswordConfirmedListener) {
             fragment.onPasswordConfirmed()
         } else {
             loge("Invalid fragment type; could not cast to OnPasswordConfirmedListener!", IllegalStateException())

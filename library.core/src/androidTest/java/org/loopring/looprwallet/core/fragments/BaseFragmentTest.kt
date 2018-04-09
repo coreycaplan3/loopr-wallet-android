@@ -5,6 +5,7 @@ import android.support.design.widget.CoordinatorLayout
 import android.support.test.runner.AndroidJUnit4
 import android.view.ViewGroup
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.R
@@ -28,18 +29,16 @@ class BaseFragmentTest : BaseDaggerFragmentTest<BaseFragmentTest.TestingBaseFrag
 
     }
 
-    override val fragment = TestingBaseFragment()
+    override fun provideFragment() = TestingBaseFragment()
     override val tag = "BaseFragment"
 
-//    @Test
-//    fun checkToolbarModeAfterRotation() = runBlockingUiCode {
-//        fragment.enableToolbarCollapsing()
-//
-//        activity.recreate()
-//
-//        val recreatedFragment = activity.supportFragmentManager.findFragmentById(R.id.activityContainer) as BaseFragment
-//        assertTrue(recreatedFragment.isToolbarCollapseEnabled)
-//    }
+    @Test
+    fun checkToolbarModeAfterRotation() = runBlockingUiCode {
+        fragment.enableToolbarCollapsing()
+
+        val recreatedFragment = activity.supportFragmentManager.findFragmentById(R.id.activityContainer) as BaseFragment
+        assertTrue(recreatedFragment.isToolbarCollapseEnabled)
+    }
 
     @Test
     fun enableToolbarCollapsing__checkUi() = runBlockingUiCode {

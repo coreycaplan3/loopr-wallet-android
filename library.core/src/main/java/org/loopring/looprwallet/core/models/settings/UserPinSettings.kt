@@ -52,7 +52,7 @@ class UserPinSettings(private val looprSecureSettings: LooprSecureSettings) {
      *
      * @return True if the PINs match or false if they don't.
      */
-    fun checkPinAndIncrementAttemptsIfFailure(pin: String): Boolean {
+    fun checkIsPinCorrectAndIncrementAttemptsIfFailure(pin: String): Boolean {
         if (isUserLockedOut()) {
             return false
         }
@@ -66,7 +66,11 @@ class UserPinSettings(private val looprSecureSettings: LooprSecureSettings) {
         val numberOfTries = getNumberOfSequentialTries() + 1
         if (numberOfTries >= MAX_NUMBER_OF_SEQUENTIAL_GUESSES) {
             resetNumberOfSequentialTries()
+            // Put the current time as when the user got locked out
             looprSecureSettings.putLong(KEY_LAST_LOCKOUT_TIME, Date().time)
+        } else {
+            // Persist the number of times the user was incorrecct
+            looprSecureSettings.putInt(KEY_NUMBER_OF_SEQUENTIAL_TRIES, numberOfTries)
         }
 
         return false

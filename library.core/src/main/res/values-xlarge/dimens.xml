@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Empty States -->
+    <dimen name="empty_image_size">96dp</dimen>
+    <dimen name="empty_title_text_size">24sp</dimen>
+
     <!-- Margin -->
     <dimen name="standard_margin">24dp</dimen>
     <dimen name="vertical_margin">24dp</dimen>
