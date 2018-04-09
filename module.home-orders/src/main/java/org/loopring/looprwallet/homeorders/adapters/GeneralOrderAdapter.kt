@@ -3,12 +3,14 @@ package org.loopring.looprwallet.homeorders.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import io.realm.kotlin.where
-import kotlinx.android.synthetic.main.view_holder_general_order.*
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
+import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.cryptotokens.EthToken
 import org.loopring.looprwallet.core.extensions.inflate
+import org.loopring.looprwallet.core.extensions.isSameDay
+import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.realm.RealmClient
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.homeorders.dagger.homeOrdersLooprComponent
@@ -23,11 +25,13 @@ import javax.inject.Inject
  *
  * @param isOpen True if this adapter will be showing open orders or false if it'll be past ones.
  */
-class GeneralOrderAdapter(private val isOpen: Boolean) : BaseRealmAdapter<EthToken>() {
+class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) : BaseRealmAdapter<EthToken>() {
 
     companion object {
         const val TYPE_FILTER = 3
     }
+
+    private val activity by weakReference(activity)
 
     @Inject
     lateinit var realmClient: RealmClient
@@ -65,15 +69,26 @@ class GeneralOrderAdapter(private val isOpen: Boolean) : BaseRealmAdapter<EthTok
         return GeneralOrderViewHolder(parent.inflate(R.layout.view_holder_general_order))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: EthToken) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: EthToken) {
         (holder as? EmptyGeneralOrderViewHolder)?.bind()
 
-        // TODO
-        (holder as? GeneralOrderViewHolder)?.bind("") {
-            holder.orderProgress.progress += 10
-            if (holder.orderProgress.progress == 100) {
-                holder.orderProgress.progress = 0
+        val previousIndex = index - 1
+        val previousItemIndex = index - 2 // There's an offset of 1 for the filter
+
+        val showDateHeader = when {
+            previousIndex == 0 ->
+                // We're at the first item in the data-list
+                true
+            previousItemIndex >= 0 -> {
+                val data = data
+                // The item is NOT the SAME day as the previous one
+                data != null && !data[previousItemIndex].lastUpdated.isSameDay(item.lastUpdated)
             }
+            else -> false
+        }
+
+        (holder as? GeneralOrderViewHolder)?.bind("", showDateHeader) {
+            activity?.supportFragmentManager
         }
     }
 

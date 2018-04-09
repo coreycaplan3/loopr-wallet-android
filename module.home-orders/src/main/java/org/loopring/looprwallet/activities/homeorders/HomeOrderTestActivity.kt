@@ -1,11 +1,9 @@
-package org.loopring.looprwallet.homeorders
+package org.loopring.looprwallet.activities.homeorders
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import org.loopring.looprwallet.core.activities.CoreTestActivity
 import org.loopring.looprwallet.core.views.OrderProgressView
-import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
+import org.loopring.looprwallet.homeorders.R
 
 /**
  * Created by Corey on 4/9/2018

@@ -64,11 +64,11 @@ abstract class BaseRealmAdapter<T : RealmModel> :
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = data
         if (data != null && position < data.size) {
-            onBindViewHolder(holder, data[position])
+            onBindViewHolder(holder, position, data[position])
         }
     }
 
-    abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: T)
+    abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: T)
 
     override fun getItemCount(): Int {
         // We return an extra item to account for the loading view holder
