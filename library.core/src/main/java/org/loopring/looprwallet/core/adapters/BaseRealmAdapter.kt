@@ -3,9 +3,10 @@ package org.loopring.looprwallet.core.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import io.realm.RealmCollection
-import io.realm.RealmModel
-import io.realm.RealmRecyclerViewAdapter
+import io.realm.*
+import io.realm.kotlin.addChangeListener
+import io.realm.kotlin.removeAllChangeListeners
+import io.realm.kotlin.removeChangeListener
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.inflate
 
@@ -25,6 +26,32 @@ abstract class BaseRealmAdapter<T : RealmModel> :
         const val TYPE_EMPTY = 1
         const val TYPE_DATA = 2
     }
+
+    var extraDataToPositionList: List<Pair<RealmModel, Int>>? = null
+        set(value) {
+            field = value
+
+            // Clear the old listeners
+            listeners.forEach { it.first.removeChangeListener(it.second)}
+            listeners.clear()
+
+            value?.forEach { dataToPositionPair ->
+                val listener = RealmObjectChangeListener<RealmModel> { _, changeSet ->
+                    when {
+                        changeSet?.isDeleted == true -> notifyItemRemoved(dataToPositionPair.second)
+                        else -> notifyItemChanged(dataToPositionPair.second)
+                    }
+                }
+
+                listeners.add(dataToPositionPair.first to listener)
+                Unit
+            }
+        }
+
+    /**
+     * Extra listeners for listening to object changes besides from main type declared as [T].
+     */
+    private val listeners = arrayListOf<Pair<RealmModel, RealmObjectChangeListener<RealmModel>>>()
 
     /**
      * The total number of items that can be loaded and stored in *data*. This represents the total
@@ -55,12 +82,12 @@ abstract class BaseRealmAdapter<T : RealmModel> :
         return when (viewType) {
             TYPE_LOADING -> LoadingViewHolder(parent.inflate(R.layout.view_holder_loading))
             TYPE_EMPTY -> onCreateEmptyViewHolder(parent)
-            else -> onCreateDataViewHolder(parent)
+            else -> onCreateDataViewHolder(parent, viewType)
         }
     }
 
     abstract fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
-    abstract fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
+    abstract fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = data
@@ -74,6 +101,18 @@ abstract class BaseRealmAdapter<T : RealmModel> :
     override fun getItemCount(): Int {
         // We return an extra item to account for the loading view holder
         return data?.let { getItemCountForOnlyData(it) } ?: 1
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        listeners.forEach { it.first.addChangeListener(it.second) }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+
+        listeners.forEach { it.first.removeChangeListener(it.second) }
     }
 
     // MARK - Protected Methods
