@@ -17,19 +17,19 @@ import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 class OrderDetailsAdapter : BaseRealmAdapter<RealmModel>() {
 
     override val totalItems: Int?
-        get() = TODO("not implemented") // TODO
+        get() = TODO("not implemented")
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         throw NotImplementedError("This method should never be called, since we already had SOME " +
                 "data before reaching this adapter")
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        TODO("not implemented") // TODO
+    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        TODO("not implemented")
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: RealmModel) {
-        TODO("not implemented") // TODO
+        TODO("not implemented")
     }
 
     override fun getItemCount(): Int {

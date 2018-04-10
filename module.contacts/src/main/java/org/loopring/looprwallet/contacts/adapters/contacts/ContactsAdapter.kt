@@ -32,7 +32,7 @@ class ContactsAdapter(private var selectedContactAddress: String?,
         }
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ContactsViewHolder(parent.inflate(R.layout.view_holder_contact))
     }
 

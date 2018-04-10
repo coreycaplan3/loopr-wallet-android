@@ -55,12 +55,12 @@ abstract class BaseRealmAdapter<T : RealmModel> :
         return when (viewType) {
             TYPE_LOADING -> LoadingViewHolder(parent.inflate(R.layout.view_holder_loading))
             TYPE_EMPTY -> onCreateEmptyViewHolder(parent)
-            else -> onCreateDataViewHolder(parent)
+            else -> onCreateDataViewHolder(parent, viewType)
         }
     }
 
     abstract fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
-    abstract fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
+    abstract fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = data

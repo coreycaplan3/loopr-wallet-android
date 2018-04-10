@@ -70,7 +70,7 @@ class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) :
         return EmptyGeneralOrderViewHolder(isOpen, parent)
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return GeneralOrderViewHolder(parent.inflate(R.layout.view_holder_general_order))
     }
 
