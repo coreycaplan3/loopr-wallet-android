@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.repositories.loopr
 
+import io.realm.RealmResults
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
@@ -13,6 +14,8 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class LooprOrderRepository(currentWallet: LooprWallet) : BaseRealmRepository(currentWallet) {
 
-    // TODO
+    fun getOrdersByTicker(ticker: String): RealmResults<Any> {
+        TODO("Finish this method")
+    }
 
 }

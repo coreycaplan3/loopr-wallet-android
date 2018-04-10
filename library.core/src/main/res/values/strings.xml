@@ -34,17 +34,11 @@
     <string name="sell">Sell</string>
     <string name="wallet_information">Wallet Information</string>
     <string name="your_address">Your Address:</string>
-    <string name="content_description_copy_address">Allows you to copy your address to the clipboard</string>
     <string name="unlock_to_reveal_private_key">Unlock to Reveal Private Key</string>
     <string name="reveal_private_key">Reveal Private Key</string>
     <string name="account_balances">Account Balances</string>
-    <string name="content_description_share_address">Share your address</string>
-    <string name="content_description_reveal_private_key">Temporarily Reveal your Private Key</string>
-    <string name="content_description_download_keystore">Download the keystore file for backup</string>
     <string name="view_all_tokens">View All Tokens</string>
-    <string name="content_description_send_ether_or_tokens">Send Ether or tokens to another address</string>
     <string name="ellipsis">.....</string>
-    <string name="content_description_trading_pair_image">The logo for this cryptocurrency</string>
     <string name="letter_b">B</string>
     <string name="letter_s">S</string>
     <string name="share_your_address">Share your address</string>
@@ -71,17 +65,14 @@
     <string name="_0">0</string>
     <string name="use_max">Use Max</string>
     <string name="send">Send</string>
-    <string name="content_description_send_swap">Swaps the input to be in terms of tokens instead of currency</string>
     <string name="recipient_address">Recipient Address</string>
     <string name="contact_address">Contact Address</string>
-    <string name="content_description_qrcode_scanner">Scan the recipient\'s address via barcode</string>
     <string name="_continue">Continue</string>
     <string name="number_of"># of</string>
     <string name="contact_name">Contact Name</string>
     <string name="contacts_and_transfers"><![CDATA[Contacts & Transfers]]></string>
     <string name="show_transfers">Show Transfers</string>
     <string name="start_a_transfer">Start a Transfer</string>
-    <string name="content_description_receive">You have received a token or Ether</string>
     <string name="date">Date</string>
     <string name="transaction">Transaction</string>
     <string name="transfers">Transfers</string>
@@ -92,13 +83,10 @@
     <string name="pending">Pending</string>
     <string name="create_new_wallet">Create New Wallet</string>
     <string name="restore_existing_wallet">Restore Existing Wallet</string>
-    <string name="content_description_app_icon">The application\'s logo</string>
     <string name="question_restore_wallet">How would you like to restore your wallet?</string>
     <string name="key_file">Key File</string>
     <string name="underscore">_</string>
     <string name="security_unlock_with_pin">Unlock with your PIN</string>
-    <string name="content_description_pin_circle">A circle which represents your PIN being inputted</string>
-    <string name="content_description_bottom_navigation_image">A tab that allows you to navigate to different parts of the application</string>
     <string name="enter_your_private_key">Enter your Private Key</string>
     <string name="rationale_enter_private_key">Make sure you\'re in a safe environment, and no one looking over your shoulder</string>
     <string name="private_key">Private Key</string>
@@ -106,8 +94,6 @@
     <string name="select_keystore_file_enter_password">Select your Keystore File and Enter your Password</string>
     <string name="select_keystore_file">Select Keystore File</string>
     <string name="password">Password</string>
-    <string name="content_description_password_toggle">Press to show or hide your password</string>
-    <string name="content_description_reorder_mnemonic_phrase">Reorder the word to a different position</string>
     <string name="add">Add</string>
     <string name="submit_phrase">Submit Phrase</string>
     <string name="word">Word</string>
@@ -115,8 +101,6 @@
     <string name="unlock_wallet">Unlock Wallet</string>
     <string name="create_with_keystore">Create with Keystore</string>
     <string name="create_with_phrase">Create with Phrase</string>
-    <string name="content_description_keystore">Provides a helpful description of what a keystore is</string>
-    <string name="content_description_phrase">Provides a helpful description of what a phrase is</string>
     <string name="enter_a_strong_password">Enter a Strong Password</string>
     <string name="enter_old_password">Enter Your Old Password</string>
     <string name="safety_description_password">Remember to keep your password and keystore safe. You will need both your password and the keystore file in order to unlock your wallet or recover it in the future. You are solely responsible for managing your credentials. We do not backup your credentials for you!</string>
@@ -134,7 +118,6 @@
     <string name="about_this_step">About this Step</string>
     <string name="about_remember_phrase">This 12-word phrase is used to recover and unlock your wallet. It must be used with the password you provided earlier. By pressing \"Confirm Phrase\" you will be taken to the next screen to reenter these 12 words.</string>
     <string name="help_recycler_empty_phrase">To enter a word type a word in the box below and press \"Add\". You will be able to submit them after entering all 12 words.\n\nTo reorder a word, hold the reorder icon on the right and drag it. To delete a word, swipe it to the right.</string>
-    <string name="content_description_navigation_icon">This button allows you to navigate back to the most recent screen you were on</string>
     <string name="error_password_required">You must enter a password</string>
     <string name="error_wallet_name_required">You must enter a wallet name</string>
     <string name="error_contact_name_required">You must enter a contact name</string>
@@ -186,7 +169,6 @@
     <string name="unknown">Unknown</string>
     <string name="formatter_recipient">Recipient: %s</string>
     <string name="create_contact">Create Contact</string>
-    <string name="content_description_add_contact">Allows you to add this unknown address as a contact</string>
     <string name="default_current_eth_price">Current ETH Price: $760.43</string>
     <string name="default_token_balance">Balance: 100 ETH</string>
     <string name="loading_exchange_rate">Loading exchange rate…</string>
@@ -279,5 +261,9 @@
     <string name="explain_application_lock">An application lock protects the assets on your device by adding a lock screen before opening this app, or when you want to view your private key.</string>
     <string name="question_send_tokens">Send Tokens?</string>
     <string name="formatter_confirm_token_send">You are about to send %s tokens, which is worth about %s. Are you sure you want to send these tokens to %s?</string>
-    <string name="sending">Sending...</string>
+    <string name="sending">Sending…</string>
+
+    <string name="cancel_all">Cancel All</string>
+    <string name="filled_amount">Filled/Amount</string>
+    <string name="total">Total</string>
 </resources>

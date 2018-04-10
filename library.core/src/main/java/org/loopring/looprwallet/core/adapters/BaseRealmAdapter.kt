@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import io.realm.RealmCollection
 import io.realm.RealmModel
 import io.realm.RealmRecyclerViewAdapter
 import org.loopring.looprwallet.core.R
@@ -72,14 +73,23 @@ abstract class BaseRealmAdapter<T : RealmModel> :
 
     override fun getItemCount(): Int {
         // We return an extra item to account for the loading view holder
-        return data?.size?.let {
+        return data?.let { getItemCountForOnlyData(it) } ?: 1
+    }
+
+    // MARK - Protected Methods
+
+    /**
+     * Gets the number of items in the adapter based on the amount of data available
+     */
+    protected fun getItemCountForOnlyData(data: RealmCollection<T>): Int {
+        return data.size.let {
             when {
                 containsMoreData() ->
                     // There's still some items left to load
                     it + 1
                 else -> it
             }
-        } ?: 1
+        }
     }
 
     // MARK - Private Methods

@@ -23,6 +23,7 @@ import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
@@ -113,6 +114,8 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        coreLooprComponent.inject(this)
 
         // Make sure that the user has a wallet, if necessary
         (activity as? BaseActivity)?.checkWalletStatus()

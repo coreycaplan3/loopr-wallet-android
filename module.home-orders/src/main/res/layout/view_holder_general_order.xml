@@ -34,7 +34,7 @@
             android:layout_marginRight="@dimen/horizontal_margin_small">
 
 
-            <org.loopring.looprwallet.core.views.OrderProgressView
+            <org.loopring.looprwallet.order.views.OrderProgressView
                 android:id="@+id/generalOrderProgress"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/border"
-                android:contentDescription="@string/content_description_completed_trade"
+                android:contentDescription="@string/content_description_completed_order"
                 android:src="@drawable/ic_swap_horiz_white_24dp"
                 android:tint="?android:attr/textColorPrimary" />
 

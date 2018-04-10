@@ -1,20 +1,17 @@
 package org.loopring.looprwallet.homeorders.adapters
 
+import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import io.realm.kotlin.where
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
+import org.loopring.looprwallet.core.adapters.SavableAdapter
 import org.loopring.looprwallet.core.cryptotokens.EthToken
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.isSameDay
 import org.loopring.looprwallet.core.extensions.weakReference
-import org.loopring.looprwallet.core.realm.RealmClient
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.strArray
 import org.loopring.looprwallet.homeorders.R
-import org.loopring.looprwallet.homeorders.dagger.homeOrdersLooprComponent
-import javax.inject.Inject
 
 /**
  * Created by Corey Caplan on 4/6/18.
@@ -25,29 +22,37 @@ import javax.inject.Inject
  *
  * @param isOpen True if this adapter will be showing open orders or false if it'll be past ones.
  */
-class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) : BaseRealmAdapter<EthToken>() {
+class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) : BaseRealmAdapter<EthToken>(),
+        OnGeneralOrderFilterActionListener, SavableAdapter {
 
     companion object {
         const val TYPE_FILTER = 3
+
+        private const val KEY_FILTER_DATE = "_FILTER_DATE"
+        private const val KEY_FILTER_STATUS = "_FILTER_STATUS"
+
+        val FILTER_DATES: Array<String> = strArray(R.array.filter_order_dates)
+        val FILTER_OPEN_ORDER_STATUS: Array<String> = strArray(R.array.filter_order_open_statuses)
+        val FILTER_CLOSED_ORDER_STATUS: Array<String> = strArray(R.array.filter_order_closed_statuses)
     }
+
+    lateinit var currentDateFilter: String
+    lateinit var currentStatusFilter: String
 
     private val activity by weakReference(activity)
 
-    @Inject
-    lateinit var realmClient: RealmClient
-
-    init {
-        homeOrdersLooprComponent.inject(this)
-        runBlocking {
-            delay(1000)
-
-            val data = realmClient.getSharedInstance().where<EthToken>().findAll()
-            updateData(data)
-        }
-    }
-
     override val totalItems: Int?
         get() = null
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        currentDateFilter = savedInstanceState?.getString(KEY_FILTER_DATE) ?: FILTER_DATES[0]
+
+        val orderStatuses = when (isOpen) {
+            true -> FILTER_OPEN_ORDER_STATUS
+            else -> FILTER_CLOSED_ORDER_STATUS
+        }
+        currentStatusFilter = savedInstanceState?.getString(KEY_FILTER_STATUS) ?: orderStatuses[0]
+    }
 
     override fun getItemViewType(position: Int): Int {
         val type = super.getItemViewType(position)
@@ -70,10 +75,24 @@ class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: EthToken) {
-        (holder as? EmptyGeneralOrderViewHolder)?.bind()
+        (holder as? EmptyGeneralOrderViewHolder)?.let {
+            it.bind()
+            return
+        }
+
+        (holder as? GeneralOpenOrderFilterViewHolder)?.let {
+            it.bind(currentDateFilter, currentStatusFilter)
+            return
+        }
+
+        (holder as? GeneralClosedOrderFilterViewHolder)?.let {
+            it.bind(currentDateFilter, currentStatusFilter)
+            return
+        }
 
         val previousIndex = index - 1
         val previousItemIndex = index - 2 // There's an offset of 1 for the filter
+
 
         val showDateHeader = when {
             previousIndex == 0 ->
@@ -87,9 +106,23 @@ class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) :
             else -> false
         }
 
-        (holder as? GeneralOrderViewHolder)?.bind("", showDateHeader) {
+        (holder as? GeneralOrderViewHolder)?.bind(item, showDateHeader) {
             activity?.supportFragmentManager
+            TODO("Add order details dialog!")
         }
+    }
+
+    override fun onStatusFilterChange(newStatusValue: String) {
+        currentStatusFilter = newStatusValue
+    }
+
+    override fun onDateFilterChange(newDateValue: String) {
+        currentDateFilter = newDateValue
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(KEY_FILTER_DATE, currentDateFilter)
+        outState.putString(KEY_FILTER_STATUS, currentStatusFilter)
     }
 
 }

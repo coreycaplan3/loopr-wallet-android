@@ -1,27 +1,63 @@
 package org.loopring.looprwallet.homeorders.fragments
 
-import android.support.v7.widget.AppCompatSpinner
+import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.widget.ArrayAdapter
+import android.view.View
+import org.loopring.looprwallet.core.adapters.SavableAdapter
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.strArray
-import org.loopring.looprwallet.homeorders.R
+import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
 
 /**
  * Created by Corey Caplan on 4/7/18.
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class:
- *
+ * Purpose of Class: To provide *base* behavior for the **open** and **closed** orders fragments.
  */
-abstract class BaseGeneralOrdersFragment : BaseFragment() {
+abstract class BaseGeneralOrdersFragment : BaseFragment(), BottomNavigationReselectedLister,
+        OnSearchViewChangeListener {
 
     abstract val recyclerView: RecyclerView
 
-    fun setDateFilterSpinner(spinner: AppCompatSpinner) {
-        val dates = strArray(R.array.filter_order_dates)
-        spinner.adapter = ArrayAdapter<String>(spinner.context, android.R.layout.simple_spinner_item, dates)
+    lateinit var adapter: GeneralOrderAdapter
+        private set
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter = provideAdapter().apply {
+            onRestoreInstanceState(savedInstanceState)
+        }
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(view.context)
+    }
+
+    abstract fun provideAdapter(): GeneralOrderAdapter
+
+    final override fun onBottomNavigationReselected() {
+        recyclerView.smoothScrollToPosition(0)
+    }
+
+    final override fun onQueryTextGainFocus() {
+        // NO OP
+    }
+
+    final override fun onSearchItemExpanded() {
+        // NO OP
+    }
+
+    final override fun onSearchItemCollapsed() {
+        // NO OP
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        adapter.onSaveInstanceState(outState)
     }
 
 }

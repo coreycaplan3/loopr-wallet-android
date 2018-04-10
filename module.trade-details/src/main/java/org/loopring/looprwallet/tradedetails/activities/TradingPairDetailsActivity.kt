@@ -1,10 +1,9 @@
 package org.loopring.looprwallet.tradedetails.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.models.trading.TradingPair
+import org.loopring.looprwallet.core.models.loopr.TradingPair
 import org.loopring.looprwallet.tradedetails.R
 
 class TradingPairDetailsActivity : BaseActivity() {

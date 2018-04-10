@@ -35,9 +35,9 @@ abstract class BaseTabFragment : BaseFragment() {
 
     private var tabLayout: TabLayout? = null
 
-    private lateinit var fragmentContainer: ViewPager
+    lateinit var viewPager: ViewPager
 
-    private lateinit var adapter: LooprFragmentPagerAdapter
+    lateinit var adapter: LooprFragmentPagerAdapter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -54,8 +54,8 @@ abstract class BaseTabFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentContainer = view.findViewById(R.id.fragmentContainer)
-        fragmentContainer.adapter = adapter
+        viewPager = view.findViewById(R.id.fragmentContainer)
+        viewPager.adapter = adapter
 
         tabLayout = view.findViewById(tabLayoutId)
 
@@ -64,7 +64,7 @@ abstract class BaseTabFragment : BaseFragment() {
         ViewGroupCompat.setTransitionGroup(tabLayout, true)
         ViewCompat.setTransitionName(tabLayout, tabLayoutTransitionName)
 
-        tabLayout?.setupWithViewPager(fragmentContainer)
+        tabLayout?.setupWithViewPager(viewPager)
         tabLayout?.tabTextColors = context?.theme?.getAttrColorStateList(R.attr.tabTextColor)
 
         enableToolbarCollapsing()

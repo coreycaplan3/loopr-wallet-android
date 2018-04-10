@@ -1,4 +1,6 @@
-package org.loopring.looprwallet.core.dialogs
+package org.loopring.looprwallet.order.dialogs
+
+import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 
 /**
  * Created by Corey on 4/9/2018

@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <org.loopring.looprwallet.core.views.OrderProgressView
+        <org.loopring.looprwallet.order.views.OrderProgressView
             android:id="@id/orderProgressView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

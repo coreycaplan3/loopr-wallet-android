@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="empty_general_open_orders">You have no open orders. Go make some trades to get started!</string>
+    <string name="empty_general_closed_orders">You have no past orders. Go make some trades to fill up this screen!</string>
+
+    <array name="filter_order_dates">
+        <item>All</item>
+        <item>1H</item>
+        <item>1D</item>
+        <item>1W</item>
+        <item>1M</item>
+        <item>1Y</item>
+    </array>
+
+    <string name="filter_all">All</string>
+
+    <array name="filter_order_open_statuses">
+        <item>@string/filter_all</item>
+        <item>New</item>
+        <item>Partially Filled</item>
+    </array>
+
+    <array name="filter_order_closed_statuses">
+        <item>@string/filter_all</item>
+        <item>Complete</item>
+        <item>Cancelled</item>
+        <item>Expired</item>
+    </array>
+
+</resources>

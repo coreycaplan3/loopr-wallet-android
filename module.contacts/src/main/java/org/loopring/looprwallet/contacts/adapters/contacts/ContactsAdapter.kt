@@ -36,7 +36,7 @@ class ContactsAdapter(private var selectedContactAddress: String?,
         return ContactsViewHolder(parent.inflate(R.layout.view_holder_contact))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: Contact) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: Contact) {
         (holder as? ContactsViewHolder)?.bind(item, selectedContactAddress) {
             onContactViewHolderSelected(it)
         }

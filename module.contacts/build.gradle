@@ -55,10 +55,6 @@ kapt {
     useBuildCache = true
 }
 
-//realm {
-//    kotlinExtensionsEnabled = true
-//}
-
 dependencies {
     implementation project(':library.core')
     implementation project(':module.barcode')

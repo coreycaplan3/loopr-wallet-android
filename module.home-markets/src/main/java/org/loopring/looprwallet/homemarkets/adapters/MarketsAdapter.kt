@@ -6,7 +6,7 @@ import io.realm.RealmRecyclerViewAdapter
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.weakReference
-import org.loopring.looprwallet.core.models.trading.TradingPair
+import org.loopring.looprwallet.core.models.loopr.TradingPair
 import org.loopring.looprwallet.homemarkets.R
 import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 
