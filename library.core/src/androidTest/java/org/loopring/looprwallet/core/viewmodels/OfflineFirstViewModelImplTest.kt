@@ -2,13 +2,14 @@ package org.loopring.looprwallet.core.viewmodels
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.repositories.BaseRepository
 import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 import io.realm.RealmModel
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.models.sync.SyncData
 import java.util.*
 
 /**
@@ -68,7 +69,7 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
             return lastRefresh
         }
 
-        override fun getLastSyncTimeForWallet(address: String, syncType: String): Date? {
+        override fun getLastSyncTimeForSyncId(syncType: String, syncId: String): Date? {
             return lastRefresh
         }
 
@@ -94,6 +95,12 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
         return MutableLiveData<EthToken>().apply {
             value = repositoryData
         }
+    }
+
+    override fun isRefreshNecessary(parameter: String) = isRefreshNecessaryDefault(parameter)
+
+    override fun addSyncDataToRepository(parameter: String) {
+        syncRepository.add(SyncData())
     }
 
     override fun getDataFromNetwork(parameter: String): Deferred<EthToken> = async {

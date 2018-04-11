@@ -5,6 +5,7 @@ import android.arch.lifecycle.Lifecycle.Event
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
@@ -62,6 +63,9 @@ abstract class BaseFragment : Fragment() {
 
     var appbarLayout: AppBarLayout? = null
         private set
+
+    @IdRes
+    open var navigationIcon: Int = R.drawable.ic_arrow_back_white_24dp
 
     var toolbar: Toolbar? = null
         private set
@@ -341,7 +345,7 @@ abstract class BaseFragment : Fragment() {
 
         if (isUpNavigationEnabled && baseActivity != null) {
             logi("Up navigation is enabled...")
-            toolbar?.navigationIcon = ViewUtility.getNavigationIcon(baseActivity.theme)
+            toolbar?.navigationIcon = ViewUtility.getNavigationIcon(navigationIcon, baseActivity.theme)
             toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
         }
     }

@@ -11,9 +11,9 @@ import org.loopring.looprwallet.home.activities.MainActivity
 import org.loopring.looprwallet.homeorders.dagger.DaggerHomeOrdersLooprComponent
 import org.loopring.looprwallet.homeorders.dagger.HomeOrdersLooprComponent
 import org.loopring.looprwallet.homeorders.dagger.HomeOrdersLooprComponentProvider
-import org.loopring.looprwallet.transfer.dagger.DaggerTransferLooprComponent
-import org.loopring.looprwallet.transfer.dagger.TransferLooprComponent
-import org.loopring.looprwallet.transfer.dagger.TransferLooprComponentProvider
+import org.loopring.looprwallet.createtransfer.dagger.DaggerTransferLooprComponent
+import org.loopring.looprwallet.createtransfer.dagger.TransferLooprComponent
+import org.loopring.looprwallet.createtransfer.dagger.TransferLooprComponentProvider
 import org.loopring.looprwallet.walletsignin.dagger.DaggerWalletLooprComponent
 import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponent
 import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponentProvider

@@ -5,6 +5,7 @@ import android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK
 import android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
+import android.support.annotation.DrawableRes
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -37,8 +38,8 @@ object ViewUtility {
         }
     }
 
-    fun getNavigationIcon(theme: Resources.Theme): Drawable {
-        val drawable = ApplicationUtility.drawable(R.drawable.ic_arrow_back_white_24dp)
+    fun getNavigationIcon(@DrawableRes drawableResource: Int, theme: Resources.Theme): Drawable {
+        val drawable = ApplicationUtility.drawable(drawableResource)
         val colorResource = ApplicationUtility.color(theme.getResourceIdFromAttrId(R.attr.titleTextColor))
         DrawableCompat.setTint(drawable, colorResource)
         return drawable

@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.models.crypto.eth
 
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before

@@ -6,11 +6,10 @@ import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.sync.SyncData
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.networking.prices.CurrencyExchangeService
 import org.loopring.looprwallet.core.repositories.currency.CurrencyExchangeRateRepository
-import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -21,11 +20,9 @@ import javax.inject.Inject
  * Purpose of Class: To monitor changes in foreign exchange rates between fiat currencies.
  *
  */
-class CurrencyExchangeRateViewModel(currentWallet: LooprWallet) : StreamingViewModel<CurrencyExchangeRate, String>() {
+class CurrencyExchangeRateViewModel() : StreamingViewModel<CurrencyExchangeRate, String>() {
 
-    override val repository = CurrencyExchangeRateRepository(currentWallet)
-
-    override val syncRepository = SyncRepository.getInstance(currentWallet)
+    override val repository = CurrencyExchangeRateRepository()
 
     override val syncType = SyncData.SYNC_TYPE_CURRENCY_EXCHANGE_RATE
 
@@ -58,6 +55,12 @@ class CurrencyExchangeRateViewModel(currentWallet: LooprWallet) : StreamingViewM
 
     override fun addNetworkDataToRepository(data: CurrencyExchangeRate) {
         repository.add(data)
+    }
+
+    override fun isRefreshNecessary(parameter: String) = isRefreshNecessaryDefault(parameter)
+
+    override fun addSyncDataToRepository(parameter: String) {
+        syncRepository.add(SyncData(syncType, parameter, Date()))
     }
 
 }

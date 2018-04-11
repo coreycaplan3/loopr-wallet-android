@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.networking.etherscan
 
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay

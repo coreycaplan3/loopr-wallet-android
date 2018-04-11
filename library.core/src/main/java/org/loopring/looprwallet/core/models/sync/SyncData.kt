@@ -16,11 +16,12 @@ import java.util.*
  */
 open class SyncData(
         @Index var syncType: String = "",
-        @Index var address: String? = null,
+        @Index var syncId: String? = null,
         var lastSyncTime: Date? = null
 ) : RealmObject() {
 
-    @StringDef(SYNC_TYPE_NONE, SYNC_TYPE_TOKEN_BALANCE, SYNC_TYPE_CURRENCY_EXCHANGE_RATE)
+    @StringDef(SYNC_TYPE_NONE, SYNC_TYPE_TOKEN_BALANCE, SYNC_TYPE_CURRENCY_EXCHANGE_RATE,
+            SYNC_TYPE_ORDER_FILLS)
     annotation class SyncType
 
     companion object {
@@ -29,6 +30,10 @@ open class SyncData(
         const val SYNC_TYPE_TOKEN_BALANCE = "_TOKEN_BALANCE"
         const val SYNC_TYPE_TOKEN_PRICE = "_TOKEN_PRICE"
         const val SYNC_TYPE_CURRENCY_EXCHANGE_RATE = "_CURRENCY_EXCHANGE_RATE"
+        const val SYNC_TYPE_ORDERS_OPEN = "_ORDERS_OPEN"
+        const val SYNC_TYPE_ORDERS_FILLED = "_ORDERS_FILLED"
+        const val SYNC_TYPE_ORDERS_CANCELLED = "_ORDERS_CANCELLED"
+        const val SYNC_TYPE_ORDER_FILLS = "_ORDER_FILLS"
     }
 
 }

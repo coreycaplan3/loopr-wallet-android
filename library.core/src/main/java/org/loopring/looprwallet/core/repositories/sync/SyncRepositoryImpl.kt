@@ -4,7 +4,6 @@ import android.support.annotation.VisibleForTesting
 import io.realm.kotlin.where
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.models.sync.SyncData
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import java.util.*
 
@@ -18,19 +17,21 @@ import java.util.*
  *
  */
 @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
-open class SyncRepositoryImpl(currentWallet: LooprWallet) : BaseRealmRepository(currentWallet), SyncRepository {
+open class SyncRepositoryImpl : BaseRealmRepository(), SyncRepository {
+
+    override fun getRealm() = realmClient.getSharedInstance()
 
     override fun getLastSyncTime(@SyncData.SyncType syncType: String): Date? {
-        return uiSharedRealm.where<SyncData>()
+        return uiRealm.where<SyncData>()
                 .equalTo(SyncData::syncType, syncType)
                 .findFirst()
                 ?.lastSyncTime
     }
 
-    override fun getLastSyncTimeForWallet(address: String, syncType: String): Date? {
-        return uiSharedRealm.where<SyncData>()
+    override fun getLastSyncTimeForSyncId(syncType: String, syncId: String): Date? {
+        return uiRealm.where<SyncData>()
                 .equalTo(SyncData::syncType, syncType)
-                .equalTo(SyncData::address, address)
+                .equalTo(SyncData::syncId, syncId)
                 .findFirst()
                 ?.lastSyncTime
     }

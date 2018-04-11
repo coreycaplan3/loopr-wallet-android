@@ -2,7 +2,7 @@ package org.loopring.looprwallet.core.viewmodels.wallet
 
 import android.support.test.runner.AndroidJUnit4
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import io.realm.RealmResults
 import org.junit.After
 import org.junit.Assert.*

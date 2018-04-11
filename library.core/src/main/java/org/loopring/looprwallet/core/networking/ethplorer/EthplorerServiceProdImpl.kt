@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import kotlinx.coroutines.experimental.Deferred
 
 /**

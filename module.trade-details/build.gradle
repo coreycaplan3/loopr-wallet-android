@@ -57,6 +57,7 @@ kapt {
 
 dependencies {
     implementation project(':library.core')
+    implementation project(path: ':module.order-details')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

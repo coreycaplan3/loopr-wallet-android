@@ -21,6 +21,10 @@ open class LooprWalletViewModelFactory protected constructor(private val current
 
     companion object {
 
+        inline fun <reified T : ViewModel> get(fragment: Fragment): T {
+            return ViewModelProviders.of(fragment).get(T::class.java)
+        }
+
         inline fun <reified T : ViewModel> get(fragment: Fragment, currentWallet: LooprWallet): T {
             return ViewModelProviders.of(fragment, LooprWalletViewModelFactory(currentWallet))
                     .get(T::class.java)

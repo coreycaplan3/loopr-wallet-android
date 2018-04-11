@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.repositories.loopr
 
+import io.realm.Realm
 import io.realm.RealmResults
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
@@ -12,7 +13,9 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class LooprOrderRepository(currentWallet: LooprWallet) : BaseRealmRepository(currentWallet) {
+class LooprOrderRepository(private val currentWallet: LooprWallet) : BaseRealmRepository() {
+
+    override fun getRealm() = realmClient.getPrivateInstance(currentWallet)
 
     fun getOrdersByTicker(ticker: String): RealmResults<Any> {
         TODO("Finish this method")

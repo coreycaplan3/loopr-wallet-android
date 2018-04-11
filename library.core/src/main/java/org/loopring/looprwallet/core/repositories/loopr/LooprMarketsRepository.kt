@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.repositories.loopr
 
+import io.realm.Realm
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
@@ -11,7 +12,9 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class LooprMarketsRepository(currentWallet: LooprWallet): BaseRealmRepository(currentWallet) {
+class LooprMarketsRepository : BaseRealmRepository() {
+
+    override fun getRealm() = realmClient.getSharedInstance()
 
     fun getAllMarkets() {
         TODO("TODO")

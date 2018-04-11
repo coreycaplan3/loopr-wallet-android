@@ -6,6 +6,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_closed_order_filter.*
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.homeorders.R
 
 /**
  * Created by Corey on 4/10/2018
@@ -22,34 +24,24 @@ class GeneralClosedOrderFilterViewHolder(
     override val containerView: View
         get() = itemView
 
-    init {
-        val context = itemView.context
-        val layoutRes = android.R.layout.simple_spinner_item
+    fun bind(dateValue: String) {
+        // Reset their values
+        orderClosedDate1hButton.context.setTheme(R.style.App_Button_Borderless)
+        orderClosedDate1dButton.context.setTheme(R.style.App_Button_Borderless)
+        orderClosedDate1wButton.context.setTheme(R.style.App_Button_Borderless)
+        orderClosedDate1mButton.context.setTheme(R.style.App_Button_Borderless)
+        orderClosedDate1yButton.context.setTheme(R.style.App_Button_Borderless)
+        orderClosedDate1yButton.context.setTheme(R.style.App_Button_Borderless)
 
-        // DATE SPINNER
-        closedOrderFilterDateSpinner.adapter = ArrayAdapter(context, layoutRes, GeneralOrderAdapter.FILTER_DATES)
-        closedOrderFilterDateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                listener.onDateFilterChange(GeneralOrderAdapter.FILTER_DATES[position])
-            }
+        // Set the selected one's value
+        when (dateValue) {
+            str(R.string._1h) -> orderClosedDate1hButton.context.setTheme(R.style.App_Button_NoClipping)
+            str(R.string._1d) -> orderClosedDate1dButton.context.setTheme(R.style.App_Button_NoClipping)
+            str(R.string._1w) -> orderClosedDate1wButton.context.setTheme(R.style.App_Button_NoClipping)
+            str(R.string._1m) -> orderClosedDate1mButton.context.setTheme(R.style.App_Button_NoClipping)
+            str(R.string._1y) -> orderClosedDate1yButton.context.setTheme(R.style.App_Button_NoClipping)
+            str(R.string.all) -> orderClosedDate1yButton.context.setTheme(R.style.App_Button_NoClipping)
         }
-
-        // STATUS SPINNER
-        closedOrderFilterStatusSpinner.adapter = ArrayAdapter(context, layoutRes, GeneralOrderAdapter.FILTER_CLOSED_ORDER_STATUS)
-        closedOrderFilterStatusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                listener.onStatusFilterChange(GeneralOrderAdapter.FILTER_CLOSED_ORDER_STATUS[position])
-            }
-        }
-    }
-
-    fun bind(dateValue: String, statusValue: String) {
-        closedOrderFilterDateSpinner.setSelection(GeneralOrderAdapter.FILTER_DATES.indexOf(dateValue))
-        closedOrderFilterStatusSpinner.setSelection(GeneralOrderAdapter.FILTER_CLOSED_ORDER_STATUS.indexOf(statusValue))
     }
 
 }

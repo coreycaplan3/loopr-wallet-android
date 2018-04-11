@@ -71,24 +71,27 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     abstract val repository: BaseRepository<*>
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    abstract val syncRepository: SyncRepository
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    open val syncRepository = SyncRepository.getInstance()
 
+    /**
+     * The amount of time to wait (in ms) before pinging the network for fresh data
+     */
     open val waitTime = DEFAULT_WAIT_TIME_MILLIS
 
     /**
      * True if the data from this [ViewModel] needs a refresh and is stale or false otherwise.
      */
     val isDataStale: Boolean
-        get() = mParameter?.let { isRefreshNecessary(it) } ?: true
+        get() = parameter?.let { isRefreshNecessary(it) } ?: true
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    var mParameter: U? = null
+    @VisibleForTesting
+    var parameter: U? = null
 
     /**
      * This variable is setup in the call to [initializeData]
      */
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    @VisibleForTesting
     var mLiveData: LiveData<T>? = null
 
     /**
@@ -186,7 +189,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      */
     @Synchronized
     fun refresh() {
-        val parameter = mParameter
+        val parameter = parameter
         if (parameter == null) {
             loge("Parameter is null somehow...", IllegalStateException())
             return
@@ -341,18 +344,18 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * - The user is trying to refreshing faster than blocks are confirmed.
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
-    open fun isRefreshNecessary(parameter: U): Boolean {
-        val dateLastSynced = syncRepository.getLastSyncTime(syncType)?.time ?: return true
+    abstract fun isRefreshNecessary(parameter: U): Boolean
 
-        return isRefreshNecessary(dateLastSynced)
-    }
+    abstract fun addSyncDataToRepository(parameter: U)
 
-    open fun addSyncDataToRepository() {
-        syncRepository.add(SyncData(syncType, null, Date()))
+    fun isRefreshNecessaryDefault(parameter: String): Boolean {
+        val date = syncRepository.getLastSyncTimeForSyncId(syncType, parameter) ?: return true
+
+        return isRefreshNecessaryBasedOnDate(date.time)
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
-    fun isRefreshNecessary(dateLastSynced: Long): Boolean {
+    fun isRefreshNecessaryBasedOnDate(dateLastSynced: Long): Boolean {
         return dateLastSynced + waitTime < Date().time
     }
 
@@ -458,7 +461,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     ) {
         // Check if we're re-initializing the same thing again
         val oldLiveData = mLiveData
-        if (oldLiveData != null && isPredicatesEqual(mParameter, parameter)) {
+        if (oldLiveData != null && isPredicatesEqual(this.parameter, parameter)) {
             addObserver(oldLiveData)
             return
         }
@@ -476,7 +479,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         mIsNetworkOperationRunning = isRefreshNecessary(parameter)
 
         // Reinitialize data, observers, and notify via the call to onLiveDataInitialized
-        this.mParameter = parameter
+        this.parameter = parameter
         val liveData = getLiveDataFromRepository(parameter)
         this.mLiveData = liveData
         addObserver(liveData)
@@ -522,7 +525,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
             addNetworkDataToRepository(data)
 
             // Add the successful sync to the logs
-            addSyncDataToRepository()
+            addSyncDataToRepository(parameter)
         } catch (exception: Exception) {
             val looprError = when (exception) {
                 is HttpException -> {

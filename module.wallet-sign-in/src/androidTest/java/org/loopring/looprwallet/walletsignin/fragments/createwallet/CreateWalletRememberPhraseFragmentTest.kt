@@ -24,7 +24,7 @@ class CreateWalletRememberPhraseFragmentTest : BaseDaggerFragmentTest<CreateWall
 
     private val password = "looprloopr"
     private val phrase = arrayListOf(
-            "address",
+            "syncId",
             "stadium",
             "photo",
             "soup",

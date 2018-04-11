@@ -2,30 +2,39 @@
 <resources>
 
     <string name="empty_general_open_orders">You have no open orders. Go make some trades to get started!</string>
-    <string name="empty_general_closed_orders">You have no past orders. Go make some trades to fill up this screen!</string>
+    <string name="empty_general_filled_orders">You have no filled orders. Go make some trades to fill up this screen!</string>
+    <string name="empty_general_cancelled_orders">You have no cancelled orders. Any orders that expire or you cancel will show here</string>
+
+    <string name="_1h">1H</string>
+    <string name="_1d">1D</string>
+    <string name="_1w">1W</string>
+    <string name="_1m">1M</string>
+    <string name="_1y">1Y</string>
 
     <array name="filter_order_dates">
-        <item>All</item>
-        <item>1H</item>
-        <item>1D</item>
-        <item>1W</item>
-        <item>1M</item>
-        <item>1Y</item>
+        <item>@string/all</item>
+        <item>@string/_1h</item>
+        <item>@string/_1d</item>
+        <item>@string/_1w</item>
+        <item>@string/_1m</item>
+        <item>@string/_1y</item>
     </array>
 
     <string name="filter_all">All</string>
+    <string name="filter_order_open">ORDER_OPENED</string>
+    <string name="filter_order_filled">ORDER_FINISHED</string>
+    <string name="filter_order_cancelled">ORDER_CANCEL</string>
 
-    <array name="filter_order_open_statuses">
+    <array name="filter_order_open_statuses_ui">
         <item>@string/filter_all</item>
         <item>New</item>
         <item>Partially Filled</item>
     </array>
 
-    <array name="filter_order_closed_statuses">
-        <item>@string/filter_all</item>
-        <item>Complete</item>
-        <item>Cancelled</item>
-        <item>Expired</item>
+    <array name="filter_order_open_statuses_values">
+        <item>@string/filter_order_open</item>
+        <item>ORDER_NEW</item>
+        <item>ORDER_PARTIAL</item>
     </array>
 
 </resources>

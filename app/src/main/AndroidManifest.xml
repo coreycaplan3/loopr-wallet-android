@@ -42,7 +42,7 @@
         </activity>
 
         <activity
-            android:name="org.loopring.looprwallet.transfer.activities.CreateTransferActivity"
+            android:name="org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity"
             android:label="@string/transfer"
             android:screenOrientation="portrait" />
 
@@ -62,7 +62,7 @@
             android:label="@string/title_activity_sign_in" />
 
         <activity
-            android:name="org.loopring.looprwallet.transfer.activities.ViewTransfersActivity"
+            android:name="org.loopring.looprwallet.createtransfer.activities.ViewTransfersActivity"
             android:label="@string/transfer" />
 
         <activity

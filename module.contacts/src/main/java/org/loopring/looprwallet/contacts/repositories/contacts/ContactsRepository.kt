@@ -2,6 +2,7 @@ package org.loopring.looprwallet.contacts.repositories.contacts
 
 import android.arch.lifecycle.LiveData
 import io.realm.Case
+import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.kotlin.where
 import org.loopring.looprwallet.core.extensions.asLiveData
@@ -20,10 +21,10 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class ContactsRepository(currentWallet: LooprWallet) : BaseRealmRepository(currentWallet) {
+class ContactsRepository(private val currentWallet: LooprWallet) : BaseRealmRepository() {
 
     fun getAllContactsByName(name: String): LiveData<RealmResults<Contact>> {
-        return uiSharedRealm.where<Contact>()
+        return uiRealm.where<Contact>()
                 .like(Contact::name, name)
                 .sort(Contact::name)
                 .findAllAsync()
@@ -31,7 +32,7 @@ class ContactsRepository(currentWallet: LooprWallet) : BaseRealmRepository(curre
     }
 
     fun getAllContactsByAddress(address: String): LiveData<RealmResults<Contact>> {
-        return uiSharedRealm.where<Contact>()
+        return uiRealm.where<Contact>()
                 .like(Contact::address, address)
                 .sort(Contact::name)
                 .findAllAsync()
@@ -39,9 +40,11 @@ class ContactsRepository(currentWallet: LooprWallet) : BaseRealmRepository(curre
     }
 
     fun getContactByAddressNow(address: String): Contact? {
-        return uiSharedRealm.where<Contact>()
+        return uiRealm.where<Contact>()
                 .equalTo(Contact::address, address, Case.INSENSITIVE)
                 .findFirst()
     }
+
+    override fun getRealm() = realmClient.getPrivateInstance(currentWallet)
 
 }

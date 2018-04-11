@@ -6,6 +6,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.fragment_general_orders.*
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.models.loopr.OrderFilter
+import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
@@ -39,18 +40,21 @@ class GeneralOpenOrdersFragment : BaseGeneralOrdersFragment() {
             return field
         }
 
-    override fun provideAdapter() = GeneralOrderAdapter(true, activity as BaseActivity)
+    override fun provideAdapter() = GeneralOrderAdapter(FILTER_OPEN_ALL, activity as BaseActivity)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val orderFilter = OrderFilter(adapter.currentDateFilter, adapter.currentStatusFilter)
-        generalOrderViewModel?.getOpenOrders(orderFilter)
-        TODO("not implemented")
+        val wallet = walletClient.getCurrentWallet()?.credentials?.address
+        wallet?.let {
+            val orderFilter = OrderFilter(it, adapter.currentDateFilter, adapter.currentOpenOrderStatusFilter)
+            generalOrderViewModel?.getOpenOrders(orderFilter)
+            TODO("not implemented")
+        }
     }
 
     override fun onQueryTextChangeListener(searchQuery: String) {
-        TODO("not implemented") // TODO
+        TODO("Perform query on orders to get specific order pairs") // TODO
     }
 
 }

@@ -4,7 +4,7 @@ import android.support.test.runner.AndroidJUnit4
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import io.realm.Realm
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.CompletableDeferred
@@ -14,7 +14,6 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
 
 /**
  * Created by Corey on 3/22/2018

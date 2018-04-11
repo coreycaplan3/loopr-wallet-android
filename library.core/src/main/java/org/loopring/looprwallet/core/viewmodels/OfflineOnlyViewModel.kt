@@ -12,9 +12,7 @@ import org.loopring.looprwallet.core.repositories.sync.SyncRepository
  * Purpose of Class: An instance of [OfflineFirstViewModel] that doesn't ping the network ever.
  * Instead, it focuses **only** on loading data from the device's repository.
  */
-abstract class OfflineOnlyViewModel<T, U>(currentWallet: LooprWallet) : OfflineFirstViewModel<T, U>() {
-
-    override val syncRepository = SyncRepository.getInstance(currentWallet)
+abstract class OfflineOnlyViewModel<T, U> : OfflineFirstViewModel<T, U>() {
 
     override val syncType = throw NotImplementedError("Not needed for offline-only ViewModels")
 
@@ -26,6 +24,13 @@ abstract class OfflineOnlyViewModel<T, U>(currentWallet: LooprWallet) : OfflineF
         throw NotImplementedError("This method should never be called")
     }
 
+    /**
+     * We never need to refresh since the data is ALWAYS offline
+     */
     override fun isRefreshNecessary(parameter: U) = false
+
+    override fun addSyncDataToRepository(parameter: U) {
+        throw NotImplementedError("This method should never be called")
+    }
 
 }

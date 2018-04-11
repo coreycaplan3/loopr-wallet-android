@@ -16,7 +16,7 @@ import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepositor
  * Purpose of Class:
  *
  */
-class ContactsByAddressViewModel(currentWallet: LooprWallet) : OfflineOnlyViewModel<RealmResults<Contact>, String>(currentWallet) {
+class ContactsByAddressViewModel(currentWallet: LooprWallet) : OfflineOnlyViewModel<RealmResults<Contact>, String>() {
 
     override val repository = ContactsRepository(currentWallet)
 

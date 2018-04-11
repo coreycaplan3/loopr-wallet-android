@@ -16,7 +16,7 @@ import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.home.fragments.MyWalletFragment
 import org.loopring.looprwallet.home.fragments.GeneralOrdersParentFragment
 import org.loopring.looprwallet.home.fragments.MarketsParentFragment
-import org.loopring.looprwallet.transfer.fragments.ViewTransfersFragment
+import org.loopring.looprwallet.createtransfer.fragments.ViewTransfersFragment
 
 /**
  * Created by Corey on 1/14/2018

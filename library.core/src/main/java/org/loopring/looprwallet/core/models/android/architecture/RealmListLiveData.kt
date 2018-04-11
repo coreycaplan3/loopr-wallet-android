@@ -17,8 +17,7 @@ import io.realm.RealmResults
  * @param results The results from a query. Don't worry about it having data or not (from a query),
  * since a [RealmChangeListener] is registered and updates this [LiveData]'s value on the fly.
  */
-class RealmListLiveData<T : RealmModel>(private val results: RealmResults<T>)
-    : LiveData<RealmResults<T>>() {
+class RealmListLiveData<T : RealmModel>(private val results: RealmResults<T>) : LiveData<RealmResults<T>>() {
 
     private val listener = RealmChangeListener<RealmResults<T>> { results -> value = results }
 

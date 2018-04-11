@@ -2,7 +2,7 @@ package org.loopring.looprwallet.core.viewmodels.price
 
 import android.support.test.runner.AndroidJUnit4
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.models.sync.SyncData
 import kotlinx.coroutines.experimental.delay
 import org.junit.After

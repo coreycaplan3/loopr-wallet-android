@@ -6,8 +6,8 @@ import org.loopring.looprwallet.core.models.loopr.OrderFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository
-import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
+import java.util.*
 
 /**
  * Created by Corey Caplan on 4/7/18.
@@ -19,15 +19,16 @@ import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
  */
 class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<Any, OrderFilter>() {
 
-    override val repository = LooprOrderRepository(currentWallet)
+    // 5 seconds in ms
+    override val waitTime = 5 * 1000L
 
-    override val syncRepository = SyncRepository.getInstance(currentWallet)
+    override val repository = LooprOrderRepository(currentWallet)
 
     fun getOpenOrders(filter: OrderFilter) {
         TODO("not implemented")
     }
 
-    fun getClosedOrders(filter: OrderFilter) {
+    fun getFilledOrders(filter: OrderFilter) {
         TODO("not implemented")
     }
 
@@ -35,10 +36,7 @@ class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<
         TODO("not implemented")
     }
 
-    /**
-     * It's always necessary to refresh since we're dealing with dynamic and changing order books
-     */
-    override fun isRefreshNecessary(parameter: OrderFilter) = true
+    override fun isRefreshNecessary(parameter: OrderFilter) = isRefreshNecessaryDefault(parameter.address)
 
     override fun getDataFromNetwork(parameter: OrderFilter): Deferred<Any> {
         TODO("not implemented")
@@ -48,6 +46,16 @@ class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<
         TODO("not implemented")
     }
 
-    override val syncType = SyncData.SYNC_TYPE_NONE
+    override fun addSyncDataToRepository(parameter: OrderFilter) {
+        syncRepository.add(SyncData(syncType, null, Date()))
+    }
+
+    override val syncType
+        get() = when (parameter?.address) {
+            OrderFilter.FILTER_OPEN_ALL -> SyncData.SYNC_TYPE_ORDERS_OPEN
+            OrderFilter.FILTER_FILLED -> SyncData.SYNC_TYPE_ORDERS_FILLED
+            OrderFilter.FILTER_CANCELLED -> SyncData.SYNC_TYPE_ORDERS_CANCELLED
+            else -> SyncData.SYNC_TYPE_NONE
+        }
 
 }

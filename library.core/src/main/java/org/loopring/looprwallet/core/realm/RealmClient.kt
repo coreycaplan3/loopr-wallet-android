@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.realm
 import android.support.annotation.VisibleForTesting
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_DEBUG
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_RELEASE
@@ -52,7 +53,10 @@ abstract class RealmClient {
 
     abstract fun getSharedInstance(): Realm
 
-    abstract fun getPrivateInstance(realmName: String, encryptionKey: ByteArray): Realm
+    /**
+     * @param wallet The wallet instance that is tied to this private realm
+     */
+    abstract fun getPrivateInstance(wallet: LooprWallet): Realm
 
     @VisibleForTesting
     fun getPrivateRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
@@ -79,8 +83,8 @@ abstract class RealmClient {
         override val privateSchemaVersion = 0L
         override val sharedSchemaVersion = 0L
 
-        override fun getPrivateInstance(realmName: String, encryptionKey: ByteArray): Realm {
-            val configuration = getPrivateRealmConfigurationBuilder("$realmName-in-memory")
+        override fun getPrivateInstance(wallet: LooprWallet): Realm {
+            val configuration = getPrivateRealmConfigurationBuilder("${wallet.walletName}-in-memory")
                     .deleteRealmIfMigrationNeeded()
                     .inMemory()
                     .build()
@@ -103,9 +107,9 @@ abstract class RealmClient {
         override val privateSchemaVersion = 0L
         override val sharedSchemaVersion = 0L
 
-        override fun getPrivateInstance(realmName: String, encryptionKey: ByteArray): Realm {
-            val configuration = getPrivateRealmConfigurationBuilder(realmName)
-                    .encryptionKey(encryptionKey)
+        override fun getPrivateInstance(wallet: LooprWallet): Realm {
+            val configuration = getPrivateRealmConfigurationBuilder(wallet.walletName)
+                    .encryptionKey(wallet.realmKey)
                     .build()
 
             return Realm.getInstance(configuration)

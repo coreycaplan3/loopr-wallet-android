@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.realm
 
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -9,7 +9,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.loopring.looprwallet.core.realm.RealmClient
 
 /**
  * Created by Corey Caplan on 3/22/18.

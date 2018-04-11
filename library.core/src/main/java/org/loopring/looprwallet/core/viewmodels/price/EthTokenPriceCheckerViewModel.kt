@@ -4,16 +4,15 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.RealmModel
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.models.sync.SyncData
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
 import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
-import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
 import java.math.RoundingMode
+import java.util.*
 
 /**
  * Created by Corey Caplan on 3/13/18.
@@ -22,23 +21,18 @@ import java.math.RoundingMode
  *
  * Purpose of Class: A [StreamingViewModel] that periodically checks the token price and sends the
  * result via a channel to a *LiveData* instance.
- *
- * @param currentWallet The wallet of the user that is currently signed in.
  */
-class EthTokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewModel<EthToken, String>() {
+class EthTokenPriceCheckerViewModel : StreamingViewModel<EthToken, String>() {
 
-    override val repository = EthTokenRepository(currentWallet)
-
-    override val syncRepository = SyncRepository.getInstance(currentWallet)
+    override val repository = EthTokenRepository()
 
     override val syncType: String = SyncData.SYNC_TYPE_TOKEN_PRICE
 
     private var currencyExchangeRate: CurrencyExchangeRate? = null
 
-    private val currencyExchangeRateViewModel = CurrencyExchangeRateViewModel(currentWallet)
-            .apply {
-                this.start { currencyExchangeRate = it }
-            }
+    private val currencyExchangeRateViewModel = CurrencyExchangeRateViewModel().apply {
+        this.start { currencyExchangeRate = it }
+    }
 
     var currentCryptoToken: EthToken? = null
         private set
@@ -73,6 +67,12 @@ class EthTokenPriceCheckerViewModel(currentWallet: LooprWallet) : StreamingViewM
 
     override fun addNetworkDataToRepository(data: EthToken) {
         (data as? RealmModel)?.let { repository.add(it) }
+    }
+
+    override fun isRefreshNecessary(parameter: String) = isRefreshNecessaryDefault(parameter)
+
+    override fun addSyncDataToRepository(parameter: String) {
+        syncRepository.add(SyncData(syncType, parameter, Date()))
     }
 
     override fun onCleared() {

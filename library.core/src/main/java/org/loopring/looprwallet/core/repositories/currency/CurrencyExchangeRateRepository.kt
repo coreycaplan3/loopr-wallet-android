@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.repositories.currency
 
 import android.arch.lifecycle.LiveData
+import io.realm.Realm
 import io.realm.kotlin.where
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
@@ -16,11 +17,12 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class CurrencyExchangeRateRepository(currentWallet: LooprWallet)
-    : BaseRealmRepository(currentWallet) {
+class CurrencyExchangeRateRepository : BaseRealmRepository() {
+
+    override fun getRealm() = realmClient.getSharedInstance()
 
     fun getCurrencyExchangeRate(currency: String): LiveData<CurrencyExchangeRate> {
-        return uiSharedRealm.where<CurrencyExchangeRate>()
+        return uiRealm.where<CurrencyExchangeRate>()
                 .equalTo(CurrencyExchangeRate::currency, currency)
                 .findFirstAsync()
                 .asLiveData()

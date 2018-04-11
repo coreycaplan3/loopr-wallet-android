@@ -2,16 +2,23 @@ package org.loopring.looprwallet.homeorders.adapters
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.adapters.SavableAdapter
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.isSameDay
 import org.loopring.looprwallet.core.extensions.weakReference
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
+import org.loopring.looprwallet.core.models.loopr.OrderFilter
+import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_CANCELLED
+import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_FILLED
+import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.strArray
 import org.loopring.looprwallet.homeorders.R
+import org.loopring.looprwallet.order.fragments.OrderDetailsFragment
 
 /**
  * Created by Corey Caplan on 4/6/18.
@@ -20,9 +27,15 @@ import org.loopring.looprwallet.homeorders.R
  *
  * Purpose of Class: To display orders that appear on the home screen to the user
  *
- * @param isOpen True if this adapter will be showing open orders or false if it'll be past ones.
+ * @param orderType The order type to be displayed in this adapter.
+ * @param activity The activity in which this adapter resides. The adapter stores a weak reference
+ * to it for starting an instance of [OrderDetailsFragment] when necessary.
+ *
+ * @see OrderFilter.FILTER_OPEN_ALL
+ * @see OrderFilter.FILTER_FILLED
+ * @see OrderFilter.FILTER_CANCELLED
  */
-class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) : BaseRealmAdapter<EthToken>(),
+class GeneralOrderAdapter(private val orderType: String, activity: BaseActivity) : BaseRealmAdapter<EthToken>(),
         OnGeneralOrderFilterActionListener, SavableAdapter {
 
     companion object {
@@ -32,12 +45,11 @@ class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) :
         private const val KEY_FILTER_STATUS = "_FILTER_STATUS"
 
         val FILTER_DATES: Array<String> = strArray(R.array.filter_order_dates)
-        val FILTER_OPEN_ORDER_STATUS: Array<String> = strArray(R.array.filter_order_open_statuses)
-        val FILTER_CLOSED_ORDER_STATUS: Array<String> = strArray(R.array.filter_order_closed_statuses)
+        val FILTER_OPEN_ORDER_STATUS: Array<String> = strArray(R.array.filter_order_open_statuses_ui)
     }
 
     lateinit var currentDateFilter: String
-    lateinit var currentStatusFilter: String
+    lateinit var currentOpenOrderStatusFilter: String
 
     private val activity by weakReference(activity)
 
@@ -47,11 +59,7 @@ class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) :
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         currentDateFilter = savedInstanceState?.getString(KEY_FILTER_DATE) ?: FILTER_DATES[0]
 
-        val orderStatuses = when (isOpen) {
-            true -> FILTER_OPEN_ORDER_STATUS
-            else -> FILTER_CLOSED_ORDER_STATUS
-        }
-        currentStatusFilter = savedInstanceState?.getString(KEY_FILTER_STATUS) ?: orderStatuses[0]
+        currentOpenOrderStatusFilter = savedInstanceState?.getString(KEY_FILTER_STATUS) ?: FILTER_OPEN_ORDER_STATUS[0]
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -67,11 +75,27 @@ class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) :
     }
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return EmptyGeneralOrderViewHolder(isOpen, parent)
+        return EmptyGeneralOrderViewHolder(orderType, parent)
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return GeneralOrderViewHolder(parent.inflate(R.layout.view_holder_general_order))
+    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        fun inflate(layoutRes: Int) = parent.inflate(layoutRes)
+
+        return when (viewType) {
+            TYPE_DATA -> GeneralOrderViewHolder(inflate(R.layout.view_holder_general_order))
+            TYPE_FILTER -> when (orderType) {
+                FILTER_OPEN_ALL -> {
+                    val view = inflate(R.layout.view_holder_open_order_filter)
+                    GeneralOpenOrderFilterViewHolder(view, this, this::onCancelAllOpenOrdersClick)
+                }
+                FILTER_FILLED, FILTER_CANCELLED -> {
+                    val view = inflate(R.layout.view_holder_open_order_filter)
+                    GeneralClosedOrderFilterViewHolder(view, this)
+                }
+                else -> throw IllegalArgumentException("Invalid orderType, found: $viewType")
+            }
+            else -> throw IllegalArgumentException("Invalid viewType, found: $viewType")
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: EthToken) {
@@ -81,12 +105,12 @@ class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) :
         }
 
         (holder as? GeneralOpenOrderFilterViewHolder)?.let {
-            it.bind(currentDateFilter, currentStatusFilter)
+            it.bind(currentDateFilter, currentOpenOrderStatusFilter)
             return
         }
 
         (holder as? GeneralClosedOrderFilterViewHolder)?.let {
-            it.bind(currentDateFilter, currentStatusFilter)
+            it.bind(currentDateFilter)
             return
         }
 
@@ -107,13 +131,23 @@ class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) :
         }
 
         (holder as? GeneralOrderViewHolder)?.bind(item, showDateHeader) {
-            activity?.supportFragmentManager
-            TODO("Add order details dialog!")
+            val activity = this.activity ?: return@bind
+
+            val fragment = OrderDetailsFragment.getInstance("TODO") //TODO
+            val tag = OrderDetailsFragment.TAG
+            FragmentTransactionController(R.id.activityContainer, fragment, tag).apply {
+                slideUpAndDownAnimation()
+                commitTransaction(activity.supportFragmentManager)
+            }
         }
     }
 
+    fun onCancelAllOpenOrdersClick(view: View) {
+        TODO("Implement me...")
+    }
+
     override fun onStatusFilterChange(newStatusValue: String) {
-        currentStatusFilter = newStatusValue
+        currentOpenOrderStatusFilter = newStatusValue
     }
 
     override fun onDateFilterChange(newDateValue: String) {
@@ -122,7 +156,7 @@ class GeneralOrderAdapter(private val isOpen: Boolean, activity: BaseActivity) :
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(KEY_FILTER_DATE, currentDateFilter)
-        outState.putString(KEY_FILTER_STATUS, currentStatusFilter)
+        outState.putString(KEY_FILTER_STATUS, currentOpenOrderStatusFilter)
     }
 
 }

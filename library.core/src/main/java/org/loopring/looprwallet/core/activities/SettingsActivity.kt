@@ -57,7 +57,7 @@ class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
         }
 
         setSupportActionBar(toolbar)
-        toolbar?.navigationIcon = ViewUtility.getNavigationIcon(theme)
+        toolbar?.navigationIcon = ViewUtility.getNavigationIcon(R.drawable.ic_arrow_back_white_24dp, theme)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         isIntentForClosingApplication()

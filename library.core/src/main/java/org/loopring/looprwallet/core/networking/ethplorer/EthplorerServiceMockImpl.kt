@@ -1,8 +1,8 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
-import org.loopring.looprwallet.core.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.cryptotokens.TokenBalanceInfo
-import org.loopring.looprwallet.core.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
+import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.loopring.looprwallet.core.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import kotlinx.coroutines.experimental.async

@@ -47,7 +47,7 @@ android {
 
     dexOptions {
         preDexLibraries true
-        javaMaxHeapSize "1g"
+        javaMaxHeapSize "512m"
         maxProcessCount 4
     }
 
@@ -112,7 +112,7 @@ dependencies {
     implementation project(':module.intro')
     implementation project(':module.create-order')
     implementation project(':module.trade-details')
-    implementation project(':module.transfer')
+    implementation project(':module.create-transfer')
     implementation project(':module.wallet-sign-in')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 

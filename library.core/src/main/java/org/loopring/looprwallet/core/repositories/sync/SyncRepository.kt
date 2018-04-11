@@ -19,7 +19,7 @@ interface SyncRepository : BaseRepository<RealmModel> {
 
     companion object {
 
-        fun getInstance(currentWallet: LooprWallet): SyncRepository = SyncRepositoryImpl(currentWallet)
+        fun getInstance(): SyncRepository = SyncRepositoryImpl()
 
     }
 
@@ -29,8 +29,8 @@ interface SyncRepository : BaseRepository<RealmModel> {
     fun getLastSyncTime(@SyncData.SyncType syncType: String): Date?
 
     /**
-     * Gets the last sync time for a given address's [SyncData.SyncType].
+     * Gets the last sync time for a given syncId's [SyncData.SyncType].
      */
-    fun getLastSyncTimeForWallet(address: String, @SyncData.SyncType syncType: String): Date?
+    fun getLastSyncTimeForSyncId(@SyncData.SyncType syncType: String, syncId: String): Date?
 
 }
