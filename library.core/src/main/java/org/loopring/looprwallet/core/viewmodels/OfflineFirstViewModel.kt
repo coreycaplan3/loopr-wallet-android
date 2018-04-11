@@ -137,6 +137,15 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     var mHasNetworkBeenCalled = false
 
     /**
+     * Removes all observers from this [OfflineFirstViewModel]'s [LiveData], given this [owner].
+     *
+     * @param owner The [LifecycleOwner] whose [LiveData] should be removed
+     */
+    fun removeDataObserver(owner: LifecycleOwner) {
+        mLiveData?.removeObservers(owner)
+    }
+
+    /**
      * An mError that may or may not have occurred. Should be used in conjunction with
      * *LiveData.observeForDoubleSpend* so you don't display the same mError *twice* to a user.
      */

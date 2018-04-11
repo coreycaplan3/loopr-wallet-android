@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.createtransfer.fragments
+package org.loopring.looprwallet.hometransfers.fragments
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton

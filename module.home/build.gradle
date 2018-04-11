@@ -58,8 +58,8 @@ dependencies {
     implementation project(':library.core')
     implementation project(path: ':module.home-markets')
     implementation project(path: ':module.home-orders')
-    implementation project(path: ':module.create-transfer')
-    implementation project(path: ':module.create-order')
+    implementation project(path: ':module.home-transfers')
+    implementation project(path: ':module.home-my-wallet')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

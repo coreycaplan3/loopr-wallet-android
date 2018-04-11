@@ -53,9 +53,13 @@ class GeneralOpenOrderFilterViewHolder(
         openOrderCancelAllButton.setOnClickListener(onCancelAllClickListener)
     }
 
-    fun bind(dateValue: String, statusValue: String) {
+    /**
+     * @param statusRawValue The status ENUM, as seen in the Loopring API for filtering orders by
+     * status.
+     */
+    fun bind(dateValue: String, statusRawValue: String) {
         openOrderFilterDateSpinner.setSelection(FILTER_DATES.indexOf(dateValue))
-        openOrderFilterStatusSpinner.setSelection(FILTER_OPEN_ORDER_STATUS.indexOf(statusValue))
+        openOrderFilterStatusSpinner.setSelection(FILTER_OPEN_ORDER_STATUS.indexOf(statusRawValue))
     }
 
 }

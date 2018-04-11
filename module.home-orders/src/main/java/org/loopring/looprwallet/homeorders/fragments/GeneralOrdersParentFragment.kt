@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.home.fragments
+package org.loopring.looprwallet.homeorders.fragments
 
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -12,8 +12,6 @@ import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.Bottom
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
 import org.loopring.looprwallet.homeorders.R
-import org.loopring.looprwallet.homeorders.fragments.HomeFilledOrdersFragment
-import org.loopring.looprwallet.homeorders.fragments.HomeOpenOrdersFragment
 
 /**
  * Created by Corey on 1/17/2018.

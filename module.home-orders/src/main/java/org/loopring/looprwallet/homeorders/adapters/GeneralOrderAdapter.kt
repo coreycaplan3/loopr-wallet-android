@@ -48,13 +48,10 @@ class GeneralOrderAdapter(
 
         private const val KEY_FILTER_DATE = "_FILTER_DATE"
         private const val KEY_FILTER_STATUS = "_FILTER_STATUS"
-
-        val FILTER_DATES: Array<String> = strArray(R.array.filter_order_dates)
-        val FILTER_OPEN_ORDER_STATUS: Array<String> = strArray(R.array.filter_order_open_statuses_ui)
     }
 
     lateinit var currentDateFilter: String
-    lateinit var currentOpenOrderStatusFilter: String
+    lateinit var currentOrderStatusFilter: String
 
     private val activity by weakReference(activity)
     private val listener by weakReference(listener)
@@ -65,7 +62,7 @@ class GeneralOrderAdapter(
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         currentDateFilter = savedInstanceState?.getString(KEY_FILTER_DATE) ?: FILTER_DATES[0]
 
-        currentOpenOrderStatusFilter = savedInstanceState?.getString(KEY_FILTER_STATUS) ?: FILTER_OPEN_ORDER_STATUS[0]
+        currentOrderStatusFilter = savedInstanceState?.getString(KEY_FILTER_STATUS) ?: orderType
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -111,7 +108,7 @@ class GeneralOrderAdapter(
         }
 
         (holder as? GeneralOpenOrderFilterViewHolder)?.let {
-            it.bind(currentDateFilter, currentOpenOrderStatusFilter)
+            it.bind(currentDateFilter, currentOrderStatusFilter)
             return
         }
 
@@ -154,7 +151,7 @@ class GeneralOrderAdapter(
     }
 
     override fun onStatusFilterChange(newStatusValue: String) {
-        currentOpenOrderStatusFilter = newStatusValue
+        currentOrderStatusFilter = newStatusValue
     }
 
     override fun onDateFilterChange(newDateValue: String) {
@@ -163,7 +160,7 @@ class GeneralOrderAdapter(
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(KEY_FILTER_DATE, currentDateFilter)
-        outState.putString(KEY_FILTER_STATUS, currentOpenOrderStatusFilter)
+        outState.putString(KEY_FILTER_STATUS, currentOrderStatusFilter)
     }
 
 }

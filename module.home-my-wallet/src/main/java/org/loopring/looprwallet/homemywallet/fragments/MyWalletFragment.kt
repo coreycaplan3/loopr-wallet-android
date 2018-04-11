@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.home.fragments
+package org.loopring.looprwallet.homemywallet.fragments
 
 import android.os.Bundle
 import android.view.View

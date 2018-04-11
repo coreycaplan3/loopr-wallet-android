@@ -1,6 +1,8 @@
 package org.loopring.looprwallet.homeorders.viewmodels
 
 import android.arch.lifecycle.LiveData
+import io.realm.RealmModel
+import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.loopr.OrderFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -24,15 +26,10 @@ class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<
 
     override val repository = LooprOrderRepository(currentWallet)
 
-    fun getOpenOrders(filter: OrderFilter, ticker: String? = null) {
-        TODO("not implemented")
-    }
-
-    fun getFilledOrders(filter: OrderFilter, ticker: String? = null) {
-        TODO("not implemented")
-    }
-
-    fun getCancelledOrders(filter: OrderFilter, ticker: String? = null) {
+    /**
+     * Gets the user's
+     */
+    fun getOrders(filter: OrderFilter, onChange: (RealmResults<RealmModel>) -> Unit) {
         TODO("not implemented")
     }
 

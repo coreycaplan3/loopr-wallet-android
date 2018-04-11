@@ -13,10 +13,10 @@ import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationF
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.home.R
-import org.loopring.looprwallet.home.fragments.MyWalletFragment
-import org.loopring.looprwallet.home.fragments.GeneralOrdersParentFragment
-import org.loopring.looprwallet.home.fragments.MarketsParentFragment
-import org.loopring.looprwallet.createtransfer.fragments.ViewTransfersFragment
+import org.loopring.looprwallet.homeorders.fragments.GeneralOrdersParentFragment
+import org.loopring.looprwallet.homemarkets.fragments.MarketsParentFragment
+import org.loopring.looprwallet.homemywallet.fragments.MyWalletFragment
+import org.loopring.looprwallet.hometransfers.fragments.ViewTransfersFragment
 
 /**
  * Created by Corey on 1/14/2018

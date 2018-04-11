@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.home.fragments
+package org.loopring.looprwallet.homemarkets.fragments
 
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout

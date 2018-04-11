@@ -21,7 +21,14 @@ import org.loopring.looprwallet.homeorders.viewmodels.GeneralOrderViewModel
 abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselectedLister,
         OnSearchViewChangeListener {
 
+    companion object {
+        private const val KEY_IS_SEARCH_ACTIVE = "_IS_SEARCH_ACTIVE"
+    }
+
     abstract val recyclerView: RecyclerView
+
+    var isSearchActive = false
+        private set
 
     lateinit var adapter: GeneralOrderAdapter
         private set
@@ -38,6 +45,12 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
             return field
         }
         private set
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        isSearchActive = savedInstanceState?.getBoolean(KEY_IS_SEARCH_ACTIVE, false) ?: false
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,16 +74,17 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
     }
 
     final override fun onSearchItemExpanded() {
-        // NO OP
+        isSearchActive = true
     }
 
     final override fun onSearchItemCollapsed() {
-        // NO OP
+        isSearchActive = false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
+        outState.putBoolean(KEY_IS_SEARCH_ACTIVE, isSearchActive)
         adapter.onSaveInstanceState(outState)
     }
 

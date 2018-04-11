@@ -33,7 +33,7 @@ class HomeFilledOrdersFragment : BaseHomeOrdersFragment() {
 
         val address = walletClient.getCurrentWallet()?.credentials?.address
         address?.let {
-            val orderFilter = OrderFilter(it, adapter.currentDateFilter, adapter.currentOpenOrderStatusFilter)
+            val orderFilter = OrderFilter(it, adapter.currentDateFilter, adapter.currentOrderStatusFilter)
             generalOrderViewModel?.getFilledOrders(orderFilter)
         }
     }
