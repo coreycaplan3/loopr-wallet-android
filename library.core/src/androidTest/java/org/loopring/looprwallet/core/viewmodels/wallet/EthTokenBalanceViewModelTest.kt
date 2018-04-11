@@ -1,14 +1,14 @@
 package org.loopring.looprwallet.core.viewmodels.wallet
 
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import io.realm.RealmResults
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
 import java.util.*
 
@@ -26,7 +26,7 @@ class EthTokenBalanceViewModelTest : BaseDaggerTest() {
 
     @Before
     fun setup() = runBlockingUiCode {
-        ethTokenBalanceViewModel = EthTokenBalanceViewModel(wallet!!)
+        ethTokenBalanceViewModel = EthTokenBalanceViewModel()
     }
 
     @After

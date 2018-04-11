@@ -13,7 +13,7 @@ import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.snackbar
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.handlers.PermissionHandler
+import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.loopring.looprwallet.core.utilities.DialogUtility
 import org.loopring.looprwallet.core.validators.PasswordValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
@@ -42,11 +42,11 @@ class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.OnPas
         get() = R.layout.fragment_create_wallet_keystore
 
     private val filePermissionsHandler by lazy {
-        PermissionHandler(
+        PermissionDelegate(
                 activity as BaseActivity,
                 this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                PermissionHandler.REQUEST_CODE_EXTERNAL_FILES,
+                PermissionDelegate.REQUEST_CODE_EXTERNAL_FILES,
                 this::onFilePermissionGranted,
                 this::onFilePermissionDenied
         )

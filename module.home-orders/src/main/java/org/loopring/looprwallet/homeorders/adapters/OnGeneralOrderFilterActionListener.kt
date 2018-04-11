@@ -6,7 +6,7 @@ package org.loopring.looprwallet.homeorders.adapters
  * Project: loopr-wallet-android
  *
  * Purpose of Class: To pass actions uniformly from [GeneralClosedOrderFilterViewHolder] and
- * [GeneralOpenOrderFilterViewHolder] to the parent adapter.
+ * [GeneralOpenOrderFilterViewHolder] to the implementor.
  */
 interface OnGeneralOrderFilterActionListener {
 

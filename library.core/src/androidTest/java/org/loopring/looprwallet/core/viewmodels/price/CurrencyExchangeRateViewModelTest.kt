@@ -1,16 +1,15 @@
 package org.loopring.looprwallet.core.viewmodels.price
 
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
-import org.loopring.looprwallet.core.models.sync.SyncData
 import kotlinx.coroutines.experimental.delay
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.loopring.looprwallet.core.viewmodels.price.CurrencyExchangeRateViewModel
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
+import org.loopring.looprwallet.core.models.sync.SyncData
 import java.util.*
 
 /**
@@ -27,7 +26,7 @@ class CurrencyExchangeRateViewModelTest : BaseDaggerTest() {
 
     @Before
     fun setup() = runBlockingUiCode {
-        currencyExchangeRateViewModel = CurrencyExchangeRateViewModel(wallet!!)
+        currencyExchangeRateViewModel = CurrencyExchangeRateViewModel()
     }
 
     @After

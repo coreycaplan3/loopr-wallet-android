@@ -2,14 +2,12 @@ package org.loopring.looprwallet.contacts.dialogs
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_create_contact.*
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
-import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
+import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.dagger.contactsLooprComponent
 import org.loopring.looprwallet.core.models.contact.Contact
@@ -69,7 +67,7 @@ class CreateContactDialog : BaseBottomSheetDialog() {
 
         activity?.let {
             val barcodeButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-            BarcodeCaptureHandler.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, barcodeButton)
+            BarcodeCaptureDelegate.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, barcodeButton)
         }
 
         if (savedInstanceState == null) {
@@ -95,7 +93,7 @@ class CreateContactDialog : BaseBottomSheetDialog() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        BarcodeCaptureHandler.handleActivityResult(contactAddressEditText, requestCode, resultCode, data)
+        BarcodeCaptureDelegate.handleActivityResult(contactAddressEditText, requestCode, resultCode, data)
     }
 
     override fun onFormChanged() {

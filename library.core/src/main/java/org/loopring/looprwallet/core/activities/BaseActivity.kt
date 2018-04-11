@@ -16,7 +16,7 @@ import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.handlers.PermissionHandler
+import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.settings.ThemeSettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
@@ -72,7 +72,7 @@ abstract class BaseActivity : AppCompatActivity() {
     var progressDialogMessage: String? = null
         private set
 
-    private lateinit var permissionHandlers: List<PermissionHandler>
+    private lateinit var permissionDelegates: List<PermissionDelegate>
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,8 +88,8 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(contentViewRes)
 
         // Setup the permission handlers
-        permissionHandlers = getAllPermissionHandlers()
-        permissionHandlers.filter { it.shouldRequestPermissionNow }.forEach { it.requestPermission() }
+        permissionDelegates = getAllPermissionHandlers()
+        permissionDelegates.filter { it.shouldRequestPermissionNow }.forEach { it.requestPermission() }
 
         // Setup keyboard related stuff
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -162,7 +162,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    open fun getAllPermissionHandlers(): List<PermissionHandler> {
+    open fun getAllPermissionHandlers(): List<PermissionDelegate> {
         // Default is to return an empty list
         return listOf()
     }
@@ -170,7 +170,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        permissionHandlers.forEach {
+        permissionDelegates.forEach {
             it.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }

@@ -33,7 +33,7 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.activity_barcode_capture.*
 import org.loopring.looprwallet.barcode.R
-import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
+import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
 import org.loopring.looprwallet.barcode.views.barcode.BarcodeGraphicTracker
 import org.loopring.looprwallet.barcode.views.barcode.BarcodeTrackerFactory
 import org.loopring.looprwallet.barcode.views.barcode.CameraSource
@@ -41,7 +41,7 @@ import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.extensions.snackbar
-import org.loopring.looprwallet.core.handlers.PermissionHandler
+import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.web3j.crypto.WalletUtils
 import java.io.IOException
 
@@ -78,12 +78,12 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
         graphicOverlay.snackbar(R.string.qr_code_scanner_instructions, Snackbar.LENGTH_LONG)
     }
 
-    override fun getAllPermissionHandlers(): List<PermissionHandler> {
+    override fun getAllPermissionHandlers(): List<PermissionDelegate> {
         return listOf(
-                PermissionHandler(
+                PermissionDelegate(
                         activity = this,
                         permission = Manifest.permission.CAMERA,
-                        requestCode = PermissionHandler.REQUEST_CODE_CAMERA,
+                        requestCode = PermissionDelegate.REQUEST_CODE_CAMERA,
                         onPermissionGranted = { createCameraSource() },
                         onPermissionDenied = { onRequestCameraPermissionFailed() }
                 )
@@ -94,8 +94,8 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
     override fun onBarcodeDetected(barcode: Barcode) {
         val value = barcode.rawValue
         when {
-            WalletUtils.isValidAddress(value) -> BarcodeCaptureHandler.putActivityResult(this, value)
-            WalletUtils.isValidPrivateKey(value) -> BarcodeCaptureHandler.putActivityResult(this, value)
+            WalletUtils.isValidAddress(value) -> BarcodeCaptureDelegate.putActivityResult(this, value)
+            WalletUtils.isValidPrivateKey(value) -> BarcodeCaptureDelegate.putActivityResult(this, value)
             else -> {
                 val message = String.format(getString(R.string.formatter_is_an_invalid_address), value)
                 cameraSourcePreview.snackbar(message, Snackbar.LENGTH_LONG)
@@ -268,7 +268,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
         }
 
         if (bestBarcode != null) {
-            BarcodeCaptureHandler.putActivityResult(this, bestBarcode.rawValue)
+            BarcodeCaptureDelegate.putActivityResult(this, bestBarcode.rawValue)
             return true
         }
         return false

@@ -133,7 +133,7 @@ open class BaseDaggerTest {
     }
 
     protected fun createRealm(): Realm {
-        return realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
+        return realmClient.getPrivateInstance(wallet!!)
     }
 
     /**

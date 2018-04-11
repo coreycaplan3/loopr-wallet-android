@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import org.loopring.looprwallet.core.adapters.SavableAdapter
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
 import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
+import org.loopring.looprwallet.homeorders.viewmodels.GeneralOrderViewModel
 
 /**
  * Created by Corey Caplan on 4/7/18.
@@ -23,6 +24,19 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
     abstract val recyclerView: RecyclerView
 
     lateinit var adapter: GeneralOrderAdapter
+        private set
+
+    var generalOrderViewModel: GeneralOrderViewModel? = null
+        get() {
+            if (field != null) {
+                return field
+            }
+
+            val wallet = walletClient.getCurrentWallet() ?: return null
+
+            field = LooprWalletViewModelFactory.get(this, wallet)
+            return field
+        }
         private set
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

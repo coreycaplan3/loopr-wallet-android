@@ -19,7 +19,7 @@ import org.loopring.looprwallet.core.utilities.RegexUtility
 import org.loopring.looprwallet.core.wallet.WalletClient
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.walletsignin.dagger.walletLooprComponent
-import org.loopring.looprwallet.walletsignin.handlers.WalletCreationHandler
+import org.loopring.looprwallet.walletsignin.delegates.WalletCreationDelegates
 import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationResult
 import org.web3j.crypto.CipherException
@@ -114,7 +114,7 @@ class WalletGeneratorViewModel : ViewModel() {
 
     fun createCredentialsWallet(walletName: String, privateKey: String) = createWalletAsync {
         val credentials = Credentials.create(privateKey)
-        WalletCreationHandler(walletName, credentials, walletClient).createWallet()
+        WalletCreationDelegates(walletName, credentials, walletClient).createWallet()
     }
 
     /**
@@ -133,7 +133,7 @@ class WalletGeneratorViewModel : ViewModel() {
             when (generatedFile.renameTo(credentialFile)) {
                 true -> {
                     val credentials = WalletUtils.loadCredentials(password, credentialFile)
-                    WalletCreationHandler(walletName, credentials, walletClient).createWallet()
+                    WalletCreationDelegates(walletName, credentials, walletClient).createWallet()
                 }
                 false -> {
                     loge("Could not rename generated currentWallet file in filesDirectory!", IllegalStateException())
@@ -153,7 +153,7 @@ class WalletGeneratorViewModel : ViewModel() {
     fun loadKeystoreWallet(walletName: String, password: String, file: File) = createWalletAsync {
         try {
             val credentials = WalletUtils.loadCredentials(password, file)
-            WalletCreationHandler(walletName, credentials, walletClient).createWallet()
+            WalletCreationDelegates(walletName, credentials, walletClient).createWallet()
         } catch (e: Exception) {
             if (e is CipherException) {
                 WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
@@ -210,7 +210,7 @@ class WalletGeneratorViewModel : ViewModel() {
             }
 
             val credentials = WalletUtils.loadBip39Credentials(password, phraseAsString.toString())
-            WalletCreationHandler(walletName, credentials, walletClient).createWallet()
+            WalletCreationDelegates(walletName, credentials, walletClient).createWallet()
         } catch (e: Exception) {
             if (e is CipherException) {
                 WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))

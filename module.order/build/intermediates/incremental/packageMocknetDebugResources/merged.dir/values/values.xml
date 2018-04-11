@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">module.order</string>
+    <string name="filled">Filled</string>
+    <string name="trade_id">Trade ID</string>
+</resources>

@@ -24,11 +24,15 @@ class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<
 
     override val repository = LooprOrderRepository(currentWallet)
 
-    fun getOpenOrders(filter: OrderFilter) {
+    fun getOpenOrders(filter: OrderFilter, ticker: String? = null) {
         TODO("not implemented")
     }
 
-    fun getFilledOrders(filter: OrderFilter) {
+    fun getFilledOrders(filter: OrderFilter, ticker: String? = null) {
+        TODO("not implemented")
+    }
+
+    fun getCancelledOrders(filter: OrderFilter, ticker: String? = null) {
         TODO("not implemented")
     }
 

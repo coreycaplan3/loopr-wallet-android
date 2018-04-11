@@ -21,7 +21,7 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.loopring.looprwallet.barcode.handlers.BarcodeCaptureHandler
+import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
 import org.loopring.looprwallet.contacts.adapters.contacts.ContactsAdapter
 import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.createtransfer.fragments.SelectTransferContactFragment
@@ -135,8 +135,8 @@ class SelectContactFragmentTest : BaseDaggerFragmentTest<SelectTransferContactFr
     @Test
     fun enterFullAddress_fromBarcode() {
         runBlockingUiCode {
-            val intent = Intent().putExtra(BarcodeCaptureHandler.KEY_BARCODE_VALUE, addressOne)
-            fragment.onActivityResult(BarcodeCaptureHandler.REQUEST_CODE_START_BARCODE_ACTIVITY, RESULT_OK, intent)
+            val intent = Intent().putExtra(BarcodeCaptureDelegate.KEY_BARCODE_VALUE, addressOne)
+            fragment.onActivityResult(BarcodeCaptureDelegate.REQUEST_CODE_START_BARCODE_ACTIVITY, RESULT_OK, intent)
         }
 
         assertEquals(addressOne, fragment.selectedContactAddress)

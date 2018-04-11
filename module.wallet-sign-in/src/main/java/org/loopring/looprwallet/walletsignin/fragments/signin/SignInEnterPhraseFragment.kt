@@ -19,7 +19,7 @@ import org.loopring.looprwallet.core.extensions.allEqual
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.handlers.SimpleItemTouchHandler
+import org.loopring.looprwallet.core.delegates.SimpleItemTouchDelegate
 import org.loopring.looprwallet.core.utilities.RegexUtility
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseAdapter
@@ -138,7 +138,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
             )
             this.adapter = adapter
 
-            itemTouchHelper = ItemTouchHelper(SimpleItemTouchHandler(adapter))
+            itemTouchHelper = ItemTouchHelper(SimpleItemTouchDelegate(adapter))
             itemTouchHelper?.attachToRecyclerView(this)
         }
 

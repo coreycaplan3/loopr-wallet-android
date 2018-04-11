@@ -1,12 +1,6 @@
 package org.loopring.looprwallet.core.realm
 
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.extensions.equalTo
-import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import org.loopring.looprwallet.core.extensions.upsert
-import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
@@ -15,6 +9,12 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
+import org.loopring.looprwallet.core.extensions.upsert
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
 
 /**
  * Created by Corey Caplan on 3/31/18.
@@ -33,7 +33,7 @@ class RealmOneToManyTest : BaseDaggerTest() {
     @Before
     fun setup() = runBlockingUiCode {
         println("FIRST")
-        realm = realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
+        realm = realmClient.getPrivateInstance(wallet!!)
     }
 
     @After

@@ -1,15 +1,15 @@
 package org.loopring.looprwallet.core.viewmodels.price
 
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
-import org.loopring.looprwallet.core.models.sync.SyncData
 import kotlinx.coroutines.experimental.delay
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.sync.SyncData
 import java.math.BigDecimal
 import java.util.*
 
@@ -27,7 +27,7 @@ class EthTokenPriceCheckerViewModelTest : BaseDaggerTest() {
 
     @Before
     fun setup() = runBlockingUiCode {
-        ethTokenPriceCheckerViewModel = EthTokenPriceCheckerViewModel(wallet!!)
+        ethTokenPriceCheckerViewModel = EthTokenPriceCheckerViewModel()
     }
 
     @After

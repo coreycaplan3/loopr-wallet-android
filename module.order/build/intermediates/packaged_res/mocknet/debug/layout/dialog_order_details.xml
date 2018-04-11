@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/standard_padding">
+
+    <LinearLayout
+        android:id="@+id/orderDetailsTitleContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:clipToPadding="false"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/orderDetailsTitleLabel"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="LRC / WETH" />
+
+        <TextView
+            android:id="@+id/orderDetailsBuyCircle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:background="@drawable/buy_circle"
+            android:gravity="center"
+            android:text="@string/letter_b"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/orderDetailsSellCircle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:background="@drawable/sell_circle"
+            android:gravity="center"
+            android:text="@string/letter_s"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/orderDetailsProgressContainer"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_below="@id/orderDetailsTitleContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/vertical_margin_small">
+
+        <org.loopring.looprwallet.order.views.OrderProgressView
+            android:id="@+id/orderDetailsOrderProgressView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border"
+            android:contentDescription="@string/content_description_completed_order"
+            android:src="@drawable/ic_swap_horiz_white_24dp"
+            android:tint="?android:attr/textColorSecondary" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/orderDetailsTokenAmountLabel"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/orderDetailsProgressContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/vertical_margin"
+        tools:text="194,329.91939596 LRC" />
+
+    <TextView
+        android:id="@+id/orderDetailsFiatAmountLabel"
+        style="@style/TextAppearance.AppCompat.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/orderDetailsTokenAmountLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/vertical_margin"
+        tools:text="~ $82,423.85" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/orderDetailsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/orderDetailsFiatAmountLabel"
+        android:layout_marginTop="@dimen/vertical_margin_large" />
+
+</RelativeLayout>

@@ -1,10 +1,6 @@
 package org.loopring.looprwallet.core.realm
 
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.extensions.equalTo
-import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import io.realm.Realm
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.CompletableDeferred
@@ -14,6 +10,10 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.loopring.looprwallet.core.dagger.BaseDaggerTest
+import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 
 /**
  * Created by Corey on 3/22/2018
@@ -31,7 +31,7 @@ class RealmObjectChangeListenerTest : BaseDaggerTest() {
 
     @Before
     fun setup() = runBlockingUiCode {
-        realm = realmClient.getPrivateInstance(wallet!!.walletName, wallet!!.realmKey)
+        realm = realmClient.getPrivateInstance(wallet!!)
     }
 
     @After

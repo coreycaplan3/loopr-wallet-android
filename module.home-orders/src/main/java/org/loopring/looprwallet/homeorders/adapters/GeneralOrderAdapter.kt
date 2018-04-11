@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.adapters.SavableAdapter
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.isSameDay
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
 import org.loopring.looprwallet.core.models.loopr.OrderFilter
 import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_CANCELLED
 import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_FILLED
@@ -30,12 +30,17 @@ import org.loopring.looprwallet.order.fragments.OrderDetailsFragment
  * @param orderType The order type to be displayed in this adapter.
  * @param activity The activity in which this adapter resides. The adapter stores a weak reference
  * to it for starting an instance of [OrderDetailsFragment] when necessary.
+ * @param listener An instance of [OnFilterChangeListener] for passing filter change events.
  *
  * @see OrderFilter.FILTER_OPEN_ALL
  * @see OrderFilter.FILTER_FILLED
  * @see OrderFilter.FILTER_CANCELLED
  */
-class GeneralOrderAdapter(private val orderType: String, activity: BaseActivity) : BaseRealmAdapter<EthToken>(),
+class GeneralOrderAdapter(
+        private val orderType: String,
+        activity: BaseActivity,
+        listener: OnGeneralOrderFilterActionListener
+) : BaseRealmAdapter<EthToken>(),
         OnGeneralOrderFilterActionListener, SavableAdapter {
 
     companion object {
@@ -52,6 +57,7 @@ class GeneralOrderAdapter(private val orderType: String, activity: BaseActivity)
     lateinit var currentOpenOrderStatusFilter: String
 
     private val activity by weakReference(activity)
+    private val listener by weakReference(listener)
 
     override val totalItems: Int?
         get() = null
@@ -86,7 +92,7 @@ class GeneralOrderAdapter(private val orderType: String, activity: BaseActivity)
             TYPE_FILTER -> when (orderType) {
                 FILTER_OPEN_ALL -> {
                     val view = inflate(R.layout.view_holder_open_order_filter)
-                    GeneralOpenOrderFilterViewHolder(view, this, this::onCancelAllOpenOrdersClick)
+                    GeneralOpenOrderFilterViewHolder(view, this, ::onCancelAllOpenOrdersClick)
                 }
                 FILTER_FILLED, FILTER_CANCELLED -> {
                     val view = inflate(R.layout.view_holder_open_order_filter)
@@ -142,7 +148,8 @@ class GeneralOrderAdapter(private val orderType: String, activity: BaseActivity)
         }
     }
 
-    fun onCancelAllOpenOrdersClick(view: View) {
+    @Suppress("UNUSED_PARAMETER")
+    private fun onCancelAllOpenOrdersClick(view: View) {
         TODO("Implement me...")
     }
 
