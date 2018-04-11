@@ -5,13 +5,11 @@ import android.arch.lifecycle.Lifecycle.Event
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.design.widget.AppBarLayout
+import android.support.annotation.DrawableRes
+import android.support.design.widget.*
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.CoordinatorLayout.LayoutParams
-import android.support.design.widget.FloatingActionButton
 import android.support.transition.TransitionSet
 import android.support.transition.Visibility
 import android.support.v4.app.Fragment
@@ -31,6 +29,7 @@ import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ViewUtility
 import org.loopring.looprwallet.core.validators.BaseValidator
+import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
 
@@ -64,7 +63,7 @@ abstract class BaseFragment : Fragment() {
     var appbarLayout: AppBarLayout? = null
         private set
 
-    @IdRes
+    @DrawableRes
     open var navigationIcon: Int = R.drawable.ic_arrow_back_white_24dp
 
     var toolbar: Toolbar? = null
@@ -273,6 +272,77 @@ abstract class BaseFragment : Fragment() {
         isToolbarCollapseEnabled = false
     }
 
+    protected val viewModelList = arrayListOf<OfflineFirstViewModel<*, *>>()
+
+    /**
+     * This method is responsible for two things:
+     *
+     * Sets up the [OfflineFirstViewModel] to handle state changes in data. This method will then
+     * show/hide the [BaseFragment]'s [progressBar] accordingly.
+     *
+     * This method registers the *errorObserver* for this [OfflineFirstViewModel] and shows an error
+     * snackbar on error. If an error occurs, an indefinite or long snackbar will appear, depending
+     * on whether the user has any valid data
+     * - A ViewModel with valid data will show a *long* snackbar.
+     * - A ViewModel **without** valid data will show an *indefinite* snackbar.
+     *
+     * @param viewModel The [OfflineFirstViewModel] that will be registered with this fragment.
+     * @param refreshAll The function that will be called when all data needs to be refreshed. This
+     * is based on whether
+     */
+    protected inline fun setupOfflineFirstStateAndErrorObserver(
+            viewModel: OfflineFirstViewModel<*, *>?,
+            crossinline refreshAll: () -> Unit
+    ) {
+        if (viewModel != null && viewModelList.none { it === viewModel }) {
+            // If there are no viewModels in the list equal to this reference, add it
+            viewModelList.add(viewModel)
+        }
+
+        // STATE OBSERVER
+        viewModel?.addCurrentStateObserver(this) {
+            progressBar?.visibility = when {
+                viewModel.isLoading() -> View.VISIBLE
+                else -> View.GONE
+            }
+
+            if (viewModelList.all { it.hasValidData() }) {
+                // If all of the viewModels have valid data, dismiss the snackbar and nullify it
+                indefiniteSnackbar?.dismiss()
+                indefiniteSnackbar = null
+            }
+
+            onOfflineFirstStateChange(viewModel, it)
+        }
+
+        // ERROR OBSERVER
+        viewModel?.addErrorObserver(this) {
+            val snackbar = indefiniteSnackbar
+            if (snackbar == null || !snackbar.isShownOrQueued) {
+                // If we aren't already showing the refreshAll snackbar, let's show it
+                when {
+                    viewModel.hasValidData() ->
+                        view?.longSnackbarWithAction(it.errorMessage, R.string.reload) { refreshAll() }
+                    else -> {
+                        // This snackbar should be indefinite because we NEED the data.
+                        indefiniteSnackbar = view?.indefiniteSnackbarWithAction(it.errorMessage, R.string.reload) { refreshAll() }
+                                ?.addCallback(snackbarCallbackRemoverListener)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param viewModel The [OfflineFirstViewModel] whose state changed
+     * @param state The new state of this [OfflineFirstViewModel]
+     */
+    protected open fun onOfflineFirstStateChange(viewModel: OfflineFirstViewModel<*, *>, state: Int) {
+        // NO OP
+    }
+
+    var indefiniteSnackbar: Snackbar? = null
+
     override fun onOptionsItemSelected(item: MenuItem?) = when {
         item?.itemId == android.R.id.home -> {
             (activity as? BaseActivity)?.onBackPressed()
@@ -329,7 +399,7 @@ abstract class BaseFragment : Fragment() {
         outState.putBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
     }
 
-// MARK - Private Methods
+    // MARK - Private Methods
 
     private fun createAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) {
         appbarLayout = createAppbarLayout(fragmentView, savedInstanceState)
@@ -386,6 +456,13 @@ abstract class BaseFragment : Fragment() {
             enableToolbarCollapsing()
         } else {
             disableToolbarCollapsing()
+        }
+    }
+
+    protected val snackbarCallbackRemoverListener = object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+            indefiniteSnackbar?.removeCallback(this)
+            indefiniteSnackbar = null
         }
     }
 

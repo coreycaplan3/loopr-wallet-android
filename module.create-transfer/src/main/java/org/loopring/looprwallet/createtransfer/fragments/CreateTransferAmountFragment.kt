@@ -3,7 +3,6 @@ package org.loopring.looprwallet.createtransfer.fragments
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuInflater
@@ -122,31 +121,9 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
     @VisibleForTesting
     val ethTokenPriceCheckerViewModel: EthTokenPriceCheckerViewModel by lazy {
-        val model = LooprWalletViewModelFactory.get<EthTokenPriceCheckerViewModel>(this)
-        model.addCurrentStateObserver(this) {
-
-            model.updateProgressBar()
-
-            when (it) {
-                OfflineFirstViewModel.STATE_LOADING_EMPTY -> {
-                    createTransferCurrentPriceLabel?.text = getString(R.string.loading_price)
-                    createTransferSecondaryLabel?.text = getString(R.string.loading_exchange_rate)
-                }
-                OfflineFirstViewModel.STATE_IDLE_EMPTY -> {
-                    createTransferCurrentPriceLabel?.text = getString(R.string.error_loading_price)
-                    createTransferSecondaryLabel?.text = getString(R.string.error_loading_exchange_rate)
-
-                    createTransferSwapButton.isEnabled = false
-                    createTransferMaxButton.isEnabled = false
-                }
-            }
-
-            updateUiBasedOnValidData()
+        return@lazy LooprWalletViewModelFactory.get<EthTokenPriceCheckerViewModel>(this).apply {
+            setupOfflineFirstStateAndErrorObserver(this, ::refreshAll)
         }
-
-        model.addCreateTransferErrorObserver()
-
-        model
     }
 
     @VisibleForTesting
@@ -157,18 +134,12 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             }
 
             val wallet = walletClient.getCurrentWallet() ?: return null
-            val model = LooprWalletViewModelFactory.get<EthTokenBalanceViewModel>(this, wallet)
-            field = model
 
-            model.addCurrentStateObserver(this) {
-                model.updateProgressBar()
-
-                updateUiBasedOnValidData()
-            }
-
-            model.addCreateTransferErrorObserver()
-
-            return model
+            return LooprWalletViewModelFactory.get<EthTokenBalanceViewModel>(this, wallet)
+                    .apply {
+                        field = this
+                        setupOfflineFirstStateAndErrorObserver(this, ::refreshAll)
+                    }
         }
 
     @VisibleForTesting
@@ -575,7 +546,25 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         else -> tokenAmount = amount
     }
 
-    private var indefiniteSnackbar: Snackbar? = null
+    override fun onOfflineFirstStateChange(viewModel: OfflineFirstViewModel<*, *>, state: Int) {
+        updateUiBasedOnValidData()
+
+        when {
+            viewModel === ethTokenPriceCheckerViewModel -> when (state) {
+                OfflineFirstViewModel.STATE_LOADING_EMPTY -> {
+                    createTransferCurrentPriceLabel?.text = getString(R.string.loading_price)
+                    createTransferSecondaryLabel?.text = getString(R.string.loading_exchange_rate)
+                }
+                OfflineFirstViewModel.STATE_IDLE_EMPTY -> {
+                    createTransferCurrentPriceLabel?.text = getString(R.string.error_loading_price)
+                    createTransferSecondaryLabel?.text = getString(R.string.error_loading_exchange_rate)
+
+                    createTransferSwapButton.isEnabled = false
+                    createTransferMaxButton.isEnabled = false
+                }
+            }
+        }
+    }
 
     /**
      * Updates the swap, max, and number pad based on whether the two essential data providers,
@@ -586,34 +575,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             createTransferSwapButton.isEnabled = true
             createTransferMaxButton.isEnabled = true
             NumberPadPresenter.enableNumberPad(this)
-
-            indefiniteSnackbar?.dismiss()
-            indefiniteSnackbar = null
         } else {
             createTransferSwapButton.isEnabled = false
             createTransferMaxButton.isEnabled = false
             NumberPadPresenter.disableNumberPad(this)
-
-            indefiniteSnackbar = view?.indefiniteSnackbarWithAction(R.string.error_no_connection, R.string.reload) {
-                refreshAll()
-            }
-        }
-    }
-
-    private fun <T, U> OfflineFirstViewModel<T, U>.addCreateTransferErrorObserver() {
-        this.addErrorObserver(this@CreateTransferAmountFragment) {
-            val snackbar = indefiniteSnackbar
-            if (snackbar == null || !snackbar.isShownOrQueued) {
-                // If we aren't already showing the refreshAll snackbar, let's show it
-                view?.longSnackbarWithAction(it.errorMessage, R.string.reload) { refreshAll() }
-            }
-        }
-    }
-
-    private fun <T, U> OfflineFirstViewModel<T, U>.updateProgressBar() {
-        progressBar?.visibility = when {
-            this.isLoading() -> View.VISIBLE
-            else -> View.GONE
         }
     }
 

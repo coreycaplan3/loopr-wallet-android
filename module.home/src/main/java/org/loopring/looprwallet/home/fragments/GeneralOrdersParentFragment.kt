@@ -12,8 +12,8 @@ import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.Bottom
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
 import org.loopring.looprwallet.homeorders.R
-import org.loopring.looprwallet.homeorders.fragments.GeneralFilledOrdersFragment
-import org.loopring.looprwallet.homeorders.fragments.GeneralOpenOrdersFragment
+import org.loopring.looprwallet.homeorders.fragments.HomeFilledOrdersFragment
+import org.loopring.looprwallet.homeorders.fragments.HomeOpenOrdersFragment
 
 /**
  * Created by Corey on 1/17/2018.
@@ -45,8 +45,8 @@ class GeneralOrdersParentFragment : BaseTabFragment(), BottomNavigationReselecte
 
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {
         return listOf(
-                Pair(getString(R.string.open), GeneralOpenOrdersFragment()),
-                Pair(getString(R.string.closed), GeneralFilledOrdersFragment())
+                Pair(getString(R.string.open), HomeOpenOrdersFragment()),
+                Pair(getString(R.string.closed), HomeFilledOrdersFragment())
         )
     }
 

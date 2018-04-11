@@ -17,7 +17,7 @@ import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
  *
  * Purpose of Class: To provide *base* behavior for the **open** and **closed** orders fragments.
  */
-abstract class BaseGeneralOrdersFragment : BaseFragment(), BottomNavigationReselectedLister,
+abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselectedLister,
         OnSearchViewChangeListener {
 
     abstract val recyclerView: RecyclerView

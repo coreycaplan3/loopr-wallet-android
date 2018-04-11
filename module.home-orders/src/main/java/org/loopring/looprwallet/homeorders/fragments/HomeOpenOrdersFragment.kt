@@ -20,7 +20,7 @@ import org.loopring.looprwallet.homeorders.viewmodels.GeneralOrderViewModel
  * Purpose of Class:
  *
  */
-class GeneralOpenOrdersFragment : BaseGeneralOrdersFragment() {
+class HomeOpenOrdersFragment : BaseHomeOrdersFragment() {
 
     override val layoutResource: Int
         get() = R.layout.fragment_general_orders

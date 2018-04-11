@@ -4,7 +4,6 @@ import dagger.Component
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.CoreLooprComponent
 import org.loopring.looprwallet.core.dagger.LooprComponentScope
-import org.loopring.looprwallet.homeorders.fragments.GeneralOpenOrdersFragment
 
 /**
  * Created by Corey on 4/9/2018

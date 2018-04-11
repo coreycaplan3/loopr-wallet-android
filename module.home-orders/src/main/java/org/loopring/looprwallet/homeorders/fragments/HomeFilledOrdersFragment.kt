@@ -20,7 +20,7 @@ import org.loopring.looprwallet.homeorders.viewmodels.GeneralOrderViewModel
  * Purpose of Class:
  *
  */
-class GeneralFilledOrdersFragment : BaseGeneralOrdersFragment() {
+class HomeFilledOrdersFragment : BaseHomeOrdersFragment() {
 
     override val layoutResource: Int
         get() = R.layout.fragment_general_orders
@@ -50,7 +50,6 @@ class GeneralFilledOrdersFragment : BaseGeneralOrdersFragment() {
             val orderFilter = OrderFilter(it, adapter.currentDateFilter, adapter.currentOpenOrderStatusFilter)
             generalOrderViewModel?.getFilledOrders(orderFilter)
         }
-        TODO("not implemented")
     }
 
     override fun onQueryTextChangeListener(searchQuery: String) {
