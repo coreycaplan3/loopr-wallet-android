@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import io.realm.RealmModel
-import io.realm.RealmResults
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.loopr.OrderFilter
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
@@ -83,15 +81,15 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
     }
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
-        TODO("not implemented") // TODO
+        setOrderLiveData(searchQuery)
     }
 
     final override fun onStatusFilterChange(newStatusValue: String) {
-        TODO("not implemented") // TODO
+        setOrderLiveData()
     }
 
     final override fun onDateFilterChange(newDateValue: String) {
-        TODO("not implemented") // TODO
+        setOrderLiveData()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -108,8 +106,15 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
      * provided by the [adapter].
      */
     protected fun resetOrderLiveData() {
-        val wallet = walletClient.getCurrentWallet()?.credentials?.address ?: return
-        val orderFilter = OrderFilter(wallet, null, adapter.currentDateFilter, adapter.currentOrderStatusFilter)
+        setOrderLiveData()
+    }
+
+    // MARK - Private Methods
+
+    private fun setOrderLiveData(ticker: String? = null) {
+        val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
+        val orderFilter = OrderFilter(address, ticker, adapter.currentDateFilter, adapter.currentOrderStatusFilter)
+
         generalOrderViewModel?.getOrders(orderFilter) {
             adapter.updateData(it)
             generalOrderViewModel?.removeDataObserver(this)
