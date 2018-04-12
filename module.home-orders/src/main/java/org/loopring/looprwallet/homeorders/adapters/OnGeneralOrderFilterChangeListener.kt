@@ -8,7 +8,7 @@ package org.loopring.looprwallet.homeorders.adapters
  * Purpose of Class: To pass actions uniformly from [GeneralClosedOrderFilterViewHolder] and
  * [GeneralOpenOrderFilterViewHolder] to the implementor.
  */
-interface OnGeneralOrderFilterActionListener {
+interface OnGeneralOrderFilterChangeListener {
 
     /**
      * Called when the filter's status changes (EX: all vs. partial orders)

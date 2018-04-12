@@ -18,7 +18,7 @@ import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter.Companio
  */
 class GeneralOpenOrderFilterViewHolder(
         itemView: View,
-        listener: OnGeneralOrderFilterActionListener,
+        listener: OnGeneralOrderFilterChangeListener,
         onCancelAllClickListener: (View) -> Unit
 ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
 

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_general_orders.*
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.models.loopr.OrderFilter
 import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
@@ -26,24 +25,21 @@ class HomeOpenOrdersFragment : BaseHomeOrdersFragment() {
     override val recyclerView: RecyclerView
         get() = fragmentContainer
 
-    override fun provideAdapter() = GeneralOrderAdapter(FILTER_OPEN_ALL, activity as BaseActivity)
+    override fun provideAdapter(savedInstanceState: Bundle?): GeneralOrderAdapter {
+        val activity = activity as? BaseActivity ?: throw IllegalStateException("Activity cannot be cast!")
+        return GeneralOrderAdapter(savedInstanceState, FILTER_OPEN_ALL, activity, this, ::onCancelAllClick)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupOrderLiveData()
+        resetOrderLiveData()
     }
 
-    private fun setupOrderLiveData() {
-        val wallet = walletClient.getCurrentWallet()?.credentials?.address ?: return
-        val orderFilter = OrderFilter(wallet, null, adapter.currentDateFilter, adapter.currentOrderStatusFilter)
-        generalOrderViewModel?.getOrders(orderFilter) {
-            generalOrderViewModel?.removeDataObserver(this)
-        }
-    }
+    // MARK - Private Methods
 
-    override fun onQueryTextChangeListener(searchQuery: String) {
-        generalOrderViewModel?.getOrders()
+    private fun onCancelAllClick() {
+        TODO("IMPLEMENT ME")
     }
 
 }

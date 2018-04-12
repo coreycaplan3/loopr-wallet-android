@@ -2,8 +2,6 @@ package org.loopring.looprwallet.homeorders.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_closed_order_filter.*
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -18,7 +16,7 @@ import org.loopring.looprwallet.homeorders.R
  */
 class GeneralClosedOrderFilterViewHolder(
         itemView: View,
-        listener: OnGeneralOrderFilterActionListener
+        listener: OnGeneralOrderFilterChangeListener
 ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
     override val containerView: View
