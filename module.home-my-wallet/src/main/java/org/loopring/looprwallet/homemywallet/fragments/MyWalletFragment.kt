@@ -2,10 +2,10 @@ package org.loopring.looprwallet.homemywallet.fragments
 
 import android.os.Bundle
 import android.view.View
-import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.homemywallet.R
 
 /**
  * Created by Corey on 1/17/2018.

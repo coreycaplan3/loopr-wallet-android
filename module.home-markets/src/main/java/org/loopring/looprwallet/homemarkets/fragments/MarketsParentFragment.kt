@@ -3,14 +3,13 @@ package org.loopring.looprwallet.homemarkets.fragments
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.view.ViewGroup
-import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
-import org.loopring.looprwallet.homemarkets.fragments.AllMarketsFragment
-import org.loopring.looprwallet.homemarkets.fragments.FavoriteMarketsFragment
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.homemarkets.R
 
 /**
  * Created by Corey on 1/17/2018.
@@ -34,8 +33,8 @@ class MarketsParentFragment : BaseTabFragment(), BottomNavigationPresenter.Botto
 
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {
         return listOf(
-                Pair(getString(R.string.all), AllMarketsFragment()),
-                Pair(getString(R.string.favorites), FavoriteMarketsFragment())
+                Pair(str(R.string.all), AllMarketsFragment()),
+                Pair(str(R.string.favorites), FavoriteMarketsFragment())
         )
     }
 

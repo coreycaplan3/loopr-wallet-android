@@ -6,8 +6,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_open_order_filter.*
-import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter.Companion.FILTER_DATES
-import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter.Companion.FILTER_OPEN_ORDER_STATUS
+import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_DATES
+import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_OPEN_ORDER_STATUS_UI
+import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_OPEN_ORDER_STATUS_VALUES
 
 /**
  * Created by Corey on 4/10/2018
@@ -40,12 +41,12 @@ class GeneralOpenOrderFilterViewHolder(
         }
 
         // STATUS SPINNER
-        openOrderFilterStatusSpinner.adapter = ArrayAdapter(context, layoutRes, FILTER_OPEN_ORDER_STATUS)
+        openOrderFilterStatusSpinner.adapter = ArrayAdapter(context, layoutRes, FILTER_OPEN_ORDER_STATUS_UI)
         openOrderFilterStatusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                listener.onStatusFilterChange(FILTER_OPEN_ORDER_STATUS[position])
+                listener.onStatusFilterChange(FILTER_OPEN_ORDER_STATUS_VALUES[position])
             }
         }
 
@@ -59,7 +60,9 @@ class GeneralOpenOrderFilterViewHolder(
      */
     fun bind(dateValue: String, statusRawValue: String) {
         openOrderFilterDateSpinner.setSelection(FILTER_DATES.indexOf(dateValue))
-        openOrderFilterStatusSpinner.setSelection(FILTER_OPEN_ORDER_STATUS.indexOf(statusRawValue))
+
+        // The index of the value is the same index of the UI value in the UI array
+        openOrderFilterStatusSpinner.setSelection(FILTER_OPEN_ORDER_STATUS_VALUES.indexOf(statusRawValue))
     }
 
 }

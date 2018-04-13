@@ -12,6 +12,8 @@ interface OnGeneralOrderFilterChangeListener {
 
     /**
      * Called when the filter's status changes (EX: all vs. partial orders)
+     *
+     * @param newStatusValue The newly selected status enum value
      */
     fun onStatusFilterChange(newStatusValue: String)
 

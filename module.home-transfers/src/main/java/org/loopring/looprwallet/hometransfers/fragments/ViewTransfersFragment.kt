@@ -1,13 +1,11 @@
 package org.loopring.looprwallet.hometransfers.fragments
 
-import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.view.View
-import org.loopring.looprwallet.createtransfer.R
-import org.loopring.looprwallet.core.fragments.BaseFragment
+import kotlinx.android.synthetic.main.fragment_view_transfers.*
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.setupWithFab
-import kotlinx.android.synthetic.main.fragment_view_transfers.*
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.hometransfers.R
 
 /**
  * Created by Corey Caplan on 2/26/18.
@@ -22,10 +20,6 @@ class ViewTransfersFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_view_transfers
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
         floatingActionButton.setImageResource(R.drawable.ic_send_white_24dp)
         floatingActionButton.setOnClickListener { logd("FAB CLICKED 2!") }
@@ -34,7 +28,7 @@ class ViewTransfersFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        fragmentContainer.clearOnScrollListeners()
+//        fragmentContainer.clearOnScrollListeners()
     }
 
 }
