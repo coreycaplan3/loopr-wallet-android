@@ -47,7 +47,7 @@ android {
 
     dexOptions {
         preDexLibraries true
-        javaMaxHeapSize "512m"
+        javaMaxHeapSize "2048m"
         maxProcessCount 4
     }
 

@@ -28,7 +28,7 @@ class ViewTransfersFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        fragmentContainer.clearOnScrollListeners()
+        fragmentContainer.clearOnScrollListeners()
     }
 
 }
