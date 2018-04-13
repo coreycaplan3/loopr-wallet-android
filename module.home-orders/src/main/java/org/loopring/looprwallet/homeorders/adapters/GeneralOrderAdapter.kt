@@ -8,15 +8,13 @@ import io.realm.RealmModel
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.inflate
-import org.loopring.looprwallet.core.extensions.isSameDay
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
-import org.loopring.looprwallet.core.models.loopr.OrderFilter
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_CANCELLED
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_DATES
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_FILLED
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_OPEN_ALL
+import org.loopring.looprwallet.core.models.order.OrderFilter
+import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_CANCELLED
+import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_DATES
+import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_FILLED
+import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.order.fragments.OrderDetailsFragment
 

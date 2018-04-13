@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.core.models.loopr
+package org.loopring.looprwallet.core.models.order
 
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str

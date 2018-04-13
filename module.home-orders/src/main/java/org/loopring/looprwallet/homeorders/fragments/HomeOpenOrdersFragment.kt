@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_general_orders.*
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_OPEN_ALL
+import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
 

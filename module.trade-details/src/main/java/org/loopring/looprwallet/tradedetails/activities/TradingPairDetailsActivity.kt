@@ -3,7 +3,7 @@ package org.loopring.looprwallet.tradedetails.activities
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.models.loopr.TradingPair
+import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.tradedetails.R
 
 class TradingPairDetailsActivity : BaseActivity() {

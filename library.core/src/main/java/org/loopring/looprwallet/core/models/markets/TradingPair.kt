@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.core.models.loopr
+package org.loopring.looprwallet.core.models.markets
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

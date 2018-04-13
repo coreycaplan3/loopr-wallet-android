@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.models.loopr.TradingPair
+import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.createorder.R
 
 /**

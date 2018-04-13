@@ -2,12 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="72dp"
     android:background="?android:attr/selectableItemBackground"
-    android:padding="@dimen/standard_padding">
+    android:paddingBottom="@dimen/vertical_padding_small"
+    android:paddingLeft="@dimen/standard_horizontal_padding"
+    android:paddingRight="@dimen/standard_horizontal_padding"
+    android:paddingTop="@dimen/vertical_padding_small">
 
     <ImageView
-        android:id="@+id/tradingPairImage"
+        android:id="@+id/marketsImage"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerVertical="true"
@@ -15,54 +18,60 @@
         tools:src="@drawable/loopring" />
 
     <TextView
-        android:id="@+id/tradingPairTickerText"
+        android:id="@+id/marketsTokenNameLabel"
         style="@style/Base.TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/standard_horizontal_padding"
         android:layout_marginStart="@dimen/standard_horizontal_padding"
-        android:layout_toEndOf="@id/tradingPairImage"
-        android:layout_toRightOf="@id/tradingPairImage"
-        tools:text="@string/default_trading_pair_ticker" />
+        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+        android:layout_toEndOf="@id/marketsImage"
+        android:layout_toRightOf="@id/marketsImage"
+        android:textSize="@dimen/list_primary_text_size"
+        tools:text="Loopring" />
 
     <TextView
-        android:id="@+id/tradingPairTokenNameText"
-        style="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:id="@+id/marketsTickerLabel"
+        style="@style/Base.TextAppearance.AppCompat.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tradingPairTickerText"
+        android:layout_below="@id/marketsTokenNameLabel"
         android:layout_marginLeft="@dimen/standard_horizontal_padding"
         android:layout_marginStart="@dimen/standard_horizontal_padding"
-        android:layout_marginTop="@dimen/vertical_margin_small"
-        android:layout_toEndOf="@id/tradingPairImage"
-        android:layout_toRightOf="@id/tradingPairImage"
-        tools:text="@string/default_trading_pair_token_name" />
+        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+        android:layout_toEndOf="@id/marketsImage"
+        android:layout_toRightOf="@id/marketsImage"
+        android:textSize="@dimen/list_secondary_text_size"
+        tools:text="LRC" />
 
     <TextView
-        android:id="@+id/tradingPairPercentageChangeText"
+        android:id="@+id/marketsPercentageChangeLabel"
         style="@style/Base.TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_toEndOf="@id/tradingPairTickerText"
-        android:layout_toRightOf="@id/tradingPairTickerText"
+        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+        android:layout_toEndOf="@id/marketsTickerLabel"
+        android:layout_toRightOf="@id/marketsTickerLabel"
         android:gravity="end"
         android:textColor="@color/material_green"
+        android:textSize="@dimen/list_primary_text_size"
         tools:text="@string/default_trading_pair_percentage_change" />
 
     <TextView
-        android:id="@+id/tradingPairCurrentPriceText"
-        style="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:id="@+id/marketsCurrentPriceText"
+        style="@style/Base.TextAppearance.AppCompat.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/tradingPairPercentageChangeText"
-        android:layout_marginTop="@dimen/vertical_margin_small"
-        android:layout_toEndOf="@id/tradingPairTokenNameText"
-        android:layout_toRightOf="@id/tradingPairTokenNameText"
+        android:layout_below="@id/marketsPercentageChangeLabel"
+        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+        android:layout_toEndOf="@id/marketsTickerLabel"
+        android:layout_toRightOf="@id/marketsTickerLabel"
         android:gravity="end"
+        android:textSize="@dimen/list_secondary_text_size"
         tools:text="@string/default_trading_pair_price" />
 
 </RelativeLayout>

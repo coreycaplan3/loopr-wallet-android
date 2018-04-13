@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData
 import io.realm.RealmModel
 import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.loopr.OrderFilter
+import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository

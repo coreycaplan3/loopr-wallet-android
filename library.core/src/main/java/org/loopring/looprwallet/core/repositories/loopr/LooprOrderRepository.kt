@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.repositories.loopr
 
 import io.realm.RealmResults
-import org.loopring.looprwallet.core.models.loopr.OrderFilter
+import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
