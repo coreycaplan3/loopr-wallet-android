@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
+import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.order.R
 
@@ -54,8 +55,15 @@ class OrderDetailsAdapter(private val orderSummary: RealmModel) : BaseRealmAdapt
         else -> throw IllegalArgumentException("Invalid viewType, found $viewType")
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: RealmModel) {
+    override fun getDataOffset(position: Int) = when (position) {
+        0 -> null
+        else -> position - 1
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: RealmModel?) {
         (holder as? OrderSummaryViewHolder)?.bind(orderSummary)
+
+        item?.guard {} ?: return
         (holder as? OrderDetailTradeViewHolder)?.bind(item)
     }
 

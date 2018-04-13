@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.homeorders.viewmodels
 
+import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.RealmModel
 import io.realm.RealmResults
@@ -19,7 +20,7 @@ import java.util.*
  * Purpose of Class:
  *
  */
-class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<Any, OrderFilter>() {
+class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<List<RealmModel>, OrderFilter>() {
 
     // 5 seconds in ms
     override val waitTime = 5 * 1000L
@@ -27,24 +28,26 @@ class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<
     override val repository = LooprOrderRepository(currentWallet)
 
     /**
-     * Gets the user's
+     * Gets the user's orders based on the provided [filter].
      */
-    fun getOrders(filter: OrderFilter, onChange: (RealmResults<RealmModel>) -> Unit) {
+    @Suppress("UNCHECKED_CAST")
+    fun getOrders(owner: LifecycleOwner, filter: OrderFilter, onChange: (RealmResults<RealmModel>) -> Unit) {
+        initializeData(owner, filter, onChange as (List<RealmModel>) -> Unit)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun getLiveDataFromRepository(parameter: OrderFilter): LiveData<List<RealmModel>> {
+        return repository.getOrders(parameter) as LiveData<List<RealmModel>>
+    }
+
+    override fun isRefreshNecessary(parameter: OrderFilter) = defaultIsRefreshNecessary(parameter.address)
+
+    override fun getDataFromNetwork(parameter: OrderFilter): Deferred<List<RealmModel>> {
         TODO("not implemented")
     }
 
-    override fun getLiveDataFromRepository(parameter: OrderFilter): LiveData<Any> {
-        TODO("not implemented")
-    }
-
-    override fun isRefreshNecessary(parameter: OrderFilter) = isRefreshNecessaryDefault(parameter.address)
-
-    override fun getDataFromNetwork(parameter: OrderFilter): Deferred<Any> {
-        TODO("not implemented")
-    }
-
-    override fun addNetworkDataToRepository(data: Any) {
-        TODO("not implemented")
+    override fun addNetworkDataToRepository(data: List<RealmModel>) {
+        repository.addList(data)
     }
 
     override fun addSyncDataToRepository(parameter: OrderFilter) {

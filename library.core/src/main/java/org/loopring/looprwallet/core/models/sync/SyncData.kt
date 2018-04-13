@@ -27,13 +27,17 @@ open class SyncData(
     companion object {
         const val SYNC_TYPE_NONE = "_NONE"
 
-        const val SYNC_TYPE_TOKEN_BALANCE = "_TOKEN_BALANCE"
-        const val SYNC_TYPE_TOKEN_PRICE = "_TOKEN_PRICE"
         const val SYNC_TYPE_CURRENCY_EXCHANGE_RATE = "_CURRENCY_EXCHANGE_RATE"
+
         const val SYNC_TYPE_ORDERS_OPEN = "_ORDERS_OPEN"
         const val SYNC_TYPE_ORDERS_FILLED = "_ORDERS_FILLED"
         const val SYNC_TYPE_ORDERS_CANCELLED = "_ORDERS_CANCELLED"
         const val SYNC_TYPE_ORDER_FILLS = "_ORDER_FILLS"
+
+        const val SYNC_TYPE_MARKETS = "_MARKETS"
+
+        const val SYNC_TYPE_TOKEN_BALANCE = "_TOKEN_BALANCE"
+        const val SYNC_TYPE_TOKEN_PRICE = "_TOKEN_PRICE"
     }
 
 }

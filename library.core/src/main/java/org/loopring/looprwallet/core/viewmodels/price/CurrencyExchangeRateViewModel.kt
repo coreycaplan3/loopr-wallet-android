@@ -57,7 +57,7 @@ class CurrencyExchangeRateViewModel() : StreamingViewModel<CurrencyExchangeRate,
         repository.add(data)
     }
 
-    override fun isRefreshNecessary(parameter: String) = isRefreshNecessaryDefault(parameter)
+    override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
     override fun addSyncDataToRepository(parameter: String) {
         syncRepository.add(SyncData(syncType, parameter, Date()))

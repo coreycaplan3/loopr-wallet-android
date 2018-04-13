@@ -44,7 +44,7 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<List<EthToken>, String>()
         return repository.getAllTokens()
     }
 
-    override fun isRefreshNecessary(parameter: String) = isRefreshNecessaryDefault(parameter)
+    override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
     override fun getDataFromNetwork(parameter: String): Deferred<List<EthToken>> {
         return ethplorerService.getAddressInfo(parameter)

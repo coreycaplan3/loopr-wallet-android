@@ -14,10 +14,8 @@ import org.loopring.looprwallet.core.models.markets.TradingPair
  */
 class MarketsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun onBind(tradingPair: TradingPair, clickListener: (TradingPair) -> Unit) {
-        itemView.setOnClickListener {
-            clickListener(tradingPair)
-        }
+    inline fun bind(tradingPair: Any, crossinline clickListener: (Any) -> Unit) {
+        itemView.setOnClickListener { clickListener(tradingPair)}
     }
 
 }

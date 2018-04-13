@@ -22,11 +22,17 @@
         style="@style/Base.TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/horizontal_margin_extra_small"
         android:layout_marginLeft="@dimen/standard_horizontal_padding"
+        android:layout_marginRight="@dimen/horizontal_margin_extra_small"
         android:layout_marginStart="@dimen/standard_horizontal_padding"
         android:layout_marginTop="@dimen/vertical_margin_extra_small"
         android:layout_toEndOf="@id/marketsImage"
+        android:layout_toLeftOf="@id/marketsSecondaryContainer"
         android:layout_toRightOf="@id/marketsImage"
+        android:layout_toStartOf="@id/marketsSecondaryContainer"
+        android:ellipsize="end"
+        android:lines="1"
         android:textSize="@dimen/list_primary_text_size"
         tools:text="Loopring" />
 
@@ -36,42 +42,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/marketsTokenNameLabel"
+        android:layout_marginEnd="@dimen/horizontal_margin_extra_small"
         android:layout_marginLeft="@dimen/standard_horizontal_padding"
+        android:layout_marginRight="@dimen/horizontal_margin_extra_small"
         android:layout_marginStart="@dimen/standard_horizontal_padding"
         android:layout_marginTop="@dimen/vertical_margin_extra_small"
         android:layout_toEndOf="@id/marketsImage"
+        android:layout_toLeftOf="@id/marketsSecondaryContainer"
         android:layout_toRightOf="@id/marketsImage"
+        android:layout_toStartOf="@id/marketsSecondaryContainer"
+        android:ellipsize="end"
+        android:lines="1"
         android:textSize="@dimen/list_secondary_text_size"
         tools:text="LRC" />
 
-    <TextView
-        android:id="@+id/marketsPercentageChangeLabel"
-        style="@style/Base.TextAppearance.AppCompat.Title"
+    <LinearLayout
+        android:id="@+id/marketsSecondaryContainer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/vertical_margin_extra_small"
-        android:layout_toEndOf="@id/marketsTickerLabel"
-        android:layout_toRightOf="@id/marketsTickerLabel"
-        android:gravity="end"
-        android:textColor="@color/material_green"
-        android:textSize="@dimen/list_primary_text_size"
-        tools:text="@string/default_trading_pair_percentage_change" />
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/marketsCurrentPriceText"
-        style="@style/Base.TextAppearance.AppCompat.Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/marketsPercentageChangeLabel"
-        android:layout_marginTop="@dimen/vertical_margin_extra_small"
-        android:layout_toEndOf="@id/marketsTickerLabel"
-        android:layout_toRightOf="@id/marketsTickerLabel"
-        android:gravity="end"
-        android:textSize="@dimen/list_secondary_text_size"
-        tools:text="@string/default_trading_pair_price" />
+        <TextView
+            android:id="@+id/marketsPercentageChangeLabel"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/vertical_margin_extra_small"
+            android:gravity="end"
+            android:textColor="@color/material_green"
+            android:textSize="@dimen/list_primary_text_size"
+            tools:text="@string/default_trading_pair_percentage_change" />
+
+        <TextView
+            android:id="@+id/marketsCurrentPriceLabel"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/vertical_margin_extra_small"
+            android:gravity="end"
+            android:textSize="@dimen/list_secondary_text_size"
+            tools:text="@string/default_trading_pair_price" />
+
+    </LinearLayout>
 
 </RelativeLayout>

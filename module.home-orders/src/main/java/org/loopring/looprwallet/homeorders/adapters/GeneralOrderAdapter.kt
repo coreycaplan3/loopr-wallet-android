@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
+import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
@@ -119,7 +120,9 @@ class GeneralOrderAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: RealmModel) {
+    override fun getDataOffset(position: Int) = position - 1
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: RealmModel?) {
         (holder as? EmptyGeneralOrderViewHolder)?.let {
             it.bind()
             return
@@ -152,6 +155,7 @@ class GeneralOrderAdapter(
             else -> false
         }
 
+        item?.guard { } ?: return
         (holder as? GeneralOrderViewHolder)?.bind(item, showDateHeader) {
             val activity = this.activity ?: return@bind
 

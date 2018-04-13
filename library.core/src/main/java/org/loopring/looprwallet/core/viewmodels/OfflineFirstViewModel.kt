@@ -357,15 +357,29 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
 
     abstract fun addSyncDataToRepository(parameter: U)
 
-    fun isRefreshNecessaryDefault(parameter: String): Boolean {
-        val date = syncRepository.getLastSyncTimeForSyncId(syncType, parameter) ?: return true
+    /**
+     * A default implementation that gets the last sync time via [syncType] and checks if the
+     * retrieved time plus the buffer is less than the current time
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    fun defaultIsRefreshNecessary(): Boolean {
+        val date = syncRepository.getLastSyncTime(syncType) ?: return true
 
         return isRefreshNecessaryBasedOnDate(date.time)
     }
 
+    /**
+     * A default implementation that gets the last sync time via [syncType] and [syncId] and checks
+     * if the retrieved time plus the buffer is less than the current time
+     *
+     * @param syncId The ID to be used with [SyncRepository.getLastSyncTimeForSyncId] for retrieving
+     * the last sync time.
+     */
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
-    fun isRefreshNecessaryBasedOnDate(dateLastSynced: Long): Boolean {
-        return dateLastSynced + waitTime < Date().time
+    fun defaultIsRefreshNecessary(syncId: String): Boolean {
+        val date = syncRepository.getLastSyncTimeForSyncId(syncType, syncId) ?: return true
+
+        return isRefreshNecessaryBasedOnDate(date.time)
     }
 
     @SyncData.SyncType
@@ -578,4 +592,9 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     private fun getCurrentLoadingState(currentData: T?): Int =
             if (!isDataEmpty(currentData)) STATE_LOADING_HAVE_DATA
             else STATE_LOADING_EMPTY
+
+    private fun isRefreshNecessaryBasedOnDate(dateLastSynced: Long): Boolean {
+        return dateLastSynced + waitTime < Date().time
+    }
+
 }

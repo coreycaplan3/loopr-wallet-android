@@ -77,5 +77,5 @@
 
     <dimen name="divider_height" format="float">0.5dp</dimen>
     <dimen name="list_primary_text_size">16sp</dimen>
-    <dimen name="list_secondary_text_size">14sp</dimen>
+    <dimen name="list_secondary_text_size">13sp</dimen>
 </resources>

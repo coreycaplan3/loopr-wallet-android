@@ -69,7 +69,7 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<EthToken, String>() {
         (data as? RealmModel)?.let { repository.add(it) }
     }
 
-    override fun isRefreshNecessary(parameter: String) = isRefreshNecessaryDefault(parameter)
+    override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
     override fun addSyncDataToRepository(parameter: String) {
         syncRepository.add(SyncData(syncType, parameter, Date()))

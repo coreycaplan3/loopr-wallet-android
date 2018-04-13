@@ -97,7 +97,7 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
         }
     }
 
-    override fun isRefreshNecessary(parameter: String) = isRefreshNecessaryDefault(parameter)
+    override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
     override fun addSyncDataToRepository(parameter: String) {
         syncRepository.add(SyncData())

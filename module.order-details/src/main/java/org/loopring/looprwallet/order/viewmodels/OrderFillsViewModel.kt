@@ -38,7 +38,7 @@ class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<Li
         return repository.getOrderDepth(parameter) as LiveData<List<RealmModel>>
     }
 
-    override fun isRefreshNecessary(parameter: String) = isRefreshNecessaryDefault(parameter)
+    override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
     override fun getDataFromNetwork(parameter: String): Deferred<List<RealmModel>> {
         TODO("GET DATA FROM NETWORK")

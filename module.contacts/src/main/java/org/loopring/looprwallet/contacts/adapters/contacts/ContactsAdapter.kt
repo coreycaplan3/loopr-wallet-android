@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
+import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.models.contact.Contact
@@ -36,7 +37,11 @@ class ContactsAdapter(private var selectedContactAddress: String?,
         return ContactsViewHolder(parent.inflate(R.layout.view_holder_contact))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: Contact) {
+    override fun getDataOffset(position: Int) = position
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: Contact?) {
+
+        item?.guard { } ?: return
         (holder as? ContactsViewHolder)?.bind(item, selectedContactAddress) {
             onContactViewHolderSelected(it)
         }

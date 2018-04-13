@@ -20,5 +20,6 @@
     <string name="content_description_navigation_icon">This button allows you to navigate back to the most recent screen you were on</string>
     <string name="content_description_add_contact">Allows you to add this unknown address as a contact</string>
     <string name="content_description_completed_order">An icon representing a completed trade</string>
+    <string name="content_description_no_connection">An icon that shows the device has no connection currently</string>
 
 </resources>

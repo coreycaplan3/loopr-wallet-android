@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import io.realm.*
 import io.realm.kotlin.addChangeListener
-import io.realm.kotlin.removeAllChangeListeners
 import io.realm.kotlin.removeChangeListener
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.inflate
@@ -32,7 +31,7 @@ abstract class BaseRealmAdapter<T : RealmModel> :
             field = value
 
             // Clear the old listeners
-            listeners.forEach { it.first.removeChangeListener(it.second)}
+            listeners.forEach { it.first.removeChangeListener(it.second) }
             listeners.clear()
 
             value?.forEach { dataToPositionPair ->
@@ -91,12 +90,27 @@ abstract class BaseRealmAdapter<T : RealmModel> :
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = data
-        if (data != null && position < data.size) {
-            onBindViewHolder(holder, position, data[position])
+        val offsetPosition = getDataOffset(position)
+        if (data != null && offsetPosition != null) {
+            onBindViewHolder(holder, position, data[offsetPosition])
         }
     }
 
-    abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: T)
+    /**
+     * Calculates an offset from the given position, if necessary for binding data and indexing into
+     * the list of data.
+     *
+     * For example, we need to bind index 1, but the 0th index is a header item and unrelated to
+     * the data in this adapter. In that situation, the data offset is *-1*, since we need to move
+     * the position back by 1 to properly index into the [adapterData] list.
+     *
+     * @param position The position at which data needs to be bound, according to [onBindViewHolder].
+     *
+     * @return The offset position or null if **NO** data should be retrieved at this position
+     */
+    abstract fun getDataOffset(position: Int): Int?
+
+    abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: T?)
 
     override fun getItemCount(): Int {
         // We return an extra item to account for the loading view holder
