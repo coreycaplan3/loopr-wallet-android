@@ -100,10 +100,6 @@ class SearchViewPresenter(
 
 
     fun onSaveInstanceState(outState: Bundle) {
-//        val queryString = searchQuery?.let {
-//            if (it.trim().isEmpty()) null
-//            else it
-//        }
         outState.putString(KEY_SEARCH_QUERY, searchQuery)
     }
 

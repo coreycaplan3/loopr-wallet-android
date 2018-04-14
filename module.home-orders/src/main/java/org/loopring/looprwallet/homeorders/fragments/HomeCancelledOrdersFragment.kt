@@ -1,10 +1,10 @@
 package org.loopring.looprwallet.homeorders.fragments
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
-import android.view.View
-import kotlinx.android.synthetic.main.fragment_general_orders.*
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.extensions.findViewById
 import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
@@ -16,29 +16,20 @@ import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
  *
  * Purpose of Class: A fragment in a set of tabs for displaying the user's cancelled orders
  */
-class HomeCancelledOrdersFragment: BaseHomeOrdersFragment() {
+class HomeCancelledOrdersFragment: BaseHomeChildOrdersFragment() {
 
     override val layoutResource: Int
         get() = R.layout.fragment_general_orders
 
+    override val swipeRefreshLayout: SwipeRefreshLayout
+        get() = findViewById(R.id.fragmentContainerSwipeRefresh)!!
+
     override val recyclerView: RecyclerView
-        get() = fragmentContainer
+        get() = findViewById(R.id.fragmentContainer)!!
 
     override fun provideAdapter(savedInstanceState: Bundle?): GeneralOrderAdapter {
         val activity = activity as? BaseActivity ?: throw IllegalStateException("Activity cannot be cast!")
         return GeneralOrderAdapter(savedInstanceState, OrderFilter.FILTER_CANCELLED, activity, this)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        resetOrderLiveData()
-    }
-
-    // MARK - Private Methods
-
-    private fun onCancelAllClick() {
-        TODO("IMPLEMENT ME")
     }
 
 }

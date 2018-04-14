@@ -27,6 +27,7 @@
     <string name="filter_order_cancelled">ORDER_CANCEL</string>
 
     <string name="filled">Filled</string>
+    <string name="cancelled">Cancelled</string>
 
     <array name="filter_order_open_statuses_ui">
         <item>@string/filter_all</item>

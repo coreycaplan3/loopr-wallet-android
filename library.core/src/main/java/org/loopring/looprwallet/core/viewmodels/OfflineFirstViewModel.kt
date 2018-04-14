@@ -30,8 +30,11 @@ import java.util.*
  * Project: loopr-wallet-android
  *
  * Purpose of Class: A [ViewModel] class whose responsibility is simplifying state and data access
- * for the UI. This class uses the repository to retrieve data initially and gets fresh data from the
- * network.
+ * for the UI. This class uses the repository to retrieve data initially and gets fresh data from
+ * the network.
+ *
+ * **NOTE**: This class is not thread-safe, yet. Reason being, it's possible for another thread to
+ * call [refresh] at the same as [initializeDataInternal] and change the value of [parameter].
  *
  * @param T The type of data this [ViewModel] is responsible for retrieving
  * @param U The type of object used for querying and retrieving [T] (a primitive/object that stores

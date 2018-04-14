@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_main_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/search"
+        app:actionLayout="@layout/search_view"
+        app:showAsAction="ifRoom|collapseActionView" />
+    <item
+        android:id="@+id/menu_main_toggle_currency"
+        android:icon="@drawable/ic_attach_money_white_24dp"
+        android:title="@string/toggle_currency" />
+    <item
+        android:id="@+id/menu_main_settings"
+        android:title="@string/title_activity_settings" />
+</menu>

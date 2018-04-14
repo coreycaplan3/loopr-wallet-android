@@ -1,7 +1,9 @@
 package org.loopring.looprwallet.core.extensions
 
+import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.view.View
 
 /**
  * Created by Corey on 1/19/2018.
@@ -24,3 +26,5 @@ import android.support.v4.app.FragmentManager
 inline fun <reified T : Fragment> FragmentManager.findFragmentByTagOrCreate(tag: String, block: (String) -> T): T {
     return (this.findFragmentByTag(tag) as? T) ?: block(tag)
 }
+
+fun <T : View> Fragment.findViewById(@IdRes idRes: Int): T? = view?.findViewById<T>(idRes)

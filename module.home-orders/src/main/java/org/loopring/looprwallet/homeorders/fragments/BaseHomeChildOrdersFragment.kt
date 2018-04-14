@@ -1,6 +1,8 @@
 package org.loopring.looprwallet.homeorders.fragments
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -20,13 +22,10 @@ import org.loopring.looprwallet.homeorders.viewmodels.GeneralOrderViewModel
  *
  * Purpose of Class: To provide *base* behavior for the **open** and **closed** orders fragments.
  */
-abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselectedLister,
-        OnSearchViewChangeListener, OnGeneralOrderFilterChangeListener {
+abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationReselectedLister,
+        OnSearchViewChangeListener, OnGeneralOrderFilterChangeListener, OnRefreshListener {
 
-    companion object {
-        private const val KEY_IS_SEARCH_ACTIVE = "_IS_SEARCH_ACTIVE"
-    }
-
+    abstract val swipeRefreshLayout: SwipeRefreshLayout
     abstract val recyclerView: RecyclerView
 
     var isSearchActive = false
@@ -35,7 +34,7 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
     lateinit var adapter: GeneralOrderAdapter
         private set
 
-    var generalOrderViewModel: GeneralOrderViewModel? = null
+    private var generalOrderViewModel: GeneralOrderViewModel? = null
         get() {
             if (field != null) {
                 return field
@@ -46,13 +45,6 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
             field = LooprWalletViewModelFactory.get(this, wallet)
             return field
         }
-        private set
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        isSearchActive = savedInstanceState?.getBoolean(KEY_IS_SEARCH_ACTIVE, false) ?: false
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,9 +52,17 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
         adapter = provideAdapter(savedInstanceState)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+        swipeRefreshLayout.setOnRefreshListener(this)
+
+        setOrderLiveData(null)
     }
 
     abstract fun provideAdapter(savedInstanceState: Bundle?): GeneralOrderAdapter
+
+    override fun onRefresh() {
+        generalOrderViewModel?.refresh()
+    }
 
     final override fun onBottomNavigationReselected() {
         recyclerView.smoothScrollToPosition(0)
@@ -99,22 +99,15 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putBoolean(KEY_IS_SEARCH_ACTIVE, isSearchActive)
         adapter.onSaveInstanceState(outState)
     }
 
-    // MARK - Protected Methods
+    // MARK - Private Methods
 
     /**
      * Resets the [adapter] to its initial set of data, based on the filter criteria that was
      * provided by the [adapter].
      */
-    protected fun resetOrderLiveData() {
-        setOrderLiveData()
-    }
-
-    // MARK - Private Methods
-
     private fun setOrderLiveData(ticker: String? = null) {
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
         val orderFilter = OrderFilter(address, ticker, adapter.currentDateFilter, adapter.currentOrderStatusFilter)

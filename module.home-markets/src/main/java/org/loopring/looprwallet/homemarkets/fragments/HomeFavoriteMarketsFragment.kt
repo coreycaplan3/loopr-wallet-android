@@ -1,13 +1,12 @@
-package org.loopring.looprwallet.homeorders.fragments
+package org.loopring.looprwallet.homemarkets.fragments
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.findViewById
-import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_FILLED
-import org.loopring.looprwallet.homeorders.R
-import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
+import org.loopring.looprwallet.homemarkets.R
+import org.loopring.looprwallet.homemarkets.adapters.HomeMarketsAdapter
 
 /**
  * Created by Corey Caplan on 1/19/18.
@@ -17,10 +16,10 @@ import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
  * Purpose of Class:
  *
  */
-class HomeFilledOrdersFragment : BaseHomeChildOrdersFragment() {
+class HomeFavoriteMarketsFragment : BaseHomeChildMarketsFragment() {
 
     override val layoutResource: Int
-        get() = R.layout.fragment_general_orders
+        get() = R.layout.fragment_markets_favorites
 
     override val swipeRefreshLayout: SwipeRefreshLayout
         get() = findViewById(R.id.fragmentContainerSwipeRefresh)!!
@@ -28,10 +27,13 @@ class HomeFilledOrdersFragment : BaseHomeChildOrdersFragment() {
     override val recyclerView: RecyclerView
         get() = findViewById(R.id.fragmentContainer)!!
 
-    override fun provideAdapter(savedInstanceState: Bundle?): GeneralOrderAdapter {
+    override val isFavorites: Boolean = true
+
+    override fun provideAdapter(savedInstanceState: Bundle?): HomeMarketsAdapter {
         val activity = activity as? BaseActivity
-                ?: throw IllegalStateException("Cannot cast activity")
-        return GeneralOrderAdapter(savedInstanceState, FILTER_FILLED, activity, this)
+                ?: throw IllegalStateException("Activity cannot be cast!")
+
+        return HomeMarketsAdapter(savedInstanceState, activity, this, ::onRefresh)
     }
 
 }

@@ -1,13 +1,17 @@
 package org.loopring.looprwallet.homemarkets.fragments
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
+import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
 import org.loopring.looprwallet.homemarkets.adapters.HomeMarketsAdapter
 import org.loopring.looprwallet.homemarkets.adapters.OnGeneralMarketsFilterChangeListener
@@ -18,16 +22,18 @@ import org.loopring.looprwallet.homemarkets.viewmodels.HomeMarketsViewModel
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class: A class that enables the sharing of functionality across [AllMarketsFragment]
- * and [FavoriteMarketsFragment].
+ * Purpose of Class: A class that enables the sharing of functionality across [HomeAllMarketsFragment]
+ * and [HomeFavoriteMarketsFragment].
  *
  */
-abstract class BaseHomeMarketsFragment : BaseFragment(), BottomNavigationPresenter.BottomNavigationReselectedLister,
-        SearchViewPresenter.OnSearchViewChangeListener, OnGeneralMarketsFilterChangeListener {
+abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationReselectedLister,
+        OnSearchViewChangeListener, OnGeneralMarketsFilterChangeListener, OnRefreshListener {
 
     companion object {
         private const val KEY_IS_SEARCH_ACTIVE = "_IS_SEARCH_ACTIVE"
     }
+
+    abstract val swipeRefreshLayout: SwipeRefreshLayout
 
     abstract val recyclerView: RecyclerView
 
@@ -42,7 +48,7 @@ abstract class BaseHomeMarketsFragment : BaseFragment(), BottomNavigationPresent
     lateinit var adapter: HomeMarketsAdapter
         private set
 
-    val homeMarketsViewModel by lazy {
+    private val homeMarketsViewModel by lazy {
         LooprWalletViewModelFactory.get<HomeMarketsViewModel>(this)
     }
 
@@ -58,12 +64,18 @@ abstract class BaseHomeMarketsFragment : BaseFragment(), BottomNavigationPresent
         adapter = provideAdapter(savedInstanceState)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+        swipeRefreshLayout.setOnRefreshListener(this)
     }
 
     abstract fun provideAdapter(savedInstanceState: Bundle?): HomeMarketsAdapter
 
     final override fun onBottomNavigationReselected() {
         recyclerView.smoothScrollToPosition(0)
+    }
+
+    override fun onRefresh() {
+        homeMarketsViewModel.refresh()
     }
 
     final override fun onQueryTextGainFocus() {
@@ -90,6 +102,10 @@ abstract class BaseHomeMarketsFragment : BaseFragment(), BottomNavigationPresent
         setMarketsLiveData()
     }
 
+    final override fun getCurrentDateFilter(): String {
+        return adapter.dateFilter
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
@@ -100,15 +116,9 @@ abstract class BaseHomeMarketsFragment : BaseFragment(), BottomNavigationPresent
     // MARK - Protected Methods
 
     /**
-     * Resets the [adapter] to its initial set of data, based on the filter criteria that was
+     * Sets the [adapter] to to use a new data set, based on the filter criteria that was
      * provided by the [adapter].
      */
-    protected fun resetMarketLiveData() {
-        setMarketsLiveData()
-    }
-
-    // MARK - Private Methods
-
     private fun setMarketsLiveData(ticker: String? = null) {
         val marketsFilter = MarketsFilter(ticker, isFavorites, adapter.dateFilter, adapter.sortBy)
 

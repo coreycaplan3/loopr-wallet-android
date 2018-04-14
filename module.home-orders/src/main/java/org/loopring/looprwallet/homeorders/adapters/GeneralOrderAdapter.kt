@@ -182,6 +182,10 @@ class GeneralOrderAdapter(
         listener?.onDateFilterChange(newDateValue)
     }
 
+    override fun getCurrentDateFilterChange(): String {
+        return currentDateFilter
+    }
+
     fun onSaveInstanceState(outState: Bundle) {
         outState.putString(KEY_FILTER_DATE, currentDateFilter)
         outState.putString(KEY_FILTER_STATUS, currentOrderStatusFilter)

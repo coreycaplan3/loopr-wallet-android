@@ -3,13 +3,18 @@ package org.loopring.looprwallet.homeorders.fragments
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.widget.SearchView
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
 import org.loopring.looprwallet.homeorders.R
 
@@ -21,7 +26,7 @@ import org.loopring.looprwallet.homeorders.R
  * Purpose of Class: To hold the children *Fragment*s' *ViewPager*s and allow them to be swiped
  * between.
  */
-class GeneralOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLister,
+class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLister,
         OnSearchViewChangeListener {
 
     override val layoutResource: Int
@@ -29,6 +34,20 @@ class GeneralOrdersParentFragment : BaseTabFragment(), BottomNavigationReselecte
 
     override val tabLayoutId: Int
         get() = R.id.ordersTabs
+
+    private lateinit var searchViewPresenter: SearchViewPresenter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        searchViewPresenter = SearchViewPresenter(
+                containsOverflowMenu = true,
+                numberOfVisibleMenuItems = 1,
+                baseFragment = this,
+                savedInstanceState = savedInstanceState,
+                listener = this
+        )
+    }
 
     override fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
         return fragmentView.inflate(R.layout.appbar_orders, false) as? AppBarLayout
@@ -43,8 +62,9 @@ class GeneralOrdersParentFragment : BaseTabFragment(), BottomNavigationReselecte
 
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {
         return listOf(
-                Pair(getString(R.string.open), HomeOpenOrdersFragment()),
-                Pair(getString(R.string.closed), HomeFilledOrdersFragment())
+                Pair(str(R.string.open), HomeOpenOrdersFragment()),
+                Pair(str(R.string.filled), HomeFilledOrdersFragment()),
+                Pair(str(R.string.cancelled), HomeCancelledOrdersFragment())
         )
     }
 
@@ -52,6 +72,16 @@ class GeneralOrdersParentFragment : BaseTabFragment(), BottomNavigationReselecte
         logd("Orders reselected")
         val fragment = adapter.getItem(viewPager.currentItem)
         (fragment as BottomNavigationReselectedLister).onBottomNavigationReselected()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(org.loopring.looprwallet.core.R.menu.menu_main_search, menu)
+
+        val searchItem = menu.findItem(R.id.menu_main_search)
+        val searchView = searchItem.actionView as SearchView
+
+        searchViewPresenter.setupSearchView(searchItem, searchView)
     }
 
     override fun onQueryTextGainFocus() {
@@ -81,4 +111,12 @@ class GeneralOrdersParentFragment : BaseTabFragment(), BottomNavigationReselecte
             (adapter.getItem(i) as OnSearchViewChangeListener).onSearchItemCollapsed()
         }
     }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        searchViewPresenter.onSaveInstanceState(outState)
+    }
+
 }

@@ -20,15 +20,16 @@ import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivi
  *
  * Purpose of Class:
  *
- * @param onRefresh A function that's invoked if the user needs to refresh the data.
+ * @param onRefresh A function that's invoked if the user needs to refresh the data. This only
+ * occurs when the market data is empty (fails to load and the Realm is empty) and the user prompts
+ * to retry loading the data.
  */
 class HomeMarketsAdapter(
         savedInstanceState: Bundle?,
         activity: BaseActivity,
         listener: OnGeneralMarketsFilterChangeListener,
         onRefresh: () -> Unit
-)
-    : BaseRealmAdapter<RealmModel>() {
+) : BaseRealmAdapter<RealmModel>() {
 
     companion object {
 

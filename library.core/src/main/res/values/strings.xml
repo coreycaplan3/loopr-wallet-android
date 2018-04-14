@@ -268,4 +268,5 @@
     <string name="total">Total</string>
     <string name="expired">Expired</string>
     <string name="no_connection_tap_to_retry">No connection, tap to retry</string>
+    <string name="toggle_currency">Toggle Currency</string>
 </resources>

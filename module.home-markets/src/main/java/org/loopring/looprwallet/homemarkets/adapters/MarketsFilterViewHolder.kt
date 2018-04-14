@@ -6,7 +6,9 @@ import android.widget.AdapterView
 import android.widget.Button
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_markets_filter.*
+import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
+import org.loopring.looprwallet.homemarkets.R
 
 /**
  * Created by Corey on 4/13/2018
@@ -14,7 +16,6 @@ import org.loopring.looprwallet.core.models.markets.MarketsFilter
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
  *
  */
 class MarketsFilterViewHolder(itemView: View?, listener: OnGeneralMarketsFilterChangeListener)
@@ -35,9 +36,18 @@ class MarketsFilterViewHolder(itemView: View?, listener: OnGeneralMarketsFilterC
         setDateFilterButtonListener(marketsDateFilter1dButton, listener)
     }
 
+    /**
+     * @param marketsFilter The filter data that's used **ONLY** for binding the current values to
+     * the UI (current sortBy status and date)
+     */
     fun bind(marketsFilter: MarketsFilter) {
-        TODO("IMPLEMENT ME")
+        val spinnerIndex = MarketsFilter.SORT_BY_ARRAY_VALUES.indexOf(marketsFilter.sortBy)
+        marketsSortBySpinner.setSelection(spinnerIndex)
 
+        when (marketsFilter.changePeriod) {
+            MarketsFilter.CHANGE_PERIOD_1D -> marketsDateFilter1dButton.context.setTheme(R.style.App_Button)
+            else -> loge("Invalid changePeriod, found: ${marketsFilter.changePeriod}", IllegalArgumentException())
+        }
     }
 
     private fun setDateFilterButtonListener(button: Button, listener: OnGeneralMarketsFilterChangeListener) {

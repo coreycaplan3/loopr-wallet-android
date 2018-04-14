@@ -13,8 +13,8 @@ import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationF
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.home.R
-import org.loopring.looprwallet.homeorders.fragments.GeneralOrdersParentFragment
-import org.loopring.looprwallet.homemarkets.fragments.MarketsParentFragment
+import org.loopring.looprwallet.homeorders.fragments.HomeOrdersParentFragment
+import org.loopring.looprwallet.homemarkets.fragments.HomeMarketsParentFragment
 import org.loopring.looprwallet.homemywallet.fragments.MyWalletFragment
 import org.loopring.looprwallet.hometransfers.fragments.ViewTransfersFragment
 
@@ -57,9 +57,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         val fragmentTagPairs: List<BottomNavigationFragmentPair> = listOf(
-                BottomNavigationFragmentPair(KEY_MARKETS, MarketsParentFragment(), R.id.menu_markets),
+                BottomNavigationFragmentPair(KEY_MARKETS, HomeMarketsParentFragment(), R.id.menu_markets),
 
-                BottomNavigationFragmentPair(KEY_ORDERS, GeneralOrdersParentFragment(), R.id.menu_orders),
+                BottomNavigationFragmentPair(KEY_ORDERS, HomeOrdersParentFragment(), R.id.menu_orders),
 
                 BottomNavigationFragmentPair(KEY_TRANSFERS, ViewTransfersFragment(), R.id.menu_transfers),
 
