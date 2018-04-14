@@ -84,12 +84,6 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
     }
 
     /**
-     * @param walletName The name of the wallet to check for its existence. The wallet variable
-     * should already be cleansed (all lower case, correct formatting, etc.)
-     */
-    fun doesWalletExist(walletName: String) = getAllWallets().contains(walletName)
-
-    /**
      * @return True if the wallet was selected, false otherwise
      */
     fun selectCurrentWallet(newCurrentWallet: String): Boolean {
@@ -109,11 +103,20 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
      * @param newWalletName The new wallet's name which will be set to the current wallet. The
      * wallet variable should already be cleansed (all lower case, correct formatting, etc.)
      * @param privateKey The verified/cleansed private key
+     * @param keyStoreContent The content of the Keystore file, if the wallet was created using
+     * this mechanism (or null otherwise)
+     * @param passphrase The 12-word phrase, if the wallet was created using this mechanism (or null
+     * otherwise).
 
      * @return True if the wallet was created successfully or false otherwise. A return of false
      * is because a wallet with this name already exists
      */
-    fun createWallet(newWalletName: String, privateKey: String): Boolean {
+    fun createWallet(
+            newWalletName: String,
+            privateKey: String,
+            keyStoreContent: String?,
+            passphrase: Array<String>?
+    ): Boolean {
         if (getAllWallets().contains(newWalletName)) {
             return false
         }

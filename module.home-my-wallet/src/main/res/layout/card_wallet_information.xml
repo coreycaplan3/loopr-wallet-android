@@ -2,8 +2,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:showIn="@layout/fragment_my_wallet">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,25 +16,25 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/Base.TextAppearance.AppCompat.Headline"
+                style="@style/TextAppearance.AppCompat.Headline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/wallet_information" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_margin="@dimen/standard_padding" />
 
             <TextView
-                style="@style/Base.TextAppearance.AppCompat.Small"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/your_address" />
 
             <TextView
                 android:id="@+id/addressText"
-                style="@style/Base.TextAppearance.AppCompat.Small"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textIsSelectable="true"
@@ -43,11 +42,11 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_margin="@dimen/standard_padding_small" />
 
             <TextView
-                style="@style/Base.TextAppearance.AppCompat.Small"
+                style="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/unlock_to_reveal_private_key" />
@@ -79,17 +78,16 @@
                 android:text="@string/reveal_private_key" />
 
             <ImageButton
-                android:id="@+id/downloadKeyStoreFile"
+                android:id="@+id/viewWalletUnlockMechanismButton"
                 style="@style/App.Button.CardAction"
                 android:layout_marginLeft="@dimen/horizontal_margin_small"
                 android:layout_marginStart="@dimen/horizontal_margin_small"
                 android:contentDescription="@string/content_description_download_keystore"
-                android:src="@drawable/ic_file_download_white_24dp"
+                android:src="@drawable/ic_view_agenda_white_24dp"
                 android:text="@string/reveal_private_key" />
 
         </LinearLayout>
 
     </LinearLayout>
-
 
 </android.support.v7.widget.CardView>

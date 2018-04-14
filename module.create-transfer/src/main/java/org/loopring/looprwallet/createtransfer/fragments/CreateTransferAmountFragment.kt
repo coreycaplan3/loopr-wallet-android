@@ -169,7 +169,14 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         tokenAmount = savedInstanceState?.getString(KEY_TOKEN_AMOUNT) ?: "0"
         isCurrencyMainLabel = savedInstanceState?.getBoolean(KEY_IS_CURRENCY_MAIN_LABEL, true) != false
 
-        address = walletClient.getCurrentWallet()?.credentials?.address ?: LooprWallet.WATCH_ONLY_WALLET.credentials.address
+        address = walletClient.getCurrentWallet()?.credentials?.address.let {
+            if (it == null) {
+                activity!!.finish()
+                return // Out of onViewCreated
+            } else {
+                return@let it
+            }
+        }
 
         ethToken = ethTokenBalanceViewModel?.getEthBalanceNow() ?: EthToken.ETH
         currentToken = ethTokenPriceCheckerViewModel.currentCryptoToken ?: ethToken
