@@ -141,14 +141,13 @@ class GeneralOrderAdapter(
         val previousIndex = index - 1
         val previousItemIndex = index - 2 // There's an offset of 1 for the filter
 
-
         val showDateHeader = when {
             previousIndex == 0 ->
                 // We're at the first item in the data-list
                 true
             previousItemIndex >= 0 -> {
                 val data = data
-                // The item is NOT the SAME day as the previous one
+                // If the item is NOT the SAME day as the previous one
                 TODO("IMPLEMENT ME")
 //                data != null && !data[previousItemIndex].lastUpdated.isSameDay(item.lastUpdated)
             }

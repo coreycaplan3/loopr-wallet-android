@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:insetBottom="@dimen/abc_button_inset_vertical_material"
-    android:insetLeft="@dimen/abc_button_inset_horizontal_material"
-    android:insetRight="@dimen/abc_button_inset_horizontal_material"
-    android:insetTop="@dimen/abc_button_inset_vertical_material">
+    android:insetBottom="3dp"
+    android:insetLeft="3dp"
+    android:insetRight="3dp"
+    android:insetTop="3dp">
     <ripple android:color="#42ffffff">
         <item>
             <!-- As we can't use themed ColorStateLists in L, we'll use a Drawable selector which

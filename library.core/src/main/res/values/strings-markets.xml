@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="sort_ticker_asc">TICKER_ASC</string>
+    <string name="sort_percentage_change_asc">CHANGE_ASC</string>
+    <string name="sort_percentage_change_desc">CHANGE_DESC</string>
+
+    <string-array name="sort_markets_ui">
+        <item>Alphabetical</item>
+        <item>Biggest Gains</item>
+        <item>Biggest Losses</item>
+    </string-array>
+
+    <string-array name="sort_markets_values">
+        <item>@string/sort_ticker_asc</item>
+        <item>@string/sort_percentage_change_asc</item>
+        <item>@string/sort_percentage_change_desc</item>
+    </string-array>
+
+</resources>

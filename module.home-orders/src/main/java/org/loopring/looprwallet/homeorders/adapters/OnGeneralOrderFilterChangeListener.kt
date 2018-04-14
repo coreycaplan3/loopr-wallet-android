@@ -21,4 +21,9 @@ interface OnGeneralOrderFilterChangeListener {
      * Called when the filter's date changes (EX: all vs. orders in past 7 days)
      */
     fun onDateFilterChange(newDateValue: String)
+
+    /**
+     * @return The current date filter being used
+     */
+    fun getCurrentDateFilterChange(): String
 }

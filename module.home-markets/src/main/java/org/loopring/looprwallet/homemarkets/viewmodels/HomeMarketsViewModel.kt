@@ -25,7 +25,7 @@ class HomeMarketsViewModel : OfflineFirstViewModel<List<RealmModel>, MarketsFilt
     override val repository = LooprMarketsRepository()
 
     @Suppress("UNCHECKED_CAST")
-    fun getAllHomeMarkets(
+    fun getHomeMarkets(
             owner: LifecycleOwner,
             filter: MarketsFilter,
             onChange: (RealmResults<RealmModel>) -> Unit

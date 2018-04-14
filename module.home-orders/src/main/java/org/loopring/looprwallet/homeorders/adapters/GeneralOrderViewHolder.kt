@@ -35,7 +35,8 @@ class GeneralOrderViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
         itemView.setOnClickListener {
             onOrderClick(order)
         }
-        TODO("BIND ORDER")
+
+        TODO("BIND ORDER; BE SURE TO INCLUDE OPEN/FULFILLED/EXPIRED")
     }
 
 }

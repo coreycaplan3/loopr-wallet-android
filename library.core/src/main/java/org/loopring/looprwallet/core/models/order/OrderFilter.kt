@@ -28,19 +28,6 @@ data class OrderFilter(
         val FILTER_OPEN_ORDER_STATUS_UI: Array<String> = strArray(R.array.filter_order_open_statuses_ui)
         val FILTER_OPEN_ORDER_STATUS_VALUES: Array<String> = strArray(R.array.filter_order_open_statuses_values)
 
-        fun mapRawValueToUi(statusEnumValue: String): String {
-            val index = FILTER_OPEN_ORDER_STATUS_VALUES.indexOfFirst { it == statusEnumValue }
-            if (index != -1) {
-                return FILTER_OPEN_ORDER_STATUS_UI[index]
-            }
-
-            return when (statusEnumValue) {
-                FILTER_CANCELLED -> str(android.R.string.cancel)
-                FILTER_FILLED -> str(R.string.filled)
-                FILTER_EXPIRED -> str(R.string.expired)
-                else -> throw IllegalArgumentException("Invalid statsEnumValue, found: $statusEnumValue")
-            }
-        }
     }
 
 }

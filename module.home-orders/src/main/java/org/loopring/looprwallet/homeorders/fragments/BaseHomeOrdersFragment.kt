@@ -92,6 +92,10 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
         setOrderLiveData()
     }
 
+    override fun getCurrentDateFilterChange(): String {
+        return adapter.currentDateFilter
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
@@ -115,7 +119,7 @@ abstract class BaseHomeOrdersFragment : BaseFragment(), BottomNavigationReselect
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
         val orderFilter = OrderFilter(address, ticker, adapter.currentDateFilter, adapter.currentOrderStatusFilter)
 
-        generalOrderViewModel?.getOrders(orderFilter) {
+        generalOrderViewModel?.getOrders(this, orderFilter) {
             adapter.updateData(it)
             generalOrderViewModel?.removeDataObserver(this)
         }
