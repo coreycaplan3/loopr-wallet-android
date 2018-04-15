@@ -16,9 +16,11 @@ import org.web3j.utils.Numeric
  * Purpose of Class:
  *
  */
-class WalletCreationDelegates(
+class WalletCreationDelegate(
         private val walletName: String,
         private val credentials: Credentials,
+        private val keystoreContent: String?,
+        private val phrase: Array<String>?,
         private val walletClient: WalletClient?
 ) {
 
@@ -31,7 +33,7 @@ class WalletCreationDelegates(
      * @return An instance of [WalletCreationResult] containing whether or not the operation was
      * successful or the error if the operation was a failure.
      */
-    fun createWallet(): WalletCreationResult {
+    fun createWalletAndBlock(): WalletCreationResult {
         if (walletClient == null) {
             loge("Could not factory currentWallet!", IllegalStateException())
             return WalletCreationResult(false, str(R.string.error_creating_wallet))
@@ -39,7 +41,7 @@ class WalletCreationDelegates(
 
         val privateKey = Numeric.encodeQuantity(credentials.ecKeyPair.privateKey)
 
-        return when (walletClient.createWallet(walletName.toLowerCase(), privateKey)) {
+        return when (walletClient.createWallet(walletName.toLowerCase(), privateKey, keystoreContent, phrase)) {
             true -> WalletCreationResult(true, null)
             else -> WalletCreationResult(false, str(R.string.error_wallet_already_exists))
         }
