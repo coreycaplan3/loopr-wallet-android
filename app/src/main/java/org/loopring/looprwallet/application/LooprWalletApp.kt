@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.application
+package org.loopring.looprwallet.application
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crash.FirebaseCrash

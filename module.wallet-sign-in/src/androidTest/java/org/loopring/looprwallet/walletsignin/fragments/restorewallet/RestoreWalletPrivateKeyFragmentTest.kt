@@ -6,7 +6,7 @@ import android.support.test.espresso.assertion.ViewAssertions.*
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import com.caplaninnovations.looprwallet.activities.MainActivity
+import org.loopring.looprwallet.activities.MainActivity
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions
 import org.loopring.looprwallet.core.validators.BaseValidator

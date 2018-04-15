@@ -1,4 +1,4 @@
-package com.caplaninnovations.looprwallet.fragments.transfers
+package org.loopring.looprwallet.fragments.transfers
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent

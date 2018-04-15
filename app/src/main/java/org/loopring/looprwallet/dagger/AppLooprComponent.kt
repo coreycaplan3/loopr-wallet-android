@@ -1,7 +1,7 @@
-package com.caplaninnovations.looprwallet.dagger
+package org.loopring.looprwallet.dagger
 
-import com.caplaninnovations.looprwallet.application.LooprWalletApp
 import dagger.Component
+import org.loopring.looprwallet.application.LooprWalletApp
 import org.loopring.looprwallet.core.dagger.CoreLooprComponent
 import org.loopring.looprwallet.core.dagger.LooprComponentScope
 

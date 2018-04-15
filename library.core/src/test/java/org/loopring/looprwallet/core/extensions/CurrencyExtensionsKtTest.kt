@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.extensions
 
-import com.caplaninnovations.looprwallet.models.android.settings.CurrencySettings
-import com.caplaninnovations.looprwallet.models.android.settings.LooprSecureSettingsDebugImpl
+import org.loopring.looprwallet.models.android.settings.CurrencySettings
+import org.loopring.looprwallet.models.android.settings.LooprSecureSettingsDebugImpl
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before

@@ -7,8 +7,8 @@ import android.os.Handler
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.android.CipherClient
-import org.loopring.looprwallet.core.activities.SecurityActivity
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.activities.SecurityActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.models.settings.LooprSecureSettings
@@ -37,8 +37,13 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
 
     private val cipherClient = CipherClient(context)
 
-    override fun createWallet(walletName: String, privateKey: String): Boolean {
-        return walletSettings.createWallet(walletName, privateKey)
+    override fun createWallet(
+            walletName: String,
+            privateKey: String,
+            keystoreContent: String?,
+            phrase: Array<String>?
+    ): Boolean {
+        return walletSettings.createWallet(walletName, privateKey, keystoreContent, phrase)
     }
 
     override fun selectNewCurrentWallet(newCurrentWallet: String, currentActivity: BaseActivity) {

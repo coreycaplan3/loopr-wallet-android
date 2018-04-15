@@ -25,6 +25,8 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
         const val KEY_ALL_WALLETS = "_ALL_WALLETS"
         const val KEY_REALM_KEY = "_REALM_KEY"
         const val KEY_PRIVATE_KEY = "_PRIVATE_KEY"
+        const val KEY_PASSPHRASE = "_PASSPHRASE"
+        const val KEY_KEYSTORE_CONTENT = "_KEYSTORE_CONTENT"
     }
 
     /**
@@ -62,10 +64,12 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
         return walletName?.let {
             val realmKey = getRealmKey(it)
             val privateKey = getPrivateKey(it)
-            if (realmKey != null && privateKey != null) {
-                LooprWallet(walletName, realmKey, privateKey)
-            } else {
-                null
+            val keystoreContent = getKeystoreContent(walletName)!!
+            val passphrase = getPassphrase(walletName)!!
+
+            return when {
+                realmKey == null || privateKey == null -> null
+                else -> LooprWallet(walletName, realmKey, keystoreContent, passphrase, privateKey)
             }
         }
     }
@@ -79,7 +83,11 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
         return if (!getAllWallets().contains(walletName)) {
             return null
         } else {
-            LooprWallet(walletName, getRealmKey(walletName)!!, getPrivateKey(walletName)!!)
+            val realmKey = getRealmKey(walletName)!!
+            val privateKey = getPrivateKey(walletName)!!
+            val keystoreContent = getKeystoreContent(walletName)!!
+            val passphrase = getPassphrase(walletName)!!
+            LooprWallet(walletName, realmKey, keystoreContent, passphrase, privateKey)
         }
     }
 
@@ -130,6 +138,8 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
         addWallet(newWalletName)
         putPrivateKey(newWalletName, privateKey)
         putRealmKey(newWalletName, RealmUtility.createKey())
+        putKeystoreContent(newWalletName, keyStoreContent)
+        putPassphrase(newWalletName, passphrase)
 
         return true
     }
@@ -153,16 +163,14 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
 
         putAllWallets(allWallets)
         putRealmKey(wallet, null)
+        putKeystoreContent(wallet, null)
+        putPassphrase(wallet, null)
         putPrivateKey(wallet, null)
 
         val newCurrentWallet = if (allWallets.isNotEmpty()) allWallets.first() else null
         putCurrentWallet(newCurrentWallet)
 
         return true
-    }
-
-    fun getRealmKey(walletName: String): ByteArray? {
-        return looprSecureSettings.getByteArray(KEY_REALM_KEY + walletName)
     }
 
     // MARK - Private methods
@@ -189,14 +197,42 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
         return looprSecureSettings.getString(KEY_PRIVATE_KEY + walletName)
     }
 
-
     private fun putPrivateKey(walletName: String, privateKey: String?) {
         looprSecureSettings.putString(KEY_PRIVATE_KEY + walletName, privateKey)
     }
 
+    // REALM KEY
+
     private fun putRealmKey(walletName: String, key: ByteArray?) {
         looprSecureSettings.putByteArray(KEY_REALM_KEY + walletName, key)
     }
+
+    @VisibleForTesting
+    fun getRealmKey(walletName: String): ByteArray? {
+        return looprSecureSettings.getByteArray(KEY_REALM_KEY + walletName)
+    }
+
+    // PASSPHRASE
+
+    private fun putPassphrase(walletName: String, passphrase: Array<String>?) {
+        looprSecureSettings.putStringArray(KEY_PASSPHRASE + walletName, passphrase)
+    }
+
+    private fun getPassphrase(walletName: String): Array<String>? {
+        return looprSecureSettings.getStringArray(KEY_PASSPHRASE + walletName)
+    }
+
+    // KEYSTORE
+
+    private fun putKeystoreContent(walletName: String, keyStoreContent: String?) {
+        looprSecureSettings.putString(KEY_KEYSTORE_CONTENT + walletName, keyStoreContent)
+    }
+
+    private fun getKeystoreContent(walletName: String): String? {
+        return looprSecureSettings.getString(KEY_KEYSTORE_CONTENT + walletName)
+    }
+
+    // CURRENT WALLET
 
     private fun putCurrentWallet(newWalletName: String?) {
         looprSecureSettings.putString(KEY_CURRENT_WALLET, newWalletName)

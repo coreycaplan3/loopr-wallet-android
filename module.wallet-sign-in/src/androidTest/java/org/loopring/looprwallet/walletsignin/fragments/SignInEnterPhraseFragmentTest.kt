@@ -7,7 +7,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions.*
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
 import org.loopring.looprwallet.core.R
-import com.caplaninnovations.looprwallet.activities.MainActivity
+import org.loopring.looprwallet.activities.MainActivity
 import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseEmptyViewHolder
 import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseViewHolder
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest

@@ -34,10 +34,17 @@ interface WalletClient {
      *
      * @param walletName The name of the new wallet
      * @param privateKey The private key of the new wallet
+     * @param keystoreContent The keystore content used to create the wallet or null if it wasn't
+     * used to create the wallet.
+     * @param phrase The phrase used to create the wallet or null if it wasn't used to create the
+     * wallet.
      * @return True if the wallet was created successfully, or false otherwise. A return of false
      * means that a wallet with this name or private key already exists
      */
-    fun createWallet(walletName: String, privateKey: String): Boolean
+    fun createWallet(walletName: String,
+                     privateKey: String,
+                     keystoreContent: String?,
+                     phrase: Array<String>?): Boolean
 
     /**
      * Selects a new current-wallet (from an existing list) and resets the current activity task

@@ -1,13 +1,12 @@
 package org.loopring.looprwallet.homemywallet.fragments
 
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.TooltipCompat
 import android.view.View
 import kotlinx.android.synthetic.main.card_wallet_information.*
+import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
-import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.homemywallet.R
 
@@ -19,7 +18,7 @@ import org.loopring.looprwallet.homemywallet.R
  * Purpose of Class:
  *
  */
-class MyWalletFragment: BaseFragment(), BottomNavigationPresenter.BottomNavigationReselectedLister {
+class MyWalletFragment : BaseFragment(), BottomNavigationPresenter.BottomNavigationReselectedLister {
 
     override val layoutResource: Int
         get() = R.layout.fragment_my_wallet
@@ -33,7 +32,21 @@ class MyWalletFragment: BaseFragment(), BottomNavigationPresenter.BottomNavigati
         TooltipCompat.setTooltipText(showPrivateKeyButton, str(R.string.reveal_private_key))
 
         val currentWallet = walletClient.getCurrentWallet()
-        TooltipCompat.setTooltipText(shareAddressButton, str(R.string.viewkey))
+        if (currentWallet != null) {
+            when {
+                currentWallet.keystoreContent != null -> {
+                    TooltipCompat.setTooltipText(viewWalletUnlockMechanismButton, str(R.string.copy_keystore_content))
+                    viewWalletUnlockMechanismButton.visibility = View.VISIBLE
+                }
+                currentWallet.passphrase != null -> {
+                    TooltipCompat.setTooltipText(viewWalletUnlockMechanismButton, str(R.string.view_your_passphrase))
+                    viewWalletUnlockMechanismButton.visibility = View.VISIBLE
+                }
+                else -> {
+                    viewWalletUnlockMechanismButton.visibility = View.GONE
+                }
+            }
+        }
     }
 
     override fun onBottomNavigationReselected() {

@@ -269,4 +269,6 @@
     <string name="expired">Expired</string>
     <string name="no_connection_tap_to_retry">No connection, tap to retry</string>
     <string name="toggle_currency">Toggle Currency</string>
+    <string name="view_your_passphrase">View your passphrase</string>
+    <string name="copy_keystore_content">Copy your keystore content</string>
 </resources>

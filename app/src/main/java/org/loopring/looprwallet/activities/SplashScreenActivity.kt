@@ -1,7 +1,7 @@
-package com.caplaninnovations.looprwallet.activities
+package org.loopring.looprwallet.activities
 
 import android.content.Intent
-import com.caplaninnovations.looprwallet.R
+import org.loopring.looprwallet.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.home.activities.MainActivity
 import org.loopring.looprwallet.walletsignin.activities.SignInActivity

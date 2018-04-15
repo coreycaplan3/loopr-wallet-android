@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:80491118944:android:9932d34bfebf3403",
         "android_client_info": {
-          "package_name": "com.caplaninnovations.looprwallet.infuraTestnet"
+          "package_name": "org.loopring.looprwallet.infuraTestnet"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "80491118944-3ma07bfo0q3jb01v35sf6plhkqq1tft4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.caplaninnovations.looprwallet.infuraTestnet",
+            "package_name": "org.loopring.looprwallet.infuraTestnet",
             "certificate_hash": "306cbd25bdaa33b035e51c058195800477663b91"
           }
         },
@@ -26,7 +26,7 @@
           "client_id": "80491118944-ir4fev1dq7ml2fs28kntefpqvqn8vub8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.caplaninnovations.looprwallet.infuraTestnet",
+            "package_name": "org.loopring.looprwallet.infuraTestnet",
             "certificate_hash": "22cd67a04b0ae82da55721fc0f23a2c165c2b574"
           }
         },

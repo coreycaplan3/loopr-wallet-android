@@ -39,7 +39,12 @@ open class CoreTestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecur
     }
 
     open fun executeHumanTestCode(savedInstanceState: Bundle?) {
-        walletClient.createWallet("loopr-wallet", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
+        walletClient.createWallet(
+                walletName = "loopr-wallet",
+                privateKey = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                keystoreContent = null,
+                phrase = null
+        )
     }
 
     fun addFragment(fragment: Fragment, tag: String) {
