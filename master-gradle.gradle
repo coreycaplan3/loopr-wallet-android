@@ -49,7 +49,8 @@ gradle.ext.kotlinKtx = "androidx.core:core-ktx:0.2"
 
 // QR Code Scanner
 gradle.ext.googleVision = "com.google.android.gms:play-services-vision:$googleLibraryVersion"
-gradle.ext.qrCodeGeneration = "com.google.zxing:android-core:3.3.0"
+gradle.ext.qrCodeAndroid = "com.google.zxing:android-core:3.3.0"
+gradle.ext.qrCodeCore = "com.google.zxing:core:3.3.0"
 
 // Realm
 gradle.ext.realmAdapters = "io.realm:android-adapters:2.1.1"

@@ -78,7 +78,7 @@
                 android:text="@string/reveal_private_key" />
 
             <ImageButton
-                android:id="@+id/viewWalletUnlockMechanismButton"
+                android:id="@+id/showWalletUnlockMechanismButton"
                 style="@style/App.Button.CardAction"
                 android:layout_marginLeft="@dimen/horizontal_margin_small"
                 android:layout_marginStart="@dimen/horizontal_margin_small"

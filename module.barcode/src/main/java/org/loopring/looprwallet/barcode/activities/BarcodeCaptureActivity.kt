@@ -34,9 +34,9 @@ import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.activity_barcode_capture.*
 import org.loopring.looprwallet.barcode.R
 import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
-import org.loopring.looprwallet.barcode.views.barcode.BarcodeGraphicTracker
-import org.loopring.looprwallet.barcode.views.barcode.BarcodeTrackerFactory
-import org.loopring.looprwallet.barcode.views.barcode.CameraSource
+import org.loopring.looprwallet.barcode.views.BarcodeGraphicTracker
+import org.loopring.looprwallet.barcode.views.BarcodeTrackerFactory
+import org.loopring.looprwallet.barcode.views.CameraSource
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logw

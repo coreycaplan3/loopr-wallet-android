@@ -6,7 +6,6 @@ import android.view.View
 import kotlinx.android.synthetic.main.card_wallet_information.*
 import kotlinx.android.synthetic.main.fragment_my_wallet.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.homemywallet.R
 import android.content.Intent
@@ -49,20 +48,22 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         if (currentWallet != null) {
             when {
                 currentWallet.keystoreContent != null -> {
-                    TooltipCompat.setTooltipText(viewWalletUnlockMechanismButton, str(R.string.copy_keystore_content))
-                    viewWalletUnlockMechanismButton.visibility = View.VISIBLE
+                    TooltipCompat.setTooltipText(showWalletUnlockMechanismButton, str(R.string.copy_keystore_content))
+                    showWalletUnlockMechanismButton.visibility = View.VISIBLE
                 }
                 currentWallet.passphrase != null -> {
-                    TooltipCompat.setTooltipText(viewWalletUnlockMechanismButton, str(R.string.view_your_passphrase))
-                    viewWalletUnlockMechanismButton.visibility = View.VISIBLE
+                    TooltipCompat.setTooltipText(showWalletUnlockMechanismButton, str(R.string.view_your_passphrase))
+                    showWalletUnlockMechanismButton.visibility = View.VISIBLE
                 }
                 else -> {
-                    viewWalletUnlockMechanismButton.visibility = View.GONE
+                    showWalletUnlockMechanismButton.visibility = View.GONE
                 }
             }
         }
 
-        viewWalletUnlockMechanismButton.setOnClickListener { onUnlockWalletButtonClick() }
+        showPrivateKeyButton.setOnClickListener { onShowPrivateKeyClick() }
+
+        showWalletUnlockMechanismButton.setOnClickListener { onShowWalletUnlockMechanismClick() }
     }
 
     override fun onBottomNavigationReselected() {
@@ -109,7 +110,12 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
     // MARK - Private Methods
 
-    private fun onUnlockWalletButtonClick() = walletClient.getCurrentWallet().ifNotNull {
+    private fun onShowPrivateKeyClick() {
+        val fragment = ConfirmOldSecurityFragment.createViewPrivateKeyInstance(TYPE_VIEW_PRIVATE_KEY)
+        pushFragmentTransaction(fragment, ConfirmOldSecurityFragment.TAG)
+    }
+
+    private fun onShowWalletUnlockMechanismClick() = walletClient.getCurrentWallet().ifNotNull {
         val fragment = when {
             it.keystoreContent != null -> ConfirmOldSecurityFragment.createViewWalletUnlockMechanismInstance(TYPE_VIEW_KEYSTORE)
             it.passphrase != null -> ConfirmOldSecurityFragment.createViewWalletUnlockMechanismInstance(TYPE_VIEW_PHRASE)

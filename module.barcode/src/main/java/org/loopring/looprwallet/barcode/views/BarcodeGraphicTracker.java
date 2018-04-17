@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.loopring.looprwallet.barcode.views.barcode;
+package org.loopring.looprwallet.barcode.views;
 
 import android.content.Context;
 import android.support.annotation.UiThread;
