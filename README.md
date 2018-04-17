@@ -21,6 +21,13 @@ handling network calls
 - Kotlin's [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) is used as a 
 replacement for standard Android/Java threading
 - [Glide](https://github.com/bumptech/glide) is used for image loading
+- Kotlin Android [Extensions](https://kotlinlang.org/docs/tutorials/android-plugin.html) is used to 
+speed up development in comparison with Java
 
 ##### Tools
-
+1. Android Studio `3.1.1`
+2. Gradle Build Tools version `3.1.1`
+3. Gradle Wrapper version `4.4-all`
+4. Kotlin version `1.2.31`
+5. Google Services version `3.2.0`
+6. Realm version `5.0.0`
