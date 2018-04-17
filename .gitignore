@@ -2,6 +2,9 @@
 *.apk
 *.ap_
 
+# Development Secrets
+secrets
+
 # Files for the ART/Dalvik VM
 *.dex
 

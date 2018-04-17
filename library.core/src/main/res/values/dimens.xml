@@ -1,0 +1,81 @@
+<resources>
+    <dimen name="zero">0dp</dimen>
+
+    <dimen name="keyboard_threshold">100dp</dimen>
+
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_elevation_selected">8dp</dimen>
+
+    <!-- Bottom Navigation -->
+    <dimen name="bottom_navigation_height">56dp</dimen>
+    <dimen name="bottom_navigation_margin_top">16dp</dimen>
+    <dimen name="bottom_navigation_margin_top_selected">6dp</dimen>
+    <dimen name="bottom_navigation_margin_bottom">8dp</dimen>
+    <dimen name="bottom_navigation_margin_horizontal">12dp</dimen>
+    <dimen name="bottom_navigation_text_size">0sp</dimen>
+    <dimen name="bottom_navigation_text_size_selected">14sp</dimen>
+    <dimen name="bottom_navigation_width">88dp</dimen>
+    <dimen name="bottom_navigation_width_selected">144dp</dimen>
+
+    <dimen name="bottom_navigation_image_translation_y_selected">8dp</dimen>
+    <dimen name="bottom_navigation_image_translation_y">-8dp</dimen>
+
+    <!-- Cards -->
+
+    <dimen name="card_padding_top">24dp</dimen>
+    <dimen name="card_padding_horizontal">16dp</dimen>
+    <dimen name="card_padding_bottom">16dp</dimen>
+
+    <!-- Dialogs -->
+    <dimen name="alert_dialog_padding">18dp</dimen>
+
+    <!-- Empty State -->
+    <dimen name="empty_image_size">72dp</dimen>
+    <dimen name="empty_title_text_size">18sp</dimen>
+
+    <!-- Floating Action Button -->
+
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Margin -->
+
+    <dimen name="statistics_pair_margin_top">-2dp</dimen>
+
+    <dimen name="standard_margin">16dp</dimen>
+    <dimen name="vertical_margin">16dp</dimen>
+    <dimen name="vertical_margin_large">32dp</dimen>
+    <dimen name="vertical_margin_small">8dp</dimen>
+    <dimen name="vertical_margin_extra_small">4dp</dimen>
+
+    <dimen name="horizontal_margin">16dp</dimen>
+    <dimen name="horizontal_margin_small">8dp</dimen>
+    <dimen name="horizontal_margin_extra_small">4dp</dimen>
+
+    <!-- Orders Circle -->
+
+    <dimen name="order_circle_size">36dp</dimen>
+
+    <!-- Padding -->
+
+    <dimen name="standard_padding">16dp</dimen>
+    <dimen name="standard_padding_small">8dp</dimen>
+    <dimen name="standard_horizontal_padding">16dp</dimen>
+    <dimen name="horizontal_padding_small">8dp</dimen>
+    <dimen name="standard_vertical_padding">16dp</dimen>
+    <dimen name="vertical_padding_small">8dp</dimen>
+    <dimen name="large_horizontal_padding">32dp</dimen>
+    <dimen name="large_vertical_padding">32dp</dimen>
+
+    <!-- Text -->
+    <dimen name="standard_text_size">13sp</dimen>
+    <dimen name="subtitle">14sp</dimen>
+    <dimen name="card_subtitle_margin_top">12dp</dimen>
+    <dimen name="card_action_icon_size">36dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="contact_height">64dp</dimen>
+    <dimen name="borderless_icon_button_size">48dp</dimen>
+
+    <dimen name="divider_height" format="float">0.5dp</dimen>
+    <dimen name="list_primary_text_size">16sp</dimen>
+    <dimen name="list_secondary_text_size">13sp</dimen>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Empty States -->
+    <dimen name="empty_image_size">96dp</dimen>
+    <dimen name="empty_title_text_size">24sp</dimen>
+
+    <!-- Margin -->
+    <dimen name="standard_margin">24dp</dimen>
+    <dimen name="vertical_margin">24dp</dimen>
+    <dimen name="vertical_margin_large">48dp</dimen>
+    <dimen name="vertical_margin_small">12dp</dimen>
+    <dimen name="vertical_margin_extra_small">6dp</dimen>
+
+    <dimen name="horizontal_margin">24dp</dimen>
+    <dimen name="horizontal_margin_small">12dp</dimen>
+    <dimen name="horizontal_margin_extra_small">6dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="standard_padding">24dp</dimen>
+    <dimen name="standard_padding_small">12dp</dimen>
+    <dimen name="standard_horizontal_padding">24dp</dimen>
+    <dimen name="standard_vertical_padding">24dp</dimen>
+    <dimen name="vertical_padding_small">12dp</dimen>
+    <dimen name="large_horizontal_padding">48dp</dimen>
+    <dimen name="large_vertical_padding">48dp</dimen>
+
+    <!-- Text -->
+    <dimen name="standard_text_size">15sp</dimen>
+
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library.core/library.core.iml" filepath="$PROJECT_DIR$/library.core/library.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/loopr-android-official.iml" filepath="$PROJECT_DIR$/loopr-android-official.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.barcode/module.barcode.iml" filepath="$PROJECT_DIR$/module.barcode/module.barcode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.contacts/module.contacts.iml" filepath="$PROJECT_DIR$/module.contacts/module.contacts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.create-order/module.create-order.iml" filepath="$PROJECT_DIR$/module.create-order/module.create-order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.create-transfer/module.create-transfer.iml" filepath="$PROJECT_DIR$/module.create-transfer/module.create-transfer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.home/module.home.iml" filepath="$PROJECT_DIR$/module.home/module.home.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.home-markets/module.home-markets.iml" filepath="$PROJECT_DIR$/module.home-markets/module.home-markets.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.home-my-wallet/module.home-my-wallet.iml" filepath="$PROJECT_DIR$/module.home-my-wallet/module.home-my-wallet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.home-orders/module.home-orders.iml" filepath="$PROJECT_DIR$/module.home-orders/module.home-orders.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.home-transfers/module.home-transfers.iml" filepath="$PROJECT_DIR$/module.home-transfers/module.home-transfers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.intro/module.intro.iml" filepath="$PROJECT_DIR$/module.intro/module.intro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.order-details/module.order-details.iml" filepath="$PROJECT_DIR$/module.order-details/module.order-details.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.trade-details/module.trade-details.iml" filepath="$PROJECT_DIR$/module.trade-details/module.trade-details.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.wallet-sign-in/module.wallet-sign-in.iml" filepath="$PROJECT_DIR$/module.wallet-sign-in/module.wallet-sign-in.iml" />
+      <module fileurl="file://$PROJECT_DIR$/view-balances/view-balances.iml" filepath="$PROJECT_DIR$/view-balances/view-balances.iml" />
+    </modules>
+  </component>
+</project>

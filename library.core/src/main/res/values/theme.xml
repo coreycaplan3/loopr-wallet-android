@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <!-- Main Colors -->
+        <item name="colorPrimary">@color/lightPrimary</item>
+        <item name="colorPrimaryDark">@color/lightPrimaryDark</item>
+        <item name="colorAccent">@color/lightAccent</item>
+
+        <item name="android:windowBackground">@color/lightBackground</item>
+        <item name="colorBackground">@color/lightBackground</item>
+        <item name="android:colorBackground">@color/lightBackground</item>
+
+        <item name="colorControlActivated">@color/lightAccent</item>
+
+        <item name="circleBackgroundColor">@color/lightShadowColor</item>
+
+        <!-- Actionbar -->
+        <item name="titleTextColor">@color/whiteTextPrimary</item>
+        <item name="actionOverflowButtonStyle">@style/App.LightCustomOverflow</item>
+
+        <!-- Button Style -->
+        <item name="colorButtonNormal">@color/lightButtonDisabled</item>
+        <item name="buttonStyle">@style/App.Button</item>
+        <item name="borderlessButtonColor">@color/lightPrimary</item>
+        <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
+
+        <!-- Cards -->
+        <item name="cardBackgroundColor">@color/cardview_light_background</item>
+
+        <!-- Dialogs -->
+        <item name="alertDialogTheme">@style/App.AlertDialog.Light</item>
+        <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog.Light</item>
+
+        <!-- Divider -->
+        <item name="dividerColor">@color/blackDivider</item>
+
+        <!-- Settings -->
+        <item name="preferenceTheme">@style/App.SettingsTheme</item>
+
+        <!-- Spinner -->
+        <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner</item>
+
+        <!-- Tabs -->
+        <item name="tabTextColor">@color/tabs_text</item>
+        <item name="tabSelectedTextColor">@color/tabs_text</item>
+        <item name="tabIndicatorColor">@android:color/white</item>
+
+        <!-- Text -->
+        <!-- TODO raise min SDK to 16 to get font support -->
+        <!--<item name="android:fontFamily"></item>-->
+
+        <item name="android:textColorPrimary">@color/full_black_text_primary</item>
+        <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary</item>
+
+        <item name="android:textColorSecondary">@color/full_black_text_secondary</item>
+        <item name="android:textColorSecondaryInverse">@color/full_white_text_secondary</item>
+        <item name="textColorDisabled">@color/blackTextDisabled</item>
+
+        <item name="textColorError">@color/textColorError</item>
+        <item name="android:listSeparatorTextViewStyle">@style/App.ListSeparatorTextViewStyle</item>
+
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+
+        <!-- Main Colors -->
+        <item name="colorPrimary">@color/darkPrimary</item>
+        <item name="colorPrimaryDark">@color/darkPrimaryDark</item>
+        <item name="colorAccent">@color/darkAccent</item>
+
+        <item name="android:windowBackground">@color/darkBackground</item>
+        <item name="colorBackground">@color/darkBackground</item>
+        <item name="android:colorBackground">@color/darkBackground</item>
+
+        <item name="colorControlActivated">@color/darkAccent</item>
+
+        <item name="circleBackgroundColor">@color/darkShadowColor</item>
+
+        <!-- Actionbar -->
+        <item name="titleTextColor">@color/whiteTextPrimary</item>
+        <item name="actionOverflowButtonStyle">@style/App.DarkCustomOverflow</item>
+
+        <!-- Button Style -->
+        <item name="colorButtonNormal">@color/darkButtonDisabled</item>
+        <item name="buttonStyle">@style/App.Button</item>
+        <item name="borderlessButtonColor">@color/borderless_button_color</item>
+        <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
+
+        <!-- Cards -->
+        <item name="cardBackgroundColor">@color/cardview_dark_background</item>
+
+        <!-- Dialogs -->
+        <item name="alertDialogTheme">@style/App.AlertDialog</item>
+        <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog</item>
+
+        <!-- Divider -->
+        <item name="dividerColor">@color/whiteDivider</item>
+
+        <!-- Settings -->
+        <item name="preferenceTheme">@style/App.SettingsTheme</item>
+
+        <!-- Spinner -->
+        <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner</item>
+
+        <!-- Tabs -->
+        <item name="tabTextColor">@color/tabs_text</item>
+        <item name="tabSelectedTextColor">@color/tabs_text</item>
+        <item name="tabIndicatorColor">@android:color/white</item>
+
+        <!-- Text -->
+        <!-- TODO raise min SDK to 16 to get font support -->
+        <!--<item name="android:fontFamily"></item>-->
+
+        <item name="android:textColorPrimary">@color/full_white_text_primary</item>
+        <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary</item>
+
+        <item name="android:textColorSecondary">@color/full_white_text_secondary</item>
+        <item name="android:textColorSecondaryInverse">@color/full_white_text_secondary</item>
+        <item name="textColorDisabled">@color/whiteTextDisabled</item>
+
+        <item name="textColorError">@color/textColorError</item>
+        <item name="android:listSeparatorTextViewStyle">@style/App.ListSeparatorTextViewStyle</item>
+
+    </style>
+
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottom_navigation_height"
+    android:layout_gravity="bottom"
+    android:id="@+id/bottomNavigationView"
+    android:background="?attr/colorPrimary"
+    app:itemTextColor="@color/tabs_text"
+    app:itemIconTint="@color/tabs_text"
+    app:elevation="8dp" />

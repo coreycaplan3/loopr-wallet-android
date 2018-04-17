@@ -1,0 +1,139 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "org.loopring.looprwallet"
+
+        multiDexEnabled true
+
+        minSdkVersion min_sdk
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "org.loopring.looprwallet.core.application.LooprJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        debug {}
+        staging {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildToolsVersion '27.0.3'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    flavorDimensions "environment"
+
+    dexOptions {
+        preDexLibraries true
+        javaMaxHeapSize "2048m"
+        maxProcessCount 4
+    }
+
+    productFlavors {
+
+        mocknet {
+            resConfigs ("en", "xxhdpi")
+
+            applicationIdSuffix ".mocknet"
+            versionNameSuffix "-mocknet"
+
+            buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 10L"
+            buildConfigField "String", "ENVIRONMENT", "\"mocknet\""
+
+            dimension "environment"
+        }
+
+        infuraTestnet {
+            applicationIdSuffix ".infuraTestnet"
+            versionNameSuffix "-testnet"
+
+            buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
+            buildConfigField "String", "ENVIRONMENT", "\"testnet\""
+
+            missingDimensionStrategy "environment", "mainnet"
+            dimension "environment"
+        }
+
+        mainnet {
+            applicationIdSuffix ".mainnet"
+            versionNameSuffix "-mainnet"
+
+            buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
+            buildConfigField "String", "ENVIRONMENT", "\"mainnet\""
+
+            dimension "environment"
+        }
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+kapt {
+    useBuildCache = true
+}
+
+dependencies {
+    implementation project(':library.core')
+    implementation project(':module.barcode')
+    implementation project(':module.contacts')
+    implementation project(':module.home')
+    implementation project(':module.home-markets')
+    implementation project(':module.home-orders')
+    implementation project(':module.intro')
+    implementation project(':module.create-order')
+    implementation project(':module.trade-details')
+    implementation project(':module.create-transfer')
+    implementation project(':module.wallet-sign-in')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // Dagger Dependency Injection
+    implementation gradle.dagger
+    kapt gradle.daggerProcessor
+    kapt gradle.daggerCompiler
+
+    // Android Testing and Integration Tests
+    androidTestImplementation gradle.junit
+    androidTestImplementation gradle.mockito
+    androidTestImplementation gradle.rules
+    androidTestImplementation gradle.runner
+    androidTestImplementation gradle.espressoContrib
+    androidTestImplementation gradle.espressoCore
+    androidTestImplementation gradle.espressoIntents
+    kaptAndroidTest gradle.daggerCompiler
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,0 +1,5 @@
+Confirmation dialog with amounts before trading - you can't press "okay" until "5" seconds passes
+
+Settings:
+	- how many tokens are tradeable
+		- IE, I only want 10 of my ETH to be tradeable

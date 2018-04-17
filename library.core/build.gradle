@@ -1,0 +1,199 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
+apply plugin: 'com.novoda.build-properties'
+
+buildProperties {
+    secrets.file rootProject.file('secrets/secrets.properties')
+}
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion min_sdk
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        multiDexEnabled true
+
+        testInstrumentationRunner "org.loopring.looprwallet.core.application.LooprJUnitRunner"
+
+        publishNonDefault true
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "2000L"
+            buildConfigField "Long", "DEFAULT_NETWORK_TIMEOUT", "1000L" // Used for testing
+        }
+        staging {
+            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "15000L"
+            buildConfigField "Long", "DEFAULT_NETWORK_TIMEOUT", "3000L" // Used for testing
+            matchingFallbacks ['release']
+        }
+        release {
+            buildConfigField "Long", "DEFAULT_READ_TIMEOUT", "15000L"
+            buildConfigField "Long", "DEFAULT_NETWORK_TIMEOUT", "3000L" // Used for testing
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "environment"
+    productFlavors {
+
+        mocknet {
+            resConfigs ("en", "xxhdpi")
+
+            buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mocknetServerUrl"]
+
+            buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 10L"
+            buildConfigField "String", "ENVIRONMENT", "\"mocknet\""
+
+            versionNameSuffix "-mocknet"
+
+            missingDimensionStrategy "environment", "mainnet", "infuraTestnet"
+            dimension "environment"
+        }
+
+        infuraTestnet {
+            buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["testnetServerUrl"]
+
+            buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
+            buildConfigField "String", "ENVIRONMENT", "\"testnet\""
+
+            versionNameSuffix "-testnet"
+
+            missingDimensionStrategy "environment", "mainnet"
+            dimension "environment"
+        }
+
+        mainnet {
+            buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mainnetServerUrl"]
+
+            buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
+            buildConfigField "String", "ENVIRONMENT", "\"mainnet\""
+
+            versionNameSuffix "-mainnet"
+
+            dimension "environment"
+        }
+
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    publishNonDefault true
+
+}
+
+androidExtensions {
+    experimental = true
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+kapt {
+    useBuildCache = true
+}
+
+realm {
+    kotlinExtensionsEnabled = true
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Android Multidex for apps with more than 65,536 methods
+    api 'com.android.support:multidex:1.0.3'
+
+    // Android Native Libraries
+    api gradle.support
+    api gradle.appcompat
+    api gradle.cardview
+    api gradle.constraint
+    api gradle.customtabs
+    api gradle.design
+    api gradle.recyclerview
+    api gradle.vectorDrawable
+    api gradle.preference
+
+    // Architecture Components
+    api gradle.lifecycleCommon
+    api gradle.lifecycleExtensions
+    api gradle.lifecycleRuntime
+    kapt gradle.lifecycleCompiler
+
+    // Blockchain Dependencies
+    api gradle.web3j
+
+    // Dagger Dependency Injection
+    implementation gradle.dagger
+    kapt gradle.daggerProcessor
+    kapt gradle.daggerCompiler
+
+    // Firebase
+    api gradle.firebaseCore
+    api gradle.firebaseAppindexing
+    api gradle.firebaseCrash
+    api gradle.firebaseInvites
+    api gradle.firebasePerf
+
+    // Glide Dependencies
+    api gradle.glide
+    api gradle.glideOkhttp
+    kapt gradle.glideCompiler
+
+    // Kotlin
+    api gradle.kotlin
+    api gradle.kotlinReflect
+    api gradle.kotlinCoroutines
+    api gradle.kotlinKtx
+
+    // QR Code Scanner
+    api gradle.googleVision
+    api gradle.qrCodeGeneration
+
+    // Realm
+    api gradle.realmAdapters
+    api gradle.realmUserstore
+
+    // Retrofit
+    api gradle.retrofit
+    api gradle.retrofitGson
+    api gradle.retrofitCoroutines
+
+    /*
+     * TESTING DEPENDENCIES
+     */
+
+    // Unit Testing
+    testImplementation gradle.junit
+    testImplementation gradle.mockito
+    kaptTest gradle.daggerCompiler
+
+    // Android Testing and Integration Tests
+    androidTestImplementation gradle.junit
+    androidTestImplementation gradle.mockito
+    androidTestImplementation gradle.rules
+    androidTestImplementation gradle.runner
+    androidTestImplementation gradle.espressoContrib
+    androidTestImplementation gradle.espressoCore
+    androidTestImplementation gradle.espressoIntents
+    kaptAndroidTest gradle.daggerCompiler
+}
+repositories {
+    mavenCentral()
+}

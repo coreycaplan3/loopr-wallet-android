@@ -1,0 +1,46 @@
+package org.loopring.looprwallet.activities
+
+import android.content.Intent
+import org.loopring.looprwallet.R
+import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.home.activities.MainActivity
+import org.loopring.looprwallet.walletsignin.activities.SignInActivity
+
+/**
+ * Created by Corey Caplan on 2/1/18.
+ *
+ * Project: loopr-wallet-android
+ *
+ * Purpose of Class:
+ *
+ */
+class SplashScreenActivity : BaseActivity() {
+
+    override val contentViewRes: Int
+        get() = R.layout.activity_splash
+
+    override val activityContainerId: Int
+        get() = R.id.activityContainer
+
+    override val isSecureActivity: Boolean
+        get() = false
+
+    override fun onResume() {
+        super.onResume()
+
+        if (walletClient.isAndroidKeystoreUnlocked()) {
+            val intent = if (walletClient.getCurrentWallet() == null) {
+                Intent(this, SignInActivity::class.java)
+            } else {
+                Intent(this, MainActivity::class.java)
+                        .putExtra("AddFragment", true)
+            }
+
+            startActivity(intent)
+            finish()
+        } else {
+            walletClient.unlockAndroidKeystore()
+        }
+    }
+
+}

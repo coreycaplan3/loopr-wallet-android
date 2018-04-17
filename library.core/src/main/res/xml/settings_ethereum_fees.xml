@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/gas_price">
+
+        <Preference
+            android:selectable="false"
+            android:summary="@string/explain_gas_price" />
+
+        <!--suppress AndroidElementNotAllowed -->
+        <android.support.v7.preference.SeekBarPreference
+            android:defaultValue="@integer/settings_ethereum_fees_gas_price_default_value"
+            android:key="@string/settings_ethereum_fees_gas_price_key"
+            android:max="50"
+            android:min="1"
+            app:seekBarIncrement="1"
+            android:summary="Fast"
+            android:title="@string/default_transaction_gas_price"
+            tools:targetApi="o" />
+
+    </PreferenceCategory>
+
+    <!-- Gas Limits -->
+
+    <PreferenceCategory android:title="@string/gas_limits">
+
+        <Preference
+            android:selectable="false"
+            android:summary="@string/explain_gas_limit" />
+
+        <EditTextPreference
+            android:defaultValue="@string/settings_ethereum_fees_default_send_ether_gas_limit_value"
+            android:inputType="number"
+            android:key="@string/settings_ethereum_fees_send_ether_gas_limit_key"
+            android:summary="@string/settings_ethereum_fees_default_send_ether_gas_limit_value"
+            android:title="@string/ether_transfer_default_gas_limit" />
+
+        <EditTextPreference
+            android:defaultValue="@string/settings_ethereum_fees_default_send_token_gas_limit_value"
+            android:inputType="number"
+            android:key="@string/settings_ethereum_fees_send_token_gas_limit_key"
+            android:summary="@string/settings_ethereum_fees_default_send_token_gas_limit_value"
+            android:title="@string/token_transfer_default_gas_limit" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

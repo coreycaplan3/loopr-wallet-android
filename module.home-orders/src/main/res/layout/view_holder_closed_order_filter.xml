@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingBottom="@dimen/standard_vertical_padding"
+    android:paddingLeft="@dimen/horizontal_padding_small"
+    android:paddingRight="@dimen/horizontal_padding_small"
+    android:paddingTop="@dimen/standard_vertical_padding">
+
+    <Button
+        android:id="@+id/orderClosedDate1hButton"
+        style="@style/App.Button.Borderless"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:text="@string/_1h" />
+
+    <Button
+        android:id="@+id/orderClosedDate1dButton"
+        style="@style/App.Button.Borderless"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:text="@string/_1d" />
+
+    <Button
+        android:id="@+id/orderClosedDate1wButton"
+        style="@style/App.Button.Borderless"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:text="@string/_1w" />
+
+    <Button
+        android:id="@+id/orderClosedDate1mButton"
+        style="@style/App.Button.Borderless"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:text="@string/_1m" />
+
+    <Button
+        android:id="@+id/orderClosedDate1yButton"
+        style="@style/App.Button.Borderless"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:text="@string/_1y" />
+
+    <Button
+        android:id="@+id/orderClosedDateAllButton"
+        style="@style/App.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:text="@string/all" />
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="empty_general_open_orders">You have no open orders. Go make some trades to get started!</string>
+    <string name="empty_general_filled_orders">You have no filled orders. Go make some trades to fill up this screen!</string>
+    <string name="empty_general_cancelled_orders">You have no cancelled orders. Any orders that expire or you cancel will show here</string>
+
+    <string name="_1h">1H</string>
+    <string name="_1d">1D</string>
+    <string name="_1w">1W</string>
+    <string name="_1m">1M</string>
+    <string name="_1y">1Y</string>
+
+    <array name="filter_order_dates">
+        <item>@string/all</item>
+        <item>@string/_1h</item>
+        <item>@string/_1d</item>
+        <item>@string/_1w</item>
+        <item>@string/_1m</item>
+        <item>@string/_1y</item>
+    </array>
+
+    <string name="filter_all">All</string>
+    <string name="filter_order_open">ORDER_OPENED</string>
+    <string name="filter_order_filled">ORDER_FINISHED</string>
+    <string name="filter_order_expired">ORDER_CUTOFF</string>
+    <string name="filter_order_cancelled">ORDER_CANCEL</string>
+
+    <string name="filled">Filled</string>
+    <string name="cancelled">Cancelled</string>
+
+    <array name="filter_order_open_statuses_ui">
+        <item>@string/filter_all</item>
+        <item>New</item>
+        <item>Partially Filled</item>
+    </array>
+
+    <array name="filter_order_open_statuses_values">
+        <item>@string/filter_order_open</item>
+        <item>ORDER_NEW</item>
+        <item>ORDER_PARTIAL</item>
+    </array>
+
+</resources>

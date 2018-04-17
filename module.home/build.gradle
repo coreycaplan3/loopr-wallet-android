@@ -1,0 +1,33 @@
+apply from: "../standard-library.gradle"
+
+dependencies {
+    implementation project(':library.core')
+    implementation project(path: ':module.home-markets')
+    implementation project(path: ':module.home-orders')
+    implementation project(path: ':module.home-transfers')
+    implementation project(path: ':module.home-my-wallet')
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation gradle.dagger
+    kapt gradle.daggerProcessor
+    kapt gradle.daggerCompiler
+
+    // Unit Testing
+    testImplementation gradle.junit
+    testImplementation gradle.mockito
+    kaptTest gradle.daggerCompiler
+
+    // Android Testing and Integration Tests
+    androidTestImplementation gradle.junit
+    androidTestImplementation gradle.mockito
+    androidTestImplementation gradle.rules
+    androidTestImplementation gradle.runner
+    androidTestImplementation gradle.espressoContrib
+    androidTestImplementation gradle.espressoCore
+    androidTestImplementation gradle.espressoIntents
+    kaptAndroidTest gradle.daggerCompiler
+}
+repositories {
+    mavenCentral()
+}

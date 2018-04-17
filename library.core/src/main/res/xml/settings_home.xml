@@ -1,0 +1,74 @@
+<!-- This is the "home" page for user settings -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/general">
+
+        <ListPreference
+            android:defaultValue="@string/settings_theme_dark"
+            android:entries="@array/settings_theme_array_entries_ui"
+            android:entryValues="@array/settings_theme_array_entries_values"
+            android:icon="@drawable/ic_palette_white_24dp"
+            android:key="@string/settings_theme_key"
+            android:summary="@string/settings_theme_dark_ui"
+            android:title="Current Theme" />
+
+        <Preference
+            android:icon="@drawable/ic_lock_outline_white_24dp"
+            android:key="@string/settings_security_screen_key"
+            android:summary="@string/summary_security_screen"
+            android:title="@string/security" />
+
+        <Preference android:layout="@layout/divider" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/fee_settings">
+
+        <Preference
+            android:icon="@drawable/ic_local_gas_station_white_24dp"
+            android:key="@string/settings_ethereum_fees_screen_key"
+            android:summary="@string/summary_ethereum_fees_screen"
+            android:title="@string/ethereum_fees" />
+
+        <Preference
+            android:icon="@drawable/ic_lrc_white_24dp"
+            android:key="@string/settings_loopring_fees_screen_key"
+            android:summary="@string/summary_loopring_trading_fees"
+            android:title="@string/trading_fees" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/wallet_settings">
+
+        <Preference
+            android:icon="@drawable/ic_account_balance_wallet_white_24dp"
+            android:key="@string/settings_general_wallet_screen_key"
+            android:summary="@string/summary_general_wallet_settings"
+            android:title="@string/wallet_customizations" />
+
+        <Preference
+            android:icon="@drawable/ic_attach_money_white_24dp"
+            android:key="@string/settings_currency_screen_key"
+            android:summary="@string/summary_currency_settings"
+            android:title="@string/currency_defaults" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Network Settings">
+
+        <Preference
+            android:icon="@drawable/ic_eth_white_24dp"
+            android:key="@string/settings_ethereum_network_screen_key"
+            android:summary="@string/summary_ethereum_network"
+            android:title="@string/ethereum_network" />
+
+        <Preference
+            android:icon="@drawable/ic_loopring_white_24dp"
+            android:key="@string/settings_loopring_network_screen_key"
+            android:summary="@string/summary_loopring_network"
+            android:title="@string/loopring_network" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

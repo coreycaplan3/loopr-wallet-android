@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activityContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:orientation="vertical">
+
+    <org.loopring.looprwallet.barcode.views.barcode.CameraSourcePreview
+        android:id="@+id/cameraSourcePreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <org.loopring.looprwallet.barcode.views.barcode.GraphicOverlay
+            android:id="@+id/graphicOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </org.loopring.looprwallet.barcode.views.barcode.CameraSourcePreview>
+
+</LinearLayout>

@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.loopring.looprwallet.barcode">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application>
+
+        <activity android:name=".activities.BarcodeCaptureActivity" />
+
+    </application>
+
+</manifest>

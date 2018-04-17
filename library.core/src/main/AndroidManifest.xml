@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.loopring.looprwallet.core">
+
+    <application android:name=".application.CoreLooprWalletApp">
+
+        <activity android:name=".activities.CoreTestActivity" />
+
+    </application>
+
+</manifest>

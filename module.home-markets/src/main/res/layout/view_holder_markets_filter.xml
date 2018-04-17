@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:padding="@dimen/standard_padding">
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/marketsSortBySpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:spinnerMode="dialog" />
+
+    <Button
+        android:id="@+id/marketsDateFilter1dButton"
+        style="@style/App.Button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:text="@string/_1d" />
+
+</RelativeLayout>

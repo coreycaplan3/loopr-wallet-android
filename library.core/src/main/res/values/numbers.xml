@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- System Misc. -->
+    <integer name="ripple_duration">0</integer>
+
+    <!-- Animations -->
+    <integer name="animation_duration">300</integer>
+    <integer name="animation_duration_short">100</integer>
+    <integer name="animation_duration_extra_short">50</integer>
+    <integer name="animation_duration_long">600</integer>
+
+    <integer name="fragment_transition_duration">200</integer>
+    <integer name="fab_transition_duration">100</integer>
+
+    <!-- Wallet -->
+    <integer name="name_max_length">255</integer>
+    <integer name="public_key_length">42</integer>
+    <integer name="private_key_length">64</integer>
+
+</resources>

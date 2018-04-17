@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/fragment_create_transfer_amount">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/verticalGuideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/verticalGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/verticalGuideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="1" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontalGuideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontalGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontalGuideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontalGuideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="1" />
+
+    <include layout="@layout/divider" />
+
+    <Button
+        android:id="@+id/numberPadDecimal"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/decimal"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline3" />
+
+    <Button
+        android:id="@+id/numberPadZero"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_0"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"
+        app:layout_constraintLeft_toRightOf="@id/verticalGuideline1"
+        app:layout_constraintRight_toLeftOf="@id/verticalGuideline2"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline3" />
+
+    <ImageButton
+        android:id="@+id/numberPadBackspace"
+        style="@style/App.Button.NumberPad"
+        android:src="@drawable/ic_keyboard_backspace_white_24dp"
+        android:tint="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"
+        app:layout_constraintEnd_toStartOf="@id/verticalGuideline3"
+        app:layout_constraintStart_toEndOf="@id/verticalGuideline2"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline3"
+        tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/numberPadOne"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_1"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline2" />
+
+    <Button
+        android:id="@+id/numberPadTwo"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_2"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"
+        app:layout_constraintLeft_toRightOf="@id/verticalGuideline1"
+        app:layout_constraintRight_toLeftOf="@id/verticalGuideline2"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline2" />
+
+    <Button
+        android:id="@+id/numberPadThree"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_3"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline3"
+        app:layout_constraintEnd_toStartOf="@id/verticalGuideline3"
+        app:layout_constraintStart_toEndOf="@id/verticalGuideline2"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline2" />
+
+    <Button
+        android:id="@+id/numberPadFour"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_4"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline1" />
+
+    <Button
+        android:id="@+id/numberPadFive"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_5"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2"
+        app:layout_constraintLeft_toRightOf="@id/verticalGuideline1"
+        app:layout_constraintRight_toLeftOf="@id/verticalGuideline2"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline1" />
+
+    <Button
+        android:id="@+id/numberPadSix"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_6"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline2"
+        app:layout_constraintEnd_toStartOf="@id/verticalGuideline3"
+        app:layout_constraintStart_toEndOf="@id/verticalGuideline2"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline1" />
+
+    <Button
+        android:id="@+id/numberPadSeven"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_7"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/numberPadEight"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_8"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"
+        app:layout_constraintLeft_toRightOf="@id/verticalGuideline1"
+        app:layout_constraintRight_toLeftOf="@id/verticalGuideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/numberPadNine"
+        style="@style/App.Button.NumberPad"
+        android:text="@string/_9"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline1"
+        app:layout_constraintEnd_toStartOf="@id/verticalGuideline3"
+        app:layout_constraintStart_toEndOf="@id/verticalGuideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

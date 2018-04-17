@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="content_description_copy_address">Allows you to copy your address to the clipboard</string>
+    <string name="content_description_share_address">Share your address</string>
+    <string name="content_description_reveal_private_key">Temporarily Reveal your Private Key</string>
+    <string name="content_description_download_keystore">Download the keystore file for backup</string>
+    <string name="content_description_send_ether_or_tokens">Send Ether or tokens to another address</string>
+    <string name="content_description_trading_pair_image">The logo for this cryptocurrency</string>
+    <string name="content_description_send_swap">Swaps the input to be in terms of tokens instead of currency</string>
+    <string name="content_description_qrcode_scanner">Scan the recipient\'s address via barcode</string>
+    <string name="content_description_receive">You have received a token or Ether</string>
+    <string name="content_description_app_icon">The application\'s logo</string>
+    <string name="content_description_pin_circle">A circle which represents your PIN being inputted</string>
+    <string name="content_description_bottom_navigation_image">A tab that allows you to navigate to different parts of the application</string>
+    <string name="content_description_password_toggle">Press to show or hide your password</string>
+    <string name="content_description_reorder_mnemonic_phrase">Reorder the word to a different position</string>
+    <string name="content_description_keystore">Provides a helpful description of what a keystore is</string>
+    <string name="content_description_phrase">Provides a helpful description of what a phrase is</string>
+    <string name="content_description_navigation_icon">This button allows you to navigate back to the most recent screen you were on</string>
+    <string name="content_description_add_contact">Allows you to add this unknown address as a contact</string>
+    <string name="content_description_completed_order">An icon representing a completed trade</string>
+    <string name="content_description_no_connection">An icon that shows the device has no connection currently</string>
+
+</resources>

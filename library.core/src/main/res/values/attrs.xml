@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Background Colors -->
+    <attr name="colorBackground" format="color" />
+    <attr name="circleBackgroundColor" format="color" />
+
+    <!-- Button Styles -->
+    <attr name="borderlessButtonColor" format="color" />
+
+    <!-- Divider Colors -->
+    <attr name="dividerColor" format="color" />
+
+    <!-- Text Colors -->
+    <attr name="textColorDisabled" format="color" />
+</resources>

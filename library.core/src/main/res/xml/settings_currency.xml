@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="@string/settings_currency_currencies_entries_values_default"
+        android:entries="@array/settings_currency_currencies_entries_values"
+        android:entryValues="@array/settings_currency_currencies_entries_values"
+        android:key="@string/settings_currency_current_fiat_key"
+        android:summary="@string/settings_currency_currencies_entries_values_default"
+        android:title="Default Native Currency" />
+
+    <ListPreference
+        android:defaultValue="@string/settings_currency_refresh_frequency_default_value"
+        android:enabled="false"
+        android:entries="@array/settings_currency_refresh_frequency_entries_ui"
+        android:entryValues="@array/settings_currency_refresh_frequency_entries_values"
+        android:key="@string/settings_currency_refresh_frequency_key"
+        android:summary="@string/settings_currency_refresh_frequency_ui_default_value"
+        android:title="@string/refresh_frequency_of_exchange_rates" />
+
+</PreferenceScreen>
