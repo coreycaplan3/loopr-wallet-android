@@ -146,7 +146,7 @@ class WalletGeneratorViewModel : ViewModel() {
                     return@createWalletAsync delegate.createWalletAndBlock()
                 }
                 false -> {
-                    loge("Could not rename generated currentWallet file in filesDirectory!", IllegalStateException())
+                    loge("Could not rename generated wallet file in filesDirectory!", IllegalStateException())
                     return@createWalletAsync WalletCreationResult(false, str(R.string.error_creating_wallet))
                 }
             }
@@ -170,7 +170,7 @@ class WalletGeneratorViewModel : ViewModel() {
             if (e is CipherException) {
                 WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
             } else {
-                loge("Error decrypting currentWallet!", e)
+                loge("Error decrypting wallet", e)
                 WalletCreationResult(false, str(R.string.error_unknown))
             }
         }
@@ -195,7 +195,7 @@ class WalletGeneratorViewModel : ViewModel() {
                 walletCreation.postValue(WalletCreationResult(true, null))
                 walletPhraseGeneration.postValue(WalletCreationPhrase(walletName, password, phraseList))
             } catch (e: Exception) {
-                loge("Could not factory phrase: ", e)
+                loge("Could not create phrase: ", e)
                 val error = str(R.string.error_creating_wallet)
                 walletCreation.postValue(WalletCreationResult(false, error))
             }
@@ -225,11 +225,12 @@ class WalletGeneratorViewModel : ViewModel() {
             val delegate = WalletCreationDelegate(walletName, credentials, null, phrase.toTypedArray(), walletClient)
             return@createWalletAsync delegate.createWalletAndBlock()
         } catch (e: Exception) {
-            if (e is CipherException) {
-                WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
-            } else {
-                loge("Error decrypting currentWallet!", e)
-                WalletCreationResult(false, str(R.string.error_unknown))
+            return@createWalletAsync when (e) {
+                is CipherException -> WalletCreationResult(false, str(getErrorMessageFromKeystoreError(e)))
+                else -> {
+                    loge("Error decrypting wallet", e)
+                    WalletCreationResult(false, str(R.string.error_unknown))
+                }
             }
         }
     }
@@ -240,13 +241,11 @@ class WalletGeneratorViewModel : ViewModel() {
      * Creates or restores a wallet async (non-blocking) and calls
      * @param block A function that takes no parameters and returns a [WalletCreationResult]
      */
-    private fun createWalletAsync(block: () -> WalletCreationResult) {
-        async {
-            isCreationRunning.postValue(true)
-            val walletCreationResult = block.invoke()
-            isCreationRunning.postValue(false)
-            walletCreation.postValue(walletCreationResult)
-        }
+    private inline fun createWalletAsync(crossinline block: () -> WalletCreationResult) = async {
+        isCreationRunning.postValue(true)
+        val walletCreationResult = block.invoke()
+        isCreationRunning.postValue(false)
+        walletCreation.postValue(walletCreationResult)
     }
 
     /**

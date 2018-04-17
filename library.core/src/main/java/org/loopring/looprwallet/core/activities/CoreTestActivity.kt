@@ -71,7 +71,7 @@ open class CoreTestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecur
     var isSecurityConfirmed = false
         private set
 
-    override fun onSecurityConfirmed() {
+    override fun onSecurityConfirmed(parameter: Int) {
         isSecurityConfirmed = true
     }
 

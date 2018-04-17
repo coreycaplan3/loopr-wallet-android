@@ -20,7 +20,7 @@
 
             <include layout="@layout/card_account_balances" />
 
-            <include layout="@layout/card_transfer_and_contacts" />
+            <include layout="@layout/card_contacts" />
 
         </LinearLayout>
 

@@ -12,8 +12,9 @@ package org.loopring.looprwallet.core.extensions
 
 fun <T> Pair<T?, T?>.isBothNonNull() = this.first != null && this.second != null
 
-inline fun <T> T.guard(block: () -> Unit) {
+inline fun <T> T.guard(block: () -> Unit): T? {
     if (this == null) block()
+    return this
 }
 
 /**
@@ -23,6 +24,15 @@ inline fun <T> T.guard(block: () -> Unit) {
  */
 inline fun <T> T?.ifNull(block: () -> Unit) {
     if (this == null) block()
+}
+
+/**
+ * Runs a given [block] if [T] is null.
+ *
+ * @param block The code to run if [T] is null
+ */
+inline fun <T> T?.ifNotNull(block: (T) -> Unit) {
+    if (this != null) block(this)
 }
 
 /**

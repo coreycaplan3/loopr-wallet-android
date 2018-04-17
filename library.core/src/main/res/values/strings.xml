@@ -37,7 +37,7 @@
     <string name="unlock_to_reveal_private_key">Unlock to Reveal Private Key</string>
     <string name="reveal_private_key">Reveal Private Key</string>
     <string name="account_balances">Account Balances</string>
-    <string name="view_all_tokens">View All Tokens</string>
+    <string name="view_all_balances">View All Balances</string>
     <string name="ellipsis">.....</string>
     <string name="letter_b">B</string>
     <string name="letter_s">S</string>
@@ -70,7 +70,7 @@
     <string name="_continue">Continue</string>
     <string name="number_of"># of</string>
     <string name="contact_name">Contact Name</string>
-    <string name="contacts_and_transfers"><![CDATA[Contacts & Transfers]]></string>
+    <string name="contacts">Contacts</string>
     <string name="show_transfers">Show Transfers</string>
     <string name="start_a_transfer">Start a Transfer</string>
     <string name="date">Date</string>
@@ -271,4 +271,9 @@
     <string name="toggle_currency">Toggle Currency</string>
     <string name="view_your_passphrase">View your passphrase</string>
     <string name="copy_keystore_content">Copy your keystore content</string>
+    <string name="view_all_contacts">View All Contacts</string>
+    <string name="formatter_keystore">%s - Keystore</string>
+    <string name="share_keystore_via">Share Keystore Via</string>
+    <string name="your_passphrase">Your Passphrase</string>
+    <string name="formatter_your_12_words_are">Your 12 words are:\n%s</string>
 </resources>

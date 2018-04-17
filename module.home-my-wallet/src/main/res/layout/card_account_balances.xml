@@ -38,39 +38,11 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/firstTokenBalance"
+                    android:id="@+id/tokenBalance"
                     style="@style/Base.TextAppearance.AppCompat.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="@string/default_lrc_quantity" />
-
-                <TextView
-                    android:id="@+id/secondTokenBalance"
-                    style="@style/Base.TextAppearance.AppCompat.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="@string/default_snov_balance" />
-
-                <TextView
-                    android:id="@+id/thirdTokenBalance"
-                    style="@style/Base.TextAppearance.AppCompat.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="@string/default_itc_balance" />
-
-                <TextView
-                    android:id="@+id/fourthTokenBalance"
-                    style="@style/Base.TextAppearance.AppCompat.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="@string/default_omg_balance" />
-
-                <TextView
-                    android:id="@+id/fifthTokenBalance"
-                    style="@style/Base.TextAppearance.AppCompat.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="@string/default_eos_balance" />
 
                 <TextView
                     android:id="@+id/ellipsisText"
@@ -91,18 +63,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/myWalletSendButton"
-                style="@style/App.Button.CardAction"
-                android:contentDescription="@string/content_description_send_ether_or_tokens"
-                android:src="@drawable/ic_send_white_24dp" />
-
             <Button
                 android:id="@+id/myWalletShowTokensButton"
                 style="@style/App.Button.CardAction"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/card_action_icon_size"
-                android:text="@string/view_all_tokens"
+                android:text="@string/view_all_balances"
                 android:textColor="?attr/colorPrimary" />
 
         </LinearLayout>

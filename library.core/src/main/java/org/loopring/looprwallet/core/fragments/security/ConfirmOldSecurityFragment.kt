@@ -39,7 +39,7 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
          * - Unlocking the app
          * - Viewing their private key
          */
-        fun onSecurityConfirmed()
+        fun onSecurityConfirmed(parameter: Int)
     }
 
     companion object {
@@ -77,17 +77,34 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
          */
         private const val TYPE_VIEWING_PRIVATE_KEY = 4
 
+        /**
+         * The user is requesting to view sensitive info.
+         */
+        private const val TYPE_VIEWING_SENSITIVE_INFORMATION = 5
+
+        /**
+         * Key value for saving the parameter that's passed into the below *Instance* functions.
+         */
+        private const val KEY_PARAMETER = "_PARAMETER"
+
         fun createDisableSecurityInstance() = createInstance(TYPE_DISABLE_SECURITY)
 
-        fun createChangeSecuritySettings() = createInstance(TYPE_CHANGE_SECURITY_SETTINGS)
+        fun createChangeSecuritySettingsInstance() = createInstance(TYPE_CHANGE_SECURITY_SETTINGS)
 
         fun createUnlockAppInstance() = createInstance(TYPE_UNLOCK_APP)
 
-        fun createViewPrivateKeyInstance() = createInstance(TYPE_VIEWING_PRIVATE_KEY)
+        fun createViewPrivateKeyInstance(parameter: Int) = createInstance(TYPE_VIEWING_PRIVATE_KEY, parameter)
 
-        private fun createInstance(type: Int) =
+        fun createViewWalletUnlockMechanismInstance(parameter: Int): ConfirmOldSecurityFragment {
+            return createInstance(TYPE_VIEWING_SENSITIVE_INFORMATION, parameter)
+        }
+
+        private fun createInstance(type: Int, parameter: Int = -1) =
                 ConfirmOldSecurityFragment().apply {
-                    arguments = bundleOf(KEY_CONFIRM_SECURITY_TYPE to type)
+                    arguments = bundleOf(
+                            KEY_CONFIRM_SECURITY_TYPE to type,
+                            KEY_PARAMETER to parameter
+                    )
                 }
     }
 
@@ -98,6 +115,9 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
 
     private val confirmationType: Int
         get() = arguments?.getInt(KEY_CONFIRM_SECURITY_TYPE)!!
+
+    private val parameter: Int
+        get() = arguments?.getInt(KEY_PARAMETER)!!
 
     var countDownTimer: CountDownTimer? = null
 
@@ -120,7 +140,7 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
     override fun onSubmitPin() {
         when {
             userPinSettings.checkIsPinCorrectAndIncrementAttemptsIfFailure(currentPin) -> {
-                (activity as? OnSecurityConfirmedListener)?.onSecurityConfirmed()
+                (activity as? OnSecurityConfirmedListener)?.onSecurityConfirmed(parameter)
             }
             userPinSettings.isUserLockedOut() ->
                 // By calling checkIsPinCorrectAndIncrementAttemptsIfFailure and reaching here, the
