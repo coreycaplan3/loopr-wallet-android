@@ -36,6 +36,8 @@ open class EthToken(
 
         @Index override var ticker: String = "ETH",
 
+        override var name: String = "Ethereum",
+
         totalSupply: String = "",
 
         override var decimalPlaces: Int = 18,
@@ -58,10 +60,11 @@ open class EthToken(
          *
          * This token is automatically added to the user's realm upon creation.
          */
-        val ETH = EthToken("ETH", "ETH")
+        val ETH = EthToken("ETH", "ETH", "Ethereum")
 
         val WETH = EthToken("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
                 "WETH",
+                "Wrapped Ether",
                 "167911966384029250753914",
                 18,
                 str(R.string.weth_binary)
@@ -70,6 +73,7 @@ open class EthToken(
         val LRC = EthToken(
                 "0xef68e7c694f40c8202821edf525de3782458639f",
                 "LRC",
+                "Loopring",
                 "13950760545238578922746031",
                 18,
                 str(R.string.lrc_binary)
@@ -79,6 +83,7 @@ open class EthToken(
         val APPC = EthToken(
                 "0x1a7a8bd9106f2b8d977e08582dc7d24c723ab0db",
                 "APPC",
+                "AppCoins",
                 "246203093000000000000000000",
                 18,
                 str(R.string.appc_binary)
@@ -87,6 +92,7 @@ open class EthToken(
         val REQ = EthToken(
                 "0x8f8221afbb33998d8584a2b05749ba73c37a938a",
                 "REQ",
+                "Request Network",
                 "999999999244592134526985951",
                 18,
                 str(R.string.req_binary)

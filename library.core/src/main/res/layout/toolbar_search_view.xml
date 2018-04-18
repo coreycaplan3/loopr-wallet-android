@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/ripple_effect_accent"
                 android:focusable="true"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"

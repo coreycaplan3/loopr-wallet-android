@@ -11,6 +11,7 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.homemywallet.R
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.card_account_balances.*
 import org.loopring.looprwallet.barcode.utilities.BarcodeUtility
 import org.loopring.looprwallet.core.extensions.*
@@ -18,7 +19,6 @@ import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragme
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.EthToken
-import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
@@ -163,11 +163,11 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
     // MARK - Private Methods
 
-    private fun onTokenBalancesChange(tokenBalances: List<CryptoToken>) {
+    private fun onTokenBalancesChange(tokenBalances: RealmResults<CryptoToken>) {
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
         tokenBalances.firstOrNull { it.identifier == EthToken.ETH.identifier }?.let {
-            val balance = it.findBalanceByAddress(address)?.balance?.toPlainString()
+            val balance = it.findAddressBalance(address)?.balance?.toPlainString()
             if (balance != null) {
                 @SuppressLint("SetTextI18n")
                 ethereumBalanceLabel.text = "$balance ${it.ticker}"
@@ -179,7 +179,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
         onlyTokenBalances.forEachIndexed { index, item ->
             if (index < 5) {
-                val balance = item.findBalanceByAddress(address)
+                val balance = item.findAddressBalance(address)
 
                 balance?.let {
                     builder.append(it.balance?.toPlainString())

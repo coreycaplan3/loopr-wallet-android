@@ -114,6 +114,7 @@ dependencies {
     implementation project(':module.home-orders')
     implementation project(':module.intro')
     implementation project(':module.trade-details')
+    implementation project(':module.view-balances')
     implementation project(':module.wallet-sign-in')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 

@@ -6,7 +6,7 @@
     <string name="content_description_reveal_private_key">Temporarily Reveal your Private Key</string>
     <string name="content_description_download_keystore">Download the keystore file for backup</string>
     <string name="content_description_send_ether_or_tokens">Send Ether or tokens to another address</string>
-    <string name="content_description_trading_pair_image">The logo for this cryptocurrency</string>
+    <string name="content_description_token_image">The logo for this token</string>
     <string name="content_description_send_swap">Swaps the input to be in terms of tokens instead of currency</string>
     <string name="content_description_qrcode_scanner">Scan the recipient\'s address via barcode</string>
     <string name="content_description_receive">You have received a token or Ether</string>
@@ -21,5 +21,6 @@
     <string name="content_description_add_contact">Allows you to add this unknown address as a contact</string>
     <string name="content_description_completed_order">An icon representing a completed trade</string>
     <string name="content_description_no_connection">An icon that shows the device has no connection currently</string>
+    <string name="content_description_unlock_trading">An image button for allowing or disallowing this token for trading</string>
 
 </resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="formatter_bal">Bal %s</string>
+    <string name="formatter_is_an_invalid_address">%s is an invalid address</string>
+    <string name="formatter_recipient">Recipient: %s</string>
+    <string name="formatter_current_ticker_price">Current %s Price: %s</string>
+    <string name="formatter_balance">Balance: %s</string>
+    <string name="formatter_automatically_lock_after_timeout">%s after exiting the app</string>
+    <string name="formatter_locked_out_minutes">You are locked out for %s more minutes</string>
+    <string name="formatter_locked_out_seconds">You are locked out for %s more seconds</string>
+    <string name="formatter_confirm_token_send">You are about to send %s tokens, which is worth about %s. Are you sure you want to send these tokens to %s?</string>
+    <string name="formatter_keystore">%s - Keystore</string>
+    <string name="formatter_your_12_words_are">Your 12 words are:\n%s</string>
+</resources>

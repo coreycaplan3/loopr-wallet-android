@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="?attr/cardBackgroundColor"
+    android:foreground="@drawable/ripple_effect_accent"
     android:paddingBottom="@dimen/vertical_padding_small"
     android:paddingLeft="@dimen/standard_horizontal_padding"
     android:paddingRight="@dimen/standard_horizontal_padding"
@@ -14,7 +15,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/content_description_trading_pair_image"
+        android:contentDescription="@string/content_description_token_image"
         tools:src="@drawable/loopring" />
 
     <TextView

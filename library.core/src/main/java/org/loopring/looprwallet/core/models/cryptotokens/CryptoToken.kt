@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.models.cryptotokens
 import org.loopring.looprwallet.core.models.TrackedRealmObject
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import io.realm.RealmList
+import io.realm.RealmModel
 import org.loopring.looprwallet.core.extensions.equalTo
 import java.math.BigDecimal
 
@@ -14,7 +15,12 @@ import java.math.BigDecimal
  * Purpose of Class:
  *
  */
-interface CryptoToken : TrackedRealmObject {
+interface CryptoToken : TrackedRealmObject, RealmModel {
+
+    /**
+     * The human-readable name of the token. For example, Loopring
+     */
+    val name: String
 
     /**
      * The identifier used to uniquely distinguish between different crypto. For example, on
@@ -76,7 +82,7 @@ interface CryptoToken : TrackedRealmObject {
     /**
      * Finds a given address's [TokenBalanceInfo] or null if it cannot be found
      */
-    fun findBalanceByAddress(address: String): TokenBalanceInfo? {
+    fun findAddressBalance(address: String): TokenBalanceInfo? {
         return this.tokenBalances.where()
                 .equalTo(TokenBalanceInfo::address, address)
                 .findFirst()

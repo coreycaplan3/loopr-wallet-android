@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:background="?attr/cardBackgroundColor">
+
+    <ImageView
+        android:id="@+id/tokenBalanceImage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:contentDescription="@string/content_description_token_image"
+        tools:src="@drawable/loopring" />
+
+    <TextView
+        android:id="@+id/tokenBalanceNameLabel"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/horizontal_margin_extra_small"
+        android:layout_marginLeft="@dimen/standard_horizontal_padding"
+        android:layout_marginRight="@dimen/horizontal_margin_extra_small"
+        android:layout_marginStart="@dimen/standard_horizontal_padding"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_toEndOf="@id/tokenBalanceImage"
+        android:layout_toLeftOf="@id/tokenBalanceUnlockButton"
+        android:layout_toRightOf="@id/tokenBalanceImage"
+        android:layout_toStartOf="@id/tokenBalanceUnlockButton"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textSize="@dimen/list_primary_text_size"
+        tools:text="Loopring" />
+
+    <TextView
+        android:id="@+id/tokenBalanceTickerLabel"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tokenBalanceNameLabel"
+        android:layout_marginEnd="@dimen/horizontal_margin_extra_small"
+        android:layout_marginLeft="@dimen/standard_horizontal_padding"
+        android:layout_marginRight="@dimen/horizontal_margin_extra_small"
+        android:layout_marginStart="@dimen/standard_horizontal_padding"
+        android:layout_marginTop="@dimen/vertical_margin_extra_small"
+        android:layout_toEndOf="@id/tokenBalanceImage"
+        android:layout_toLeftOf="@id/tokenBalanceUnlockButton"
+        android:layout_toRightOf="@id/tokenBalanceImage"
+        android:layout_toStartOf="@id/tokenBalanceUnlockButton"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textSize="@dimen/list_secondary_text_size"
+        tools:text="LRC" />
+
+    <TextView
+        android:id="@+id/tokenBalanceLabel"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tokenBalanceTickerLabel"
+        android:layout_marginEnd="@dimen/horizontal_margin_extra_small"
+        android:layout_marginLeft="@dimen/standard_horizontal_padding"
+        android:layout_marginRight="@dimen/horizontal_margin_extra_small"
+        android:layout_marginStart="@dimen/standard_horizontal_padding"
+        android:layout_toEndOf="@id/tokenBalanceImage"
+        android:layout_toLeftOf="@id/tokenBalanceUnlockButton"
+        android:layout_toRightOf="@id/tokenBalanceImage"
+        android:layout_toStartOf="@id/tokenBalanceUnlockButton"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textSize="@dimen/list_secondary_text_size"
+        tools:text="Bal 103,204.4829394034" />
+
+    <ImageButton
+        android:id="@+id/tokenBalanceUnlockButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/horizontal_margin"
+        android:layout_marginRight="@dimen/horizontal_margin"
+        android:background="@drawable/ripple_effect_accent"
+        android:contentDescription="@string/content_description_unlock_trading"
+        android:src="@drawable/ic_lock_open_white_24dp" />
+
+    <include
+        layout="@layout/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/tokenBalanceImage"
+        android:layout_toRightOf="@id/tokenBalanceImage" />
+
+</RelativeLayout>

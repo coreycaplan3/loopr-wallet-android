@@ -50,7 +50,6 @@
     <string name="today_low">Today\'s Low</string>
     <string name="today_high">Today\'s High</string>
     <string name="qr_code_scanner_instructions">Tap to capture. Pinch to zoom</string>
-    <string name="formatter_is_an_invalid_address">%s is an invalid address</string>
     <string name="error_starting_camera">There was an error starting the camera</string>
     <string name="_7">7</string>
     <string name="_8">8</string>
@@ -167,7 +166,6 @@
     <string name="search">Search</string>
     <string name="empty_state_no_contacts">No contacts found</string>
     <string name="unknown">Unknown</string>
-    <string name="formatter_recipient">Recipient: %s</string>
     <string name="create_contact">Create Contact</string>
     <string name="default_current_eth_price">Current ETH Price: $760.43</string>
     <string name="default_token_balance">Balance: 100 ETH</string>
@@ -182,9 +180,7 @@
     <string name="reload">Reload</string>
     <string name="loading_price">Loading price…</string>
     <string name="error_loading_price">Unable to load price</string>
-    <string name="formatter_current_ticker_price">Current %s Price: %s</string>
     <string name="error_send_tokens_with_zero_balance">You may only send tokens that do not have a 0 balance</string>
-    <string name="formatter_balance">Balance: %s</string>
     <string name="error_retrieve_eth_balance">There was an error getting your ETH balance</string>
     <string name="error_retrieve_token_balance">There was an error getting your token\'s balance</string>
     <string name="retry">retry</string>
@@ -214,7 +210,6 @@
     <string name="summary_general_wallet_settings">Hide low balance tokens and customize other in-app experiences</string>
     <string name="wallet_customizations">Wallet Customizations</string>
     <string name="automatically_lock">Automatically lock</string>
-    <string name="formatter_automatically_lock_after_timeout">%s after exiting the app</string>
     <string name="enter_new_pin">Enter a New PIN</string>
     <string name="disabled_application_lock">This setting is disabled unless you turn on an application lock</string>
     <string name="enter_a_new_pin">Enter a new PIN</string>
@@ -225,8 +220,6 @@
     <string name="enter_old_pin_create_new_one">Enter your old PIN to create a new one</string>
     <string name="enter_old_pin_disable_security">Enter your old PIN to disable security settings</string>
     <string name="enter_pin_view_private_key">Enter your PIN to view your private key</string>
-    <string name="formatter_locked_out_minutes">You are locked out for %s more minutes</string>
-    <string name="formatter_locked_out_seconds">You are locked out for %s more seconds</string>
     <string name="gas_limits">Gas Limits</string>
     <string name="gas_price">Gas Price</string>
     <string name="ether_transfer_default_gas_limit">Ether Transfer Default Gas Limit</string>
@@ -260,7 +253,6 @@
     <string name="cannot_send_more_eth_than_balance_and_gas">You cannot send more ETH than your balance minus gas</string>
     <string name="explain_application_lock">An application lock protects the assets on your device by adding a lock screen before opening this app, or when you want to view your private key.</string>
     <string name="question_send_tokens">Send Tokens?</string>
-    <string name="formatter_confirm_token_send">You are about to send %s tokens, which is worth about %s. Are you sure you want to send these tokens to %s?</string>
     <string name="sending">Sending…</string>
     <string name="cancel_all">Cancel All</string>
     <string name="filled_amount">Filled/Amount</string>
@@ -271,10 +263,8 @@
     <string name="view_your_passphrase">View your passphrase</string>
     <string name="copy_keystore_content">Copy your keystore content</string>
     <string name="view_all_contacts">View All Contacts</string>
-    <string name="formatter_keystore">%s - Keystore</string>
     <string name="share_keystore_via">Share Keystore Via</string>
     <string name="your_phrase">Your Phrase</string>
-    <string name="formatter_your_12_words_are">Your 12 words are:\n%s</string>
     <string name="content_description_barcode">A barcode that can be scanned</string>
     <string name="error_creating_qr_code">There was an error creating the QR code</string>
     <string name="warning">Warning</string>

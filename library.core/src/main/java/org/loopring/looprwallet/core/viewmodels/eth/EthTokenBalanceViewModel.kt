@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.viewmodels.eth
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.Realm
+import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
@@ -32,12 +33,13 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<List<EthToken>, String>()
 
     fun getEthBalanceNow() = repository.getEthNow()
 
+    @Suppress("UNCHECKED_CAST")
     fun getAllTokensWithBalances(
             owner: LifecycleOwner,
             address: String,
-            onChange: (List<CryptoToken>) -> Unit
+            onChange: (RealmResults<CryptoToken>) -> Unit
     ) {
-        initializeData(owner, address, onChange)
+        initializeData(owner, address, onChange as (List<CryptoToken>) -> Unit)
     }
 
     override fun getLiveDataFromRepository(parameter: String): LiveData<List<EthToken>> {
