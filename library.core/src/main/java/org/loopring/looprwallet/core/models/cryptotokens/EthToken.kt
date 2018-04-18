@@ -6,6 +6,7 @@ import io.realm.annotations.Ignore
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import java.math.BigDecimal
 import java.util.*

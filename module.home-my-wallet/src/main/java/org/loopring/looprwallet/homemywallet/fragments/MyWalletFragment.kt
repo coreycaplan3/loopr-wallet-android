@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.homemywallet.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.widget.TooltipCompat
 import android.view.View
@@ -165,14 +166,20 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     private fun onTokenBalancesChange(tokenBalances: List<CryptoToken>) {
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
+        tokenBalances.firstOrNull { it.identifier == EthToken.ETH.identifier }?.let {
+            val balance = it.findBalanceByAddress(address)?.balance?.toPlainString()
+            if (balance != null) {
+                @SuppressLint("SetTextI18n")
+                ethereumBalanceLabel.text = "$balance ${it.ticker}"
+            }
+        }
+
         val builder = StringBuilder()
         val onlyTokenBalances = tokenBalances.filter { it.identifier != EthToken.ETH.identifier }
 
         onlyTokenBalances.forEachIndexed { index, item ->
             if (index < 5) {
-                val balance = item.tokenBalances.where()
-                        .equalTo(TokenBalanceInfo::address, address)
-                        .findFirst()
+                val balance = item.findBalanceByAddress(address)
 
                 balance?.let {
                     builder.append(it.balance?.toPlainString())

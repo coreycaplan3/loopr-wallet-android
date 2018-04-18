@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.models.cryptotokens
 import org.loopring.looprwallet.core.models.TrackedRealmObject
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import io.realm.RealmList
+import org.loopring.looprwallet.core.extensions.equalTo
 import java.math.BigDecimal
 
 /**
@@ -70,6 +71,15 @@ interface CryptoToken : TrackedRealmObject {
         val format = currencySettings.getNumberFormatter()
         val supply = (totalSupply.setScale(decimalPlaces)) / (BigDecimal(10).pow(decimalPlaces))
         return format.format(supply)
+    }
+
+    /**
+     * Finds a given address's [TokenBalanceInfo] or null if it cannot be found
+     */
+    fun findBalanceByAddress(address: String): TokenBalanceInfo? {
+        return this.tokenBalances.where()
+                .equalTo(TokenBalanceInfo::address, address)
+                .findFirst()
     }
 
 }
