@@ -10,10 +10,22 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.homemywallet.R
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import kotlinx.android.synthetic.main.card_account_balances.*
+import org.loopring.looprwallet.barcode.utilities.BarcodeUtility
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
+import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
+import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
+import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
+import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
+import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
+import org.loopring.looprwallet.homemywallet.dagger.homeMyWalletLooprComponent
+import org.loopring.looprwallet.homemywallet.dialogs.ShowBarcodeDialog
+import javax.inject.Inject
+import kotlin.math.roundToInt
 
 
 /**
@@ -36,22 +48,38 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     override val layoutResource: Int
         get() = R.layout.fragment_my_wallet
 
+    @Inject
+    lateinit var securitySettings: SecuritySettings
+
+    val tokenBalanceViewModel: EthTokenBalanceViewModel by lazy {
+        LooprViewModelFactory.get<EthTokenBalanceViewModel>(this@MyWalletFragment)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        homeMyWalletLooprComponent.inject(this)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         enableToolbarCollapsing()
 
-        TooltipCompat.setTooltipText(shareAddressButton, str(R.string.share_your_address))
-        TooltipCompat.setTooltipText(showPrivateKeyButton, str(R.string.reveal_private_key))
+        walletClient.getCurrentWallet()?.let { wallet ->
+            tokenBalanceViewModel.getAllTokensWithBalances(this, wallet.credentials.address, ::onTokenBalancesChange)
 
-        val currentWallet = walletClient.getCurrentWallet()
-        if (currentWallet != null) {
+            // Setup Tooltips
+            TooltipCompat.setTooltipText(shareAddressButton, str(R.string.share_your_address))
+            TooltipCompat.setTooltipText(showPrivateKeyButton, str(R.string.reveal_private_key))
+
+            // Setup the showWalletUnlockMechanismButton, based on how the type of wallet
             when {
-                currentWallet.keystoreContent != null -> {
+                wallet.keystoreContent != null -> {
                     TooltipCompat.setTooltipText(showWalletUnlockMechanismButton, str(R.string.copy_keystore_content))
                     showWalletUnlockMechanismButton.visibility = View.VISIBLE
                 }
-                currentWallet.passphrase != null -> {
+                wallet.passphrase != null -> {
                     TooltipCompat.setTooltipText(showWalletUnlockMechanismButton, str(R.string.view_your_passphrase))
                     showWalletUnlockMechanismButton.visibility = View.VISIBLE
                 }
@@ -59,10 +87,21 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
                     showWalletUnlockMechanismButton.visibility = View.GONE
                 }
             }
+
+            // Setup the Address Barcode
+            try {
+                val address = wallet.credentials.address
+                val dimensions = resources.getDimension(R.dimen.barcode_dimensions).roundToInt()
+                val barcode = BarcodeUtility.encodeTextToBitmap(address, dimensions)
+                addressBarcodeImage.setImageBitmap(barcode)
+                addressLabel.text = address
+            } catch (e: Throwable) {
+                addressLabel.text = str(R.string.error_creating_qr_code)
+            }
+
         }
 
         showPrivateKeyButton.setOnClickListener { onShowPrivateKeyClick() }
-
         showWalletUnlockMechanismButton.setOnClickListener { onShowWalletUnlockMechanismClick() }
     }
 
@@ -74,15 +113,28 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
     override fun onSecurityConfirmed(parameter: Int): Unit = when (parameter) {
         TYPE_VIEW_PRIVATE_KEY -> {
-            TODO("Show private key with QR Code and plaintext")
+            val privateKey = walletClient.getCurrentWallet()?.credentials?.ecKeyPair?.privateKey
+            privateKey?.let {
+                ShowBarcodeDialog.getInstance(it.toString(16))
+                        .show(requireFragmentManager(), ShowBarcodeDialog.TAG)
+            } ?: Unit
         }
         TYPE_VIEW_KEYSTORE -> walletClient.getCurrentWallet().ifNotNull {
-            val sharingIntent = Intent(Intent.ACTION_SEND)
-                    .setType("text/plain")
-                    .putExtra(Intent.EXTRA_SUBJECT, str(R.string.formatter_keystore).format(it.walletName))
-                    .putExtra(Intent.EXTRA_TEXT, it.keystoreContent)
+            AlertDialog.Builder(context!!)
+                    .setTitle(R.string.warning)
+                    .setMessage(R.string.help_export_keystore)
+                    .setPositiveButton(R.string.export_anyway) { dialog, _ ->
+                        dialog.dismiss()
+                        val sharingIntent = Intent(Intent.ACTION_SEND)
+                                .setType("text/plain")
+                                .putExtra(Intent.EXTRA_SUBJECT, str(R.string.formatter_keystore).format(it.walletName))
+                                .putExtra(Intent.EXTRA_TEXT, it.keystoreContent)
 
-            startActivity(Intent.createChooser(sharingIntent, str(R.string.share_keystore_via)))
+                        startActivity(Intent.createChooser(sharingIntent, str(R.string.share_keystore_via)))
+                    }
+                    .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
+                    .create()
+                    .show()
         }
         TYPE_VIEW_PHRASE -> walletClient.getCurrentWallet().ifNotNull {
             val builder = StringBuilder()
@@ -98,7 +150,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
             val context = context ?: return@ifNotNull
             AlertDialog.Builder(context)
-                    .setTitle(R.string.your_passphrase)
+                    .setTitle(R.string.your_phrase)
                     .setMessage(formattedPhrase)
                     .create()
                     .show()
@@ -110,18 +162,58 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
     // MARK - Private Methods
 
-    private fun onShowPrivateKeyClick() {
-        val fragment = ConfirmOldSecurityFragment.createViewPrivateKeyInstance(TYPE_VIEW_PRIVATE_KEY)
-        pushFragmentTransaction(fragment, ConfirmOldSecurityFragment.TAG)
-    }
+    private fun onTokenBalancesChange(tokenBalances: List<CryptoToken>) {
+        val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
-    private fun onShowWalletUnlockMechanismClick() = walletClient.getCurrentWallet().ifNotNull {
-        val fragment = when {
-            it.keystoreContent != null -> ConfirmOldSecurityFragment.createViewWalletUnlockMechanismInstance(TYPE_VIEW_KEYSTORE)
-            it.passphrase != null -> ConfirmOldSecurityFragment.createViewWalletUnlockMechanismInstance(TYPE_VIEW_PHRASE)
-            else -> throw IllegalArgumentException("Invalid unlockWallet mechanism!")
+        val builder = StringBuilder()
+        val onlyTokenBalances = tokenBalances.filter { it.identifier != EthToken.ETH.identifier }
+
+        onlyTokenBalances.forEachIndexed { index, item ->
+            if (index < 5) {
+                val balance = item.tokenBalances.where()
+                        .equalTo(TokenBalanceInfo::address, address)
+                        .findFirst()
+
+                balance?.let {
+                    builder.append(it.balance?.toPlainString())
+                            .append(" ")
+                            .append(item.ticker)
+
+                    // We're before the 5th position (4th index) and before the second-to-last item
+                    if (index < 4 && index < onlyTokenBalances.size - 1) builder.append("\n")
+                }
+            }
+
+            if (index >= 5) {
+                builder.append("\n")
+                        .append(str(R.string.ellipsis))
+            }
         }
-        pushFragmentTransaction(fragment, ConfirmOldSecurityFragment.TAG)
     }
 
+    private fun onShowPrivateKeyClick() = when {
+        securitySettings.isSecurityActive() -> {
+            val fragment = ConfirmOldSecurityFragment.getViewPrivateKeyInstance(TYPE_VIEW_PRIVATE_KEY)
+            pushFragmentTransaction(fragment, ConfirmOldSecurityFragment.TAG)
+        }
+        else -> onSecurityConfirmed(TYPE_VIEW_PRIVATE_KEY)
+    }
+
+    private fun onShowWalletUnlockMechanismClick() = walletClient.getCurrentWallet().ifNotNull { wallet ->
+        val parameter = when {
+            wallet.keystoreContent != null -> TYPE_VIEW_KEYSTORE
+            wallet.passphrase != null -> TYPE_VIEW_PHRASE
+            else -> {
+                loge("Invalid unlockWallet mechanism!", IllegalArgumentException())
+                return
+            }
+        }
+
+        if (securitySettings.isSecurityActive()) {
+            val fragment = ConfirmOldSecurityFragment.createViewWalletUnlockMechanismInstance(parameter)
+            pushFragmentTransaction(fragment, ConfirmOldSecurityFragment.TAG)
+        } else {
+            onSecurityConfirmed(parameter)
+        }
+    }
 }

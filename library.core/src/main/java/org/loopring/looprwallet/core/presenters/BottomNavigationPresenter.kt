@@ -5,11 +5,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
-import org.loopring.looprwallet.core.extensions.isExpanded
-import org.loopring.looprwallet.core.extensions.logv
-import org.loopring.looprwallet.core.extensions.weakReference
+import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
@@ -79,7 +78,11 @@ class BottomNavigationPresenter(activity: BaseActivity,
         bottomNavigationView.setOnNavigationItemReselectedListener {
             val tag = getTagFromMenuId(it.itemId)
             val fragment = activity.supportFragmentManager.findFragmentByTag(tag)
-            (fragment as? BottomNavigationReselectedLister)?.onBottomNavigationReselected()
+            if (fragment is BottomNavigationReselectedLister) {
+                fragment.onBottomNavigationReselected()
+            } else {
+                loge("Could not reselect fragment!", IllegalStateException())
+            }
         }
     }
 
@@ -123,18 +126,21 @@ class BottomNavigationPresenter(activity: BaseActivity,
         bottomNavigationFragmentStackHistory.push(newFragmentTag)
 
         val newFragment = activity?.supportFragmentManager?.findFragmentByTagOrCreate(newFragmentTag) { tag ->
-            // The fragment MUST be in the list (so it's ALWAYS safe to force the optional unwrap.
+            // The fragment MUST be in the immutable list (so it's ALWAYS safe to force the unwrap it).
             fragmentTagPairs.find { it.tag == tag }?.fragment!!
         } ?: return // We return since we CANNOT commit the transaction without this fragment
 
-        val baseFragment = currentFragment as? BaseFragment
-        if (baseFragment?.appbarLayout?.isExpanded() == false) {
+        val appBarLayout = (currentFragment as? BaseFragment)?.appbarLayout
+        if (appBarLayout != null && !appBarLayout.isExpanded()) {
             logv("Expanding appbar before committing transaction...")
 
-            baseFragment.appbarLayout?.setExpanded(true, true)
+            appBarLayout.setExpanded(true, true)
 
             // Allow the appbar to snap into place for committing the transaction
-            Handler().postDelayed({ commitTransaction(newFragment, newFragmentTag) }, 125L)
+            runBlocking {
+                delay(125L)
+                commitTransaction(newFragment, newFragmentTag)
+            }
         } else {
             commitTransaction(newFragment, newFragmentTag)
         }

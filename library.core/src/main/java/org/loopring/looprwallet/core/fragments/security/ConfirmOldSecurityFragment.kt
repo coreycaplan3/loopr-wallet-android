@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.fragment_security_pin.*
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
+import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 
@@ -87,19 +88,19 @@ class ConfirmOldSecurityFragment : BaseSecurityFragment() {
          */
         private const val KEY_PARAMETER = "_PARAMETER"
 
-        fun createDisableSecurityInstance() = createInstance(TYPE_DISABLE_SECURITY)
+        fun getDisableSecurityInstance() = getInstance(TYPE_DISABLE_SECURITY)
 
-        fun createChangeSecuritySettingsInstance() = createInstance(TYPE_CHANGE_SECURITY_SETTINGS)
+        fun getChangeSecuritySettingsInstance() = getInstance(TYPE_CHANGE_SECURITY_SETTINGS)
 
-        fun createUnlockAppInstance() = createInstance(TYPE_UNLOCK_APP)
+        fun getUnlockAppInstance() = getInstance(TYPE_UNLOCK_APP)
 
-        fun createViewPrivateKeyInstance(parameter: Int) = createInstance(TYPE_VIEWING_PRIVATE_KEY, parameter)
+        fun getViewPrivateKeyInstance(parameter: Int) = getInstance(TYPE_VIEWING_PRIVATE_KEY, parameter)
 
         fun createViewWalletUnlockMechanismInstance(parameter: Int): ConfirmOldSecurityFragment {
-            return createInstance(TYPE_VIEWING_SENSITIVE_INFORMATION, parameter)
+            return getInstance(TYPE_VIEWING_SENSITIVE_INFORMATION, parameter)
         }
 
-        private fun createInstance(type: Int, parameter: Int = -1) =
+        private fun getInstance(type: Int, parameter: Int = -1) =
                 ConfirmOldSecurityFragment().apply {
                     arguments = bundleOf(
                             KEY_CONFIRM_SECURITY_TYPE to type,

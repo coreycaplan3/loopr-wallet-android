@@ -15,15 +15,15 @@ import org.loopring.looprwallet.createtransfer.fragments.CreateTransferAmountFra
  */
 @LooprComponentScope
 @Component(dependencies = [CoreLooprComponent::class])
-interface TransferLooprComponent {
+interface CreateTransferLooprComponent {
 
     fun inject(createTransferAmountFragment: CreateTransferAmountFragment)
 }
 
 interface TransferLooprComponentProvider {
 
-    fun provideTransferLooprComponent(): TransferLooprComponent
+    fun provideTransferLooprComponent(): CreateTransferLooprComponent
 }
 
-val transferLooprComponent: TransferLooprComponent
+val createTransferLooprComponent: CreateTransferLooprComponent
     get() = (CoreLooprWalletApp.application as TransferLooprComponentProvider).provideTransferLooprComponent()

@@ -63,13 +63,13 @@ class SecuritySettingsFragment : BaseSettingsFragment(), OnSecurityChangeListene
                 val tag: String
                 when (value) {
                     TYPE_DEFAULT_VALUE_SECURITY -> {
-                        fragment = ConfirmOldSecurityFragment.createDisableSecurityInstance()
+                        fragment = ConfirmOldSecurityFragment.getDisableSecurityInstance()
                         tag = ConfirmOldSecurityFragment.TAG
                     }
                     TYPE_PIN_SECURITY -> when (currentSecurityType) {
                         TYPE_PIN_SECURITY -> {
                             // We currently use a PIN, and we reselected PIN
-                            fragment = ConfirmOldSecurityFragment.createChangeSecuritySettingsInstance()
+                            fragment = ConfirmOldSecurityFragment.getChangeSecuritySettingsInstance()
                             tag = ConfirmOldSecurityFragment.TAG
                         }
                         else -> {

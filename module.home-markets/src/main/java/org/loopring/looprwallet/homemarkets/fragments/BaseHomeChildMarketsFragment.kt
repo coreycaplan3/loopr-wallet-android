@@ -8,11 +8,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
-import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
-import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
-import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
+import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.homemarkets.adapters.HomeMarketsAdapter
 import org.loopring.looprwallet.homemarkets.adapters.OnGeneralMarketsFilterChangeListener
 import org.loopring.looprwallet.homemarkets.viewmodels.HomeMarketsViewModel
@@ -49,7 +47,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         private set
 
     private val homeMarketsViewModel by lazy {
-        LooprWalletViewModelFactory.get<HomeMarketsViewModel>(this)
+        LooprViewModelFactory.get<HomeMarketsViewModel>(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

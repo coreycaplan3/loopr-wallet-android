@@ -10,7 +10,7 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
-import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
+import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
 import org.loopring.looprwallet.homeorders.adapters.OnGeneralOrderFilterChangeListener
 import org.loopring.looprwallet.homeorders.viewmodels.GeneralOrderViewModel
@@ -42,7 +42,7 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
 
             val wallet = walletClient.getCurrentWallet() ?: return null
 
-            field = LooprWalletViewModelFactory.get(this, wallet)
+            field = LooprViewModelFactory.get(this, wallet)
             return field
         }
 

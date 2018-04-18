@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.utilities
 
+import android.graphics.drawable.Drawable
 import android.support.annotation.*
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 
@@ -13,45 +14,51 @@ import org.loopring.looprwallet.core.application.CoreLooprWalletApp
  */
 object ApplicationUtility {
 
-    /**
-     * @param resId The string resource
-     * @return Gets a string using the [CoreLooprWalletApp] application instance
-     */
-    fun bool(@BoolRes resId: Int) = CoreLooprWalletApp.application.resources.getBoolean(resId)
+    private val application by lazy {
+        CoreLooprWalletApp.application
+    }
 
     /**
      * @param resId The string resource
      * @return Gets a string using the [CoreLooprWalletApp] application instance
      */
-    fun int(@IntegerRes resId: Int) = CoreLooprWalletApp.application.resources.getInteger(resId)
+    fun bool(@BoolRes resId: Int) = application.resources.getBoolean(resId)
 
     /**
      * @param resId The string resource
      * @return Gets a string using the [CoreLooprWalletApp] application instance
      */
-    fun str(@StringRes resId: Int) = CoreLooprWalletApp.application.getString(resId)!!
+    fun int(@IntegerRes resId: Int) = application.resources.getInteger(resId)
+
+    /**
+     * @param resId The string resource
+     * @return Gets a string using the [CoreLooprWalletApp] application instance
+     */
+    fun str(@StringRes resId: Int): String = application.getString(resId)!!
 
     /**
      * @param resId The string resource
      * @return Gets a string array using the [CoreLooprWalletApp] application instance
      */
-    fun strArray(@ArrayRes resId: Int) = CoreLooprWalletApp.application.resources.getStringArray(resId)!!
-
+    fun strArray(@ArrayRes resId: Int): Array<String> = application.resources.getStringArray(resId)!!
 
     /**
      * @param resId The dimension resource
      * @return Gets a dimension using the [CoreLooprWalletApp] application instance
      */
-    fun dimen(@DimenRes resId: Int) = CoreLooprWalletApp.application.resources.getDimension(resId)
+    fun dimen(@DimenRes resId: Int) = application.resources.getDimension(resId)
 
     /**
      * @param resId The dimension resource
      * @return Gets a dimension using the [CoreLooprWalletApp] application instance
      */
     @Suppress("deprecation")
-    fun color(@ColorRes resId: Int) = CoreLooprWalletApp.application.resources.getColor(resId)
+    fun color(@ColorRes resId: Int) = application.resources.getColor(resId)
 
+    /**
+     * @return The drawable that is mapped to by the given [resId].
+     */
     @Suppress("deprecation")
-    fun drawable(@DrawableRes resId: Int) = CoreLooprWalletApp.application.resources.getDrawable(resId)
+    fun drawable(@DrawableRes resId: Int): Drawable = application.resources.getDrawable(resId)
 
 }

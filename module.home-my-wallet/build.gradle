@@ -2,8 +2,13 @@ apply from: "../standard-library.gradle"
 
 dependencies {
     implementation project(':library.core')
+    implementation project(':module.barcode')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation gradle.dagger
+    kapt gradle.daggerProcessor
+    kapt gradle.daggerCompiler
 
     // Unit Testing
     testImplementation gradle.junit

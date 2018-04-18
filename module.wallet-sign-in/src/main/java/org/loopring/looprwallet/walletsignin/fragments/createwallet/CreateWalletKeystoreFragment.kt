@@ -145,7 +145,7 @@ class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.OnPas
 
         val wallet = WalletCreationKeystore(walletName, password)
 
-        val dialog = ConfirmPasswordDialog.createInstance(TAG, wallet)
+        val dialog = ConfirmPasswordDialog.getInstance(TAG, wallet)
         dialog.show(fragmentManager, ConfirmPasswordDialog.TAG)
     }
 

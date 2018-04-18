@@ -27,7 +27,7 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
 
         private const val KEY_TIME_LEFT = "_TIME_LEFT"
 
-        fun createInstance(walletCreationPhrase: WalletCreationPhrase) =
+        fun getInstance(walletCreationPhrase: WalletCreationPhrase) =
                 CreateWalletRememberPhraseFragment().apply {
                     arguments = bundleOf(KEY_WALLET_PHRASE to walletCreationPhrase)
                 }

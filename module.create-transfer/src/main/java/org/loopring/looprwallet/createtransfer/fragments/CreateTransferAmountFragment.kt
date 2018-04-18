@@ -28,9 +28,8 @@ import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate.Compan
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate.Companion.MAX_EXCHANGE_RATE_FRACTION_DIGITS
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.settings.EthereumFeeSettings
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
-import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
+import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
 import org.loopring.looprwallet.core.viewmodels.eth.EthereumTransactionViewModel
@@ -60,7 +59,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
         private const val KEY_RECIPIENT_ADDRESS = "_RECIPIENT_ADDRESS"
 
-        fun createInstance(recipientAddress: String) =
+        fun getInstance(recipientAddress: String) =
                 CreateTransferAmountFragment().apply {
                     arguments = bundleOf(KEY_RECIPIENT_ADDRESS to recipientAddress)
                 }
@@ -121,7 +120,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
     @VisibleForTesting
     val ethTokenPriceCheckerViewModel: EthTokenPriceCheckerViewModel by lazy {
-        return@lazy LooprWalletViewModelFactory.get<EthTokenPriceCheckerViewModel>(this).apply {
+        return@lazy LooprViewModelFactory.get<EthTokenPriceCheckerViewModel>(this).apply {
             setupOfflineFirstStateAndErrorObserver(this, ::refreshAll)
         }
     }
@@ -135,7 +134,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
             val wallet = walletClient.getCurrentWallet() ?: return null
 
-            return LooprWalletViewModelFactory.get<EthTokenBalanceViewModel>(this, wallet)
+            return LooprViewModelFactory.get<EthTokenBalanceViewModel>(this, wallet)
                     .apply {
                         field = this
                         setupOfflineFirstStateAndErrorObserver(this, ::refreshAll)

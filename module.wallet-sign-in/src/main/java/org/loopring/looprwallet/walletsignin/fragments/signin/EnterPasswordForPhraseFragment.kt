@@ -126,7 +126,7 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnP
 
         walletGeneratorViewModel.walletPhraseGeneration.observeForDoubleSpend(this, {
             pushFragmentTransaction(
-                    CreateWalletRememberPhraseFragment.createInstance(it),
+                    CreateWalletRememberPhraseFragment.getInstance(it),
                     CreateWalletRememberPhraseFragment.TAG
             )
         })
@@ -142,7 +142,7 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnP
 
         when (fragmentType) {
             TYPE_CREATE_WALLET -> {
-                val dialog = ConfirmPasswordDialog.createInstance(TAG, wallet)
+                val dialog = ConfirmPasswordDialog.getInstance(TAG, wallet)
                 dialog.show(fragmentManager, ConfirmPasswordDialog.TAG)
             }
 

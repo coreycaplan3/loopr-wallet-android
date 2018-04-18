@@ -16,7 +16,7 @@ import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.contact.Contact
-import org.loopring.looprwallet.core.viewmodels.LooprWalletViewModelFactory
+import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 
 /**
  * Created by Corey on 3/30/2018
@@ -46,7 +46,7 @@ class ViewContactsFragment : BaseFragment() {
             }
 
             val wallet = walletClient.getCurrentWallet() ?: return null
-            return LooprWalletViewModelFactory.get<ContactsByAddressViewModel>(this, wallet)
+            return LooprViewModelFactory.get<ContactsByAddressViewModel>(this, wallet)
                     .apply {
                         field = this
                     }
@@ -59,7 +59,7 @@ class ViewContactsFragment : BaseFragment() {
             }
 
             val wallet = walletClient.getCurrentWallet() ?: return null
-            return LooprWalletViewModelFactory.get<ContactsByNameViewModel>(this, wallet)
+            return LooprViewModelFactory.get<ContactsByNameViewModel>(this, wallet)
                     .apply {
                         field = this
                     }

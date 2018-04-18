@@ -34,7 +34,7 @@ class ConfirmOldSecurityFragmentTest : BaseDaggerFragmentTest<ConfirmOldSecurity
         LooprSettings.getInstance(CoreLooprWalletApp.context)
                 .putString(SecuritySettings.KEY_SECURITY_TYPE, SecuritySettings.TYPE_PIN_SECURITY)
 
-        return ConfirmOldSecurityFragment.createUnlockAppInstance()
+        return ConfirmOldSecurityFragment.getUnlockAppInstance()
     }
 
     override val tag = ConfirmOldSecurityFragment.TAG

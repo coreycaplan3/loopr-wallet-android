@@ -10,6 +10,7 @@ import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
+import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
 import org.loopring.looprwallet.core.models.settings.UserPinSettings
 import javax.inject.Inject

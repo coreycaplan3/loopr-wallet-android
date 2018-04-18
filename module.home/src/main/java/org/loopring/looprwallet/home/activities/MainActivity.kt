@@ -5,6 +5,8 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.bottom_navigation.*
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
+import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
@@ -26,7 +28,7 @@ import org.loopring.looprwallet.hometransfers.fragments.ViewTransfersFragment
  * Purpose of Class: As of right now, this will translate into the *Market* screen for traders,
  * when they first open the app (assuming they are signed in & authenticated).
  */
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
 
     companion object {
 
@@ -49,22 +51,22 @@ class MainActivity : BaseActivity() {
     override val isSecureActivity: Boolean
         get() = true
 
+    private val fragmentTagPairs: List<BottomNavigationFragmentPair> = listOf(
+            BottomNavigationFragmentPair(KEY_MARKETS, HomeMarketsParentFragment(), R.id.menu_markets),
+
+            BottomNavigationFragmentPair(KEY_ORDERS, HomeOrdersParentFragment(), R.id.menu_orders),
+
+            BottomNavigationFragmentPair(KEY_TRANSFERS, ViewTransfersFragment(), R.id.menu_transfers),
+
+            BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(), R.id.menu_my_wallet)
+    )
+
     lateinit var bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory
 
     lateinit var bottomNavigationPresenter: BottomNavigationPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val fragmentTagPairs: List<BottomNavigationFragmentPair> = listOf(
-                BottomNavigationFragmentPair(KEY_MARKETS, HomeMarketsParentFragment(), R.id.menu_markets),
-
-                BottomNavigationFragmentPair(KEY_ORDERS, HomeOrdersParentFragment(), R.id.menu_orders),
-
-                BottomNavigationFragmentPair(KEY_TRANSFERS, ViewTransfersFragment(), R.id.menu_transfers),
-
-                BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(), R.id.menu_my_wallet)
-        )
 
         bottomNavigationFragmentStackHistory = BottomNavigationFragmentStackHistory(false, savedInstanceState)
 
@@ -78,6 +80,15 @@ class MainActivity : BaseActivity() {
                 bottomNavigationFragmentStackHistory = bottomNavigationFragmentStackHistory,
                 savedInstanceState = savedInstanceState
         )
+    }
+
+    override fun onSecurityConfirmed(parameter: Int) {
+        fragmentTagPairs.forEach {
+            val fragment = it.fragment
+            if (fragment is OnSecurityConfirmedListener) {
+                fragment.onSecurityConfirmed(parameter)
+            }
+        }
     }
 
     override fun onBackPressed() {

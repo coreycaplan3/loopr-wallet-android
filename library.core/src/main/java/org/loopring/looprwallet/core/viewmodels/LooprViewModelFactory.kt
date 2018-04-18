@@ -16,7 +16,7 @@ import org.loopring.looprwallet.core.models.wallet.LooprWallet
  * require a [LooprWallet] instance in their constructor
  *
  */
-open class LooprWalletViewModelFactory protected constructor(private val currentWallet: LooprWallet)
+open class LooprViewModelFactory protected constructor(private val currentWallet: LooprWallet)
     : ViewModelProvider.Factory {
 
     companion object {
@@ -26,7 +26,7 @@ open class LooprWalletViewModelFactory protected constructor(private val current
         }
 
         inline fun <reified T : ViewModel> get(fragment: Fragment, currentWallet: LooprWallet): T {
-            return ViewModelProviders.of(fragment, LooprWalletViewModelFactory(currentWallet))
+            return ViewModelProviders.of(fragment, LooprViewModelFactory(currentWallet))
                     .get(T::class.java)
         }
 

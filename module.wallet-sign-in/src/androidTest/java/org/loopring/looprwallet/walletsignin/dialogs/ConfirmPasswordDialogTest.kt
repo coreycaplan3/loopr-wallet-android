@@ -30,7 +30,7 @@ class ConfirmPasswordDialogTest : BaseDaggerFragmentTest<ConfirmPasswordDialog>(
     private val incorrectPassword = "abcdeabcde"
 
     override fun provideFragment(): ConfirmPasswordDialog {
-        return ConfirmPasswordDialog.createInstance("null", WalletCreationKeystore(walletName, password))
+        return ConfirmPasswordDialog.getInstance("null", WalletCreationKeystore(walletName, password))
     }
 
     override val tag = ConfirmPasswordDialog.TAG

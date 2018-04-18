@@ -9,7 +9,8 @@ import org.loopring.looprwallet.core.extensions.logv
  *
  * Project: LooprWallet
  *
- * Purpose of Class:
+ * Purpose of Class: A stack that mocks the behavior of *Instagram*'s stack history for home-page
+ * navigation.
  *
  * @param isUpNavigationEnabled True if upwards navigation should be enabled or false to disabled.
  * This is mainly useful for bottom-navigation, when the user is navigating "horizontally" instead

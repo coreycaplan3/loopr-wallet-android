@@ -48,7 +48,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
         const val name = "Daniel"
     }
 
-    override fun provideFragment() = CreateTransferAmountFragment.createInstance(address)
+    override fun provideFragment() = CreateTransferAmountFragment.getInstance(address)
     override val tag = CreateTransferAmountFragment.TAG
 
     @Before

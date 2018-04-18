@@ -95,7 +95,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         createTransferContinueButton.setOnClickListener {
             val currentAddress = recipientAddressEditText.text.toString()
             pushFragmentTransaction(
-                    CreateTransferAmountFragment.createInstance(currentAddress),
+                    CreateTransferAmountFragment.getInstance(currentAddress),
                     CreateTransferAmountFragment.TAG
             )
         }

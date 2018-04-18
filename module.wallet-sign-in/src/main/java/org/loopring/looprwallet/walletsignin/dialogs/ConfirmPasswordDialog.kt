@@ -50,7 +50,7 @@ class ConfirmPasswordDialog : BaseBottomSheetDialog() {
          * back to it, after the user confirms their password.
          * @param walletCreationKeystore The wallet that the user is creating.
          */
-        fun createInstance(currentFragmentTag: String, walletCreationKeystore: WalletCreationKeystore): ConfirmPasswordDialog {
+        fun getInstance(currentFragmentTag: String, walletCreationKeystore: WalletCreationKeystore): ConfirmPasswordDialog {
             return ConfirmPasswordDialog().apply {
                 arguments = bundleOf(
                         KEY_CURRENT_FRAGMENT_TAG to currentFragmentTag,
@@ -64,7 +64,7 @@ class ConfirmPasswordDialog : BaseBottomSheetDialog() {
          * back to it, after the user confirms their password.
          * @param walletCreationPhrase The wallet that the user is creating.
          */
-        fun createInstance(currentFragmentTag: String, walletCreationPhrase: WalletCreationPhrase): ConfirmPasswordDialog {
+        fun getInstance(currentFragmentTag: String, walletCreationPhrase: WalletCreationPhrase): ConfirmPasswordDialog {
             return ConfirmPasswordDialog().apply {
                 arguments = bundleOf(
                         KEY_CURRENT_FRAGMENT_TAG to currentFragmentTag,

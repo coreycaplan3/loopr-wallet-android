@@ -40,7 +40,7 @@ class CreateWalletRememberPhraseFragmentTest : BaseDaggerFragmentTest<CreateWall
 
     override fun provideFragment(): CreateWalletRememberPhraseFragment {
         val wallet = WalletCreationPhrase(walletName, password, phrase)
-        return CreateWalletRememberPhraseFragment.createInstance(wallet)
+        return CreateWalletRememberPhraseFragment.getInstance(wallet)
     }
 
     override val tag = CreateWalletRememberPhraseFragment.TAG

@@ -1,12 +1,10 @@
-package org.loopring.looprwallet.core.utilities
+package org.loopring.looprwallet.barcode.utilities
 
 import android.graphics.Bitmap
 import android.graphics.Color
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
-import com.google.zxing.common.BitMatrix
-import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 
 
 /**
@@ -20,11 +18,10 @@ import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 object BarcodeUtility {
 
     @Throws(WriterException::class)
-    private fun encodeTextToBitmap(value: String, dimension: Int): Bitmap? {
-        val bitMatrix: BitMatrix
-        try {
-            bitMatrix = MultiFormatWriter()
-                    .encode(value, BarcodeFormat.DATA_MATRIX, dimension, dimension, null)
+    fun encodeTextToBitmap(value: String, dimension: Int): Bitmap? {
+
+        val bitMatrix = try {
+            MultiFormatWriter().encode(value, BarcodeFormat.DATA_MATRIX, dimension, dimension, null)
 
         } catch (ignored: IllegalArgumentException) {
             return null
