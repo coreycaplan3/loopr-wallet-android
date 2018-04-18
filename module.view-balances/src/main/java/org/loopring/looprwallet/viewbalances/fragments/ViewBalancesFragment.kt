@@ -8,6 +8,7 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
+import org.loopring.looprwallet.core.viewmodels.eth.EthereumTransactionViewModel
 import org.loopring.looprwallet.viewbalances.R
 import org.loopring.looprwallet.viewbalances.adapters.OnTokenLockClickListener
 import org.loopring.looprwallet.viewbalances.adapters.ViewBalancesAdapter
@@ -30,8 +31,12 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
     override val layoutResource: Int
         get() = R.layout.fragment_view_balances
 
-    private val tokenBalanceViewModel: EthTokenBalanceViewModel by lazy {
+    private val tokenBalanceViewModel by lazy {
         LooprViewModelFactory.get<EthTokenBalanceViewModel>(this)
+    }
+
+    private val ethereumTransactionViewModel by lazy {
+        LooprViewModelFactory.get<EthereumTransactionViewModel>(this)
     }
 
     private val adapter by lazy {
@@ -41,13 +46,10 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewBalancesSwipeRefreshLayout.setOnRefreshListener {
-            tokenBalanceViewModel.refresh()
-        }
 
-        setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel) {
-            tokenBalanceViewModel.refresh()
-        }
+
+        viewBalancesSwipeRefreshLayout.setOnRefreshListener { refreshAll() }
+        setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel, ::refreshAll)
 
         val address = walletClient.getCurrentWallet()?.credentials?.address
         if (address != null) {
@@ -66,4 +68,9 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
     override fun onLockClick(token: CryptoToken) {
         TODO("not implemented") // TODO
     }
+
+    private fun refreshAll() {
+        tokenBalanceViewModel.refresh()
+    }
+
 }

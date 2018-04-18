@@ -67,4 +67,28 @@ interface EthereumService {
                   gasPrice: BigDecimal
     ): Deferred<TransactionReceipt>
 
+    /**
+     * **ERC-20 Function**
+     * Approves a given [spender] to use [amount] tokens on behalf of user ([credentials]).
+     *
+     * **THIS FUNCTION IS REQUIRED FOR LOOPRING TO TRADE ON BEHALF OF THE USER, ONCE AN ORDER IS
+     * FOUND**
+     *
+     * @param contractAddress The address of the token's contract
+     * @param credentials The [Credentials] of the user whose tokens will be spendable by the
+     * Loopring smart contract
+     * @param amount The amount of tokens that the Loopring smart contract will be able to spend
+     * @param gasLimit The amount of gas needed to perform the approval
+     * @param gasPrice The price at which the
+     *
+     */
+    fun approveToken(
+            contractAddress: String,
+            credentials: Credentials,
+            spender: String,
+            amount: BigDecimal,
+            gasLimit: BigDecimal,
+            gasPrice: BigDecimal
+    ): Deferred<TransactionReceipt>
+
 }

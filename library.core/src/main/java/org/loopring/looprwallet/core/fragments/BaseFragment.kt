@@ -265,6 +265,10 @@ abstract class BaseFragment : Fragment() {
 
     protected val viewModelList = arrayListOf<OfflineFirstViewModel<*, *>>()
 
+    protected fun setupTransactionViewModel() {
+
+    }
+
     /**
      * This method is responsible for two things:
      *
@@ -294,7 +298,7 @@ abstract class BaseFragment : Fragment() {
         // STATE OBSERVER
         viewModel?.addCurrentStateObserver(this) {
             progressBar?.visibility = when {
-                viewModel.isLoading() -> View.VISIBLE
+                viewModelList.any { it.isLoading() } -> View.VISIBLE
                 else -> View.GONE
             }
 
