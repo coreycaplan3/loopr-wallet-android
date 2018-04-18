@@ -31,7 +31,7 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
         get() = R.layout.fragment_view_balances
 
     private val tokenBalanceViewModel: EthTokenBalanceViewModel by lazy {
-        LooprViewModelFactory.get<EthTokenBalanceViewModel>(this@ViewBalancesFragment)
+        LooprViewModelFactory.get<EthTokenBalanceViewModel>(this)
     }
 
     private val adapter by lazy {
@@ -40,6 +40,14 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewBalancesSwipeRefreshLayout.setOnRefreshListener {
+            tokenBalanceViewModel.refresh()
+        }
+
+        setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel) {
+            tokenBalanceViewModel.refresh()
+        }
 
         val address = walletClient.getCurrentWallet()?.credentials?.address
         if (address != null) {

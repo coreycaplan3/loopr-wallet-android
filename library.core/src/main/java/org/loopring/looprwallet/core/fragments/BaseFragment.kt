@@ -273,13 +273,14 @@ abstract class BaseFragment : Fragment() {
      *
      * This method registers the *errorObserver* for this [OfflineFirstViewModel] and shows an error
      * snackbar on error. If an error occurs, an indefinite or long snackbar will appear, depending
-     * on whether the user has any valid data
+     * on whether the user has any valid data. The criteria for an indefinite vs long snackbar are
+     * as follows:
      * - A ViewModel with valid data will show a *long* snackbar.
      * - A ViewModel **without** valid data will show an *indefinite* snackbar.
      *
      * @param viewModel The [OfflineFirstViewModel] that will be registered with this fragment.
      * @param refreshAll The function that will be called when all data needs to be refreshed. This
-     * is based on whether
+     * is called when an error occurs and the user opts into a refresh/retry.
      */
     protected inline fun setupOfflineFirstStateAndErrorObserver(
             viewModel: OfflineFirstViewModel<*, *>?,
