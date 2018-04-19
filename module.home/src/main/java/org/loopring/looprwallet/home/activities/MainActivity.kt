@@ -3,8 +3,11 @@ package org.loopring.looprwallet.home.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.widget.DrawerLayout
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
+import kotlinx.android.synthetic.main.navigation_header.*
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.activities.BaseActivity
@@ -17,6 +20,7 @@ import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationF
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.homeorders.fragments.HomeOrdersParentFragment
@@ -84,6 +88,8 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
                 bottomNavigationFragmentStackHistory = bottomNavigationFragmentStackHistory,
                 savedInstanceState = savedInstanceState
         )
+
+        setupNavigationDrawer()
     }
 
     override fun onSecurityConfirmed(parameter: Int) {
@@ -109,8 +115,11 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
 
     // MARK - Private Methods
 
-    fun setupNavigationView() {
+    private fun setupNavigationDrawer() {
 
+        // TODO delete an item!
+
+        // Setup the current selected menu item
         val currentWalletName = walletClient.getCurrentWallet()?.walletName
         val allWallets = walletClient.getAllWallets()
         allWallets.forEachIndexed { index, item ->
@@ -122,31 +131,66 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
             }
         }
 
-        walletClient.getCurrentWallet()?.let {
-            TODO("Bind values...")
+        setupNavigationHeaderView()
+
+        setupNavigationItemClickListener(allWallets)
+    }
+
+    private fun setupNavigationHeaderView() {
+        val currentWallet = walletClient.getCurrentWallet()
+        when (currentWallet) {
+            null -> {
+                navigationHeaderWalletAddressLabel.visibility = View.GONE
+                navigationHeaderWalletNameLabel.setText(R.string.watch_only)
+            }
+            else -> {
+                navigationHeaderWalletAddressLabel.visibility = View.VISIBLE
+
+                navigationHeaderWalletNameLabel.text = currentWallet.walletName
+                navigationHeaderWalletAddressLabel.text = currentWallet.credentials.address
+            }
         }
+    }
+
+    private fun setupNavigationItemClickListener(allWallets: List<LooprWallet>) {
+        // If this variable is **NOT** null when the drawer is closed, we can invoke it :)
+        var onItemSelected: (() -> Unit)? = null
+
+        homeNavigationDrawerLayout.addDrawerListener(object : DrawerListenerAdapter() {
+            override fun onDrawerClosed(drawerView: View) {
+                onItemSelected?.invoke()
+            }
+        })
 
         homeNavigationView.setNavigationItemSelectedListener { menuItem ->
             when {
                 menuItem.itemId == R.id.menuAddNewWallet -> {
-                    SignInActivity.route(this)
+                    onItemSelected = { SignInActivity.route(this) }
                 }
                 else -> allWallets.find { it.walletName == menuItem.title }?.ifNotNull {
+                    // We found the wallet that matches the title's name
                     val currentWallet = walletClient.getCurrentWallet()
                     if (currentWallet != null && currentWallet != it) {
-                        homeNavigationDrawerLayout.closeDrawers()
-
-                        runBlocking {
-                            delay(300L)
-
-                            // The current wallet is not the selected one, so we must switch it
-                            MainActivity.routeAndClearOldTasks(this@MainActivity)
-                        }
+                        onItemSelected = { MainActivity.routeAndClearOldTasks(this@MainActivity) }
                     }
                 }
             }
 
             return@setNavigationItemSelectedListener true
+        }
+    }
+
+    private open class DrawerListenerAdapter : DrawerLayout.DrawerListener {
+        override fun onDrawerStateChanged(newState: Int) {
+        }
+
+        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+        }
+
+        override fun onDrawerClosed(drawerView: View) {
+        }
+
+        override fun onDrawerOpened(drawerView: View) {
         }
     }
 
