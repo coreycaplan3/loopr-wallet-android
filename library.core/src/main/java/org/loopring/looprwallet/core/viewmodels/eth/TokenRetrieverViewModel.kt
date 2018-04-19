@@ -28,17 +28,17 @@ class TokenRetrieverViewModel : TransactionViewModel<EthToken>() {
      * This
      */
     fun getTokenInfoFromNetworkAndAdd(contractAddress: String) = async {
-        isTransactionRunning.postValue(true)
+        mIsTransactionRunning.postValue(true)
         try {
             val token = ethplorerService.getTokenInfo(contractAddress).await()
             token.binary = etherScanService.getTokenBinary(contractAddress).await()
             repository.add(token)
             true
         } catch (e: Throwable) {
-            error.postValue(e)
+            mError.postValue(e)
             false
         } finally {
-            isTransactionRunning.postValue(false)
+            mIsTransactionRunning.postValue(false)
         }
     }
 

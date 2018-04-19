@@ -38,7 +38,7 @@
     <string name="reveal_private_key">Reveal Private Key</string>
     <string name="account_balances">Account Balances</string>
     <string name="view_all_balances">View All Balances</string>
-    <string name="ellipsis">.....</string>
+    <string name="ellipsis">…</string>
     <string name="letter_b">B</string>
     <string name="letter_s">S</string>
     <string name="share_your_address">Share your address</string>
@@ -270,4 +270,7 @@
     <string name="warning">Warning</string>
     <string name="help_export_keystore">We do not recommend exporting your keystore, because other apps will be able to see it. It\'s safest to keep the keystore in this app. For this reason, we recommend using a 12-word phrase for securing your wallet.</string>
     <string name="export_anyway">Export Anyway</string>
+    <string name="unlocking_token">Unlocking token…</string>
+    <string name="locking_token">Locking token…</string>
+    <string name="error_unlocking_token">There was an error unlocking this token</string>
 </resources>

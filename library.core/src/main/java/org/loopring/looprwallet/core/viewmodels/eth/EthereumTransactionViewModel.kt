@@ -31,12 +31,12 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
             gasPrice: BigDecimal
     ) = async<Unit> {
         try {
-            isTransactionRunning.postValue(true)
+            mIsTransactionRunning.postValue(true)
             EthereumService.getInstance(credentials).sendEther(recipient, amount, gasLimit, gasPrice)
         } catch (e: Throwable) {
-            error.postValue(e)
+            mError.postValue(e)
         } finally {
-            isTransactionRunning.postValue(false)
+            mIsTransactionRunning.postValue(false)
         }
     }
 
@@ -53,15 +53,15 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
             gasLimit: BigDecimal,
             gasPrice: BigDecimal
     ) = async<Unit> {
-        isTransactionRunning.postValue(true)
+        mIsTransactionRunning.postValue(true)
         try {
             EthereumService.getInstance(credentials)
                     .sendToken(contractAddress, recipient, amount, gasLimit, gasPrice)
                     .await()
         } catch (e: Throwable) {
-            error.postValue(e)
+            mError.postValue(e)
         } finally {
-            isTransactionRunning.postValue(false)
+            mIsTransactionRunning.postValue(false)
         }
     }
 
@@ -79,15 +79,15 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
             gasLimit: BigDecimal,
             gasPrice: BigDecimal
     ) = async<Unit> {
-        isTransactionRunning.postValue(true)
+        mIsTransactionRunning.postValue(true)
         try {
             EthereumService.getInstance(credentials)
                     .approveToken(contractAddress, credentials, spender, amount, gasLimit, gasPrice)
                     .await()
         } catch (e: Throwable) {
-            error.postValue(e)
+            mError.postValue(e)
         } finally {
-            isTransactionRunning.postValue(false)
+            mIsTransactionRunning.postValue(false)
         }
     }
 

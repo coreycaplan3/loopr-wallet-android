@@ -24,9 +24,6 @@ open class CoreTestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecur
     override val contentViewRes: Int
         get() = R.layout.activity_test_container
 
-    override val activityContainerId: Int
-        get() = R.id.activityContainer
-
     override val isSecureActivity: Boolean
         get() = false
 

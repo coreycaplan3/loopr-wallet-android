@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import kotlinx.android.synthetic.main.activity_security.view.*
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -117,7 +119,7 @@ class BottomNavigationPresenter(activity: BaseActivity,
         fun commitTransaction(fragment: Fragment, fragmentTag: String) {
             val activity = activity ?: return
             activity.supportFragmentManager?.let {
-                val controller = FragmentTransactionController(activity.activityContainerId, fragment, fragmentTag)
+                val controller = FragmentTransactionController(R.id.activityContainer, fragment, fragmentTag)
                 controller.commitTransaction(it)
                 currentFragment = fragment
             }

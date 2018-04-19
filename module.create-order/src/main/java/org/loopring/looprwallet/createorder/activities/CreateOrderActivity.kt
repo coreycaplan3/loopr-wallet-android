@@ -38,9 +38,6 @@ class CreateOrderActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_create_order
 
-    override val activityContainerId: Int
-        get() = R.id.activityContainer
-
     override val isSecureActivity = true
 
     override fun onCreate(savedInstanceState: Bundle?) {

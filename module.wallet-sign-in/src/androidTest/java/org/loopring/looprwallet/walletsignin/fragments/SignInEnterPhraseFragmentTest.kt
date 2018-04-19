@@ -11,7 +11,7 @@ import org.loopring.looprwallet.activities.MainActivity
 import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseEmptyViewHolder
 import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseViewHolder
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
+import org.loopring.looprwallet.walletsignin.models.WalletCreationPhrase
 import org.loopring.looprwallet.core.utilities.CustomViewActions.dragDownViewHolder
 import org.loopring.looprwallet.core.utilities.CustomViewActions.dragUpViewHolder
 import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*

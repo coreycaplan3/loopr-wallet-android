@@ -45,9 +45,6 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     override val contentViewRes: Int
         get() = R.layout.activity_main
 
-    override val activityContainerId: Int
-        get() = R.id.activityContainer
-
     override val isSecureActivity: Boolean
         get() = true
 

@@ -34,6 +34,7 @@ import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
 import org.loopring.looprwallet.core.viewmodels.eth.EthereumTransactionViewModel
 import org.loopring.looprwallet.core.viewmodels.price.EthTokenPriceCheckerViewModel
+import org.loopring.looprwallet.createtransfer.dagger.createTransferLooprComponent
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.inject.Inject
@@ -160,6 +161,12 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
     lateinit var spinnerActionView: Spinner
 
     override val isDecimalVisible = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        createTransferLooprComponent.inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -17,5 +17,5 @@ interface OnTokenLockClickListener {
      *
      * @param token The [CryptoToken] that was clicked
      */
-    fun onLockClick(token: CryptoToken)
+    fun onTokenLockClick(token: CryptoToken)
 }

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="orderProgressView" type="id">orderProgressView</item>
+    <item name="orderProgressView" type="id"/>
+    <item name="menuMainSettings" type="id"/>
+    <item name="activityContainer" type="id"/>
+    <item name="fragmentContainer" type="id"/>
 
 </resources>

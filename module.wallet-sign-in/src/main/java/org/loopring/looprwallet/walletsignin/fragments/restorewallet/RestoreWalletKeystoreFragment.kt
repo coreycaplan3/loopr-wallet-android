@@ -25,6 +25,7 @@ import org.loopring.looprwallet.core.validators.PasswordValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel.Companion.getMessageFromError
 import java.io.File
 
 /**
@@ -125,9 +126,9 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
             }
         }
 
-        keystoreUnlockButton.setOnClickListener(this::onUnlockButtonClick)
+        keystoreUnlockButton.setOnClickListener(::onUnlockButtonClick)
 
-        WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
+        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, ::getMessageFromError)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {

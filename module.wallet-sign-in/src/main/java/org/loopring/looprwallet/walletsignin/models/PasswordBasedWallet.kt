@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.walletsignin.models.wallet
+package org.loopring.looprwallet.walletsignin.models
 
 /**
  * Created by Corey on 2/25/2018

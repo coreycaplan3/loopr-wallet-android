@@ -19,9 +19,6 @@ class ViewBalancesActivity: BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_view_balances
 
-    override val activityContainerId: Int
-        get() = R.id.activityContainer
-
     override val isSecureActivity: Boolean
         get() = true
 

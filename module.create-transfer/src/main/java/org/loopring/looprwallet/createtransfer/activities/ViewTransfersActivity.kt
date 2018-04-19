@@ -16,9 +16,6 @@ class ViewTransfersActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_view_transfers
 
-    override val activityContainerId: Int
-        get() = R.id.activityContainer
-
     override val isSecureActivity: Boolean
         get() = true
 

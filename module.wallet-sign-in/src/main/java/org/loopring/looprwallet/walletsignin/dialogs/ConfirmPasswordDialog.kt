@@ -1,16 +1,10 @@
 package org.loopring.looprwallet.walletsignin.dialogs
 
 import android.os.Bundle
-import android.os.Parcelable
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.os.bundleOf
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.walletsignin.activities.SignInActivity
-import org.loopring.looprwallet.walletsignin.models.wallet.PasswordBasedWallet
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationKeystore
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
 import org.loopring.looprwallet.core.validators.PasswordMatcherValidator
 import kotlinx.android.synthetic.main.dialog_confirm_password.*
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
@@ -43,35 +37,22 @@ class ConfirmPasswordDialog : BaseBottomSheetDialog() {
 
         private const val KEY_CURRENT_FRAGMENT_TAG = "_CURRENT_FRAGMENT_TAG"
 
-        const val KEY_WALLET = "_WALLET"
+        const val KEY_PASSWORD = "_PASSWORD"
 
         /**
          * @param currentFragmentTag The tag of the currently active fragment. Used to communicate
          * back to it, after the user confirms their password.
-         * @param walletCreationKeystore The wallet that the user is creating.
+         * @param password The correct password for the wallet.
          */
-        fun getInstance(currentFragmentTag: String, walletCreationKeystore: WalletCreationKeystore): ConfirmPasswordDialog {
+        fun getInstance(currentFragmentTag: String, password: String): ConfirmPasswordDialog {
             return ConfirmPasswordDialog().apply {
                 arguments = bundleOf(
                         KEY_CURRENT_FRAGMENT_TAG to currentFragmentTag,
-                        KEY_WALLET to walletCreationKeystore
+                        KEY_PASSWORD to password
                 )
             }
         }
 
-        /**
-         * @param currentFragmentTag The tag of the currently active fragment. Used to communicate
-         * back to it, after the user confirms their password.
-         * @param walletCreationPhrase The wallet that the user is creating.
-         */
-        fun getInstance(currentFragmentTag: String, walletCreationPhrase: WalletCreationPhrase): ConfirmPasswordDialog {
-            return ConfirmPasswordDialog().apply {
-                arguments = bundleOf(
-                        KEY_CURRENT_FRAGMENT_TAG to currentFragmentTag,
-                        KEY_WALLET to walletCreationPhrase
-                )
-            }
-        }
     }
 
     override val layoutResource: Int
@@ -81,16 +62,15 @@ class ConfirmPasswordDialog : BaseBottomSheetDialog() {
         arguments!!.getString(KEY_CURRENT_FRAGMENT_TAG)
     }
 
-    private val passwordBasedWallet: PasswordBasedWallet by lazy {
-        arguments!!.getParcelable<Parcelable>(KEY_WALLET) as PasswordBasedWallet
+    private val password: String by lazy {
+        arguments!!.getString(KEY_PASSWORD)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val correctPassword = passwordBasedWallet.getWalletPassword()
         validatorList = listOf(
-                PasswordMatcherValidator(confirmPasswordInputLayout, correctPassword, this::onFormChanged)
+                PasswordMatcherValidator(confirmPasswordInputLayout, password, this::onFormChanged)
         )
 
         confirmButton.setOnClickListener {

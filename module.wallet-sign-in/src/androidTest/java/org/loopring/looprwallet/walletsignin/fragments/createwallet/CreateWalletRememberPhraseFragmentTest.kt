@@ -9,7 +9,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
+import org.loopring.looprwallet.walletsignin.models.WalletCreationPhrase
 
 /**
  * Created by Corey on 3/5/2018.

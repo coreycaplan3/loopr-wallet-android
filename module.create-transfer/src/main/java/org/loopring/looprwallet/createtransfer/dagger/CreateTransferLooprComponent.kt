@@ -20,10 +20,10 @@ interface CreateTransferLooprComponent {
     fun inject(createTransferAmountFragment: CreateTransferAmountFragment)
 }
 
-interface TransferLooprComponentProvider {
+interface CreateTransferLooprComponentProvider {
 
     fun provideTransferLooprComponent(): CreateTransferLooprComponent
 }
 
 val createTransferLooprComponent: CreateTransferLooprComponent
-    get() = (CoreLooprWalletApp.application as TransferLooprComponentProvider).provideTransferLooprComponent()
+    get() = (CoreLooprWalletApp.application as CreateTransferLooprComponentProvider).provideTransferLooprComponent()

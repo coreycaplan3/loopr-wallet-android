@@ -13,7 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.utilities.CustomViewAssertions.isDisabled
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationKeystore
+import org.loopring.looprwallet.walletsignin.models.WalletCreationKeystore
 
 /**
  * Created by Corey Caplan on 2/25/18.

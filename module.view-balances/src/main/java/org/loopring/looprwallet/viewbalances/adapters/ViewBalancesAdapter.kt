@@ -48,7 +48,7 @@ class ViewBalancesAdapter(listener: OnTokenLockClickListener) : BaseRealmAdapter
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
         (holder as? ViewBalancesViewHolder)?.bind(address, item) {
-            listener?.onLockClick(item)
+            listener?.onTokenLockClick(item)
         }
     }
 

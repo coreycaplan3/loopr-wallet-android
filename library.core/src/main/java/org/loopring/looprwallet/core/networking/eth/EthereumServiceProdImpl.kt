@@ -12,15 +12,37 @@ import java.math.BigDecimal
  *
  * Purpose of Class: An implementation of [EthereumService] that communicates with the
  * Ethereum network. The type of network (testnet vs. mainnet) with which it interacts depends on
- * the build flavor. This can be checked easily by examining the value passed in [BuildConfig.ENVIRONMENT]
+ * the build flavor. This can be checked easily by examining the value passed in the *BuildConfig*.
  */
 class EthereumServiceProdImpl(private val credentials: Credentials) : EthereumService {
 
-    override fun sendEther(recipient: String, amount: BigDecimal, gasLimit: BigDecimal, gasPrice: BigDecimal): Deferred<TransactionReceipt> {
+    override fun sendEther(
+            recipient: String,
+            amount: BigDecimal,
+            gasLimit: BigDecimal,
+            gasPrice: BigDecimal
+    ): Deferred<TransactionReceipt> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun sendToken(contractAddress: String, recipient: String, amount: BigDecimal, gasLimit: BigDecimal, gasPrice: BigDecimal): Deferred<TransactionReceipt> {
+    override fun sendToken(
+            contractAddress: String,
+            recipient: String,
+            amount: BigDecimal,
+            gasLimit: BigDecimal,
+            gasPrice: BigDecimal
+    ): Deferred<TransactionReceipt> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun approveToken(
+            contractAddress: String,
+            credentials: Credentials,
+            spender: String,
+            amount: BigDecimal,
+            gasLimit: BigDecimal,
+            gasPrice: BigDecimal
+    ): Deferred<TransactionReceipt> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

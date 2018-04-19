@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.walletsignin.models.wallet
+package org.loopring.looprwallet.walletsignin.models
 
 import android.annotation.SuppressLint
 import android.os.Parcelable
@@ -18,7 +18,8 @@ import kotlinx.android.parcel.Parcelize
  */
 @SuppressLint("ParcelCreator")
 @Parcelize
-data class WalletCreationPhrase(val walletName: String, val password: String, val phrase: ArrayList<String>) : Parcelable, PasswordBasedWallet {
+data class WalletCreationPhrase(override val walletName: String, val password: String, val phrase: ArrayList<String>)
+    : Parcelable, PasswordBasedWallet, WalletCreationResult {
 
     override fun getWalletPassword(): String {
         return password

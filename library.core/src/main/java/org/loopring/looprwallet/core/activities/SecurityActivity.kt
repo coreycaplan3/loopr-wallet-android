@@ -21,9 +21,6 @@ class SecurityActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_security
 
-    override val activityContainerId: Int
-        get() = R.id.activityContainer
-
     override val isSecureActivity: Boolean
         get() = false
 

@@ -29,9 +29,6 @@ class TradingPairDetailsActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_trading_pair_details
 
-    override val activityContainerId: Int
-        get() = R.id.activityContainer
-
     override val isSecureActivity: Boolean
         get() = true
 

@@ -23,9 +23,6 @@ class SignInActivity : BaseActivity() {
     override val isSecureActivity: Boolean
         get() = false
 
-    override val activityContainerId: Int
-        get() = R.id.activityContainer
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

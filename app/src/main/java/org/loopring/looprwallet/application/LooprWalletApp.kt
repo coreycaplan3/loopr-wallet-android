@@ -13,7 +13,7 @@ import org.loopring.looprwallet.homeorders.dagger.HomeOrdersLooprComponent
 import org.loopring.looprwallet.homeorders.dagger.HomeOrdersLooprComponentProvider
 import org.loopring.looprwallet.createtransfer.dagger.CreateTransferLooprComponent
 import org.loopring.looprwallet.createtransfer.dagger.DaggerCreateTransferLooprComponent
-import org.loopring.looprwallet.createtransfer.dagger.TransferLooprComponentProvider
+import org.loopring.looprwallet.createtransfer.dagger.CreateTransferLooprComponentProvider
 import org.loopring.looprwallet.homemywallet.dagger.DaggerHomeMyWalletLooprComponent
 import org.loopring.looprwallet.homemywallet.dagger.HomeMyWalletLooprComponent
 import org.loopring.looprwallet.homemywallet.dagger.HomeMyWalletLooprComponentProvider
@@ -34,7 +34,7 @@ import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponentProvider
  */
 open class LooprWalletApp : CoreLooprWalletApp(), ContactsLooprComponentProvider,
         HomeMyWalletLooprComponentProvider, HomeOrdersLooprComponentProvider,
-        TransferLooprComponentProvider, ViewBalancesLooprComponentProvider,
+        CreateTransferLooprComponentProvider, ViewBalancesLooprComponentProvider,
         WalletLooprComponentProvider {
 
     companion object {

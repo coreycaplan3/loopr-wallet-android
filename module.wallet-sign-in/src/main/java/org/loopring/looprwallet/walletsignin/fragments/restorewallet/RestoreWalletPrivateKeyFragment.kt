@@ -10,6 +10,8 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.validators.PrivateKeyValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
 import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel.Companion
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel.Companion.getMessageFromError
 
 /**
  * Created by Corey on 2/22/2018
@@ -41,7 +43,7 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
 
         privateKeyUnlockButton.setOnClickListener { onUnlockWalletClick() }
 
-        WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
+        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, ::getMessageFromError)
     }
 
     override fun onFormChanged() {
@@ -59,7 +61,7 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
         val walletName = walletNameEditText.text.toString()
         val privateKey = privateKeyEditText.text.toString().toLowerCase()
 
-        walletGeneratorViewModel.createCredentialsWallet(walletName, privateKey)
+        walletGeneratorViewModel.createPrivateKeyWallet(walletName, privateKey)
     }
 
 }

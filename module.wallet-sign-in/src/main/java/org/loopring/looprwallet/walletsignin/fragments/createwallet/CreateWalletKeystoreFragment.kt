@@ -19,8 +19,8 @@ import org.loopring.looprwallet.core.validators.PasswordValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationKeystore
 import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
+import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel.Companion.getMessageFromError
 
 /**
  * Created by Corey Caplan on 2/19/18.
@@ -81,7 +81,7 @@ class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.OnPas
             filePermissionsDialog?.show()
         }
 
-        WalletGeneratorViewModel.setupForFragment(walletGeneratorViewModel, this)
+        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, ::getMessageFromError)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -140,13 +140,10 @@ class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.OnPas
      * when the rest of the form is valid.
      */
     private fun onFilePermissionGranted() {
-        val walletName = walletNameEditText.text.toString()
         val password = walletPasswordEditText.text.toString()
 
-        val wallet = WalletCreationKeystore(walletName, password)
-
-        val dialog = ConfirmPasswordDialog.getInstance(TAG, wallet)
-        dialog.show(fragmentManager, ConfirmPasswordDialog.TAG)
+        ConfirmPasswordDialog.getInstance(TAG, password)
+                .show(fragmentManager, ConfirmPasswordDialog.TAG)
     }
 
     private fun onFilePermissionDenied() {

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.DrawableRes
+import android.support.annotation.StringRes
 import android.support.design.widget.*
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
@@ -27,9 +28,11 @@ import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.ViewUtility
 import org.loopring.looprwallet.core.validators.BaseValidator
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
+import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
 
@@ -265,8 +268,61 @@ abstract class BaseFragment : Fragment() {
 
     protected val viewModelList = arrayListOf<OfflineFirstViewModel<*, *>>()
 
-    protected fun setupTransactionViewModel() {
+    /**
+     * Setups and standardizes the usage of [TransactionViewModel]. This includes the observers
+     * used to watch for transactions and errors.
+     *
+     * @param viewModel The generator used for running transactions
+     * @param progressMessage The message to be displayed by the activity's progressDialog when the
+     * transaction is running.
+     * @param convertErrorToMessage A function that takes a [Throwable] and converts it to a string
+     * to be displayed in a *Toast*.
+     */
+    protected inline fun <T> setupTransactionViewModel(
+            viewModel: TransactionViewModel<T>,
+            @StringRes progressMessage: Int,
+            crossinline convertErrorToMessage: (Throwable) -> String
+    ) {
+        setupTransactionViewModel(viewModel, str(progressMessage), convertErrorToMessage)
+    }
 
+    /**
+     * Setups and standardizes the usage of [TransactionViewModel]. This includes the observers
+     * used to watch for transactions and errors.
+     *
+     * @param viewModel The generator used for running transactions
+     * @param progressMessage The message to be displayed by the activity's progressDialog when the
+     * transaction is running.
+     * @param convertErrorToMessage A function that takes a [Throwable] and converts it to a string
+     * to be displayed in a *Toast*.
+     */
+    protected inline fun <T> setupTransactionViewModel(
+            viewModel: TransactionViewModel<T>,
+            progressMessage: String,
+            crossinline convertErrorToMessage: (Throwable) -> String
+    ) {
+        viewModel.isTransactionRunning.observeForDoubleSpend(this, {
+            val progress = (activity as? BaseActivity)?.progressDialog
+            if (it) {
+                progress?.setMessage(progressMessage)
+                progress?.show()
+            } else {
+                if (progress?.isShowing == true) {
+                    progress.dismiss()
+                }
+            }
+        })
+
+        viewModel.result.observeForDoubleSpend(this) {
+            activity?.let {
+                it.startActivity(Intent(it, CoreLooprWalletApp.mainClass))
+                it.finish()
+            }
+        }
+
+        viewModel.error.observeForDoubleSpend(this) {
+            activity?.longToast(convertErrorToMessage(it))
+        }
     }
 
     /**
@@ -344,7 +400,7 @@ abstract class BaseFragment : Fragment() {
             (activity as? BaseActivity)?.onBackPressed()
             true
         }
-        item?.itemId == R.id.menu_main_settings -> {
+        item?.itemId == R.id.menuMainSettings -> {
             context?.let { startActivity(Intent(it, SettingsActivity::class.java)) }
             true
         }

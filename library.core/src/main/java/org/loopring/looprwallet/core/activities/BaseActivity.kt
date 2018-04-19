@@ -45,12 +45,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * A layout-resource used to set the *contentView* of the current activity
      */
     abstract val contentViewRes: Int
-
-    /**
-     * The layout ID that points to the activity container
-     */
-    abstract val activityContainerId: Int
-
+    
     /**
      * True if this activity requires the user to be authenticated (enter OS passcode) or false
      * otherwise

@@ -16,9 +16,6 @@ class WelcomeActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_welcome
 
-    override val activityContainerId: Int
-        get() = R.id.activityContainer
-
     override val isSecureActivity: Boolean
         get() = false
 

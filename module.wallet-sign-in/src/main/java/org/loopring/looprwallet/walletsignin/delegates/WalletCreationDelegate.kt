@@ -1,10 +1,7 @@
 package org.loopring.looprwallet.walletsignin.delegates
 
-import org.loopring.looprwallet.walletsignin.R
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.wallet.WalletClient
-import org.loopring.looprwallet.core.extensions.loge
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationResult
+import org.loopring.looprwallet.walletsignin.models.*
 import org.web3j.crypto.Credentials
 import org.web3j.utils.Numeric
 
@@ -19,9 +16,10 @@ import org.web3j.utils.Numeric
 class WalletCreationDelegate(
         private val walletName: String,
         private val credentials: Credentials,
+        private val password: String?,
         private val keystoreContent: String?,
         private val phrase: Array<String>?,
-        private val walletClient: WalletClient?
+        private val walletClient: WalletClient
 ) {
 
     /**
@@ -34,16 +32,20 @@ class WalletCreationDelegate(
      * successful or the error if the operation was a failure.
      */
     fun createWalletAndBlock(): WalletCreationResult {
-        if (walletClient == null) {
-            loge("Could not factory currentWallet!", IllegalStateException())
-            return WalletCreationResult(false, str(R.string.error_creating_wallet))
-        }
-
         val privateKey = Numeric.encodeQuantity(credentials.ecKeyPair.privateKey)
 
         return when (walletClient.createWallet(walletName.toLowerCase(), privateKey, keystoreContent, phrase)) {
-            true -> WalletCreationResult(true, null)
-            else -> WalletCreationResult(false, str(R.string.error_wallet_already_exists))
+            true -> when {
+                password != null && keystoreContent != null ->
+                    WalletCreationKeystore(walletName, password, keystoreContent)
+
+                password != null && phrase != null ->
+                    WalletCreationPhrase(walletName, password, ArrayList(phrase.toList()))
+
+                else ->
+                    WalletCreationPrivateKey(walletName)
+            }
+            else -> throw DuplicateWalletException()
         }
     }
 

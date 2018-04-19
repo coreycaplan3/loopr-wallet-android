@@ -18,7 +18,8 @@ import org.loopring.looprwallet.core.validators.WalletNameValidator
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
 import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletRememberPhraseFragment
-import org.loopring.looprwallet.walletsignin.models.wallet.WalletCreationPhrase
+import org.loopring.looprwallet.walletsignin.models.WalletCreationPhrase
+import org.loopring.looprwallet.walletsignin.models.WalletCreationResult
 import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
 
 /**
@@ -113,23 +114,29 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnP
     // MARK - Private Methods
 
     private fun setupViewModel(view: View) {
-        walletGeneratorViewModel.walletCreation.observeForDoubleSpend(this, {
+        walletGeneratorViewModel.isTransactionRunning.observeForDoubleSpend(this) { isRunning ->
             val progress = (activity as? BaseActivity)?.progressDialog
-            if (progress?.isShowing == true) {
-                progress.dismiss()
-            }
+            when {
+                isRunning && progress != null && !progress.isShowing ->
+                    progress.show()
 
-            if (it.error != null) {
-                view.context.longToast(it.error)
+                !isRunning && progress?.isShowing == true ->
+                    progress.dismiss()
             }
-        })
+        }
 
-        walletGeneratorViewModel.walletPhraseGeneration.observeForDoubleSpend(this, {
-            pushFragmentTransaction(
-                    CreateWalletRememberPhraseFragment.getInstance(it),
-                    CreateWalletRememberPhraseFragment.TAG
-            )
-        })
+        walletGeneratorViewModel.result.observeForDoubleSpend(this) {
+            (it as? WalletCreationPhrase)?.let {
+                pushFragmentTransaction(
+                        CreateWalletRememberPhraseFragment.getInstance(it),
+                        CreateWalletRememberPhraseFragment.TAG
+                )
+            }
+        }
+
+        walletGeneratorViewModel.error.observeForDoubleSpend(this) {
+            view.context.longToast(WalletGeneratorViewModel.getMessageFromError(it))
+        }
     }
 
     private fun onSubmitFormClick(buttonView: View) {
@@ -142,7 +149,7 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnP
 
         when (fragmentType) {
             TYPE_CREATE_WALLET -> {
-                val dialog = ConfirmPasswordDialog.getInstance(TAG, wallet)
+                val dialog = ConfirmPasswordDialog.getInstance(TAG, password)
                 dialog.show(fragmentManager, ConfirmPasswordDialog.TAG)
             }
 
