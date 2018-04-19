@@ -54,6 +54,7 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
 
         setupTransactionViewModel(approveTransactionViewModel, R.string.unlocking_token) {
             return@setupTransactionViewModel when (it) {
+            // TODO CHECK GAS
                 is IOException -> str(R.string.error_no_connection)
                 else -> str(R.string.error_unlocking_token)
             }
@@ -61,6 +62,7 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
 
         setupTransactionViewModel(disapproveTransactionViewModel, R.string.locking_token) {
             return@setupTransactionViewModel when (it) {
+            // TODO CHECK GAS
                 is IOException -> str(R.string.error_no_connection)
                 else -> str(R.string.error_unlocking_token)
             }
