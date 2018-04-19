@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="168dp"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/standard_padding">
+
+        <ImageView
+            android:id="@+id/navigationHeaderLoopringImage"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:contentDescription="@string/content_description_loopring"
+            android:src="@drawable/ic_loopring_logo_96dp"
+            android:tint="@android:color/black" />
+
+        <TextView
+            android:id="@+id/navigationHeaderWalletNameLabel"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/vertical_margin_small"
+            android:layout_toEndOf="@id/navigationHeaderLoopringImage"
+            android:layout_toRightOf="@id/navigationHeaderLoopringImage"
+            android:textColor="@android:color/black"
+            tools:text="Loopr Test" />
+
+        <TextView
+            android:id="@+id/navigationHeaderWalletAddressLabel"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/navigationHeaderWalletNameLabel"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/vertical_margin_small"
+            android:layout_toEndOf="@id/navigationHeaderLoopringImage"
+            android:layout_toRightOf="@id/navigationHeaderLoopringImage"
+            android:alpha="0.80"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            tools:text="@string/default_address" />
+
+        <TextView
+            android:id="@+id/navigationHeaderFiatTitleLabel"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/navigationHeaderWalletAddressLabel"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_toEndOf="@id/navigationHeaderLoopringImage"
+            android:layout_toRightOf="@id/navigationHeaderLoopringImage"
+            android:alpha="0.80"
+            android:text="@string/wallet_value"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/navigationHeaderWalletFiatValueLabel"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/navigationHeaderFiatTitleLabel"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/vertical_margin_small"
+            android:layout_toEndOf="@id/navigationHeaderLoopringImage"
+            android:layout_toRightOf="@id/navigationHeaderLoopringImage"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            tools:text="$143.25" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.20"
+        android:contentDescription="@string/content_description_loopring"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_loopring_logo_96dp" />
+
+</RelativeLayout>

@@ -80,7 +80,7 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
      * should already be cleansed (all lower case, correct formatting, etc.)
      */
     fun getWallet(walletName: String): LooprWallet? {
-        return if (!getAllWallets().contains(walletName)) {
+        return if (!getAllWalletNames().contains(walletName)) {
             return null
         } else {
             val realmKey = getRealmKey(walletName)!!
@@ -95,7 +95,7 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
      * @return True if the wallet was selected, false otherwise
      */
     fun selectCurrentWallet(newCurrentWallet: String): Boolean {
-        val doesContainWallet = getAllWallets().contains(newCurrentWallet)
+        val doesContainWallet = getAllWalletNames().contains(newCurrentWallet)
 
         if (doesContainWallet) {
             looprSecureSettings.putString(KEY_CURRENT_WALLET, newCurrentWallet)
@@ -125,11 +125,11 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
             keyStoreContent: String?,
             passphrase: Array<String>?
     ): Boolean {
-        if (getAllWallets().contains(newWalletName)) {
+        if (getAllWalletNames().contains(newWalletName)) {
             return false
         }
 
-        if (getAllWallets().any({ getPrivateKey(it) == privateKey })) {
+        if (getAllWalletNames().any({ getPrivateKey(it) == privateKey })) {
             // There's already a wallet with this private key
             return false
         }
@@ -154,7 +154,7 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
      * @return True if the wallet was removed or false otherwise
      */
     fun removeWallet(wallet: String): Boolean {
-        var allWallets = getAllWallets()
+        var allWallets = getAllWalletNames()
         if (!allWallets.contains(wallet)) {
             return false
         }
@@ -173,10 +173,20 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
         return true
     }
 
+    /**
+     * @return All of the [LooprWallet]s that are currently stored in settings in alphabetical
+     * order.
+     */
+    fun getAllWallets(): List<LooprWallet> {
+        return getAllWalletNames()
+                .sortedWith(String.CASE_INSENSITIVE_ORDER)
+                .mapNotNull { getWallet(it) }
+    }
+
     // MARK - Private methods
 
     @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
-    fun getAllWallets(): Array<String> {
+    fun getAllWalletNames(): Array<String> {
         return looprSecureSettings.getStringArray(KEY_ALL_WALLETS) ?: arrayOf()
     }
 

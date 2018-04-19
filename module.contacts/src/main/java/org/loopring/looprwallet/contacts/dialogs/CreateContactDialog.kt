@@ -67,7 +67,7 @@ class CreateContactDialog : BaseBottomSheetDialog() {
 
         activity?.let {
             val barcodeButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-            BarcodeCaptureDelegate.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, barcodeButton)
+            BarcodeCaptureDelegate.setupBarcodeScanner(it, barcodeButton)
         }
 
         if (savedInstanceState == null) {

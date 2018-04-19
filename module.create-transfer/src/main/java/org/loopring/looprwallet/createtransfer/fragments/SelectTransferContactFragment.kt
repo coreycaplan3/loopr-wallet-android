@@ -56,8 +56,8 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let {
-            val imageButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-            BarcodeCaptureDelegate.setupBarcodeScanner(it, BarcodeCaptureActivity::class.java, imageButton)
+            val barcodeScannerButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
+            BarcodeCaptureDelegate.setupBarcodeScanner(it, barcodeScannerButton)
         }
 
         searchViewPresenter = SearchViewPresenter(

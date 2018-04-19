@@ -23,16 +23,24 @@ class TokenRetrieverViewModel : TransactionViewModel<EthToken>() {
     private val etherScanService = EtherScanService.getInstance()
 
     /**
-     * Gets a token's info (including its binary) from the network and saves it to the shared Realm.
+     * Gets a token's info (including its binary) from the network and saves it to the shared Realm,
+     * if the token does **not** already exist.
      *
-     * This
+     * @return True if the token was added successfully or false otherwise.
      */
     fun getTokenInfoFromNetworkAndAdd(contractAddress: String) = async {
         mIsTransactionRunning.postValue(true)
-        try {
+        return@async try {
             val token = ethplorerService.getTokenInfo(contractAddress).await()
             token.binary = etherScanService.getTokenBinary(contractAddress).await()
-            repository.add(token)
+
+            if (repository.getTokenByContractAddressNow(token.contractAddress) == null) {
+                // The token does NOT already exist so we can safely add it
+                repository.add(token)
+            }
+
+            mResult.postValue(token)
+
             true
         } catch (e: Throwable) {
             mError.postValue(e)

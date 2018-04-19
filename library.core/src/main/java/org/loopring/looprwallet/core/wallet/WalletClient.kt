@@ -63,6 +63,12 @@ interface WalletClient {
     fun getCurrentWallet(): LooprWallet?
 
     /**
+     * @return The list of [LooprWallet]s that are on the device currently in alphabetical order.
+     * Note, the list will be empty if there are no wallets on the device currently.
+     */
+    fun getAllWallets(): List<LooprWallet>
+
+    /**
      * Called when there is **NO** current wallet selected by the user. A call to this method
      * should result in the user being sent to the [SignInActivity]
      *

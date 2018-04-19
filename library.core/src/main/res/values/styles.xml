@@ -50,6 +50,8 @@
     <!-- There's no shapes with a radius that intrinsically limits the size -->
     <style name="App.Button.NoClipping" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/button_background_full_size</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">match_parent</item>
     </style>
 
     <style name="App.Button.NoElevation" parent="Widget.AppCompat.Button.Colored">

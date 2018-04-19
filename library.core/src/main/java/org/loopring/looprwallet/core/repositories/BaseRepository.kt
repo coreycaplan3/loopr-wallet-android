@@ -11,28 +11,29 @@ package org.loopring.looprwallet.core.repositories
 interface BaseRepository<T> {
 
     /**
-     * Adds the data to the database. This method may be called from a background thread.
+     * Adds new data to the database or updates existing data. This method may be called from any
+     * thread.
      */
     fun add(data: T)
 
     /**
-     * Adds the list of data to the database. This method may be called from a background thread.
+     * Adds new data to the database or updates existing data. This method may be called from any
+     * thread.
      */
     fun addList(data: List<T>)
 
     /**
-     * Removes the data from the database. This method may be called from a background thread.
+     * Removes the data from the database. This method may be called from a any thread.
      */
     fun remove(data: T)
 
     /**
-     * Removes the list of data from the database. This method may be called from a background
-     * thread.
+     * Removes the list of data from the database. This method may be called from a any thread.
      */
     fun remove(data: List<T>)
 
     /**
-     * Called when this repository is no longer need and can be garbage-collected.
+     * Called when this repository is no longer needed and can be destroyed.
      */
     fun clear()
 

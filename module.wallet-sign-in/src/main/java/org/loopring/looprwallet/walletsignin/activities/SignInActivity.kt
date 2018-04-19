@@ -1,5 +1,7 @@
 package org.loopring.looprwallet.walletsignin.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.activities.BaseActivity
@@ -16,6 +18,14 @@ import org.loopring.looprwallet.walletsignin.fragments.signin.SignInSelectionFra
  *
  */
 class SignInActivity : BaseActivity() {
+
+    companion object {
+
+        fun route(activity: Activity) {
+            val intent = Intent(activity, SignInActivity::class.java)
+            activity.startActivity(intent)
+        }
+    }
 
     override val contentViewRes: Int
         get() = R.layout.activity_sign_in

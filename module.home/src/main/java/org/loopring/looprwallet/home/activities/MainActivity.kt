@@ -1,11 +1,15 @@
 package org.loopring.looprwallet.home.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
-import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
+import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
@@ -19,6 +23,7 @@ import org.loopring.looprwallet.homeorders.fragments.HomeOrdersParentFragment
 import org.loopring.looprwallet.homemarkets.fragments.HomeMarketsParentFragment
 import org.loopring.looprwallet.homemywallet.fragments.MyWalletFragment
 import org.loopring.looprwallet.hometransfers.fragments.ViewTransfersFragment
+import org.loopring.looprwallet.walletsignin.activities.SignInActivity
 
 /**
  * Created by Corey on 1/14/2018
@@ -36,9 +41,11 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
          * @return An intent used to start this activity (as normal), clearing any previous tasks
          * which may have pointed to here
          */
-        fun routeAndClearOldTasks(): Intent {
-            return Intent(CoreLooprWalletApp.context, MainActivity::class.java)
+        fun routeAndClearOldTasks(activity: Activity) {
+            val intent = Intent(CoreLooprWalletApp.context, MainActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            activity.startActivity(intent)
         }
     }
 
@@ -98,6 +105,49 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         super.onSaveInstanceState(outState)
 
         bottomNavigationFragmentStackHistory.saveState(outState)
+    }
+
+    // MARK - Private Methods
+
+    fun setupNavigationView() {
+
+        val currentWalletName = walletClient.getCurrentWallet()?.walletName
+        val allWallets = walletClient.getAllWallets()
+        allWallets.forEachIndexed { index, item ->
+            homeNavigationView.menu.add(index).let {
+                it.title = item.walletName
+                if (item.walletName == currentWalletName) {
+                    it.isChecked = true
+                }
+            }
+        }
+
+        walletClient.getCurrentWallet()?.let {
+            TODO("Bind values...")
+        }
+
+        homeNavigationView.setNavigationItemSelectedListener { menuItem ->
+            when {
+                menuItem.itemId == R.id.menuAddNewWallet -> {
+                    SignInActivity.route(this)
+                }
+                else -> allWallets.find { it.walletName == menuItem.title }?.ifNotNull {
+                    val currentWallet = walletClient.getCurrentWallet()
+                    if (currentWallet != null && currentWallet != it) {
+                        homeNavigationDrawerLayout.closeDrawers()
+
+                        runBlocking {
+                            delay(300L)
+
+                            // The current wallet is not the selected one, so we must switch it
+                            MainActivity.routeAndClearOldTasks(this@MainActivity)
+                        }
+                    }
+                }
+            }
+
+            return@setNavigationItemSelectedListener true
+        }
     }
 
 }

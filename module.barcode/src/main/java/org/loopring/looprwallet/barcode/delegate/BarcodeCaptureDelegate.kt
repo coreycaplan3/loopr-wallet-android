@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.widget.EditText
 import android.widget.ImageButton
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.core.activities.BaseActivity
 
 /**
@@ -20,10 +21,9 @@ object BarcodeCaptureDelegate {
 
     private const val KEY_BARCODE_VALUE = "_BARCODE_VALUE"
 
-    // TODO refactor after making Capture Module
-    fun <T : BaseActivity> setupBarcodeScanner(activity: Activity, barcodeActivityClass: Class<T>, barcodeScannerButton: ImageButton) {
+    fun setupBarcodeScanner(activity: Activity, barcodeScannerButton: ImageButton) {
         barcodeScannerButton.setOnClickListener {
-            val intent = Intent(it.context, barcodeActivityClass)
+            val intent = Intent(it.context, BarcodeCaptureActivity::class.java)
             activity.startActivityForResult(intent, REQUEST_CODE_START_BARCODE_ACTIVITY)
         }
     }

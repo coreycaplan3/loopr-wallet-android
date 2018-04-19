@@ -22,5 +22,6 @@
     <string name="content_description_completed_order">An icon representing a completed trade</string>
     <string name="content_description_no_connection">An icon that shows the device has no connection currently</string>
     <string name="content_description_unlock_trading">An image button for allowing or disallowing this token for trading</string>
+    <string name="content_description_loopring">The official Loopring logo</string>
 
 </resources>

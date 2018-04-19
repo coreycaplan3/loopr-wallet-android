@@ -76,7 +76,7 @@ class UserWalletSettingsTest : BaseDaggerTest() {
         val firstRealmKey = userWalletSettings.getRealmKey(firstWalletName)
 
         assertNotNull(firstRealmKey)
-        assertEquals(1, userWalletSettings.getAllWallets().size)
+        assertEquals(1, userWalletSettings.getAllWalletNames().size)
 
         // Add a second wallet
 
@@ -89,7 +89,7 @@ class UserWalletSettingsTest : BaseDaggerTest() {
         val secondRealmKey = userWalletSettings.getRealmKey(secondWalletName)
 
         assertFalse(Arrays.equals(firstRealmKey, secondRealmKey))
-        assertEquals(2, userWalletSettings.getAllWallets().size)
+        assertEquals(2, userWalletSettings.getAllWalletNames().size)
 
         // Remove second wallet and assert that first is now selected
 
@@ -97,7 +97,7 @@ class UserWalletSettingsTest : BaseDaggerTest() {
 
         assertEquals(firstWallet, userWalletSettings.getCurrentWallet())
         assertTrue(Arrays.equals(firstRealmKey, userWalletSettings.getRealmKey(firstWalletName)))
-        assertEquals(1, userWalletSettings.getAllWallets().size)
+        assertEquals(1, userWalletSettings.getAllWalletNames().size)
     }
 
 }

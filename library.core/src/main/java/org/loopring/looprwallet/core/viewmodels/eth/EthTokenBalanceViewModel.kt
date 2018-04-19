@@ -89,11 +89,14 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<List<EthToken>, String>()
                     // The token is in Realm but DOES NOT have a balance associated with it; insert it
                     token.tokenBalances.add(tokenBalance)
             }
+
+            repository.add(token)
+
             return token
         } else {
             // There is no token in the Realm currently for this contract address
             // This should rarely ever happen but can occur. For example, if the user synced tokens
-            // that are not in this app by default
+            // that are not in this app by already
             val tokenRetrieverViewModel = TokenRetrieverViewModel()
             val isSuccessful = runBlocking {
                 tokenRetrieverViewModel.getTokenInfoFromNetworkAndAdd(newToken.contractAddress)

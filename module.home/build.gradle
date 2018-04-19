@@ -2,6 +2,7 @@ apply from: "../standard-library.gradle"
 
 dependencies {
     implementation project(':library.core')
+    implementation project(path: ':module.wallet-sign-in')
     implementation project(path: ':module.home-markets')
     implementation project(path: ':module.home-orders')
     implementation project(path: ':module.home-transfers')

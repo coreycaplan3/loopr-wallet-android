@@ -56,6 +56,10 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
 
     override fun getCurrentWallet(): LooprWallet? = walletSettings.getCurrentWallet()
 
+    override fun getAllWallets(): List<LooprWallet> {
+        return walletSettings.getAllWallets()
+    }
+
     override fun onNoCurrentWalletSelected(currentActivity: BaseActivity) {
         val intent = Intent(currentActivity, CoreLooprWalletApp.signInClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)

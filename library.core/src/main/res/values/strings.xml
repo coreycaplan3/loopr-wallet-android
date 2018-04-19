@@ -119,11 +119,21 @@
     <string name="help_recycler_empty_phrase">To enter a word type a word in the box below and press \"Add\". You will be able to submit them after entering all 12 words.\n\nTo reorder a word, hold the reorder icon on the right and drag it. To delete a word, swipe it to the right.</string>
     <string name="error_password_required">You must enter a password</string>
     <string name="error_wallet_name_required">You must enter a wallet name</string>
+    <string name="error_token_ticker_required">You must enter a token symbol</string>
+    <string name="error_token_name_required">You must enter a token name</string>
+    <string name="error_token_decimal_required">You must enter a valid number</string>
     <string name="error_contact_name_required">You must enter a contact name</string>
-    <string name="error_wallet_name_bad_format">The wallet must start with a letter or number and can only contain letters, numbers, spaces, dashes, (-), and underscores (_)</string>
-    <string name="error_contact_name_bad_format">The name must start with a letter or number and can only contain letters, numbers, spaces, dashes, (-), and underscores (_)</string>
+    <string name="error_wallet_name_bad_format">The wallet must start with a letter or number and can only contain letters, numbers, spaces, dashes (-), and underscores (_)</string>
+    <string name="error_token_name_bad_format">The token\'s name must start with a letter or number and can only contain letters, numbers, spaces, dashes (-), and underscores (_)</string>
+    <string name="error_token_decimal_bad_format">The token\'s number of decimals can only contain numbers</string>
+    <string name="error_token_ticker_bad_format">The token\'s symbol must can only contain letters</string>
+    <string name="error_contact_name_bad_format">The name must start with a letter or number and can only contain letters, numbers, spaces, dashes (-), and underscores (_)</string>
     <string name="error_wallet_name_too_short">The wallet name should be at least 3 characters long</string>
+    <string name="error_token_name_too_short">The token name should be at least 2 characters long</string>
+    <string name="error_token_ticker_too_short">The token symbol should be at least 2 characters long</string>
     <string name="error_wallet_name_too_long">The wallet name cannot be longer than 255 characters</string>
+    <string name="error_token_name_too_long">The token name cannot be longer than 255 characters</string>
+    <string name="error_token_ticker_too_long">The token symbol cannot be longer than 255 characters</string>
     <string name="error_contact_name_too_long">The contact name cannot be longer than 255 characters</string>
     <string name="error_password_too_short">Your password must be at least 9 characters long</string>
     <string name="error_too_long">This field is too long</string>
@@ -273,4 +283,12 @@
     <string name="unlocking_token">Unlocking token…</string>
     <string name="locking_token">Locking token…</string>
     <string name="error_unlocking_token">There was an error unlocking this token</string>
+    <string name="contract_address">Contract Address</string>
+    <string name="name">Name</string>
+    <string name="symbol">Symbol</string>
+    <string name="decimals">Decimals</string>
+    <string name="add_custom_token">Add Custom Token</string>
+    <string name="adding_token">Adding token...</string>
+    <string name="wallet_value">Wallet Value</string>
+    <string name="add_new_wallet">Add New Wallet</string>
 </resources>

@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.dialogs
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
@@ -9,7 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.extensions.longToast
+import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.validators.BaseValidator
+import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 
 /**
  * Created by Corey on 3/30/2018
@@ -77,6 +83,47 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
         super.onDestroyView()
 
         validatorList?.forEach { it.destroy() }
+    }
+
+    // MARK - Protected Methods
+
+    /**
+     * Setups and standardizes the usage of [TransactionViewModel]. This includes the observers
+     * used to watch for transactions and errors.
+     *
+     * @param viewModel The generator used for running transactions
+     * @param progressMessage The message to be displayed by the activity's progressDialog when the
+     * transaction is running.
+     * @param convertErrorToMessage A function that takes a [Throwable] and converts it to a string
+     * to be displayed in a *Toast*.
+     */
+    protected inline fun <T> setupTransactionViewModel(
+            viewModel: TransactionViewModel<T>,
+            progressMessage: String,
+            crossinline convertErrorToMessage: (Throwable) -> String
+    ) {
+        viewModel.isTransactionRunning.observeForDoubleSpend(this, {
+            val progress = (activity as? BaseActivity)?.progressDialog
+            if (it) {
+                progress?.setMessage(progressMessage)
+                progress?.show()
+            } else {
+                if (progress?.isShowing == true) {
+                    progress.dismiss()
+                }
+            }
+        })
+
+        viewModel.result.observeForDoubleSpend(this) {
+            activity?.let {
+                it.startActivity(Intent(it, CoreLooprWalletApp.mainClass))
+                it.finish()
+            }
+        }
+
+        viewModel.error.observeForDoubleSpend(this) {
+            activity?.longToast(convertErrorToMessage(it))
+        }
     }
 
 }
