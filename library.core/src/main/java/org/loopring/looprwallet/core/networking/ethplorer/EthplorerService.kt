@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MAINNET
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MOCKNET
@@ -33,14 +33,14 @@ interface EthplorerService {
     /**
      * Gets a token's information like price and total supply from the network.
      *
-     * @param contractAddress The token's [EthToken.contractAddress] used to get the proper token's
+     * @param contractAddress The token's [LooprToken.contractAddress] used to get the proper token's
      * information.
      */
-    fun getTokenInfo(contractAddress: String): Deferred<EthToken>
+    fun getTokenInfo(contractAddress: String): Deferred<LooprToken>
 
     /**
      * Gets an address's information. This includes ETH and token balance information.
      */
-    fun getAddressInfo(address: String): Deferred<List<EthToken>>
+    fun getAddressInfo(address: String): Deferred<List<LooprToken>>
 
 }

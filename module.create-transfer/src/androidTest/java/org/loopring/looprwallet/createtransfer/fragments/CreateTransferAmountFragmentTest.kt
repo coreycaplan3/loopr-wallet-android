@@ -20,7 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.extensions.formatAsCurrency
 import org.loopring.looprwallet.core.extensions.formatAsToken
@@ -193,7 +193,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
         switchTransferFromEthToLrcToken()
 
         // We have "no" ETH
-        fragment.ethToken.tokenBalances.first()!!.balance = BigDecimal.ZERO
+        fragment.looprToken.tokenBalances.first()!!.balance = BigDecimal.ZERO
 
         Espresso.onView(`is`(fragment.createTransferMaxButton)).perform(click())
 
@@ -433,7 +433,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
         Espresso.onView(`is`(fragment.spinnerActionView))
                 .perform(click())
 
-        val spinnerText = EthToken.LRC.ticker
+        val spinnerText = LooprToken.LRC.ticker
 
         onData(allOf(`is`(instanceOf(String::class.java)), `is`(spinnerText)))
                 .perform(click())

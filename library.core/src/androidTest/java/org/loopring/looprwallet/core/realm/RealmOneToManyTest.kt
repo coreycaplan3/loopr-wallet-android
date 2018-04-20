@@ -13,7 +13,7 @@ import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
 import org.loopring.looprwallet.core.extensions.upsert
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
 
 /**
@@ -47,11 +47,11 @@ class RealmOneToManyTest : BaseDaggerTest() {
         realm.executeTransaction {
             val balances = RealmList<TokenBalanceInfo>()
             balances.add(TokenBalanceInfo("0x0123456012345601234560123456012345601234"))
-            it.upsert(EthToken(tokenBalances = balances))
+            it.upsert(LooprToken(tokenBalances = balances))
         }
 
-        var token = realm.where<EthToken>()
-                .equalTo(EthToken::contractAddress, "ETH")
+        var token = realm.where<LooprToken>()
+                .equalTo(LooprToken::contractAddress, "ETH")
                 .findFirst()!!
         assertEquals(1, token.tokenBalances.size)
 
@@ -59,13 +59,13 @@ class RealmOneToManyTest : BaseDaggerTest() {
             val balances = RealmList<TokenBalanceInfo>()
             balances.add(TokenBalanceInfo("0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"))
 
-            val eth = realm.where<EthToken>().equalTo(EthToken::contractAddress, "ETH").findFirst()
+            val eth = realm.where<LooprToken>().equalTo(LooprToken::contractAddress, "ETH").findFirst()
             eth!!.tokenBalances.addAll(balances)
             realm.upsert(eth)
         }
 
-        token = realm.where<EthToken>()
-                .equalTo(EthToken::contractAddress, "ETH")
+        token = realm.where<LooprToken>()
+                .equalTo(LooprToken::contractAddress, "ETH")
                 .findFirst()!!
         assertEquals(2, token.tokenBalances.size)
     }

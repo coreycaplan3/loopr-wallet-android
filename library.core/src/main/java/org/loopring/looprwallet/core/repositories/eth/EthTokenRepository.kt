@@ -3,7 +3,7 @@ package org.loopring.looprwallet.core.repositories.eth
 import android.arch.lifecycle.LiveData
 import io.realm.kotlin.where
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
@@ -24,50 +24,50 @@ class EthTokenRepository : BaseRealmRepository() {
     override fun getRealm() = realmClient.getSharedInstance()
 
     /**
-     * Finds [EthToken.ETH] synchronously. If not found, it is inserted and returned from realm.
+     * Finds [LooprToken.ETH] synchronously. If not found, it is inserted and returned from realm.
      *
-     * @return An **UN-MANAGED** [EthToken] that represents ETH.
+     * @return An **UN-MANAGED** [LooprToken] that represents ETH.
      */
-    fun getEthNow(): EthToken = getRealm().use {
-        it.where<EthToken>()
-                .equalTo(EthToken::ticker, EthToken.ETH.ticker)
+    fun getEthNow(): LooprToken = getRealm().use {
+        it.where<LooprToken>()
+                .equalTo(LooprToken::ticker, LooprToken.ETH.ticker)
                 .findFirst()
                 .mapIfNull {
-                    val data = uiRealm.copyToRealm(EthToken.ETH)
+                    val data = uiRealm.copyToRealm(LooprToken.ETH)
                     return@mapIfNull uiRealm.copyFromRealm(data)
                 }
     }
 
     /**
-     * @return An **UN-MANAGED** [EthToken] that represents the token with the provided contract
+     * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract
      * address.
      */
-    fun getTokenByContractAddressNow(contractAddress: String): EthToken? = getRealm().use {
-        val data = it.where<EthToken>()
-                .equalTo(EthToken::contractAddress, contractAddress)
+    fun getTokenByContractAddressNow(contractAddress: String): LooprToken? = getRealm().use {
+        val data = it.where<LooprToken>()
+                .equalTo(LooprToken::contractAddress, contractAddress)
                 .findFirst() ?: return null
 
         return@use it.copyFromRealm(data)
     }
 
     /**
-     * @return An **UN-MANAGED** [EthToken] that represents the token with the provided contract
+     * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract
      * address and wallet address as the balance owner.
      */
-    fun getTokenByContractAddressAndAddressNow(contractAddress: String, walletAddress: String): EthToken? = getRealm().use {
-        val data = it.where<EthToken>()
-                .equalTo(EthToken::contractAddress, contractAddress)
-                .equalTo(listOf(EthToken::tokenBalances), TokenBalanceInfo::address, walletAddress)
+    fun getTokenByContractAddressAndAddressNow(contractAddress: String, walletAddress: String): LooprToken? = getRealm().use {
+        val data = it.where<LooprToken>()
+                .equalTo(LooprToken::contractAddress, contractAddress)
+                .equalTo(listOf(LooprToken::tokenBalances), TokenBalanceInfo::address, walletAddress)
                 .findFirst() ?: return null
 
         return@use it.copyFromRealm(data)
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun getAllTokens(): LiveData<List<EthToken>> {
-        return uiRealm.where<EthToken>()
+    fun getAllTokens(): LiveData<List<LooprToken>> {
+        return uiRealm.where<LooprToken>()
                 .findAllAsync()
-                .asLiveData() as LiveData<List<EthToken>>
+                .asLiveData() as LiveData<List<LooprToken>>
     }
 
     /**
@@ -75,16 +75,16 @@ class EthTokenRepository : BaseRealmRepository() {
      */
     @Suppress("UNCHECKED_CAST")
     fun getAllTokensWithoutZeroBalance(address: String): LiveData<List<CryptoToken>> {
-        return uiRealm.where<EthToken>()
-                .notEqualTo(listOf(EthToken::tokenBalances), TokenBalanceInfo::mBalance, "0")
+        return uiRealm.where<LooprToken>()
+                .notEqualTo(listOf(LooprToken::tokenBalances), TokenBalanceInfo::mBalance, "0")
                 .findAllAsync()
                 .asLiveData() as LiveData<List<CryptoToken>>
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun getToken(contractAddress: String): LiveData<EthToken> {
-        return uiRealm.where<EthToken>()
-                .equalTo(EthToken::contractAddress, contractAddress)
+    fun getToken(contractAddress: String): LiveData<LooprToken> {
+        return uiRealm.where<LooprToken>()
+                .equalTo(LooprToken::contractAddress, contractAddress)
                 .findFirstAsync()
                 .asLiveData()
     }

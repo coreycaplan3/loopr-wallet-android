@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.models.crypto.eth
 
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -16,7 +16,7 @@ import java.util.*
  *
  * Purpose of Class:
  */
-class EthTokenTest {
+class LooprTokenTest {
 
     private val contractAddress = "0xef68e7c694f40c8202821edf525de3782458639f"
     private val ticker = "LRC"
@@ -25,11 +25,11 @@ class EthTokenTest {
     private val priceInUsd = BigDecimal("80.40").setScale(2)
     private val priceInNativeCurrency = BigDecimal("100.80").setScale(2)
 
-    private lateinit var loopringToken: EthToken
+    private lateinit var loopringToken: LooprToken
 
     @Before
     fun setUp() {
-        loopringToken = EthToken(
+        loopringToken = LooprToken(
                 contractAddress,
                 ticker,
                 totalSupply,

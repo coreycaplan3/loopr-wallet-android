@@ -6,6 +6,7 @@ import io.realm.RealmList
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.extensions.equalTo
 import java.math.BigDecimal
+import java.math.BigInteger
 
 /**
  * Created by Corey Caplan on 3/18/18.
@@ -54,15 +55,16 @@ interface CryptoToken : TrackedRealmObject, RealmModel {
     var tokenBalances: RealmList<TokenBalanceInfo>
 
     /**
-     * The price of the token, in terms of USD.
+     * The price of the token currently in USD. This number always has a radix of size 10. To get
+     * the decimal representation of this number, divide it by 100.
      */
-    var priceInUsd: BigDecimal?
+    var priceInUsd: BigInteger?
 
     /**
-     * The price of the token in the user's currently-selected currency.
-     * This variable should go out 8 decimal places.
+     * The price of the token currently in the user's native currency. This number always has a
+     * radix of size 10. To get the decimal representation of this number, divide it by 100.
      */
-    var priceInNativeCurrency: BigDecimal?
+    var priceInNativeCurrency: BigInteger?
 
     fun getBalanceOf(address: String) = tokenBalances.find { it.address == address }?.balance
 

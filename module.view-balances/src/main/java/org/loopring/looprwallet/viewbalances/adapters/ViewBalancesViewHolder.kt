@@ -5,7 +5,7 @@ import android.view.View
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_token_balance.*
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.viewbalances.R
 
@@ -33,7 +33,7 @@ class ViewBalancesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
         }
 
         when (token.identifier) {
-            EthToken.ETH.identifier -> tokenBalanceUnlockButton.visibility = View.GONE
+            LooprToken.ETH.identifier -> tokenBalanceUnlockButton.visibility = View.GONE
             else -> {
                 tokenBalanceUnlockButton.visibility = View.VISIBLE
                 tokenBalanceUnlockButton.setOnClickListener { onUnlockClick() }

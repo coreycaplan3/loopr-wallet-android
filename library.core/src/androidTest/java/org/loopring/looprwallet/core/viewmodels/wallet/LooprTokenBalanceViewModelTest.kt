@@ -8,7 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
 import java.util.*
 
@@ -20,7 +20,7 @@ import java.util.*
  * Purpose of Class:
  */
 @RunWith(AndroidJUnit4::class)
-class EthTokenBalanceViewModelTest : BaseDaggerTest() {
+class LooprTokenBalanceViewModelTest : BaseDaggerTest() {
 
     private lateinit var ethTokenBalanceViewModel: EthTokenBalanceViewModel
 
@@ -37,7 +37,7 @@ class EthTokenBalanceViewModelTest : BaseDaggerTest() {
     @Test
     fun getLiveDataFromRepository() = runBlockingUiCode {
         val data = ethTokenBalanceViewModel.getLiveDataFromRepository(address)
-        val realmData = data.value as RealmResults<EthToken>
+        val realmData = data.value as RealmResults<LooprToken>
 
         assertTrue(realmData.load())
 
@@ -56,7 +56,7 @@ class EthTokenBalanceViewModelTest : BaseDaggerTest() {
         val list = ethTokenBalanceViewModel.getDataFromNetwork(address).await()
         ethTokenBalanceViewModel.addNetworkDataToRepository(list)
 
-        val allTokens = (ethTokenBalanceViewModel.repository.getAllTokens().value as RealmResults<EthToken>)
+        val allTokens = (ethTokenBalanceViewModel.repository.getAllTokens().value as RealmResults<LooprToken>)
         assertTrue(allTokens.load())
         val date = Date()
         allTokens.forEach {

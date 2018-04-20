@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.networking.etherscan
 
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
@@ -21,7 +21,7 @@ internal class EtherScanServiceMockImpl : EtherScanService {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            EthToken.LRC.binary!!
+            LooprToken.LRC.binary!!
         } else {
             throw IOException("No connection!")
         }

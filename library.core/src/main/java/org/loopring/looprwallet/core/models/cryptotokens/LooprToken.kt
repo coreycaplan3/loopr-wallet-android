@@ -6,9 +6,9 @@ import io.realm.annotations.Ignore
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
 
 /**
@@ -18,37 +18,39 @@ import java.util.*
  *
  * Purpose of Class:
  *
- * @param contractAddress The address used to locate the contract for this token. A value of "ETH"
- * means the token actually represents ethereum. This is because
- * @param ticker The ticker for this token. A value of "ETH" means the token is actually ethereum.
- * @param totalSupply The total supply of the crypto. To get the [BigDecimal] version, we must
+ * @property identifier The identifier used to uniquely identify this token. For Ethereum-based
+ * tokens, this can be the contract address.
+ * @property ticker The ticker for this token. A value of "ETH" means the token is actually ethereum.
+ * @property totalSupply The total supply of the crypto. To get the [BigDecimal] version, we must
  * assign this string value to a big decimal and divide it by (10^decimalPlaces). Said differently,
  * this variable should have **NO** decimal places in it.
- * @param binary The binary for the contract. This can be retrieved by viewing the contract
+ * @property binary The binary for the contract. This can be retrieved by viewing the contract
  * creation's transaction.
- * @param priceInUsd The price of the token currently in USD. This [BigDecimal] should have a scale
- * of exactly 2.
- * @param priceInNativeCurrency The price of the token currently in the user's native currency.
+ * @property priceInUsd The price of the token currently in USD. This number always has a radix of
+ * size 10. To get the decimal representation of this number, divide it by 100.
+ * @property priceInNativeCurrency The price of the token currently in the user's native currency.
+ * This number always has a radix of size 10. To get the decimal representation of this number,
+ * divide it by 100.
  * This [BigDecimal] should have a scale of exactly 2.
  */
-open class EthToken(
-        @PrimaryKey var contractAddress: String = "ETH",
+open class LooprToken(
+        @PrimaryKey override var identifier: String = ETH.identifier,
 
-        @Index override var ticker: String = "ETH",
+        @Index override var ticker: String = ETH.ticker,
 
-        override var name: String = "Ethereum",
+        override var name: String = ETH.name,
 
         totalSupply: String = "",
 
-        override var decimalPlaces: Int = 18,
+        override var decimalPlaces: Int = ETH.decimalPlaces,
 
         var binary: String? = null,
 
         override var tokenBalances: RealmList<TokenBalanceInfo> = RealmList(),
 
-        priceInUsd: BigDecimal? = null,
+        priceInUsd: BigInteger? = null,
 
-        @Ignore override var priceInNativeCurrency: BigDecimal? = null,
+        @Ignore override var priceInNativeCurrency: BigInteger? = null,
 
         override var lastUpdated: Date = Date()
 ) : RealmObject(), CryptoToken {
@@ -60,9 +62,9 @@ open class EthToken(
          *
          * This token is automatically added to the user's realm upon creation.
          */
-        val ETH = EthToken("ETH", "ETH", "Ethereum")
+        val ETH = LooprToken("ETH", "ETH", "Ethereum")
 
-        val WETH = EthToken("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        val WETH = LooprToken("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
                 "WETH",
                 "Wrapped Ether",
                 "167911966384029250753914",
@@ -70,7 +72,7 @@ open class EthToken(
                 str(R.string.weth_binary)
         )
 
-        val LRC = EthToken(
+        val LRC = LooprToken(
                 "0xef68e7c694f40c8202821edf525de3782458639f",
                 "LRC",
                 "Loopring",
@@ -80,7 +82,7 @@ open class EthToken(
 
         )
 
-        val APPC = EthToken(
+        val APPC = LooprToken(
                 "0x1a7a8bd9106f2b8d977e08582dc7d24c723ab0db",
                 "APPC",
                 "AppCoins",
@@ -89,7 +91,7 @@ open class EthToken(
                 str(R.string.appc_binary)
         )
 
-        val REQ = EthToken(
+        val REQ = LooprToken(
                 "0x8f8221afbb33998d8584a2b05749ba73c37a938a",
                 "REQ",
                 "Request Network",
@@ -98,12 +100,6 @@ open class EthToken(
                 str(R.string.req_binary)
         )
     }
-
-    /**
-     * This is a backing field
-     */
-    override val identifier
-        get() = contractAddress
 
     override var totalSupply: BigDecimal
         get() = BigDecimal(mTotalSupply)
@@ -124,14 +120,10 @@ open class EthToken(
      *
      * The price of this token, in USD. This allows for standard conversions to occur later.
      */
-    final override var priceInUsd: BigDecimal?
-        get() = mPriceInUsd?.let { BigDecimal(it) }
+    final override var priceInUsd: BigInteger?
+        get() = mPriceInUsd?.let { BigInteger(it) }
         set(value) {
-            if (value != null && value.scale() != 2) {
-                throw IllegalArgumentException("Scale should be set to 2, found ${value.scale()}")
-            }
-
-            mPriceInUsd = value?.toPlainString()
+            mPriceInUsd = value?.toString(10)
         }
 
     private var mPriceInUsd: String?
@@ -150,7 +142,7 @@ open class EthToken(
     }
 
     override fun hashCode(): Int {
-        var result = contractAddress.hashCode()
+        var result = identifier.hashCode()
         result = 31 * result + ticker.hashCode()
         return result
     }

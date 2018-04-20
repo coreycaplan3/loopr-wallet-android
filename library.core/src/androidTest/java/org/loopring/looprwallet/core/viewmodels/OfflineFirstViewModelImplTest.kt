@@ -2,7 +2,7 @@ package org.loopring.looprwallet.core.viewmodels
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.repositories.BaseRepository
 import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 import io.realm.RealmModel
@@ -18,30 +18,30 @@ import java.util.*
  * Project: loopr-wallet-android
  *
  * Purpose of Class: A default instance of [OfflineFirstViewModel] that uses a [String] instance as
- * a parameter and an  an in-memory repository for storing one instance of an [EthToken] as data.
+ * a parameter and an  an in-memory repository for storing one instance of an [LooprToken] as data.
  */
-class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() {
+class OfflineFirstViewModelImplTest : OfflineFirstViewModel<LooprToken, String>() {
 
     companion object {
-        val DATA = EthToken.ETH
+        val DATA = LooprToken.ETH
     }
 
     // TODO hook into repository GET query
-    var repositoryData: EthToken? = null
+    var repositoryData: LooprToken? = null
 
-    override val repository = object : BaseRepository<EthToken> {
+    override val repository = object : BaseRepository<LooprToken> {
 
-        override fun add(data: EthToken) {
+        override fun add(data: LooprToken) {
             repositoryData = data
         }
 
-        override fun addList(data: List<EthToken>) {
+        override fun addList(data: List<LooprToken>) {
         }
 
-        override fun remove(data: EthToken) {
+        override fun remove(data: LooprToken) {
         }
 
-        override fun remove(data: List<EthToken>) {
+        override fun remove(data: List<LooprToken>) {
         }
 
         override fun clear() {
@@ -83,16 +83,16 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
 
     override val syncType: String = "TEST"
 
-    fun createLiveData(parameter: String, onChange: (EthToken) -> Unit) {
+    fun createLiveData(parameter: String, onChange: (LooprToken) -> Unit) {
         initializeDataForever(parameter, onChange)
     }
 
-    fun createLiveDataForever(parameter: String, onChange: (EthToken) -> Unit) {
+    fun createLiveDataForever(parameter: String, onChange: (LooprToken) -> Unit) {
         initializeDataForever(parameter, onChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: String): LiveData<EthToken> {
-        return MutableLiveData<EthToken>().apply {
+    override fun getLiveDataFromRepository(parameter: String): LiveData<LooprToken> {
+        return MutableLiveData<LooprToken>().apply {
             value = repositoryData
         }
     }
@@ -103,12 +103,12 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
         syncRepository.add(SyncData())
     }
 
-    override fun getDataFromNetwork(parameter: String): Deferred<EthToken> = async {
+    override fun getDataFromNetwork(parameter: String): Deferred<LooprToken> = async {
         delay(500L)
         DATA
     }
 
-    override fun addNetworkDataToRepository(data: EthToken) {
+    override fun addNetworkDataToRepository(data: LooprToken) {
         (mLiveData as MutableLiveData).postValue(data)
     }
 
@@ -116,11 +116,11 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<EthToken, String>() 
         return super.isPredicatesEqual(oldParameter, newParameter)
     }
 
-    public override fun isDataValid(data: EthToken?): Boolean {
+    public override fun isDataValid(data: LooprToken?): Boolean {
         return super.isDataValid(data)
     }
 
-    public override fun isDataEmpty(data: EthToken?): Boolean {
+    public override fun isDataEmpty(data: LooprToken?): Boolean {
         return super.isDataEmpty(data)
     }
 }

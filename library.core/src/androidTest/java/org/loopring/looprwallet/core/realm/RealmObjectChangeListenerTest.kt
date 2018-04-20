@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 
 /**
  * Created by Corey on 3/22/2018
@@ -41,12 +41,12 @@ class RealmObjectChangeListenerTest : BaseDaggerTest() {
 
     @Test
     fun checkOnChange_noResultsFound() = runBlockingUiCode {
-        val tokenAsync = realm.where<EthToken>()
-                .equalTo(EthToken::ticker, "does not exist")
+        val tokenAsync = realm.where<LooprToken>()
+                .equalTo(LooprToken::ticker, "does not exist")
                 .findFirstAsync()
 
-        val deferred = CompletableDeferred<EthToken>()
-        tokenAsync.addChangeListener { token: EthToken ->
+        val deferred = CompletableDeferred<LooprToken>()
+        tokenAsync.addChangeListener { token: LooprToken ->
             deferred.complete(token)
         }
 

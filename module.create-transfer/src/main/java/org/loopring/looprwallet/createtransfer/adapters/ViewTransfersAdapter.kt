@@ -6,7 +6,7 @@ import io.realm.RealmList
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.models.tutorials.TutorialTracker
 import org.loopring.looprwallet.createtransfer.R
-import org.loopring.looprwallet.createtransfer.models.LooprTransfer
+import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 
 /**
  * Created by Corey Caplan on 2/28/18.

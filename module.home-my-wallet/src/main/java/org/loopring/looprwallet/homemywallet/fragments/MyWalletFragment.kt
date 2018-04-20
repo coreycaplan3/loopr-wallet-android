@@ -19,7 +19,7 @@ import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
@@ -172,7 +172,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     private fun onTokenBalancesChange(tokenBalances: RealmResults<CryptoToken>) {
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
-        tokenBalances.firstOrNull { it.identifier == EthToken.ETH.identifier }?.let {
+        tokenBalances.firstOrNull { it.identifier == LooprToken.ETH.identifier }?.let {
             val balance = it.findAddressBalance(address)?.balance?.toPlainString()
             if (balance != null) {
                 @SuppressLint("SetTextI18n")
@@ -181,7 +181,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         }
 
         val builder = StringBuilder()
-        val onlyTokenBalances = tokenBalances.filter { it.identifier != EthToken.ETH.identifier }
+        val onlyTokenBalances = tokenBalances.filter { it.identifier != LooprToken.ETH.identifier }
 
         onlyTokenBalances.forEachIndexed { index, item ->
             if (index < 5) {

@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.realm
 
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import io.realm.Realm
 import io.realm.kotlin.where
@@ -32,7 +32,7 @@ class RealmClientTest {
 
     @Test
     fun checkInitialData() {
-        val ethTokenList = realm.where<EthToken>().findAll()
+        val ethTokenList = realm.where<LooprToken>().findAll()
         assertEquals(4, ethTokenList.size)
 
         val currencyList = realm.where<CurrencyExchangeRate>().findAll()

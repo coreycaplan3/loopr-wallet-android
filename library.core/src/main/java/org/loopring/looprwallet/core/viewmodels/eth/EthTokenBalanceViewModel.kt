@@ -7,7 +7,7 @@ import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.extensions.update
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
@@ -23,7 +23,7 @@ import java.util.*
  * Purpose of Class:
  *
  */
-class EthTokenBalanceViewModel : OfflineFirstViewModel<List<EthToken>, String>() {
+class EthTokenBalanceViewModel : OfflineFirstViewModel<List<LooprToken>, String>() {
 
     override val syncType = SyncData.SYNC_TYPE_TOKEN_BALANCE
 
@@ -42,17 +42,17 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<List<EthToken>, String>()
         initializeData(owner, address, onChange as (List<CryptoToken>) -> Unit)
     }
 
-    override fun getLiveDataFromRepository(parameter: String): LiveData<List<EthToken>> {
+    override fun getLiveDataFromRepository(parameter: String): LiveData<List<LooprToken>> {
         return repository.getAllTokens()
     }
 
     override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
-    override fun getDataFromNetwork(parameter: String): Deferred<List<EthToken>> {
+    override fun getDataFromNetwork(parameter: String): Deferred<List<LooprToken>> {
         return ethplorerService.getAddressInfo(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: List<EthToken>) {
+    override fun addNetworkDataToRepository(data: List<LooprToken>) {
         repository.runTransaction(Realm.Transaction { realm ->
             val list = data.mapNotNull(this::addTokenInfoToRealm)
             realm.insertOrUpdate(list)
@@ -69,7 +69,7 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<List<EthToken>, String>()
      * Persists the given [newToken] to realm if it already exists. If not, it's information is
      * retrieved from the network and it is persisted to realm so it may be reused and accessed.
      */
-    private fun addTokenInfoToRealm(newToken: EthToken): EthToken? {
+    private fun addTokenInfoToRealm(newToken: LooprToken): LooprToken? {
         val address = parameter ?: return null
 
         val tokenBalance = newToken.tokenBalances[0]

@@ -1,9 +1,7 @@
 package org.loopring.looprwallet.core.models.android.architecture
 
 import android.arch.lifecycle.LiveData
-import io.realm.RealmChangeListener
-import io.realm.RealmModel
-import io.realm.RealmResults
+import io.realm.*
 
 
 /**
@@ -17,16 +15,37 @@ import io.realm.RealmResults
  * @param results The results from a query. Don't worry about it having data or not (from a query),
  * since a [RealmChangeListener] is registered and updates this [LiveData]'s value on the fly.
  */
-class RealmListLiveData<T : RealmModel>(private val results: RealmResults<T>) : LiveData<RealmResults<T>>() {
-
-    private val listener = RealmChangeListener<RealmResults<T>> { results -> value = results }
+class RealmListLiveData<T : RealmModel>(private val results: OrderedRealmCollection<T>) : LiveData<OrderedRealmCollection<T>>() {
 
     override fun onActive() {
-        results.addChangeListener(listener)
+        when (results) {
+            is RealmResults<*> -> {
+                (results as RealmResults<T>).addChangeListener { realmResults: RealmResults<T>? ->
+                    value = realmResults
+                }
+            }
+            is RealmList<*> -> {
+                (results as RealmList<T>).addChangeListener { list: RealmList<T>? ->
+                    value = list
+                }
+            }
+            else -> throw IllegalArgumentException("RealmCollection not supported: " + results.javaClass.simpleName)
+        }
     }
 
     override fun onInactive() {
-        results.removeChangeListener(listener)
+        when (results) {
+            is RealmResults<*> -> {
+                val results = results as RealmResults<T>
+                results.removeAllChangeListeners()
+            }
+            is RealmList<*> -> {
+                val list = results as RealmList<T>
+                list.removeAllChangeListeners()
+            }
+            else -> throw IllegalArgumentException("RealmCollection not supported: " + results.javaClass.simpleName)
+        }
+
     }
 
 }

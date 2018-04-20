@@ -17,7 +17,7 @@ import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepositor
 import org.loopring.looprwallet.createtransfer.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.settings.EthereumFeeSettingsFragment
@@ -102,10 +102,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
     lateinit var address: String
 
     @VisibleForTesting
-    lateinit var ethToken: EthToken
+    lateinit var looprToken: LooprToken
 
     @VisibleForTesting
-    lateinit var currentToken: EthToken
+    lateinit var currentToken: LooprToken
 
     @VisibleForTesting
     var contact: Contact? = null
@@ -184,8 +184,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             }
         }
 
-        ethToken = ethTokenBalanceViewModel?.getEthBalanceNow() ?: EthToken.ETH
-        currentToken = ethTokenPriceCheckerViewModel.currentCryptoToken ?: ethToken
+        looprToken = ethTokenBalanceViewModel?.getEthBalanceNow() ?: LooprToken.ETH
+        currentToken = ethTokenPriceCheckerViewModel.currentCryptoToken ?: looprToken
 
         toolbar?.title = null
         toolbar?.subtitle = contact?.name ?: recipientAddress
@@ -234,7 +234,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             val totalTokenTransferAmount = gasPrice * ethereumFeeSettings.currentTokenTransferGasLimit
 
             when (currentToken.identifier) {
-                EthToken.ETH.identifier -> onSendEth(bdTokenAmount, totalEtherTransferAmount)
+                LooprToken.ETH.identifier -> onSendEth(bdTokenAmount, totalEtherTransferAmount)
                 else -> onSendToken(bdTokenAmount, totalTokenTransferAmount)
             }
         }
@@ -391,7 +391,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
     }
 
     /**
-     * Sets up [EthTokenPriceCheckerViewModel] to watch an [EthToken].
+     * Sets up [EthTokenPriceCheckerViewModel] to watch an [LooprToken].
      */
     private fun setupTokenTicker(token: CryptoToken) {
         ethTokenPriceCheckerViewModel.getTokenPrice(this, token.identifier) {
@@ -419,7 +419,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
      * issues.
      */
     private fun onSendEth(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
-        val ethBalance = ethToken.getBalanceOf(address) ?: NEGATIVE_ONE
+        val ethBalance = looprToken.getBalanceOf(address) ?: NEGATIVE_ONE
         val gasLimit = ethereumFeeSettings.currentEthTransferGasLimit
         val gasPrice = ethereumFeeSettings.currentGasPrice
         when {
@@ -443,7 +443,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
     private fun onSendToken(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
         val tokenToSendBalance = currentToken.getBalanceOf(address) ?: NEGATIVE_ONE
-        val ethBalance = ethToken.getBalanceOf(address) ?: NEGATIVE_ONE
+        val ethBalance = looprToken.getBalanceOf(address) ?: NEGATIVE_ONE
 
         val gasLimit = ethereumFeeSettings.currentTokenTransferGasLimit
         val gasPrice = ethereumFeeSettings.currentGasPrice

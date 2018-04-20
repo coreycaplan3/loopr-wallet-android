@@ -2,7 +2,7 @@ package org.loopring.looprwallet.core.networking.ethplorer
 
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.loopring.looprwallet.core.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import kotlinx.coroutines.experimental.async
@@ -24,19 +24,19 @@ class EthplorerServiceMockImpl : EthplorerService {
         delay(MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            val eth = EthToken.ETH
+            val eth = LooprToken.ETH
             setTokenBalanceInfo(address, eth)
             setTokenPriceInfo(eth)
 
-            val lrc = EthToken.LRC
+            val lrc = LooprToken.LRC
             setTokenBalanceInfo(address, lrc)
             setTokenPriceInfo(lrc)
 
-            val appc = EthToken.APPC
+            val appc = LooprToken.APPC
             setTokenBalanceInfo(address, appc)
             setTokenPriceInfo(appc)
 
-            val req = EthToken.REQ
+            val req = LooprToken.REQ
             setTokenBalanceInfo(address, req)
             setTokenPriceInfo(req)
 
@@ -50,7 +50,7 @@ class EthplorerServiceMockImpl : EthplorerService {
         delay(MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            val tokenList = listOf(EthToken.ETH, EthToken.LRC, EthToken.APPC, EthToken.REQ)
+            val tokenList = listOf(LooprToken.ETH, LooprToken.LRC, LooprToken.APPC, LooprToken.REQ)
             tokenList.forEach { setTokenPriceInfo(it) }
             tokenList.firstOrNull { it.contractAddress == contractAddress }!!
         } else {
@@ -60,20 +60,20 @@ class EthplorerServiceMockImpl : EthplorerService {
 
     private fun setTokenPriceInfo(token: CryptoToken) {
         token.priceInUsd = when (token.identifier) {
-            EthToken.ETH.identifier -> BigDecimal("5000.00")
-            EthToken.LRC.identifier -> BigDecimal("100.00")
-            EthToken.APPC.identifier -> BigDecimal("500.00")
-            EthToken.REQ.identifier -> BigDecimal("900.00")
+            LooprToken.ETH.identifier -> BigDecimal("5000.00")
+            LooprToken.LRC.identifier -> BigDecimal("100.00")
+            LooprToken.APPC.identifier -> BigDecimal("500.00")
+            LooprToken.REQ.identifier -> BigDecimal("900.00")
             else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
         }
     }
 
     private fun setTokenBalanceInfo(address: String, token: CryptoToken) {
         val balanceAmount = when (token.identifier) {
-            EthToken.ETH.identifier -> BigDecimal("100")
-            EthToken.LRC.identifier -> BigDecimal("250")
-            EthToken.APPC.identifier -> BigDecimal("0")
-            EthToken.REQ.identifier -> BigDecimal("250")
+            LooprToken.ETH.identifier -> BigDecimal("100")
+            LooprToken.LRC.identifier -> BigDecimal("250")
+            LooprToken.APPC.identifier -> BigDecimal("0")
+            LooprToken.REQ.identifier -> BigDecimal("250")
             else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
         }
 

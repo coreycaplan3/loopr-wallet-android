@@ -4,7 +4,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.RealmModel
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -22,7 +22,7 @@ import java.util.*
  * Purpose of Class: A [StreamingViewModel] that periodically checks the token price and sends the
  * result via a channel to a *LiveData* instance.
  */
-class EthTokenPriceCheckerViewModel : StreamingViewModel<EthToken, String>() {
+class EthTokenPriceCheckerViewModel : StreamingViewModel<LooprToken, String>() {
 
     override val repository = EthTokenRepository()
 
@@ -34,7 +34,7 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<EthToken, String>() {
         this.start { currencyExchangeRate = it }
     }
 
-    var currentCryptoToken: EthToken? = null
+    var currentCryptoToken: LooprToken? = null
         private set
 
     private val ethplorerTokenApiService = EthplorerService.getInstance()
@@ -44,28 +44,28 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<EthToken, String>() {
      * the network. This method kicks off a "stream" event that will forward price changes every
      *
      * @param owner The [LifecycleOwner] that will be observing this ViewModel
-     * @param identifier The identifier that's used to get the [EthToken] from the repository
+     * @param identifier The identifier that's used to get the [LooprToken] from the repository
      * and network. For Ethereum, this is the contract's address.
-     * @param onChange A function that is called whenever the [EthToken] changes to a valid
+     * @param onChange A function that is called whenever the [LooprToken] changes to a valid
      * value.
      */
     fun getTokenPrice(owner: LifecycleOwner,
                       identifier: String,
-                      onChange: (EthToken) -> Unit
+                      onChange: (LooprToken) -> Unit
     ) {
         val interceptedChange = interceptOnChange(onChange)
         initializeData(owner, identifier, interceptedChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: String): LiveData<EthToken> {
+    override fun getLiveDataFromRepository(parameter: String): LiveData<LooprToken> {
         return repository.getToken(parameter)
     }
 
-    override fun getDataFromNetwork(parameter: String): Deferred<EthToken> {
+    override fun getDataFromNetwork(parameter: String): Deferred<LooprToken> {
         return ethplorerTokenApiService.getTokenInfo(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: EthToken) {
+    override fun addNetworkDataToRepository(data: LooprToken) {
         (data as? RealmModel)?.let { repository.add(it) }
     }
 
@@ -87,9 +87,9 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<EthToken, String>() {
      * Intercepts the supplied [onChange] method to multiply the token price by the current
      * [currencyExchangeRate].
      *
-     * @return A new function that takes [EthToken] as a parameter and returns nothing.
+     * @return A new function that takes [LooprToken] as a parameter and returns nothing.
      */
-    private fun interceptOnChange(onChange: (EthToken) -> Unit) = function@{ token: EthToken ->
+    private fun interceptOnChange(onChange: (LooprToken) -> Unit) = function@{ token: LooprToken ->
         currentCryptoToken = token
 
         val rateAgainstUsd = currencyExchangeRate?.rateAgainstToUsd

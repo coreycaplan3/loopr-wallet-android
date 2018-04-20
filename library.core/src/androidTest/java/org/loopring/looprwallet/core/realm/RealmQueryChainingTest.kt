@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import org.loopring.looprwallet.core.models.cryptotokens.EthToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 
 /**
  * Created by Corey Caplan on 4/11/18.
@@ -42,13 +42,13 @@ class RealmQueryChainingTest : BaseDaggerTest() {
 
     @Test
     fun realmQueryChaining() = runBlockingUiCode {
-        val originalTokenList = realm.where<EthToken>().findAll()
+        val originalTokenList = realm.where<LooprToken>().findAll()
 
         val originalSize = originalTokenList.size
         assertTrue(originalSize > 0)
 
         val newTokenList = originalTokenList.where()
-                .equalTo(EthToken::contractAddress, EthToken.ETH.contractAddress)
+                .equalTo(LooprToken::contractAddress, LooprToken.ETH.contractAddress)
                 .findAll()
 
         assertEquals(1, newTokenList.size)
