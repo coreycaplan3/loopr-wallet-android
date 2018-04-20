@@ -154,12 +154,12 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
      * @return True if the wallet was removed or false otherwise
      */
     fun removeWallet(wallet: String): Boolean {
-        var allWallets = getAllWalletNames()
-        if (!allWallets.contains(wallet)) {
+        val oldAllWallets = getAllWalletNames()
+        if (!oldAllWallets.contains(wallet)) {
             return false
         }
 
-        allWallets = allWallets.filterNot { it == wallet }.toTypedArray()
+        val allWallets = oldAllWallets.filterNot { it == wallet }.toTypedArray()
 
         putAllWallets(allWallets)
         putRealmKey(wallet, null)
@@ -167,8 +167,14 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
         putPassphrase(wallet, null)
         putPrivateKey(wallet, null)
 
-        val newCurrentWallet = if (allWallets.isNotEmpty()) allWallets.first() else null
-        putCurrentWallet(newCurrentWallet)
+        if (getCurrentWallet()?.walletName == wallet) {
+            // We just deleted the currentWallet, so we must reset the new one
+            val newCurrentWallet = when {
+                allWallets.isNotEmpty() -> allWallets.first()
+                else -> null
+            }
+            putCurrentWallet(newCurrentWallet)
+        }
 
         return true
     }
@@ -178,16 +184,17 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
      * order.
      */
     fun getAllWallets(): List<LooprWallet> {
-        return getAllWalletNames()
-                .sortedWith(String.CASE_INSENSITIVE_ORDER)
-                .mapNotNull { getWallet(it) }
+        return getAllWalletNames().mapNotNull { getWallet(it) }
     }
 
     // MARK - Private methods
 
     @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     fun getAllWalletNames(): Array<String> {
-        return looprSecureSettings.getStringArray(KEY_ALL_WALLETS) ?: arrayOf()
+        return (looprSecureSettings.getStringArray(KEY_ALL_WALLETS) ?: arrayOf())
+                .apply {
+                    sort()
+                }
     }
 
     /**

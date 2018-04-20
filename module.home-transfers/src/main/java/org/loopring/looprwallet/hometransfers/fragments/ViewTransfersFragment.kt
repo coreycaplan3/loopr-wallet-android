@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.hometransfers.fragments
 
 import android.support.design.widget.FloatingActionButton
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.fragment_view_transfers.*
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.setupWithFab
@@ -24,6 +25,11 @@ class ViewTransfersFragment : BaseFragment() {
         floatingActionButton.setImageResource(R.drawable.ic_send_white_24dp)
         floatingActionButton.setOnClickListener { logd("FAB CLICKED 2!") }
         fragmentContainer.setupWithFab(floatingActionButton)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {

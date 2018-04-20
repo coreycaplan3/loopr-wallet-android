@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
@@ -82,6 +83,11 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
         val searchView = searchItem.actionView as SearchView
 
         searchViewPresenter.setupSearchView(searchItem, searchView)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onQueryTextGainFocus() {

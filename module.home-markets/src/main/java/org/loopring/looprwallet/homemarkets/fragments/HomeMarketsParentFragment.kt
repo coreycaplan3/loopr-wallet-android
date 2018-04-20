@@ -5,6 +5,7 @@ import android.support.design.widget.AppBarLayout
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.logd
@@ -67,6 +68,11 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         val searchView = searchItem.actionView as SearchView
 
         searchViewPresenter.setupSearchView(searchItem, searchView)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onBottomNavigationReselected() {

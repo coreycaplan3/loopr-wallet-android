@@ -2,15 +2,23 @@ package org.loopring.looprwallet.home.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.AlertDialog
+import android.support.v7.widget.Toolbar
+import android.view.Gravity
+import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.ifNotNull
+import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
@@ -49,6 +57,20 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
 
             activity.startActivity(intent)
         }
+
+        /**
+         * @return An intent used to start this activity (as normal), clearing any previous tasks
+         * which may have pointed to here
+         */
+        fun routeClearOldTasksAndRemoveCurrentWallet(activity: Activity) {
+            val intent = Intent(CoreLooprWalletApp.context, MainActivity::class.java)
+                    .putExtra(KEY_REMOVE_CURRENT_WALLET, true)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            activity.startActivity(intent)
+        }
+
+        private const val KEY_REMOVE_CURRENT_WALLET = "_REMOVE_CURRENT_WALLET"
     }
 
     override val contentViewRes: Int
@@ -57,22 +79,28 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     override val isSecureActivity: Boolean
         get() = true
 
-    private val fragmentTagPairs: List<BottomNavigationFragmentPair> = listOf(
-            BottomNavigationFragmentPair(KEY_MARKETS, HomeMarketsParentFragment(), R.id.menu_markets),
+    private val fragmentTagPairs by lazy {
+        listOf(
+                BottomNavigationFragmentPair(KEY_MARKETS, HomeMarketsParentFragment(), R.id.menu_markets),
 
-            BottomNavigationFragmentPair(KEY_ORDERS, HomeOrdersParentFragment(), R.id.menu_orders),
+                BottomNavigationFragmentPair(KEY_ORDERS, HomeOrdersParentFragment(), R.id.menu_orders),
 
-            BottomNavigationFragmentPair(KEY_TRANSFERS, ViewTransfersFragment(), R.id.menu_transfers),
+                BottomNavigationFragmentPair(KEY_TRANSFERS, ViewTransfersFragment(), R.id.menu_transfers),
 
-            BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(), R.id.menu_my_wallet)
-    )
-
+                BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(), R.id.menu_my_wallet)
+        )
+    }
     lateinit var bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory
 
     lateinit var bottomNavigationPresenter: BottomNavigationPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val isRemovingCurrentWallet = intent.getBooleanExtra(KEY_REMOVE_CURRENT_WALLET, false)
+        if (isRemovingCurrentWallet && savedInstanceState == null) {
+            walletClient.getCurrentWallet()?.walletName?.let { walletClient.removeWallet(it) }
+        }
 
         bottomNavigationFragmentStackHistory = BottomNavigationFragmentStackHistory(false, savedInstanceState)
 
@@ -87,7 +115,6 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
                 savedInstanceState = savedInstanceState
         )
 
-        setupNavigationDrawer()
     }
 
     override fun onSecurityConfirmed(parameter: Int) {
@@ -113,25 +140,33 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
 
     // MARK - Private Methods
 
-    private fun setupNavigationDrawer() {
+    /**
+     * If this variable is **NOT** null when the drawer is closed, we can invoke it :)
+     */
+    var onItemSelected: (() -> Unit)? = null
 
-        // TODO delete an item!
+    override fun setSupportActionBar(toolbar: Toolbar?) {
+        super.setSupportActionBar(toolbar)
 
-        // Setup the current selected menu item
-        val currentWalletName = walletClient.getCurrentWallet()?.walletName
-        val allWallets = walletClient.getAllWallets()
-        allWallets.forEachIndexed { index, item ->
-            homeNavigationView.menu.add(index).let {
-                it.title = item.walletName
-                if (item.walletName == currentWalletName) {
-                    it.isChecked = true
-                }
-            }
+        supportActionBar?.apply {
+            logi("Setting up the navigation drawer...")
+            setupNavigationDrawer()
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
         }
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        android.R.id.home -> {
+            homeNavigationDrawerLayout.openDrawer(Gravity.START)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun setupNavigationDrawer() {
         setupNavigationHeaderView()
-
-        setupNavigationItemClickListener(allWallets)
+        setupNavigationDrawerMenu()
     }
 
     private fun setupNavigationHeaderView() {
@@ -150,13 +185,39 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         }
     }
 
-    private fun setupNavigationItemClickListener(allWallets: List<LooprWallet>) {
-        // If this variable is **NOT** null when the drawer is closed, we can invoke it :)
-        var onItemSelected: (() -> Unit)? = null
+    private fun setupNavigationDrawerMenu() {
+        // Clear the old menu
+        homeNavigationView.menu.clear()
+        homeNavigationView.inflateMenu(R.menu.home_navigation_drawer_menu)
 
+        // Setup the current selected menu item
+        val currentWalletName = walletClient.getCurrentWallet()?.walletName
+        val allWallets = walletClient.getAllWallets()
+        allWallets.forEachIndexed { index, item ->
+            homeNavigationView.menu.add(index).let {
+                it.title = item.walletName
+                if (item.walletName == currentWalletName) {
+                    it.isChecked = true
+                }
+            }
+        }
+
+        homeNavigationView.menu.findItem(R.id.menuAddNewWallet).apply {
+            this.icon?.let { DrawableCompat.setTint(it, Color.BLACK) }
+        }
+
+        homeNavigationView.menu.findItem(R.id.menuDeleteWallet).apply {
+            this.icon?.let { DrawableCompat.setTint(it, Color.BLACK) }
+        }
+
+        setupNavigationItemClickListener(allWallets)
+    }
+
+    private fun setupNavigationItemClickListener(allWallets: List<LooprWallet>) {
         homeNavigationDrawerLayout.addDrawerListener(object : DrawerListenerAdapter() {
             override fun onDrawerClosed(drawerView: View) {
                 onItemSelected?.invoke()
+                onItemSelected = null
             }
         })
 
@@ -164,6 +225,9 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
             when {
                 menuItem.itemId == R.id.menuAddNewWallet -> {
                     onItemSelected = { SignInActivity.route(this) }
+                }
+                menuItem.itemId == R.id.menuDeleteWallet -> {
+                    setupDeleteWalletDialogAdapter(allWallets)
                 }
                 else -> allWallets.find { it.walletName == menuItem.title }?.ifNotNull {
                     // We found the wallet that matches the title's name
@@ -176,6 +240,27 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
 
             return@setNavigationItemSelectedListener true
         }
+    }
+
+    private fun setupDeleteWalletDialogAdapter(allWallets: List<LooprWallet>) {
+        val adapterItems = allWallets.map { it.walletName }
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, adapterItems)
+        AlertDialog.Builder(this)
+                .setAdapter(adapter) { dialog, position ->
+                    if (walletClient.getCurrentWallet() == allWallets[position]) {
+                        // We need to restart the activity and remove the wallet while there are NO
+                        // realms open
+                        onItemSelected = { MainActivity.routeClearOldTasksAndRemoveCurrentWallet(this) }
+                        dialog.dismiss()
+                        homeNavigationDrawerLayout.closeDrawers()
+                    } else {
+                        walletClient.removeWallet(allWallets[position].walletName)
+
+                        // Reset the menu
+                        setupNavigationDrawerMenu()
+                        dialog.dismiss()
+                    }
+                }
     }
 
     private open class DrawerListenerAdapter : DrawerLayout.DrawerListener {

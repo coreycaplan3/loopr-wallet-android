@@ -11,6 +11,7 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.homemywallet.R
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import android.view.MenuItem
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.card_account_balances.*
 import org.loopring.looprwallet.barcode.utilities.BarcodeUtility
@@ -110,6 +111,11 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         logd("Wallet Reselected!")
         // Scroll to the top of the NestedScrollView
         fragmentContainer.scrollTo(0, 0)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onSecurityConfirmed(parameter: Int): Unit = when (parameter) {

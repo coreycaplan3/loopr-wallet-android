@@ -169,6 +169,18 @@ abstract class BaseFragment : Fragment() {
         floatingActionButton.visibility = View.GONE
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?) = when {
+        item?.itemId == android.R.id.home -> {
+            (activity as? BaseActivity)?.onBackPressed()
+            true
+        }
+        item?.itemId == R.id.menuMainSettings -> {
+            context?.let { startActivity(Intent(it, SettingsActivity::class.java)) }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
     open fun onShowKeyboard() {
         // Defaults to no-op
     }
@@ -394,18 +406,6 @@ abstract class BaseFragment : Fragment() {
     }
 
     var indefiniteSnackbar: Snackbar? = null
-
-    override fun onOptionsItemSelected(item: MenuItem?) = when {
-        item?.itemId == android.R.id.home -> {
-            (activity as? BaseActivity)?.onBackPressed()
-            true
-        }
-        item?.itemId == R.id.menuMainSettings -> {
-            context?.let { startActivity(Intent(it, SettingsActivity::class.java)) }
-            true
-        }
-        else -> false
-    }
 
     override fun onStart() {
         super.onStart()
