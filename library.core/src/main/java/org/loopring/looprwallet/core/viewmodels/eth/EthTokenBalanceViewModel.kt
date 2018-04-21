@@ -2,11 +2,10 @@ package org.loopring.looprwallet.core.viewmodels.eth
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
+import io.realm.OrderedRealmCollection
 import io.realm.Realm
-import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.runBlocking
-import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.extensions.update
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -23,7 +22,7 @@ import java.util.*
  * Purpose of Class:
  *
  */
-class EthTokenBalanceViewModel : OfflineFirstViewModel<List<LooprToken>, String>() {
+class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<LooprToken>, String>() {
 
     override val syncType = SyncData.SYNC_TYPE_TOKEN_BALANCE
 
@@ -33,26 +32,25 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<List<LooprToken>, String>
 
     fun getEthBalanceNow() = repository.getEthNow()
 
-    @Suppress("UNCHECKED_CAST")
     fun getAllTokensWithBalances(
             owner: LifecycleOwner,
             address: String,
-            onChange: (RealmResults<CryptoToken>) -> Unit
+            onChange: (OrderedRealmCollection<LooprToken>) -> Unit
     ) {
-        initializeData(owner, address, onChange as (List<CryptoToken>) -> Unit)
+        initializeData(owner, address, onChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: String): LiveData<List<LooprToken>> {
+    override fun getLiveDataFromRepository(parameter: String): LiveData<OrderedRealmCollection<LooprToken>> {
         return repository.getAllTokens()
     }
 
     override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
-    override fun getDataFromNetwork(parameter: String): Deferred<List<LooprToken>> {
+    override fun getDataFromNetwork(parameter: String): Deferred<OrderedRealmCollection<LooprToken>> {
         return ethplorerService.getAddressInfo(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: List<LooprToken>) {
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprToken>) {
         repository.runTransaction(Realm.Transaction { realm ->
             val list = data.mapNotNull(this::addTokenInfoToRealm)
             realm.insertOrUpdate(list)
@@ -73,9 +71,9 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<List<LooprToken>, String>
         val address = parameter ?: return null
 
         val tokenBalance = newToken.tokenBalances[0]
-        val token = repository.getTokenByContractAddressNow(contractAddress = newToken.contractAddress)
+        val token = repository.getTokenByContractAddressNow(contractAddress = newToken.identifier)
         val tokenWithBalanceInfo = repository.getTokenByContractAddressAndAddressNow(
-                contractAddress = newToken.contractAddress,
+                contractAddress = newToken.identifier,
                 walletAddress = address
         )
 
@@ -99,7 +97,7 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<List<LooprToken>, String>
             // that are not in this app by already
             val tokenRetrieverViewModel = TokenRetrieverViewModel()
             val isSuccessful = runBlocking {
-                tokenRetrieverViewModel.getTokenInfoFromNetworkAndAdd(newToken.contractAddress)
+                tokenRetrieverViewModel.getTokenInfoFromNetworkAndAdd(newToken.identifier)
                         .await()
             }
             return when {

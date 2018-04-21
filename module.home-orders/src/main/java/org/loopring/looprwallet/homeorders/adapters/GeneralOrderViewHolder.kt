@@ -32,7 +32,7 @@ class GeneralOrderViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
             else -> View.GONE
         }
 
-        itemView.setOnClickListener {
+        generalOrderContainer.setOnClickListener {
             onOrderClick(order)
         }
 

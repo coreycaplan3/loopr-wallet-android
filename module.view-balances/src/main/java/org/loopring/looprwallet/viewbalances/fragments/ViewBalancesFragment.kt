@@ -75,10 +75,7 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
         val address = walletClient.getCurrentWallet()?.credentials?.address
         if (address != null) {
             tokenBalanceViewModel.getAllTokensWithBalances(this, address) {
-                adapter.updateData(it)
-
-                // The adapter tracks changes automatically, so we only needed to observe once
-                tokenBalanceViewModel.removeDataObserver(this)
+                setupOfflineFirstDataObserver(tokenBalanceViewModel, adapter, it)
             }
         }
 

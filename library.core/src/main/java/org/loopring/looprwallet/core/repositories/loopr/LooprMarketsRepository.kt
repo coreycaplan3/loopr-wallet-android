@@ -1,9 +1,7 @@
 package org.loopring.looprwallet.core.repositories.loopr
 
 import android.arch.lifecycle.LiveData
-import io.realm.Realm
-import io.realm.RealmModel
-import io.realm.RealmResults
+import io.realm.*
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
@@ -20,7 +18,7 @@ class LooprMarketsRepository : BaseRealmRepository() {
 
     override fun getRealm() = realmClient.getSharedInstance()
 
-    fun getMarkets(filter: MarketsFilter): LiveData<RealmResults<RealmModel>> {
+    fun getMarkets(filter: MarketsFilter): LiveData<OrderedRealmCollection<RealmModel>> {
         TODO("TODO")
     }
 

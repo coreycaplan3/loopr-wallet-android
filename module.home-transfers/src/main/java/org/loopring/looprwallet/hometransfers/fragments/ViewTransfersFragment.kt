@@ -2,18 +2,17 @@ package org.loopring.looprwallet.hometransfers.fragments
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_view_transfers.*
-import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.setupWithFab
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
 import org.loopring.looprwallet.hometransfers.R
+import org.loopring.looprwallet.hometransfers.adapters.ViewTransfersAdapter
 import org.loopring.looprwallet.hometransfers.viewmodels.ViewAllTransfersViewModel
 
 /**
@@ -44,10 +43,14 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val adapter = ViewTransfersAdapter()
         setupOfflineFirstStateAndErrorObserver(viewAllTransfersViewModel, ::onRefresh)
+        viewAllTransfersViewModel?.getAllTransfers(this) {
+            setupOfflineFirstDataObserver(viewAllTransfersViewModel, adapter, it)
+        }
 
         viewTransfersRecyclerView.layoutManager = LinearLayoutManager(view.context)
-//        viewTransfersRecyclerView.adapter =
+        viewTransfersRecyclerView.adapter = adapter
 
         // TODO setup recycler view, view model, swipe refresh, onDetailsClick, error handling, etc.
         // TODO standardize BaseRealmRecyclerAdapter initialization with OfflineFirstViewModel :)

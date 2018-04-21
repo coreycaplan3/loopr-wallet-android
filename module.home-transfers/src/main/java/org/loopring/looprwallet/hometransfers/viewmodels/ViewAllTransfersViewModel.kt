@@ -1,13 +1,12 @@
 package org.loopring.looprwallet.hometransfers.viewmodels
 
+import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
-import io.realm.RealmList
-import io.realm.RealmModel
+import io.realm.OrderedRealmCollection
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import org.loopring.looprwallet.core.repositories.BaseRepository
 import org.loopring.looprwallet.core.repositories.loopr.LooprTransferRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.util.*
@@ -20,20 +19,23 @@ import java.util.*
  * Purpose of Class: To retrieve this user's transfers of ETH, tokens, etc.
  *
  */
-class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<RealmList<LooprTransfer>, Unit>() {
+class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<LooprTransfer>, Unit>() {
 
     override val repository = LooprTransferRepository(currentWallet)
 
-    @Suppress("UNCHECKED_CAST")
-    override fun getLiveDataFromRepository(parameter: Unit): LiveData<RealmList<LooprTransfer>> {
-        return repository.getAllTransfers() as LiveData<RealmList<LooprTransfer>>
+    fun getAllTransfers(owner: LifecycleOwner, onChange: (OrderedRealmCollection<LooprTransfer>) -> Unit) {
+        initializeData(owner, Unit, onChange)
     }
 
-    override fun getDataFromNetwork(parameter: Unit): Deferred<RealmList<LooprTransfer>> {
+    override fun getLiveDataFromRepository(parameter: Unit): LiveData<OrderedRealmCollection<LooprTransfer>> {
+        return repository.getAllTransfers()
+    }
+
+    override fun getDataFromNetwork(parameter: Unit): Deferred<OrderedRealmCollection<LooprTransfer>> {
         TODO("Ethplorer get Address History") // TODO
     }
 
-    override fun addNetworkDataToRepository(data: RealmList<LooprTransfer>) {
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprTransfer>) {
         repository.addList(data)
     }
 

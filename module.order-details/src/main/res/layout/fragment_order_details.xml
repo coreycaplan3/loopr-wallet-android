@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/cardBackgroundColor"
     android:padding="@dimen/standard_padding">
 
     <LinearLayout
@@ -91,9 +92,9 @@
         tools:text="~ $82,423.85" />
 
     <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/orderDetailsSwipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/orderDetailsSwipeRefreshLayout"
         android:layout_below="@id/orderDetailsFiatAmountLabel"
         android:layout_marginTop="@dimen/vertical_margin_large">
 

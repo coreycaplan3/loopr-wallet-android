@@ -15,7 +15,8 @@ import io.realm.*
  * @param results The results from a query. Don't worry about it having data or not (from a query),
  * since a [RealmChangeListener] is registered and updates this [LiveData]'s value on the fly.
  */
-class RealmListLiveData<T : RealmModel>(private val results: OrderedRealmCollection<T>) : LiveData<OrderedRealmCollection<T>>() {
+class RealmListLiveData<T : RealmModel>(private val results: OrderedRealmCollection<T>)
+    : LiveData<OrderedRealmCollection<T>>() {
 
     override fun onActive() {
         when (results) {

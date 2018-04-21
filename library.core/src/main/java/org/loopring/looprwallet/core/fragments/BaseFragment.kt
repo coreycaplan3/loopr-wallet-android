@@ -19,13 +19,18 @@ import android.support.v4.view.ViewGroupCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ProgressBar
+import io.realm.OrderedRealmCollection
+import io.realm.RealmList
+import io.realm.RealmModel
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -335,6 +340,23 @@ abstract class BaseFragment : Fragment() {
         viewModel.error.observeForDoubleSpend(this) {
             activity?.longToast(convertErrorToMessage(it))
         }
+    }
+
+    /**
+     * Sets up the offline-first data observer by updating the [adapter] and removing the
+     * [viewModel]'s data observer (since the [adapter] registers its own data observer).
+     *
+     * @param viewModel The view model whose data observer will be unregistered
+     * @param adapter The adapter whose data will be updated
+     * @param data The data that will be bound to the [adapter]
+     */
+    protected fun <T : RealmModel> setupOfflineFirstDataObserver(
+            viewModel: OfflineFirstViewModel<*, *>?,
+            adapter: BaseRealmAdapter<T>,
+            data: OrderedRealmCollection<T>
+    ) {
+        viewModel?.removeDataObserver(this)
+        adapter.updateData(data)
     }
 
     /**

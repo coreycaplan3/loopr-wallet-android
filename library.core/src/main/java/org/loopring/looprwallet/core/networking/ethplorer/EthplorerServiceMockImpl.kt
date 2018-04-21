@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
+import io.realm.RealmList
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
@@ -9,6 +10,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import java.io.IOException
 import java.math.BigDecimal
+import java.math.BigInteger
 
 /**
  * Created by Corey Caplan on 3/17/18.
@@ -40,7 +42,7 @@ class EthplorerServiceMockImpl : EthplorerService {
             setTokenBalanceInfo(address, req)
             setTokenPriceInfo(req)
 
-            listOf(eth, lrc, appc, req)
+            return@async RealmList<LooprToken>(eth, lrc, appc, req)
         } else {
             throw IOException("No connection!")
         }
@@ -52,7 +54,7 @@ class EthplorerServiceMockImpl : EthplorerService {
         if (NetworkUtility.isNetworkAvailable()) {
             val tokenList = listOf(LooprToken.ETH, LooprToken.LRC, LooprToken.APPC, LooprToken.REQ)
             tokenList.forEach { setTokenPriceInfo(it) }
-            tokenList.firstOrNull { it.contractAddress == contractAddress }!!
+            tokenList.firstOrNull { it.identifier == contractAddress }!!
         } else {
             throw IOException("No connection!")
         }
@@ -60,20 +62,20 @@ class EthplorerServiceMockImpl : EthplorerService {
 
     private fun setTokenPriceInfo(token: CryptoToken) {
         token.priceInUsd = when (token.identifier) {
-            LooprToken.ETH.identifier -> BigDecimal("5000.00")
-            LooprToken.LRC.identifier -> BigDecimal("100.00")
-            LooprToken.APPC.identifier -> BigDecimal("500.00")
-            LooprToken.REQ.identifier -> BigDecimal("900.00")
+            LooprToken.ETH.identifier -> BigInteger("500000")
+            LooprToken.LRC.identifier -> BigInteger("10000")
+            LooprToken.APPC.identifier -> BigInteger("50000")
+            LooprToken.REQ.identifier -> BigInteger("90000")
             else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
         }
     }
 
     private fun setTokenBalanceInfo(address: String, token: CryptoToken) {
         val balanceAmount = when (token.identifier) {
-            LooprToken.ETH.identifier -> BigDecimal("100")
-            LooprToken.LRC.identifier -> BigDecimal("250")
-            LooprToken.APPC.identifier -> BigDecimal("0")
-            LooprToken.REQ.identifier -> BigDecimal("250")
+            LooprToken.ETH.identifier -> BigDecimal("10000")
+            LooprToken.LRC.identifier -> BigDecimal("25000")
+            LooprToken.APPC.identifier -> BigDecimal("000")
+            LooprToken.REQ.identifier -> BigDecimal("25000")
             else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
         }
 

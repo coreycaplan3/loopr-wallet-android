@@ -293,4 +293,5 @@
     <string name="add_new_wallet">Add New Wallet</string>
     <string name="watch_only">Watch Only</string>
     <string name="remove_wallet">Remove a Wallet</string>
+    <string name="empty_state_view_transfers">You have no transfers. Send or receive some tokens to populate this page!</string>
 </resources>

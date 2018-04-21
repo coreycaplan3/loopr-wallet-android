@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ripple_effect_accent"
     android:orientation="vertical"
     android:paddingLeft="@dimen/standard_padding_small"
     android:paddingRight="@dimen/standard_padding_small"
@@ -19,9 +18,12 @@
         tools:text="@string/default_date_short" />
 
     <RelativeLayout
+        android:id="@+id/generalOrderContainer"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:clipToPadding="false">
+        android:background="?attr/cardBackgroundColor"
+        android:clipToPadding="false"
+        android:foreground="@drawable/ripple_effect_accent">
 
         <FrameLayout
             android:id="@+id/orderSymbolContainer"

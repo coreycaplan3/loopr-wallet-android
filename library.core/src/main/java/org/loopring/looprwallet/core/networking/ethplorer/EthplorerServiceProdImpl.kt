@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
+import io.realm.RealmList
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import kotlinx.coroutines.experimental.Deferred
 
@@ -11,9 +12,9 @@ import kotlinx.coroutines.experimental.Deferred
  * Purpose of Class:
  *
  */
-class EthplorerServiceProdImpl: EthplorerService {
+class EthplorerServiceProdImpl : EthplorerService {
 
-    override fun getAddressInfo(address: String): Deferred<List<LooprToken>> {
+    override fun getAddressInfo(address: String): Deferred<RealmList<LooprToken>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

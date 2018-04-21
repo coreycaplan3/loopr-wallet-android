@@ -4,22 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/cardBackgroundColor"
-    android:clipToPadding="false"
-    android:padding="@dimen/standard_padding"
-    tools:ignore="UseCompoundDrawables">
+    android:padding="@dimen/standard_padding">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="vertical"
-        tools:ignore="UselessParent">
+        tools:ignore="UseCompoundDrawables,UselessParent">
 
         <ImageView
             android:layout_width="@dimen/empty_image_size"
             android:layout_height="@dimen/empty_image_size"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_assignment_white_48dp"
+            android:src="@drawable/ic_swap_vert_white_24dp"
             android:tint="?attr/textColorDisabled"
             tools:ignore="ContentDescription" />
 
@@ -28,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/empty_general_open_orders"
+            android:text="@string/empty_state_view_transfers"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textSize="@dimen/empty_title_text_size" />
 

@@ -59,8 +59,9 @@ abstract class BaseRealmAdapter<T : RealmModel> :
      * whether or not we should "load more" data after scrolling beyond the current data's
      * capacity.
      *
-     * Set this field to *null* if it shouldn't be used, like if we're loading data only locally
-     * and we know there's nothing more to load.
+     * Set this field to *null* if it shouldn't be used. For example:
+     * - The app is loading data only locally and we know there's nothing more to load.
+     * - We don't know how many items there are in the list
      */
     abstract val totalItems: Int?
 

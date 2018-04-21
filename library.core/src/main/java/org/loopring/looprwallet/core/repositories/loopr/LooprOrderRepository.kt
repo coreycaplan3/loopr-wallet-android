@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.repositories.loopr
 
 import android.arch.lifecycle.LiveData
+import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
 import io.realm.RealmResults
 import org.loopring.looprwallet.core.models.order.OrderFilter
@@ -19,7 +20,7 @@ class LooprOrderRepository(private val currentWallet: LooprWallet) : BaseRealmRe
 
     override fun getRealm() = realmClient.getPrivateInstance(currentWallet)
 
-    fun getOrders(orderFilter: OrderFilter): LiveData<RealmResults<RealmModel>> {
+    fun getOrders(orderFilter: OrderFilter): LiveData<OrderedRealmCollection<RealmModel>> {
         TODO("IMPLEMENT ME")
     }
 

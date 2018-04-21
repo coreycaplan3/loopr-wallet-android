@@ -1,8 +1,9 @@
 package org.loopring.looprwallet.core.repositories.eth
 
 import android.arch.lifecycle.LiveData
+import io.realm.OrderedRealmCollection
+import io.realm.RealmList
 import io.realm.kotlin.where
-import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
 import org.loopring.looprwallet.core.extensions.asLiveData
@@ -44,7 +45,7 @@ class EthTokenRepository : BaseRealmRepository() {
      */
     fun getTokenByContractAddressNow(contractAddress: String): LooprToken? = getRealm().use {
         val data = it.where<LooprToken>()
-                .equalTo(LooprToken::contractAddress, contractAddress)
+                .equalTo(LooprToken::identifier, contractAddress)
                 .findFirst() ?: return null
 
         return@use it.copyFromRealm(data)
@@ -56,35 +57,32 @@ class EthTokenRepository : BaseRealmRepository() {
      */
     fun getTokenByContractAddressAndAddressNow(contractAddress: String, walletAddress: String): LooprToken? = getRealm().use {
         val data = it.where<LooprToken>()
-                .equalTo(LooprToken::contractAddress, contractAddress)
+                .equalTo(LooprToken::identifier, contractAddress)
                 .equalTo(listOf(LooprToken::tokenBalances), TokenBalanceInfo::address, walletAddress)
                 .findFirst() ?: return null
 
         return@use it.copyFromRealm(data)
     }
 
-    @Suppress("UNCHECKED_CAST")
-    fun getAllTokens(): LiveData<List<LooprToken>> {
+    fun getAllTokens(): LiveData<OrderedRealmCollection<LooprToken>> {
         return uiRealm.where<LooprToken>()
                 .findAllAsync()
-                .asLiveData() as LiveData<List<LooprToken>>
+                .asLiveData()
     }
 
     /**
-     * @param address The address of the wallet whose addres s
+     * @param address The address of the wallet whose balances will be retrieved
      */
-    @Suppress("UNCHECKED_CAST")
-    fun getAllTokensWithoutZeroBalance(address: String): LiveData<List<CryptoToken>> {
+    fun getAllTokensWithoutZeroBalance(address: String): LiveData<OrderedRealmCollection<LooprToken>> {
         return uiRealm.where<LooprToken>()
                 .notEqualTo(listOf(LooprToken::tokenBalances), TokenBalanceInfo::mBalance, "0")
                 .findAllAsync()
-                .asLiveData() as LiveData<List<CryptoToken>>
+                .asLiveData()
     }
 
-    @Suppress("UNCHECKED_CAST")
     fun getToken(contractAddress: String): LiveData<LooprToken> {
         return uiRealm.where<LooprToken>()
-                .equalTo(LooprToken::contractAddress, contractAddress)
+                .equalTo(LooprToken::identifier, contractAddress)
                 .findFirstAsync()
                 .asLiveData()
     }

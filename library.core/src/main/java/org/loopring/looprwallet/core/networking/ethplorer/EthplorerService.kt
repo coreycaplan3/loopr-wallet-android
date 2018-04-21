@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
+import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.utilities.BuildUtility
@@ -41,6 +42,6 @@ interface EthplorerService {
     /**
      * Gets an address's information. This includes ETH and token balance information.
      */
-    fun getAddressInfo(address: String): Deferred<List<LooprToken>>
+    fun getAddressInfo(address: String): Deferred<RealmList<LooprToken>>
 
 }

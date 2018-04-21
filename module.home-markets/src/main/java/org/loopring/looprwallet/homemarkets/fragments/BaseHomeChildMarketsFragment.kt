@@ -40,8 +40,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
      */
     abstract val isFavorites: Boolean
 
-    var isSearchActive = false
-        private set
+    private var isSearchActive = false
 
     lateinit var adapter: HomeMarketsAdapter
         private set
@@ -121,8 +120,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         val marketsFilter = MarketsFilter(ticker, isFavorites, adapter.dateFilter, adapter.sortBy)
 
         homeMarketsViewModel.getHomeMarkets(this, marketsFilter) {
-            adapter.updateData(it)
-            homeMarketsViewModel.removeDataObserver(this)
+            setupOfflineFirstDataObserver(homeMarketsViewModel, adapter, it)
         }
     }
 

@@ -2,6 +2,7 @@ package org.loopring.looprwallet.order.viewmodels
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
+import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
 import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
@@ -20,31 +21,29 @@ import java.util.*
  * Purpose of Class: An [OfflineFirstViewModel] that retrieves the details of an order (order fills)
  * by using the order's unique hash as the parameter.
  */
-class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<List<RealmModel>, String>() {
+class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<RealmModel>, String>() {
 
     override val repository = OrderFillsRepository(currentWallet)
 
-    @Suppress("UNCHECKED_CAST")
     fun getOrderFills(
             owner: LifecycleOwner,
             orderId: String,
-            onChange: (RealmResults<RealmModel>) -> Unit
+            onChange: (OrderedRealmCollection<RealmModel>) -> Unit
     ) {
-        initializeData(owner, orderId, onChange as (List<RealmModel>) -> Unit)
+        initializeData(owner, orderId, onChange)
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun getLiveDataFromRepository(parameter: String): LiveData<List<RealmModel>> {
-        return repository.getOrderDepth(parameter) as LiveData<List<RealmModel>>
+    override fun getLiveDataFromRepository(parameter: String): LiveData<OrderedRealmCollection<RealmModel>> {
+        return repository.getOrderDepth(parameter)
     }
 
     override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
-    override fun getDataFromNetwork(parameter: String): Deferred<List<RealmModel>> {
+    override fun getDataFromNetwork(parameter: String): Deferred<OrderedRealmCollection<RealmModel>> {
         TODO("GET DATA FROM NETWORK")
     }
 
-    override fun addNetworkDataToRepository(data: List<RealmModel>) {
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<RealmModel>) {
         repository.addList(data)
     }
 

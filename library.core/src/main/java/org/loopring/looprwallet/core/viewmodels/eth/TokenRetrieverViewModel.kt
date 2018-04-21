@@ -34,7 +34,7 @@ class TokenRetrieverViewModel : TransactionViewModel<LooprToken>() {
             val token = ethplorerService.getTokenInfo(contractAddress).await()
             token.binary = etherScanService.getTokenBinary(contractAddress).await()
 
-            if (repository.getTokenByContractAddressNow(token.contractAddress) == null) {
+            if (repository.getTokenByContractAddressNow(token.identifier) == null) {
                 // The token does NOT already exist so we can safely add it
                 repository.add(token)
             }

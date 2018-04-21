@@ -6,6 +6,7 @@ import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.wallet.WalletClient
 import org.loopring.looprwallet.viewbalances.R
 import org.loopring.looprwallet.viewbalances.dagger.viewBalancesLooprComponent
@@ -20,7 +21,7 @@ import javax.inject.Inject
  *
  *
  */
-class ViewBalancesAdapter(listener: OnTokenLockClickListener) : BaseRealmAdapter<CryptoToken>() {
+class ViewBalancesAdapter(listener: OnTokenLockClickListener) : BaseRealmAdapter<LooprToken>() {
 
     override val totalItems: Int? = null
 
@@ -43,7 +44,7 @@ class ViewBalancesAdapter(listener: OnTokenLockClickListener) : BaseRealmAdapter
 
     override fun getDataOffset(position: Int): Int? = 0
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: CryptoToken?) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprToken?) {
         item ?: return
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 

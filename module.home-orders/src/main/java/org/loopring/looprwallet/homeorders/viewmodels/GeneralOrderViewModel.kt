@@ -2,6 +2,7 @@ package org.loopring.looprwallet.homeorders.viewmodels
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
+import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
 import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
@@ -20,7 +21,7 @@ import java.util.*
  * Purpose of Class:
  *
  */
-class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<List<RealmModel>, OrderFilter>() {
+class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<RealmModel>, OrderFilter>() {
 
     // 5 seconds in ms
     override val waitTime = 5 * 1000L
@@ -30,23 +31,21 @@ class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<
     /**
      * Gets the user's orders based on the provided [filter].
      */
-    @Suppress("UNCHECKED_CAST")
-    fun getOrders(owner: LifecycleOwner, filter: OrderFilter, onChange: (RealmResults<RealmModel>) -> Unit) {
-        initializeData(owner, filter, onChange as (List<RealmModel>) -> Unit)
+    fun getOrders(owner: LifecycleOwner, filter: OrderFilter, onChange: (OrderedRealmCollection<RealmModel>) -> Unit) {
+        initializeData(owner, filter, onChange)
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun getLiveDataFromRepository(parameter: OrderFilter): LiveData<List<RealmModel>> {
-        return repository.getOrders(parameter) as LiveData<List<RealmModel>>
+    override fun getLiveDataFromRepository(parameter: OrderFilter): LiveData<OrderedRealmCollection<RealmModel>> {
+        return repository.getOrders(parameter)
     }
 
     override fun isRefreshNecessary(parameter: OrderFilter) = defaultIsRefreshNecessary(parameter.address)
 
-    override fun getDataFromNetwork(parameter: OrderFilter): Deferred<List<RealmModel>> {
+    override fun getDataFromNetwork(parameter: OrderFilter): Deferred<OrderedRealmCollection<RealmModel>> {
         TODO("not implemented")
     }
 
-    override fun addNetworkDataToRepository(data: List<RealmModel>) {
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<RealmModel>) {
         repository.addList(data)
     }
 

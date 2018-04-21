@@ -37,10 +37,9 @@
     <string name="default_contact_name">Corey Caplan</string>
     <string name="default_received_token">Received LRC</string>
     <string name="default_sent_token">Sent LRC</string>
-    <string name="default_from_contact">From Corey Caplan</string>
     <string name="default_to_contact">To Corey Caplan</string>
     <string name="default_date">Feb 12, 2018 at 1:24 AM</string>
-    <string name="default_date_short">2018-02-12</string>
+    <string name="default_date_short">2018–02–12</string>
     <string name="default_sent_lrc_quantity">Sent - 132 LRC</string>
     <string name="default_receive_lrc_quantity">Received - 132 LRC</string>
     <string name="default_wallet_name">My-Wallet.json</string>

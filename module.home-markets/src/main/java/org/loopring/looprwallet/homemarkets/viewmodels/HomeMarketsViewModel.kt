@@ -2,6 +2,8 @@ package org.loopring.looprwallet.homemarkets.viewmodels
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
+import io.realm.OrderedRealmCollection
+import io.realm.RealmList
 import io.realm.RealmModel
 import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
@@ -20,29 +22,27 @@ import java.util.*
  * Purpose of Class:
  *
  */
-class HomeMarketsViewModel : OfflineFirstViewModel<List<RealmModel>, MarketsFilter>() {
+class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<RealmModel>, MarketsFilter>() {
 
     override val repository = LooprMarketsRepository()
 
-    @Suppress("UNCHECKED_CAST")
     fun getHomeMarkets(
             owner: LifecycleOwner,
             filter: MarketsFilter,
-            onChange: (RealmResults<RealmModel>) -> Unit
+            onChange: (OrderedRealmCollection<RealmModel>) -> Unit
     ) {
-        initializeData(owner, filter, onChange as (List<RealmModel>) -> Unit)
+        initializeData(owner, filter, onChange)
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun getLiveDataFromRepository(parameter: MarketsFilter): LiveData<List<RealmModel>> {
-        return repository.getMarkets(parameter) as LiveData<List<RealmModel>>
+    override fun getLiveDataFromRepository(parameter: MarketsFilter): LiveData<OrderedRealmCollection<RealmModel>> {
+        return repository.getMarkets(parameter)
     }
 
-    override fun getDataFromNetwork(parameter: MarketsFilter): Deferred<List<RealmModel>> {
+    override fun getDataFromNetwork(parameter: MarketsFilter): Deferred<OrderedRealmCollection<RealmModel>> {
         TODO("not implemented")
     }
 
-    override fun addNetworkDataToRepository(data: List<RealmModel>) {
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<RealmModel>) {
         repository.addList(data)
     }
 
