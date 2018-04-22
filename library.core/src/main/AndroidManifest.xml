@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.loopring.looprwallet.core">
 
-    <application android:name=".application.CoreLooprWalletApp">
+    <application
+        android:name=".application.CoreLooprWalletApp"
+        android:theme="@style/AppTheme.Dark">
 
         <activity android:name=".activities.CoreTestActivity" />
 

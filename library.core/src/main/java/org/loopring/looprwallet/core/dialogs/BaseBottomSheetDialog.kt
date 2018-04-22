@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.validators.BaseValidator
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
+import org.loopring.looprwallet.core.wallet.WalletClient
 
 /**
  * Created by Corey on 3/30/2018
@@ -34,6 +36,14 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
             field = value
             onFormChanged()
         }
+
+    lateinit var walletClient: WalletClient
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        coreLooprComponent.inject(this)
+    }
 
     final override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return BottomSheetDialog(context!!, this.theme)

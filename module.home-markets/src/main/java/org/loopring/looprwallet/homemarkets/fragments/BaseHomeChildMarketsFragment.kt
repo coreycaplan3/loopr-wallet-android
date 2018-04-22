@@ -120,7 +120,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         val marketsFilter = MarketsFilter(ticker, isFavorites, adapter.dateFilter, adapter.sortBy)
 
         homeMarketsViewModel.getHomeMarkets(this, marketsFilter) {
-            setupOfflineFirstDataObserver(homeMarketsViewModel, adapter, it)
+            setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, it)
         }
     }
 

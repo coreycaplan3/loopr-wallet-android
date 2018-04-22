@@ -16,6 +16,7 @@ import android.support.transition.Visibility
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ProgressBar
@@ -350,7 +351,7 @@ abstract class BaseFragment : Fragment() {
      * @param adapter The adapter whose data will be updated
      * @param data The data that will be bound to the [adapter]
      */
-    protected fun <T : RealmModel> setupOfflineFirstDataObserver(
+    protected fun <T : RealmModel> setupOfflineFirstDataObserverForAdapter(
             viewModel: OfflineFirstViewModel<*, *>?,
             adapter: BaseRealmAdapter<T>,
             data: OrderedRealmCollection<T>
@@ -373,11 +374,14 @@ abstract class BaseFragment : Fragment() {
      * - A ViewModel **without** valid data will show an *indefinite* snackbar.
      *
      * @param viewModel The [OfflineFirstViewModel] that will be registered with this fragment.
+     * @param refreshLayout The refresh layout that shows the refresh drawable when the *ViewModel*
+     * is loading or null otherwise
      * @param refreshAll The function that will be called when all data needs to be refreshed. This
      * is called when an error occurs and the user opts into a refresh/retry.
      */
     protected inline fun setupOfflineFirstStateAndErrorObserver(
             viewModel: OfflineFirstViewModel<*, *>?,
+            refreshLayout: SwipeRefreshLayout?,
             crossinline refreshAll: () -> Unit
     ) {
         if (viewModel != null && viewModelList.none { it === viewModel }) {
@@ -387,6 +391,7 @@ abstract class BaseFragment : Fragment() {
 
         // STATE OBSERVER
         viewModel?.addCurrentStateObserver(this) {
+            refreshLayout?.isRefreshing = false
             progressBar?.visibility = when {
                 viewModelList.any { it.isLoading() } -> View.VISIBLE
                 else -> View.GONE

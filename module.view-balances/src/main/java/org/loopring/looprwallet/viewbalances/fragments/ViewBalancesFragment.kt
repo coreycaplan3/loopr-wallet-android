@@ -70,12 +70,12 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
         }
 
         viewBalancesSwipeRefreshLayout.setOnRefreshListener { refreshAll() }
-        setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel, ::refreshAll)
+        setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel, viewBalancesSwipeRefreshLayout, ::refreshAll)
 
         val address = walletClient.getCurrentWallet()?.credentials?.address
         if (address != null) {
             tokenBalanceViewModel.getAllTokensWithBalances(this, address) {
-                setupOfflineFirstDataObserver(tokenBalanceViewModel, adapter, it)
+                setupOfflineFirstDataObserverForAdapter(tokenBalanceViewModel, adapter, it)
             }
         }
 
@@ -86,6 +86,8 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
     override fun onTokenLockClick(token: CryptoToken) {
         TODO("Unlock or lock the token, depending on its current allowance being above a certain threshold")
     }
+
+    // MARK - Private Methods
 
     private fun refreshAll() {
         tokenBalanceViewModel.refresh()

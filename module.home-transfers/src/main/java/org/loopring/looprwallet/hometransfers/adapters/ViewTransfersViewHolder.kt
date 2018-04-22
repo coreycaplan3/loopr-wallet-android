@@ -18,7 +18,7 @@ class ViewTransfersViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemVie
     override val containerView: View?
         get() = itemView
 
-    fun bind(item: LooprTransfer) {
+    inline fun bind(item: LooprTransfer, onTransferClick: (LooprTransfer) -> Unit) {
         TODO("You know what to do...")
     }
 

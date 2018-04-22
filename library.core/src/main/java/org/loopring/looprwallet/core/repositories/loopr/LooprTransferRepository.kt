@@ -23,6 +23,15 @@ class LooprTransferRepository(private val currentWallet: LooprWallet) : BaseReal
 
     override fun getRealm() = realmClient.getPrivateInstance(currentWallet)
 
+    fun getTransferByHash(transferHash: String): LiveData<LooprTransfer> {
+        // We're in a private realm instance, so we're already querying by all of this address's
+        // orders
+        return uiRealm.where<LooprTransfer>()
+                .equalTo(LooprTransfer::transactionHash, transferHash)
+                .findFirstAsync()
+                .asLiveData()
+    }
+
     fun getAllTransfers(): LiveData<OrderedRealmCollection<LooprTransfer>> {
         // We're in a private realm instance, so we're already querying by all of this address's
         // orders

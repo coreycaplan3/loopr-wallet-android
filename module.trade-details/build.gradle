@@ -7,7 +7,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
-
+    
     // Unit Testing
     testImplementation gradle.junit
     testImplementation gradle.mockito

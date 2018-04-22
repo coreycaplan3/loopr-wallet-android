@@ -1,2 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.loopring.looprwallet.home" />
+    package="org.loopring.looprwallet.home">
+
+    <application
+        android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp"
+        android:theme="@style/AppTheme.Dark" />
+
+</manifest>

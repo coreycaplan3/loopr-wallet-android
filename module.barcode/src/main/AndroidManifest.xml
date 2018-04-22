@@ -3,7 +3,9 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <application>
+    <application
+        android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp"
+        android:theme="@style/AppTheme.Dark">
 
         <activity android:name=".activities.BarcodeCaptureActivity" />
 

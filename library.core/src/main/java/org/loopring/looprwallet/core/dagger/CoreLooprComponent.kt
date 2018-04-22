@@ -4,6 +4,7 @@ import dagger.Component
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.security.BaseSecurityFragment
 import org.loopring.looprwallet.core.fragments.settings.EthereumFeeSettingsFragment
@@ -33,6 +34,10 @@ interface CoreLooprComponent {
 
     fun inject(baseActivity: BaseActivity)
     fun inject(settingsActivity: SettingsActivity)
+
+    // Dialogs
+
+    fun inject(baseBottomSheetDialog: BaseBottomSheetDialog)
 
     // Fragments
 

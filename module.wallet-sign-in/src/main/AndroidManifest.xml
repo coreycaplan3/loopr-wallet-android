@@ -1,2 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.loopring.looprwallet.walletsignin" />
+    package="org.loopring.looprwallet.walletsignin">
+
+    <application
+        android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp"
+        android:theme="@style/AppTheme.Dark">
+
+        <activity android:name=".activities.SignInActivity" />
+
+    </application>
+
+</manifest>

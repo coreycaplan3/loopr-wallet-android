@@ -9,9 +9,11 @@ import android.view.View
 import kotlinx.android.synthetic.main.fragment_view_transfers.*
 import org.loopring.looprwallet.core.extensions.setupWithFab
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
 import org.loopring.looprwallet.hometransfers.R
+import org.loopring.looprwallet.hometransfers.adapters.OnTransferClickListener
 import org.loopring.looprwallet.hometransfers.adapters.ViewTransfersAdapter
 import org.loopring.looprwallet.hometransfers.viewmodels.ViewAllTransfersViewModel
 
@@ -23,7 +25,7 @@ import org.loopring.looprwallet.hometransfers.viewmodels.ViewAllTransfersViewMod
  * Purpose of Class:
  *
  */
-class ViewTransfersFragment : BaseFragment(), OnRefreshListener {
+class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClickListener {
 
     override val layoutResource: Int
         get() = R.layout.fragment_view_transfers
@@ -43,17 +45,16 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewTransfersSwipeRefresh.setOnRefreshListener(this)
+
         val adapter = ViewTransfersAdapter()
-        setupOfflineFirstStateAndErrorObserver(viewAllTransfersViewModel, ::onRefresh)
+        setupOfflineFirstStateAndErrorObserver(viewAllTransfersViewModel, viewTransfersSwipeRefresh, ::onRefresh)
         viewAllTransfersViewModel?.getAllTransfers(this) {
-            setupOfflineFirstDataObserver(viewAllTransfersViewModel, adapter, it)
+            setupOfflineFirstDataObserverForAdapter(viewAllTransfersViewModel, adapter, it)
         }
 
         viewTransfersRecyclerView.layoutManager = LinearLayoutManager(view.context)
         viewTransfersRecyclerView.adapter = adapter
-
-        // TODO setup recycler view, view model, swipe refresh, onDetailsClick, error handling, etc.
-        // TODO standardize BaseRealmRecyclerAdapter initialization with OfflineFirstViewModel :)
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
@@ -71,6 +72,10 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener {
 
     override fun onRefresh() {
         viewAllTransfersViewModel?.refresh()
+    }
+
+    override fun onTransferClick(looprTransfer: LooprTransfer) {
+        TODO("not implemented")
     }
 
     override fun onDestroyView() {

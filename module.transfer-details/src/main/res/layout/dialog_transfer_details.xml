@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="?attr/cardBackgroundColor"
+    android:padding="@dimen/standard_padding">
+
+    <FrameLayout
+        android:id="@+id/transferDetailsImageContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/transferDetailsReceiveImage"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/border"
+            android:contentDescription="@string/content_description_receive"
+            android:src="@drawable/transfer_receive"
+            android:tint="@color/material_green" />
+
+        <ImageView
+            android:id="@+id/transferDetailsSendImage"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/border"
+            android:contentDescription="@string/content_description_receive"
+            android:src="@drawable/transfer_send"
+            android:tint="@color/material_red"
+            tools:visibility="gone" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/transferDetailsQuantityLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/transferDetailsImageContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        tools:text="@string/default_receive_lrc_quantity" />
+
+    <TextView
+        android:id="@+id/transferDetailsPriceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/transferDetailsQuantityLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/vertical_margin_small"
+        android:gravity="end"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subtitle"
+        tools:text="@string/default_total_price" />
+
+    <include
+        android:id="@+id/transferDetailsDivider"
+        layout="@layout/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_below="@id/transferDetailsPriceLabel"
+        android:layout_marginBottom="@dimen/vertical_margin"
+        android:layout_marginTop="@dimen/vertical_margin" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/transferDetailsDivider"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/transferDetailsDateDefaultLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small"
+                android:text="@string/date"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/transferDetailsDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="@dimen/horizontal_margin_small"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginRight="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small"
+                android:layout_toEndOf="@id/transferDetailsDateDefaultLabel"
+                android:layout_toRightOf="@id/transferDetailsDateDefaultLabel"
+                android:gravity="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:text="@string/default_date" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/transferDetailsTransactionDefaultLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small"
+                android:layout_toEndOf="@id/transferDetailsTransactionDefaultLabel"
+                android:layout_toRightOf="@id/transferDetailsTransactionDefaultLabel"
+                android:text="@string/transaction"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <Button
+                android:id="@+id/transferDetailsViewTransactionButton"
+                style="@style/App.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="@dimen/horizontal_margin_small"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginRight="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small"
+                android:text="@string/view_in_explorer" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/transferDetailsStatusDefaultLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small"
+                android:text="@string/status"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/transferDetailsStatusLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/transferDetailsStatusDefaultLabel"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/horizontal_margin_small"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginRight="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small"
+                android:layout_toEndOf="@id/transferDetailsStatusDefaultLabel"
+                android:layout_toRightOf="@id/transferDetailsStatusDefaultLabel"
+                android:gravity="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textIsSelectable="true"
+                tools:text="@string/pending"
+                tools:textColor="@color/amber_500" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
