@@ -75,7 +75,7 @@
     <dimen name="contact_height">64dp</dimen>
     <dimen name="borderless_icon_button_size">48dp</dimen>
 
-    <dimen name="divider_height" format="float">0.5dp</dimen>
+    <dimen name="divider_height" formatter="float">0.5dp</dimen>
     <dimen name="list_primary_text_size">16sp</dimen>
     <dimen name="list_secondary_text_size">13sp</dimen>
     <dimen name="barcode_dimensions">96dp</dimen>

@@ -34,6 +34,9 @@ import org.loopring.looprwallet.homemarkets.fragments.HomeMarketsParentFragment
 import org.loopring.looprwallet.homemywallet.fragments.MyWalletFragment
 import org.loopring.looprwallet.hometransfers.fragments.ViewTransfersFragment
 import org.loopring.looprwallet.walletsignin.activities.SignInActivity
+import android.support.v4.app.ActivityCompat.invalidateOptionsMenu
+import android.support.v7.app.ActionBarDrawerToggle
+
 
 /**
  * Created by Corey on 1/14/2018
@@ -150,7 +153,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
 
         supportActionBar?.apply {
             logi("Setting up the navigation drawer...")
-            setupNavigationDrawer()
+            toolbar?.let { setupNavigationDrawer(it) }
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
         }
@@ -164,9 +167,9 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun setupNavigationDrawer() {
+    private fun setupNavigationDrawer(toolbar: Toolbar) {
         setupNavigationHeaderView()
-        setupNavigationDrawerMenu()
+        setupNavigationDrawerMenu(toolbar)
     }
 
     private fun setupNavigationHeaderView() {
@@ -185,7 +188,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         }
     }
 
-    private fun setupNavigationDrawerMenu() {
+    private fun setupNavigationDrawerMenu(toolbar: Toolbar) {
         // Clear the old menu
         homeNavigationView.menu.clear()
         homeNavigationView.inflateMenu(R.menu.home_navigation_drawer_menu)
@@ -210,16 +213,26 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
             this.icon?.let { DrawableCompat.setTint(it, Color.BLACK) }
         }
 
-        setupNavigationItemClickListener(allWallets)
+        setupNavigationItemClickListener(toolbar, allWallets)
     }
 
-    private fun setupNavigationItemClickListener(allWallets: List<LooprWallet>) {
-        homeNavigationDrawerLayout.addDrawerListener(object : DrawerListenerAdapter() {
+    private fun setupNavigationItemClickListener(toolbar: Toolbar, allWallets: List<LooprWallet>) {
+        val listener = object : ActionBarDrawerToggle(
+                this,
+                homeNavigationDrawerLayout,
+                toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close
+        ) {
             override fun onDrawerClosed(drawerView: View) {
+                super.onDrawerClosed(drawerView)
+
                 onItemSelected?.invoke()
                 onItemSelected = null
             }
-        })
+        }
+
+        homeNavigationDrawerLayout.addDrawerListener(listener)
 
         homeNavigationView.setNavigationItemSelectedListener { menuItem ->
             when {
@@ -227,7 +240,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
                     onItemSelected = { SignInActivity.route(this) }
                 }
                 menuItem.itemId == R.id.menuDeleteWallet -> {
-                    setupDeleteWalletDialogAdapter(allWallets)
+                    setupDeleteWalletDialogAdapter(toolbar, allWallets)
                 }
                 else -> allWallets.find { it.walletName == menuItem.title }?.ifNotNull {
                     // We found the wallet that matches the title's name
@@ -242,7 +255,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         }
     }
 
-    private fun setupDeleteWalletDialogAdapter(allWallets: List<LooprWallet>) {
+    private fun setupDeleteWalletDialogAdapter(toolbar: Toolbar, allWallets: List<LooprWallet>) {
         val adapterItems = allWallets.map { it.walletName }
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, adapterItems)
         AlertDialog.Builder(this)
@@ -254,27 +267,14 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
                         dialog.dismiss()
                         homeNavigationDrawerLayout.closeDrawers()
                     } else {
+                        // "It's not my wallet" - Patrick
                         walletClient.removeWallet(allWallets[position].walletName)
 
                         // Reset the menu
-                        setupNavigationDrawerMenu()
+                        setupNavigationDrawerMenu(toolbar)
                         dialog.dismiss()
                     }
                 }
-    }
-
-    private open class DrawerListenerAdapter : DrawerLayout.DrawerListener {
-        override fun onDrawerStateChanged(newState: Int) {
-        }
-
-        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-        }
-
-        override fun onDrawerClosed(drawerView: View) {
-        }
-
-        override fun onDrawerOpened(drawerView: View) {
-        }
     }
 
 }

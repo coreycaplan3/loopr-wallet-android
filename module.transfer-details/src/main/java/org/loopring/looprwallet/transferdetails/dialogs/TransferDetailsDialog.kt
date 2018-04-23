@@ -5,13 +5,19 @@ import android.view.View
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_transfer_details.*
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
+import org.loopring.looprwallet.core.extensions.formatAsCurrency
+import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.DateUtility
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.transferdetails.R
+import org.loopring.looprwallet.transferdetails.dagger.transferDetailsLooprComponent
 import org.loopring.looprwallet.transferdetails.viewmodels.TransferDetailsViewModel
 import java.text.DateFormat
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by Corey on 4/20/2018
@@ -50,8 +56,17 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
         arguments?.getString(KEY_TRANSFER)!!
     }
 
+    @Inject
+    lateinit var currencySettings: CurrencySettings
+
     override val layoutResource: Int
         get() = R.layout.dialog_transfer_details
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        transferDetailsLooprComponent.inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,10 +75,27 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
     }
 
     private fun onDataChange(transfer: LooprTransfer) {
-        transferDetailsDateLabel.text = DateFormat.getDateTimeInstance()
-                .format(Date(transfer.timestamp))
 
-        transferDetailsViewTransactionButton.setOnClickListener { TODO("") }
+        // Quantity
+        val quantity = transfer.numberOfTokens.formatAsToken(currencySettings, transfer.token)
+        transferDetailsQuantityLabel.text = str(R.string.formatter_received).format(quantity)
+
+        // USD Value
+        val usdValue = transfer.transactionFeeUsdValue.formatAsCurrency(currencySettings)
+        transferDetailsPriceLabel.text = usdValue
+
+        // Date
+        val dateFormat = DateFormat.getDateTimeInstance()
+        transferDetailsDateLabel.text = dateFormat.format(Date(transfer.timestamp))
+
+        // Explorer
+        transferDetailsViewTransactionButton.setOnClickListener {
+            TODO("")
+        }
+
+        // status
+        transferDetailsStatusLabel
+        TODO("BIND DATA TO VIEW MODEL")
     }
 
 }

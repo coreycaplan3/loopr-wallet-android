@@ -11,4 +11,5 @@
     <string name="formatter_confirm_token_send">You are about to send %s tokens, which is worth about %s. Are you sure you want to send these tokens to %s?</string>
     <string name="formatter_keystore">%s - Keystore</string>
     <string name="formatter_your_12_words_are">Your 12 words are:\n%s</string>
+    <string name="formatter_received">Received - %s</string>
 </resources>

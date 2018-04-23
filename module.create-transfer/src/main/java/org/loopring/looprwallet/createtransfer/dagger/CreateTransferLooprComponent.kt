@@ -22,8 +22,8 @@ interface CreateTransferLooprComponent {
 
 interface CreateTransferLooprComponentProvider {
 
-    fun provideTransferLooprComponent(): CreateTransferLooprComponent
+    fun provideCreateTransferLooprComponent(): CreateTransferLooprComponent
 }
 
 val createTransferLooprComponent: CreateTransferLooprComponent
-    get() = (CoreLooprWalletApp.application as CreateTransferLooprComponentProvider).provideTransferLooprComponent()
+    get() = (CoreLooprWalletApp.application as CreateTransferLooprComponentProvider).provideCreateTransferLooprComponent()

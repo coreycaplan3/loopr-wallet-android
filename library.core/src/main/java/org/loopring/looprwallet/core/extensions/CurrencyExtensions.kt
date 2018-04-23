@@ -1,7 +1,9 @@
 package org.loopring.looprwallet.core.extensions
 
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.text.NumberFormat
 
 /**
@@ -76,21 +78,21 @@ fun BigDecimal.formatAsCurrency(settings: CurrencySettings): String {
 }
 
 /**
- * Formats a [BigDecimal] in the user's native currency
+ * Formats a [BigDecimal] as a token
  */
-fun BigDecimal.formatAsToken(settings: CurrencySettings, tokenTicker: String): String {
-    val value = settings.getNumberFormatter().format(this)
-    return when {
-        this.equalsZero() -> {
-            "${value}00 $tokenTicker"
-        }
-        this.isIntegerValue() -> {
-            "${value}00 $tokenTicker"
-        }
-        else -> {
-            "$value $tokenTicker"
-        }
-    }
+fun BigInteger.formatAsToken(settings: CurrencySettings, token: LooprToken): String {
+    val formatter = settings.getNumberFormatter()
+    val result =  BigDecimal(this, token.decimalPlaces) / (BigDecimal.TEN.pow(token.decimalPlaces))
+    return "${formatter.format(result)} ${token.ticker}"
+}
+
+/**
+ * Formats a [BigDecimal] as the user's national currency
+ */
+fun BigInteger.formatAsCurrency(settings: CurrencySettings): String {
+    val formatter = settings.getCurrencyFormatter()
+    val result = BigDecimal(this, 2) / BigDecimal(100)
+    return formatter.format(result)
 }
 
 fun BigDecimal.equalsZero(): Boolean {
