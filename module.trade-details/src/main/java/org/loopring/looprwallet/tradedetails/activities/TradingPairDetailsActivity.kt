@@ -14,9 +14,7 @@ class TradingPairDetailsActivity : BaseActivity() {
 
         fun route(tradingPair: Any, activity: BaseActivity) {
             val intent = Intent(activity, TradingPairDetailsActivity::class.java)
-//                    .putExtra(KEY_TRADING_PAIR, )
-            TODO("PUT DATA")
-
+//                    .putExtra(KEY_TRADING_PAIR, ) // TODO put trading pair data
             activity.startActivity(intent)
         }
 
