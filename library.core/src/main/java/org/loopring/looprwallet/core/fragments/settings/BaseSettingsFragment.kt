@@ -33,7 +33,7 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
 
         // Fix the divider resource
         val resourceId = view.context.theme.getResourceIdFromAttrId(R.attr.dividerColor)
-        val color = ApplicationUtility.color(resourceId)
+        val color = ApplicationUtility.col(resourceId)
         this.setDivider(ColorDrawable(color))
 
         val height = ApplicationUtility.dimen(R.dimen.divider_height)
@@ -164,7 +164,7 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
         val textColorResource = context?.theme?.getResourceIdFromAttrId(android.R.attr.textColorSecondary)
 
         Pair(icon, textColorResource).allNonNull {
-            val primaryTextColor = ApplicationUtility.color(it.second)
+            val primaryTextColor = ApplicationUtility.col(it.second)
             DrawableCompat.setTint(it.first, primaryTextColor)
         }
 

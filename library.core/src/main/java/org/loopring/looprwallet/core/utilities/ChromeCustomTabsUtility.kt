@@ -7,10 +7,8 @@ import android.graphics.BitmapFactory
 import android.support.customtabs.CustomTabsIntent
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.color
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
-import android.app.Activity
-import android.net.Uri
 
 
 /**
@@ -31,7 +29,7 @@ object ChromeCustomTabsUtility {
         val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_share_white_24dp)
 
         return CustomTabsIntent.Builder()
-                .setToolbarColor(color(context.theme.getResourceIdFromAttrId(R.attr.colorPrimary)))
+                .setToolbarColor(col(context.theme.getResourceIdFromAttrId(R.attr.colorPrimary)))
                 .setShowTitle(true)
                 .setActionButton(bitmap, str(R.string.content_description_share_chrome_tab), pendingIntent, true)
                 .build()

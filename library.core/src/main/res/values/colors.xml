@@ -2,10 +2,10 @@
 <resources>
 
     <color name="amber_500">#FFC107</color>
-
     <color name="blue_100">#B3E5FC</color>
-
-    <color name="textColorError">#F44336</color>
+    <color name="green_400">#66BB6A</color>
+    <color name="red_400">#F44336</color>
+    <color name="textColorError">@color/red_400</color>
 
     <color name="tabText">#FFFFFFFF</color>
     <color name="tabTextDisabled">#B3FFFFFF</color>
@@ -14,7 +14,7 @@
 
     <color name="lightPrimary">#03A9F4</color>
     <color name="lightPrimaryDark">#01579B</color>
-    <color name="lightAccent">#66BB6A</color>
+    <color name="lightAccent">@color/green_400</color>
     <color name="lightBackground">#ECECEC</color>
 
     <color name="lightButtonDisabled">#1F000000</color>

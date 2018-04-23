@@ -3,7 +3,6 @@ package org.loopring.looprwallet.core.models.transfers
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
-import org.loopring.looprwallet.core.models.blockchain.LooprTransaction
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import java.math.BigInteger
 
@@ -25,28 +24,33 @@ class LooprTransfer(
         @Index
         var timestamp: Long = -1L,
 
-        numberOfTokens: BigInteger,
+        blockNumber: BigInteger? = null,
 
-        usdValue: BigInteger,
+        numberOfTokens: BigInteger = BigInteger.ZERO,
 
-        transactionFee: BigInteger,
+        usdValue: BigInteger = BigInteger.ZERO,
 
-        transactionFeeUsdValue: BigInteger,
+        transactionFee: BigInteger = BigInteger.ZERO,
 
-        var token: LooprToken = LooprToken.ETH,
+        transactionFeeUsdValue: BigInteger = BigInteger.ZERO,
 
-        /**
-         * The current status of the transaction
-         */
-        @LooprTransaction.TransactionStatus
-        var status: Int
-
+        var token: LooprToken = LooprToken.ETH
 ) : RealmObject() {
 
+    private var mBlockNumber: String? = null
     private var mNumberOfTokens: String = ""
     private var mUsdValue: String = ""
     private var mTransactionFee: String = ""
     private var mTransactionFeeUsdValue: String = ""
+
+    /**
+     * The block number at which the transfer was mined
+     */
+    var blockNumber: BigInteger?
+        get() = mBlockNumber?.let { BigInteger(it) }
+        set(value) {
+            mBlockNumber = value?.toString(10)
+        }
 
     /**
      * The number of tokens that were sent in this transaction. To get the decimal representation,
@@ -93,6 +97,7 @@ class LooprTransfer(
         }
 
     init {
+        this.blockNumber = blockNumber
         this.numberOfTokens = numberOfTokens
         this.usdValue = usdValue
         this.transactionFee = transactionFee

@@ -40,7 +40,7 @@ object ViewUtility {
 
     fun getNavigationIcon(@DrawableRes drawableResource: Int, theme: Resources.Theme): Drawable {
         val drawable = ApplicationUtility.drawable(drawableResource)
-        val colorResource = ApplicationUtility.color(theme.getResourceIdFromAttrId(R.attr.titleTextColor))
+        val colorResource = ApplicationUtility.col(theme.getResourceIdFromAttrId(R.attr.titleTextColor))
         DrawableCompat.setTint(drawable, colorResource)
         return drawable
     }

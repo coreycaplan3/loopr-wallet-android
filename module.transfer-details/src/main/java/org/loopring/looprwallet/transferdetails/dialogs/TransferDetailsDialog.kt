@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.transferdetails.dialogs
 
+import android.arch.lifecycle.ViewModelProviders
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -8,15 +9,19 @@ import kotlinx.android.synthetic.main.dialog_transfer_details.*
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 import org.loopring.looprwallet.core.extensions.formatAsCurrency
 import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.ChromeCustomTabsUtility
-import org.loopring.looprwallet.core.utilities.DateUtility
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
+import org.loopring.looprwallet.core.viewmodels.eth.EthereumBlockNumberViewModel
 import org.loopring.looprwallet.transferdetails.R
 import org.loopring.looprwallet.transferdetails.dagger.transferDetailsLooprComponent
 import org.loopring.looprwallet.transferdetails.viewmodels.TransferDetailsViewModel
+import java.math.BigInteger
 import java.text.DateFormat
 import java.util.*
 import javax.inject.Inject
@@ -54,9 +59,15 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
             return field
         }
 
+    private lateinit var ethereumBlockNumberViewModel: EthereumBlockNumberViewModel
+
     private val transactionHash by lazy {
         arguments?.getString(KEY_TRANSFER)!!
     }
+
+    var looprTransfer: LooprTransfer? = null
+
+    var ethereumBlockNumber: EthereumBlockNumber? = null
 
     @Inject
     lateinit var currencySettings: CurrencySettings
@@ -73,10 +84,19 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        ethereumBlockNumberViewModel = ViewModelProviders.of(activity!!)
+                .get(EthereumBlockNumberViewModel::class.java)
+
+        ethereumBlockNumberViewModel.getEthereumBlockNumber(this) {
+            ethereumBlockNumber = it
+            bindStatus()
+        }
+
         transferDetailsViewModel?.getTransferByHash(this, transactionHash, ::onDataChange)
     }
 
     private fun onDataChange(transfer: LooprTransfer) {
+        this.looprTransfer = transfer
 
         // Quantity
         val quantity = transfer.numberOfTokens.formatAsToken(currencySettings, transfer.token)
@@ -96,9 +116,33 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
                     .launchUrl(it.context, Uri.parse("https://etherscan.io/tx/${transfer.transactionHash}"))
         }
 
-        // status
-        transferDetailsStatusLabel
-        TODO("BIND DATA TO VIEW MODEL")
+        // Status
+        bindStatus()
+    }
+
+    fun bindStatus() {
+        val transfer = looprTransfer ?: return
+        val ethereumBlockNumber = ethereumBlockNumber?.blockNumber ?: return
+        val transferBlockNumber = transfer.blockNumber
+
+        val status: String
+        val color: Int
+        when {
+            transferBlockNumber == null -> {
+                status = str(R.string.waiting_to_be_mined)
+                color = col(R.color.red_400, activity)
+            }
+            ethereumBlockNumber - transferBlockNumber < BigInteger("12") -> {
+                status = str(R.string.pending)
+                color = col(R.color.amber_500, activity)
+            }
+            else -> {
+                status = str(R.string.complete)
+                color = col(R.color.green_400, activity)
+            }
+        }
+
+        transferDetailsStatusLabel.text = status
     }
 
 }

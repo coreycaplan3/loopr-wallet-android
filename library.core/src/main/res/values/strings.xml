@@ -288,10 +288,11 @@
     <string name="symbol">Symbol</string>
     <string name="decimals">Decimals</string>
     <string name="add_custom_token">Add Custom Token</string>
-    <string name="adding_token">Adding token...</string>
+    <string name="adding_token">Adding token…</string>
     <string name="wallet_value">Wallet Value</string>
     <string name="add_new_wallet">Add New Wallet</string>
     <string name="watch_only">Watch Only</string>
     <string name="remove_wallet">Remove a Wallet</string>
     <string name="empty_state_view_transfers">You have no transfers. Send or receive some tokens to populate this page!</string>
+    <string name="waiting_to_be_mined">Waiting to be mined</string>
 </resources>

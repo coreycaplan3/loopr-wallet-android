@@ -1,8 +1,11 @@
 package org.loopring.looprwallet.core.utilities
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.annotation.*
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.extensions.isLollipop
+import org.loopring.looprwallet.core.extensions.isMarshmallow
 
 /**
  * Created by Corey Caplan on 1/19/18.
@@ -49,11 +52,19 @@ object ApplicationUtility {
     fun dimen(@DimenRes resId: Int) = application.resources.getDimension(resId)
 
     /**
-     * @param resId The dimension resource
-     * @return Gets a dimension using the [CoreLooprWalletApp] application instance
+     * @param resId The color resource
+     * @return Gets a color using the [CoreLooprWalletApp] application instance
      */
     @Suppress("deprecation")
-    fun color(@ColorRes resId: Int) = application.resources.getColor(resId)
+    fun col(@ColorRes resId: Int, context: Context? = null): Int {
+        return when {
+            isMarshmallow() && context != null ->
+                application.resources.getColor(resId, context.theme)
+
+            else ->
+                application.resources.getColor(resId)
+        }
+    }
 
     /**
      * @return The drawable that is mapped to by the given [resId].
