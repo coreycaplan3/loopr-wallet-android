@@ -22,7 +22,7 @@ class EthereumServiceProdImpl(private val credentials: Credentials) : EthereumSe
             gasLimit: BigDecimal,
             gasPrice: BigDecimal
     ): Deferred<TransactionReceipt> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun sendToken(
@@ -32,7 +32,7 @@ class EthereumServiceProdImpl(private val credentials: Credentials) : EthereumSe
             gasLimit: BigDecimal,
             gasPrice: BigDecimal
     ): Deferred<TransactionReceipt> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun approveToken(
@@ -43,6 +43,6 @@ class EthereumServiceProdImpl(private val credentials: Credentials) : EthereumSe
             gasLimit: BigDecimal,
             gasPrice: BigDecimal
     ): Deferred<TransactionReceipt> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 }

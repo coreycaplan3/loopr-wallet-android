@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.utilities
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.annotation.*
+import android.support.v4.content.ContextCompat
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.isLollipop
 import org.loopring.looprwallet.core.extensions.isMarshmallow
@@ -58,8 +59,8 @@ object ApplicationUtility {
     @Suppress("deprecation")
     fun col(@ColorRes resId: Int, context: Context? = null): Int {
         return when {
-            isMarshmallow() && context != null ->
-                application.resources.getColor(resId, context.theme)
+            context != null ->
+                ContextCompat.getColor(context, resId)
 
             else ->
                 application.resources.getColor(resId)

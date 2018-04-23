@@ -6,16 +6,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.bottom_navigation.*
-import kotlinx.android.synthetic.main.navigation_header.*
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.ifNotNull
@@ -29,16 +26,13 @@ import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationF
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
+import org.loopring.looprwallet.core.viewmodels.eth.EthereumBlockNumberViewModel
 import org.loopring.looprwallet.home.R
-import org.loopring.looprwallet.homeorders.fragments.HomeOrdersParentFragment
 import org.loopring.looprwallet.homemarkets.fragments.HomeMarketsParentFragment
 import org.loopring.looprwallet.homemywallet.fragments.MyWalletFragment
+import org.loopring.looprwallet.homeorders.fragments.HomeOrdersParentFragment
 import org.loopring.looprwallet.hometransfers.fragments.ViewTransfersFragment
 import org.loopring.looprwallet.walletsignin.activities.SignInActivity
-import android.support.v4.app.ActivityCompat.invalidateOptionsMenu
-import android.support.v7.app.ActionBarDrawerToggle
-import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
-import org.loopring.looprwallet.core.viewmodels.eth.EthereumBlockNumberViewModel
 
 
 /**

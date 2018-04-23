@@ -143,6 +143,7 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
         }
 
         transferDetailsStatusLabel.text = status
+        transferDetailsStatusLabel.setTextColor(color)
     }
 
 }

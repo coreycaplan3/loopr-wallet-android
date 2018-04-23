@@ -3,6 +3,7 @@ apply from: "../standard-library.gradle"
 dependencies {
     implementation project(':library.core')
     implementation project(path: ':module.create-transfer')
+    implementation project(path: ':module.transfer-details')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

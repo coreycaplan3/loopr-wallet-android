@@ -32,7 +32,7 @@ class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewMo
     }
 
     override fun getDataFromNetwork(parameter: Unit): Deferred<OrderedRealmCollection<LooprTransfer>> {
-        TODO("Ethplorer get Address History") // TODO
+        TODO("Ethplorer get Address History")
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprTransfer>) {

@@ -16,6 +16,7 @@ import org.loopring.looprwallet.hometransfers.R
 import org.loopring.looprwallet.hometransfers.adapters.OnTransferClickListener
 import org.loopring.looprwallet.hometransfers.adapters.ViewTransfersAdapter
 import org.loopring.looprwallet.hometransfers.viewmodels.ViewAllTransfersViewModel
+import org.loopring.looprwallet.transferdetails.dialogs.TransferDetailsDialog
 
 /**
  * Created by Corey Caplan on 2/26/18.
@@ -47,7 +48,7 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
 
         viewTransfersSwipeRefresh.setOnRefreshListener(this)
 
-        val adapter = ViewTransfersAdapter()
+        val adapter = ViewTransfersAdapter(this)
         setupOfflineFirstStateAndErrorObserver(viewAllTransfersViewModel, viewTransfersSwipeRefresh, ::onRefresh)
         viewAllTransfersViewModel?.getAllTransfers(this) {
             setupOfflineFirstDataObserverForAdapter(viewAllTransfersViewModel, adapter, it)
@@ -75,7 +76,7 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
     }
 
     override fun onTransferClick(looprTransfer: LooprTransfer) {
-        TODO("not implemented")
+        TransferDetailsDialog.getInstance(looprTransfer)
     }
 
     override fun onDestroyView() {
