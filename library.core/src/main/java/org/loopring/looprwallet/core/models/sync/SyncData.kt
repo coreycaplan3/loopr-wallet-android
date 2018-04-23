@@ -27,6 +27,8 @@ open class SyncData(
     companion object {
         const val SYNC_TYPE_NONE = "_NONE"
 
+        const val SYNC_TYPE_ETHEREUM_BLOCK_NUMBER = "_ETHEREUM_BLOCK_NUMBER"
+
         const val SYNC_TYPE_CURRENCY_EXCHANGE_RATE = "_CURRENCY_EXCHANGE_RATE"
 
         const val SYNC_TYPE_ORDERS_OPEN = "_ORDERS_OPEN"

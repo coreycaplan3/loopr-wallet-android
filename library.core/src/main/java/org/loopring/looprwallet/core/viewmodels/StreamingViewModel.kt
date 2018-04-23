@@ -10,7 +10,7 @@ import kotlin.concurrent.scheduleAtFixedRate
  * Project: loopr-wallet-android
  *
  * Purpose of Class: A class responsible for establishing a basis for how subclasses should
- * GET streamed data, which needs frequent updates. Classes should call [initializeData] to start
+ * GET streamed data, which needs frequent updates. Sub-classes should call [initializeData] to start
  * listening for changes in realm data.
  *
  * In this case, streamed data refers to a piece of singular data that is updated over periods of
@@ -20,10 +20,10 @@ abstract class StreamingViewModel<T, U> : OfflineFirstViewModel<T, U>() {
 
     private val timer = Timer()
 
-    override fun onLiveDataInitialized(liveData: LiveData<T>) {
-        timer.scheduleAtFixedRate(0L, waitTime, {
+    final override fun onLiveDataInitialized(liveData: LiveData<T>) {
+        timer.scheduleAtFixedRate(0L, waitTime) {
             refresh()
-        })
+        }
     }
 
     override fun onCleared() {

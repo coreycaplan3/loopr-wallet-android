@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.transferdetails.dialogs
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.os.bundleOf
@@ -10,6 +11,7 @@ import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ChromeCustomTabsUtility
 import org.loopring.looprwallet.core.utilities.DateUtility
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.transferdetails.R
@@ -90,7 +92,8 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
 
         // Explorer
         transferDetailsViewTransactionButton.setOnClickListener {
-            TODO("")
+            ChromeCustomTabsUtility.getInstance(it.context)
+                    .launchUrl(it.context, Uri.parse("https://etherscan.io/tx/${transfer.transactionHash}"))
         }
 
         // status

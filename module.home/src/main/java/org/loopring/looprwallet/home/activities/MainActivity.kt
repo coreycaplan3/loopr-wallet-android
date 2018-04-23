@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.home.activities
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -36,6 +37,8 @@ import org.loopring.looprwallet.hometransfers.fragments.ViewTransfersFragment
 import org.loopring.looprwallet.walletsignin.activities.SignInActivity
 import android.support.v4.app.ActivityCompat.invalidateOptionsMenu
 import android.support.v7.app.ActionBarDrawerToggle
+import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
+import org.loopring.looprwallet.core.viewmodels.eth.EthereumBlockNumberViewModel
 
 
 /**
@@ -96,6 +99,12 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     lateinit var bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory
 
     lateinit var bottomNavigationPresenter: BottomNavigationPresenter
+
+    private val ethereumBlockNumberViewModel by lazy {
+        // TODO listen for blocks
+        ViewModelProviders.of(this)
+                .get(EthereumBlockNumberViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
