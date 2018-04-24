@@ -10,6 +10,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    // Dagger Dependency Injection
     implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler

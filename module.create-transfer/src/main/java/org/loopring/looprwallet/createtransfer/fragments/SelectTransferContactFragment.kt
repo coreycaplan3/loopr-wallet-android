@@ -9,7 +9,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import kotlinx.android.synthetic.main.fragment_select_address.*
-import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.contacts.fragments.ViewContactsFragment
 import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
@@ -54,10 +55,8 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.let {
-            val barcodeScannerButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-            BarcodeCaptureDelegate.setupBarcodeScanner(it, barcodeScannerButton)
-        }
+        val barcodeScannerButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
+        BarcodeCaptureActivity.setupBarcodeScanner(this, barcodeScannerButton, arrayOf(TYPE_PUBLIC_KEY))
 
         searchViewPresenter = SearchViewPresenter(
                 containsOverflowMenu = false,
@@ -139,7 +138,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        BarcodeCaptureDelegate.handleActivityResult(recipientAddressEditText, requestCode, resultCode, data)
+        BarcodeCaptureActivity.handleActivityResult(recipientAddressEditText, requestCode, resultCode, data)
     }
 
 

@@ -14,9 +14,8 @@ import java.util.*
  * updated
  */
 open class EthereumBlockNumber(
-        blockNumber: BigInteger,
-        override var lastUpdated: Date
-) : RealmObject(), TrackedRealmObject {
+        blockNumber: BigInteger = BigInteger.ZERO
+) : RealmObject() {
 
     /**
      * The block number, represented as a base 10 number.

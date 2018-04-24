@@ -92,7 +92,7 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         menu.clear()
         inflater.inflate(R.menu.menu_home_search, menu)
 
-        val searchItem = menu.findItem(R.id.mainMenuSearch)
+        val searchItem = menu.findItem(R.id.menuMainSearch)
         val searchView = searchItem.actionView as SearchView
 
         searchViewPresenter.setupSearchView(searchItem, searchView)

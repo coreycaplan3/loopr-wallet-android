@@ -2,6 +2,7 @@ package org.loopring.looprwallet.contacts.repositories
 
 import android.arch.lifecycle.LiveData
 import io.realm.Case
+import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.kotlin.where
@@ -23,7 +24,7 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class ContactsRepository(private val currentWallet: LooprWallet) : BaseRealmRepository() {
 
-    fun getAllContactsByName(name: String): LiveData<RealmResults<Contact>> {
+    fun getAllContactsByName(name: String): LiveData<OrderedRealmCollection<Contact>> {
         return uiRealm.where<Contact>()
                 .like(Contact::name, name)
                 .sort(Contact::name)
@@ -31,7 +32,7 @@ class ContactsRepository(private val currentWallet: LooprWallet) : BaseRealmRepo
                 .asLiveData()
     }
 
-    fun getAllContactsByAddress(address: String): LiveData<RealmResults<Contact>> {
+    fun getAllContactsByAddress(address: String): LiveData<OrderedRealmCollection<Contact>> {
         return uiRealm.where<Contact>()
                 .like(Contact::address, address)
                 .sort(Contact::name)

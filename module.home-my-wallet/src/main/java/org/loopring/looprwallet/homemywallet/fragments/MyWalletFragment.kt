@@ -1,37 +1,39 @@
 package org.loopring.looprwallet.homemywallet.fragments
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.support.v7.widget.TooltipCompat
-import android.view.View
-import kotlinx.android.synthetic.main.card_wallet_information.*
-import kotlinx.android.synthetic.main.fragment_my_wallet.*
-import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
-import org.loopring.looprwallet.homemywallet.R
 import android.content.Intent
+import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.TooltipCompat
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import io.realm.OrderedRealmCollection
-import io.realm.RealmResults
 import kotlinx.android.synthetic.main.card_account_balances.*
+import kotlinx.android.synthetic.main.card_wallet_information.*
+import kotlinx.android.synthetic.main.fragment_my_wallet.*
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.utilities.BarcodeUtility
 import org.loopring.looprwallet.core.activities.SettingsActivity
-import org.loopring.looprwallet.core.extensions.*
+import org.loopring.looprwallet.core.extensions.ifNotNull
+import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
-import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
+import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
+import org.loopring.looprwallet.homemywallet.R
 import org.loopring.looprwallet.homemywallet.dagger.homeMyWalletLooprComponent
 import org.loopring.looprwallet.homemywallet.dialogs.ShowBarcodeDialog
+import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -119,7 +121,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
             when(type) {
                 BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
-                    TODO("Create Transfer")
+                    CreateTransferActivity.route(this, value)
                 }
                 BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
                     val tradingPair = TradingPair.createFromMarket(value)

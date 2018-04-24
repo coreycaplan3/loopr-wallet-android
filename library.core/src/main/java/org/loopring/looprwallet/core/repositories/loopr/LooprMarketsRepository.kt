@@ -2,6 +2,9 @@ package org.loopring.looprwallet.core.repositories.loopr
 
 import android.arch.lifecycle.LiveData
 import io.realm.*
+import io.realm.kotlin.where
+import org.loopring.looprwallet.core.extensions.asLiveData
+import org.loopring.looprwallet.core.extensions.sort
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
 import org.loopring.looprwallet.core.models.markets.TradingPair
@@ -30,8 +33,12 @@ class LooprMarketsRepository : BaseRealmRepository() {
         })
     }
 
-    fun getMarkets(filter: MarketsFilter): LiveData<OrderedRealmCollection<RealmModel>> {
-        TODO("TODO")
+    fun getMarkets(filter: MarketsFilter): LiveData<OrderedRealmCollection<TradingPair>> {
+        // TODO
+        return uiRealm.where<TradingPair>()
+                .sort(TradingPair::primaryTicker)
+                .findAll()
+                .asLiveData()
     }
 
 }

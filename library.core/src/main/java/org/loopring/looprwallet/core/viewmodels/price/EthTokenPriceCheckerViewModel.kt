@@ -11,6 +11,8 @@ import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
 import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
 import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
+import java.math.BigDecimal
+import java.math.BigInteger
 import java.math.RoundingMode
 import java.util.*
 
@@ -108,10 +110,14 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<LooprToken, String>() {
             return@function
         }
 
-        val priceInNativeCurrency = (priceInUsd * rateAgainstUsd)
+        val bdPriceInUsd = BigDecimal(priceInUsd) / BigDecimal("100")
+        val priceInNativeCurrency = (bdPriceInUsd * rateAgainstUsd)
                 .setScale(8, RoundingMode.HALF_EVEN)
 
-        token.priceInNativeCurrency = priceInNativeCurrency
+        val x = (priceInNativeCurrency * BigDecimal(100))
+                .setScale(0, RoundingMode.HALF_EVEN)
+                .toPlainString()
+        token.priceInNativeCurrency = BigInteger(x)
 
         onChange(token)
     }

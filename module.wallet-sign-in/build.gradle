@@ -5,7 +5,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // We must redeclare annotation processors
+    // Dagger Dependency Injection
     implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler

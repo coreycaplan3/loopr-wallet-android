@@ -6,7 +6,8 @@ import android.view.View
 import android.widget.ImageButton
 import kotlinx.android.synthetic.main.dialog_add_token.*
 import org.loopring.looprwallet.addtoken.R
-import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
@@ -49,7 +50,7 @@ class AddTokenDialog : BaseBottomSheetDialog() {
 
         activity?.let {
             val barcodeScannerButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-            BarcodeCaptureDelegate.setupBarcodeScanner(it, barcodeScannerButton)
+            BarcodeCaptureActivity.setupBarcodeScanner(this, barcodeScannerButton, arrayOf(TYPE_PUBLIC_KEY))
         }
 
         validatorList = listOf(
@@ -65,7 +66,7 @@ class AddTokenDialog : BaseBottomSheetDialog() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        BarcodeCaptureDelegate.handleActivityResult(addTokenContractAddressEditText, requestCode, resultCode, data)
+        BarcodeCaptureActivity.handleActivityResult(addTokenContractAddressEditText, requestCode, resultCode, data)
     }
 
     override fun onFormChanged() {

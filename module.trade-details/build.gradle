@@ -9,6 +9,7 @@ dependencies {
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
+    // Dagger Dependency Injection
     implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler

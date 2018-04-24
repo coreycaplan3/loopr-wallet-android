@@ -4,6 +4,11 @@ dependencies {
     implementation project(':library.core')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    // Dagger Dependency Injection
+    implementation gradle.dagger
+    kapt gradle.daggerProcessor
+    kapt gradle.daggerCompiler
+
     // Unit Testing
     testImplementation gradle.junit
     testImplementation gradle.mockito

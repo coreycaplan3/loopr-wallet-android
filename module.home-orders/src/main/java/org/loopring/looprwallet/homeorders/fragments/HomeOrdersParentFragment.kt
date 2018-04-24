@@ -21,6 +21,7 @@ import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
+import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 
@@ -80,7 +81,7 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
         BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
             when(type) {
                 BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
-                    TODO("Create Transfer")
+                    CreateTransferActivity.route(this, value)
                 }
                 BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
                     val tradingPair = TradingPair.createFromMarket(value)
@@ -100,7 +101,7 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
         menu.clear()
         inflater.inflate(org.loopring.looprwallet.core.R.menu.menu_home_search, menu)
 
-        val searchItem = menu.findItem(R.id.mainMenuSearch)
+        val searchItem = menu.findItem(R.id.menuMainSearch)
         val searchView = searchItem.actionView as SearchView
 
         searchViewPresenter.setupSearchView(searchItem, searchView)

@@ -36,6 +36,7 @@ import org.loopring.looprwallet.core.viewmodels.eth.EthereumTransactionViewModel
 import org.loopring.looprwallet.core.viewmodels.price.EthTokenPriceCheckerViewModel
 import org.loopring.looprwallet.createtransfer.dagger.createTransferLooprComponent
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.math.RoundingMode
 import javax.inject.Inject
 
@@ -214,7 +215,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             if (isCurrencyMainLabel) {
                 // calculate max based on currency
                 // MAX = balance * princeInCurrency
-                currencyAmount = (balance * priceInNativeCurrency)
+                currencyAmount = (balance * BigDecimal(priceInNativeCurrency.toString(10)))
                         .setScale(2, RoundingMode.HALF_DOWN)
                         .toPlainString()
             } else {
@@ -397,7 +398,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         ethTokenPriceCheckerViewModel.getTokenPrice(this, token.identifier) {
             currentToken = it
 
-            val balance = it.getBalanceOf(address)?.formatAsToken(currencySettings, it.ticker)
+            val balance = it.getBalanceOf(address)?.formatAsToken(currencySettings, it)
                     ?: NEGATIVE_ONE
             createTransferBalanceLabel.text = when (balance) {
                 NEGATIVE_ONE -> str(R.string.formatter_balance).format(balance)
@@ -430,7 +431,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                 buildSendConfirmationDialog {
                     val credentials = walletClient.getCurrentWallet()!!.credentials
                     ethereumTransactionViewModel.sendTokens(
-                            currentToken.contractAddress,
+                            currentToken.identifier,
                             credentials,
                             address,
                             amountToSend,
@@ -473,7 +474,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                 buildSendConfirmationDialog {
                     val credentials = walletClient.getCurrentWallet()!!.credentials
                     ethereumTransactionViewModel.sendTokens(
-                            currentToken.contractAddress,
+                            currentToken.identifier,
                             credentials,
                             address,
                             amountToSend,
@@ -521,9 +522,9 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
                 // We're setting the secondary label in terms of the token
                 // IE --> $500 / $1,000 (per ETH) = 0.5 tokens
-                val bdTokenAmount = (BigDecimal(currencyAmount).setScale(8)) / (priceInNativeCurrency.setScale(8))
+                val bdTokenAmount = (BigDecimal(currencyAmount).setScale(8)) / (BigDecimal(priceInNativeCurrency.toString(10)).setScale(8))
                 tokenAmount = bdTokenAmount.setScale(8, RoundingMode.HALF_DOWN).toPlainString()
-                createTransferSecondaryLabel.text = bdTokenAmount.formatAsToken(currencySettings, ticker)
+                createTransferSecondaryLabel.text = BigInteger((bdTokenAmount * (BigDecimal.TEN.pow(currentToken.decimalPlaces))).toString()).formatAsToken(currencySettings, currentToken)
             }
             else -> {
                 createTransferMainLabel.text = tokenAmount.formatAsCustomToken(currencySettings, ticker)
@@ -532,7 +533,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
                 // We're setting the secondary label in terms of the currency
                 // IE --> 0.5 (tokens) * $1,000 (per ETH) = $500
-                val bdCurrencyAmount = BigDecimal(tokenAmount) * priceInNativeCurrency
+                val bdCurrencyAmount = BigDecimal(tokenAmount) * BigDecimal(priceInNativeCurrency.toString(10))
                 currencyAmount = bdCurrencyAmount.setScale(2, RoundingMode.HALF_DOWN).toPlainString()
                 createTransferSecondaryLabel.text = bdCurrencyAmount.formatAsCurrency(currencySettings)
             }

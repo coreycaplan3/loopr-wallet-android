@@ -21,8 +21,6 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner "org.loopring.looprwallet.core.application.LooprJUnitRunner"
-
-        publishNonDefault true
     }
 
     buildTypes {
@@ -90,9 +88,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    publishNonDefault true
-
 }
 
 androidExtensions {

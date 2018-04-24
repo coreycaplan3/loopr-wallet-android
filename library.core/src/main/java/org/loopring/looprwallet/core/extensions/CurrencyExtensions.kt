@@ -87,6 +87,14 @@ fun BigInteger.formatAsToken(settings: CurrencySettings, token: LooprToken): Str
 }
 
 /**
+ * Formats a [BigDecimal] as a token
+ */
+fun BigDecimal.formatAsToken(settings: CurrencySettings, token: LooprToken): String {
+    val formatter = settings.getNumberFormatter()
+    return "${formatter.format(this)} ${token.ticker}"
+}
+
+/**
  * Formats a [BigDecimal] as the user's national currency
  */
 fun BigInteger.formatAsCurrency(settings: CurrencySettings): String {

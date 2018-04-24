@@ -2,6 +2,7 @@ package org.loopring.looprwallet.contacts.viewmodels
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
+import io.realm.OrderedRealmCollection
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.viewmodels.OfflineOnlyViewModel
 import io.realm.RealmResults
@@ -16,19 +17,19 @@ import org.loopring.looprwallet.contacts.repositories.ContactsRepository
  * Purpose of Class:
  *
  */
-class ContactsByAddressViewModel(currentWallet: LooprWallet) : OfflineOnlyViewModel<RealmResults<Contact>, String>() {
+class ContactsByAddressViewModel(currentWallet: LooprWallet) : OfflineOnlyViewModel<OrderedRealmCollection<Contact>, String>() {
 
     override val repository = ContactsRepository(currentWallet)
 
     fun getAllContactsByAddress(
             owner: LifecycleOwner,
             address: String,
-            onChange: (RealmResults<Contact>) -> Unit
+            onChange: (OrderedRealmCollection<Contact>) -> Unit
     ) {
         initializeData(owner, address, onChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: String): LiveData<RealmResults<Contact>> {
+    override fun getLiveDataFromRepository(parameter: String): LiveData<OrderedRealmCollection<Contact>> {
         return repository.getAllContactsByAddress(parameter)
     }
 

@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import io.realm.RealmModel
-import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.weakReference
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
+import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.homemarkets.R
 import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 
@@ -26,10 +27,10 @@ import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivi
  */
 class HomeMarketsAdapter(
         savedInstanceState: Bundle?,
-        activity: BaseActivity,
+        fragment: BaseFragment,
         listener: OnGeneralMarketsFilterChangeListener,
         onRefresh: () -> Unit
-) : BaseRealmAdapter<RealmModel>() {
+) : BaseRealmAdapter<TradingPair>() {
 
     companion object {
 
@@ -39,7 +40,7 @@ class HomeMarketsAdapter(
         private const val KEY_DATE_FILTER = "_DATE_FILTER"
     }
 
-    private val activity by weakReference(activity)
+    private val fragment by weakReference(fragment)
     private val listener by weakReference(listener)
     private val onRefresh by weakReference(onRefresh)
 
@@ -74,13 +75,15 @@ class HomeMarketsAdapter(
         else -> position - 1
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: RealmModel?) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: TradingPair?) {
         val filter = MarketsFilter(null, false, sortBy, dateFilter)
         (holder as? MarketsFilterViewHolder)?.bind(filter)
 
         item?.guard { } ?: return
         (holder as? MarketsViewHolder)?.bind(item) { tradingPair ->
-            activity?.let { TradingPairDetailsActivity.route(tradingPair, it) }
+            fragment?.let {
+                TradingPairDetailsActivity.route(tradingPair, it)
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.models.transfers
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
+import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import java.math.BigInteger
 
@@ -17,7 +18,7 @@ import java.math.BigInteger
  * @property timestamp  The time UNIX timestamp (in millis) at which the transfer occurred.
  * @property numberOfTokens
  */
-class LooprTransfer(
+open class LooprTransfer(
         @PrimaryKey
         var transactionHash: String = "",
 
@@ -34,7 +35,7 @@ class LooprTransfer(
 
         transactionFeeUsdValue: BigInteger = BigInteger.ZERO,
 
-        var token: LooprToken = LooprToken.ETH
+        token: LooprToken = LooprToken.ETH
 ) : RealmObject() {
 
     private var mBlockNumber: String? = null
@@ -42,6 +43,14 @@ class LooprTransfer(
     private var mUsdValue: String = ""
     private var mTransactionFee: String = ""
     private var mTransactionFeeUsdValue: String = ""
+
+    var mToken: LooprToken? = null
+
+    var token: LooprToken
+        get() = mToken ?: LooprToken.ETH
+        set(value) {
+            mToken = value
+        }
 
     /**
      * The block number at which the transfer was mined
@@ -97,6 +106,7 @@ class LooprTransfer(
         }
 
     init {
+        this.mToken?.ifNotNull { this.token = it }
         this.blockNumber = blockNumber
         this.numberOfTokens = numberOfTokens
         this.usdValue = usdValue

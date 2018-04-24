@@ -22,6 +22,7 @@ import org.loopring.looprwallet.hometransfers.R
 import org.loopring.looprwallet.hometransfers.adapters.OnTransferClickListener
 import org.loopring.looprwallet.hometransfers.adapters.ViewTransfersAdapter
 import org.loopring.looprwallet.hometransfers.viewmodels.ViewAllTransfersViewModel
+import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 import org.loopring.looprwallet.transferdetails.dialogs.TransferDetailsDialog
 
 /**
@@ -67,7 +68,7 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
         floatingActionButton.setImageResource(R.drawable.ic_send_white_24dp)
         floatingActionButton.setOnClickListener {
-            activity?.let { CreateTransferActivity.route(it) }
+            CreateTransferActivity.route(this)
         }
         viewTransfersRecyclerView.setupWithFab(floatingActionButton)
     }
@@ -76,9 +77,9 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
         super.onActivityResult(requestCode, resultCode, data)
 
         BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
-            when(type) {
+            when (type) {
                 BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
-                    CreateTransferActivity.route()
+                    CreateTransferActivity.route(this, value)
                 }
                 BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
                     val tradingPair = TradingPair.createFromMarket(value)

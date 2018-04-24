@@ -22,7 +22,7 @@ gradle.ext.lifecycleRuntime = "android.arch.lifecycle:runtime:$androidArchitectu
 gradle.ext.web3j = 'org.web3j:core:3.3.1-android'
 
 // Dagger
-ext.daggerVersion = '2.13'
+ext.daggerVersion = '2.15'
 gradle.ext.dagger = "com.google.dagger:dagger-android-support:$daggerVersion"
 gradle.ext.daggerCompiler = "com.google.dagger:dagger-compiler:$daggerVersion"
 gradle.ext.daggerProcessor = "com.google.dagger:dagger-android-processor:$daggerVersion"

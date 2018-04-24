@@ -13,6 +13,9 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.bottom_navigation.*
+import kotlinx.android.synthetic.main.navigation_header.*
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.ifNotNull

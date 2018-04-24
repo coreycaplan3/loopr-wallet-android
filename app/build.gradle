@@ -104,6 +104,7 @@ kapt {
 
 dependencies {
     implementation project(':library.core')
+    implementation project(':module.add-token')
     implementation project(':module.barcode')
     implementation project(':module.contacts')
     implementation project(':module.create-order')
@@ -112,7 +113,9 @@ dependencies {
     implementation project(':module.home-markets')
     implementation project(':module.home-my-wallet')
     implementation project(':module.home-orders')
+    implementation project(':module.home-transfers')
     implementation project(':module.intro')
+    implementation project(':module.order-details')
     implementation project(':module.trade-details')
     implementation project(':module.transfer-details')
     implementation project(':module.view-balances')
@@ -123,6 +126,13 @@ dependencies {
     implementation gradle.dagger
     kapt gradle.daggerProcessor
     kapt gradle.daggerCompiler
+
+    // Firebase - For ensuring the proper version is applied to the google-plugin below
+    api gradle.firebaseCore
+    api gradle.firebaseAppindexing
+    api gradle.firebaseCrash
+    api gradle.firebaseInvites
+    api gradle.firebasePerf
 
     // Android Testing and Integration Tests
     androidTestImplementation gradle.junit

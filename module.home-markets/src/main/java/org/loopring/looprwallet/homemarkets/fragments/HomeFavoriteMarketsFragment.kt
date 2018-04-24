@@ -30,10 +30,7 @@ class HomeFavoriteMarketsFragment : BaseHomeChildMarketsFragment() {
     override val isFavorites: Boolean = true
 
     override fun provideAdapter(savedInstanceState: Bundle?): HomeMarketsAdapter {
-        val activity = activity as? BaseActivity
-                ?: throw IllegalStateException("Activity cannot be cast!")
-
-        return HomeMarketsAdapter(savedInstanceState, activity, this, ::onRefresh)
+        return HomeMarketsAdapter(savedInstanceState, this, this, ::onRefresh)
     }
 
 }
