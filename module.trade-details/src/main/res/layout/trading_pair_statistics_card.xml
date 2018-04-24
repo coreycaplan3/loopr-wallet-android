@@ -17,7 +17,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <LinearLayout
-            android:id="@+id/tradingGeneralCurrentPriceContainer"
+            android:id="@+id/tradingPairStatsCurrentPriceContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tradingPairStatsTitleLabel"
@@ -25,6 +25,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tradingPairStatsCurrentLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -44,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@id/tradingGeneralCurrentPriceContainer"
+            android:layout_below="@id/tradingPairStatsCurrentPriceContainer"
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_toLeftOf="@id/tradingPairStatsSecondaryContainer"
             android:layout_toStartOf="@id/tradingPairStatsSecondaryContainer"
@@ -99,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/tradingGeneralCurrentPriceContainer"
+            android:layout_below="@id/tradingPairStatsCurrentPriceContainer"
             android:layout_marginTop="@dimen/vertical_margin"
             android:orientation="vertical">
 
@@ -119,7 +120,7 @@
                 android:text="@string/_24h_change" />
 
             <TextView
-                android:id="@+id/tradingPairStatsLowPriceLabel"
+                android:id="@+id/tradingPairStatsLowLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/vertical_margin"

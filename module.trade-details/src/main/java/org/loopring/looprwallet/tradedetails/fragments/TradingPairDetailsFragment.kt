@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.tradedetails.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.view.Menu
@@ -14,6 +15,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import io.realm.OrderedRealmCollection
 import kotlinx.android.synthetic.main.fragment_trading_pair_details.*
 import kotlinx.android.synthetic.main.trading_pair_graph.*
+import kotlinx.android.synthetic.main.trading_pair_statistics_card.*
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.snackbar
@@ -21,6 +23,7 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.markets.TradingPairTrend
+import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.repositories.loopr.LooprMarketsRepository
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.int
@@ -28,6 +31,7 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
 import org.loopring.looprwallet.tradedetails.R
+import org.loopring.looprwallet.tradedetails.dagger.tradeDetailsLooprComponent
 import org.loopring.looprwallet.tradedetails.viewmodels.TradingPairDetailsViewModel
 import org.loopring.looprwallet.tradedetails.viewmodels.TradingPairTrendViewModel
 
@@ -81,6 +85,8 @@ class TradingPairDetailsFragment : BaseFragment() {
 
     lateinit var filter: TradingPairFilter
 
+    lateinit var currencySettings: CurrencySettings
+
     private var tradingPair: TradingPair? = null
 
     override val layoutResource: Int
@@ -88,6 +94,8 @@ class TradingPairDetailsFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        tradeDetailsLooprComponent.inject(this)
 
         val defaultTradingPair = TradingPairFilter(primaryTicker, secondaryTicker, TradingPairFilter.GRAPH_DATE_FILTER_1H)
         filter = savedInstanceState?.getParcelable(KEY_TRADING_PAIR_FILTER) ?: defaultTradingPair
@@ -152,8 +160,29 @@ class TradingPairDetailsFragment : BaseFragment() {
 
     // MARK - Private Methods
 
+    @SuppressLint("SetTextI18n")
     private fun onDataChange(tradingPair: TradingPair) {
         this.tradingPair = tradingPair
+
+        currencySettings.getCurrencyFormatter().apply {
+            // TODO check if these numbers are formatted as native currency or tokens
+        }
+
+        currencySettings.getNumberFormatter().apply {
+            val secondaryTicker = tradingPair.secondaryTicker
+
+            tradingPairStatsCurrentLabel.text = "${format(tradingPair.lastPrice)} $secondaryTicker"
+            tradingPairStatsHighLabel.text = "${format(tradingPair.highPrice)} $secondaryTicker"
+            tradingPairStatsLowLabel.text = "${format(tradingPair.lowPrice)} $secondaryTicker"
+            tradingPairStatsVolumeLabel.text = "${format(tradingPair.volumeOfSecondary)} $secondaryTicker"
+        }
+
+        tradingPairStats24hChangeLabel.text = tradingPair.change24h
+        if (tradingPair.change24h.startsWith("-")) {
+            tradingPairStats24hChangeLabel.setTextColor(col(R.color.red_400))
+        } else {
+            tradingPairStats24hChangeLabel.setTextColor(col(R.color.green_400))
+        }
     }
 
     private fun onTrendChange(trends: OrderedRealmCollection<TradingPairTrend>) {
