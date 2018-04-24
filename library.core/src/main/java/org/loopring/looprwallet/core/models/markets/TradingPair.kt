@@ -31,6 +31,13 @@ open class TradingPair(
         var volumeOfSecondary: Double = 0.00
 ) : RealmObject() {
 
+    companion object {
+
+
+        fun isValidMarket(market: String) = Regex("[A-Z]{2,7}-[A-Z]{2,7}").matches(market)
+
+    }
+
     /**
      * The [primaryTicker] and [secondaryTicker] formatted as *[primaryTicker]-[secondaryTicker]*
      */

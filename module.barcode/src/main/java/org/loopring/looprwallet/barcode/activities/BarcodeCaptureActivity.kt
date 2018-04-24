@@ -17,6 +17,7 @@ package org.loopring.looprwallet.barcode.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.IntentFilter
@@ -25,6 +26,8 @@ import android.support.design.widget.Snackbar
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -33,7 +36,6 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.activity_barcode_capture.*
 import org.loopring.looprwallet.barcode.R
-import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
 import org.loopring.looprwallet.barcode.views.BarcodeGraphicTracker
 import org.loopring.looprwallet.barcode.views.BarcodeTrackerFactory
 import org.loopring.looprwallet.barcode.views.CameraSource
@@ -42,14 +44,81 @@ import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.extensions.snackbar
 import org.loopring.looprwallet.core.delegates.PermissionDelegate
+import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.web3j.crypto.WalletUtils
 import java.io.IOException
 
 /**
- * This activity detects barcodes and displays the value with the rear facing camera. During
- * detection overlay graphics are drawn to indicate the position, size, and ID of each barcode.
+ * This activity detects QR codes and displays the value with the rear facing camera. During
+ * detection, overlay graphics are drawn to indicate the position, size, and ID of each barcode.
  */
 class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpdateListener {
+
+    companion object {
+
+        private const val REQUEST_CODE_HANDLE_GMS_ERROR = 9001
+
+        /**
+         * Key for the supported types of QR codes in this activity
+         */
+        private const val KEY_ALLOWED_TYPES = "_SUPPORTED_TYPES"
+
+        const val TYPE_PUBLIC_KEY = "_PUBLIC_KEY"
+        const val TYPE_PRIVATE_KEY = "_PRIVATE_KEY"
+        const val TYPE_TRADING_PAIR = "_TRADING_PAIR"
+
+        const val REQUEST_CODE_START_BARCODE_ACTIVITY = 1323
+
+        const val KEY_BARCODE_VALUE = "_BARCODE_VALUE"
+
+        /**
+         * Sets up the barcode scanner to work with the provided [activity].
+         * @param activity The activity that should be set up with this barcode scanner
+         * @param barcodeScannerButton The [ImageButton] that whose click listener will start the
+         * barcode scanner
+         * @param allowedTypes The types of entities that can be scanned by the barcode scanner
+         * @see TYPE_PUBLIC_KEY
+         * @see TYPE_PRIVATE_KEY
+         * @see TYPE_TRADING_PAIR
+         */
+        fun setupBarcodeScanner(activity: Activity, barcodeScannerButton: ImageButton, allowedTypes: Array<String>) {
+            barcodeScannerButton.setOnClickListener {
+                route(activity, allowedTypes)
+                val intent = Intent(it.context, BarcodeCaptureActivity::class.java)
+                activity.startActivityForResult(intent, REQUEST_CODE_START_BARCODE_ACTIVITY)
+            }
+        }
+
+        fun handleActivityResult(editText: EditText, requestCode: Int, resultCode: Int, data: Intent?) {
+            if (requestCode == REQUEST_CODE_START_BARCODE_ACTIVITY && resultCode == Activity.RESULT_OK) {
+                val value = data?.getStringExtra(KEY_BARCODE_VALUE)
+                editText.setText(value)
+            }
+        }
+
+        inline fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?, onValidResult: (String) -> Unit) {
+            if (requestCode == REQUEST_CODE_START_BARCODE_ACTIVITY && resultCode == Activity.RESULT_OK) {
+                data?.getStringExtra(KEY_BARCODE_VALUE)?.let {
+                    onValidResult(it)
+                }
+            }
+        }
+
+        private fun route(activity: Activity, supportedTypes: Array<out String>) {
+            val intent = Intent(activity, BarcodeCaptureActivity::class.java)
+                    .putExtra(KEY_ALLOWED_TYPES, supportedTypes)
+
+            activity.startActivityForResult(intent, REQUEST_CODE_START_BARCODE_ACTIVITY)
+        }
+
+        private fun putActivityResultAndFinish(activity: BaseActivity, barcodeResult: String) {
+            val data = Intent()
+            data.putExtra(KEY_BARCODE_VALUE, barcodeResult)
+            activity.setResult(Activity.RESULT_OK, data)
+            activity.finish()
+        }
+
+    }
 
     private var mCameraSource: CameraSource? = null
 
@@ -62,6 +131,10 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
 
     override val isSecureActivity: Boolean
         get() = false
+
+    val allowedTypes: Array<String> by lazy {
+        intent.getStringArrayExtra(KEY_ALLOWED_TYPES)
+    }
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -89,10 +162,13 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
 
     @SuppressLint("Range")
     override fun onBarcodeDetected(barcode: Barcode) {
+        val isAddressAccepted = allowedTypes.find { it == TYPE_PUBLIC_KEY }
+
         val value = barcode.rawValue
         when {
-            WalletUtils.isValidAddress(value) -> BarcodeCaptureDelegate.putActivityResult(this, value)
-            WalletUtils.isValidPrivateKey(value) -> BarcodeCaptureDelegate.putActivityResult(this, value)
+            WalletUtils.isValidAddress(value) -> putActivityResultAndFinish(this, value)
+            WalletUtils.isValidPrivateKey(value) -> putActivityResultAndFinish(this, value)
+            TradingPair.isValidMarket(value) -> putActivityResultAndFinish(this, value)
             else -> {
                 val message = String.format(getString(R.string.formatter_is_an_invalid_address), value)
                 cameraSourcePreview.snackbar(message, Snackbar.LENGTH_LONG)
@@ -201,7 +277,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
                 .isGooglePlayServicesAvailable(applicationContext)
         if (code != ConnectionResult.SUCCESS) {
             GoogleApiAvailability.getInstance()
-                    .getErrorDialog(this, code, RC_HANDLE_GMS)
+                    .getErrorDialog(this, code, REQUEST_CODE_HANDLE_GMS_ERROR)
                     .show()
         }
 
@@ -264,11 +340,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
             }
         }
 
-        if (bestBarcode != null) {
-            BarcodeCaptureDelegate.putActivityResult(this, bestBarcode.rawValue)
-            return true
-        }
-        return false
+        return bestBarcode != null
     }
 
     private inner class CaptureGestureListener : GestureDetector.SimpleOnGestureListener() {
@@ -327,11 +399,6 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
         override fun onScaleEnd(detector: ScaleGestureDetector) {
             mCameraSource!!.doZoom(detector.scaleFactor)
         }
-    }
-
-    companion object {
-
-        private const val RC_HANDLE_GMS = 9001
     }
 
 }
