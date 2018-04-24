@@ -11,15 +11,21 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.homemywallet.R
 import android.content.Intent
 import android.support.v7.app.AlertDialog
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
+import io.realm.OrderedRealmCollection
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.card_account_balances.*
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.utilities.BarcodeUtility
+import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
@@ -107,14 +113,42 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         showWalletUnlockMechanismButton.setOnClickListener { onShowWalletUnlockMechanismClick() }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
+            when(type) {
+                BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
+                    TODO("Create Transfer")
+                }
+                BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
+                    val tradingPair = TradingPair.createFromMarket(value)
+                    TradingPairDetailsActivity.route(tradingPair, this)
+                }
+            }
+        }
+    }
+
     override fun onBottomNavigationReselected() {
         logd("Wallet Reselected!")
         // Scroll to the top of the NestedScrollView
         fragmentContainer.scrollTo(0, 0)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_home, menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+        R.id.menuMainScanQrCode -> {
+            BarcodeCaptureActivity.route(this, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY, BarcodeCaptureActivity.TYPE_TRADING_PAIR))
+            true
+        }
+        R.id.menuMainSettings -> {
+            SettingsActivity.route(this)
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -169,7 +203,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
     // MARK - Private Methods
 
-    private fun onTokenBalancesChange(tokenBalances: RealmResults<CryptoToken>) {
+    private fun onTokenBalancesChange(tokenBalances: OrderedRealmCollection<LooprToken>) {
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
         tokenBalances.firstOrNull { it.identifier == LooprToken.ETH.identifier }?.let {

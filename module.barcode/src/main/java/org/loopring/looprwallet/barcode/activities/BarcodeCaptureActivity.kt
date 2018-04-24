@@ -23,6 +23,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -40,11 +41,13 @@ import org.loopring.looprwallet.barcode.views.BarcodeGraphicTracker
 import org.loopring.looprwallet.barcode.views.BarcodeTrackerFactory
 import org.loopring.looprwallet.barcode.views.CameraSource
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.extensions.snackbar
 import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.web3j.crypto.WalletUtils
 import java.io.IOException
 
@@ -63,6 +66,8 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
          */
         private const val KEY_ALLOWED_TYPES = "_SUPPORTED_TYPES"
 
+        const val KEY_TYPE = "_TYPE"
+
         const val TYPE_PUBLIC_KEY = "_PUBLIC_KEY"
         const val TYPE_PRIVATE_KEY = "_PRIVATE_KEY"
         const val TYPE_TRADING_PAIR = "_TRADING_PAIR"
@@ -72,20 +77,23 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
         const val KEY_BARCODE_VALUE = "_BARCODE_VALUE"
 
         /**
-         * Sets up the barcode scanner to work with the provided [activity].
-         * @param activity The activity that should be set up with this barcode scanner
+         * Sets up the barcode scanner to work with the provided [fragment].
+         * @param fragment The fragment that should be set up with this barcode scanner
          * @param barcodeScannerButton The [ImageButton] that whose click listener will start the
          * barcode scanner
          * @param allowedTypes The types of entities that can be scanned by the barcode scanner
          * @see TYPE_PUBLIC_KEY
          * @see TYPE_PRIVATE_KEY
          * @see TYPE_TRADING_PAIR
+         * @throws IllegalArgumentException If [allowedTypes] is empty
          */
-        fun setupBarcodeScanner(activity: Activity, barcodeScannerButton: ImageButton, allowedTypes: Array<String>) {
+        fun setupBarcodeScanner(fragment: Fragment, barcodeScannerButton: ImageButton, allowedTypes: Array<String>) {
+            if (allowedTypes.isEmpty()) {
+                throw IllegalArgumentException("allowedTypes cannot be empty!")
+            }
+
             barcodeScannerButton.setOnClickListener {
-                route(activity, allowedTypes)
-                val intent = Intent(it.context, BarcodeCaptureActivity::class.java)
-                activity.startActivityForResult(intent, REQUEST_CODE_START_BARCODE_ACTIVITY)
+                route(fragment, allowedTypes)
             }
         }
 
@@ -96,24 +104,39 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
             }
         }
 
-        inline fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?, onValidResult: (String) -> Unit) {
+        /**
+         * Handles the activity result after returning back from this [BarcodeCaptureActivity].
+         *
+         * @param requestCode The activity's request code
+         * @param resultCode The activity's result code
+         * @param data The data returned by the activity
+         * @param onValidResult A function that is invoked if the [requestCode] and [resultCode]
+         * are valid. It takes the type of result (1st) and the value (2nd) as parameters
+         */
+        inline fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent?, onValidResult: (String, String) -> Unit) {
             if (requestCode == REQUEST_CODE_START_BARCODE_ACTIVITY && resultCode == Activity.RESULT_OK) {
-                data?.getStringExtra(KEY_BARCODE_VALUE)?.let {
-                    onValidResult(it)
+                val type = data?.getStringExtra(KEY_TYPE)
+                val value = data?.getStringExtra(KEY_BARCODE_VALUE)
+
+                if (type != null && value != null) {
+                    onValidResult(type, value)
                 }
             }
         }
 
-        private fun route(activity: Activity, supportedTypes: Array<out String>) {
-            val intent = Intent(activity, BarcodeCaptureActivity::class.java)
-                    .putExtra(KEY_ALLOWED_TYPES, supportedTypes)
-
-            activity.startActivityForResult(intent, REQUEST_CODE_START_BARCODE_ACTIVITY)
+        fun route(fragment: Fragment, allowedTypes: Array<out String>) {
+            fragment.startActivityForResult(getIntent(allowedTypes), REQUEST_CODE_START_BARCODE_ACTIVITY)
         }
 
-        private fun putActivityResultAndFinish(activity: BaseActivity, barcodeResult: String) {
+        private fun getIntent(allowedTypes: Array<out String>): Intent {
+            return Intent(CoreLooprWalletApp.application, BarcodeCaptureActivity::class.java)
+                    .putExtra(KEY_ALLOWED_TYPES, allowedTypes)
+        }
+
+        private fun putActivityResultAndFinish(activity: BaseActivity, type: String, barcodeResult: String) {
             val data = Intent()
             data.putExtra(KEY_BARCODE_VALUE, barcodeResult)
+            data.putExtra(KEY_TYPE, type)
             activity.setResult(Activity.RESULT_OK, data)
             activity.finish()
         }
@@ -132,7 +155,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
     override val isSecureActivity: Boolean
         get() = false
 
-    val allowedTypes: Array<String> by lazy {
+    private val allowedTypes: Array<String> by lazy {
         intent.getStringArrayExtra(KEY_ALLOWED_TYPES)
     }
 
@@ -162,15 +185,22 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
 
     @SuppressLint("Range")
     override fun onBarcodeDetected(barcode: Barcode) {
-        val isAddressAccepted = allowedTypes.find { it == TYPE_PUBLIC_KEY }
+        val isAddressAllowed = allowedTypes.any { it == TYPE_PUBLIC_KEY }
+        val isPrivateKeyAllowed = allowedTypes.any { it == TYPE_PRIVATE_KEY }
+        val isAddressAccepted = allowedTypes.any { it == TYPE_TRADING_PAIR }
 
         val value = barcode.rawValue
         when {
-            WalletUtils.isValidAddress(value) -> putActivityResultAndFinish(this, value)
-            WalletUtils.isValidPrivateKey(value) -> putActivityResultAndFinish(this, value)
-            TradingPair.isValidMarket(value) -> putActivityResultAndFinish(this, value)
+            isAddressAllowed && WalletUtils.isValidAddress(value) ->
+                putActivityResultAndFinish(this, TYPE_PUBLIC_KEY, value)
+
+            isPrivateKeyAllowed && WalletUtils.isValidPrivateKey(value) ->
+                putActivityResultAndFinish(this, TYPE_PRIVATE_KEY, value)
+
+            isAddressAccepted && TradingPair.isValidMarket(value) ->
+                putActivityResultAndFinish(this, TYPE_TRADING_PAIR, value)
             else -> {
-                val message = String.format(getString(R.string.formatter_is_an_invalid_address), value)
+                val message = String.format(str(R.string.error_invalid_qr_code), value)
                 cameraSourcePreview.snackbar(message, Snackbar.LENGTH_LONG)
             }
         }

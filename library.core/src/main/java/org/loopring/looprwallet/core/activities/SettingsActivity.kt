@@ -1,7 +1,9 @@
 package org.loopring.looprwallet.core.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.appbar_main.*
@@ -34,6 +36,10 @@ class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
             return Intent(CoreLooprWalletApp.application.applicationContext, SettingsActivity::class.java)
                     .putExtra(KEY_FINISH_ALL, true)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        fun route(fragment: Fragment) {
+            fragment.startActivity(Intent(CoreLooprWalletApp.application, SettingsActivity::class.java))
         }
 
     }

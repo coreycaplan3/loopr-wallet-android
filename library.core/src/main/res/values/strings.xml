@@ -298,4 +298,5 @@
     <string name="_24h_change">24h Change</string>
     <string name="unlock_token">Unlock Token</string>
     <string name="favorite">Favorite</string>
+    <string name="scan_qr_code">Scan QR Code</string>
 </resources>

@@ -2,7 +2,9 @@ package org.loopring.looprwallet.tradedetails.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.tradedetails.R
 import org.loopring.looprwallet.tradedetails.fragments.TradingPairDetailsFragment
@@ -14,12 +16,12 @@ class TradingPairDetailsActivity : BaseActivity() {
         private const val KEY_PRIMARY_TICKER = "_PRIMARY_TICKER"
         private const val KEY_SECONDARY_TICKER = "_SECONDARY_TICKER"
 
-        fun route(tradingPair: TradingPair, activity: BaseActivity) {
-            val intent = Intent(activity, TradingPairDetailsActivity::class.java)
+        fun route(tradingPair: TradingPair, fragment: Fragment) {
+            val intent = Intent(CoreLooprWalletApp.application, TradingPairDetailsActivity::class.java)
                     .putExtra(KEY_PRIMARY_TICKER, tradingPair.primaryTicker)
                     .putExtra(KEY_SECONDARY_TICKER, tradingPair.secondaryTicker)
 
-            activity.startActivity(intent)
+            fragment.startActivity(intent)
         }
 
     }

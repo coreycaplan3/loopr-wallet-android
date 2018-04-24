@@ -3,7 +3,9 @@ package org.loopring.looprwallet.createtransfer.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.createtransfer.R
 import org.loopring.looprwallet.createtransfer.fragments.SelectTransferContactFragment
 
@@ -19,11 +21,13 @@ class CreateTransferActivity : BaseActivity() {
 
     companion object {
 
-        const val RC_CREATE_TRANSFER = 132
+        private const val KEY_DEFAULT_ADDRESS = "_DEFAULT_ADDRESS"
 
-        fun route(activity: Activity) {
-            val intent = Intent(activity, CreateTransferActivity::class.java)
-            activity.startActivityForResult(intent, RC_CREATE_TRANSFER)
+        fun route(fragment: Fragment, address: String? = null) {
+            val intent = Intent(CoreLooprWalletApp.application, CreateTransferActivity::class.java)
+                    .putExtra(KEY_DEFAULT_ADDRESS, address)
+
+            fragment.startActivity(intent)
         }
 
     }
@@ -38,6 +42,7 @@ class CreateTransferActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // TODO DEFAULT ADDRESS
         if (savedInstanceState == null) {
             pushFragmentTransaction(SelectTransferContactFragment(), SelectTransferContactFragment.TAG)
         }

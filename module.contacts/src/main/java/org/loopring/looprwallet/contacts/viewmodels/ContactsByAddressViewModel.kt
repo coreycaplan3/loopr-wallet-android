@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.contacts.viewmodels.contacts
+package org.loopring.looprwallet.contacts.viewmodels
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
@@ -6,7 +6,7 @@ import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.viewmodels.OfflineOnlyViewModel
 import io.realm.RealmResults
 import org.loopring.looprwallet.core.models.contact.Contact
-import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
+import org.loopring.looprwallet.contacts.repositories.ContactsRepository
 
 /**
  * Created by Corey Caplan on 3/18/18.

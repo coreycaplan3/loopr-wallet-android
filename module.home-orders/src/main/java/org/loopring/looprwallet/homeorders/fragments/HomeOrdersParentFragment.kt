@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.homeorders.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
@@ -8,16 +9,20 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
+import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
 import org.loopring.looprwallet.homeorders.R
+import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 
 /**
  * Created by Corey on 1/17/2018.
@@ -69,6 +74,22 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
         )
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
+            when(type) {
+                BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
+                    TODO("Create Transfer")
+                }
+                BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
+                    val tradingPair = TradingPair.createFromMarket(value)
+                    TradingPairDetailsActivity.route(tradingPair, this)
+                }
+            }
+        }
+    }
+
     override fun onBottomNavigationReselected() {
         logd("Orders reselected")
         val fragment = adapter.getItem(viewPager.currentItem)
@@ -77,9 +98,9 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()
-        inflater.inflate(org.loopring.looprwallet.core.R.menu.menu_main_search, menu)
+        inflater.inflate(org.loopring.looprwallet.core.R.menu.menu_home_search, menu)
 
-        val searchItem = menu.findItem(R.id.menu_main_search)
+        val searchItem = menu.findItem(R.id.mainMenuSearch)
         val searchView = searchItem.actionView as SearchView
 
         searchViewPresenter.setupSearchView(searchItem, searchView)
@@ -87,6 +108,14 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+        R.id.menuMainScanQrCode -> {
+            BarcodeCaptureActivity.route(this, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY, BarcodeCaptureActivity.TYPE_TRADING_PAIR))
+            true
+        }
+        R.id.menuMainSettings -> {
+            SettingsActivity.route(this)
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 

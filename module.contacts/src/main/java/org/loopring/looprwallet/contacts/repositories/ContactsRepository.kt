@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.contacts.repositories.contacts
+package org.loopring.looprwallet.contacts.repositories
 
 import android.arch.lifecycle.LiveData
 import io.realm.Case

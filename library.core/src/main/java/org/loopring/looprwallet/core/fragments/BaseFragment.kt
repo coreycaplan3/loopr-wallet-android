@@ -485,7 +485,7 @@ abstract class BaseFragment : Fragment() {
         baseActivity?.setSupportActionBar(toolbar)
 
         if (isUpNavigationEnabled && baseActivity != null) {
-            logi("Up navigation is enabled...")
+            logi("Up navigation is enabled. Setting up...")
             toolbar?.navigationIcon = ViewUtility.getNavigationIcon(navigationIcon, baseActivity.theme)
             toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
         }

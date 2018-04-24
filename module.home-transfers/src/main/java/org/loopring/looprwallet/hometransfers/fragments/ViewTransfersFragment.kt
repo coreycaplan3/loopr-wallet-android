@@ -1,14 +1,20 @@
 package org.loopring.looprwallet.hometransfers.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_view_transfers.*
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
+import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.extensions.setupWithFab
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
@@ -66,8 +72,37 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
         viewTransfersRecyclerView.setupWithFab(floatingActionButton)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
+            when(type) {
+                BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
+                    CreateTransferActivity.route()
+                }
+                BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
+                    val tradingPair = TradingPair.createFromMarket(value)
+                    TradingPairDetailsActivity.route(tradingPair, this)
+                }
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.menu_home, menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+        R.id.menuMainScanQrCode -> {
+            BarcodeCaptureActivity.route(this, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY, BarcodeCaptureActivity.TYPE_TRADING_PAIR))
+            true
+        }
+        R.id.menuMainSettings -> {
+            SettingsActivity.route(this)
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 

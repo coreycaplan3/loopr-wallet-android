@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.contacts.fragments.contacts
+package org.loopring.looprwallet.contacts.fragments
 
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
@@ -8,9 +8,9 @@ import android.view.View
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.fragment_view_contacts.*
 import org.loopring.looprwallet.contacts.R
-import org.loopring.looprwallet.contacts.adapters.contacts.ContactsAdapter
-import org.loopring.looprwallet.contacts.viewmodels.contacts.ContactsByAddressViewModel
-import org.loopring.looprwallet.contacts.viewmodels.contacts.ContactsByNameViewModel
+import org.loopring.looprwallet.contacts.adapters.ContactsAdapter
+import org.loopring.looprwallet.contacts.viewmodels.ContactsByAddressViewModel
+import org.loopring.looprwallet.contacts.viewmodels.ContactsByNameViewModel
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.extensions.weakReference

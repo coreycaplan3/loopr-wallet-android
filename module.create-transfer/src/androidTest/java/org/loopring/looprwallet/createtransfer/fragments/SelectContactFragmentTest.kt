@@ -22,7 +22,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
-import org.loopring.looprwallet.contacts.adapters.contacts.ContactsAdapter
+import org.loopring.looprwallet.contacts.adapters.ContactsAdapter
 import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.createtransfer.fragments.SelectTransferContactFragment
 

@@ -2,6 +2,8 @@ apply from: "../standard-library.gradle"
 
 dependencies {
     implementation project(':library.core')
+    implementation project(path: ':module.barcode')
+    implementation project(path: ':module.create-transfer')
     implementation project(path: ':module.trade-details')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])

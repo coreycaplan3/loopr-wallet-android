@@ -7,16 +7,12 @@ import android.widget.ImageButton
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_create_contact.*
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
-import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
 import org.loopring.looprwallet.contacts.R
-import org.loopring.looprwallet.contacts.dagger.contactsLooprComponent
-import org.loopring.looprwallet.core.models.contact.Contact
-import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
+import org.loopring.looprwallet.contacts.repositories.ContactsRepository
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
+import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.validators.ContactNameValidator
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
-import org.loopring.looprwallet.core.wallet.WalletClient
-import javax.inject.Inject
 
 /**
  * Created by Corey Caplan on 3/12/18.
@@ -43,9 +39,6 @@ class CreateContactDialog : BaseBottomSheetDialog() {
     override val layoutResource: Int
         get() = R.layout.dialog_create_contact
 
-    @Inject
-    lateinit var walletClient: WalletClient
-
     private var repository: ContactsRepository? = null
         get() {
             if (field != null) {
@@ -56,19 +49,11 @@ class CreateContactDialog : BaseBottomSheetDialog() {
             return ContactsRepository(wallet).apply { field = this }
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        contactsLooprComponent.inject(this)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.let {
-            val barcodeButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-            BarcodeCaptureDelegate.setupBarcodeScanner(it, barcodeButton)
-        }
+        val barcodeButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
+        BarcodeCaptureActivity.setupBarcodeScanner(this, barcodeButton, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY))
 
         if (savedInstanceState == null) {
             contactAddressEditText.setText(arguments?.getString(KEY_ADDRESS))
@@ -93,7 +78,7 @@ class CreateContactDialog : BaseBottomSheetDialog() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        BarcodeCaptureDelegate.handleActivityResult(contactAddressEditText, requestCode, resultCode, data)
+        BarcodeCaptureActivity.handleActivityResult(contactAddressEditText, requestCode, resultCode, data)
     }
 
     override fun onFormChanged() {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="formatter_bal">Bal %s</string>
-    <string name="formatter_is_an_invalid_address">%s is an invalid address</string>
     <string name="formatter_recipient">Recipient: %s</string>
     <string name="formatter_current_ticker_price">Current %s Price: %s</string>
     <string name="formatter_balance">Balance: %s</string>

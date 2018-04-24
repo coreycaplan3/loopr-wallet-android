@@ -9,10 +9,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import kotlinx.android.synthetic.main.fragment_select_address.*
-import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.delegate.BarcodeCaptureDelegate
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
-import org.loopring.looprwallet.contacts.fragments.contacts.ViewContactsFragment
+import org.loopring.looprwallet.contacts.fragments.ViewContactsFragment
 import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.contact.Contact

@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.contacts.adapters.contacts
+package org.loopring.looprwallet.contacts.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -11,4 +11,4 @@ import android.view.View
  * Purpose of Class:
  *
  */
-class NoContactsFoundViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+class EmptyContactsViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)

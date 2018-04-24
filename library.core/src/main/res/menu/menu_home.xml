@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menuMainScanQrCode"
+        android:icon="@drawable/ic_attach_money_white_24dp"
+        android:title="@string/scan_qr_code" />
+    <item
+        android:id="@+id/menuMainSettings"
+        android:title="@string/title_activity_settings" />
+</menu>

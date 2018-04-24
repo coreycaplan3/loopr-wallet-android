@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.contacts.adapters.contacts
+package org.loopring.looprwallet.contacts.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup

@@ -33,8 +33,14 @@ open class TradingPair(
 
     companion object {
 
-
         fun isValidMarket(market: String) = Regex("[A-Z]{2,7}-[A-Z]{2,7}").matches(market)
+
+        fun createFromMarket(market: String): TradingPair {
+            val splitMarket = market.split(Regex("-"))
+            val primaryTicker = splitMarket[0]
+            val secondaryTradingPair = splitMarket[1]
+            return TradingPair(primaryTicker, secondaryTradingPair)
+        }
 
     }
 

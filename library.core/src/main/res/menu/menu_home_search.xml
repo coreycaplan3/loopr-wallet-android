@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_main_search"
+        android:id="@+id/menuMainSearch"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/search"
         app:actionLayout="@layout/search_view"
         app:showAsAction="ifRoom|collapseActionView" />
     <item
-        android:id="@+id/menu_main_toggle_currency"
+        android:id="@+id/menuMainScanQrCode"
         android:icon="@drawable/ic_attach_money_white_24dp"
-        android:title="@string/toggle_currency" />
+        android:title="@string/scan_qr_code" />
     <item
-        android:id="@+id/menu_main_settings"
+        android:id="@+id/menuMainSettings"
         android:title="@string/title_activity_settings" />
 </menu>

@@ -13,7 +13,7 @@ import android.widget.Spinner
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_create_transfer_amount.*
 import org.loopring.looprwallet.core.models.contact.Contact
-import org.loopring.looprwallet.contacts.repositories.contacts.ContactsRepository
+import org.loopring.looprwallet.contacts.repositories.ContactsRepository
 import org.loopring.looprwallet.createtransfer.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
