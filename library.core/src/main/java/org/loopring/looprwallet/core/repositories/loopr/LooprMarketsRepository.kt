@@ -2,7 +2,9 @@ package org.loopring.looprwallet.core.repositories.loopr
 
 import android.arch.lifecycle.LiveData
 import io.realm.*
+import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
+import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
@@ -18,11 +20,17 @@ class LooprMarketsRepository : BaseRealmRepository() {
 
     override fun getRealm() = realmClient.getSharedInstance()
 
-    fun getMarkets(filter: MarketsFilter): LiveData<OrderedRealmCollection<RealmModel>> {
-        TODO("TODO")
+    /**
+     * Toggles the *favorite* status of a trading pair
+     */
+    fun toggleIsFavorite(tradingPair: TradingPair) {
+        runTransaction(Realm.Transaction {
+            tradingPair.isFavorite = !tradingPair.isFavorite
+            it.upsert(tradingPair)
+        })
     }
 
-    fun getMarketDetails(tradePair: Any) {
+    fun getMarkets(filter: MarketsFilter): LiveData<OrderedRealmCollection<RealmModel>> {
         TODO("TODO")
     }
 

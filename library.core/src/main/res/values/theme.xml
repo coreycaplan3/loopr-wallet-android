@@ -36,6 +36,9 @@
         <!-- Divider -->
         <item name="dividerColor">@color/blackDivider</item>
 
+        <!-- Overflow Menu -->
+        <item name="android:popupMenuStyle">@style/App.PopupMenu</item>
+
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>
 
@@ -53,7 +56,8 @@
 
         <item name="android:textColorPrimary">@color/full_black_text_primary</item>
         <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
-        <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary
+        </item>
 
         <item name="android:textColorSecondary">@color/full_black_text_secondary</item>
         <item name="android:textColorSecondaryInverse">@color/full_white_text_secondary</item>
@@ -99,6 +103,9 @@
         <!-- Divider -->
         <item name="dividerColor">@color/whiteDivider</item>
 
+        <!-- Overflow Menu -->
+        <item name="android:popupMenuStyle">@style/App.PopupMenu</item>
+
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>
 
@@ -116,7 +123,8 @@
 
         <item name="android:textColorPrimary">@color/full_white_text_primary</item>
         <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
-        <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary
+        </item>
 
         <item name="android:textColorSecondary">@color/full_white_text_secondary</item>
         <item name="android:textColorSecondaryInverse">@color/full_white_text_secondary</item>

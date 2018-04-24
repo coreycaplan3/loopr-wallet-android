@@ -2,12 +2,17 @@ apply from: "../standard-library.gradle"
 
 dependencies {
     implementation project(':library.core')
+    implementation project(path: ':module.create-order')
     implementation project(path: ':module.order-details')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
-    
+
+    implementation gradle.dagger
+    kapt gradle.daggerProcessor
+    kapt gradle.daggerCompiler
+
     // Unit Testing
     testImplementation gradle.junit
     testImplementation gradle.mockito

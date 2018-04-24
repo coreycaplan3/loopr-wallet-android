@@ -70,7 +70,7 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
         }
 
         viewBalancesSwipeRefreshLayout.setOnRefreshListener { refreshAll() }
-        setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel, viewBalancesSwipeRefreshLayout, ::refreshAll)
+        setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel, viewBalancesSwipeRefreshLayout)
 
         val address = walletClient.getCurrentWallet()?.credentials?.address
         if (address != null) {

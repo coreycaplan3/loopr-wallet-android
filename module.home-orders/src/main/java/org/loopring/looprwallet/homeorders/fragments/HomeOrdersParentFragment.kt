@@ -55,7 +55,7 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.setImageResource(R.drawable.ic_account_balance_wallet_white_24dp)
+        floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp)
         floatingActionButton.setOnClickListener {
             activity?.let { CreateOrderActivity.route(it, null) }
         }

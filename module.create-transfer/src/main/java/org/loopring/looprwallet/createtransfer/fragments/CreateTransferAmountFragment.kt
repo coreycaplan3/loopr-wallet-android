@@ -122,7 +122,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
     @VisibleForTesting
     val ethTokenPriceCheckerViewModel: EthTokenPriceCheckerViewModel by lazy {
         return@lazy LooprViewModelFactory.get<EthTokenPriceCheckerViewModel>(this).apply {
-            setupOfflineFirstStateAndErrorObserver(this, null, ::refreshAll)
+            setupOfflineFirstStateAndErrorObserver(this, null)
         }
     }
 
@@ -138,7 +138,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             return LooprViewModelFactory.get<EthTokenBalanceViewModel>(this, wallet)
                     .apply {
                         field = this
-                        setupOfflineFirstStateAndErrorObserver(this, null, ::refreshAll)
+                        setupOfflineFirstStateAndErrorObserver(this, null)
                     }
         }
 

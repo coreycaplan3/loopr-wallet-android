@@ -385,6 +385,10 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         return isRefreshNecessaryBasedOnDate(date.time)
     }
 
+    protected fun isRefreshNecessaryBasedOnDate(dateLastSynced: Long): Boolean {
+        return dateLastSynced + waitTime < Date().time
+    }
+
     @SyncData.SyncType
     abstract val syncType: String
 
@@ -595,9 +599,5 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     private fun getCurrentLoadingState(currentData: T?): Int =
             if (!isDataEmpty(currentData)) STATE_LOADING_HAVE_DATA
             else STATE_LOADING_EMPTY
-
-    private fun isRefreshNecessaryBasedOnDate(dateLastSynced: Long): Boolean {
-        return dateLastSynced + waitTime < Date().time
-    }
 
 }

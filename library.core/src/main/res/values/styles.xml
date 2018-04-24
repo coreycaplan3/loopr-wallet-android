@@ -167,6 +167,10 @@
         <item name="android:src">@drawable/ic_more_vert_white_24dp</item>
     </style>
 
+    <style name="App.PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">?attr/cardBackgroundColor</item>
+    </style>
+
     <!-- Search View -->
 
     <style name="App.SearchView" parent="Widget.AppCompat.SearchView.ActionBar">

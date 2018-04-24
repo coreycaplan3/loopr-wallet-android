@@ -49,7 +49,7 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
         viewTransfersSwipeRefresh.setOnRefreshListener(this)
 
         val adapter = ViewTransfersAdapter(this)
-        setupOfflineFirstStateAndErrorObserver(viewAllTransfersViewModel, viewTransfersSwipeRefresh, ::onRefresh)
+        setupOfflineFirstStateAndErrorObserver(viewAllTransfersViewModel, viewTransfersSwipeRefresh)
         viewAllTransfersViewModel?.getAllTransfers(this) {
             setupOfflineFirstDataObserverForAdapter(viewAllTransfersViewModel, adapter, it)
         }

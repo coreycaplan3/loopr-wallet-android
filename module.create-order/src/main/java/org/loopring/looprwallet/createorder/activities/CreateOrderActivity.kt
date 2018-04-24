@@ -19,7 +19,8 @@ class CreateOrderActivity : BaseActivity() {
 
     companion object {
 
-        private const val KEY_TRADING_PAIR = "_TRADING_PAIR"
+        private const val KEY_PRIMARY_TICKER = "_PRIMARY_TICKER"
+        private const val KEY_SECONDARY_TICKER = "_SECONDARY_TICKER"
 
         /**
          * Routes this activity to the [CreateOrderActivity].
@@ -28,7 +29,8 @@ class CreateOrderActivity : BaseActivity() {
          */
         fun route(activity: Activity, tradingPair: TradingPair? = null) {
             val intent = Intent(activity, CreateOrderActivity::class.java)
-                    .putExtra(KEY_TRADING_PAIR, tradingPair?.ticker)
+                    .putExtra(KEY_PRIMARY_TICKER, tradingPair?.primaryTicker)
+                    .putExtra(KEY_SECONDARY_TICKER, tradingPair?.secondaryTicker)
 
             activity.startActivity(intent)
         }

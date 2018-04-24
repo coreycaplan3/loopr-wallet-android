@@ -295,4 +295,7 @@
     <string name="remove_wallet">Remove a Wallet</string>
     <string name="empty_state_view_transfers">You have no transfers. Send or receive some tokens to populate this page!</string>
     <string name="waiting_to_be_mined">Waiting to be mined</string>
+    <string name="_24h_change">24h Change</string>
+    <string name="unlock_token">Unlock Token</string>
+    <string name="favorite">Favorite</string>
 </resources>

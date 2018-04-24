@@ -2,6 +2,7 @@ package org.loopring.looprwallet.homemarkets.fragments
 
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
@@ -51,6 +52,11 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
 
     override fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
         return fragmentView.inflate(R.layout.appbar_markets, false) as AppBarLayout?
+    }
+
+    override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
+        floatingActionButton.setImageResource(R.drawable.ic_card_giftcard_white_24dp)
+        floatingActionButton.setOnClickListener { TODO("ADD ROUTE TO WRAP/UNWRAP ETH") }
     }
 
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {

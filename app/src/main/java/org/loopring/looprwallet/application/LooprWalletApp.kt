@@ -17,6 +17,8 @@ import org.loopring.looprwallet.createtransfer.dagger.CreateTransferLooprCompone
 import org.loopring.looprwallet.homemywallet.dagger.DaggerHomeMyWalletLooprComponent
 import org.loopring.looprwallet.homemywallet.dagger.HomeMyWalletLooprComponent
 import org.loopring.looprwallet.homemywallet.dagger.HomeMyWalletLooprComponentProvider
+import org.loopring.looprwallet.tradedetails.dagger.TradeDetailsLooprComponent
+import org.loopring.looprwallet.tradedetails.dagger.TradeDetailsLooprComponentProvider
 import org.loopring.looprwallet.transferdetails.dagger.TransferDetailsLooprComponent
 import org.loopring.looprwallet.transferdetails.dagger.TransferDetailsLooprComponentProvider
 import org.loopring.looprwallet.viewbalances.dagger.DaggerViewBalancesLooprComponent
@@ -36,8 +38,9 @@ import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponentProvider
  */
 open class LooprWalletApp : CoreLooprWalletApp(), ContactsLooprComponentProvider,
         HomeMyWalletLooprComponentProvider, HomeOrdersLooprComponentProvider,
-        CreateTransferLooprComponentProvider, TransferDetailsLooprComponentProvider,
-        ViewBalancesLooprComponentProvider, WalletLooprComponentProvider {
+        CreateTransferLooprComponentProvider, TradeDetailsLooprComponentProvider,
+        TransferDetailsLooprComponentProvider, ViewBalancesLooprComponentProvider,
+        WalletLooprComponentProvider {
 
     companion object {
 
@@ -55,6 +58,10 @@ open class LooprWalletApp : CoreLooprWalletApp(), ContactsLooprComponentProvider
 
         val homeOrdersLooprComponent: HomeOrdersLooprComponent by lazy {
             DaggerHomeOrdersLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
+        }
+
+        val tradeDetailsLooprComponent: TradeDetailsLooprComponent by lazy {
+            DaggerTradeDetailsLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
         }
 
         val transferDetailsLooprComponent: TransferDetailsLooprComponent by lazy {
@@ -78,6 +85,8 @@ open class LooprWalletApp : CoreLooprWalletApp(), ContactsLooprComponentProvider
     override fun provideHomeOrdersLooprComponent() = homeOrdersLooprComponent
 
     override fun provideCreateTransferLooprComponent() = createTransferLooprComponent
+
+    override fun provideTradeDetailsLooprComponent() = tradeDetailsLooprComponent
 
     override fun provideTransferDetailsLooprComponent() = transferDetailsLooprComponent
 

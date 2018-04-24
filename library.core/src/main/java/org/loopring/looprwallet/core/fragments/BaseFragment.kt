@@ -379,10 +379,9 @@ abstract class BaseFragment : Fragment() {
      * @param refreshAll The function that will be called when all data needs to be refreshed. This
      * is called when an error occurs and the user opts into a refresh/retry.
      */
-    protected inline fun setupOfflineFirstStateAndErrorObserver(
+    protected fun setupOfflineFirstStateAndErrorObserver(
             viewModel: OfflineFirstViewModel<*, *>?,
-            refreshLayout: SwipeRefreshLayout?,
-            crossinline refreshAll: () -> Unit
+            refreshLayout: SwipeRefreshLayout?
     ) {
         if (viewModel != null && viewModelList.none { it === viewModel }) {
             // If there are no viewModels in the list equal to this reference, add it
@@ -411,12 +410,13 @@ abstract class BaseFragment : Fragment() {
             val snackbar = indefiniteSnackbar
             if (snackbar == null || !snackbar.isShownOrQueued) {
                 // If we aren't already showing the refreshAll snackbar, let's show it
+                val refreshAll = { _: View -> viewModelList.forEach(OfflineFirstViewModel<*, *>::refresh) }
                 when {
                     viewModel.hasValidData() ->
-                        view?.longSnackbarWithAction(it.errorMessage, R.string.reload) { refreshAll() }
+                        view?.longSnackbarWithAction(it.errorMessage, R.string.reload, refreshAll)
                     else -> {
                         // This snackbar should be indefinite because we NEED the data.
-                        indefiniteSnackbar = view?.indefiniteSnackbarWithAction(it.errorMessage, R.string.reload) { refreshAll() }
+                        indefiniteSnackbar = view?.indefiniteSnackbarWithAction(it.errorMessage, R.string.reload, refreshAll)
                                 ?.addCallback(snackbarCallbackRemoverListener)
                     }
                 }

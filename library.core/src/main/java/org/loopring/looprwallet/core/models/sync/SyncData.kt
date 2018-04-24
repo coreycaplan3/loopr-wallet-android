@@ -38,6 +38,9 @@ open class SyncData(
 
         const val SYNC_TYPE_MARKETS = "_MARKETS"
 
+        const val SYNC_TYPE_TRADING_PAIR_DETAILS = "_TRADING_PAIR_DETAILS"
+        const val SYNC_TYPE_TRADING_PAIR_TRENDS = "_TRADING_PAIR_TRENDS"
+
         const val SYNC_TYPE_TRANSFERS = "_TRANSFERS"
         const val SYNC_TYPE_TOKEN_TRANSFERS = "_TOKEN_TRANSFERS"
 

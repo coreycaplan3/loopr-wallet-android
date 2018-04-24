@@ -1,52 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView style="@style/App.Card"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/App.Card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tradingPairGeneralStatsText"
+            android:id="@+id/tradingPairStatsTitleLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/statistics"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <LinearLayout
-            android:id="@+id/tradingPairGeneralPrimaryContainer"
-            android:layout_width="wrap_content"
+            android:id="@+id/tradingGeneralCurrentPriceContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/tradingPairGeneralStatsText"
+            android:layout_below="@id/tradingPairStatsTitleLabel"
             android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_toLeftOf="@id/tradingPairGeneralSecondaryContainer"
-            android:layout_toStartOf="@id/tradingPairGeneralSecondaryContainer"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tradingPairGeneralCurrentPriceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="@string/default_price" />
+                tools:text="$0.63" />
 
             <TextView
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/statistics_pair_margin_top"
                 android:text="@string/current" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tradingPairStatsPrimaryContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/tradingGeneralCurrentPriceContainer"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_toLeftOf="@id/tradingPairStatsSecondaryContainer"
+            android:layout_toStartOf="@id/tradingPairStatsSecondaryContainer"
+            android:orientation="vertical">
+
+            <!--<TextView-->
+            <!--android:id="@+id/tradingPairStatsCurrentPriceText"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+            <!--tools:text="@string/default_price" />-->
+
+            <!--<TextView-->
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Caption"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/statistics_pair_margin_top"-->
+            <!--android:text="@string/current" />-->
+
             <TextView
-                android:id="@+id/tradingPairGeneralVolumeText"
+                android:id="@+id/tradingPairStatsVolumeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 tools:text="@string/default_trade_volume" />
 
@@ -57,46 +78,7 @@
                 android:text="@string/volume" />
 
             <TextView
-                android:id="@+id/tradingPairMarketCapText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_margin"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="@string/default_market_cap" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/statistics_pair_margin_top"
-                android:text="@string/market_cap" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tradingPairGeneralSecondaryContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/tradingPairGeneralStatsText"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tradingPairGeneralOpenPriceText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="@string/default_price" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/statistics_pair_margin_top"
-                android:text="@string/today_open" />
-
-            <TextView
-                android:id="@+id/tradingPairGeneralHighText"
+                android:id="@+id/tradingPairStatsHighLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/vertical_margin"
@@ -109,8 +91,35 @@
                 android:layout_marginTop="@dimen/statistics_pair_margin_top"
                 android:text="@string/today_high" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tradingPairStatsSecondaryContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tradingGeneralCurrentPriceContainer"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/tradingPairGeneralLowPriceText"
+                android:id="@+id/tradingPairStats24hChangeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textStyle="bold"
+                tools:text="@string/default_trading_pair_percentage_change"
+                tools:textColor="@color/green_400" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/statistics_pair_margin_top"
+                android:text="@string/_24h_change" />
+
+            <TextView
+                android:id="@+id/tradingPairStatsLowPriceLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/vertical_margin"
@@ -122,6 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/statistics_pair_margin_top"
                 android:text="@string/today_low" />
+
         </LinearLayout>
 
     </RelativeLayout>
