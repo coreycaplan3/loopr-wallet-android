@@ -75,7 +75,7 @@ class BottomNavigationPresenter(activity: BaseActivity,
             if (fragment is BottomNavigationReselectedLister) {
                 fragment.onBottomNavigationReselected()
             } else {
-                loge("Could not reselect fragment!", IllegalStateException())
+                loge("Could not reselect ${fragment?.tag}!", IllegalStateException())
             }
         }
     }
@@ -131,7 +131,7 @@ class BottomNavigationPresenter(activity: BaseActivity,
             val position = getPositionFromTitle(title)
             if (position != null) {
                 viewPager?.let {
-                    it.setCurrentItem(position, true)
+                    it.setCurrentItem(position, false)
                     currentFragment = activity?.supportFragmentManager?.findFragmentById(it.id)
                 }
             }

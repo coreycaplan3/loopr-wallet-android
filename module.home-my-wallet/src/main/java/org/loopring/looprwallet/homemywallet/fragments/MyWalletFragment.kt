@@ -103,10 +103,8 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
             try {
                 val address = wallet.credentials.address
                 val dimensions = resources.getDimension(R.dimen.barcode_dimensions).roundToInt()
-                logw("Setting up wallet barcode...")
                 val barcode = BarcodeUtility.encodeTextToBitmap(address, dimensions)
                 addressBarcodeImage.setImageBitmap(barcode)
-                logw("Finished setting up wallet barcode...")
                 addressLabel.text = address
             } catch (e: Throwable) {
                 addressLabel.text = str(R.string.error_creating_qr_code)

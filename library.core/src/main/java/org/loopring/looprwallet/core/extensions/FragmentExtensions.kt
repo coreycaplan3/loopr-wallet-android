@@ -27,4 +27,4 @@ inline fun <reified T : Fragment> FragmentManager.findFragmentByTagOrCreate(tag:
     return (this.findFragmentByTag(tag) as? T) ?: block(tag)
 }
 
-fun <T : View> Fragment.findViewById(@IdRes idRes: Int): T? = view?.findViewById<T>(idRes)
+fun <T : View> Fragment.findViewById(@IdRes idRes: Int): T? = view?.findViewById(idRes)

@@ -22,11 +22,11 @@ class HomeFilledOrdersFragment : BaseHomeChildOrdersFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_general_orders
 
-    override val swipeRefreshLayout: SwipeRefreshLayout
-        get() = findViewById(R.id.fragmentContainerSwipeRefresh)!!
+    override val swipeRefreshLayout: SwipeRefreshLayout?
+        get() = findViewById(R.id.fragmentContainerSwipeRefresh)
 
-    override val recyclerView: RecyclerView
-        get() = findViewById(R.id.fragmentContainer)!!
+    override val recyclerView: RecyclerView?
+        get() = findViewById(R.id.fragmentContainer)
 
     override fun provideAdapter(savedInstanceState: Bundle?): GeneralOrderAdapter {
         val activity = activity as? BaseActivity

@@ -32,9 +32,4 @@ interface BaseRepository<T> {
      */
     fun remove(data: List<T>)
 
-    /**
-     * Called when this repository is no longer needed and can be destroyed.
-     */
-    fun clear()
-
 }

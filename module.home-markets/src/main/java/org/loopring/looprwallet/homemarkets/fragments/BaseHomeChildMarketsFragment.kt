@@ -31,9 +31,9 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         private const val KEY_IS_SEARCH_ACTIVE = "_IS_SEARCH_ACTIVE"
     }
 
-    abstract val swipeRefreshLayout: SwipeRefreshLayout
+    abstract val swipeRefreshLayout: SwipeRefreshLayout?
 
-    abstract val recyclerView: RecyclerView
+    abstract val recyclerView: RecyclerView?
 
     /**
      * True if this fragment is showing favorites or false otherwise
@@ -59,10 +59,10 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         super.onViewCreated(view, savedInstanceState)
 
         adapter = provideAdapter(savedInstanceState)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(view.context)
+        recyclerView?.adapter = adapter
+        recyclerView?.layoutManager = LinearLayoutManager(view.context)
 
-        swipeRefreshLayout.setOnRefreshListener(this)
+        swipeRefreshLayout?.setOnRefreshListener(this)
 
         setupOfflineFirstStateAndErrorObserver(homeMarketsViewModel, swipeRefreshLayout)
         setMarketsLiveData()
@@ -71,7 +71,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     abstract fun provideAdapter(savedInstanceState: Bundle?): HomeMarketsAdapter
 
     final override fun onBottomNavigationReselected() {
-        recyclerView.smoothScrollToPosition(0)
+        recyclerView?.smoothScrollToPosition(0)
     }
 
     override fun onRefresh() {

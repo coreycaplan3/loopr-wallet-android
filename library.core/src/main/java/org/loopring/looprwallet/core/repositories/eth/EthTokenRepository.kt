@@ -2,7 +2,6 @@ package org.loopring.looprwallet.core.repositories.eth
 
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
-import io.realm.RealmList
 import io.realm.kotlin.where
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
@@ -20,16 +19,16 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class EthTokenRepository : BaseRealmRepository() {
+class EthTokenRepository : BaseRealmRepository(false) {
 
-    override fun getRealm() = realmClient.getSharedInstance()
+    override fun getAsyncRealm() = realmClient.getSharedInstance()
 
     /**
      * Finds [LooprToken.ETH] synchronously. If not found, it is inserted and returned from realm.
      *
      * @return An **UN-MANAGED** [LooprToken] that represents ETH.
      */
-    fun getEthNow(): LooprToken = getRealm().use {
+    fun getEthNow(): LooprToken = getAsyncRealm().use {
         it.where<LooprToken>()
                 .equalTo(LooprToken::ticker, LooprToken.ETH.ticker)
                 .findFirst()
@@ -43,7 +42,7 @@ class EthTokenRepository : BaseRealmRepository() {
      * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract
      * address.
      */
-    fun getTokenByContractAddressNow(contractAddress: String): LooprToken? = getRealm().use {
+    fun getTokenByContractAddressNow(contractAddress: String): LooprToken? = getAsyncRealm().use {
         val data = it.where<LooprToken>()
                 .equalTo(LooprToken::identifier, contractAddress)
                 .findFirst() ?: return null
@@ -55,7 +54,7 @@ class EthTokenRepository : BaseRealmRepository() {
      * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract
      * address and wallet address as the balance owner.
      */
-    fun getTokenByContractAddressAndAddressNow(contractAddress: String, walletAddress: String): LooprToken? = getRealm().use {
+    fun getTokenByContractAddressAndAddressNow(contractAddress: String, walletAddress: String): LooprToken? = getAsyncRealm().use {
         val data = it.where<LooprToken>()
                 .equalTo(LooprToken::identifier, contractAddress)
                 .equalTo(listOf(LooprToken::tokenBalances), TokenBalanceInfo::address, walletAddress)

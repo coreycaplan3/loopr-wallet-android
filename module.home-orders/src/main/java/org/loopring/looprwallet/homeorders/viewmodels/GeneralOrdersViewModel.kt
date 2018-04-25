@@ -54,7 +54,7 @@ class GeneralOrdersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel
     }
 
     override fun addSyncDataToRepository(parameter: OrderFilter) {
-        syncRepository.add(SyncData(syncType, null, Date()))
+        syncRepository.add(SyncData(syncType, parameter.address, Date()))
     }
 
     override val syncType

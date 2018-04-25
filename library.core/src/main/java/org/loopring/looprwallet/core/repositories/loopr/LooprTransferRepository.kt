@@ -19,9 +19,9 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class LooprTransferRepository(private val currentWallet: LooprWallet) : BaseRealmRepository() {
+class LooprTransferRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
 
-    override fun getRealm() = realmClient.getPrivateInstance(currentWallet)
+    override fun getAsyncRealm() = realmClient.getPrivateInstance(currentWallet)
 
     fun getTransferByHash(transferHash: String): LiveData<LooprTransfer> {
         // We're in a private realm instance, so we're already querying by all of this address's

@@ -17,9 +17,9 @@ import java.util.*
  *
  */
 @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
-open class SyncRepositoryImpl : BaseRealmRepository(), SyncRepository {
+open class SyncRepositoryImpl : BaseRealmRepository(false), SyncRepository {
 
-    override fun getRealm() = realmClient.getSharedInstance()
+    override fun getAsyncRealm() = realmClient.getSharedInstance()
 
     override fun getLastSyncTime(@SyncData.SyncType syncType: String): Date? {
         return uiRealm.where<SyncData>()

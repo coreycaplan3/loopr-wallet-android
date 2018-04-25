@@ -23,6 +23,9 @@ import android.widget.ProgressBar
 import io.realm.OrderedRealmCollection
 import io.realm.RealmList
 import io.realm.RealmModel
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
@@ -470,8 +473,9 @@ abstract class BaseFragment : Fragment() {
 
     // MARK - Private Methods
 
-    private fun createAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) {
-        appbarLayout = createAppbarLayout(fragmentView, savedInstanceState)
+    private fun createAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) = runBlocking {
+        appbarLayout = async(CommonPool) { createAppbarLayout(fragmentView, savedInstanceState) }.await()
+
         fragmentView.addView(appbarLayout, 0)
         toolbar = appbarLayout?.findViewById(R.id.toolbar)
         setHasOptionsMenu(true)

@@ -21,9 +21,9 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class LooprOrderRepository(private val currentWallet: LooprWallet) : BaseRealmRepository() {
+class LooprOrderRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
 
-    override fun getRealm() = realmClient.getPrivateInstance(currentWallet)
+    override fun getAsyncRealm() = realmClient.getPrivateInstance(currentWallet)
 
     fun getOrderByHash(orderHash: String): LiveData<LooprOrder> {
         return uiRealm.where<LooprOrder>()

@@ -25,8 +25,8 @@ import org.loopring.looprwallet.homeorders.viewmodels.GeneralOrdersViewModel
 abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationReselectedLister,
         OnSearchViewChangeListener, OnGeneralOrderFilterChangeListener, OnRefreshListener {
 
-    abstract val swipeRefreshLayout: SwipeRefreshLayout
-    abstract val recyclerView: RecyclerView
+    abstract val swipeRefreshLayout: SwipeRefreshLayout?
+    abstract val recyclerView: RecyclerView?
 
     var isSearchActive = false
         private set
@@ -50,10 +50,10 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
         super.onViewCreated(view, savedInstanceState)
 
         adapter = provideAdapter(savedInstanceState)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(view.context)
+        recyclerView?.adapter = adapter
+        recyclerView?.layoutManager = LinearLayoutManager(view.context)
 
-        swipeRefreshLayout.setOnRefreshListener(this)
+        swipeRefreshLayout?.setOnRefreshListener(this)
 
         setupOfflineFirstStateAndErrorObserver(generalOrdersViewModel, swipeRefreshLayout)
         setOrderLiveData()
@@ -66,7 +66,7 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     }
 
     final override fun onBottomNavigationReselected() {
-        recyclerView.smoothScrollToPosition(0)
+        recyclerView?.smoothScrollToPosition(0)
     }
 
     final override fun onQueryTextGainFocus() {

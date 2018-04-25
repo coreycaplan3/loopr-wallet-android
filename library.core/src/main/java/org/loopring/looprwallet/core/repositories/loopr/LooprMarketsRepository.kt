@@ -19,9 +19,9 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class LooprMarketsRepository : BaseRealmRepository() {
+class LooprMarketsRepository : BaseRealmRepository(false) {
 
-    override fun getRealm() = realmClient.getSharedInstance()
+    override fun getAsyncRealm() = realmClient.getSharedInstance()
 
     /**
      * Toggles the *favorite* status of a trading pair

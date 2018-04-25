@@ -21,11 +21,11 @@ class HomeAllMarketsFragment : BaseHomeChildMarketsFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_markets_all
 
-    override val swipeRefreshLayout: SwipeRefreshLayout
-        get() = findViewById(R.id.fragmentContainerSwipeRefresh)!!
+    override val swipeRefreshLayout: SwipeRefreshLayout?
+        get() = findViewById(R.id.fragmentContainerSwipeRefresh)
 
-    override val recyclerView: RecyclerView
-        get() = findViewById(R.id.fragmentContainer)!!
+    override val recyclerView: RecyclerView?
+        get() = findViewById(R.id.fragmentContainer)
 
     override val isFavorites: Boolean = false
 

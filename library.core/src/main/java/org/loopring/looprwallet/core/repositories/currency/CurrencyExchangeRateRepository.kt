@@ -17,9 +17,9 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class CurrencyExchangeRateRepository : BaseRealmRepository() {
+class CurrencyExchangeRateRepository : BaseRealmRepository(false) {
 
-    override fun getRealm() = realmClient.getSharedInstance()
+    override fun getAsyncRealm() = realmClient.getSharedInstance()
 
     fun getCurrencyExchangeRate(currency: String): LiveData<CurrencyExchangeRate> {
         return uiRealm.where<CurrencyExchangeRate>()

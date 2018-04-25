@@ -22,7 +22,7 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class ContactsRepository(private val currentWallet: LooprWallet) : BaseRealmRepository() {
+class ContactsRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
 
     fun getAllContactsByName(name: String): LiveData<OrderedRealmCollection<Contact>> {
         return uiRealm.where<Contact>()
@@ -46,6 +46,6 @@ class ContactsRepository(private val currentWallet: LooprWallet) : BaseRealmRepo
                 .findFirst()
     }
 
-    override fun getRealm() = realmClient.getPrivateInstance(currentWallet)
+    override fun getAsyncRealm() = realmClient.getPrivateInstance(currentWallet)
 
 }

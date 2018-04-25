@@ -18,9 +18,9 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class TradingPairTrendRepository : BaseRealmRepository() {
+class TradingPairTrendRepository : BaseRealmRepository(false) {
 
-    override fun getRealm() = realmClient.getSharedInstance()
+    override fun getAsyncRealm() = realmClient.getSharedInstance()
 
     fun getTradingPairTrend(filter: TradingPairFilter): LiveData<OrderedRealmCollection<TradingPairTrend>> {
         return uiRealm.where<TradingPairTrend>()

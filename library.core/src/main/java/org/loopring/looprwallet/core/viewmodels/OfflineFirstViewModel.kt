@@ -441,8 +441,6 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         super.onCleared()
 
         foreverObserver?.let { mLiveData?.removeObserver(it) }
-        repository.clear()
-        syncRepository.clear()
     }
 
     // MARK - Private Methods

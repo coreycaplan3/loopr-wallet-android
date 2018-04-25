@@ -25,7 +25,9 @@ class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<Or
 
     override val repository = OrderFillsRepository(currentWallet)
 
-    val looprOrderService = LooprOrderService.getInstance()
+    private val service by lazy {
+        LooprOrderService.getInstance()
+    }
 
     fun getOrderFills(
             owner: LifecycleOwner,
@@ -42,7 +44,7 @@ class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<Or
     override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
     override fun getDataFromNetwork(parameter: String): Deferred<OrderedRealmCollection<LooprOrderFill>> {
-        return looprOrderService.getOrderFillsByOrderHash(parameter)
+        return service.getOrderFillsByOrderHash(parameter)
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprOrderFill>) {

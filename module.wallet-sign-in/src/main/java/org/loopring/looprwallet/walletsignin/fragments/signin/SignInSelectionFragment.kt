@@ -1,8 +1,13 @@
 package org.loopring.looprwallet.walletsignin.fragments.signin
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -29,7 +34,7 @@ class SignInSelectionFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if((activity as? SignInActivity)?.showBackButton == false) {
+        if ((activity as? SignInActivity)?.showBackButton == false) {
             toolbar?.navigationIcon = null
         }
 
