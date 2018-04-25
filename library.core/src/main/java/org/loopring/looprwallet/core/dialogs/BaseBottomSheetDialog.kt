@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.dialogs
 
 import android.app.Dialog
+import android.arch.lifecycle.Lifecycle
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
@@ -15,6 +16,8 @@ import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
+import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
+import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
 import org.loopring.looprwallet.core.validators.BaseValidator
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import org.loopring.looprwallet.core.wallet.WalletClient
@@ -27,7 +30,7 @@ import org.loopring.looprwallet.core.wallet.WalletClient
  * Purpose of Class: A base instance of [BottomSheetDialogFragment] that allows for uniform
  * behavior for all of its subclasses.
  */
-abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
+abstract class BaseBottomSheetDialog : BottomSheetDialogFragment(), ViewLifecycleFragment {
 
     abstract val layoutResource: Int
 
@@ -38,6 +41,8 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
         }
 
     lateinit var walletClient: WalletClient
+
+    override var fragmentViewLifecycleFragment: FragmentViewLifecycleOwner? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +60,10 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fragmentViewLifecycleFragment = FragmentViewLifecycleOwner().apply {
+            lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+        }
 
         (dialog as? BottomSheetDialog)?.let { dialog ->
 
@@ -87,12 +96,6 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
      */
     open fun onFormChanged() {
         // Do nothing for now
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        validatorList?.forEach { it.destroy() }
     }
 
     // MARK - Protected Methods
@@ -134,6 +137,35 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment() {
         viewModel.error.observeForDoubleSpend(this) {
             activity?.longToast(convertErrorToMessage(it))
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Lifecycle.Event.ON_START)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    }
+
+    override fun onPause() {
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+        super.onPause()
+    }
+
+    override fun onStop() {
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        validatorList?.forEach { it.destroy() }
+
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        fragmentViewLifecycleFragment = null
+
+        super.onDestroyView()
     }
 
 }

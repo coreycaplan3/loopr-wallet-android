@@ -21,6 +21,8 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner "org.loopring.looprwallet.core.application.LooprJUnitRunner"
+
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
     buildTypes {

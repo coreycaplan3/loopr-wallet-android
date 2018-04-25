@@ -14,6 +14,8 @@ android {
 
         testInstrumentationRunner "org.loopring.looprwallet.core.application.LooprJUnitRunner"
 
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+
         vectorDrawables.useSupportLibrary = true
     }
 

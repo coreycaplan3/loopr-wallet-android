@@ -1,12 +1,9 @@
 package org.loopring.looprwallet.homemarkets.viewmodels
 
-import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -33,7 +30,7 @@ class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<Tradin
     }
 
     fun getHomeMarkets(
-            owner: LifecycleOwner,
+            owner: BaseFragment,
             filter: MarketsFilter,
             onChange: (OrderedRealmCollection<TradingPair>) -> Unit
     ) {

@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.core.fragments
 
-import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Lifecycle.Event
 import android.content.Context
 import android.content.Intent
@@ -21,7 +20,6 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ProgressBar
 import io.realm.OrderedRealmCollection
-import io.realm.RealmList
 import io.realm.RealmModel
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
@@ -34,7 +32,6 @@ import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -54,7 +51,7 @@ import javax.inject.Inject
  * Purpose of Class:
  *
  */
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
     companion object {
 
@@ -102,9 +99,7 @@ abstract class BaseFragment : Fragment() {
     var isUpNavigationEnabled = true
         protected set
 
-    private val fragmentLifeCycleOwner = FragmentViewLifecycleOwner()
-
-    override fun getLifecycle(): Lifecycle = fragmentLifeCycleOwner.lifecycle
+    override var fragmentViewLifecycleFragment: FragmentViewLifecycleOwner? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -139,7 +134,9 @@ abstract class BaseFragment : Fragment() {
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_CREATE)
+        fragmentViewLifecycleFragment = FragmentViewLifecycleOwner().apply {
+            lifecycle.handleLifecycleEvent(Event.ON_CREATE)
+        }
 
         val fragmentView = inflater.inflate(layoutResource, container, false) as ViewGroup
 
@@ -437,30 +434,30 @@ abstract class BaseFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_START)
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Event.ON_START)
     }
 
     override fun onResume() {
         super.onResume()
-        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_RESUME)
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Event.ON_RESUME)
     }
 
     override fun onPause() {
-        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_PAUSE)
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Event.ON_PAUSE)
         super.onPause()
     }
 
     override fun onStop() {
-        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_STOP)
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Event.ON_STOP)
         super.onStop()
     }
 
     override fun onDestroyView() {
-
         validatorList?.forEach { it.destroy() }
         (activity as? BaseActivity)?.setSupportActionBar(null)
 
-        fragmentLifeCycleOwner.lifecycle.handleLifecycleEvent(Event.ON_DESTROY)
+        fragmentViewLifecycleFragment?.lifecycle?.handleLifecycleEvent(Event.ON_DESTROY)
+        fragmentViewLifecycleFragment = null
 
         super.onDestroyView()
     }

@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.core.viewmodels.eth
 
-import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import io.realm.Realm
@@ -8,6 +7,7 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.extensions.update
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
 import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
@@ -33,7 +33,7 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<Lo
     fun getEthBalanceNow() = repository.getEthNow()
 
     fun getAllTokensWithBalances(
-            owner: LifecycleOwner,
+            owner: BaseFragment,
             address: String,
             onChange: (OrderedRealmCollection<LooprToken>) -> Unit
     ) {

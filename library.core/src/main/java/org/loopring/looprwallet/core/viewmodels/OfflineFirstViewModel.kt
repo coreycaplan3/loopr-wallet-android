@@ -8,11 +8,11 @@ import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.isValid
 import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.extensions.loge
-import org.loopring.looprwallet.core.extensions.logi
-import org.loopring.looprwallet.core.extensions.logw
-import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
+import org.loopring.looprwallet.core.extensions.*
+import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.error.ErrorTypes
 import org.loopring.looprwallet.core.models.error.LooprError
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -220,14 +220,18 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * @param onChange The observer that will watch for non-null value changes with the created
      * [LiveData]
      */
-    protected fun initializeData(owner: LifecycleOwner, parameter: U, onChange: (T) -> Unit) {
+    protected fun initializeData(owner: ViewLifecycleFragment, parameter: U, onChange: (T) -> Unit) {
 
         val removeObserver = { liveData: LiveData<T> ->
-            liveData.removeObservers(owner)
+            owner.fragmentViewLifecycleFragment.ifNotNull {
+                liveData.removeObservers(it)
+            }
         }
 
         val addObserver = { liveData: LiveData<T> ->
-            liveData.observe(owner, createObserver(onChange))
+            owner.fragmentViewLifecycleFragment.ifNotNull {
+                liveData.observe(it, createObserver(onChange))
+            }
         }
 
         initializeDataInternal(parameter, removeObserver, addObserver)
@@ -489,7 +493,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         mLiveData?.let { removeObserver(it) }
 
         // Reinitialize the state
-        mCurrentState.value = STATE_LOADING_EMPTY
+        mCurrentState.postValue(STATE_LOADING_EMPTY)
 
         // We are going to ping a refresh. So we need to initialize the state with a network
         // operation running. Reason being, there could be a brief period in which repository
@@ -498,15 +502,17 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         mIsNetworkOperationRunning = isRefreshNecessary(parameter)
 
         // Reinitialize data, observers, and notify via the call to onLiveDataInitialized
-        this@OfflineFirstViewModel.parameter = parameter
-        val liveData = getLiveDataFromRepository(parameter)
-        this@OfflineFirstViewModel.mLiveData = liveData
-        addObserver(liveData)
-        onLiveDataInitialized(liveData)
+        launch(UI) {
+            this@OfflineFirstViewModel.parameter = parameter
+            val liveData = getLiveDataFromRepository(parameter)
+            this@OfflineFirstViewModel.mLiveData = liveData
+            addObserver(liveData)
+            onLiveDataInitialized(liveData)
+        }
 
         if (mIsNetworkOperationRunning) {
             // Ping the network for fresh data
-            mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
+            mCurrentState.postValue(getCurrentLoadingState(mLiveData?.value))
             handleNetworkRequest(parameter)
         }
     }

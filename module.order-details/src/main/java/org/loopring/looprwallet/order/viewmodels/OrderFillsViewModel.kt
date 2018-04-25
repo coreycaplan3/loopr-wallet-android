@@ -1,9 +1,9 @@
 package org.loopring.looprwallet.order.viewmodels
 
-import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.order.LooprOrderFill
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.sync.SyncData.Companion.SYNC_TYPE_ORDER_FILLS
@@ -30,7 +30,7 @@ class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<Or
     }
 
     fun getOrderFills(
-            owner: LifecycleOwner,
+            owner: BaseFragment,
             orderHash: String,
             onChange: (OrderedRealmCollection<LooprOrderFill>) -> Unit
     ) {

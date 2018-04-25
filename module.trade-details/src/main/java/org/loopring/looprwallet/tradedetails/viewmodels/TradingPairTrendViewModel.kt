@@ -1,10 +1,9 @@
 package org.loopring.looprwallet.tradedetails.viewmodels
 
-import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
-import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.markets.TradingPairTrend
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -26,7 +25,7 @@ class TradingPairTrendViewModel : OfflineFirstViewModel<OrderedRealmCollection<T
 
     private val service = LooprMarketsService.getInstance()
 
-    fun getTradingPairTrends(owner: LifecycleOwner, filter: TradingPairFilter, onChange: (OrderedRealmCollection<TradingPairTrend>) -> Unit) {
+    fun getTradingPairTrends(owner: BaseFragment, filter: TradingPairFilter, onChange: (OrderedRealmCollection<TradingPairTrend>) -> Unit) {
         initializeData(owner, filter, onChange)
     }
 

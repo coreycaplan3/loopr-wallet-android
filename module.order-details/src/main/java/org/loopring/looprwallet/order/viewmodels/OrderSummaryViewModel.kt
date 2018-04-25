@@ -1,8 +1,8 @@
 package org.loopring.looprwallet.order.viewmodels
 
-import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
@@ -24,7 +24,7 @@ class OrderSummaryViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<
 
     private val service = LooprOrderService.getInstance()
 
-    fun getOrderByHash(owner: LifecycleOwner, orderHash: String, onChange: (LooprOrder) -> Unit) {
+    fun getOrderByHash(owner: BaseFragment, orderHash: String, onChange: (LooprOrder) -> Unit) {
         initializeData(owner, orderHash, onChange)
     }
 

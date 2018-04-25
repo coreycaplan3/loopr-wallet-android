@@ -1,8 +1,8 @@
 package org.loopring.looprwallet.core.viewmodels.eth
 
-import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.eth.EthereumService
@@ -29,9 +29,11 @@ class EthereumBlockNumberViewModel : StreamingViewModel<EthereumBlockNumber, Uni
 
     override val repository = EthereumBlockNumberRepository()
 
-    val ethereumService = EthereumService.getInstance()
+    private val ethereumService by lazy {
+        EthereumService.getInstance()
+    }
 
-    fun getEthereumBlockNumber(owner: LifecycleOwner, onChange: (EthereumBlockNumber) -> Unit) {
+    fun getEthereumBlockNumber(owner: ViewLifecycleFragment, onChange: (EthereumBlockNumber) -> Unit) {
         initializeData(owner, Unit, onChange)
     }
 
