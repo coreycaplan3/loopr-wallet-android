@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.walletsignin.adapters.phrase
+package org.loopring.looprwallet.walletsignin.adapters
 
 import android.support.annotation.DimenRes
 import android.support.v7.widget.RecyclerView

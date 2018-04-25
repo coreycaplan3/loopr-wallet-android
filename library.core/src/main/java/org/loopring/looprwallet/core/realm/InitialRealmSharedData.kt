@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.realm
 
 import io.realm.Realm
+import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 
@@ -16,14 +17,14 @@ object InitialRealmSharedData {
 
     fun getInitialData() = Realm.Transaction {
         // LooprToken
-        it.insertOrUpdate(LooprToken.ETH)
-        it.insertOrUpdate(LooprToken.WETH)
-        it.insertOrUpdate(LooprToken.LRC)
-        it.insertOrUpdate(LooprToken.APPC)
-        it.insertOrUpdate(LooprToken.REQ)
+        it.upsert(LooprToken.ETH)
+        it.upsert(LooprToken.WETH)
+        it.upsert(LooprToken.LRC)
+        it.upsert(LooprToken.APPC)
+        it.upsert(LooprToken.REQ)
 
         // Currency Exchange Rate
-        it.insertOrUpdate(CurrencyExchangeRate.USD)
+        it.upsert(CurrencyExchangeRate.USD)
     }
 
 }

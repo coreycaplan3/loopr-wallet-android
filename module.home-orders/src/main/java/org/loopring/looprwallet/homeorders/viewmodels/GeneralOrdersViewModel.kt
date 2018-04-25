@@ -28,7 +28,9 @@ class GeneralOrdersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel
 
     override val repository = LooprOrderRepository(currentWallet)
 
-    val looprOrderService = LooprOrderService.getInstance()
+    private val service by lazy {
+        LooprOrderService.getInstance()
+    }
 
     /**
      * Gets the user's orders based on the provided [filter].
@@ -44,7 +46,7 @@ class GeneralOrdersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel
     override fun isRefreshNecessary(parameter: OrderFilter) = defaultIsRefreshNecessary(parameter.address)
 
     override fun getDataFromNetwork(parameter: OrderFilter): Deferred<OrderedRealmCollection<LooprOrder>> {
-        return looprOrderService.getOrdersByAddress(parameter.address)
+        return service.getOrdersByAddress(parameter.address)
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprOrder>) {

@@ -40,7 +40,7 @@ class CreateWalletSelectionFragment : BaseFragment() {
 
         createFromPhraseButton.setOnClickListener {
             pushFragmentTransaction(
-                    EnterPasswordForPhraseFragment.createCreationInstance(),
+                    EnterPasswordForPhraseFragment.getCreationInstance(),
                     EnterPasswordForPhraseFragment.TAG
             )
         }

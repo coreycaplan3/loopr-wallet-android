@@ -1,9 +1,11 @@
 package org.loopring.looprwallet.homeorders.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuInflater
@@ -19,6 +21,7 @@ import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
 import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
@@ -57,11 +60,13 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
     }
 
     override fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
-        return fragmentView.inflate(R.layout.appbar_orders, false) as? AppBarLayout
+        return layoutInflater.inflate(R.layout.appbar_orders, fragmentView, false) as? AppBarLayout
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp)
+        val drawable = drawable(R.drawable.ic_add_white_24dp)
+        DrawableCompat.setTint(drawable, Color.WHITE)
+        floatingActionButton.setImageDrawable(drawable)
         floatingActionButton.setOnClickListener {
             activity?.let { CreateOrderActivity.route(it, null) }
         }
@@ -79,7 +84,7 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
         super.onActivityResult(requestCode, resultCode, data)
 
         BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
-            when(type) {
+            when (type) {
                 BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
                     CreateTransferActivity.route(this, value)
                 }
@@ -131,19 +136,19 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
      */
 
     override fun onQueryTextChangeListener(searchQuery: String) {
-        for (i in 0..adapter.count) {
+        for (i in 0 until adapter.count) {
             (adapter.getItem(i) as OnSearchViewChangeListener).onQueryTextChangeListener(searchQuery)
         }
     }
 
     override fun onSearchItemExpanded() {
-        for (i in 0..adapter.count) {
+        for (i in 0 until adapter.count) {
             (adapter.getItem(i) as OnSearchViewChangeListener).onSearchItemExpanded()
         }
     }
 
     override fun onSearchItemCollapsed() {
-        for (i in 0..adapter.count) {
+        for (i in 0 until adapter.count) {
             (adapter.getItem(i) as OnSearchViewChangeListener).onSearchItemCollapsed()
         }
     }

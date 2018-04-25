@@ -19,14 +19,26 @@ import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_O
  */
 class GeneralOpenOrderFilterViewHolder(
         itemView: View,
-        listener: OnGeneralOrderFilterChangeListener,
-        onCancelAllClickListener: (View) -> Unit
+        private val listener: OnGeneralOrderFilterChangeListener?,
+        private val onCancelAllClickListener: ((View) -> Unit)?
 ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
     override val containerView: View
         get() = itemView
 
-    init {
+
+    /**
+     * @param statusRawValue The status ENUM, as seen in the Loopring API for filtering orders by
+     * status.
+     */
+    fun bind(dateValue: String, statusRawValue: String) {
+        openOrderFilterDateSpinner.setSelection(FILTER_DATES.indexOf(dateValue))
+
+        openOrderFilterStatusSpinner.onItemSelectedListener = null
+
+        // The index of the value is the same index of the UI value in the UI array
+        openOrderFilterStatusSpinner.setSelection(FILTER_OPEN_ORDER_STATUS_VALUES.indexOf(statusRawValue))
+
         val context = itemView.context
         val layoutRes = android.R.layout.simple_spinner_item
 
@@ -36,7 +48,7 @@ class GeneralOpenOrderFilterViewHolder(
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                listener.onDateFilterChange(FILTER_DATES[position])
+                listener?.onDateFilterChange(FILTER_DATES[position])
             }
         }
 
@@ -46,23 +58,12 @@ class GeneralOpenOrderFilterViewHolder(
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                listener.onStatusFilterChange(FILTER_OPEN_ORDER_STATUS_VALUES[position])
+                listener?.onStatusFilterChange(FILTER_OPEN_ORDER_STATUS_VALUES[position])
             }
         }
 
         // CANCEL ALL BUTTON
         openOrderCancelAllButton.setOnClickListener(onCancelAllClickListener)
-    }
-
-    /**
-     * @param statusRawValue The status ENUM, as seen in the Loopring API for filtering orders by
-     * status.
-     */
-    fun bind(dateValue: String, statusRawValue: String) {
-        openOrderFilterDateSpinner.setSelection(FILTER_DATES.indexOf(dateValue))
-
-        // The index of the value is the same index of the UI value in the UI array
-        openOrderFilterStatusSpinner.setSelection(FILTER_OPEN_ORDER_STATUS_VALUES.indexOf(statusRawValue))
     }
 
 }

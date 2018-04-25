@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.dagger
 
+import android.support.multidex.MultiDexApplication
 import dagger.Component
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
@@ -29,6 +30,10 @@ import javax.inject.Singleton
 @Component(modules = [LooprSettingsModule::class, LooprSecureSettingsModule::class,
     LooprRealmModule::class, LooprWalletModule::class])
 interface CoreLooprComponent {
+
+    // Applications
+
+    fun inject(application: CoreLooprWalletApp)
 
     // Activities
 

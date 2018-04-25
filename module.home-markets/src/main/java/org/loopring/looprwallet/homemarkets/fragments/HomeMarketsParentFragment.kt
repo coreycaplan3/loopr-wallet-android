@@ -13,7 +13,6 @@ import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_TRADING_PAIR
 import org.loopring.looprwallet.core.activities.SettingsActivity
-import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
@@ -58,13 +57,13 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
     }
 
     override fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
-        return fragmentView.inflate(R.layout.appbar_markets, false) as AppBarLayout?
+        return layoutInflater.inflate(R.layout.appbar_markets, fragmentView, false) as? AppBarLayout
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
         floatingActionButton.setImageResource(R.drawable.ic_card_giftcard_white_24dp)
         floatingActionButton.setOnClickListener {
-            TODO("ADD ROUTE TO WRAP/UNWRAP ETH")
+            // TODO ADD ROUTE TO WRAP/UNWRAP ETH
         }
     }
 
@@ -117,7 +116,7 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
     override fun onBottomNavigationReselected() {
         logd("Markets reselected")
         val fragment = adapter.getItem(viewPager.currentItem)
-        (fragment as BottomNavigationReselectedLister).onBottomNavigationReselected()
+        (fragment as? BottomNavigationReselectedLister)?.onBottomNavigationReselected()
     }
 
     override fun onQueryTextGainFocus() {
@@ -131,20 +130,20 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
      */
 
     override fun onQueryTextChangeListener(searchQuery: String) {
-        for (i in 0..adapter.count) {
-            (adapter.getItem(i) as OnSearchViewChangeListener).onQueryTextChangeListener(searchQuery)
+        for (i in 0 until adapter.count) {
+            (adapter.getItem(i) as? OnSearchViewChangeListener)?.onQueryTextChangeListener(searchQuery)
         }
     }
 
     override fun onSearchItemExpanded() {
-        for (i in 0..adapter.count) {
-            (adapter.getItem(i) as OnSearchViewChangeListener).onSearchItemExpanded()
+        for (i in 0 until adapter.count) {
+            (adapter.getItem(i) as? OnSearchViewChangeListener)?.onSearchItemExpanded()
         }
     }
 
     override fun onSearchItemCollapsed() {
-        for (i in 0..adapter.count) {
-            (adapter.getItem(i) as OnSearchViewChangeListener).onSearchItemCollapsed()
+        for (i in 0 until adapter.count) {
+            (adapter.getItem(i) as? OnSearchViewChangeListener)?.onSearchItemCollapsed()
         }
     }
 

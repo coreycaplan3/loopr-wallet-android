@@ -18,23 +18,11 @@ import org.loopring.looprwallet.homemarkets.R
  * Purpose of Class:
  *
  */
-class MarketsFilterViewHolder(itemView: View?, listener: OnGeneralMarketsFilterChangeListener)
+class MarketsFilterViewHolder(itemView: View?, private val listener: OnGeneralMarketsFilterChangeListener?)
     : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
     override val containerView: View?
         get() = itemView
-
-    init {
-        marketsSortBySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                listener.onSortByChange(MarketsFilter.SORT_BY_ARRAY_VALUES[position])
-            }
-        }
-
-        setDateFilterButtonListener(marketsDateFilter1dButton, listener)
-    }
 
     /**
      * @param marketsFilter The filter data that's used **ONLY** for binding the current values to
@@ -42,7 +30,21 @@ class MarketsFilterViewHolder(itemView: View?, listener: OnGeneralMarketsFilterC
      */
     fun bind(marketsFilter: MarketsFilter) {
         val spinnerIndex = MarketsFilter.SORT_BY_ARRAY_VALUES.indexOf(marketsFilter.sortBy)
+
+        marketsSortBySpinner.onItemSelectedListener = null
+
         marketsSortBySpinner.setSelection(spinnerIndex)
+
+        marketsSortBySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                listener?.onSortByChange(MarketsFilter.SORT_BY_ARRAY_VALUES[position])
+            }
+        }
+
+        setDateFilterButtonListener(marketsDateFilter1dButton, listener)
+
 
         when (marketsFilter.changePeriod) {
             MarketsFilter.CHANGE_PERIOD_1D -> marketsDateFilter1dButton.context.setTheme(R.style.App_Button)
@@ -50,11 +52,11 @@ class MarketsFilterViewHolder(itemView: View?, listener: OnGeneralMarketsFilterC
         }
     }
 
-    private fun setDateFilterButtonListener(button: Button, listener: OnGeneralMarketsFilterChangeListener) {
+    private fun setDateFilterButtonListener(button: Button, listener: OnGeneralMarketsFilterChangeListener?) {
         button.setOnClickListener {
-            if (listener.getCurrentDateFilter() != button.text.toString()) {
+            if (listener?.getCurrentDateFilter() != button.text.toString()) {
                 // The user clicked on a different date filter
-                listener.onDateFilterChange(button.text.toString())
+                listener?.onDateFilterChange(button.text.toString())
             }
         }
     }

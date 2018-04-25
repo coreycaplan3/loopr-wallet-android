@@ -44,10 +44,8 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
             if (field != null) return field
 
             val currentWallet = walletClient.getCurrentWallet() ?: return null
-            return LooprViewModelFactory.get<ViewAllTransfersViewModel>(this, currentWallet)
-                    .apply {
-                        field = this
-                    }
+            field = LooprViewModelFactory.get(this, currentWallet)
+            return field
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,6 +115,7 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
 
     override fun onTransferClick(looprTransfer: LooprTransfer) {
         TransferDetailsDialog.getInstance(looprTransfer)
+                .show(fragmentManager, TransferDetailsDialog.TAG)
     }
 
     override fun onDestroyView() {

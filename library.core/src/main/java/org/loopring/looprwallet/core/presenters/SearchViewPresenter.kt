@@ -98,7 +98,6 @@ class SearchViewPresenter(
 
     }
 
-
     fun onSaveInstanceState(outState: Bundle) {
         outState.putString(KEY_SEARCH_QUERY, searchQuery)
     }

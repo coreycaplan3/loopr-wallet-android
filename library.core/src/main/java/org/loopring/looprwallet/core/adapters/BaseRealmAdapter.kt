@@ -4,8 +4,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import io.realm.*
-import io.realm.kotlin.addChangeListener
-import io.realm.kotlin.removeChangeListener
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.inflate
 
@@ -17,19 +15,13 @@ import org.loopring.looprwallet.core.extensions.inflate
  * Purpose of Class:
  *
  */
-abstract class BaseRealmAdapter<T : RealmModel> :
-        RealmRecyclerViewAdapter<T, RecyclerView.ViewHolder>(null, true, true) {
+abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val TYPE_LOADING = 0
         const val TYPE_EMPTY = 1
         const val TYPE_DATA = 2
     }
-
-    /**
-     * Extra listeners for listening to object changes besides from main type declared as [T].
-     */
-    private val listeners = arrayListOf<Pair<RealmModel, RealmObjectChangeListener<RealmModel>>>()
 
     /**
      * The total number of items that can be loaded and stored in *data*. This represents the total
@@ -43,6 +35,9 @@ abstract class BaseRealmAdapter<T : RealmModel> :
      * - We don't know how many items there are in the list
      */
     abstract val totalItems: Int?
+
+    var data: OrderedRealmCollection<T>? = null
+        private set
 
     // TODO reimplement me for adapter with custom DATA viewHolders
     override fun getItemViewType(position: Int): Int {
@@ -71,43 +66,29 @@ abstract class BaseRealmAdapter<T : RealmModel> :
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = data
-        val offsetPosition = getDataOffset(position)
-        if (data != null && offsetPosition != null) {
-            onBindViewHolder(holder, position, data[offsetPosition])
+        val newPosition = position - getDataOffset()
+        if (data != null && newPosition >= 0 && newPosition < data.size) {
+            onBindViewHolder(holder, position, data[newPosition])
         }
     }
 
     /**
-     * Calculates an offset from the given position, if necessary for binding data and indexing into
+     * Returns an offset from the given position, if necessary for binding data and indexing into
      * the list of data.
      *
      * For example, we need to bind index 1, but the 0th index is a header item and unrelated to
      * the data in this adapter. In that situation, the data offset is *-1*, since we need to move
-     * the position back by 1 to properly index into the [adapterData] list.
-     *
-     * @param position The position at which data needs to be bound, according to [onBindViewHolder].
+     * the position back by 1 to properly index into the [data] list.
      *
      * @return The offset position or null if **NO** data should be retrieved at this position
      */
-    abstract fun getDataOffset(position: Int): Int?
+    abstract fun getDataOffset(): Int
 
     abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: T?)
 
     override fun getItemCount(): Int {
         // We return an extra item to account for the loading view holder
         return data?.let { getItemCountForOnlyData(it) } ?: 1
-    }
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-
-        listeners.forEach { it.first.addChangeListener(it.second) }
-    }
-
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-
-        listeners.forEach { it.first.removeChangeListener(it.second) }
     }
 
     // MARK - Protected Methods
@@ -134,6 +115,33 @@ abstract class BaseRealmAdapter<T : RealmModel> :
         val totalItems = totalItems ?: return false
         return data?.size?.let { it < totalItems } ?: false
     }
+
+    /**
+     * Returns the item associated with the specified position.
+     * Can return `null` if provided Realm instance by [OrderedRealmCollection] is closed.
+     *
+     * @param index index of the item.
+     * @return the item at the specified position, `null` if adapter data is not valid.
+     */
+    fun getItem(index: Int): T? {
+        return if (isDataValid()) data?.get(index) else null
+    }
+
+    /**
+     * Updates the data associated to the Adapter. Useful when the query has been changed.
+     * If the query does not change you might consider using the automaticUpdate feature.
+     *
+     * @param data the new [OrderedRealmCollection] to display.
+     */
+    fun updateData(data: OrderedRealmCollection<T>?) {
+        this.data = data
+        notifyDataSetChanged()
+    }
+
+    private fun isDataValid(): Boolean {
+        return data != null && data!!.isValid
+    }
+
 
     private class LoadingViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
 

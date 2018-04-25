@@ -18,6 +18,6 @@ class LooprRealmModule {
 
     @Singleton
     @Provides
-    fun provideLooprRealmClient(): RealmClient = RealmClient.getPrivateInstance()
+    fun provideLooprRealmClient(): RealmClient = RealmClient.getInstance()
 
 }

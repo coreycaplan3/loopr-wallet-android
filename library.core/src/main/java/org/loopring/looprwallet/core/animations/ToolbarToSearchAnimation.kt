@@ -32,8 +32,8 @@ object ToolbarToSearchAnimation {
      * Animates the toolbar to go from a toolbar to a search view.
      */
     fun animateToSearch(fragment: BaseFragment, numberOfMenuIcon: Int, containsOverflow: Boolean) {
-        val activity = fragment.activity!!
-        val toolbar = fragment.toolbar!!
+        val activity = fragment.activity ?: return
+        val toolbar = fragment.toolbar ?: return
 
         toolbar.setBackgroundColor(ContextCompat.getColor(activity, android.R.color.white))
 
@@ -57,8 +57,8 @@ object ToolbarToSearchAnimation {
     }
 
     fun animateToToolbar(fragment: BaseFragment, numberOfMenuIcon: Int, containsOverflow: Boolean) {
-        val activity = fragment.activity!!
-        val toolbar = fragment.toolbar!!
+        val activity = fragment.activity ?: return
+        val toolbar = fragment.toolbar ?: return
 
         if (isLollipop()) {
             activity.window.statusBarColor = getThemeColor(activity, R.attr.colorPrimaryDark)

@@ -121,7 +121,7 @@ class GeneralOrderAdapter(
         }
     }
 
-    override fun getDataOffset(position: Int) = position - 1
+    override fun getDataOffset() = -1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrder?) {
         (holder as? EmptyGeneralOrderViewHolder)?.let {

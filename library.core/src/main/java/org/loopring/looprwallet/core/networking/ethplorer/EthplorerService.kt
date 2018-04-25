@@ -22,7 +22,7 @@ interface EthplorerService {
     companion object {
 
         fun getInstance(): EthplorerService {
-            val buildType = BuildUtility.BUILD_TYPE
+            val buildType = BuildUtility.BUILD_FLAVOR
             return when (buildType) {
                 FLAVOR_MOCKNET -> EthplorerServiceMockImpl()
                 FLAVOR_TESTNET, FLAVOR_MAINNET -> EthplorerServiceProdImpl()

@@ -37,21 +37,34 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
 
     private val cipherClient = CipherClient(context)
 
+    private var onChange: ((LooprWallet) -> Unit)? = null
+
+    override fun setOnCurrentWalletChange(onChange: ((LooprWallet) -> Unit)?) {
+        this.onChange = onChange
+    }
+
     override fun createWallet(
             walletName: String,
             privateKey: String,
             keystoreContent: String?,
             phrase: Array<String>?
     ): Boolean {
-        return walletSettings.createWallet(walletName, privateKey, keystoreContent, phrase)
+        return walletSettings.createWallet(walletName, privateKey, keystoreContent, phrase).let { isSuccessful ->
+            if (isSuccessful) {
+                getCurrentWallet()?.let { onChange?.invoke(it) }
+            }
+            isSuccessful
+        }
     }
 
     override fun selectNewCurrentWallet(newCurrentWallet: String, currentActivity: BaseActivity) {
-        walletSettings.selectCurrentWallet(newCurrentWallet)
+        walletSettings.selectCurrentWallet(newCurrentWallet)?.let {
+            onChange?.invoke(it)
 
-        val intent = Intent(currentActivity, CoreLooprWalletApp.mainClass)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        currentActivity.startActivity(intent)
+            val intent = Intent(currentActivity, CoreLooprWalletApp.mainClass)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            currentActivity.startActivity(intent)
+        }
     }
 
     override fun getCurrentWallet(): LooprWallet? = walletSettings.getCurrentWallet()
@@ -60,7 +73,7 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
         return walletSettings.getAllWallets()
     }
 
-    override fun onNoCurrentWalletSelected(currentActivity: BaseActivity) {
+    override fun noCurrentWalletSelected(currentActivity: BaseActivity) {
         val intent = Intent(currentActivity, CoreLooprWalletApp.signInClass)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         currentActivity.startActivity(intent)
@@ -93,9 +106,17 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
     }
 
     override fun removeWallet(walletName: String): Boolean {
+        val oldCurrentWallet = getCurrentWallet()
         if (!walletSettings.removeWallet(walletName)) {
             // GUARD
             return false
+        }
+
+        oldCurrentWallet?.let {
+            // We just deleted the current wallet, so there was a change in the current one
+            if (walletName == it.walletName) {
+                onChange?.invoke(it)
+            }
         }
 
         val configuration = RealmConfiguration.Builder()

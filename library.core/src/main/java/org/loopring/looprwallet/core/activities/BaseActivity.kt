@@ -5,12 +5,14 @@ package org.loopring.looprwallet.core.activities
 import android.app.ProgressDialog
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.StrictMode
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowManager
+import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.loge
@@ -72,6 +74,18 @@ abstract class BaseActivity : AppCompatActivity() {
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build())
+            StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build())
+        }
 
         // Setup the Dagger injection component
         coreLooprComponent.inject(this)
@@ -144,16 +158,7 @@ abstract class BaseActivity : AppCompatActivity() {
             // This should never happen, since we can't get to a "securityActivity" without
             // passing through the SplashScreen first.
             loge("There is no current currentWallet... prompting the user to sign in", IllegalStateException())
-            walletClient.onNoCurrentWalletSelected(this)
-        }
-    }
-
-    fun removeWalletCurrentWallet() {
-        walletClient.getCurrentWallet()?.let {
-            walletClient.removeWallet(it.walletName)
-            if (walletClient.getCurrentWallet() == null) {
-                walletClient.onNoCurrentWalletSelected(this)
-            }
+            walletClient.noCurrentWalletSelected(this)
         }
     }
 

@@ -8,8 +8,8 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.activities.MainActivity
-import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseEmptyViewHolder
-import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseViewHolder
+import org.loopring.looprwallet.walletsignin.adapters.PhraseEmptyViewHolder
+import org.loopring.looprwallet.walletsignin.adapters.PhraseViewHolder
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.walletsignin.models.WalletCreationPhrase
 import org.loopring.looprwallet.core.utilities.CustomViewActions.dragDownViewHolder

@@ -123,7 +123,8 @@
 
         <item name="android:textColorPrimary">@color/full_white_text_primary</item>
         <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
-        <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary
+        <item name="android:textColorPrimaryInverseDisableOnly">
+            @color/full_white_text_primary
         </item>
 
         <item name="android:textColorSecondary">@color/full_white_text_secondary</item>

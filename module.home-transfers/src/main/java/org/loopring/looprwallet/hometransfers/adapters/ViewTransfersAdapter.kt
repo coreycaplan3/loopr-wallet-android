@@ -30,7 +30,7 @@ class ViewTransfersAdapter(listener: OnTransferClickListener) : BaseRealmAdapter
         return ViewTransfersViewHolder(parent.inflate(R.layout.view_holder_view_transfers))
     }
 
-    override fun getDataOffset(position: Int): Int? = 0
+    override fun getDataOffset() = 0
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprTransfer?) {
         item ?: return // GUARD

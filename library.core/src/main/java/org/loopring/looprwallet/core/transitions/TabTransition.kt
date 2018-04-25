@@ -27,19 +27,18 @@ class TabTransition : Visibility() {
 
     companion object {
 
-        fun setupForBaseTabFragment(baseTagFragment: BaseTabFragment) =
-                baseTagFragment.apply {
-                    (enterTransition as TransitionSet).addTransition(TabTransition()
-                            .addMode(Visibility.MODE_IN)
-                            .addTarget(tabLayoutTransitionName)
-                    )
+        fun setupForBaseTabFragment(baseTagFragment: BaseTabFragment) = baseTagFragment.apply {
+            (enterTransition as TransitionSet).addTransition(TabTransition()
+                    .addMode(Visibility.MODE_IN)
+                    .addTarget(tabLayoutTransitionName)
+            )
 
-                    (exitTransition as TransitionSet).addTransition(
-                            TabTransition()
-                                    .addMode(Visibility.MODE_OUT)
-                                    .addTarget(tabLayoutTransitionName) as TabTransition
-                    )
-                }
+            (exitTransition as TransitionSet).addTransition(
+                    TabTransition()
+                            .addMode(Visibility.MODE_OUT)
+                            .addTarget(tabLayoutTransitionName) as TabTransition
+            )
+        }
     }
 
     override fun onAppear(sceneRoot: ViewGroup?, view: View?, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {

@@ -97,6 +97,7 @@ class HomeSettingsFragment : BaseSettingsFragment() {
 
     override fun getSummaryValue(preference: Preference, value: String) = when (preference.key) {
         ThemeSettings.KEY_THEME -> getSummaryForListPreference(preference as ListPreference, value)
+        SCREEN_KEY_SECURITY -> SUMMARY_VALUE_SECURITY_SCREEN
         SCREEN_KEY_CURRENCY -> SUMMARY_VALUE_CURRENCY_SCREEN
         SCREEN_KEY_ETHEREUM_FEES -> SUMMARY_VALUE_ETHEREUM_FEES_SCREEN
         SCREEN_KEY_LOOPRING_FEES -> SUMMARY_VALUE_LOOPRING_FEES_SCREEN

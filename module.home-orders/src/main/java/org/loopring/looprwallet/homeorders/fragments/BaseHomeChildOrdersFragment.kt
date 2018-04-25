@@ -55,7 +55,8 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
 
         swipeRefreshLayout.setOnRefreshListener(this)
 
-        setOrderLiveData(null)
+        setupOfflineFirstStateAndErrorObserver(generalOrdersViewModel, swipeRefreshLayout)
+        setOrderLiveData()
     }
 
     abstract fun provideAdapter(savedInstanceState: Bundle?): GeneralOrderAdapter
@@ -113,8 +114,7 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
         val orderFilter = OrderFilter(address, ticker, adapter.currentDateFilter, adapter.currentOrderStatusFilter)
 
         generalOrdersViewModel?.getOrders(this, orderFilter) {
-            adapter.updateData(it)
-            generalOrdersViewModel?.removeDataObserver(this)
+            setupOfflineFirstDataObserverForAdapter(generalOrdersViewModel, adapter, it)
         }
     }
 

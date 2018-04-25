@@ -29,6 +29,7 @@ import org.loopring.looprwallet.transferdetails.dagger.TransferDetailsLooprCompo
 import org.loopring.looprwallet.viewbalances.dagger.DaggerViewBalancesLooprComponent
 import org.loopring.looprwallet.viewbalances.dagger.ViewBalancesLooprComponent
 import org.loopring.looprwallet.viewbalances.dagger.ViewBalancesLooprComponentProvider
+import org.loopring.looprwallet.walletsignin.activities.SignInActivity
 import org.loopring.looprwallet.walletsignin.dagger.DaggerWalletLooprComponent
 import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponent
 import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponentProvider
@@ -109,6 +110,7 @@ open class LooprWalletApp : CoreLooprWalletApp(), CreateTransferLooprComponentPr
         super.onCreate()
 
         CoreLooprWalletApp.mainClass = MainActivity::class.java
+        CoreLooprWalletApp.signInClass = SignInActivity::class.java
 
         FirebaseApp.initializeApp(this)
         FirebaseCrash.setCrashCollectionEnabled(!BuildConfig.DEBUG)

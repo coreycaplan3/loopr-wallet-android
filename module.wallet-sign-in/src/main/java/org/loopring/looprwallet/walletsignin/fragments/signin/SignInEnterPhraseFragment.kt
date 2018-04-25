@@ -22,7 +22,7 @@ import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.utilities.RegexUtility
 import org.loopring.looprwallet.walletsignin.R
-import org.loopring.looprwallet.walletsignin.adapters.phrase.PhraseAdapter
+import org.loopring.looprwallet.walletsignin.adapters.PhraseAdapter
 import org.loopring.looprwallet.walletsignin.models.WalletCreationPhrase
 import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel
 import org.loopring.looprwallet.walletsignin.viewmodels.WalletGeneratorViewModel.Companion.getMessageFromError
@@ -123,7 +123,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
             }
         }
 
-        setupFormUI()
+        setupForm()
 
         fragmentContainer.apply {
             this.layoutManager = LinearLayoutManager(context)
@@ -189,7 +189,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
                     ?.hideSoftInputFromWindow(view?.windowToken, 0)
 
             TransitionManager.beginDelayedTransition(view as ViewGroup)
-            setupFormUI()
+            setupForm()
         }
     }
 
@@ -197,7 +197,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
         if (phrase.size == PHRASE_SIZE - 1) {
             // We are downsizing from 12. Allow the user to input new words
             (view as? ViewGroup)?.let { TransitionManager.beginDelayedTransition(it) }
-            setupFormUI()
+            setupForm()
         }
     }
 
@@ -220,7 +220,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
         }
     }
 
-    private fun setupFormUI() {
+    private fun setupForm() {
         if (phrase.size == PHRASE_SIZE) {
             enterPhraseAddSubmitButton.text = getEnterPhraseSubmitButtonText()
             (enterPhraseInputLayout.layoutParams as? LinearLayout.LayoutParams)?.let {

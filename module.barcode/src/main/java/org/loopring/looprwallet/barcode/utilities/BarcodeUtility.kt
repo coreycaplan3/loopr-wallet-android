@@ -22,7 +22,6 @@ object BarcodeUtility {
 
         val bitMatrix = try {
             MultiFormatWriter().encode(value, BarcodeFormat.DATA_MATRIX, dimension, dimension, null)
-
         } catch (ignored: IllegalArgumentException) {
             return null
         }
@@ -35,15 +34,15 @@ object BarcodeUtility {
         for (y in 0 until bitMatrixHeight) {
             val offset = y * bitMatrixWidth
 
-            for (x in 0 until bitMatrixWidth) pixels[offset + x] = when {
-                bitMatrix.get(x, y) -> Color.BLACK
-                else -> Color.WHITE
-            }
+            for (x in 0 until bitMatrixWidth)
+                pixels[offset + x] = when {
+                    bitMatrix.get(x, y) -> Color.BLACK
+                    else -> Color.WHITE
+                }
         }
-        val bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444)
-
-        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight)
-        return bitmap
+        return Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444).apply {
+            setPixels(pixels, 0, bitMatrixWidth, 0, 0, bitMatrixWidth, bitMatrixHeight)
+        }
     }
 
 }

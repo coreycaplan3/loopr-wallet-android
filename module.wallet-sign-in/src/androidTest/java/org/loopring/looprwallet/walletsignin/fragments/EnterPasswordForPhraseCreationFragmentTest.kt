@@ -26,12 +26,12 @@ import java.util.concurrent.FutureTask
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class: For testing the [EnterPasswordForPhraseFragment.createCreationInstance]
+ * Purpose of Class: For testing the [EnterPasswordForPhraseFragment.getCreationInstance]
  * version of the fragment.
  */
 class EnterPasswordForPhraseCreationFragmentTest : BaseDaggerFragmentTest<EnterPasswordForPhraseFragment>() {
 
-    override fun provideFragment() = EnterPasswordForPhraseFragment.createCreationInstance()
+    override fun provideFragment() = EnterPasswordForPhraseFragment.getCreationInstance()
     override val tag = EnterPasswordForPhraseFragment.TAG
 
     private val badName = "loopr$" // bad character

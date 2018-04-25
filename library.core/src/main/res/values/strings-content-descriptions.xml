@@ -26,5 +26,6 @@
     <string name="drawer_open">The navigation drawer is now open</string>
     <string name="drawer_close">The navigation drawer is now closed</string>
     <string name="content_description_share_chrome_tab">Press this button to share this page</string>
+    <string name="content_description_loopring_logo">The Loopring logo</string>
 
 </resources>

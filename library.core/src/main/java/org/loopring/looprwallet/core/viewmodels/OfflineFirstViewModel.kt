@@ -7,10 +7,7 @@ import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.isValid
-import kotlinx.coroutines.experimental.CompletableDeferred
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.*
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logi
@@ -82,12 +79,6 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * The amount of time to wait (in ms) before pinging the network for fresh data
      */
     open val waitTime = DEFAULT_WAIT_TIME_MILLIS
-
-    /**
-     * True if the data from this [ViewModel] needs a refresh and is stale or false otherwise.
-     */
-    val isDataStale: Boolean
-        get() = parameter?.let { isRefreshNecessary(it) } ?: true
 
     @VisibleForTesting
     var parameter: U? = null
@@ -200,7 +191,6 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * - A refresh recently occurred, so pinging the network again would be pointless and likely be
      * a waste of resources
      */
-    @Synchronized
     fun refresh() {
         val parameter = parameter
         when (parameter) {
@@ -230,7 +220,6 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * @param onChange The observer that will watch for non-null value changes with the created
      * [LiveData]
      */
-    @Synchronized
     protected fun initializeData(owner: LifecycleOwner, parameter: U, onChange: (T) -> Unit) {
 
         val removeObserver = { liveData: LiveData<T> ->
@@ -267,7 +256,6 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * @param onChange The observer that will watch for non-null value changes with the created
      * [LiveData].
      */
-    @Synchronized
     protected fun initializeDataForever(parameter: U, onChange: (T) -> Unit) {
 
         val removeObserver = { liveData: LiveData<T> ->
@@ -489,14 +477,14 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      */
     private inline fun initializeDataInternal(
             parameter: U,
-            removeObserver: (LiveData<T>) -> Unit,
-            addObserver: (LiveData<T>) -> Unit
-    ) {
+            crossinline removeObserver: (LiveData<T>) -> Unit,
+            crossinline addObserver: (LiveData<T>) -> Unit
+    ) = async(CommonPool) {
         // Check if we're re-initializing the same thing again
         val oldLiveData = mLiveData
-        if (oldLiveData != null && isPredicatesEqual(this.parameter, parameter)) {
+        if (oldLiveData != null && isPredicatesEqual(this@OfflineFirstViewModel.parameter, parameter)) {
             addObserver(oldLiveData)
-            return
+            return@async
         }
 
         // Remove old observers
@@ -512,9 +500,9 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         mIsNetworkOperationRunning = isRefreshNecessary(parameter)
 
         // Reinitialize data, observers, and notify via the call to onLiveDataInitialized
-        this.parameter = parameter
+        this@OfflineFirstViewModel.parameter = parameter
         val liveData = getLiveDataFromRepository(parameter)
-        this.mLiveData = liveData
+        this@OfflineFirstViewModel.mLiveData = liveData
         addObserver(liveData)
         onLiveDataInitialized(liveData)
 
@@ -528,8 +516,8 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     private fun refreshInternal(parameter: U) = async {
         if (!mIsNetworkOperationRunning && isRefreshNecessary(parameter)) {
             // We don't have a network operation already running and a refresh is necessary
-            mCurrentState.postValue(getCurrentLoadingState(mLiveData?.value))
-            handleNetworkRequest(parameter).await()
+            mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
+            handleNetworkRequest(parameter)
         } else {
             mCurrentState.value = getCurrentIdleState(mLiveData?.value)
         }
@@ -546,7 +534,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * @param parameter The parameter used for querying the network. It's passed into
      * [getDataFromNetwork].
      */
-    private fun handleNetworkRequest(parameter: U) = async {
+    private suspend fun handleNetworkRequest(parameter: U) {
         try {
             mIsNetworkOperationRunning = true
             val response = getDataFromNetwork(parameter)

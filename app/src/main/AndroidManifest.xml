@@ -24,7 +24,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -62,11 +61,11 @@
             android:label="@string/title_activity_sign_in" />
 
         <activity
-            android:name="org.loopring.looprwallet.createtransfer.activities.ViewTransfersActivity"
-            android:label="@string/transfer" />
+            android:name="org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity"
+            android:label="@string/trading_pair" />
 
         <activity
-            android:name="org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity"
+            android:name="org.loopring.looprwallet.viewbalances.activities.ViewBalancesActivity"
             android:label="@string/trading_pair" />
 
         <activity

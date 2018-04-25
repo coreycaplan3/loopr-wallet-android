@@ -63,6 +63,9 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
         swipeRefreshLayout.setOnRefreshListener(this)
+
+        setupOfflineFirstStateAndErrorObserver(homeMarketsViewModel, swipeRefreshLayout)
+        setMarketsLiveData()
     }
 
     abstract fun provideAdapter(savedInstanceState: Bundle?): HomeMarketsAdapter

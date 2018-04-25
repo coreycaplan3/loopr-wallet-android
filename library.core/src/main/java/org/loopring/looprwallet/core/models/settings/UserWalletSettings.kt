@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.models.settings
 
 import android.support.annotation.VisibleForTesting
+import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.models.settings.UserWalletSettings.LockoutTimes.DEFAULT_LOCKOUT_TIME_MILLIS
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.utilities.RealmUtility
@@ -64,8 +65,8 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
         return walletName?.let {
             val realmKey = getRealmKey(it)
             val privateKey = getPrivateKey(it)
-            val keystoreContent = getKeystoreContent(walletName)!!
-            val passphrase = getPassphrase(walletName)!!
+            val keystoreContent = getKeystoreContent(walletName)
+            val passphrase = getPassphrase(walletName)
 
             return when {
                 realmKey == null || privateKey == null -> null
@@ -83,10 +84,15 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
         return if (!getAllWalletNames().contains(walletName)) {
             return null
         } else {
-            val realmKey = getRealmKey(walletName)!!
-            val privateKey = getPrivateKey(walletName)!!
-            val keystoreContent = getKeystoreContent(walletName)!!
-            val passphrase = getPassphrase(walletName)!!
+            val realmKey = getRealmKey(walletName)
+            val privateKey = getPrivateKey(walletName)
+            if(realmKey == null || privateKey == null) {
+                loge("realmKey or privateKey was null!", IllegalStateException())
+                return null
+            }
+
+            val keystoreContent = getKeystoreContent(walletName)
+            val passphrase = getPassphrase(walletName)
             LooprWallet(walletName, realmKey, keystoreContent, passphrase, privateKey)
         }
     }
@@ -94,14 +100,15 @@ class UserWalletSettings(private val looprSecureSettings: LooprSecureSettings) {
     /**
      * @return True if the wallet was selected, false otherwise
      */
-    fun selectCurrentWallet(newCurrentWallet: String): Boolean {
-        val doesContainWallet = getAllWalletNames().contains(newCurrentWallet)
-
-        if (doesContainWallet) {
-            looprSecureSettings.putString(KEY_CURRENT_WALLET, newCurrentWallet)
+    fun selectCurrentWallet(newCurrentWallet: String): LooprWallet? {
+        val containsWallet = getAllWalletNames().contains(newCurrentWallet)
+        return when {
+            containsWallet -> {
+                looprSecureSettings.putString(KEY_CURRENT_WALLET, newCurrentWallet)
+                getWallet(newCurrentWallet)
+            }
+            else -> null
         }
-
-        return doesContainWallet
     }
 
     /**

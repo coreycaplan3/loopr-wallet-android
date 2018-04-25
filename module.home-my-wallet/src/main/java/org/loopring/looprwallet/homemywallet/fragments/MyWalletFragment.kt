@@ -19,6 +19,7 @@ import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
@@ -61,7 +62,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     @Inject
     lateinit var securitySettings: SecuritySettings
 
-    val tokenBalanceViewModel: EthTokenBalanceViewModel by lazy {
+    private val tokenBalanceViewModel: EthTokenBalanceViewModel by lazy {
         LooprViewModelFactory.get<EthTokenBalanceViewModel>(this@MyWalletFragment)
     }
 
@@ -102,8 +103,10 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
             try {
                 val address = wallet.credentials.address
                 val dimensions = resources.getDimension(R.dimen.barcode_dimensions).roundToInt()
+                logw("Setting up wallet barcode...")
                 val barcode = BarcodeUtility.encodeTextToBitmap(address, dimensions)
                 addressBarcodeImage.setImageBitmap(barcode)
+                logw("Finished setting up wallet barcode...")
                 addressLabel.text = address
             } catch (e: Throwable) {
                 addressLabel.text = str(R.string.error_creating_qr_code)

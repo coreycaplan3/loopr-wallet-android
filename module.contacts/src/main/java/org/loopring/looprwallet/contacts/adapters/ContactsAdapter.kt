@@ -37,7 +37,7 @@ class ContactsAdapter(private var selectedContactAddress: String?,
         return ContactsViewHolder(parent.inflate(R.layout.view_holder_contact))
     }
 
-    override fun getDataOffset(position: Int) = position
+    override fun getDataOffset() = 0
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: Contact?) {
 

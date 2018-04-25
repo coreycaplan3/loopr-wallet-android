@@ -1,75 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:padding="@dimen/standard_padding">
+        android:layout_gravity="center_horizontal"
+        android:clipToPadding="false">
 
-        <include layout="@layout/app_logo_container" />
+        <ImageView
+            android:layout_width="0dp"
+            android:id="@+id/restoreWalletBackgroundImage"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.CardView
-            style="@style/App.Card.Title"
+        <android.support.constraint.Guideline
+            android:id="@+id/verticalGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/vertical_margin_large">
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
-            <LinearLayout
+        <ImageView
+            android:id="@+id/loopringLogoImage"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:contentDescription="@string/content_description_loopring_logo"
+            android:src="@drawable/loopring_logo"
+            app:layout_constraintEnd_toStartOf="@id/verticalGuideline"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/verticalGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:text="@string/secure_token_trading_slogan"
+            android:textColor="@color/blackTextPrimary"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/loopringLogoImage" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:padding="@dimen/standard_padding"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="parent">
+
+            <Button
+                android:id="@+id/restoreWalletPhraseButton"
+                style="@style/App.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_gravity="center_horizontal"
+                android:text="@string/twelve_word_phrase" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/question_restore_wallet"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            <Button
+                android:id="@+id/restoreWalletKeystoreButton"
+                style="@style/App.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:text="@string/key_file" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:clipToPadding="false"
-                    android:orientation="vertical">
+            <Button
+                android:id="@+id/restoreWalletPrivateKeyButton"
+                style="@style/App.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:text="@string/private_key" />
 
-                    <Button
-                        android:id="@+id/restoreWalletKeystoreButton"
-                        style="@style/App.Button.Borderless"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/vertical_margin"
-                        android:text="@string/key_file" />
+        </LinearLayout>
 
-                    <Button
-                        android:id="@+id/restoreWalletPhraseButton"
-                        style="@style/App.Button.Borderless"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/vertical_margin_small"
-                        android:text="@string/twelve_word_phrase" />
 
-                    <Button
-                        android:id="@+id/restoreWalletPrivateKeyButton"
-                        style="@style/App.Button.Borderless"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/vertical_margin_small"
-                        android:text="@string/private_key" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -3,11 +3,17 @@ package org.loopring.looprwallet.core.realm
 import android.support.annotation.VisibleForTesting
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_DEBUG
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_RELEASE
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_STAGING
+import org.loopring.looprwallet.core.wallet.WalletClient
 
 /**
  * Created by Corey Caplan on 1/30/18.
@@ -26,7 +32,7 @@ abstract class RealmClient {
         /**
          * An instance of [RealmClient] that can be used for the any user (not private info).
          */
-        fun getSharedInstance(): RealmClient {
+        fun getInstance(): RealmClient {
             val buildType = BuildUtility.BUILD_TYPE
             return when (buildType) {
                 BUILD_DEBUG -> RealmClientDebugImpl()
@@ -36,20 +42,39 @@ abstract class RealmClient {
         }
 
         /**
-         * An instance of [RealmClient] that can be used for the user's private Realm instance.
+         * Initializes the migration and initial data from a background thread. This should be
+         * called from the application instance's *onCreate*.
          */
-        fun getPrivateInstance(): RealmClient {
+        fun initializeMigrationAndInitialDataAsync(walletClient: WalletClient) = async(CommonPool) {
             val buildType = BuildUtility.BUILD_TYPE
-            return when (buildType) {
+            val client = when (buildType) {
                 BUILD_DEBUG -> RealmClientDebugImpl()
                 BUILD_STAGING, BUILD_RELEASE -> RealmClientProductionImpl()
                 else -> throw IllegalArgumentException("Invalid build type, found: $buildType")
             }
+
+            val configuration = client.getSharedRealmConfigurationBuilder(SHARED_REALM_NAME)
+                    .migration(LooprRealmMigration())
+                    .initialData(InitialRealmSharedData.getInitialData())
+                    .build()
+
+            val realm = Realm.getInstance(configuration)
+            realm.close()
+
+            launch(UI) {
+                val realmClient = RealmClient.getInstance()
+                CoreLooprWalletApp.uiSharedRealm = realmClient.getSharedInstance()
+
+                walletClient.getCurrentWallet()?.let {
+                    CoreLooprWalletApp.uiPrivateRealm = realmClient.getPrivateInstance(it)
+                }
+            }
+
+            Unit
         }
     }
 
-    abstract val privateSchemaVersion: Long
-    abstract val sharedSchemaVersion: Long
+    abstract val schemaVersion: Long
 
     abstract fun getSharedInstance(): Realm
 
@@ -63,9 +88,7 @@ abstract class RealmClient {
         return RealmConfiguration.Builder()
                 .name(realmName)
                 .modules(CoreLooprRealmModule())
-                .migration(LooprPrivateInstanceMigration())
-                .initialData(InitialRealmPrivateData.getInitialData())
-                .schemaVersion(privateSchemaVersion)
+                .schemaVersion(schemaVersion)
     }
 
     @VisibleForTesting
@@ -73,15 +96,12 @@ abstract class RealmClient {
         return RealmConfiguration.Builder()
                 .name(realmName)
                 .modules(CoreLooprRealmModule())
-                .migration(LooprSharedInstanceMigration())
-                .initialData(InitialRealmSharedData.getInitialData())
-                .schemaVersion(sharedSchemaVersion)
+                .schemaVersion(schemaVersion)
     }
 
     private class RealmClientDebugImpl : RealmClient() {
 
-        override val privateSchemaVersion = 0L
-        override val sharedSchemaVersion = 0L
+        override val schemaVersion = 0L
 
         override fun getPrivateInstance(wallet: LooprWallet): Realm {
             val configuration = getPrivateRealmConfigurationBuilder("${wallet.walletName}-in-memory")
@@ -104,8 +124,7 @@ abstract class RealmClient {
 
     private class RealmClientProductionImpl : RealmClient() {
 
-        override val privateSchemaVersion = 0L
-        override val sharedSchemaVersion = 0L
+        override val schemaVersion = 0L
 
         override fun getPrivateInstance(wallet: LooprWallet): Realm {
             val configuration = getPrivateRealmConfigurationBuilder(wallet.walletName)

@@ -92,7 +92,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.20"
+        android:alpha="0.15"
         android:contentDescription="@string/content_description_loopring"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_loopring_logo_96dp" />

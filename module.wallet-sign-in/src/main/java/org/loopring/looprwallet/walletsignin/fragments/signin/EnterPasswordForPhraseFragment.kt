@@ -15,6 +15,7 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.utilities.ViewUtility
 import org.loopring.looprwallet.core.validators.PasswordValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
+import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
 import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletRememberPhraseFragment
@@ -40,15 +41,13 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnP
         private const val TYPE_RESTORE_WALLET = "restore_phrase_wallet"
         private const val TYPE_CREATE_WALLET = "create_phrase_wallet"
 
-        fun createRestorationInstance() =
-                EnterPasswordForPhraseFragment().apply {
-                    arguments = bundleOf(KEY_TYPE to TYPE_RESTORE_WALLET)
-                }
+        fun getRestorationInstance() = EnterPasswordForPhraseFragment().apply {
+            arguments = bundleOf(KEY_TYPE to TYPE_RESTORE_WALLET)
+        }
 
-        fun createCreationInstance() =
-                EnterPasswordForPhraseFragment().apply {
-                    arguments = bundleOf(KEY_TYPE to TYPE_CREATE_WALLET)
-                }
+        fun getCreationInstance() = EnterPasswordForPhraseFragment().apply {
+            arguments = bundleOf(KEY_TYPE to TYPE_CREATE_WALLET)
+        }
 
     }
 
@@ -60,7 +59,7 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnP
     }
 
     private val walletGeneratorViewModel: WalletGeneratorViewModel by lazy {
-        ViewModelProviders.of(this).get(WalletGeneratorViewModel::class.java)
+        LooprViewModelFactory.get<WalletGeneratorViewModel>(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,7 +104,6 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnP
 
         (activity as? BaseActivity)?.progressDialog?.apply {
             setMessage(getString(R.string.generating_phrase))
-            show()
         }
 
         walletGeneratorViewModel.createPhraseAsync(walletName, password)

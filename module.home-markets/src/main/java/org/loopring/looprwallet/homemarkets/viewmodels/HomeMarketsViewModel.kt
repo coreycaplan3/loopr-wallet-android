@@ -28,7 +28,9 @@ class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<Tradin
 
     override val repository = LooprMarketsRepository()
 
-    val marketsService = LooprMarketsService.getInstance()
+    private val service by lazy {
+        LooprMarketsService.getInstance()
+    }
 
     fun getHomeMarkets(
             owner: LifecycleOwner,
@@ -43,7 +45,7 @@ class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<Tradin
     }
 
     override fun getDataFromNetwork(parameter: MarketsFilter): Deferred<OrderedRealmCollection<TradingPair>> {
-        return marketsService.getMarkets()
+        return service.getMarkets()
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<TradingPair>) {

@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.networking.eth
 
+import kotlinx.coroutines.experimental.CommonPool
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
@@ -39,7 +40,7 @@ internal class EthServiceMockImpl : EthService {
             amount: BigDecimal,
             gasLimit: BigDecimal,
             gasPrice: BigDecimal
-    ) = async {
+    ) = async(CommonPool) {
 
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
@@ -55,7 +56,7 @@ internal class EthServiceMockImpl : EthService {
             amount: BigDecimal,
             gasLimit: BigDecimal,
             gasPrice: BigDecimal
-    ) = async {
+    ) = async(CommonPool) {
 
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
@@ -72,7 +73,7 @@ internal class EthServiceMockImpl : EthService {
             amount: BigDecimal,
             gasLimit: BigDecimal,
             gasPrice: BigDecimal
-    ) = async {
+    ) = async(CommonPool) {
 
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 

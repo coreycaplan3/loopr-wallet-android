@@ -24,7 +24,9 @@ class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewMo
 
     override val repository = LooprTransferRepository(currentWallet)
 
-    private val ethplorerService = EthplorerService.getInstance()
+    private val ethplorerService by lazy {
+        EthplorerService.getInstance()
+    }
 
     fun getAllTransfers(owner: LifecycleOwner, address: String, onChange: (OrderedRealmCollection<LooprTransfer>) -> Unit) {
         initializeData(owner, address, onChange)

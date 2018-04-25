@@ -30,36 +30,36 @@ class LooprFragmentPagerAdapter(private val fragmentManager: FragmentManager,
         const val KEY_FRAGMENT = "_FRAGMENT"
     }
 
-    override fun saveState(): Parcelable? {
-        super.saveState()
-        val bundle = Bundle()
+//    override fun saveState(): Parcelable? {
+//        super.saveState()
+//        val bundle = Bundle()
+//
+//        fragmentList.forEachIndexed { index, pair ->
+//            val fragment = pair.second
+//            try {
+//                val savedState = fragmentManager.saveFragmentInstanceState(fragment)
+//                bundle.putParcelable(KEY_FRAGMENT + index, savedState)
+//            } catch (e: Exception) {
+//                logd("Unable to save state for ${fragment.tag}", e)
+//            }
+//        }
+//
+//        return bundle
+//    }
 
-        fragmentList.forEachIndexed { index, pair ->
-            val fragment = pair.second
-            try {
-                val savedState = fragmentManager.saveFragmentInstanceState(fragment)
-                bundle.putParcelable(KEY_FRAGMENT + index, savedState)
-            } catch (e: Exception) {
-                logd("Unable to save state for ${fragment.tag}")
-            }
-        }
-
-        return bundle
-    }
-
-    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
-        (state as? Bundle)?.let {
-            it.classLoader = loader
-
-            fragmentList.forEachIndexed { index, pair ->
-                val fragment = pair.second
-                val bundle = it.getParcelable(KEY_FRAGMENT + index) as Fragment.SavedState
-                try {
-                    fragment.setInitialSavedState(bundle)
-                } catch (ignored: Exception) {
-                }
-            }
-        }
-    }
+//    override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
+//        (state as? Bundle)?.let {
+//            it.classLoader = loader
+//
+//            fragmentList.forEachIndexed { index, pair ->
+//                val fragment = pair.second
+//                val bundle = it.getParcelable(KEY_FRAGMENT + index) as? Fragment.SavedState
+//                try {
+//                    fragment.setInitialSavedState(bundle)
+//                } catch (ignored: Exception) {
+//                }
+//            }
+//        }
+//    }
 
 }

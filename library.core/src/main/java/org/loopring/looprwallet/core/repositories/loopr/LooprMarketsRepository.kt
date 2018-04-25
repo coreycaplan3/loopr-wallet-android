@@ -37,7 +37,7 @@ class LooprMarketsRepository : BaseRealmRepository() {
         // TODO apply filter
         return uiRealm.where<TradingPair>()
                 .sort(TradingPair::primaryTicker)
-                .findAll()
+                .findAllAsync()
                 .asLiveData()
     }
 

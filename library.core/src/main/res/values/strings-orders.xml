@@ -5,7 +5,8 @@
     <string name="empty_general_filled_orders">You have no filled orders. Go make some trades to fill up this screen!</string>
     <string name="empty_general_cancelled_orders">You have no cancelled orders. Any orders that expire or you cancel will show here</string>
 
-
+    <string name="trade_id">Trade ID</string>
+    <string name="order_details">Order Details</string>
 
     <array name="filter_order_dates">
         <item>@string/all</item>

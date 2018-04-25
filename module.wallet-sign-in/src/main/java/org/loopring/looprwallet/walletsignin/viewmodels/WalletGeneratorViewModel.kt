@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.walletsignin.viewmodels
 
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.loge
@@ -124,7 +125,8 @@ class WalletGeneratorViewModel : TransactionViewModel<WalletCreationResult>() {
      * @param walletName The wallet's *unique* name
      * @param password The wallet's password, used to derive the private key.
      */
-    fun createPhraseAsync(walletName: String, password: String) = async {
+    fun createPhraseAsync(walletName: String, password: String) = async(CommonPool) {
+        mIsTransactionRunning.postValue(true)
         populateWordListFromAssets()
 
         val initialEntropy = ByteArray(16)
@@ -132,6 +134,8 @@ class WalletGeneratorViewModel : TransactionViewModel<WalletCreationResult>() {
 
         val phrase = MnemonicUtils.generateMnemonic(initialEntropy)
         val phraseList = phrase.split(RegexUtility.WHITESPACE_REGEX).toArrayList()
+
+        mIsTransactionRunning.postValue(false)
         mResult.postValue(WalletCreationPhrase(walletName, password, phraseList))
     }
 
@@ -171,7 +175,7 @@ class WalletGeneratorViewModel : TransactionViewModel<WalletCreationResult>() {
      * Creates or restores a wallet async (non-blocking) and calls
      * @param block A function that takes no parameters and returns a [WalletCreationResult]
      */
-    private inline fun createWalletAsync(crossinline block: () -> WalletCreationResult) = async {
+    private inline fun createWalletAsync(crossinline block: () -> WalletCreationResult) = async(CommonPool) {
         mIsTransactionRunning.postValue(true)
 
         var walletCreationResult: WalletCreationResult? = null
@@ -183,6 +187,7 @@ class WalletGeneratorViewModel : TransactionViewModel<WalletCreationResult>() {
             loge("Error: ", e)
             creationError = e
         }
+
         mIsTransactionRunning.postValue(false)
 
         walletCreationResult?.let { mResult.postValue(it) }

@@ -27,6 +27,8 @@ interface WalletClient {
 
     }
 
+    fun setOnCurrentWalletChange(onChange: ((LooprWallet) -> Unit)?)
+
     /**
      * Attempts to create a wallet with the given name. If a wallet with that name or private key
      * already exists, the creation will fail. Upon creating the wallet, the new wallet will also
@@ -76,7 +78,7 @@ interface WalletClient {
      * is used to make a call to [BaseActivity.finish] and start the [SignInActivity] from the same
      * task stack.
      */
-    fun onNoCurrentWalletSelected(currentActivity: BaseActivity)
+    fun noCurrentWalletSelected(currentActivity: BaseActivity)
 
     /**
      * @return True if the app is now unlocked or false otherwise. If the app is locked, a call to

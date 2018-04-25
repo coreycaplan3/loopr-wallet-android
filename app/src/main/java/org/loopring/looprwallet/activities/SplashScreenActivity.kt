@@ -26,14 +26,14 @@ class SplashScreenActivity : BaseActivity() {
         super.onResume()
 
         if (walletClient.isAndroidKeystoreUnlocked()) {
-            val intent = if (walletClient.getCurrentWallet() == null) {
-                Intent(this, SignInActivity::class.java)
-            } else {
-                Intent(this, MainActivity::class.java)
-                        .putExtra("AddFragment", true)
-            }
 
-            startActivity(intent)
+            // TODO delete me
+            walletClient.createWallet("loopr", "0321321123312132321312321312123312312123132321213212323112331232", null, null)
+
+            when {
+                walletClient.getCurrentWallet() == null -> SignInActivity.route(this, false)
+                else -> MainActivity.routeAndClearOldTasks(this)
+            }
             finish()
         } else {
             walletClient.unlockAndroidKeystore()

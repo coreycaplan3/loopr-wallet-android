@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.card_wallet_name.*
 import kotlinx.android.synthetic.main.fragment_restore_private_key.*
+import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.validators.PrivateKeyValidator
@@ -54,8 +55,6 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
 
     /**
      * Called when the user attempts to create the wallet with the given private key.
-     *
-     * @param view The button view that was clicked
      */
     private fun onUnlockWalletClick() {
         val walletName = walletNameEditText.text.toString()

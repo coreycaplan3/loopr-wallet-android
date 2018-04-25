@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.networking.loopr
 
 import io.realm.RealmList
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
@@ -60,7 +61,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
 
     }
 
-    override fun getMarkets(): Deferred<RealmList<TradingPair>> = async {
+    override fun getMarkets(): Deferred<RealmList<TradingPair>> = async(CommonPool) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -70,7 +71,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         }
     }
 
-    override fun getMarketDetails(tradingPairMarket: String): Deferred<TradingPair> = async {
+    override fun getMarketDetails(tradingPairMarket: String): Deferred<TradingPair> = async(CommonPool) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -80,7 +81,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         }
     }
 
-    override fun getMarketTrends(tradingPairMarket: String): Deferred<RealmList<TradingPairTrend>> = async {
+    override fun getMarketTrends(tradingPairMarket: String): Deferred<RealmList<TradingPairTrend>> = async(CommonPool) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {

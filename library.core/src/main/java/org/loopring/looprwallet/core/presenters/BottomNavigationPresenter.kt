@@ -5,17 +5,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
-import kotlinx.android.synthetic.main.activity_security.view.*
+import android.support.v4.view.ViewPager
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
-import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
-import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
-import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
-import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationTag
+import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentPagerAdapter
 
 /**
  * Created by Corey on 1/31/2018
@@ -29,14 +26,14 @@ import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationT
  *
  * @param activity The activity in which this presenter resides
  * @param bottomNavigationView The [BottomNavigationView] in which the tabs are displayed
- * @param fragmentTagPairs The pairs of fragments and their corresponding tags
- * @param initialTag The item that should be selected initially
+ * @param viewPager The locked [ViewPager] in which these items are located
+ * @param pagerAdapter The adapter that works in sync with the [viewPager]
  * @param bottomNavigationFragmentStackHistory The history of all the fragment's back-stack
  */
 class BottomNavigationPresenter(activity: BaseActivity,
                                 bottomNavigationView: BottomNavigationView,
-                                private val fragmentTagPairs: List<BottomNavigationFragmentPair>,
-                                @BottomNavigationTag private val initialTag: String,
+                                viewPager: ViewPager,
+                                pagerAdapter: LooprFragmentPagerAdapter,
                                 private val bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory,
                                 savedInstanceState: Bundle?) {
 
@@ -46,40 +43,35 @@ class BottomNavigationPresenter(activity: BaseActivity,
     }
 
     private val activity by weakReference(activity)
-
     private val bottomNavigationView by weakReference(bottomNavigationView)
-
     private var currentFragment by weakReference<Fragment>(null)
+    private var viewPager by weakReference(viewPager)
+    private var pagerAdapter by weakReference(pagerAdapter)
 
     init {
-
         when {
             savedInstanceState != null -> {
                 val tag = bottomNavigationFragmentStackHistory.peek()!!
                 logv("Pushing $tag fragment...")
 
                 // We don't need to select the tab actually, just update the UI
-                currentFragment = activity.supportFragmentManager.findFragmentByTag(tag)
+                currentFragment = activity.supportFragmentManager.findFragmentById(viewPager.id)
             }
             else -> {
-                val tag = initialTag
-                logv("Initializing $tag fragment...")
-
                 Handler().postDelayed({
                     // Needed to allow the TabLayout animation to occur initially.
-                    executeFragmentTransaction(fragmentTagPairs.first().tag)
+                    viewPager.adapter = pagerAdapter
                 }, 200)
             }
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
-            executeFragmentTransaction(getTagFromMenuId(it.itemId))
-            true
+            executeFragmentTransaction(it.title.toString())
+            return@setOnNavigationItemSelectedListener true
         }
 
         bottomNavigationView.setOnNavigationItemReselectedListener {
-            val tag = getTagFromMenuId(it.itemId)
-            val fragment = activity.supportFragmentManager.findFragmentByTag(tag)
+            val fragment = activity.supportFragmentManager.findFragmentById(viewPager.id)
             if (fragment is BottomNavigationReselectedLister) {
                 fragment.onBottomNavigationReselected()
             } else {
@@ -96,41 +88,56 @@ class BottomNavigationPresenter(activity: BaseActivity,
         bottomNavigationFragmentStackHistory.pop()
 
         bottomNavigationFragmentStackHistory.peek()?.let {
-            bottomNavigationView?.selectedItemId = getMenuIdFromTag(it)
-            return false
+            getMenuIdFromTitle(it)?.let {
+                bottomNavigationView?.selectedItemId = it
+                return false
+            }
         }
 
         // The stack is empty. Time to finish the activity
         return true
     }
 
+    fun onSaveInstanceState(outState: Bundle?) {
+        bottomNavigationFragmentStackHistory.saveState(outState)
+    }
+
     // MARK - Private Methods
 
-    private fun getTagFromMenuId(id: Int): String {
-        return fragmentTagPairs.find { it.menuId == id }!!.tag
+    private fun getMenuIdFromTitle(title: String): Int? {
+        val menu = bottomNavigationView?.menu ?: return null
+        for (i in 0 until menu.size()) {
+            if (menu.getItem(i).title == title) {
+                return menu.getItem(i).itemId
+            }
+        }
+        return null
+
     }
 
-    private fun getMenuIdFromTag(tag: String): Int {
-        return fragmentTagPairs.find { it.tag == tag }!!.menuId
+    private fun getPositionFromTitle(title: String): Int? {
+        val pagerAdapter = pagerAdapter ?: return null
+        for (i in 0 until pagerAdapter.count) {
+            if (pagerAdapter.getPageTitle(i) == title) {
+                return i
+            }
+        }
+        return null
     }
 
-    private fun executeFragmentTransaction(newFragmentTag: String) {
+    private fun executeFragmentTransaction(newFragmentTitle: String) {
 
-        fun commitTransaction(fragment: Fragment, fragmentTag: String) {
-            val activity = activity ?: return
-            activity.supportFragmentManager?.let {
-                val controller = FragmentTransactionController(R.id.activityContainer, fragment, fragmentTag)
-                controller.commitTransaction(it)
-                currentFragment = fragment
+        fun commitTransaction(title: String) {
+            val position = getPositionFromTitle(title)
+            if (position != null) {
+                viewPager?.let {
+                    it.setCurrentItem(position, true)
+                    currentFragment = activity?.supportFragmentManager?.findFragmentById(it.id)
+                }
             }
         }
 
-        bottomNavigationFragmentStackHistory.push(newFragmentTag)
-
-        val newFragment = activity?.supportFragmentManager?.findFragmentByTagOrCreate(newFragmentTag) { tag ->
-            // The fragment MUST be in the immutable list (so it's ALWAYS safe to force the unwrap it).
-            fragmentTagPairs.find { it.tag == tag }?.fragment!!
-        } ?: return // We return since we CANNOT commit the transaction without this fragment
+        bottomNavigationFragmentStackHistory.push(newFragmentTitle)
 
         val appBarLayout = (currentFragment as? BaseFragment)?.appbarLayout
         if (appBarLayout != null && !appBarLayout.isExpanded()) {
@@ -141,10 +148,10 @@ class BottomNavigationPresenter(activity: BaseActivity,
             // Allow the appbar to snap into place for committing the transaction
             runBlocking {
                 delay(125L)
-                commitTransaction(newFragment, newFragmentTag)
+                commitTransaction(newFragmentTitle)
             }
         } else {
-            commitTransaction(newFragment, newFragmentTag)
+            commitTransaction(newFragmentTitle)
         }
     }
 

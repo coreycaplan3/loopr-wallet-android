@@ -161,7 +161,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     open fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
-        return fragmentView.inflate(R.layout.appbar_main, false) as AppBarLayout?
+        return layoutInflater.inflate(R.layout.appbar_main, fragmentView, false) as? AppBarLayout
     }
 
     /**
@@ -324,17 +324,15 @@ abstract class BaseFragment : Fragment() {
             if (it) {
                 progress?.setMessage(progressMessage)
                 progress?.show()
-            } else {
-                if (progress?.isShowing == true) {
-                    progress.dismiss()
-                }
+            } else if (progress?.isShowing == true) {
+                progress.dismiss()
             }
         })
 
         viewModel.result.observeForDoubleSpend(this) {
             activity?.let {
-                it.startActivity(Intent(it, CoreLooprWalletApp.mainClass))
                 it.finish()
+                it.startActivity(Intent(it, CoreLooprWalletApp.mainClass))
             }
         }
 
@@ -356,7 +354,7 @@ abstract class BaseFragment : Fragment() {
             adapter: BaseRealmAdapter<T>,
             data: OrderedRealmCollection<T>
     ) {
-        viewModel?.removeDataObserver(this)
+//        viewModel?.removeDataObserver(this) // TODO fix me
         adapter.updateData(data)
     }
 
@@ -517,7 +515,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     private fun setupAppbar() {
-        toolbar = (0..(appbarLayout?.childCount ?: 0))
+        toolbar = (0 until (appbarLayout?.childCount ?: 0))
                 .map { appbarLayout?.getChildAt(it) }
                 .filterIsInstance<Toolbar>()
                 .first()

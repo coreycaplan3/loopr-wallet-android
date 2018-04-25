@@ -39,6 +39,8 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
 
     companion object {
 
+        val TAG: String = TransferDetailsDialog::class.java.simpleName
+
         private const val KEY_TRANSFER = "_TRANSFER"
 
         fun getInstance(transfer: LooprTransfer) = TransferDetailsDialog().apply {

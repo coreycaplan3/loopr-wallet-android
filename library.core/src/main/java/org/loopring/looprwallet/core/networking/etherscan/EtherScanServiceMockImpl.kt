@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.networking.etherscan
 
+import kotlinx.coroutines.experimental.CommonPool
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import kotlinx.coroutines.experimental.async
@@ -17,7 +18,7 @@ import java.io.IOException
 internal class EtherScanServiceMockImpl : EtherScanService {
 
     // Get's LRC by default
-    override fun getTokenBinary(contractAddress: String) = async {
+    override fun getTokenBinary(contractAddress: String) = async(CommonPool) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {

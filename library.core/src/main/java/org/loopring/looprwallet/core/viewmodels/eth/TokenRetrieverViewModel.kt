@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.viewmodels.eth
 
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.networking.etherscan.EtherScanService
@@ -28,7 +29,7 @@ class TokenRetrieverViewModel : TransactionViewModel<LooprToken>() {
      *
      * @return True if the token was added successfully or false otherwise.
      */
-    fun getTokenInfoFromNetworkAndAdd(contractAddress: String) = async {
+    fun getTokenInfoFromNetworkAndAdd(contractAddress: String) = async(CommonPool) {
         mIsTransactionRunning.postValue(true)
         return@async try {
             val token = ethplorerService.getTokenInfo(contractAddress).await()

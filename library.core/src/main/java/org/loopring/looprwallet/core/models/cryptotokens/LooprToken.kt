@@ -62,7 +62,13 @@ open class LooprToken(
          *
          * This token is automatically added to the user's realm upon creation.
          */
-        val ETH = LooprToken("ETH", "ETH", "Ethereum")
+        val ETH = LooprToken(
+                "ETH",
+                "ETH",
+                "Ethereum",
+                "120000000",
+                18
+        )
 
         val WETH = LooprToken("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
                 "WETH",

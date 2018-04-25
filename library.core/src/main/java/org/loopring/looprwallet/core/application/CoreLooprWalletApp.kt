@@ -1,15 +1,19 @@
 package org.loopring.looprwallet.core.application
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import io.realm.Realm
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.CoreTestActivity
 import org.loopring.looprwallet.core.dagger.*
 import org.loopring.looprwallet.core.extensions.logi
+import org.loopring.looprwallet.core.realm.RealmClient
 import org.loopring.looprwallet.core.utilities.PreferenceUtility
 import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
@@ -26,6 +30,12 @@ open class CoreLooprWalletApp : MultiDexApplication(), Application.ActivityLifec
         CoreLooprComponentProvider {
 
     companion object {
+
+        @SuppressLint("StaticFieldLeak")
+        lateinit var uiSharedRealm: Realm
+
+        @SuppressLint("StaticFieldLeak")
+        lateinit var uiPrivateRealm: Realm
 
         /**
          * The class representing the *MainActivity* for the app
@@ -53,6 +63,9 @@ open class CoreLooprWalletApp : MultiDexApplication(), Application.ActivityLifec
     }
 
     @Inject
+    lateinit var realmClient: RealmClient
+
+    @Inject
     lateinit var walletClient: WalletClient
 
     override fun onCreate() {
@@ -63,9 +76,19 @@ open class CoreLooprWalletApp : MultiDexApplication(), Application.ActivityLifec
         CoreLooprWalletApp.application = this
         CoreLooprWalletApp.mainClass = CoreTestActivity::class.java
 
+        coreLooprComponent.inject(this)
+
         PreferenceUtility.setDefaultValues()
 
         Realm.init(this)
+
+        RealmClient.initializeMigrationAndInitialDataAsync(walletClient)
+
+        walletClient.setOnCurrentWalletChange {
+            launch(UI) {
+                uiPrivateRealm = realmClient.getPrivateInstance(it)
+            }
+        }
     }
 
     override fun provideCoreLooprComponent() = coreLooprComponent

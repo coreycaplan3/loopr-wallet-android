@@ -3,7 +3,6 @@ package org.loopring.looprwallet.homemarkets.adapters
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import io.realm.RealmModel
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.inflate
@@ -64,16 +63,15 @@ class HomeMarketsAdapter(
         }
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        TYPE_DATA -> MarketsViewHolder(parent.inflate(R.layout.view_holder_markets))
-        TYPE_MARKETS_FILTER -> MarketsFilterViewHolder(parent.inflate(R.layout.view_holder_markets_filter), listener!!)
-        else -> throw IllegalArgumentException("Invalid viewType, found: $viewType")
+    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_DATA -> MarketsViewHolder(parent.inflate(R.layout.view_holder_markets))
+            TYPE_MARKETS_FILTER -> MarketsFilterViewHolder(parent.inflate(R.layout.view_holder_markets_filter), listener)
+            else -> throw IllegalArgumentException("Invalid viewType, found: $viewType")
+        }
     }
 
-    override fun getDataOffset(position: Int) = when (position) {
-        0 -> null
-        else -> position - 1
-    }
+    override fun getDataOffset() = -1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: TradingPair?) {
         val filter = MarketsFilter(null, false, sortBy, dateFilter)

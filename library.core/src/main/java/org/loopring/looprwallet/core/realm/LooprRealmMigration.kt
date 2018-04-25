@@ -14,13 +14,13 @@ import io.realm.RealmMigration
  * app is running a  lower version of the database from the newer one (in the newly-downloaded
  * version).
  */
-class LooprPrivateInstanceMigration : RealmMigration {
+class LooprRealmMigration : RealmMigration {
 
     override fun migrate(realm: DynamicRealm?, oldVersion: Long, newVersion: Long) {
         for (i in oldVersion..newVersion) {
             when (i) {
                 0L -> migrate0To1(realm)
-                else -> throw IllegalStateException("Developer did not factory a migration plan!")
+                else -> throw IllegalStateException("Developer did not create a migration plan!")
             }
         }
     }

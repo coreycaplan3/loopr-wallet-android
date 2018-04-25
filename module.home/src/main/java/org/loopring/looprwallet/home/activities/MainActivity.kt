@@ -1,7 +1,6 @@
 package org.loopring.looprwallet.home.activities
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -13,30 +12,29 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_navigation.*
-import kotlinx.android.synthetic.main.navigation_header.*
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
-import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair
+import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentPagerAdapter
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
 import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
-import org.loopring.looprwallet.core.viewmodels.eth.EthereumBlockNumberViewModel
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.homemarkets.fragments.HomeMarketsParentFragment
 import org.loopring.looprwallet.homemywallet.fragments.MyWalletFragment
 import org.loopring.looprwallet.homeorders.fragments.HomeOrdersParentFragment
 import org.loopring.looprwallet.hometransfers.fragments.ViewTransfersFragment
 import org.loopring.looprwallet.walletsignin.activities.SignInActivity
-
 
 /**
  * Created by Corey on 1/14/2018
@@ -51,8 +49,8 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     companion object {
 
         /**
-         * @return An intent used to start this activity (as normal), clearing any previous tasks
-         * which may have pointed to here
+         * Starts this activity (as normal), clearing any previous tasks which may have pointed to
+         * here
          */
         fun routeAndClearOldTasks(activity: Activity) {
             val intent = Intent(CoreLooprWalletApp.context, MainActivity::class.java)
@@ -82,17 +80,15 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     override val isSecureActivity: Boolean
         get() = true
 
-    private val fragmentTagPairs by lazy {
-        listOf(
-                BottomNavigationFragmentPair(KEY_MARKETS, HomeMarketsParentFragment(), R.id.menu_markets),
-
-                BottomNavigationFragmentPair(KEY_ORDERS, HomeOrdersParentFragment(), R.id.menu_orders),
-
-                BottomNavigationFragmentPair(KEY_TRANSFERS, ViewTransfersFragment(), R.id.menu_transfers),
-
-                BottomNavigationFragmentPair(KEY_MY_WALLET, MyWalletFragment(), R.id.menu_my_wallet)
-        )
+    private val pagerAdapter by lazy {
+        LooprFragmentPagerAdapter(supportFragmentManager, listOf(
+                str(R.string.markets) to HomeMarketsParentFragment(),
+                str(R.string.orders) to HomeOrdersParentFragment(),
+                str(R.string.transfers) to ViewTransfersFragment(),
+                str(R.string.my_wallet) to MyWalletFragment()
+        ))
     }
+
     lateinit var bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory
 
     lateinit var bottomNavigationPresenter: BottomNavigationPresenter
@@ -103,6 +99,11 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         val isRemovingCurrentWallet = intent.getBooleanExtra(KEY_REMOVE_CURRENT_WALLET, false)
         if (isRemovingCurrentWallet && savedInstanceState == null) {
             walletClient.getCurrentWallet()?.walletName?.let { walletClient.removeWallet(it) }
+
+            if (walletClient.getAllWallets().isEmpty()) {
+                // We need to go back to the SignInActivity
+                SignInActivity.route(this, false)
+            }
         }
 
         bottomNavigationFragmentStackHistory = BottomNavigationFragmentStackHistory(false, savedInstanceState)
@@ -112,19 +113,17 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         bottomNavigationPresenter = BottomNavigationPresenter(
                 activity = this,
                 bottomNavigationView = bottomNavigationView,
-                fragmentTagPairs = fragmentTagPairs,
-                initialTag = KEY_MARKETS,
+                viewPager = mainViewPager,
+                pagerAdapter = pagerAdapter,
                 bottomNavigationFragmentStackHistory = bottomNavigationFragmentStackHistory,
                 savedInstanceState = savedInstanceState
         )
     }
 
     override fun onSecurityConfirmed(parameter: Int) {
-        fragmentTagPairs.forEach {
-            val fragment = it.fragment
-            if (fragment is OnSecurityConfirmedListener) {
-                fragment.onSecurityConfirmed(parameter)
-            }
+        val fragment = supportFragmentManager.findFragmentById(mainViewPager.id)
+        if (fragment is OnSecurityConfirmedListener) {
+            fragment.onSecurityConfirmed(parameter)
         }
     }
 
@@ -137,7 +136,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
 
-        bottomNavigationFragmentStackHistory.saveState(outState)
+        bottomNavigationPresenter.onSaveInstanceState(outState)
     }
 
     // MARK - Private Methods
@@ -145,7 +144,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     /**
      * If this variable is **NOT** null when the drawer is closed, we can invoke it :)
      */
-    var onItemSelected: (() -> Unit)? = null
+    private var onItemSelected: (() -> Unit)? = null
 
     override fun setSupportActionBar(toolbar: Toolbar?) {
         super.setSupportActionBar(toolbar)
@@ -153,7 +152,6 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         supportActionBar?.apply {
             logi("Setting up the navigation drawer...")
             toolbar?.let { setupNavigationDrawer(it) }
-            setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
         }
     }
@@ -172,17 +170,22 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     }
 
     private fun setupNavigationHeaderView() {
+        val headerView = homeNavigationView.getHeaderView(0)
+
+        val addressLabel = headerView.findViewById<TextView>(R.id.navigationHeaderWalletAddressLabel)
+        val walletNameLabel = headerView.findViewById<TextView>(R.id.navigationHeaderWalletNameLabel)
+
         val currentWallet = walletClient.getCurrentWallet()
         when (currentWallet) {
             null -> {
-                navigationHeaderWalletAddressLabel.visibility = View.GONE
-                navigationHeaderWalletNameLabel.setText(R.string.watch_only)
+                addressLabel.visibility = View.GONE
+                walletNameLabel.setText(R.string.watch_only)
             }
             else -> {
-                navigationHeaderWalletAddressLabel.visibility = View.VISIBLE
+                addressLabel.visibility = View.VISIBLE
 
-                navigationHeaderWalletNameLabel.text = currentWallet.walletName
-                navigationHeaderWalletAddressLabel.text = currentWallet.credentials.address
+                walletNameLabel.text = currentWallet.walletName
+                addressLabel.text = currentWallet.credentials.address
             }
         }
     }
@@ -195,9 +198,8 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         // Setup the current selected menu item
         val currentWalletName = walletClient.getCurrentWallet()?.walletName
         val allWallets = walletClient.getAllWallets()
-        allWallets.forEachIndexed { index, item ->
-            homeNavigationView.menu.add(index).let {
-                it.title = item.walletName
+        allWallets.forEach { item ->
+            homeNavigationView.menu.add(item.walletName).let {
                 if (item.walletName == currentWalletName) {
                     it.isChecked = true
                 }
@@ -231,12 +233,13 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
             }
         }
 
-        homeNavigationDrawerLayout.addDrawerListener(listener)
+        @Suppress("DEPRECATION")
+        homeNavigationDrawerLayout.setDrawerListener(listener)
 
         homeNavigationView.setNavigationItemSelectedListener { menuItem ->
             when {
                 menuItem.itemId == R.id.menuAddNewWallet -> {
-                    onItemSelected = { SignInActivity.route(this) }
+                    onItemSelected = { SignInActivity.route(this, true) }
                 }
                 menuItem.itemId == R.id.menuDeleteWallet -> {
                     setupDeleteWalletDialogAdapter(toolbar, allWallets)
@@ -245,10 +248,15 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
                     // We found the wallet that matches the title's name
                     val currentWallet = walletClient.getCurrentWallet()
                     if (currentWallet != null && currentWallet != it) {
-                        onItemSelected = { MainActivity.routeAndClearOldTasks(this@MainActivity) }
+                        onItemSelected = {
+                            walletClient.selectNewCurrentWallet(it.walletName, this)
+                            MainActivity.routeAndClearOldTasks(this@MainActivity)
+                        }
                     }
                 }
             }
+
+            homeNavigationDrawerLayout.closeDrawers()
 
             return@setNavigationItemSelectedListener true
         }

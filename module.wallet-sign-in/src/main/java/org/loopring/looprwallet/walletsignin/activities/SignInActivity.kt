@@ -21,8 +21,12 @@ class SignInActivity : BaseActivity() {
 
     companion object {
 
-        fun route(activity: Activity) {
+        private const val KEY_SHOW_BACK_BUTTON = "_SHOW_BACK_BUTTON"
+
+        fun route(activity: Activity, showBackButton: Boolean) {
             val intent = Intent(activity, SignInActivity::class.java)
+                    .putExtra(KEY_SHOW_BACK_BUTTON, showBackButton)
+
             activity.startActivity(intent)
         }
     }
@@ -32,6 +36,9 @@ class SignInActivity : BaseActivity() {
 
     override val isSecureActivity: Boolean
         get() = false
+
+    val showBackButton
+        get() = intent.getBooleanExtra(KEY_SHOW_BACK_BUTTON, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +60,7 @@ class SignInActivity : BaseActivity() {
         if (fragment is ConfirmPasswordDialog.OnPasswordConfirmedListener) {
             fragment.onPasswordConfirmed()
         } else {
-            loge("Invalid fragment type; could not cast to OnPasswordConfirmedListener!", IllegalStateException())
+            loge("Invalid fragment type; could not cast ${fragment?.tag} to OnPasswordConfirmedListener!", IllegalStateException())
         }
     }
 

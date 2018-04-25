@@ -50,6 +50,7 @@
     <!-- There's no shapes with a radius that intrinsically limits the size -->
     <style name="App.Button.NoClipping" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/button_background_full_size</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverseDisableOnly</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_width">match_parent</item>
     </style>
@@ -135,6 +136,10 @@
         <item name="colorAccent">@color/darkAccent</item>
         <item name="colorControlHighlight">@color/darkAccent</item>
 
+        <item name="android:textColorPrimaryInverseDisableOnly">
+            @color/full_white_text_primary
+        </item>
+
         <item name="textColorDisabled">@color/whiteTextDisabled</item>
     </style>
 
@@ -149,6 +154,9 @@
         <item name="colorControlHighlight">@color/lightAccent</item>
 
         <item name="textColorDisabled">@color/blackTextDisabled</item>
+        <item name="android:textColorPrimaryInverseDisableOnly">
+            @color/full_white_text_primary
+        </item>
     </style>
 
     <!-- Input -->

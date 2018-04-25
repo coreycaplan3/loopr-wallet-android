@@ -33,7 +33,7 @@ import org.loopring.looprwallet.walletsignin.fragments.signin.SignInEnterPhraseF
  */
 class EnterPasswordForPhraseRestorationFragment : BaseDaggerFragmentTest<EnterPasswordForPhraseFragment>() {
 
-    override fun provideFragment() = EnterPasswordForPhraseFragment.createRestorationInstance()
+    override fun provideFragment() = EnterPasswordForPhraseFragment.getRestorationInstance()
     override val tag = EnterPasswordForPhraseFragment.TAG
 
     private val badName = "loopr$" // bad character

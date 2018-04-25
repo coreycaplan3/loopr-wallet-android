@@ -58,10 +58,7 @@ class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrde
         else -> throw IllegalArgumentException("Invalid viewType, found $viewType")
     }
 
-    override fun getDataOffset(position: Int) = when (position) {
-        0 -> null
-        else -> position - 1
-    }
+    override fun getDataOffset() = -1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrderFill?) {
         (holder as? OrderSummaryViewHolder)?.bind(orderSummary)
