@@ -1,85 +1,40 @@
 package org.loopring.looprwallet.core.networking.eth
 
-import org.loopring.looprwallet.core.utilities.NetworkUtility
+import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
-import org.web3j.crypto.Credentials
-import org.web3j.protocol.core.methods.response.TransactionReceipt
+import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
+import org.loopring.looprwallet.core.utilities.NetworkUtility
 import java.io.IOException
-import java.math.BigDecimal
+import java.math.BigInteger
 
 /**
- * Created by Corey Caplan on 3/10/18.
+ * Created by Corey on 4/24/2018
  *
- * Project: loopr-wallet-android
+ * Project: loopr-android
  *
  * Purpose of Class:
  *
  */
-class EthereumServiceMockImpl : EthereumService {
+internal class EthereumServiceMockImpl : EthereumService {
 
-    private val mockTransactionReceipt = TransactionReceipt(
-            "0xabcdef",
-            "1",
-            "0x123456789",
-            "5000000",
-            "10000",
-            "10000",
-            null,
-            null,
-            null,
-            "0x1234567812345678123456781234567812345678",
-            "0x1234567812345678123456781234567812345678",
-            listOf(),
-            null
-    )
+    companion object {
 
-    override fun sendEther(
-            recipient: String,
-            amount: BigDecimal,
-            gasLimit: BigDecimal,
-            gasPrice: BigDecimal
-    ) = async {
+        /**
+         * 5 million
+         */
+        const val ETHEREUM_BLOCK_NUMBER = "5000000"
 
+    }
+
+    override fun getBlockNumber(): Deferred<EthereumBlockNumber> = async {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
-        return@async when {
-            NetworkUtility.isNetworkAvailable() -> mockTransactionReceipt
-            else -> throw IOException("No connection!")
+        if (NetworkUtility.isNetworkAvailable()) {
+            return@async EthereumBlockNumber(BigInteger(ETHEREUM_BLOCK_NUMBER))
+        } else {
+            throw IOException("No connection")
         }
     }
 
-    override fun sendToken(
-            contractAddress: String,
-            recipient: String,
-            amount: BigDecimal,
-            gasLimit: BigDecimal,
-            gasPrice: BigDecimal
-    ) = async {
-
-        delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
-
-        return@async when {
-            NetworkUtility.isNetworkAvailable() -> mockTransactionReceipt
-            else -> throw IOException("No connection!")
-        }
-    }
-
-    override fun approveToken(
-            contractAddress: String,
-            credentials: Credentials,
-            spender: String,
-            amount: BigDecimal,
-            gasLimit: BigDecimal,
-            gasPrice: BigDecimal
-    ) = async {
-
-        delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
-
-        return@async when {
-            NetworkUtility.isNetworkAvailable() -> mockTransactionReceipt
-            else -> throw IOException("No connection!")
-        }
-
-    }
 }

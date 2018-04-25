@@ -1,9 +1,16 @@
 package org.loopring.looprwallet.hometransfers.adapters
 
+import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.view_holder_view_transfers.*
+import org.loopring.looprwallet.core.extensions.formatAsCurrency
+import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.hometransfers.dagger.homeTransfersLooprComponent
+import javax.inject.Inject
 
 /**
  * Created by Corey Caplan on 4/20/18.
@@ -18,8 +25,29 @@ class ViewTransfersViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemVie
     override val containerView: View?
         get() = itemView
 
-    inline fun bind(item: LooprTransfer, onTransferClick: (LooprTransfer) -> Unit) {
-        TODO("You know what to do...")
+    @Inject
+    lateinit var currencySettings: CurrencySettings
+
+    init {
+        homeTransfersLooprComponent.inject(this)
+    }
+
+    @SuppressLint("SetTextI18n")
+    inline fun bind(item: LooprTransfer, crossinline onTransferClick: (LooprTransfer) -> Unit) {
+        itemView?.setOnClickListener { onTransferClick(item) }
+
+        if (item.isSend) {
+            viewTransfersSendImage.visibility = View.VISIBLE
+            viewTransfersReceiveImage.visibility = View.GONE
+        } else {
+            viewTransfersReceiveImage.visibility = View.VISIBLE
+            viewTransfersSendImage.visibility = View.GONE
+        }
+
+        viewTransfersTokenNameLabel.text = item.token.name
+        viewTransfersContactLabel.text = item.contactAddress
+        viewTransfersQuantityLabel.text = item.numberOfTokens.formatAsToken(currencySettings, item.token)
+        viewTransfersPriceLabel.text = item.usdValue.formatAsCurrency(currencySettings)
     }
 
 }

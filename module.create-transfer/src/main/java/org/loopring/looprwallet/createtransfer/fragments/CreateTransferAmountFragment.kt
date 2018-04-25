@@ -169,6 +169,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         createTransferLooprComponent.inject(this)
     }
 
+    // TODO fix this file with price changes
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

@@ -97,12 +97,6 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
 
     lateinit var bottomNavigationPresenter: BottomNavigationPresenter
 
-    private val ethereumBlockNumberViewModel by lazy {
-        // TODO listen for blocks
-        ViewModelProviders.of(this)
-                .get(EthereumBlockNumberViewModel::class.java)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -123,7 +117,6 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
                 bottomNavigationFragmentStackHistory = bottomNavigationFragmentStackHistory,
                 savedInstanceState = savedInstanceState
         )
-
     }
 
     override fun onSecurityConfirmed(parameter: Int) {

@@ -11,6 +11,7 @@ import org.loopring.looprwallet.core.models.markets.MarketsFilter
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.sync.SyncData.Companion.SYNC_TYPE_MARKETS
+import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService
 import org.loopring.looprwallet.core.repositories.loopr.LooprMarketsRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.util.*
@@ -27,6 +28,8 @@ class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<Tradin
 
     override val repository = LooprMarketsRepository()
 
+    val marketsService = LooprMarketsService.getInstance()
+
     fun getHomeMarkets(
             owner: LifecycleOwner,
             filter: MarketsFilter,
@@ -40,7 +43,7 @@ class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<Tradin
     }
 
     override fun getDataFromNetwork(parameter: MarketsFilter): Deferred<OrderedRealmCollection<TradingPair>> {
-        TODO("not implemented")
+        return marketsService.getMarkets()
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<TradingPair>) {

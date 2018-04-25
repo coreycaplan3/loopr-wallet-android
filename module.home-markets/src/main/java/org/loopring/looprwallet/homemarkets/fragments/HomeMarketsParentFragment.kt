@@ -22,6 +22,7 @@ import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.Bottom
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
 import org.loopring.looprwallet.homemarkets.R
 import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 
@@ -62,7 +63,9 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
         floatingActionButton.setImageResource(R.drawable.ic_card_giftcard_white_24dp)
-        floatingActionButton.setOnClickListener { TODO("ADD ROUTE TO WRAP/UNWRAP ETH") }
+        floatingActionButton.setOnClickListener {
+            TODO("ADD ROUTE TO WRAP/UNWRAP ETH")
+        }
     }
 
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {
@@ -78,7 +81,7 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
             when(type) {
                 BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
-                     TODO("Create Transfer")
+                     CreateTransferActivity.route(this, value)
                 }
                 BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
                     val tradingPair = TradingPair.createFromMarket(value)

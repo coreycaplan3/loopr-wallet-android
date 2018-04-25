@@ -17,6 +17,8 @@
     </array>
 
     <string name="filter_order_open">ORDER_OPENED</string>
+    <string name="filter_order_open_new">ORDER_NEW</string>
+    <string name="filter_order_open_partial">ORDER_PARTIAL</string>
     <string name="filter_order_filled">ORDER_FINISHED</string>
     <string name="filter_order_expired">ORDER_CUTOFF</string>
     <string name="filter_order_cancelled">ORDER_CANCEL</string>

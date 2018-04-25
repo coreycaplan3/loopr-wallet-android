@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
 import io.realm.RealmList
+import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
@@ -8,6 +9,7 @@ import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.loopring.looprwallet.core.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import java.io.IOException
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -22,25 +24,68 @@ import java.math.BigInteger
  */
 class EthplorerServiceMockImpl : EthplorerService {
 
-    override fun getAddressInfo(address: String) = async {
+    private val eth = LooprToken.ETH.apply {
+        setTokenPriceInfo(this)
+    }
+
+    private val lrc = LooprToken.LRC.apply {
+        setTokenPriceInfo(this)
+    }
+
+    private val appc = LooprToken.APPC.apply {
+        setTokenPriceInfo(this)
+    }
+
+    private val req = LooprToken.REQ.apply {
+        setTokenPriceInfo(this)
+    }
+
+    // The current block number when mocking is 5m
+
+    private val transfer1 = LooprTransfer(
+            transactionHash = "abcdef1234",
+            blockNumber = BigInteger("4999998"),
+            isSend = false,
+            contactAddress = "0x0123456789abcdef0123456789abcdef01234567",
+            numberOfTokens = BigInteger("20"),
+            usdValue = BigInteger("85493"),
+            transactionFee = BigInteger("0.00424"),
+            transactionFeeUsdValue = BigInteger("24"),
+            token = lrc
+    )
+
+    private val transfer2 = LooprTransfer(
+            transactionHash = "abcdef4321",
+            blockNumber = BigInteger("49999"),
+            isSend = false,
+            contactAddress = "0x0123456789abcdef0123456789abcdef01234567",
+            numberOfTokens = BigInteger("30"),
+            usdValue = BigInteger("63298"),
+            transactionFee = BigInteger("0.00424"),
+            transactionFeeUsdValue = BigInteger("20"),
+            token = appc
+    )
+
+    private val transfer3 = LooprTransfer(
+            transactionHash = "abcdef4213",
+            blockNumber = BigInteger("4999988"),
+            isSend = true,
+            contactAddress = "0x0123456789abcdef0123456789abcdef01234567",
+            numberOfTokens = BigInteger("5"),
+            usdValue = BigInteger("48726"),
+            transactionFee = BigInteger("0.00424"),
+            transactionFeeUsdValue = BigInteger("25"),
+            token = req
+    )
+
+    override fun getAddressInfo(address: String): Deferred<RealmList<LooprToken>> = async {
         delay(MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            val eth = LooprToken.ETH
             setTokenBalanceInfo(address, eth)
-            setTokenPriceInfo(eth)
-
-            val lrc = LooprToken.LRC
             setTokenBalanceInfo(address, lrc)
-            setTokenPriceInfo(lrc)
-
-            val appc = LooprToken.APPC
             setTokenBalanceInfo(address, appc)
-            setTokenPriceInfo(appc)
-
-            val req = LooprToken.REQ
             setTokenBalanceInfo(address, req)
-            setTokenPriceInfo(req)
 
             return@async RealmList<LooprToken>(eth, lrc, appc, req)
         } else {
@@ -48,7 +93,7 @@ class EthplorerServiceMockImpl : EthplorerService {
         }
     }
 
-    override fun getTokenInfo(contractAddress: String) = async {
+    override fun getTokenInfo(contractAddress: String): Deferred<LooprToken> = async {
         delay(MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -59,6 +104,18 @@ class EthplorerServiceMockImpl : EthplorerService {
             throw IOException("No connection!")
         }
     }
+
+    override fun getAddressTransferHistory(address: String): Deferred<RealmList<LooprTransfer>> = async {
+        delay(MOCK_SERVICE_CALL_DURATION)
+
+        if (NetworkUtility.isNetworkAvailable()) {
+            return@async RealmList(transfer1, transfer2, transfer3)
+        } else {
+            throw IOException("No connection!")
+        }
+    }
+
+    // MARK - Private Methods
 
     private fun setTokenPriceInfo(token: CryptoToken) {
         token.priceInUsd = when (token.identifier) {

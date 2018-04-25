@@ -8,13 +8,13 @@
     android:padding="@dimen/standard_padding">
 
     <FrameLayout
-        android:id="@+id/imageContainer"
+        android:id="@+id/viewTransfersImageContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true">
 
         <ImageView
-            android:id="@+id/receiveImage"
+            android:id="@+id/viewTransfersReceiveImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/border"
@@ -23,7 +23,7 @@
             android:tint="@color/material_green" />
 
         <ImageView
-            android:id="@+id/sendImage"
+            android:id="@+id/viewTransfersSendImage"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/border"
@@ -42,9 +42,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/horizontal_margin"
         android:layout_marginStart="@dimen/horizontal_margin"
-        android:layout_toEndOf="@id/imageContainer"
+        android:layout_toEndOf="@id/viewTransfersImageContainer"
         android:layout_toLeftOf="@id/viewTransfersSecondaryContainer"
-        android:layout_toRightOf="@id/imageContainer"
+        android:layout_toRightOf="@id/viewTransfersImageContainer"
         android:layout_toStartOf="@id/viewTransfersSecondaryContainer"
         android:textSize="@dimen/list_primary_text_size"
         tools:text="@string/default_received_token" />
@@ -58,9 +58,9 @@
         android:layout_marginLeft="@dimen/horizontal_margin"
         android:layout_marginStart="@dimen/horizontal_margin"
         android:layout_marginTop="@dimen/vertical_margin_small"
-        android:layout_toEndOf="@id/imageContainer"
+        android:layout_toEndOf="@id/viewTransfersImageContainer"
         android:layout_toLeftOf="@id/viewTransfersSecondaryContainer"
-        android:layout_toRightOf="@id/imageContainer"
+        android:layout_toRightOf="@id/viewTransfersImageContainer"
         android:layout_toStartOf="@id/viewTransfersSecondaryContainer"
         android:ellipsize="middle"
         android:singleLine="true"
@@ -88,7 +88,7 @@
             tools:text="@string/default_lrc_quantity" />
 
         <TextView
-            android:id="@+id/priceLabel"
+            android:id="@+id/viewTransfersPriceLabel"
             style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

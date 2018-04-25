@@ -17,7 +17,8 @@ import io.realm.RealmObject
  * @property highPrice The 24h high price
  * @property lowPrice The 24h low price
  * @property amountOfPrimary The amount of [primaryTicker] that was traded in the past 24h
- * @property volumeOfSecondary The volume of [secondaryTicker] that was traded in the past 24h.
+ * @property volumeOfSecondary The volume of [primaryTicker] in relationship with [secondaryTicker]
+ * that was traded in the past 24h. IE 10,000 LRC was traded which equated to 100 WETH (secondary)
  */
 open class TradingPair(
         var primaryTicker: String = "",

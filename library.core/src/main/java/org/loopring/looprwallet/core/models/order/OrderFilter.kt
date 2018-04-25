@@ -20,6 +20,8 @@ data class OrderFilter(
 
     companion object {
         val FILTER_OPEN_ALL: String = str(R.string.filter_order_open)
+        val FILTER_OPEN_NEW: String = str(R.string.filter_order_open_new)
+        val FILTER_OPEN_PARTIAL: String = str(R.string.filter_order_open_partial)
         val FILTER_FILLED: String = str(R.string.filter_order_filled)
         val FILTER_CANCELLED: String = str(R.string.filter_order_cancelled)
         val FILTER_EXPIRED: String = str(R.string.filter_order_expired)

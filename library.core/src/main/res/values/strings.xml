@@ -299,4 +299,7 @@
     <string name="unlock_token">Unlock Token</string>
     <string name="favorite">Favorite</string>
     <string name="scan_qr_code">Scan QR Code</string>
+    <string name="order_status">Order Status</string>
+    <string name="_new">New</string>
+    <string name="partial">Partial</string>
 </resources>

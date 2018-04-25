@@ -3,12 +3,12 @@ package org.loopring.looprwallet.homeorders.viewmodels
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
-import io.realm.RealmModel
-import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.networking.loopr.LooprOrderService
 import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.util.*
@@ -21,31 +21,33 @@ import java.util.*
  * Purpose of Class:
  *
  */
-class GeneralOrderViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<RealmModel>, OrderFilter>() {
+class GeneralOrdersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<LooprOrder>, OrderFilter>() {
 
     // 5 seconds in ms
     override val waitTime = 5 * 1000L
 
     override val repository = LooprOrderRepository(currentWallet)
 
+    val looprOrderService = LooprOrderService.getInstance()
+
     /**
      * Gets the user's orders based on the provided [filter].
      */
-    fun getOrders(owner: LifecycleOwner, filter: OrderFilter, onChange: (OrderedRealmCollection<RealmModel>) -> Unit) {
+    fun getOrders(owner: LifecycleOwner, filter: OrderFilter, onChange: (OrderedRealmCollection<LooprOrder>) -> Unit) {
         initializeData(owner, filter, onChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: OrderFilter): LiveData<OrderedRealmCollection<RealmModel>> {
+    override fun getLiveDataFromRepository(parameter: OrderFilter): LiveData<OrderedRealmCollection<LooprOrder>> {
         return repository.getOrders(parameter)
     }
 
     override fun isRefreshNecessary(parameter: OrderFilter) = defaultIsRefreshNecessary(parameter.address)
 
-    override fun getDataFromNetwork(parameter: OrderFilter): Deferred<OrderedRealmCollection<RealmModel>> {
-        TODO("not implemented")
+    override fun getDataFromNetwork(parameter: OrderFilter): Deferred<OrderedRealmCollection<LooprOrder>> {
+        return looprOrderService.getOrdersByAddress(parameter.address)
     }
 
-    override fun addNetworkDataToRepository(data: OrderedRealmCollection<RealmModel>) {
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprOrder>) {
         repository.addList(data)
     }
 

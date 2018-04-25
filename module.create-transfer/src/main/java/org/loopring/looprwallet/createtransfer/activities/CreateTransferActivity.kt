@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.createtransfer.activities
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -23,9 +22,15 @@ class CreateTransferActivity : BaseActivity() {
 
         private const val KEY_DEFAULT_ADDRESS = "_DEFAULT_ADDRESS"
 
-        fun route(fragment: Fragment, address: String? = null) {
+        /**
+         * Routes the current activity to the [CreateTransferActivity].
+         *
+         * @param fragment The current fragment
+         * @param defaultAddress The default address to set the send edit text field to. Optional.
+         */
+        fun route(fragment: Fragment, defaultAddress: String? = null) {
             val intent = Intent(CoreLooprWalletApp.application, CreateTransferActivity::class.java)
-                    .putExtra(KEY_DEFAULT_ADDRESS, address)
+                    .putExtra(KEY_DEFAULT_ADDRESS, defaultAddress)
 
             fragment.startActivity(intent)
         }
@@ -38,13 +43,15 @@ class CreateTransferActivity : BaseActivity() {
     override val isSecureActivity: Boolean
         get() = true
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO DEFAULT ADDRESS
         if (savedInstanceState == null) {
-            pushFragmentTransaction(SelectTransferContactFragment(), SelectTransferContactFragment.TAG)
+            val address = intent.getStringExtra(KEY_DEFAULT_ADDRESS)
+            pushFragmentTransaction(
+                    SelectTransferContactFragment.getInstance(address),
+                    SelectTransferContactFragment.TAG
+            )
         }
     }
 

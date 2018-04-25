@@ -3,12 +3,12 @@ package org.loopring.looprwallet.order.viewmodels
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
-import io.realm.RealmModel
-import io.realm.RealmResults
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.models.order.LooprOrderFill
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.sync.SyncData.Companion.SYNC_TYPE_ORDER_FILLS
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.networking.loopr.LooprOrderService
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.order.repositories.OrderFillsRepository
 import java.util.*
@@ -21,29 +21,31 @@ import java.util.*
  * Purpose of Class: An [OfflineFirstViewModel] that retrieves the details of an order (order fills)
  * by using the order's unique hash as the parameter.
  */
-class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<RealmModel>, String>() {
+class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<LooprOrderFill>, String>() {
 
     override val repository = OrderFillsRepository(currentWallet)
 
+    val looprOrderService = LooprOrderService.getInstance()
+
     fun getOrderFills(
             owner: LifecycleOwner,
-            orderId: String,
-            onChange: (OrderedRealmCollection<RealmModel>) -> Unit
+            orderHash: String,
+            onChange: (OrderedRealmCollection<LooprOrderFill>) -> Unit
     ) {
-        initializeData(owner, orderId, onChange)
+        initializeData(owner, orderHash, onChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: String): LiveData<OrderedRealmCollection<RealmModel>> {
+    override fun getLiveDataFromRepository(parameter: String): LiveData<OrderedRealmCollection<LooprOrderFill>> {
         return repository.getOrderDepth(parameter)
     }
 
     override fun isRefreshNecessary(parameter: String) = defaultIsRefreshNecessary(parameter)
 
-    override fun getDataFromNetwork(parameter: String): Deferred<OrderedRealmCollection<RealmModel>> {
-        TODO("GET DATA FROM NETWORK")
+    override fun getDataFromNetwork(parameter: String): Deferred<OrderedRealmCollection<LooprOrderFill>> {
+        return looprOrderService.getOrderFillsByOrderHash(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: OrderedRealmCollection<RealmModel>) {
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprOrderFill>) {
         repository.addList(data)
     }
 

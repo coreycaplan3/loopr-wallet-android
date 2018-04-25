@@ -34,7 +34,7 @@ class LooprMarketsRepository : BaseRealmRepository() {
     }
 
     fun getMarkets(filter: MarketsFilter): LiveData<OrderedRealmCollection<TradingPair>> {
-        // TODO
+        // TODO apply filter
         return uiRealm.where<TradingPair>()
                 .sort(TradingPair::primaryTicker)
                 .findAll()

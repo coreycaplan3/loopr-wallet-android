@@ -2,10 +2,11 @@ package org.loopring.looprwallet.order.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import io.realm.RealmModel
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.inflate
+import org.loopring.looprwallet.core.models.order.LooprOrder
+import org.loopring.looprwallet.core.models.order.LooprOrderFill
 import org.loopring.looprwallet.order.R
 
 /**
@@ -17,7 +18,7 @@ import org.loopring.looprwallet.order.R
  *
  *
  */
-class OrderDetailsAdapter(private val orderSummary: RealmModel) : BaseRealmAdapter<RealmModel>() {
+class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrderFill>() {
 
     companion object {
         /**
@@ -26,12 +27,14 @@ class OrderDetailsAdapter(private val orderSummary: RealmModel) : BaseRealmAdapt
         const val TYPE_SUMMARY = 3
     }
 
-    override val totalItems: Int?
-        get() = TODO("ADD ONCE ORDERS OBJECT IS AVAILABLE")
+    var orderSummary: LooprOrder = orderSummary
+        set(value) {
+            field = value
+            notifyItemChanged(0)
+        }
 
-    init {
-        extraDataToPositionList = listOf(orderSummary to 0)
-    }
+    override val totalItems: Int?
+        get() = data?.size ?: 3 // TODO
 
     override fun getItemViewType(position: Int): Int {
         val viewType = super.getItemViewType(position)
@@ -60,14 +63,15 @@ class OrderDetailsAdapter(private val orderSummary: RealmModel) : BaseRealmAdapt
         else -> position - 1
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: RealmModel?) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrderFill?) {
         (holder as? OrderSummaryViewHolder)?.bind(orderSummary)
 
         item?.guard {} ?: return
-        (holder as? OrderDetailTradeViewHolder)?.bind(item)
+        (holder as? OrderDetailTradeViewHolder)?.bind(index, item)
     }
 
     override fun getItemCount(): Int {
-        return 1 + (data?.let { getItemCountForOnlyData(it) } ?: 0)
+        val dataCount = data?.let { getItemCountForOnlyData(it) } ?: 0
+        return 1 + dataCount
     }
 }

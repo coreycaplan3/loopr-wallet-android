@@ -8,6 +8,7 @@ import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.markets.TradingPairTrend
 import org.loopring.looprwallet.core.models.sync.SyncData
+import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.tradedetails.repositories.TradingPairTrendRepository
 
@@ -23,6 +24,8 @@ class TradingPairTrendViewModel : OfflineFirstViewModel<OrderedRealmCollection<T
 
     override val repository = TradingPairTrendRepository()
 
+    private val service = LooprMarketsService.getInstance()
+
     fun getTradingPairTrends(owner: LifecycleOwner, filter: TradingPairFilter, onChange: (OrderedRealmCollection<TradingPairTrend>) -> Unit) {
         initializeData(owner, filter, onChange)
     }
@@ -32,7 +35,7 @@ class TradingPairTrendViewModel : OfflineFirstViewModel<OrderedRealmCollection<T
     }
 
     override fun getDataFromNetwork(parameter: TradingPairFilter): Deferred<OrderedRealmCollection<TradingPairTrend>> {
-        TODO("not implemented")
+        return service.getMarketTrends(parameter.market)
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<TradingPairTrend>) {

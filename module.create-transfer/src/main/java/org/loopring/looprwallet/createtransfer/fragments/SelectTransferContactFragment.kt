@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
+import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_select_address.*
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
@@ -36,15 +37,19 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         val TAG: String = CreateTransferAmountFragment::class.java.simpleName
 
         private const val KEY_SELECTED_CONTACT = "_SELECTED_CONTACT"
+
+        private const val KEY_DEFAULT_ADDRESS = "_DEFAULT_ADDRESS"
+
+        fun getInstance(defaultAddress: String?) = SelectTransferContactFragment().apply {
+            arguments = bundleOf(KEY_DEFAULT_ADDRESS to defaultAddress)
+        }
+
     }
 
     override val layoutResource: Int
         get() = R.layout.fragment_select_address
 
     var selectedContactAddress: String? = null
-
-    var searchQuery: String? = null
-        private set
 
     lateinit var searchItem: MenuItem
 
@@ -66,7 +71,11 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
                 listener = this
         )
 
-        selectedContactAddress = savedInstanceState?.getString(KEY_SELECTED_CONTACT)
+        if (savedInstanceState == null) {
+            selectedContactAddress = arguments?.getString(KEY_DEFAULT_ADDRESS)
+        } else {
+            selectedContactAddress = savedInstanceState.getString(KEY_SELECTED_CONTACT)
+        }
 
         validatorList = listOf(PublicKeyValidator(recipientAddressInputLayout, this::onFormChanged))
 

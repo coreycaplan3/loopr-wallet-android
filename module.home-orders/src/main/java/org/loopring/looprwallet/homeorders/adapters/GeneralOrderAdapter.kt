@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import io.realm.RealmModel
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.inflate
+import org.loopring.looprwallet.core.extensions.isSameDay
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
+import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_CANCELLED
 import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_DATES
@@ -46,7 +47,7 @@ class GeneralOrderAdapter(
         activity: BaseActivity,
         listener: OnGeneralOrderFilterChangeListener,
         cancelAllClickListener: (() -> Unit)? = null
-) : BaseRealmAdapter<RealmModel>(),
+) : BaseRealmAdapter<LooprOrder>(),
         OnGeneralOrderFilterChangeListener {
 
     companion object {
@@ -122,7 +123,7 @@ class GeneralOrderAdapter(
 
     override fun getDataOffset(position: Int) = position - 1
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: RealmModel?) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrder?) {
         (holder as? EmptyGeneralOrderViewHolder)?.let {
             it.bind()
             return
@@ -138,6 +139,10 @@ class GeneralOrderAdapter(
             return
         }
 
+        // General Order Binding
+
+        item?.guard { } ?: return
+
         val previousIndex = index - 1
         val previousItemIndex = index - 2 // There's an offset of 1 for the filter
 
@@ -148,17 +153,15 @@ class GeneralOrderAdapter(
             previousItemIndex >= 0 -> {
                 val data = data
                 // If the item is NOT the SAME day as the previous one
-                TODO("IMPLEMENT ME")
-//                data != null && !data[previousItemIndex].lastUpdated.isSameDay(item.lastUpdated)
+                data != null && !data[previousItemIndex].orderDate.isSameDay(item.orderDate)
             }
             else -> false
         }
 
-        item?.guard { } ?: return
         (holder as? GeneralOrderViewHolder)?.bind(item, showDateHeader) {
             val activity = this.activity ?: return@bind
 
-            val fragment = OrderDetailsFragment.getInstance("TODO") //TODO
+            val fragment = OrderDetailsFragment.getInstance(it.orderHash)
             val tag = OrderDetailsFragment.TAG
             FragmentTransactionController(R.id.activityContainer, fragment, tag).apply {
                 slideUpAndDownAnimation()

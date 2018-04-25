@@ -105,10 +105,10 @@ class TradingPairDetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupOfflineFirstStateAndErrorObserver(tradingPairDetailsViewModel, tradingPairDetailsSwipeRefresh)
-        tradingPairDetailsViewModel.getTradingPair(this, filter, ::onDataChange)
+        tradingPairDetailsViewModel.getTradingPair(this, filter, ::bindTradingPair)
 
         setupOfflineFirstStateAndErrorObserver(tradingPairTrendViewModel, tradingPairDetailsSwipeRefresh)
-        tradingPairTrendViewModel.getTradingPairTrends(this, filter, ::onTrendChange)
+        tradingPairTrendViewModel.getTradingPairTrends(this, filter, ::bindTrendChange)
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
@@ -161,12 +161,11 @@ class TradingPairDetailsFragment : BaseFragment() {
     // MARK - Private Methods
 
     @SuppressLint("SetTextI18n")
-    private fun onDataChange(tradingPair: TradingPair) {
+    private fun bindTradingPair(tradingPair: TradingPair) {
         this.tradingPair = tradingPair
 
-        currencySettings.getCurrencyFormatter().apply {
-            // TODO check if these numbers are formatted as native currency or tokens
-        }
+        // TODO check if these numbers are formatted as native currency or tokens
+        currencySettings.getCurrencyFormatter()
 
         currencySettings.getNumberFormatter().apply {
             val secondaryTicker = tradingPair.secondaryTicker
@@ -185,7 +184,7 @@ class TradingPairDetailsFragment : BaseFragment() {
         }
     }
 
-    private fun onTrendChange(trends: OrderedRealmCollection<TradingPairTrend>) {
+    private fun bindTrendChange(trends: OrderedRealmCollection<TradingPairTrend>) {
         if (tradingPairDetailsChartProgress.isVisible) {
             tradingPairDetailsChartProgress.visibility = View.GONE
             tradingPairDetailsChart.visibility = View.VISIBLE

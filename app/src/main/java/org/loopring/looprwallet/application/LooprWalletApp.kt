@@ -11,6 +11,15 @@ import org.loopring.looprwallet.createtransfer.dagger.CreateTransferLooprCompone
 import org.loopring.looprwallet.homemywallet.dagger.DaggerHomeMyWalletLooprComponent
 import org.loopring.looprwallet.homemywallet.dagger.HomeMyWalletLooprComponent
 import org.loopring.looprwallet.homemywallet.dagger.HomeMyWalletLooprComponentProvider
+import org.loopring.looprwallet.homeorders.dagger.DaggerHomeOrdersLooprComponent
+import org.loopring.looprwallet.homeorders.dagger.HomeOrdersLooprComponent
+import org.loopring.looprwallet.homeorders.dagger.HomeOrdersLooprComponentProvider
+import org.loopring.looprwallet.hometransfers.dagger.DaggerHomeTransfersLooprComponent
+import org.loopring.looprwallet.hometransfers.dagger.HomeTransfersLooprComponent
+import org.loopring.looprwallet.hometransfers.dagger.HomeTransfersLooprComponentProvider
+import org.loopring.looprwallet.order.dagger.DaggerOrderDetailsLooprComponent
+import org.loopring.looprwallet.order.dagger.OrderDetailsLooprComponent
+import org.loopring.looprwallet.order.dagger.OrderDetailsLooprComponentProvider
 import org.loopring.looprwallet.tradedetails.dagger.DaggerTradeDetailsLooprComponent
 import org.loopring.looprwallet.tradedetails.dagger.TradeDetailsLooprComponent
 import org.loopring.looprwallet.tradedetails.dagger.TradeDetailsLooprComponentProvider
@@ -33,9 +42,10 @@ import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponentProvider
  *
  */
 open class LooprWalletApp : CoreLooprWalletApp(), CreateTransferLooprComponentProvider,
-        HomeMyWalletLooprComponentProvider, TradeDetailsLooprComponentProvider,
-        TransferDetailsLooprComponentProvider, ViewBalancesLooprComponentProvider,
-        WalletLooprComponentProvider {
+        HomeMyWalletLooprComponentProvider, HomeOrdersLooprComponentProvider,
+        HomeTransfersLooprComponentProvider, OrderDetailsLooprComponentProvider,
+        TradeDetailsLooprComponentProvider, TransferDetailsLooprComponentProvider,
+        ViewBalancesLooprComponentProvider, WalletLooprComponentProvider {
 
     companion object {
 
@@ -45,6 +55,18 @@ open class LooprWalletApp : CoreLooprWalletApp(), CreateTransferLooprComponentPr
 
         val homeMyWalletLooprComponent: HomeMyWalletLooprComponent by lazy {
             DaggerHomeMyWalletLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
+        }
+
+        val homeOrdersLooprComponent: HomeOrdersLooprComponent by lazy {
+            DaggerHomeOrdersLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
+        }
+
+        val homeTransfersLooprComponent: HomeTransfersLooprComponent by lazy {
+            DaggerHomeTransfersLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
+        }
+
+        val orderDetailsLooprComponent: OrderDetailsLooprComponent by lazy {
+            DaggerOrderDetailsLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
         }
 
         val tradeDetailsLooprComponent: TradeDetailsLooprComponent by lazy {
@@ -65,9 +87,15 @@ open class LooprWalletApp : CoreLooprWalletApp(), CreateTransferLooprComponentPr
 
     }
 
+    override fun provideCreateTransferLooprComponent() = createTransferLooprComponent
+
     override fun provideHomeMyWalletLooprComponent() = homeMyWalletLooprComponent
 
-    override fun provideCreateTransferLooprComponent() = createTransferLooprComponent
+    override fun provideHomeOrdersLooprComponent() = homeOrdersLooprComponent
+
+    override fun provideHomeTransfersLooprComponent() = homeTransfersLooprComponent
+
+    override fun provideOrderDetailsLooprComponent() = orderDetailsLooprComponent
 
     override fun provideTradeDetailsLooprComponent() = tradeDetailsLooprComponent
 

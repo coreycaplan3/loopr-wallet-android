@@ -14,6 +14,7 @@ import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logi
+import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.models.error.ErrorTypes
 import org.loopring.looprwallet.core.models.error.LooprError
@@ -202,11 +203,13 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     @Synchronized
     fun refresh() {
         val parameter = parameter
-        if (parameter == null) {
-            loge("Parameter is null somehow...", IllegalStateException())
-            return
+        when (parameter) {
+            null -> {
+                logw("Attempted to refresh this ViewModel before it was initialized")
+                return
+            }
+            else -> refreshInternal(parameter)
         }
-        refreshInternal(parameter)
     }
 
     // MARK - Protected Methods

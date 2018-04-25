@@ -57,8 +57,12 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
 
         val adapter = ViewTransfersAdapter(this)
         setupOfflineFirstStateAndErrorObserver(viewAllTransfersViewModel, viewTransfersSwipeRefresh)
-        viewAllTransfersViewModel?.getAllTransfers(this) {
-            setupOfflineFirstDataObserverForAdapter(viewAllTransfersViewModel, adapter, it)
+
+        val address = walletClient.getCurrentWallet()?.credentials?.address
+        if (address != null) {
+            viewAllTransfersViewModel?.getAllTransfers(this, address) {
+                setupOfflineFirstDataObserverForAdapter(viewAllTransfersViewModel, adapter, it)
+            }
         }
 
         viewTransfersRecyclerView.layoutManager = LinearLayoutManager(view.context)

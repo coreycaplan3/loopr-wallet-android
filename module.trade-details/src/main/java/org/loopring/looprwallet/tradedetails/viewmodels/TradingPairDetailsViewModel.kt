@@ -6,6 +6,7 @@ import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
+import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.tradedetails.repositories.TradingPairDetailsRepository
 import java.util.*
@@ -34,6 +35,8 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
 
     override val repository = TradingPairDetailsRepository()
 
+    private val service = LooprMarketsService.getInstance()
+
     /**
      * Gets the trading pair based on the provided [filter].
      */
@@ -46,7 +49,7 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
     }
 
     override fun getDataFromNetwork(parameter: TradingPairFilter): Deferred<TradingPair> {
-        TODO("not implemented")
+        return service.getMarketDetails(parameter.market)
     }
 
     override fun addNetworkDataToRepository(data: TradingPair) {

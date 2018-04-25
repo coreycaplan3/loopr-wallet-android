@@ -21,9 +21,9 @@ class TradingPairOrdersAdapter(data: OrderedRealmCollection<LooprOrder>?)
     }
 
     override fun onBindViewHolder(holderTradingPair: TradingPairOrdersViewHolder, position: Int) {
-        holderTradingPair.onBind(data!![position], cancelListener = {
+        holderTradingPair.onBind(data!![position]) {
             // TODO
-        })
+        }
     }
 
 

@@ -10,11 +10,11 @@ import java.math.BigDecimal
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class: An implementation of [EthereumService] that communicates with the
+ * Purpose of Class: An implementation of [EthService] that communicates with the
  * Ethereum network. The type of network (testnet vs. mainnet) with which it interacts depends on
  * the build flavor. This can be checked easily by examining the value passed in the *BuildConfig*.
  */
-class EthereumServiceProdImpl(private val credentials: Credentials) : EthereumService {
+internal class EthServiceProdImpl(private val credentials: Credentials) : EthService {
 
     override fun sendEther(
             recipient: String,

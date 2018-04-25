@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <!-- Filled Amount -->
 
@@ -46,7 +46,7 @@
         android:layout_marginTop="@dimen/vertical_margin"
         android:layout_toLeftOf="@id/orderDetailsFilledAmountLabel"
         android:layout_toStartOf="@id/orderDetailsFilledAmountLabel"
-        android:text="@string/filled_amount" />
+        android:text="@string/order_status" />
 
     <TextView
         android:id="@+id/orderDetailsStatusLabel"
@@ -58,7 +58,7 @@
         android:layout_below="@id/orderDetailsFilledAmountDivider"
         android:layout_marginTop="@dimen/vertical_margin"
         android:textColor="@color/amber_500"
-        tools:text="Pending" />
+        tools:text="Partial" />
 
     <include
         android:id="@+id/orderDetailsStatusDivider"

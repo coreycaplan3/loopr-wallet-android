@@ -14,7 +14,7 @@ import org.loopring.looprwallet.core.models.order.LooprOrder
  */
 class TradingPairOrdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun onBind(order: LooprOrder, cancelListener: (LooprOrder) -> Unit) {
+    inline fun onBind(order: LooprOrder, crossinline cancelListener: (LooprOrder) -> Unit) {
         // TODO show cancel button if the order is open; hide otherwise
     }
 

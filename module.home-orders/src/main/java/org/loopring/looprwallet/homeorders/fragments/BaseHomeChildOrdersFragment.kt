@@ -13,7 +13,7 @@ import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchView
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.homeorders.adapters.GeneralOrderAdapter
 import org.loopring.looprwallet.homeorders.adapters.OnGeneralOrderFilterChangeListener
-import org.loopring.looprwallet.homeorders.viewmodels.GeneralOrderViewModel
+import org.loopring.looprwallet.homeorders.viewmodels.GeneralOrdersViewModel
 
 /**
  * Created by Corey Caplan on 4/7/18.
@@ -34,7 +34,7 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     lateinit var adapter: GeneralOrderAdapter
         private set
 
-    private var generalOrderViewModel: GeneralOrderViewModel? = null
+    private var generalOrdersViewModel: GeneralOrdersViewModel? = null
         get() {
             if (field != null) {
                 return field
@@ -61,7 +61,7 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     abstract fun provideAdapter(savedInstanceState: Bundle?): GeneralOrderAdapter
 
     override fun onRefresh() {
-        generalOrderViewModel?.refresh()
+        generalOrdersViewModel?.refresh()
     }
 
     final override fun onBottomNavigationReselected() {
@@ -112,9 +112,9 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
         val orderFilter = OrderFilter(address, ticker, adapter.currentDateFilter, adapter.currentOrderStatusFilter)
 
-        generalOrderViewModel?.getOrders(this, orderFilter) {
+        generalOrdersViewModel?.getOrders(this, orderFilter) {
             adapter.updateData(it)
-            generalOrderViewModel?.removeDataObserver(this)
+            generalOrdersViewModel?.removeDataObserver(this)
         }
     }
 

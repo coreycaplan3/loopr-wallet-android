@@ -7,6 +7,7 @@ import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
 import org.loopring.looprwallet.core.repositories.loopr.LooprTransferRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.util.*
@@ -19,32 +20,34 @@ import java.util.*
  * Purpose of Class: To retrieve this user's transfers of ETH, tokens, etc.
  *
  */
-class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<LooprTransfer>, Unit>() {
+class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<LooprTransfer>, String>() {
 
     override val repository = LooprTransferRepository(currentWallet)
 
-    fun getAllTransfers(owner: LifecycleOwner, onChange: (OrderedRealmCollection<LooprTransfer>) -> Unit) {
-        initializeData(owner, Unit, onChange)
+    private val ethplorerService = EthplorerService.getInstance()
+
+    fun getAllTransfers(owner: LifecycleOwner, address: String, onChange: (OrderedRealmCollection<LooprTransfer>) -> Unit) {
+        initializeData(owner, address, onChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: Unit): LiveData<OrderedRealmCollection<LooprTransfer>> {
+    override fun getLiveDataFromRepository(parameter: String): LiveData<OrderedRealmCollection<LooprTransfer>> {
         return repository.getAllTransfers()
     }
 
-    override fun getDataFromNetwork(parameter: Unit): Deferred<OrderedRealmCollection<LooprTransfer>> {
-        TODO("Ethplorer get Address History")
+    override fun getDataFromNetwork(parameter: String): Deferred<OrderedRealmCollection<LooprTransfer>> {
+        return ethplorerService.getAddressTransferHistory(parameter)
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprTransfer>) {
         repository.addList(data)
     }
 
-    override fun isRefreshNecessary(parameter: Unit): Boolean {
-        return defaultIsRefreshNecessary()
+    override fun isRefreshNecessary(parameter: String): Boolean {
+        return defaultIsRefreshNecessary(parameter)
     }
 
-    override fun addSyncDataToRepository(parameter: Unit) {
-        syncRepository.add(SyncData(syncType, null, Date()))
+    override fun addSyncDataToRepository(parameter: String) {
+        syncRepository.add(SyncData(syncType, parameter, Date()))
     }
 
     override val syncType: String = SyncData.SYNC_TYPE_TRANSFERS

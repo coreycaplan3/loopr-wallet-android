@@ -51,7 +51,7 @@ class HomeMarketsAdapter(
         private set
 
     override val totalItems: Int?
-        get() = TODO("not implemented")
+        get() = null
 
     init {
         sortBy = savedInstanceState?.getString(KEY_SORT_BY) ?: MarketsFilter.SORT_BY_TICKER_ASC

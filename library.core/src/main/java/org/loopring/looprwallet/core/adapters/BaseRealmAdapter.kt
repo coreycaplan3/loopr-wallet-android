@@ -26,27 +26,6 @@ abstract class BaseRealmAdapter<T : RealmModel> :
         const val TYPE_DATA = 2
     }
 
-    var extraDataToPositionList: List<Pair<RealmModel, Int>>? = null
-        set(value) {
-            field = value
-
-            // Clear the old listeners
-            listeners.forEach { it.first.removeChangeListener(it.second) }
-            listeners.clear()
-
-            value?.forEach { dataToPositionPair ->
-                val listener = RealmObjectChangeListener<RealmModel> { _, changeSet ->
-                    when {
-                        changeSet?.isDeleted == true -> notifyItemRemoved(dataToPositionPair.second)
-                        else -> notifyItemChanged(dataToPositionPair.second)
-                    }
-                }
-
-                listeners.add(dataToPositionPair.first to listener)
-                Unit
-            }
-        }
-
     /**
      * Extra listeners for listening to object changes besides from main type declared as [T].
      */
@@ -65,6 +44,7 @@ abstract class BaseRealmAdapter<T : RealmModel> :
      */
     abstract val totalItems: Int?
 
+    // TODO reimplement me for adapter with custom DATA viewHolders
     override fun getItemViewType(position: Int): Int {
         val data = data ?: return TYPE_LOADING
 
@@ -133,16 +113,15 @@ abstract class BaseRealmAdapter<T : RealmModel> :
     // MARK - Protected Methods
 
     /**
-     * Gets the number of items in the adapter based on the amount of data available
+     * Gets the number of items in the adapter based on the amount of data currently and if there's
+     * any more available after loading more from the network.
      */
-    protected fun getItemCountForOnlyData(data: RealmCollection<T>): Int {
-        return data.size.let {
-            when {
-                containsMoreData() ->
-                    // There's still some items left to load
-                    it + 1
-                else -> it
-            }
+    protected fun getItemCountForOnlyData(data: RealmCollection<T>): Int = data.size.let {
+        return@let when {
+            containsMoreData() ->
+                // There's still some items left to load
+                it + 1
+            else -> it
         }
     }
 

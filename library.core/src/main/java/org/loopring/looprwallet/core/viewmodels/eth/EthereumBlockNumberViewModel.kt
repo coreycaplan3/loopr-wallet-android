@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
 import org.loopring.looprwallet.core.models.sync.SyncData
+import org.loopring.looprwallet.core.networking.eth.EthereumService
 import org.loopring.looprwallet.core.repositories.eth.EthereumBlockNumberRepository
 import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
 import java.util.*
@@ -28,6 +29,8 @@ class EthereumBlockNumberViewModel : StreamingViewModel<EthereumBlockNumber, Uni
 
     override val repository = EthereumBlockNumberRepository()
 
+    val ethereumService = EthereumService.getInstance()
+
     fun getEthereumBlockNumber(owner: LifecycleOwner, onChange: (EthereumBlockNumber) -> Unit) {
         initializeData(owner, Unit, onChange)
     }
@@ -37,7 +40,7 @@ class EthereumBlockNumberViewModel : StreamingViewModel<EthereumBlockNumber, Uni
     }
 
     override fun getDataFromNetwork(parameter: Unit): Deferred<EthereumBlockNumber> {
-        TODO("not implemented") // TODO
+        return ethereumService.getBlockNumber()
     }
 
     override fun addNetworkDataToRepository(data: EthereumBlockNumber) {

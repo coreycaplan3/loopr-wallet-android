@@ -6,6 +6,7 @@ import io.realm.annotations.PrimaryKey
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import java.math.BigInteger
+import java.util.*
 
 /**
  * Created by Corey Caplan on 2/28/18.
@@ -23,9 +24,13 @@ open class LooprTransfer(
         var transactionHash: String = "",
 
         @Index
-        var timestamp: Long = -1L,
+        var timestamp: Date = Date(),
+
+        var isSend: Boolean = false,
 
         blockNumber: BigInteger? = null,
+
+        var contactAddress: String = "",
 
         numberOfTokens: BigInteger = BigInteger.ZERO,
 
@@ -44,10 +49,11 @@ open class LooprTransfer(
     private var mTransactionFee: String = ""
     private var mTransactionFeeUsdValue: String = ""
 
-    var mToken: LooprToken? = null
+    var mToken: LooprToken? = token
 
+    // TODO better way of handling this
     var token: LooprToken
-        get() = mToken ?: LooprToken.ETH
+        get() = mToken!!
         set(value) {
             mToken = value
         }

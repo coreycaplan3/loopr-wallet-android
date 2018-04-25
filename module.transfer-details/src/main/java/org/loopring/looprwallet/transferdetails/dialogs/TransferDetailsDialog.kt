@@ -108,7 +108,7 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
 
         // Date
         val dateFormat = DateFormat.getDateTimeInstance()
-        transferDetailsDateLabel.text = dateFormat.format(Date(transfer.timestamp))
+        transferDetailsDateLabel.text = dateFormat.format(transfer.timestamp)
 
         // Explorer
         transferDetailsViewTransactionButton.setOnClickListener {
@@ -128,7 +128,8 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
         val status: String
         val color: Int
         when {
-            transferBlockNumber == null -> {
+            transferBlockNumber == null || ethereumBlockNumber - transferBlockNumber < BigInteger.ZERO -> {
+                //  The difference may be < 0 if the ethereumBlockNumber is stale
                 status = str(R.string.waiting_to_be_mined)
                 color = col(R.color.red_400, activity)
             }
