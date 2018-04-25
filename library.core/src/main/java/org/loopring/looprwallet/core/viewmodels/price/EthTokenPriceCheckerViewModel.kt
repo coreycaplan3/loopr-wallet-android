@@ -7,6 +7,7 @@ import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
@@ -52,7 +53,7 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<LooprToken, String>() {
      * @param onChange A function that is called whenever the [LooprToken] changes to a valid
      * value.
      */
-    fun getTokenPrice(owner: BaseFragment,
+    fun getTokenPrice(owner: ViewLifecycleFragment,
                       identifier: String,
                       onChange: (LooprToken) -> Unit
     ) {

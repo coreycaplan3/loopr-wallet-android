@@ -21,12 +21,14 @@
         android:layout_below="@id/privateKeyTitleLabel"
         android:layout_marginTop="@dimen/vertical_margin"
         android:clipToPadding="false"
+        android:orientation="vertical"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/barcodeImage"
-            android:layout_width="@dimen/barcode_dimensions"
-            android:layout_height="@dimen/barcode_dimensions"
+            android:layout_width="196dp"
+            android:layout_height="196dp"
+            android:layout_gravity="center_horizontal"
             android:contentDescription="@string/content_description_barcode" />
 
         <TextView
@@ -37,6 +39,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/horizontal_margin"
             android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
             tools:text="@string/default_address" />
 
     </LinearLayout>

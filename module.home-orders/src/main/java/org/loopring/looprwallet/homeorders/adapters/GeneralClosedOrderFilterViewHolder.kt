@@ -23,23 +23,21 @@ class GeneralClosedOrderFilterViewHolder(
     override val containerView: View
         get() = itemView
 
-    init {
+    fun bind(dateValue: String, listener: OnGeneralOrderFilterChangeListener) {
         setButtonClickListener(orderClosedDate1hButton, listener)
         setButtonClickListener(orderClosedDate1dButton, listener)
         setButtonClickListener(orderClosedDate1wButton, listener)
         setButtonClickListener(orderClosedDate1mButton, listener)
         setButtonClickListener(orderClosedDate1yButton, listener)
-        setButtonClickListener(orderClosedDate1yButton, listener)
-    }
+        setButtonClickListener(orderClosedDateAllButton, listener)
 
-    fun bind(dateValue: String) {
-        // Reset their values
+        // Reset their UI values
         orderClosedDate1hButton.context.setTheme(R.style.App_Button_Borderless)
         orderClosedDate1dButton.context.setTheme(R.style.App_Button_Borderless)
         orderClosedDate1wButton.context.setTheme(R.style.App_Button_Borderless)
         orderClosedDate1mButton.context.setTheme(R.style.App_Button_Borderless)
         orderClosedDate1yButton.context.setTheme(R.style.App_Button_Borderless)
-        orderClosedDate1yButton.context.setTheme(R.style.App_Button_Borderless)
+        orderClosedDateAllButton.context.setTheme(R.style.App_Button_Borderless)
 
         // Set the selected one's value
         when (dateValue) {
@@ -48,7 +46,7 @@ class GeneralClosedOrderFilterViewHolder(
             str(R.string._1w) -> orderClosedDate1wButton.context.setTheme(R.style.App_Button)
             str(R.string._1m) -> orderClosedDate1mButton.context.setTheme(R.style.App_Button)
             str(R.string._1y) -> orderClosedDate1yButton.context.setTheme(R.style.App_Button)
-            str(R.string.all) -> orderClosedDate1yButton.context.setTheme(R.style.App_Button)
+            str(R.string.all) -> orderClosedDateAllButton.context.setTheme(R.style.App_Button)
         }
     }
 

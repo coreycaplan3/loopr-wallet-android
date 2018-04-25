@@ -77,13 +77,11 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
             selectedContactAddress = savedInstanceState.getString(KEY_SELECTED_CONTACT)
         }
 
-        validatorList = listOf(PublicKeyValidator(recipientAddressInputLayout, this::onFormChanged))
-
         viewContactsFragment = childFragmentManager.findFragmentByTagOrCreate(ViewContactsFragment.TAG) {
             val fragment = ViewContactsFragment()
             childFragmentManager.beginTransaction()
                     .replace(R.id.viewContactsFragmentContainer, fragment, ViewContactsFragment.TAG)
-                    .commit()
+                    .commitNow()
 
             return@findFragmentByTagOrCreate fragment
         }
@@ -106,6 +104,8 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
                     CreateTransferAmountFragment.TAG
             )
         }
+
+        validatorList = listOf(PublicKeyValidator(recipientAddressInputLayout, this::onFormChanged))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

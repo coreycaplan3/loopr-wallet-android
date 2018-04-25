@@ -55,15 +55,15 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment(), ViewLifecycl
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        fragmentViewLifecycleFragment = FragmentViewLifecycleOwner().apply {
+            lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+        }
+
         return inflater.inflate(layoutResource, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        fragmentViewLifecycleFragment = FragmentViewLifecycleOwner().apply {
-            lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
-        }
 
         (dialog as? BottomSheetDialog)?.let { dialog ->
 
@@ -73,7 +73,9 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment(), ViewLifecycl
             dialog.setOnShowListener {
                 val bottomSheet = dialog.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
                 bottomSheet?.let {
-                    BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
+                    val behavior = BottomSheetBehavior.from(it)
+                    behavior.peekHeight = 0
+                    behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }
         }

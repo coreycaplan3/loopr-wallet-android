@@ -26,11 +26,13 @@ class EmptyGeneralOrderViewHolder(private val orderType: String, itemView: View?
     override val containerView: View?
         get() = itemView
 
-    fun bind() = when (orderType) {
-        OrderFilter.FILTER_OPEN_ALL -> emptyOrdersLabel.setText(R.string.empty_general_open_orders)
-        OrderFilter.FILTER_FILLED -> emptyOrdersLabel.setText(R.string.empty_general_filled_orders)
-        OrderFilter.FILTER_CANCELLED -> emptyOrdersLabel.setText(R.string.empty_general_cancelled_orders)
-        else -> throw IllegalArgumentException("Invalid orderType, found: $orderType")
+    fun bind() {
+        when (orderType) {
+            OrderFilter.FILTER_OPEN_ALL -> emptyOrdersLabel.setText(R.string.empty_general_open_orders)
+            OrderFilter.FILTER_FILLED -> emptyOrdersLabel.setText(R.string.empty_general_filled_orders)
+            OrderFilter.FILTER_CANCELLED -> emptyOrdersLabel.setText(R.string.empty_general_cancelled_orders)
+            else -> throw IllegalArgumentException("Invalid orderType, found: $orderType")
+        }
     }
 
 }

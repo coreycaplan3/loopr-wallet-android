@@ -3,7 +3,7 @@ package org.loopring.looprwallet.contacts.viewmodels
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import org.loopring.looprwallet.contacts.repositories.ContactsRepository
-import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.viewmodels.OfflineOnlyViewModel
@@ -21,7 +21,7 @@ class ContactsByAddressViewModel(currentWallet: LooprWallet) : OfflineOnlyViewMo
     override val repository = ContactsRepository(currentWallet)
 
     fun getAllContactsByAddress(
-            owner: BaseFragment,
+            owner: ViewLifecycleFragment,
             address: String,
             onChange: (OrderedRealmCollection<Contact>) -> Unit
     ) {

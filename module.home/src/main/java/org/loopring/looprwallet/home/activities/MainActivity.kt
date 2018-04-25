@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
@@ -22,10 +23,6 @@ import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentPagerAdapter
-import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MARKETS
-import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_MY_WALLET
-import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_ORDERS
-import org.loopring.looprwallet.core.models.android.navigation.BottomNavigationFragmentPair.Companion.KEY_TRANSFERS
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -121,7 +118,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     }
 
     override fun onSecurityConfirmed(parameter: Int) {
-        val fragment = supportFragmentManager.findFragmentById(mainViewPager.id)
+        val fragment = pagerAdapter.currentFragment
         if (fragment is OnSecurityConfirmedListener) {
             fragment.onSecurityConfirmed(parameter)
         }
@@ -199,7 +196,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         val currentWalletName = walletClient.getCurrentWallet()?.walletName
         val allWallets = walletClient.getAllWallets()
         allWallets.forEach { item ->
-            homeNavigationView.menu.add(item.walletName).let {
+            homeNavigationView.menu.add(Menu.NONE, Menu.NONE, 1, item.walletName).let {
                 if (item.walletName == currentWalletName) {
                     it.isChecked = true
                 }
@@ -242,14 +239,15 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
                     onItemSelected = { SignInActivity.route(this, true) }
                 }
                 menuItem.itemId == R.id.menuDeleteWallet -> {
-                    setupDeleteWalletDialogAdapter(toolbar, allWallets)
+                    onItemSelected = { showDeleteWalletDialogAdapter(toolbar, allWallets) }
                 }
                 else -> allWallets.find { it.walletName == menuItem.title }?.ifNotNull {
                     // We found the wallet that matches the title's name
                     val currentWallet = walletClient.getCurrentWallet()
                     if (currentWallet != null && currentWallet != it) {
+                        // We just selected a different wallet from the current one
                         onItemSelected = {
-                            walletClient.selectNewCurrentWallet(it.walletName, this)
+                            walletClient.selectNewCurrentWallet(it.walletName)
                             MainActivity.routeAndClearOldTasks(this@MainActivity)
                         }
                     }
@@ -262,9 +260,10 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         }
     }
 
-    private fun setupDeleteWalletDialogAdapter(toolbar: Toolbar, allWallets: List<LooprWallet>) {
+    private fun showDeleteWalletDialogAdapter(toolbar: Toolbar, allWallets: List<LooprWallet>) {
         val adapterItems = allWallets.map { it.walletName }
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, adapterItems)
+
         AlertDialog.Builder(this)
                 .setAdapter(adapter) { dialog, position ->
                     if (walletClient.getCurrentWallet() == allWallets[position]) {
@@ -281,7 +280,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
                         setupNavigationDrawerMenu(toolbar)
                         dialog.dismiss()
                     }
-                }
+                }.show()
     }
 
 }

@@ -2,6 +2,7 @@ package org.loopring.looprwallet.hometransfers.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView.OnNavigationItemReselectedListener
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
@@ -33,7 +34,8 @@ import org.loopring.looprwallet.transferdetails.dialogs.TransferDetailsDialog
  * Purpose of Class:
  *
  */
-class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClickListener {
+class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener, OnRefreshListener,
+        OnTransferClickListener {
 
     override val layoutResource: Int
         get() = R.layout.fragment_view_transfers
@@ -111,6 +113,10 @@ class ViewTransfersFragment : BaseFragment(), OnRefreshListener, OnTransferClick
 
     override fun onRefresh() {
         viewAllTransfersViewModel?.refresh()
+    }
+
+    override fun onNavigationItemReselected(item: MenuItem) {
+        viewTransfersRecyclerView.smoothScrollToPosition(0)
     }
 
     override fun onTransferClick(looprTransfer: LooprTransfer) {

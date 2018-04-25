@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/menuAddNewWallet"
-            android:icon="@drawable/ic_add_white_24dp"
-            android:title="@string/add_new_wallet" />
-        <item
-            android:id="@+id/menuDeleteWallet"
-            android:icon="@drawable/ic_delete_white_24dp"
-            android:title="@string/remove_wallet" />
-    </group>
+    <item
+        android:orderInCategory="999"
+        android:title="@string/wallet_settings">
+        <menu>
+            <group android:checkableBehavior="none">
+                <item
+                    android:id="@+id/menuAddNewWallet"
+                    android:icon="@drawable/ic_add_white_24dp"
+                    android:title="@string/add_new_wallet" />
+                <item
+                    android:id="@+id/menuDeleteWallet"
+                    android:icon="@drawable/ic_delete_white_24dp"
+                    android:title="@string/remove_wallet" />
+            </group>
+        </menu>
+    </item>
 </menu>

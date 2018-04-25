@@ -26,7 +26,6 @@ class GeneralOpenOrderFilterViewHolder(
     override val containerView: View
         get() = itemView
 
-
     /**
      * @param statusRawValue The status ENUM, as seen in the Loopring API for filtering orders by
      * status.

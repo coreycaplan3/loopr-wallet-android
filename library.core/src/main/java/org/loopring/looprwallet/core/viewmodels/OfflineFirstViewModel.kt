@@ -8,10 +8,8 @@ import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.isValid
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.*
-import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.error.ErrorTypes
 import org.loopring.looprwallet.core.models.error.LooprError
@@ -477,23 +475,23 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     /**
      * Initializes the offline-first data pipeline.
      */
-    private inline fun initializeDataInternal(
+    private fun initializeDataInternal(
             parameter: U,
-            crossinline removeObserver: (LiveData<T>) -> Unit,
-            crossinline addObserver: (LiveData<T>) -> Unit
-    ) = async(CommonPool) {
+            removeObserver: (LiveData<T>) -> Unit,
+            addObserver: (LiveData<T>) -> Unit
+    ) {
         // Check if we're re-initializing the same thing again
         val oldLiveData = mLiveData
         if (oldLiveData != null && isPredicatesEqual(this@OfflineFirstViewModel.parameter, parameter)) {
             addObserver(oldLiveData)
-            return@async
+            return
         }
 
         // Remove old observers
         mLiveData?.let { removeObserver(it) }
 
         // Reinitialize the state
-        mCurrentState.postValue(STATE_LOADING_EMPTY)
+        mCurrentState.value = STATE_LOADING_EMPTY
 
         // We are going to ping a refresh. So we need to initialize the state with a network
         // operation running. Reason being, there could be a brief period in which repository
@@ -502,18 +500,18 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         mIsNetworkOperationRunning = isRefreshNecessary(parameter)
 
         // Reinitialize data, observers, and notify via the call to onLiveDataInitialized
-        launch(UI) {
-            this@OfflineFirstViewModel.parameter = parameter
-            val liveData = getLiveDataFromRepository(parameter)
-            this@OfflineFirstViewModel.mLiveData = liveData
-            addObserver(liveData)
-            onLiveDataInitialized(liveData)
-        }
+        this.parameter = parameter
+        val liveData = getLiveDataFromRepository(parameter)
+        this.mLiveData = liveData
+        addObserver(liveData)
+        onLiveDataInitialized(liveData)
 
         if (mIsNetworkOperationRunning) {
-            // Ping the network for fresh data
-            mCurrentState.postValue(getCurrentLoadingState(mLiveData?.value))
-            handleNetworkRequest(parameter)
+            mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
+            async(CommonPool) {
+                // Ping the network for fresh data
+                handleNetworkRequest(parameter)
+            }
         }
     }
 

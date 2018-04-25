@@ -5,6 +5,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.markets.TradingPairTrend
 import org.loopring.looprwallet.core.utilities.NetworkUtility
@@ -24,15 +25,16 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
     companion object {
 
         val lrcTradingPair = TradingPair(
-                "LRC",
-                "WETH",
-                true,
-                0.85,
-                "20.25%",
-                0.88,
-                0.80,
-                19430240.0,
-                194302.0
+                primaryTicker = "LRC",
+                secondaryTicker = "WETH",
+                isFavorite = true,
+                lastPrice = 0.85,
+                change24h = "20.25%",
+                highPrice = 0.88,
+                lowPrice = 0.80,
+                amountOfPrimary = 19430240.0,
+                volumeOfSecondary = 194302.0,
+                primaryToken = LooprToken.LRC
         )
 
         val reqTradingPair = TradingPair(
@@ -44,7 +46,8 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
                 0.27,
                 0.24,
                 38030240.0,
-                380302.0
+                380302.0,
+                LooprToken.REQ
         )
 
         val zrxTradingPair = TradingPair(
@@ -52,11 +55,12 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
                 "WETH",
                 true,
                 0.85,
-                "-10.25%",
+                "-68.25%",
                 0.88,
                 0.80,
                 20030240.0,
-                200302.0
+                200302.0,
+                LooprToken.ZRX
         )
 
     }

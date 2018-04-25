@@ -57,13 +57,9 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
         }
     }
 
-    override fun selectNewCurrentWallet(newCurrentWallet: String, currentActivity: BaseActivity) {
+    override fun selectNewCurrentWallet(newCurrentWallet: String) {
         walletSettings.selectCurrentWallet(newCurrentWallet)?.let {
             onChange?.invoke(it)
-
-            val intent = Intent(currentActivity, CoreLooprWalletApp.mainClass)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            currentActivity.startActivity(intent)
         }
     }
 

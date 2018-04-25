@@ -3,7 +3,7 @@ package org.loopring.looprwallet.hometransfers.viewmodels
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
@@ -28,7 +28,7 @@ class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewMo
         EthplorerService.getInstance()
     }
 
-    fun getAllTransfers(owner: BaseFragment, address: String, onChange: (OrderedRealmCollection<LooprTransfer>) -> Unit) {
+    fun getAllTransfers(owner: ViewLifecycleFragment, address: String, onChange: (OrderedRealmCollection<LooprTransfer>) -> Unit) {
         initializeData(owner, address, onChange)
     }
 

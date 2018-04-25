@@ -3,7 +3,7 @@ package org.loopring.looprwallet.homemarkets.viewmodels
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -30,7 +30,7 @@ class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<Tradin
     }
 
     fun getHomeMarkets(
-            owner: BaseFragment,
+            owner: ViewLifecycleFragment,
             filter: MarketsFilter,
             onChange: (OrderedRealmCollection<TradingPair>) -> Unit
     ) {
@@ -52,7 +52,7 @@ class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<Tradin
     override fun isRefreshNecessary(parameter: MarketsFilter) = defaultIsRefreshNecessary()
 
     override fun addSyncDataToRepository(parameter: MarketsFilter) {
-        repository.add(SyncData(syncType, null, Date()))
+        syncRepository.add(SyncData(syncType, null, Date()))
     }
 
     override val syncType = SYNC_TYPE_MARKETS

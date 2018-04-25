@@ -3,7 +3,7 @@ package org.loopring.looprwallet.homeorders.viewmodels
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -35,7 +35,7 @@ class GeneralOrdersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel
     /**
      * Gets the user's orders based on the provided [filter].
      */
-    fun getOrders(owner: BaseFragment, filter: OrderFilter, onChange: (OrderedRealmCollection<LooprOrder>) -> Unit) {
+    fun getOrders(owner: ViewLifecycleFragment, filter: OrderFilter, onChange: (OrderedRealmCollection<LooprOrder>) -> Unit) {
         initializeData(owner, filter, onChange)
     }
 

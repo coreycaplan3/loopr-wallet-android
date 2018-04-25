@@ -49,14 +49,12 @@ interface WalletClient {
                      phrase: Array<String>?): Boolean
 
     /**
-     * Selects a new current-wallet (from an existing list) and resets the current activity task
-     * list, starting at [MainActivity]
+     * Selects a new current-wallet (from an existing list). Typically, an activity restart should
+     * occur afterward.
      *
      * @param newCurrentWallet The new wallet that is now selected
-     * @param currentActivity The current activity. This parameter is used to restart the current
-     * activity, since other configurations need to be reinitialized to support the new wallet.
      */
-    fun selectNewCurrentWallet(newCurrentWallet: String, currentActivity: BaseActivity)
+    fun selectNewCurrentWallet(newCurrentWallet: String)
 
     /**
      * @return The current wallet being used by the user. A null return values means there is no

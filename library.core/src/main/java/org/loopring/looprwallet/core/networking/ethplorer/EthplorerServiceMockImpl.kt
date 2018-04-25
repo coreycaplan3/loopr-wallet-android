@@ -3,14 +3,14 @@ package org.loopring.looprwallet.core.networking.ethplorer
 import io.realm.RealmList
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
-import org.loopring.looprwallet.core.utilities.NetworkUtility
-import org.loopring.looprwallet.core.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.utilities.NetworkUtility
+import org.loopring.looprwallet.core.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import java.io.IOException
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -25,20 +25,34 @@ import java.math.BigInteger
  */
 class EthplorerServiceMockImpl : EthplorerService {
 
-    private val eth = LooprToken.ETH.apply {
-        setTokenPriceInfo(this)
-    }
+    companion object {
 
-    private val lrc = LooprToken.LRC.apply {
-        setTokenPriceInfo(this)
-    }
+        val eth = LooprToken.ETH.apply {
+            setTokenPriceInfo(this)
+        }
 
-    private val appc = LooprToken.APPC.apply {
-        setTokenPriceInfo(this)
-    }
+        val lrc = LooprToken.LRC.apply {
+            setTokenPriceInfo(this)
+        }
 
-    private val req = LooprToken.REQ.apply {
-        setTokenPriceInfo(this)
+        val appc = LooprToken.APPC.apply {
+            setTokenPriceInfo(this)
+        }
+
+        val req = LooprToken.REQ.apply {
+            setTokenPriceInfo(this)
+        }
+
+        private fun setTokenPriceInfo(token: CryptoToken) {
+            token.priceInUsd = when (token.identifier) {
+                LooprToken.ETH.identifier -> BigInteger("500000")
+                LooprToken.LRC.identifier -> BigInteger("10000")
+                LooprToken.APPC.identifier -> BigInteger("50000")
+                LooprToken.REQ.identifier -> BigInteger("90000")
+                else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
+            }
+        }
+
     }
 
     // The current block number when mocking is 5m
@@ -117,16 +131,6 @@ class EthplorerServiceMockImpl : EthplorerService {
     }
 
     // MARK - Private Methods
-
-    private fun setTokenPriceInfo(token: CryptoToken) {
-        token.priceInUsd = when (token.identifier) {
-            LooprToken.ETH.identifier -> BigInteger("500000")
-            LooprToken.LRC.identifier -> BigInteger("10000")
-            LooprToken.APPC.identifier -> BigInteger("50000")
-            LooprToken.REQ.identifier -> BigInteger("90000")
-            else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
-        }
-    }
 
     private fun setTokenBalanceInfo(address: String, token: CryptoToken) {
         val balanceAmount = when (token.identifier) {

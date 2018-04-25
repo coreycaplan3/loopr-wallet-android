@@ -105,6 +105,15 @@ open class LooprToken(
                 18,
                 str(R.string.req_binary)
         )
+
+        val ZRX = LooprToken(
+                "0xe41d2489571d322189246dafa5ebde1f4699f498",
+                "ZRX",
+                "0x",
+                "1000000000000000000000000000",
+                18,
+                str(R.string.zrx_binary)
+        )
     }
 
     override var totalSupply: BigDecimal

@@ -127,13 +127,13 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
         coreLooprComponent.inject(this)
 
-        // Make sure that the user has a wallet, if necessary
-        (activity as? BaseActivity)?.checkWalletStatus()
-
         isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED) == true
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // Make sure that the user has a wallet, if necessary
+        (activity as? BaseActivity)?.checkWalletStatus()
+
         fragmentViewLifecycleFragment = FragmentViewLifecycleOwner().apply {
             lifecycle.handleLifecycleEvent(Event.ON_CREATE)
         }
@@ -470,8 +470,11 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
     // MARK - Private Methods
 
-    private fun createAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) = runBlocking {
-        appbarLayout = async(CommonPool) { createAppbarLayout(fragmentView, savedInstanceState) }.await()
+    private fun createAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) {
+        runBlocking {
+            appbarLayout = async(CommonPool) { createAppbarLayout(fragmentView, savedInstanceState) }
+                    .await()
+        }
 
         fragmentView.addView(appbarLayout, 0)
         toolbar = appbarLayout?.findViewById(R.id.toolbar)

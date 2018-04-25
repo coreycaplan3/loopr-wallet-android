@@ -9,7 +9,10 @@ import android.support.v4.view.ViewPager
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.extensions.*
+import org.loopring.looprwallet.core.extensions.isExpanded
+import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.extensions.logv
+import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentPagerAdapter
@@ -55,7 +58,7 @@ class BottomNavigationPresenter(activity: BaseActivity,
                 logv("Pushing $tag fragment...")
 
                 // We don't need to select the tab actually, just update the UI
-                currentFragment = activity.supportFragmentManager.findFragmentById(viewPager.id)
+                currentFragment = pagerAdapter.currentFragment
             }
             else -> {
                 Handler().postDelayed({
@@ -71,7 +74,7 @@ class BottomNavigationPresenter(activity: BaseActivity,
         }
 
         bottomNavigationView.setOnNavigationItemReselectedListener {
-            val fragment = activity.supportFragmentManager.findFragmentById(viewPager.id)
+            val fragment = pagerAdapter.currentFragment
             if (fragment is BottomNavigationReselectedLister) {
                 fragment.onBottomNavigationReselected()
             } else {

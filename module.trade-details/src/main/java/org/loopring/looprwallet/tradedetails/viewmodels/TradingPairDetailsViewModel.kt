@@ -2,7 +2,7 @@ package org.loopring.looprwallet.tradedetails.viewmodels
 
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -40,7 +40,7 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
     /**
      * Gets the trading pair based on the provided [filter].
      */
-    fun getTradingPair(owner: BaseFragment, filter: TradingPairFilter, onChange: (TradingPair) -> Unit) {
+    fun getTradingPair(owner: ViewLifecycleFragment, filter: TradingPairFilter, onChange: (TradingPair) -> Unit) {
         initializeData(owner, filter, onChange)
     }
 

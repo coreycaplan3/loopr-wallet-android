@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.models.markets
 
 import io.realm.RealmObject
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 
 /**
  * Created by Corey Caplan on 1/29/18.
@@ -29,7 +30,8 @@ open class TradingPair(
         var highPrice: Double = 0.00,
         var lowPrice: Double = 0.00,
         var amountOfPrimary: Double = 0.00,
-        var volumeOfSecondary: Double = 0.00
+        var volumeOfSecondary: Double = 0.00,
+        primaryToken: LooprToken? = null
 ) : RealmObject() {
 
     companion object {
@@ -44,6 +46,14 @@ open class TradingPair(
         }
 
     }
+
+    var mPrimaryToken = primaryToken
+
+    var primaryToken: LooprToken
+        get() = mPrimaryToken ?: LooprToken.ETH
+        set(value) {
+            mPrimaryToken = primaryToken
+        }
 
     /**
      * The [primaryTicker] and [secondaryTicker] formatted as *[primaryTicker]-[secondaryTicker]*
