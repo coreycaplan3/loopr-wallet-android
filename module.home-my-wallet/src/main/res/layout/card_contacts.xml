@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/standard_vertical_padding">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -22,41 +20,37 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contacts" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_margin"
-                android:clipToPadding="false"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/viewAllContactsButton"
-                    style="@style/App.Button.CardFlat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/vertical_margin_small"
-                    android:text="@string/view_all_contacts" />
-
-            </LinearLayout>
-
         </LinearLayout>
 
-        <include layout="@layout/divider" />
+        <include
+            layout="@layout/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:layout_above="@id/cardContactsSecondaryContainer" />
 
         <LinearLayout
+            android:id="@+id/cardContactsSecondaryContainer"
             style="@style/App.Card.ActionContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/viewAllContactsButton"
+                style="@style/App.Button.CardAction"
+                android:contentDescription="@string/content_description_view_all_contacts"
+                android:src="@drawable/ic_contacts_white_24dp" />
 
             <ImageButton
                 android:id="@+id/addContactButton"
                 style="@style/App.Button.CardAction"
-                android:contentDescription="@string/content_description_send_ether_or_tokens"
+                android:contentDescription="@string/content_description_add_contact"
                 android:src="@drawable/ic_person_add_white_24dp" />
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>

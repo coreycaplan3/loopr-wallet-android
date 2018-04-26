@@ -12,6 +12,7 @@ import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.order.R
 import org.loopring.looprwallet.order.dagger.orderDetailsLooprComponent
+import javax.inject.Inject
 
 /**
  * Created by Corey on 4/10/2018
@@ -27,6 +28,7 @@ class OrderSummaryViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
     override val containerView: View?
         get() = itemView
 
+    @Inject
     lateinit var currencySettings: CurrencySettings
 
     init {

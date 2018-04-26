@@ -27,5 +27,6 @@
     <string name="drawer_close">The navigation drawer is now closed</string>
     <string name="content_description_share_chrome_tab">Press this button to share this page</string>
     <string name="content_description_loopring_logo">The Loopring logo</string>
+    <string name="content_description_view_all_contacts">Takes you to a screen to view all of your contacts</string>
 
 </resources>

@@ -20,8 +20,6 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class TradingPairTrendRepository : BaseRealmRepository(false) {
 
-    override fun getAsyncRealm() = realmClient.getSharedInstance()
-
     fun getTradingPairTrend(filter: TradingPairFilter): LiveData<OrderedRealmCollection<TradingPairTrend>> {
         return uiRealm.where<TradingPairTrend>()
                 .equalTo(TradingPairTrend::tradingPair, filter.market)

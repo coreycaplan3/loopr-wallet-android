@@ -1,9 +1,9 @@
 package org.loopring.looprwallet.core.networking.eth
 
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import java.io.IOException
@@ -28,7 +28,7 @@ internal class EthereumServiceMockImpl : EthereumService {
 
     }
 
-    override fun getBlockNumber(): Deferred<EthereumBlockNumber> = async(CommonPool) {
+    override fun getBlockNumber(): Deferred<EthereumBlockNumber> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {

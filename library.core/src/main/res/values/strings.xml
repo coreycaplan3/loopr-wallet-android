@@ -35,7 +35,7 @@
     <string name="your_address">Your Address:</string>
     <string name="unlock_to_reveal_private_key">Unlock to Reveal Private Key</string>
     <string name="reveal_private_key">Reveal Private Key</string>
-    <string name="account_balances">Account Balances</string>
+    <string name="balances">Balances</string>
     <string name="view_all_balances">View All Balances</string>
     <string name="ellipsis">…</string>
     <string name="letter_b">B</string>
@@ -303,4 +303,10 @@
     <string name="partial">Partial</string>
     <string name="secure_token_trading_slogan">Secure token trading right from your own wallet</string>
     <string name="restore_your_wallet">Restore your Wallet</string>
+    <string name="my_wallets">My Wallets</string>
+    <string name="content_description_view_token_balances">Tap to see all of your token balances</string>
+    <string name="my_balances">My Balances</string>
+    <string name="view_all_your_balances">View all of your balances</string>
+    <string name="view_all_your_contacts">View all of your contacts</string>
+    <string name="add_a_new_contact">Add a new contact</string>
 </resources>

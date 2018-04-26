@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.ImageButton
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_create_contact.*
-import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
+import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.repositories.ContactsRepository
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
@@ -29,7 +29,7 @@ class CreateContactDialog : BaseBottomSheetDialog() {
 
         private const val KEY_ADDRESS = "_ADDRESS"
 
-        fun create(address: String?): CreateContactDialog {
+        fun getInstance(address: String?): CreateContactDialog {
             return CreateContactDialog().apply {
                 arguments = bundleOf(KEY_ADDRESS to address)
             }
@@ -53,7 +53,7 @@ class CreateContactDialog : BaseBottomSheetDialog() {
         super.onViewCreated(view, savedInstanceState)
 
         val barcodeButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-        BarcodeCaptureActivity.setupBarcodeScanner(this, barcodeButton, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY))
+        QRCodeCaptureActivity.setupBarcodeScanner(this, barcodeButton, arrayOf(QRCodeCaptureActivity.TYPE_PUBLIC_KEY))
 
         if (savedInstanceState == null) {
             contactAddressEditText.setText(arguments?.getString(KEY_ADDRESS))
@@ -78,7 +78,7 @@ class CreateContactDialog : BaseBottomSheetDialog() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        BarcodeCaptureActivity.handleActivityResult(contactAddressEditText, requestCode, resultCode, data)
+        QRCodeCaptureActivity.handleActivityResult(contactAddressEditText, requestCode, resultCode, data)
     }
 
     override fun onFormChanged() {

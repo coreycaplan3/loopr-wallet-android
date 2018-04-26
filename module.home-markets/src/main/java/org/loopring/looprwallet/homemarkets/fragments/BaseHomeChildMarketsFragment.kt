@@ -2,7 +2,6 @@ package org.loopring.looprwallet.homemarkets.fragments
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -25,10 +24,12 @@ import org.loopring.looprwallet.homemarkets.viewmodels.HomeMarketsViewModel
  *
  */
 abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationReselectedLister,
-        OnSearchViewChangeListener, OnGeneralMarketsFilterChangeListener, OnRefreshListener {
+        OnSearchViewChangeListener, OnGeneralMarketsFilterChangeListener {
 
     companion object {
+
         private const val KEY_IS_SEARCH_ACTIVE = "_IS_SEARCH_ACTIVE"
+
     }
 
     abstract val swipeRefreshLayout: SwipeRefreshLayout?
@@ -62,8 +63,6 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         recyclerView?.adapter = adapter
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
 
-        swipeRefreshLayout?.setOnRefreshListener(this)
-
         setupOfflineFirstStateAndErrorObserver(homeMarketsViewModel, swipeRefreshLayout)
         setMarketsLiveData()
     }
@@ -72,10 +71,6 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
 
     final override fun onBottomNavigationReselected() {
         recyclerView?.smoothScrollToPosition(0)
-    }
-
-    override fun onRefresh() {
-        homeMarketsViewModel.refresh()
     }
 
     final override fun onQueryTextGainFocus() {
@@ -94,16 +89,20 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         setMarketsLiveData(searchQuery)
     }
 
-    final override fun onSortByChange(sortByValue: String) {
+    final override fun onSortByChange(newSortByFilter: String) {
         setMarketsLiveData()
     }
 
-    final override fun onDateFilterChange(dateValue: String) {
+    final override fun onDateFilterChange(newDateFilter: String) {
         setMarketsLiveData()
     }
 
     final override fun getCurrentDateFilter(): String {
         return adapter.dateFilter
+    }
+
+    final override fun getCurrentSortByFilter(): String {
+        return adapter.sortBy
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -29,12 +29,9 @@ class HomeMarketsAdapter(
         fragment: BaseFragment,
         listener: OnGeneralMarketsFilterChangeListener,
         onRefresh: () -> Unit
-) : BaseRealmAdapter<TradingPair>() {
+) : BaseRealmAdapter<TradingPair>(), OnGeneralMarketsFilterChangeListener {
 
     companion object {
-
-        const val TYPE_MARKETS_FILTER = 3
-
         private const val KEY_SORT_BY = "_SORT_BY"
         private const val KEY_DATE_FILTER = "_DATE_FILTER"
     }
@@ -53,6 +50,7 @@ class HomeMarketsAdapter(
         get() = null
 
     init {
+        containsHeader = true
         sortBy = savedInstanceState?.getString(KEY_SORT_BY) ?: MarketsFilter.SORT_BY_TICKER_ASC
         dateFilter = savedInstanceState?.getString(KEY_DATE_FILTER) ?: MarketsFilter.CHANGE_PERIOD_1D
     }
@@ -63,31 +61,59 @@ class HomeMarketsAdapter(
         }
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            TYPE_DATA -> MarketsViewHolder(parent.inflate(R.layout.view_holder_markets))
-            TYPE_MARKETS_FILTER -> MarketsFilterViewHolder(parent.inflate(R.layout.view_holder_markets_filter), listener)
-            else -> throw IllegalArgumentException("Invalid viewType, found: $viewType")
-        }
+    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        return MarketsViewHolder(parent.inflate(R.layout.view_holder_markets), ::onTradingPairClick)
     }
 
-    override fun getDataOffset() = -1
+    override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        return MarketsFilterViewHolder(parent.inflate(R.layout.view_holder_markets_filter), this)
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: TradingPair?) {
         val filter = MarketsFilter(null, false, sortBy, dateFilter)
-        (holder as? MarketsFilterViewHolder)?.bind(filter)
+        (holder as? MarketsFilterViewHolder)?.let {
+            it.bind(filter)
+            return
+        }
 
         item?.guard { } ?: return
-        (holder as? MarketsViewHolder)?.bind(item) { tradingPair ->
-            fragment?.let {
-                TradingPairDetailsActivity.route(tradingPair, it)
-            }
+        (holder as? MarketsViewHolder)?.bind(item)
+    }
+
+    override fun onSortByChange(newSortByFilter: String) {
+        if (newSortByFilter != sortBy) {
+            sortBy = newSortByFilter
+            notifyItemChanged(0)
+            listener?.onSortByChange(newSortByFilter)
         }
     }
+
+    override fun onDateFilterChange(newDateFilter: String) {
+        if (newDateFilter != dateFilter) {
+            dateFilter = newDateFilter
+            notifyItemChanged(0)
+            listener?.onDateFilterChange(newDateFilter)
+        }
+    }
+
+    override fun getCurrentDateFilter(): String = dateFilter
+
+    override fun getCurrentSortByFilter(): String = sortBy
 
     fun onSaveInstanceState(outState: Bundle) {
         outState.putString(KEY_SORT_BY, sortBy)
         outState.putString(KEY_DATE_FILTER, dateFilter)
+    }
+
+    // MARK - Private Methods
+
+    private fun onTradingPairClick(index: Int) {
+        val position = index + dataOffsetPosition
+        val tradingPair = data?.get(position) ?: return
+
+        fragment?.let {
+            TradingPairDetailsActivity.route(tradingPair, it)
+        }
     }
 
 }

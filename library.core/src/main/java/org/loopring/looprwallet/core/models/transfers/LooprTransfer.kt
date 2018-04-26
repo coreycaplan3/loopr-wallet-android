@@ -3,7 +3,6 @@ package org.loopring.looprwallet.core.models.transfers
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
-import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import java.math.BigInteger
 import java.util.*
@@ -40,7 +39,7 @@ open class LooprTransfer(
 
         transactionFeeUsdValue: BigInteger = BigInteger.ZERO,
 
-        token: LooprToken = LooprToken.ETH
+        token: LooprToken? = null
 ) : RealmObject() {
 
     private var mBlockNumber: String? = null
@@ -53,7 +52,7 @@ open class LooprTransfer(
 
     // TODO better way of handling this
     var token: LooprToken
-        get() = mToken!!
+        get() = mToken ?: LooprToken.ETH
         set(value) {
             mToken = value
         }
@@ -112,7 +111,6 @@ open class LooprTransfer(
         }
 
     init {
-        this.mToken?.ifNotNull { this.token = it }
         this.blockNumber = blockNumber
         this.numberOfTokens = numberOfTokens
         this.usdValue = usdValue

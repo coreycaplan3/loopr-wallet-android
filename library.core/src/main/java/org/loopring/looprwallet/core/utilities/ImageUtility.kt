@@ -2,11 +2,9 @@ package org.loopring.looprwallet.core.utilities
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.support.annotation.DrawableRes
 import android.support.v4.graphics.drawable.DrawableCompat
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 
 /**
@@ -32,10 +30,10 @@ object ImageUtility {
             val fieldName = "token_${ticker.toLowerCase().trim()}"
             drawable(R.drawable::class.java.getField(fieldName).getInt(null))
         } catch (e: Throwable) {
-            val d = drawable(R.drawable.ic_help_outline_white_24dp)
-            val tintColor = context.theme.getResourceIdFromAttrId(android.R.attr.textColor)
-            DrawableCompat.setTint(d, col(tintColor))
-            d
+            drawable(R.drawable.ic_help_outline_white_24dp).apply {
+                val textColor = context.theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary)
+                DrawableCompat.setTint(this, ApplicationUtility.col(textColor))
+            }
         }
     }
 

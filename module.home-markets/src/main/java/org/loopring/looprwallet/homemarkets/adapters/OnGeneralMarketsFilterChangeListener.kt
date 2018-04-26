@@ -13,20 +13,25 @@ interface OnGeneralMarketsFilterChangeListener {
     /**
      * Called when the filter's *sort by* value changes
      *
-     * @param sortByValue The new value (not UI value) that the markets sort by attribute is changed
+     * @param newSortByFilter The new value (not UI value) that the markets sort by attribute is changed
      * to
      */
-    fun onSortByChange(sortByValue: String)
+    fun onSortByChange(newSortByFilter: String)
 
     /**
      * Called when the filter's *date* value changes
      *
-     * @param dateValue The new value that the markets date filter is changed to
+     * @param newDateFilter The new value that the markets date filter is changed to
      */
-    fun onDateFilterChange(dateValue: String)
+    fun onDateFilterChange(newDateFilter: String)
 
     /**
      * @return The current date filter used for filtering market information
      */
     fun getCurrentDateFilter(): String
+
+    /**
+     * @return The sort by predicate used for filtering market information
+     */
+    fun getCurrentSortByFilter(): String
 }

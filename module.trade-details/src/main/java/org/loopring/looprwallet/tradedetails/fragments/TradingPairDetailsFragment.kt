@@ -133,7 +133,7 @@ class TradingPairDetailsFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         R.id.menuTradingPairFavorite -> {
             tradingPair?.ifNotNull {
-                looprMarketsRepository.toggleIsFavorite(it)
+                looprMarketsRepository.toggleIsFavorite(it.market)
 
                 val message = when {
                     it.isFavorite -> str(R.string.formatter_is_favorite).format(it.primaryTicker)
@@ -209,6 +209,7 @@ class TradingPairDetailsFragment : BaseFragment() {
         val lineData = LineData(lineDataSet)
 
         tradingPairDetailsChart.data = lineData
+        tradingPairDetailsChart.setDrawGridBackground(false)
 
         if (tradingPairDetailsChart.isVisible) {
             tradingPairDetailsChart.invalidate()

@@ -7,7 +7,7 @@
         android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp"
         android:theme="@style/AppTheme.Dark">
 
-        <activity android:name=".activities.BarcodeCaptureActivity" />
+        <activity android:name=".activities.QRCodeCaptureActivity" />
 
     </application>
 

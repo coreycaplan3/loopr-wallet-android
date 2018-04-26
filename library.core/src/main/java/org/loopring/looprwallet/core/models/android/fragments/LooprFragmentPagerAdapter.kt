@@ -2,7 +2,7 @@ package org.loopring.looprwallet.core.models.android.fragments
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.app.FragmentPagerAdapter
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.fragments.BaseFragment
 
@@ -16,10 +16,12 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
  */
 class LooprFragmentPagerAdapter(private val fragmentManager: FragmentManager,
                                 private val fragmentList: List<Pair<String, BaseFragment>>)
-    : FragmentStatePagerAdapter(fragmentManager) {
+    : FragmentPagerAdapter(fragmentManager) {
 
     companion object {
+
         const val KEY_FRAGMENT = "_FRAGMENT"
+
     }
 
     var currentFragment: Fragment? = null
@@ -38,6 +40,7 @@ class LooprFragmentPagerAdapter(private val fragmentManager: FragmentManager,
 
     override fun getPageTitle(position: Int): CharSequence? = fragmentList[position].first
 
+    // TODO delete or use
 //    override fun saveState(): Parcelable? {
 //        super.saveState()
 //        val bundle = Bundle()

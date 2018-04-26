@@ -175,13 +175,10 @@ class OrderDetailsFragment : BaseFragment() {
         val currencyFormatter = currencySettings.getCurrencyFormatter()
         orderDetailsFiatAmountLabel.text = currencyFormatter.format(order.priceInUsd)
 
-        when {
-            order.isComplete -> orderDetailsSwipeRefreshLayout.isEnabled = false
-            else -> orderDetailsSwipeRefreshLayout.setOnRefreshListener {
-                orderSummaryViewModel?.refresh()
-                // TODO possible race condition because fills may not have been initialized yet
-                orderFillsViewModel?.refresh()
-            }
+        if(order.isComplete) {
+            orderDetailsSwipeRefreshLayout.isEnabled = false
+        } else {
+            orderDetailsSwipeRefreshLayout.isEnabled = true
         }
 
     }

@@ -1,11 +1,11 @@
 package org.loopring.looprwallet.core.networking.prices
 
-import kotlinx.coroutines.experimental.CommonPool
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.models.android.architecture.NET
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -19,7 +19,7 @@ import java.math.RoundingMode
  */
 class CurrencyExchangeServiceMockImpl : CurrencyExchangeService {
 
-    override fun getCurrentCurrencyExchangeRate(currency: String): Deferred<CurrencyExchangeRate> = async(CommonPool) {
+    override fun getCurrentCurrencyExchangeRate(currency: String): Deferred<CurrencyExchangeRate> = async(NET) {
 
         delay(MOCK_SERVICE_CALL_DURATION)
 

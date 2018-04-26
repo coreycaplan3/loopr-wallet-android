@@ -100,7 +100,7 @@ open class LooprToken(
         val REQ = LooprToken(
                 "0x8f8221afbb33998d8584a2b05749ba73c37a938a",
                 "REQ",
-                "Request Network",
+                "Request NET",
                 "999999999244592134526985951",
                 18,
                 str(R.string.req_binary)

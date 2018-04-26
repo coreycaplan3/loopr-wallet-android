@@ -13,17 +13,22 @@ interface OnGeneralOrderFilterChangeListener {
     /**
      * Called when the filter's status changes (EX: all vs. partial orders)
      *
-     * @param newStatusValue The newly selected status enum value
+     * @param newOrderStatusFilter The newly selected status enum value
      */
-    fun onStatusFilterChange(newStatusValue: String)
+    fun onStatusFilterChange(newOrderStatusFilter: String)
 
     /**
      * Called when the filter's date changes (EX: all vs. orders in past 7 days)
      */
-    fun onDateFilterChange(newDateValue: String)
+    fun onDateFilterChange(newDateFilter: String)
 
     /**
      * @return The current date filter being used
      */
     fun getCurrentDateFilterChange(): String
+
+    /**
+     * @return The current status filter being used
+     */
+    fun getCurrentStatusFilterChange(): String
 }

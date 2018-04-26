@@ -20,7 +20,8 @@ import javax.inject.Inject
  * Purpose of Class:
  *
  */
-class ViewTransfersViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+class ViewTransfersViewHolder(itemView: View?, onTransferClick: (Int) -> Unit)
+    : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
     override val containerView: View?
         get() = itemView
@@ -30,12 +31,12 @@ class ViewTransfersViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemVie
 
     init {
         homeTransfersLooprComponent.inject(this)
+
+        itemView?.setOnClickListener { onTransferClick(adapterPosition) }
     }
 
     @SuppressLint("SetTextI18n")
-    inline fun bind(item: LooprTransfer, crossinline onTransferClick: (LooprTransfer) -> Unit) {
-        itemView?.setOnClickListener { onTransferClick(item) }
-
+    fun bind(item: LooprTransfer) {
         if (item.isSend) {
             viewTransfersSendImage.visibility = View.VISIBLE
             viewTransfersReceiveImage.visibility = View.GONE

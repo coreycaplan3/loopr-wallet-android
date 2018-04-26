@@ -22,6 +22,7 @@ object InitialRealmSharedData {
         it.upsert(LooprToken.LRC)
         it.upsert(LooprToken.APPC)
         it.upsert(LooprToken.REQ)
+        it.upsert(LooprToken.ZRX)
 
         // Currency Exchange Rate
         it.upsert(CurrencyExchangeRate.USD)

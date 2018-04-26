@@ -3,17 +3,13 @@ package org.loopring.looprwallet.core.realm
 import android.support.annotation.VisibleForTesting
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
-import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_DEBUG
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_RELEASE
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_STAGING
-import org.loopring.looprwallet.core.wallet.WalletClient
 
 /**
  * Created by Corey Caplan on 1/30/18.
@@ -45,7 +41,7 @@ abstract class RealmClient {
          * Initializes the migration and initial data from a background thread. This should be
          * called from the application instance's *onCreate*.
          */
-        fun initializeMigrationAndInitialDataAsync(walletClient: WalletClient) = async(CommonPool) {
+        fun initializeMigrationAndInitialDataAsync() = async(IO) {
             val buildType = BuildUtility.BUILD_TYPE
             val client = when (buildType) {
                 BUILD_DEBUG -> RealmClientDebugImpl()
@@ -60,15 +56,6 @@ abstract class RealmClient {
 
             val realm = Realm.getInstance(configuration)
             realm.close()
-
-            launch(UI) {
-                val realmClient = RealmClient.getInstance()
-                CoreLooprWalletApp.uiSharedRealm = realmClient.getSharedInstance()
-
-                walletClient.getCurrentWallet()?.let {
-                    CoreLooprWalletApp.uiPrivateRealm = realmClient.getPrivateInstance(it)
-                }
-            }
 
             Unit
         }
@@ -106,6 +93,7 @@ abstract class RealmClient {
         override fun getPrivateInstance(wallet: LooprWallet): Realm {
             val configuration = getPrivateRealmConfigurationBuilder("${wallet.walletName}-in-memory")
                     .deleteRealmIfMigrationNeeded()
+                    .initialData(InitialRealmPrivateData.getInitialData())
                     .inMemory()
                     .build()
 

@@ -237,9 +237,9 @@ open class OfflineFirstViewModelTest : BaseDaggerTest() {
 
     @Test
     fun isPredicatesEqual() {
-        assertTrue(offlineFirstViewModel.isPredicatesEqual(offlineFirstViewModel.parameter, parameter))
+        assertTrue(offlineFirstViewModel.isPredicatesEqual(offlineFirstViewModel.mParameter, parameter))
 
-        assertFalse(offlineFirstViewModel.isPredicatesEqual(offlineFirstViewModel.parameter, "not-equal-parameter"))
+        assertFalse(offlineFirstViewModel.isPredicatesEqual(offlineFirstViewModel.mParameter, "not-equal-parameter"))
     }
 
     @Test

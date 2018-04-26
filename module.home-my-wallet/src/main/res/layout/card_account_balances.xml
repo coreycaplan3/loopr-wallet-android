@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/standard_vertical_padding"
     tools:showIn="@layout/fragment_my_wallet">
 
     <LinearLayout
@@ -21,7 +20,7 @@
                 style="@style/Base.TextAppearance.AppCompat.Headline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/account_balances" />
+                android:text="@string/balances" />
 
             <TextView
                 android:id="@+id/ethereumBalanceLabel"
@@ -34,7 +33,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_marginTop="@dimen/vertical_margin_small"
                 android:orientation="vertical">
 
                 <TextView
@@ -56,13 +55,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/myWalletShowTokensButton"
                 style="@style/App.Button.CardAction"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/card_action_icon_size"
-                android:text="@string/view_all_balances"
-                android:textColor="?attr/colorPrimary" />
+                android:contentDescription="@string/content_description_view_token_balances"
+                android:src="@drawable/ic_details_white_24dp" />
 
         </LinearLayout>
 

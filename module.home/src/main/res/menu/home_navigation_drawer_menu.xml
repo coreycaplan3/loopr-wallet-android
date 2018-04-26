@@ -2,6 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:orderInCategory="999"
+        android:title="@string/my_wallets">
+        <menu>
+            <group android:id="@+id/menuWalletNameGroup"
+                android:checkableBehavior="none"/>
+        </menu>
+    </item>
+    <item
+        android:orderInCategory="999"
         android:title="@string/wallet_settings">
         <menu>
             <group android:checkableBehavior="none">

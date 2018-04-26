@@ -6,10 +6,10 @@ import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.repositories.BaseRepository
 import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 import io.realm.RealmModel
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.sync.SyncData
 import java.util.*
 
@@ -104,7 +104,7 @@ class OfflineFirstViewModelImplTest : OfflineFirstViewModel<LooprToken, String>(
         syncRepository.add(SyncData())
     }
 
-    override fun getDataFromNetwork(parameter: String): Deferred<LooprToken> = async(CommonPool) {
+    override fun getDataFromNetwork(parameter: String): Deferred<LooprToken> = async(IO) {
         delay(500L)
         DATA
     }

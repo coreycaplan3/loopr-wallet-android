@@ -22,12 +22,12 @@ class RealmListLiveData<T : RealmModel>(private val results: OrderedRealmCollect
         when (results) {
             is RealmResults<*> -> {
                 (results as RealmResults<T>).addChangeListener { realmResults: RealmResults<T>? ->
-                    value = realmResults
+                    postValue(realmResults)
                 }
             }
             is RealmList<*> -> {
                 (results as RealmList<T>).addChangeListener { list: RealmList<T>? ->
-                    value = list
+                    postValue(list)
                 }
             }
             else -> throw IllegalArgumentException("RealmCollection not supported: " + results.javaClass.simpleName)

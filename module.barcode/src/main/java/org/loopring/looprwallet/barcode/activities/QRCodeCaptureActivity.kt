@@ -35,17 +35,17 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.vision.MultiProcessor
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
-import kotlinx.android.synthetic.main.activity_barcode_capture.*
+import kotlinx.android.synthetic.main.activity_qr_code_capture.*
 import org.loopring.looprwallet.barcode.R
 import org.loopring.looprwallet.barcode.views.BarcodeGraphicTracker
 import org.loopring.looprwallet.barcode.views.BarcodeTrackerFactory
 import org.loopring.looprwallet.barcode.views.CameraSource
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.extensions.snackbar
-import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.web3j.crypto.WalletUtils
@@ -55,7 +55,7 @@ import java.io.IOException
  * This activity detects QR codes and displays the value with the rear facing camera. During
  * detection, overlay graphics are drawn to indicate the position, size, and ID of each barcode.
  */
-class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpdateListener {
+class QRCodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpdateListener {
 
     companion object {
 
@@ -105,7 +105,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
         }
 
         /**
-         * Handles the activity result after returning back from this [BarcodeCaptureActivity].
+         * Handles the activity result after returning back from this [QRCodeCaptureActivity].
          *
          * @param requestCode The activity's request code
          * @param resultCode The activity's result code
@@ -129,7 +129,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
         }
 
         private fun getIntent(allowedTypes: Array<out String>): Intent {
-            return Intent(CoreLooprWalletApp.application, BarcodeCaptureActivity::class.java)
+            return Intent(CoreLooprWalletApp.application, QRCodeCaptureActivity::class.java)
                     .putExtra(KEY_ALLOWED_TYPES, allowedTypes)
         }
 
@@ -150,7 +150,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
     private var gestureDetector: GestureDetector? = null
 
     override val contentViewRes: Int
-        get() = R.layout.activity_barcode_capture
+        get() = R.layout.activity_qr_code_capture
 
     override val isSecureActivity: Boolean
         get() = false

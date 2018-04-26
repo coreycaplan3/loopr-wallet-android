@@ -1,10 +1,10 @@
 package org.loopring.looprwallet.core.networking.loopr
 
 import io.realm.RealmList
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.markets.TradingPairTrend
@@ -54,10 +54,10 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
                 "ZRX",
                 "WETH",
                 true,
-                0.85,
+                0.43,
                 "-68.25%",
-                0.88,
-                0.80,
+                0.44,
+                0.40,
                 20030240.0,
                 200302.0,
                 LooprToken.ZRX
@@ -65,7 +65,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
 
     }
 
-    override fun getMarkets(): Deferred<RealmList<TradingPair>> = async(CommonPool) {
+    override fun getMarkets(): Deferred<RealmList<TradingPair>> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -75,7 +75,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         }
     }
 
-    override fun getMarketDetails(tradingPairMarket: String): Deferred<TradingPair> = async(CommonPool) {
+    override fun getMarketDetails(tradingPairMarket: String): Deferred<TradingPair> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -85,7 +85,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         }
     }
 
-    override fun getMarketTrends(tradingPairMarket: String): Deferred<RealmList<TradingPairTrend>> = async(CommonPool) {
+    override fun getMarketTrends(tradingPairMarket: String): Deferred<RealmList<TradingPairTrend>> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {

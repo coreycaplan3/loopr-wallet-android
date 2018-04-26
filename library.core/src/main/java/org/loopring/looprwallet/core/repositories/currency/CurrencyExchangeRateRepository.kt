@@ -19,8 +19,6 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class CurrencyExchangeRateRepository : BaseRealmRepository(false) {
 
-    override fun getAsyncRealm() = realmClient.getSharedInstance()
-
     fun getCurrencyExchangeRate(currency: String): LiveData<CurrencyExchangeRate> {
         return uiRealm.where<CurrencyExchangeRate>()
                 .equalTo(CurrencyExchangeRate::currency, currency)

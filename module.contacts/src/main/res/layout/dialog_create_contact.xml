@@ -52,7 +52,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <include
-            layout="@layout/barcode_button"
+            layout="@layout/qr_code_button"
             android:layout_width="@dimen/card_action_icon_size"
             android:layout_height="@dimen/card_action_icon_size"
             android:layout_alignParentEnd="true"

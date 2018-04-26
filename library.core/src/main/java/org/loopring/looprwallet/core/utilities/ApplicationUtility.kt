@@ -5,8 +5,6 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.*
 import android.support.v4.content.ContextCompat
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
-import org.loopring.looprwallet.core.extensions.isLollipop
-import org.loopring.looprwallet.core.extensions.isMarshmallow
 
 /**
  * Created by Corey Caplan on 1/19/18.
@@ -57,7 +55,7 @@ object ApplicationUtility {
      * @return Gets a color using the [CoreLooprWalletApp] application instance
      */
     @Suppress("deprecation")
-    fun col(@ColorRes resId: Int, context: Context? = null): Int {
+    fun col(@ColorRes @AttrRes resId: Int, context: Context? = null): Int {
         return when {
             context != null ->
                 ContextCompat.getColor(context, resId)

@@ -7,10 +7,15 @@ import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.isValid
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.CompletableDeferred
+import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.error.ErrorTypes
 import org.loopring.looprwallet.core.models.error.LooprError
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -30,7 +35,7 @@ import java.util.*
  * the network.
  *
  * **NOTE**: This class is not thread-safe, yet. Reason being, it's possible for another thread to
- * call [refresh] at the same as [initializeDataInternal] and change the value of [parameter].
+ * call [refresh] at the same as [initializeDataInternal] and change the value of [mParameter].
  *
  * @param T The type of data this [ViewModel] is responsible for retrieving
  * @param U The type of object used for querying and retrieving [T] (a primitive/object that stores
@@ -79,7 +84,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     open val waitTime = DEFAULT_WAIT_TIME_MILLIS
 
     @VisibleForTesting
-    var parameter: U? = null
+    var mParameter: U? = null
 
     /**
      * This variable is setup in the call to [initializeData]
@@ -190,7 +195,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * a waste of resources
      */
     fun refresh() {
-        val parameter = parameter
+        val parameter = mParameter
         when (parameter) {
             null -> {
                 logw("Attempted to refresh this ViewModel before it was initialized")
@@ -420,7 +425,9 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     }
 
     /**
-     * Waits for data to come back from the network
+     * **FOR TESTING ONLY**
+     *
+     * Waits for data to come back from the network.
      */
     @VisibleForTesting
     suspend fun blockingNetworkObserver(): T {
@@ -482,7 +489,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     ) {
         // Check if we're re-initializing the same thing again
         val oldLiveData = mLiveData
-        if (oldLiveData != null && isPredicatesEqual(this@OfflineFirstViewModel.parameter, parameter)) {
+        if (oldLiveData != null && isPredicatesEqual(this@OfflineFirstViewModel.mParameter, parameter)) {
             addObserver(oldLiveData)
             return
         }
@@ -500,26 +507,32 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         mIsNetworkOperationRunning = isRefreshNecessary(parameter)
 
         // Reinitialize data, observers, and notify via the call to onLiveDataInitialized
-        this.parameter = parameter
-        val liveData = getLiveDataFromRepository(parameter)
-        this.mLiveData = liveData
-        addObserver(liveData)
-        onLiveDataInitialized(liveData)
+        async(UI) {
+            mParameter = parameter
+            val liveData = async(UI) {getLiveDataFromRepository(parameter)}.await()
+            mLiveData = liveData
+            addObserver(liveData)
+            onLiveDataInitialized(liveData)
+        }
 
-        if (mIsNetworkOperationRunning) {
-            mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
-            async(CommonPool) {
+        async(IO) {
+            if (mIsNetworkOperationRunning) {
+                mCurrentState.postValue(getCurrentLoadingState(mLiveData?.value))
                 // Ping the network for fresh data
                 handleNetworkRequest(parameter)
             }
         }
     }
 
-    private fun refreshInternal(parameter: U) = async {
+    private fun refreshInternal(parameter: U) {
         if (!mIsNetworkOperationRunning && isRefreshNecessary(parameter)) {
             // We don't have a network operation already running and a refresh is necessary
             mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
-            handleNetworkRequest(parameter)
+
+            async(IO) {
+                handleNetworkRequest(parameter)
+            }
+
         } else {
             mCurrentState.value = getCurrentIdleState(mLiveData?.value)
         }
@@ -552,7 +565,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         } catch (exception: Exception) {
             val looprError = when (exception) {
                 is HttpException -> {
-                    loge("Network communication addErrorObserver: ", exception)
+                    loge("NET communication addErrorObserver: ", exception)
                     if (exception.code() >= 500) {
                         LooprError(R.string.error_network_error, ErrorTypes.SERVER_ERROR)
                     } else {

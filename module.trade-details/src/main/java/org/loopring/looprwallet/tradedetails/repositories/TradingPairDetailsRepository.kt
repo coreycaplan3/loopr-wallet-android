@@ -18,8 +18,6 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class TradingPairDetailsRepository : BaseRealmRepository(false) {
 
-    override fun getAsyncRealm(): Realm = realmClient.getSharedInstance()
-
     fun getTradingPairByMarket(primaryTicker: String, secondaryTicker: String): LiveData<TradingPair> {
         return uiRealm.where<TradingPair>()
                 .equalTo(TradingPair::primaryTicker, primaryTicker)

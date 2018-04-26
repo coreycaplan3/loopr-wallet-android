@@ -10,8 +10,8 @@ import android.view.View
 import android.widget.ImageButton
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_select_address.*
-import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
-import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
+import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
+import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.contacts.fragments.ViewContactsFragment
 import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
@@ -61,7 +61,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         super.onViewCreated(view, savedInstanceState)
 
         val barcodeScannerButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-        BarcodeCaptureActivity.setupBarcodeScanner(this, barcodeScannerButton, arrayOf(TYPE_PUBLIC_KEY))
+        QRCodeCaptureActivity.setupBarcodeScanner(this, barcodeScannerButton, arrayOf(TYPE_PUBLIC_KEY))
 
         searchViewPresenter = SearchViewPresenter(
                 containsOverflowMenu = false,
@@ -94,7 +94,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
 
         addContactButton.setOnClickListener {
             val currentAddress = recipientAddressEditText.text.toString()
-            CreateContactDialog.create(currentAddress).show(fragmentManager, CreateContactDialog.TAG)
+            CreateContactDialog.getInstance(currentAddress).show(fragmentManager, CreateContactDialog.TAG)
         }
 
         createTransferContinueButton.setOnClickListener {
@@ -147,7 +147,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        BarcodeCaptureActivity.handleActivityResult(recipientAddressEditText, requestCode, resultCode, data)
+        QRCodeCaptureActivity.handleActivityResult(recipientAddressEditText, requestCode, resultCode, data)
     }
 
 

@@ -3,7 +3,9 @@ package org.loopring.looprwallet.core.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import io.realm.*
+import io.realm.OrderedRealmCollection
+import io.realm.RealmCollection
+import io.realm.RealmModel
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.inflate
 
@@ -12,8 +14,8 @@ import org.loopring.looprwallet.core.extensions.inflate
  *
  * Project: loopr-wallet-android
  *
- * Purpose of Class:
- *
+ * Purpose of Class: An adapter fit for using realm's features out-of-the-box. This class has the
+ * ability to add a header item that is always in the 0th position (first) in the list.
  */
 abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -21,6 +23,7 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
         const val TYPE_LOADING = 0
         const val TYPE_EMPTY = 1
         const val TYPE_DATA = 2
+        const val TYPE_HEADER = 3
     }
 
     /**
@@ -36,18 +39,26 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      */
     abstract val totalItems: Int?
 
+    var containsHeader: Boolean = false
+        set(value) {
+            if (field != value) {
+                notifyDataSetChanged()
+                field = value
+            }
+        }
+
     var data: OrderedRealmCollection<T>? = null
         private set
 
-    // TODO reimplement me for adapter with custom DATA viewHolders
-    override fun getItemViewType(position: Int): Int {
+    final override fun getItemViewType(position: Int): Int {
         val data = data ?: return TYPE_LOADING
 
         return when {
             !data.isValid -> TYPE_LOADING
             data.size == 0 -> TYPE_EMPTY
-            position == itemCount - 1 && containsMoreData() ->
-                // We are at the last item, and there's still more data to load
+            position == 0 && containsHeader -> TYPE_HEADER
+            position == itemCount && containsMoreData() ->
+                // We are at the last position (after the data), but there's still more data to load
                 TYPE_LOADING
             else -> TYPE_DATA
         }
@@ -57,16 +68,21 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
         return when (viewType) {
             TYPE_LOADING -> LoadingViewHolder(parent.inflate(R.layout.view_holder_loading))
             TYPE_EMPTY -> onCreateEmptyViewHolder(parent)
-            else -> onCreateDataViewHolder(parent, viewType)
+            TYPE_DATA -> onCreateDataViewHolder(parent)
+            TYPE_HEADER -> onCreateHeaderViewHolder(parent)
+            else -> throw IllegalArgumentException("Invalid viewType, found $viewType")
         }
     }
 
     abstract fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
-    abstract fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
+    abstract fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
+    open fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        throw NotImplementedError("This exception is only thrown if this function was forgotten and should be implemented!")
+    }
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = data
-        val newPosition = position - getDataOffset()
+        val newPosition = position + dataOffsetPosition
         if (data != null && newPosition >= 0 && newPosition < data.size) {
             onBindViewHolder(holder, position, data[newPosition])
         }
@@ -76,20 +92,29 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      * Returns an offset from the given position, if necessary for binding data and indexing into
      * the list of data.
      *
-     * For example, we need to bind index 1, but the 0th index is a header item and unrelated to
-     * the data in this adapter. In that situation, the data offset is *-1*, since we need to move
-     * the position back by 1 to properly index into the [data] list.
+     * For example, we need to bind position 1, but the 0th position is a header item and unrelated
+     * to the data in this adapter. In that situation, the data offset is *-1*, since we need to
+     * move the position back by 1 to properly index into the [data] list.
      *
      * @return The offset position or null if **NO** data should be retrieved at this position
      */
-    abstract fun getDataOffset(): Int
+    val dataOffsetPosition
+        get() = when (containsHeader) {
+            true -> -1
+            else -> 0
+        }
 
     abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: T?)
 
-    override fun getItemCount(): Int {
-        // We return an extra item to account for the loading view holder
-        return data?.let { getItemCountForOnlyData(it) } ?: 1
-    }
+    final override fun getItemCount(): Int = data?.let {
+        val canLoadMore = totalItems != null && it.size == totalItems
+        val addition = when {
+            canLoadMore && containsHeader -> 2
+            canLoadMore || containsHeader -> 1
+            else -> 0
+        }
+        return@let it.size + addition
+    } ?: 1
 
     // MARK - Protected Methods
 
@@ -141,7 +166,6 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     private fun isDataValid(): Boolean {
         return data != null && data!!.isValid
     }
-
 
     private class LoadingViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
 

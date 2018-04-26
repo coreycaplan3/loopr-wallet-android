@@ -27,7 +27,7 @@ open class LooprOrder(
         var amount: Double = 1320.25,
         var total: Double = 10.0,
         var priceInUsd: Double = 0.85,
-        var priceInEth: Double = 0.001214,
+        var priceInSecondaryTicker: Double = 0.001214,
         override var lastUpdated: Date = Date()
 ) : RealmObject(), TrackedRealmObject {
 

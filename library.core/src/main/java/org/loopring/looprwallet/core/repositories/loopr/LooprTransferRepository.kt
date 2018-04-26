@@ -1,7 +1,8 @@
 package org.loopring.looprwallet.core.repositories.loopr
 
 import android.arch.lifecycle.LiveData
-import io.realm.*
+import io.realm.OrderedRealmCollection
+import io.realm.Sort
 import io.realm.kotlin.where
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
@@ -20,8 +21,6 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  *
  */
 class LooprTransferRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
-
-    override fun getAsyncRealm() = realmClient.getPrivateInstance(currentWallet)
 
     fun getTransferByHash(transferHash: String): LiveData<LooprTransfer> {
         // We're in a private realm instance, so we're already querying by all of this address's

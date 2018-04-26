@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.models.markets
 
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 
 /**
@@ -22,8 +23,8 @@ import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
  * that was traded in the past 24h. IE 10,000 LRC was traded which equated to 100 WETH (secondary)
  */
 open class TradingPair(
-        var primaryTicker: String = "",
-        var secondaryTicker: String = "",
+        primaryTicker: String = "",
+        secondaryTicker: String = "",
         var isFavorite: Boolean = false,
         var lastPrice: Double = 0.00,
         var change24h: String = "0.00%",
@@ -52,13 +53,21 @@ open class TradingPair(
     var primaryToken: LooprToken
         get() = mPrimaryToken ?: LooprToken.ETH
         set(value) {
-            mPrimaryToken = primaryToken
+            mPrimaryToken = value
         }
 
     /**
      * The [primaryTicker] and [secondaryTicker] formatted as *[primaryTicker]-[secondaryTicker]*
      */
-    val market: String
-        get() = "$primaryTicker-$secondaryTicker"
+    @PrimaryKey
+    var market: String = ""
+        private set
+
+    var primaryTicker: String = ""
+    var secondaryTicker: String = ""
+
+    init {
+        market = "$primaryTicker-$secondaryTicker"
+    }
 
 }

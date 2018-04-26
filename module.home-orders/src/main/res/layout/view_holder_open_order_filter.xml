@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/standard_padding">
 
-    <android.support.v7.widget.AppCompatSpinner
+    <Spinner
         android:id="@+id/openOrderFilterDateSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,9 +12,10 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/horizontal_margin"
-        android:layout_marginRight="@dimen/horizontal_margin" />
+        android:layout_marginRight="@dimen/horizontal_margin"
+        android:spinnerMode="dialog" />
 
-    <android.support.v7.widget.AppCompatSpinner
+    <Spinner
         android:id="@+id/openOrderFilterStatusSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,7 +23,8 @@
         android:layout_marginEnd="@dimen/horizontal_margin"
         android:layout_marginRight="@dimen/horizontal_margin"
         android:layout_toLeftOf="@id/openOrderCancelAllButton"
-        android:layout_toStartOf="@id/openOrderCancelAllButton" />
+        android:layout_toStartOf="@id/openOrderCancelAllButton"
+        android:spinnerMode="dialog" />
 
     <Button
         android:id="@+id/openOrderCancelAllButton"

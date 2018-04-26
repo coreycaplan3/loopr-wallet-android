@@ -9,9 +9,9 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
-import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
-import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
-import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_TRADING_PAIR
+import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
+import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
+import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity.Companion.TYPE_TRADING_PAIR
 import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -77,12 +77,12 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
+        QRCodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
             when(type) {
-                BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
+                QRCodeCaptureActivity.TYPE_PUBLIC_KEY -> {
                      CreateTransferActivity.route(this, value)
                 }
-                BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
+                QRCodeCaptureActivity.TYPE_TRADING_PAIR -> {
                     val tradingPair = TradingPair.createFromMarket(value)
                     TradingPairDetailsActivity.route(tradingPair, this)
                 }
@@ -103,7 +103,7 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
         R.id.menuMainScanQrCode -> {
-            BarcodeCaptureActivity.route(this, arrayOf(TYPE_PUBLIC_KEY, TYPE_TRADING_PAIR))
+            QRCodeCaptureActivity.route(this, arrayOf(TYPE_PUBLIC_KEY, TYPE_TRADING_PAIR))
             true
         }
         R.id.menuMainSettings -> {

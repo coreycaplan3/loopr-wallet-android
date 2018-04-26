@@ -52,6 +52,8 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar?.title = str(R.string.my_balances)
+
         setupTransactionViewModel(approveTransactionViewModel, R.string.unlocking_token) {
             return@setupTransactionViewModel when (it) {
             // TODO CHECK GAS
@@ -69,7 +71,6 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
 
         }
 
-        viewBalancesSwipeRefreshLayout.setOnRefreshListener { refreshAll() }
         setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel, viewBalancesSwipeRefreshLayout)
 
         val address = walletClient.getCurrentWallet()?.credentials?.address
@@ -84,13 +85,7 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
     }
 
     override fun onTokenLockClick(token: CryptoToken) {
-        TODO("Unlock or lock the token, depending on its current allowance being above a certain threshold")
-    }
-
-    // MARK - Private Methods
-
-    private fun refreshAll() {
-        tokenBalanceViewModel.refresh()
+        // TODO Unlock, lock or both - depending on its current allowance being above a certain threshold
     }
 
 }

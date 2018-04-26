@@ -19,12 +19,51 @@ import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_O
  */
 class GeneralOpenOrderFilterViewHolder(
         itemView: View,
-        private val listener: OnGeneralOrderFilterChangeListener?,
-        private val onCancelAllClickListener: ((View) -> Unit)?
+        listener: OnGeneralOrderFilterChangeListener,
+        onCancelAllClickListener: ((View) -> Unit)
 ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
     override val containerView: View
         get() = itemView
+
+    init {
+        val context = itemView.context
+        val layoutRes = android.R.layout.simple_spinner_item
+        val dropDownViewRes = android.R.layout.simple_spinner_dropdown_item
+
+        // STATUS SPINNER
+        val statusAdapter = ArrayAdapter(context, layoutRes, FILTER_OPEN_ORDER_STATUS_UI).apply {
+            setDropDownViewResource(dropDownViewRes)
+        }
+        openOrderFilterStatusSpinner.adapter = statusAdapter
+        openOrderFilterDateSpinner.setSelection(0)
+        openOrderFilterStatusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                listener.onStatusFilterChange(FILTER_OPEN_ORDER_STATUS_VALUES[position])
+            }
+        }
+
+
+        // DATE SPINNER
+        val dateAdapter = ArrayAdapter(context, layoutRes, FILTER_DATES).apply {
+            setDropDownViewResource(dropDownViewRes)
+        }
+        openOrderFilterDateSpinner.adapter = dateAdapter
+        openOrderFilterDateSpinner.setSelection(0)
+        openOrderFilterDateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                listener.onDateFilterChange(FILTER_DATES[position])
+            }
+        }
+
+        // CANCEL ALL BUTTON
+        openOrderCancelAllButton.setOnClickListener(onCancelAllClickListener)
+
+    }
 
     /**
      * @param statusRawValue The status ENUM, as seen in the Loopring API for filtering orders by
@@ -32,37 +71,7 @@ class GeneralOpenOrderFilterViewHolder(
      */
     fun bind(dateValue: String, statusRawValue: String) {
         openOrderFilterDateSpinner.setSelection(FILTER_DATES.indexOf(dateValue))
-
-        openOrderFilterStatusSpinner.onItemSelectedListener = null
-
-        // The index of the value is the same index of the UI value in the UI array
         openOrderFilterStatusSpinner.setSelection(FILTER_OPEN_ORDER_STATUS_VALUES.indexOf(statusRawValue))
-
-        val context = itemView.context
-        val layoutRes = android.R.layout.simple_spinner_item
-
-        // DATE SPINNER
-        openOrderFilterDateSpinner.adapter = ArrayAdapter(context, layoutRes, FILTER_DATES)
-        openOrderFilterDateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                listener?.onDateFilterChange(FILTER_DATES[position])
-            }
-        }
-
-        // STATUS SPINNER
-        openOrderFilterStatusSpinner.adapter = ArrayAdapter(context, layoutRes, FILTER_OPEN_ORDER_STATUS_UI)
-        openOrderFilterStatusSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                listener?.onStatusFilterChange(FILTER_OPEN_ORDER_STATUS_VALUES[position])
-            }
-        }
-
-        // CANCEL ALL BUTTON
-        openOrderCancelAllButton.setOnClickListener(onCancelAllClickListener)
     }
 
 }

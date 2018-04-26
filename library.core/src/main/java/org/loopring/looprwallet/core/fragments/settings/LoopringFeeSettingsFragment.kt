@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.fragments.settings
 import android.os.Bundle
 import android.support.v7.preference.Preference
 import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.DEFAULT_VALUE_LRC_FEE
 import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.DEFAULT_VALUE_MARGIN_SPLIT
@@ -29,6 +30,12 @@ class LoopringFeeSettingsFragment : BaseSettingsFragment() {
 
     @Inject
     lateinit var currencySettings: CurrencySettings
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        coreLooprComponent.inject(this)
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.settings_loopring_fees)

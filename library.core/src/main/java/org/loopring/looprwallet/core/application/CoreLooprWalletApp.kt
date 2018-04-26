@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import io.realm.Realm
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.CoreTestActivity
 import org.loopring.looprwallet.core.dagger.*
 import org.loopring.looprwallet.core.extensions.logi
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.realm.RealmClient
 import org.loopring.looprwallet.core.utilities.PreferenceUtility
 import org.loopring.looprwallet.core.wallet.WalletClient
@@ -34,8 +36,23 @@ open class CoreLooprWalletApp : MultiDexApplication(), Application.ActivityLifec
         @SuppressLint("StaticFieldLeak")
         lateinit var uiSharedRealm: Realm
 
+        /**
+         * A shared realm that can only be access from a **IO** co-routine thread thread
+         */
         @SuppressLint("StaticFieldLeak")
         lateinit var uiPrivateRealm: Realm
+
+        /**
+         * A shared realm that can only be access from a **IO** co-routine thread thread
+         */
+        @SuppressLint("StaticFieldLeak")
+        lateinit var asyncSharedRealm: Realm
+
+        /**
+         * A private realm that can only be access from a **IO** co-routine thread thread
+         */
+        @SuppressLint("StaticFieldLeak")
+        lateinit var asyncPrivateRealm: Realm
 
         /**
          * The class representing the *MainActivity* for the app
@@ -82,11 +99,27 @@ open class CoreLooprWalletApp : MultiDexApplication(), Application.ActivityLifec
 
         Realm.init(this)
 
-        RealmClient.initializeMigrationAndInitialDataAsync(walletClient)
+        val job = RealmClient.initializeMigrationAndInitialDataAsync()
+
+        async(IO) {
+            job.await()
+            asyncSharedRealm = realmClient.getSharedInstance()
+        }
+
+        async(UI) {
+            job.await()
+            uiSharedRealm = realmClient.getSharedInstance()
+        }
 
         walletClient.setOnCurrentWalletChange {
             launch(UI) {
+                job.await()
                 uiPrivateRealm = realmClient.getPrivateInstance(it)
+            }
+
+            launch(IO) {
+                job.await()
+                asyncPrivateRealm = realmClient.getPrivateInstance(it)
             }
         }
     }

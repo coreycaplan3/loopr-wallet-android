@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.view_holder_token_balance.*
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ImageUtility
 import org.loopring.looprwallet.viewbalances.R
 
 /**
@@ -24,6 +25,9 @@ class ViewBalancesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
         get() = itemView
 
     inline fun bind(address: String, token: CryptoToken, crossinline onUnlockClick: () -> Unit) {
+        val context = itemView.context
+        tokenBalanceImage.setImageDrawable(ImageUtility.getImageFromTicker(token.ticker, context))
+
         tokenBalanceNameLabel.text = token.name
         tokenBalanceTickerLabel.text = token.ticker
 
@@ -40,7 +44,7 @@ class ViewBalancesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
             }
         }
 
-        TODO("1) Image Loading and 2) Check if token is unlocked and display lock icon. If locked, display unlock icon")
+        TODO("Check if token is unlocked and display lock icon. If locked, display unlock icon")
     }
 
 }

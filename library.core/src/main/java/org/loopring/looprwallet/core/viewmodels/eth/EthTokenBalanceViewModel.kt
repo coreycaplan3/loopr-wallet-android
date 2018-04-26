@@ -68,10 +68,10 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<Lo
      * retrieved from the network and it is persisted to realm so it may be reused and accessed.
      */
     private fun addTokenInfoToRealm(newToken: LooprToken): LooprToken? {
-        val address = parameter ?: return null
+        val address = mParameter ?: return null
 
         val tokenBalance = newToken.tokenBalances[0]
-        val token = repository.getTokenByContractAddressNow(contractAddress = newToken.identifier)
+        val token = repository.getTokenByContractAddressFromIoNow(contractAddress = newToken.identifier)
         val tokenWithBalanceInfo = repository.getTokenByContractAddressAndAddressNow(
                 contractAddress = newToken.identifier,
                 walletAddress = address

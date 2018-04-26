@@ -33,7 +33,9 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/horizontal_margin_small"
-            android:layout_marginRight="@dimen/horizontal_margin_small">
+            android:layout_marginLeft="@dimen/horizontal_margin_small"
+            android:layout_marginRight="@dimen/horizontal_margin_small"
+            android:layout_marginStart="@dimen/horizontal_margin_small">
 
 
             <org.loopring.looprwallet.order.views.OrderProgressView
@@ -85,20 +87,21 @@
 
                     <TextView
                         android:id="@+id/generalOrderSellCircle"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:background="@drawable/sell_circle"
                         android:gravity="center"
                         android:text="@string/letter_s"
                         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                         android:textColor="@android:color/white"
                         android:textSize="12sp"
-                        android:visibility="gone" />
+                         />
 
                     <TextView
                         android:id="@+id/generalOrderBuyCircle"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:visibility="gone"
                         android:background="@drawable/buy_circle"
                         android:gravity="center"
                         android:text="@string/letter_b"
@@ -129,12 +132,14 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/standard_padding_small"
-            android:layout_marginStart="@dimen/standard_padding_small"
+            android:layout_marginEnd="@dimen/horizontal_margin_small"
+            android:layout_marginLeft="@dimen/horizontal_margin_small"
+            android:layout_marginRight="@dimen/horizontal_margin_small"
+            android:layout_marginStart="@dimen/horizontal_margin_small"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/genericOrderPriceEthLabel"
+                android:id="@+id/genericOrderPriceSecondaryTokenLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/vertical_margin_extra_small"

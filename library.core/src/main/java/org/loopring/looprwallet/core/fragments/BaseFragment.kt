@@ -32,6 +32,7 @@ import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -234,6 +235,11 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * Enables the toolbar to be collapsed when scrolling
      */
     fun enableToolbarCollapsing() {
+        if(parentFragment != null) {
+            // Children don't have toolbars
+            return
+        }
+
         (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
             it.scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
         }
@@ -257,6 +263,11 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * Disables the toolbar from being collapsed when scrolling
      */
     fun disableToolbarCollapsing() {
+        if(parentFragment != null) {
+            // Children don't have toolbars
+            return
+        }
+
         (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
             it.scrollFlags = 0
         }
@@ -386,9 +397,13 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
             viewModelList.add(viewModel)
         }
 
+        refreshLayout?.setOnRefreshListener {
+            refreshLayout.isRefreshing = false
+            refreshAllOfflineFirstViewModels()
+        }
+
         // STATE OBSERVER
         viewModel?.addCurrentStateObserver(this) {
-            refreshLayout?.isRefreshing = false
             progressBar?.visibility = when {
                 viewModelList.any { it.isLoading() } -> View.VISIBLE
                 else -> View.GONE
@@ -408,18 +423,25 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
             val snackbar = indefiniteSnackbar
             if (snackbar == null || !snackbar.isShownOrQueued) {
                 // If we aren't already showing the refreshAll snackbar, let's show it
-                val refreshAll = { _: View -> viewModelList.forEach(OfflineFirstViewModel<*, *>::refresh) }
                 when {
                     viewModel.hasValidData() ->
-                        view?.longSnackbarWithAction(it.errorMessage, R.string.reload, refreshAll)
+                        view?.longSnackbarWithAction(it.errorMessage, R.string.reload) { refreshAllOfflineFirstViewModels() }
                     else -> {
                         // This snackbar should be indefinite because we NEED the data.
-                        indefiniteSnackbar = view?.indefiniteSnackbarWithAction(it.errorMessage, R.string.reload, refreshAll)
+                        indefiniteSnackbar = view?.indefiniteSnackbarWithAction(it.errorMessage, R.string.reload) { refreshAllOfflineFirstViewModels() }
                                 ?.addCallback(snackbarCallbackRemoverListener)
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Refreshes all viewModels in the [viewModelList] that were added via calls to
+     * [setupOfflineFirstDataObserverForAdapter].
+     */
+    protected fun refreshAllOfflineFirstViewModels() {
+        viewModelList.forEach(OfflineFirstViewModel<*, *>::refresh)
     }
 
     /**
@@ -472,7 +494,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
     private fun createAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) {
         runBlocking {
-            appbarLayout = async(CommonPool) { createAppbarLayout(fragmentView, savedInstanceState) }
+            appbarLayout = async(IO) { createAppbarLayout(fragmentView, savedInstanceState) }
                     .await()
         }
 

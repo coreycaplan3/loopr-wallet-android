@@ -114,10 +114,12 @@ class GeneralOrderViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
         val formatter = str(R.string.formatter_vol)
         genericOrderQuantityLabel.text = formatter.format(quantityText)
 
-        genericOrderPriceFiatLabel.text = "${tokenFormatter.format(order.priceInEth)} ${order.tradingPair.secondaryTicker}"
+        genericOrderPriceFiatLabel.text = "${tokenFormatter.format(order.priceInSecondaryTicker)} ${order.tradingPair.secondaryTicker}"
 
         val currencyFormatter = currencySettings.getCurrencyFormatter()
         genericOrderPriceFiatLabel.text = currencyFormatter.format(order.priceInUsd)
+
+        genericOrderPriceSecondaryTokenLabel.text = tokenFormatter.format(order.priceInSecondaryTicker)
 
         val totalPriceInFiat = BigDecimal(order.priceInUsd) * BigDecimal(order.amount)
         genericOrderTotalPriceLabel.text = currencyFormatter.format(totalPriceInFiat)

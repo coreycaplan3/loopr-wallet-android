@@ -23,8 +23,6 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class LooprOrderRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
 
-    override fun getAsyncRealm() = realmClient.getPrivateInstance(currentWallet)
-
     fun getOrderByHash(orderHash: String): LiveData<LooprOrder> {
         return uiRealm.where<LooprOrder>()
                 .equalTo(LooprOrder::orderHash, orderHash)

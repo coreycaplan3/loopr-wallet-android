@@ -42,7 +42,7 @@ class ShowBarcodeDialog : BaseBottomSheetDialog() {
         super.onViewCreated(view, savedInstanceState)
 
         try {
-            val dimensions = resources.getDimension(R.dimen.barcode_dimensions).roundToInt()
+            val dimensions = resources.getDimension(R.dimen.qr_code_dimensions).roundToInt()
             val bitmap = BarcodeUtility.encodeTextToBitmap(barcodeText, dimensions)
             barcodeImage.setImageBitmap(bitmap)
             barcodeLabel.text = barcodeText

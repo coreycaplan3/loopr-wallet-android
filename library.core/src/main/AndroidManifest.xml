@@ -1,11 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.loopring.looprwallet.core">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".application.CoreLooprWalletApp"
         android:theme="@style/AppTheme.Dark">
 
-        <activity android:name=".activities.CoreTestActivity" />
+        <activity android:name=".activities.CoreTestActivity"
+            android:theme="@style/AppTheme.Dark" />
 
     </application>
 

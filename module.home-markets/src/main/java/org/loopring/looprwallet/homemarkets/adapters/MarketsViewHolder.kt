@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.view_holder_markets.*
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
+import org.loopring.looprwallet.core.utilities.ImageUtility
 import org.loopring.looprwallet.homemarkets.R
 import org.loopring.looprwallet.homemarkets.dagger.homeMarketsLooprComponent
 import javax.inject.Inject
@@ -19,7 +20,8 @@ import javax.inject.Inject
  * Purpose of Class:
  *
  */
-class MarketsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+class MarketsViewHolder(itemView: View, onTradingPairClick: (Int) -> Unit)
+    : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
     @Inject
     lateinit var currencySettings: CurrencySettings
@@ -29,9 +31,17 @@ class MarketsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Lay
 
     init {
         homeMarketsLooprComponent.inject(this)
+
+        itemView.setOnClickListener {
+            onTradingPairClick(adapterPosition)
+        }
     }
 
-    inline fun bind(tradingPair: TradingPair, crossinline clickListener: (TradingPair) -> Unit) {
+    fun bind(tradingPair: TradingPair) {
+        val context = itemView.context
+        val image = ImageUtility.getImageFromTicker(tradingPair.primaryTicker, context)
+        marketsImage.setImageDrawable(image)
+
         marketsTokenNameLabel.text = tradingPair.primaryToken.name
         marketsTickerLabel.text = tradingPair.primaryTicker
 
@@ -44,8 +54,6 @@ class MarketsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Lay
 
         val formatter = currencySettings.getCurrencyFormatter()
         marketsCurrentPriceLabel.text = formatter.format(tradingPair.lastPrice)
-
-        itemView.setOnClickListener { clickListener(tradingPair) }
     }
 
 }

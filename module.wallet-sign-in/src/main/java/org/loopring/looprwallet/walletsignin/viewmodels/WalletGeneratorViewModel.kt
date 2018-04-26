@@ -1,10 +1,10 @@
 package org.loopring.looprwallet.walletsignin.viewmodels
 
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.toArrayList
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.FilesUtility
 import org.loopring.looprwallet.core.utilities.RegexUtility
@@ -125,7 +125,7 @@ class WalletGeneratorViewModel : TransactionViewModel<WalletCreationResult>() {
      * @param walletName The wallet's *unique* name
      * @param password The wallet's password, used to derive the private key.
      */
-    fun createPhraseAsync(walletName: String, password: String) = async(CommonPool) {
+    fun createPhraseAsync(walletName: String, password: String) = async(IO) {
         mIsTransactionRunning.postValue(true)
         populateWordListFromAssets()
 
@@ -175,7 +175,7 @@ class WalletGeneratorViewModel : TransactionViewModel<WalletCreationResult>() {
      * Creates or restores a wallet async (non-blocking) and calls
      * @param block A function that takes no parameters and returns a [WalletCreationResult]
      */
-    private inline fun createWalletAsync(crossinline block: () -> WalletCreationResult) = async(CommonPool) {
+    private inline fun createWalletAsync(crossinline block: () -> WalletCreationResult) = async(IO) {
         mIsTransactionRunning.postValue(true)
 
         var walletCreationResult: WalletCreationResult? = null

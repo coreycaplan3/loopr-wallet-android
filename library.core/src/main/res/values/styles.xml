@@ -25,6 +25,23 @@
 
     <!-- Buttons -->
 
+    <style name="App.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">?android:attr/textColorPrimaryInverseDisableOnly</item>
+        <item name="android:background">@drawable/button_background_material</item>
+    </style>
+
+    <style name="App.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">?attr/borderlessButtonColor</item>
+        <item name="android:paddingLeft">@dimen/horizontal_padding_small</item>
+        <item name="android:paddingRight">@dimen/horizontal_padding_small</item>
+        <item name="android:background">@drawable/ripple_effect_accent</item>
+    </style>
+
+    <style name="App.Button.Borderless.White" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/ripple_effect_white</item>
+    </style>
+
     <style name="App.Button.CardAction" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">@dimen/card_action_icon_size</item>
         <item name="android:layout_height">@dimen/card_action_icon_size</item>
@@ -40,11 +57,6 @@
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:paddingLeft">@dimen/card_padding_horizontal</item>
         <item name="android:paddingRight">@dimen/card_padding_horizontal</item>
-    </style>
-
-    <style name="App.Button" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:textColor">?android:attr/textColorPrimaryInverseDisableOnly</item>
-        <item name="android:background">@drawable/button_background_material</item>
     </style>
 
     <!-- There's no shapes with a radius that intrinsically limits the size -->
@@ -64,18 +76,6 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
-    </style>
-
-    <style name="App.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">?attr/borderlessButtonColor</item>
-        <item name="android:paddingLeft">@dimen/horizontal_padding_small</item>
-        <item name="android:paddingRight">@dimen/horizontal_padding_small</item>
-        <item name="android:background">@drawable/ripple_effect_accent</item>
-    </style>
-
-    <style name="App.Button.Borderless.White" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@drawable/ripple_effect_white</item>
     </style>
 
     <!-- Card -->
@@ -193,6 +193,16 @@
     <style name="App.SettingsTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
         <item name="preferenceFragmentCompatStyle">@style/App.FragmentSettingsStyle</item>
         <item name="preferenceFragmentStyle">@style/App.FragmentSettingsStyle</item>
+    </style>
+
+    <!-- Spinner -->
+
+    <style name="App.Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
+    </style>
+
+    <style name="App.Spinner.Light" parent="App.Spinner">
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <!-- Custom Style for PreferenceFragmentCompat -->

@@ -26,18 +26,21 @@ class ViewTransfersAdapter(listener: OnTransferClickListener) : BaseRealmAdapter
         return ViewTransfersEmptyViewHolder(parent.inflate(R.layout.view_holder_view_transfers_empty))
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewTransfersViewHolder(parent.inflate(R.layout.view_holder_view_transfers))
+    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        return ViewTransfersViewHolder(parent.inflate(R.layout.view_holder_view_transfers), ::onTransferClick)
     }
-
-    override fun getDataOffset() = 0
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprTransfer?) {
         item ?: return // GUARD
 
-        (holder as? ViewTransfersViewHolder)?.bind(item) {
-            listener?.onTransferClick(it)
-        }
+        (holder as? ViewTransfersViewHolder)?.bind(item)
+    }
+
+    private fun onTransferClick(index: Int) {
+        val position = index + dataOffsetPosition
+        val transfer = data?.get(position) ?: return
+
+        listener?.onTransferClick(transfer)
     }
 
 }

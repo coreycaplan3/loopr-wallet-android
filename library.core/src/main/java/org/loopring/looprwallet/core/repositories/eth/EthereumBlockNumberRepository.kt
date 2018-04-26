@@ -18,8 +18,6 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class EthereumBlockNumberRepository : BaseRealmRepository(false) {
 
-    override fun getAsyncRealm(): Realm = realmClient.getSharedInstance()
-
     fun getEthereumBlockNumber(): LiveData<EthereumBlockNumber> {
         return uiRealm.where<EthereumBlockNumber>()
                 .findFirstAsync()

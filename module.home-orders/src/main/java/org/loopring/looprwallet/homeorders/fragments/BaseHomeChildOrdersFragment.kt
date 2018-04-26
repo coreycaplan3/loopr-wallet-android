@@ -53,8 +53,6 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
         recyclerView?.adapter = adapter
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
 
-        swipeRefreshLayout?.setOnRefreshListener(this)
-
         setupOfflineFirstStateAndErrorObserver(generalOrdersViewModel, swipeRefreshLayout)
         setOrderLiveData()
     }
@@ -85,11 +83,11 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
         setOrderLiveData(searchQuery)
     }
 
-    final override fun onStatusFilterChange(newStatusValue: String) {
+    final override fun onStatusFilterChange(newOrderStatusFilter: String) {
         setOrderLiveData()
     }
 
-    final override fun onDateFilterChange(newDateValue: String) {
+    final override fun onDateFilterChange(newDateFilter: String) {
         setOrderLiveData()
     }
 
@@ -97,6 +95,9 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
         return adapter.currentDateFilter
     }
 
+    override fun getCurrentStatusFilterChange(): String {
+        return adapter.currentOrderStatusFilter
+    }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 

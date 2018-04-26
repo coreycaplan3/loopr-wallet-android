@@ -51,8 +51,6 @@ class GeneralOrderAdapter(
         OnGeneralOrderFilterChangeListener {
 
     companion object {
-        const val TYPE_FILTER = 3
-
         private const val KEY_FILTER_DATE = "_FILTER_DATE"
         private const val KEY_FILTER_STATUS = "_FILTER_STATUS"
     }
@@ -81,47 +79,31 @@ class GeneralOrderAdapter(
             else -> throw IllegalArgumentException("Invalid orderType, found: $orderType")
         }
 
+        containsHeader = true
+
         currentDateFilter = savedInstanceState?.getString(KEY_FILTER_DATE) ?: FILTER_DATES[0]
         currentOrderStatusFilter = savedInstanceState?.getString(KEY_FILTER_STATUS) ?: orderType
     }
 
-    override fun getItemViewType(position: Int): Int {
-        val type = super.getItemViewType(position)
-
-        return when (type) {
-            TYPE_DATA -> when (position) {
-                0 -> TYPE_FILTER
-                else -> TYPE_DATA
-            }
-            else -> type
-        }
-    }
-
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return EmptyGeneralOrderViewHolder(orderType, parent)
+        return EmptyGeneralOrderViewHolder(orderType, parent.inflate(R.layout.view_holder_general_orders_empty))
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        fun inflate(layoutRes: Int) = parent.inflate(layoutRes)
+    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        return GeneralOrderViewHolder(parent.inflate(R.layout.view_holder_general_order))
+    }
 
-        return when (viewType) {
-            TYPE_DATA -> GeneralOrderViewHolder(inflate(R.layout.view_holder_general_order))
-            TYPE_FILTER -> when (orderType) {
-                FILTER_OPEN_ALL -> {
-                    val view = inflate(R.layout.view_holder_open_order_filter)
-                    GeneralOpenOrderFilterViewHolder(view, this, ::onCancelAllOpenOrdersClick)
-                }
-                FILTER_FILLED, FILTER_CANCELLED -> {
-                    val view = inflate(R.layout.view_holder_open_order_filter)
-                    GeneralClosedOrderFilterViewHolder(view, this)
-                }
-                else -> throw IllegalArgumentException("Invalid orderType, found: $viewType")
-            }
-            else -> throw IllegalArgumentException("Invalid viewType, found: $viewType")
+    override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder = when (orderType) {
+        FILTER_OPEN_ALL -> {
+            val view = parent.inflate(R.layout.view_holder_open_order_filter)
+            GeneralOpenOrderFilterViewHolder(view, this, ::onCancelAllOpenOrdersClick)
         }
+        FILTER_FILLED, FILTER_CANCELLED -> {
+            val view = parent.inflate(R.layout.view_holder_closed_order_filter)
+            GeneralClosedOrderFilterViewHolder(view, this)
+        }
+        else -> throw IllegalArgumentException("Invalid orderType, found: $orderType")
     }
-
-    override fun getDataOffset() = -1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrder?) {
         (holder as? EmptyGeneralOrderViewHolder)?.let {
@@ -175,18 +157,28 @@ class GeneralOrderAdapter(
         cancelAllClickListener?.invoke()
     }
 
-    override fun onStatusFilterChange(newStatusValue: String) {
-        currentOrderStatusFilter = newStatusValue
-        listener?.onStatusFilterChange(newStatusValue)
+    override fun onStatusFilterChange(newOrderStatusFilter: String) {
+        if (currentOrderStatusFilter != newOrderStatusFilter) {
+            currentOrderStatusFilter = newOrderStatusFilter
+            notifyItemChanged(0)
+            listener?.onStatusFilterChange(newOrderStatusFilter)
+        }
     }
 
-    override fun onDateFilterChange(newDateValue: String) {
-        currentDateFilter = newDateValue
-        listener?.onDateFilterChange(newDateValue)
+    override fun onDateFilterChange(newDateFilter: String) {
+        if (currentDateFilter != newDateFilter) {
+            currentDateFilter = newDateFilter
+            notifyItemChanged(0)
+            listener?.onDateFilterChange(newDateFilter)
+        }
     }
 
     override fun getCurrentDateFilterChange(): String {
         return currentDateFilter
+    }
+
+    override fun getCurrentStatusFilterChange(): String {
+        return currentOrderStatusFilter
     }
 
     fun onSaveInstanceState(outState: Bundle) {

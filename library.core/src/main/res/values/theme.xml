@@ -37,13 +37,13 @@
         <item name="dividerColor">@color/blackDivider</item>
 
         <!-- Overflow Menu -->
-        <item name="android:popupMenuStyle">@style/App.PopupMenu</item>
+        <item name="popupMenuStyle">@style/App.PopupMenu</item>
 
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>
 
         <!-- Spinner -->
-        <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner</item>
+        <item name="spinnerStyle">@style/App.Spinner.Light</item>
 
         <!-- Tabs -->
         <item name="tabTextColor">@color/tabs_text</item>
@@ -104,13 +104,13 @@
         <item name="dividerColor">@color/whiteDivider</item>
 
         <!-- Overflow Menu -->
-        <item name="android:popupMenuStyle">@style/App.PopupMenu</item>
+        <item name="popupMenuStyle">@style/App.PopupMenu</item>
 
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>
 
         <!-- Spinner -->
-        <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner</item>
+        <item name="spinnerStyle">@style/App.Spinner</item>
 
         <!-- Tabs -->
         <item name="tabTextColor">@color/tabs_text</item>

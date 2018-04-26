@@ -3,7 +3,6 @@ package org.loopring.looprwallet.homemarkets.fragments
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
-import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.findViewById
 import org.loopring.looprwallet.homemarkets.R
 import org.loopring.looprwallet.homemarkets.adapters.HomeMarketsAdapter
@@ -30,7 +29,7 @@ class HomeFavoriteMarketsFragment : BaseHomeChildMarketsFragment() {
     override val isFavorites: Boolean = true
 
     override fun provideAdapter(savedInstanceState: Bundle?): HomeMarketsAdapter {
-        return HomeMarketsAdapter(savedInstanceState, this, this, ::onRefresh)
+        return HomeMarketsAdapter(savedInstanceState, this, this, ::refreshAllOfflineFirstViewModels)
     }
 
 }

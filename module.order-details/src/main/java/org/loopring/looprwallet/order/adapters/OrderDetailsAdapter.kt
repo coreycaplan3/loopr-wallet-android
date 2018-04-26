@@ -2,6 +2,7 @@ package org.loopring.looprwallet.order.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.inflate
@@ -20,11 +21,8 @@ import org.loopring.looprwallet.order.R
  */
 class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrderFill>() {
 
-    companion object {
-        /**
-         * The first item in the Adapter - The summary of the order
-         */
-        const val TYPE_SUMMARY = 3
+    init {
+        containsHeader = true
     }
 
     var orderSummary: LooprOrder = orderSummary
@@ -36,29 +34,21 @@ class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrde
     override val totalItems: Int?
         get() = data?.size ?: 3 // TODO
 
-    override fun getItemViewType(position: Int): Int {
-        val viewType = super.getItemViewType(position)
-        return when (viewType) {
-            TYPE_DATA -> when (position) {
-                0 -> TYPE_SUMMARY
-                else -> TYPE_DATA
-            }
-            else -> viewType
-        }
+    init {
+        containsHeader = true
     }
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        throw NotImplementedError("This method should never be called, since we already had SOME " +
-                "data before reaching this adapter")
+        return object : RecyclerView.ViewHolder(LinearLayout(parent.context)) {}
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        TYPE_SUMMARY -> OrderSummaryViewHolder(parent.inflate(R.layout.view_holder_order_details_summary))
-        TYPE_DATA -> OrderSummaryViewHolder(parent.inflate(R.layout.view_holder_order_details_fill))
-        else -> throw IllegalArgumentException("Invalid viewType, found $viewType")
+    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        return OrderSummaryViewHolder(parent.inflate(R.layout.view_holder_order_details_fill))
     }
 
-    override fun getDataOffset() = -1
+    override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        return OrderSummaryViewHolder(parent.inflate(R.layout.view_holder_order_details_summary))
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrderFill?) {
         (holder as? OrderSummaryViewHolder)?.bind(orderSummary)
@@ -67,8 +57,4 @@ class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrde
         (holder as? OrderDetailTradeViewHolder)?.bind(index, item)
     }
 
-    override fun getItemCount(): Int {
-        val dataCount = data?.let { getItemCountForOnlyData(it) } ?: 0
-        return 1 + dataCount
-    }
 }

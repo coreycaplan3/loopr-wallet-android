@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.core.dagger
 
-import android.support.multidex.MultiDexApplication
 import dagger.Component
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
@@ -10,6 +9,7 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.security.BaseSecurityFragment
 import org.loopring.looprwallet.core.fragments.settings.EthereumFeeSettingsFragment
 import org.loopring.looprwallet.core.fragments.settings.HomeSettingsFragment
+import org.loopring.looprwallet.core.fragments.settings.LoopringFeeSettingsFragment
 import org.loopring.looprwallet.core.fragments.settings.SecuritySettingsFragment
 import org.loopring.looprwallet.core.models.settings.*
 import org.loopring.looprwallet.core.realm.RealmClient
@@ -51,6 +51,7 @@ interface CoreLooprComponent {
     fun inject(baseSecurityFragment: BaseSecurityFragment)
     fun inject(securitySettingsFragment: SecuritySettingsFragment)
     fun inject(ethereumFeeSettingsFragment: EthereumFeeSettingsFragment)
+    fun inject(loopringFeeSettingsFragment: LoopringFeeSettingsFragment)
 
     // Repositories
 

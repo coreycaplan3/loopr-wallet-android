@@ -1,5 +1,7 @@
 package org.loopring.looprwallet.viewbalances.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.viewbalances.R
@@ -15,6 +17,14 @@ import org.loopring.looprwallet.viewbalances.fragments.ViewBalancesFragment
  *
  */
 class ViewBalancesActivity: BaseActivity() {
+
+    companion object {
+
+        fun route(activity: Activity) {
+            activity.startActivity(Intent(activity, ViewBalancesActivity::class.java))
+        }
+
+    }
 
     override val contentViewRes: Int
         get() = R.layout.activity_view_balances

@@ -3,8 +3,6 @@ package org.loopring.looprwallet.contacts.repositories
 import android.arch.lifecycle.LiveData
 import io.realm.Case
 import io.realm.OrderedRealmCollection
-import io.realm.Realm
-import io.realm.RealmResults
 import io.realm.kotlin.where
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
@@ -45,7 +43,5 @@ class ContactsRepository(private val currentWallet: LooprWallet) : BaseRealmRepo
                 .equalTo(Contact::address, address, Case.INSENSITIVE)
                 .findFirst()
     }
-
-    override fun getAsyncRealm() = realmClient.getPrivateInstance(currentWallet)
 
 }

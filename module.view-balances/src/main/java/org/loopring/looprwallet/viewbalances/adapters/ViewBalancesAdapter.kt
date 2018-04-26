@@ -37,11 +37,9 @@ class ViewBalancesAdapter(listener: OnTokenLockClickListener) : BaseRealmAdapter
         throw IllegalStateException("This method should never be called")
     }
 
-    override fun onCreateDataViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return ViewBalancesViewHolder(parent.inflate(R.layout.view_holder_token_balance))
     }
-
-    override fun getDataOffset() = 0
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprToken?) {
         item ?: return

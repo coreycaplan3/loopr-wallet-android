@@ -27,22 +27,27 @@ abstract class BaseRealmRepository(isPrivateInstance: Boolean) : BaseRepository<
     lateinit var realmClient: RealmClient
 
     /**
-     * @return An instance of a *private* or *shared* realm for use when executing transactions or
-     * performing queries.
-     */
-    protected abstract fun getAsyncRealm(): Realm
-
-    /**
      * This realm can **ONLY** be used from the UI thread
      */
     protected val uiRealm: Realm
 
+    /**
+     * This realm can **ONLY** be accessed from the IO thread
+     */
+    protected val ioRealm: Realm
+
     init {
         coreLooprComponent.inject(this)
 
-        uiRealm = when (isPrivateInstance) {
-            true -> CoreLooprWalletApp.uiPrivateRealm
-            else -> CoreLooprWalletApp.uiSharedRealm
+        when (isPrivateInstance) {
+            true -> {
+                uiRealm = CoreLooprWalletApp.uiPrivateRealm
+                ioRealm = CoreLooprWalletApp.asyncPrivateRealm
+            }
+            else -> {
+                uiRealm = CoreLooprWalletApp.uiSharedRealm
+                ioRealm = CoreLooprWalletApp.asyncSharedRealm
+            }
         }
     }
 
@@ -58,32 +63,24 @@ abstract class BaseRealmRepository(isPrivateInstance: Boolean) : BaseRepository<
     }
 
     fun runTransaction(transaction: Realm.Transaction) {
-        getAsyncRealm().use { it.executeTransaction(transaction) }
+        ioRealm.executeTransaction(transaction)
     }
 
     final override fun add(data: RealmModel) {
-        getAsyncRealm().use {
-            it.executeTransaction { it.upsert(data) }
-        }
+        ioRealm.executeTransaction { it.upsert(data) }
     }
 
     final override fun addList(data: List<RealmModel>) {
-        getAsyncRealm().use {
-            it.executeTransaction { it.upsert(data) }
-        }
+        ioRealm.executeTransaction { it.upsert(data) }
     }
 
     final override fun remove(data: RealmModel) {
-        getAsyncRealm().use {
-            it.executeTransaction { data.deleteFromRealm() }
-        }
+        ioRealm.executeTransaction { data.deleteFromRealm() }
     }
 
     final override fun remove(data: List<RealmModel>) {
         if (data is RealmResults) {
-            getAsyncRealm().use {
-                it.executeTransaction { data.deleteAllFromRealm() }
-            }
+            ioRealm.executeTransaction { data.deleteAllFromRealm() }
         }
     }
 
@@ -96,20 +93,17 @@ abstract class BaseRealmRepository(isPrivateInstance: Boolean) : BaseRepository<
      * @param transaction A function that is executed from **within** a [Realm] transaction
      */
     private inline fun <T> executeTransactionAndReturn(crossinline transaction: (Realm) -> T): T {
-        return getAsyncRealm().use {
-            it.beginTransaction()
-            return@use try {
-                val result = transaction(it)
-                it.commitTransaction()
-                result
-            } catch (e: Throwable) {
-                when {
-                    it.isInTransaction -> it.cancelTransaction()
-                    else -> logw("Could not cancel transaction, not currently in one.")
-                }
-                throw e
+        ioRealm.beginTransaction()
+        return try {
+            val result = transaction(ioRealm)
+            ioRealm.commitTransaction()
+            result
+        } catch (e: Throwable) {
+            when {
+                ioRealm.isInTransaction -> ioRealm.cancelTransaction()
+                else -> logw("Could not cancel transaction, not currently in one.")
             }
-
+            throw e
         }
     }
 

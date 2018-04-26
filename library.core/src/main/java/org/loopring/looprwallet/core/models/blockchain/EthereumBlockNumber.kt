@@ -1,9 +1,7 @@
 package org.loopring.looprwallet.core.models.blockchain
 
 import io.realm.RealmObject
-import org.loopring.looprwallet.core.models.TrackedRealmObject
 import java.math.BigInteger
-import java.util.*
 
 /**
  * Created by Corey on 4/23/2018
@@ -23,7 +21,7 @@ open class EthereumBlockNumber(
     var blockNumber: BigInteger
         get() = BigInteger(mBlockNumber)
         set(value) {
-            mBlockNumber = blockNumber.toString(10)
+            mBlockNumber = value.toString(10)
         }
 
     private var mBlockNumber: String

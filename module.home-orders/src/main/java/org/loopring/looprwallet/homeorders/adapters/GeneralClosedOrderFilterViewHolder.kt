@@ -6,6 +6,7 @@ import android.widget.Button
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_closed_order_filter.*
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.FilterButtonUtility
 import org.loopring.looprwallet.homeorders.R
 
 /**
@@ -15,38 +16,38 @@ import org.loopring.looprwallet.homeorders.R
  *
  * Purpose of Class: To display the filter options for filled or cancelled order tab.
  */
-class GeneralClosedOrderFilterViewHolder(
-        itemView: View,
-        listener: OnGeneralOrderFilterChangeListener
-) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+class GeneralClosedOrderFilterViewHolder(itemView: View, listener: OnGeneralOrderFilterChangeListener)
+    : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
     override val containerView: View
         get() = itemView
 
-    fun bind(dateValue: String, listener: OnGeneralOrderFilterChangeListener) {
+    init {
         setButtonClickListener(orderClosedDate1hButton, listener)
         setButtonClickListener(orderClosedDate1dButton, listener)
         setButtonClickListener(orderClosedDate1wButton, listener)
         setButtonClickListener(orderClosedDate1mButton, listener)
         setButtonClickListener(orderClosedDate1yButton, listener)
         setButtonClickListener(orderClosedDateAllButton, listener)
+    }
 
+    fun bind(dateValue: String) {
         // Reset their UI values
-        orderClosedDate1hButton.context.setTheme(R.style.App_Button_Borderless)
-        orderClosedDate1dButton.context.setTheme(R.style.App_Button_Borderless)
-        orderClosedDate1wButton.context.setTheme(R.style.App_Button_Borderless)
-        orderClosedDate1mButton.context.setTheme(R.style.App_Button_Borderless)
-        orderClosedDate1yButton.context.setTheme(R.style.App_Button_Borderless)
-        orderClosedDateAllButton.context.setTheme(R.style.App_Button_Borderless)
+        FilterButtonUtility.toNormal(orderClosedDate1hButton)
+        FilterButtonUtility.toNormal(orderClosedDate1dButton)
+        FilterButtonUtility.toNormal(orderClosedDate1wButton)
+        FilterButtonUtility.toNormal(orderClosedDate1mButton)
+        FilterButtonUtility.toNormal(orderClosedDate1yButton)
+        FilterButtonUtility.toNormal(orderClosedDateAllButton)
 
         // Set the selected one's value
         when (dateValue) {
-            str(R.string._1h) -> orderClosedDate1hButton.context.setTheme(R.style.App_Button)
-            str(R.string._1d) -> orderClosedDate1dButton.context.setTheme(R.style.App_Button)
-            str(R.string._1w) -> orderClosedDate1wButton.context.setTheme(R.style.App_Button)
-            str(R.string._1m) -> orderClosedDate1mButton.context.setTheme(R.style.App_Button)
-            str(R.string._1y) -> orderClosedDate1yButton.context.setTheme(R.style.App_Button)
-            str(R.string.all) -> orderClosedDateAllButton.context.setTheme(R.style.App_Button)
+            str(R.string._1h) -> FilterButtonUtility.toSelected(orderClosedDate1hButton)
+            str(R.string._1d) -> FilterButtonUtility.toSelected(orderClosedDate1dButton)
+            str(R.string._1w) -> FilterButtonUtility.toSelected(orderClosedDate1wButton)
+            str(R.string._1m) -> FilterButtonUtility.toSelected(orderClosedDate1mButton)
+            str(R.string._1y) -> FilterButtonUtility.toSelected(orderClosedDate1yButton)
+            str(R.string.all) -> FilterButtonUtility.toSelected(orderClosedDateAllButton)
         }
     }
 
@@ -54,7 +55,7 @@ class GeneralClosedOrderFilterViewHolder(
 
     private fun setButtonClickListener(button: Button, listener: OnGeneralOrderFilterChangeListener) {
         button.setOnClickListener {
-            if(listener.getCurrentDateFilterChange() != button.text.toString()) {
+            if (listener.getCurrentDateFilterChange() != button.text.toString()) {
                 // The user clicked on a different date filter change
                 listener.onDateFilterChange(button.text.toString())
             }

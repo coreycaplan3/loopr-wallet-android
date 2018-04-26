@@ -26,7 +26,7 @@ import org.loopring.looprwallet.core.models.contact.Contact
 @RunWith(AndroidJUnit4::class)
 class CreateContactDialogTest : BaseDaggerFragmentTest<CreateContactDialog>() {
 
-    override fun provideFragment() = CreateContactDialog.create(null)
+    override fun provideFragment() = CreateContactDialog.getInstance(null)
 
     override val tag = CreateContactDialog.TAG
 

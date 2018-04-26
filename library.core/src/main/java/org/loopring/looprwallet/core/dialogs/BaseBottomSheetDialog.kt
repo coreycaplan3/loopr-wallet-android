@@ -21,6 +21,7 @@ import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLif
 import org.loopring.looprwallet.core.validators.BaseValidator
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import org.loopring.looprwallet.core.wallet.WalletClient
+import javax.inject.Inject
 
 /**
  * Created by Corey on 3/30/2018
@@ -40,6 +41,7 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment(), ViewLifecycl
             onFormChanged()
         }
 
+    @Inject
     lateinit var walletClient: WalletClient
 
     override var fragmentViewLifecycleFragment: FragmentViewLifecycleOwner? = null

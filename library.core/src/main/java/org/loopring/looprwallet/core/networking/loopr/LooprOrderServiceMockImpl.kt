@@ -1,11 +1,10 @@
 package org.loopring.looprwallet.core.networking.loopr
 
 import io.realm.RealmList
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
-import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.order.LooprOrderFill
 import org.loopring.looprwallet.core.models.order.OrderFilter
@@ -26,15 +25,15 @@ import java.util.*
  */
 internal class LooprOrderServiceMockImpl : LooprOrderService {
 
-    private val order1 = LooprOrder(orderHash = "abcdef1234", tradingPair = lrcTradingPair, percentageFilled = 0)
+    private val order1 = LooprOrder(orderHash = "abcdef1234", tradingPair = lrcTradingPair, percentageFilled = 0, status = OrderFilter.FILTER_OPEN_NEW)
     private val order2 = LooprOrder(orderHash = "abcdef4321", tradingPair = reqTradingPair, percentageFilled = 78, status = OrderFilter.FILTER_OPEN_PARTIAL)
-    private val order3 = LooprOrder(orderHash = "abcdef4132", tradingPair = zrxTradingPair, percentageFilled = 45, status = OrderFilter.FILTER_OPEN_PARTIAL)
+    private val order3 = LooprOrder(orderHash = "abcdef4132", tradingPair = zrxTradingPair, percentageFilled = 45, status = OrderFilter.FILTER_OPEN_PARTIAL, isSell = true)
 
     private val fill1 = LooprOrderFill("abc", order1.orderHash, 143.00, Date(Date().time - 100000L))
     private val fill2 = LooprOrderFill("def", order1.orderHash, 2045.00, Date(Date().time - 70000L))
     private val fill3 = LooprOrderFill("acd", order1.orderHash, 1043.00, Date(Date().time - 30000L))
 
-    override fun getOrdersByAddress(address: String): Deferred<RealmList<LooprOrder>> = async(CommonPool) {
+    override fun getOrdersByAddress(address: String): Deferred<RealmList<LooprOrder>> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -44,7 +43,7 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         }
     }
 
-    override fun getOrderByHash(orderHash: String): Deferred<LooprOrder> = async(CommonPool) {
+    override fun getOrderByHash(orderHash: String): Deferred<LooprOrder> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -54,7 +53,7 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         }
     }
 
-    override fun getOrderFillsByOrderHash(orderHash: String): Deferred<RealmList<LooprOrderFill>> = async(CommonPool) {
+    override fun getOrderFillsByOrderHash(orderHash: String): Deferred<RealmList<LooprOrderFill>> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {

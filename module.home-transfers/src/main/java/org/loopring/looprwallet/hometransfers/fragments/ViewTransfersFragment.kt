@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView.OnNavigationItemReselectedListener
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_view_transfers.*
-import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
+import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.extensions.setupWithFab
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -34,7 +33,7 @@ import org.loopring.looprwallet.transferdetails.dialogs.TransferDetailsDialog
  * Purpose of Class:
  *
  */
-class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener, OnRefreshListener,
+class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener,
         OnTransferClickListener {
 
     override val layoutResource: Int
@@ -52,8 +51,6 @@ class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewTransfersSwipeRefresh.setOnRefreshListener(this)
 
         val adapter = ViewTransfersAdapter(this)
         setupOfflineFirstStateAndErrorObserver(viewAllTransfersViewModel, viewTransfersSwipeRefresh)
@@ -80,12 +77,12 @@ class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
+        QRCodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
             when (type) {
-                BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
+                QRCodeCaptureActivity.TYPE_PUBLIC_KEY -> {
                     CreateTransferActivity.route(this, value)
                 }
-                BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
+                QRCodeCaptureActivity.TYPE_TRADING_PAIR -> {
                     val tradingPair = TradingPair.createFromMarket(value)
                     TradingPairDetailsActivity.route(tradingPair, this)
                 }
@@ -101,7 +98,7 @@ class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
         R.id.menuMainScanQrCode -> {
-            BarcodeCaptureActivity.route(this, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY, BarcodeCaptureActivity.TYPE_TRADING_PAIR))
+            QRCodeCaptureActivity.route(this, arrayOf(QRCodeCaptureActivity.TYPE_PUBLIC_KEY, QRCodeCaptureActivity.TYPE_TRADING_PAIR))
             true
         }
         R.id.menuMainSettings -> {
@@ -109,10 +106,6 @@ class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    override fun onRefresh() {
-        viewAllTransfersViewModel?.refresh()
     }
 
     override fun onNavigationItemReselected(item: MenuItem) {

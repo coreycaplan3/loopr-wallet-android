@@ -195,8 +195,8 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         // Setup the current selected menu item
         val currentWalletName = walletClient.getCurrentWallet()?.walletName
         val allWallets = walletClient.getAllWallets()
-        allWallets.forEach { item ->
-            homeNavigationView.menu.add(Menu.NONE, Menu.NONE, 1, item.walletName).let {
+        allWallets.forEachIndexed { index, item ->
+            homeNavigationView.menu.add(R.id.menuWalletNameGroup, Menu.NONE, index, item.walletName).let {
                 if (item.walletName == currentWalletName) {
                     it.isChecked = true
                 }
@@ -273,6 +273,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
                         dialog.dismiss()
                         homeNavigationDrawerLayout.closeDrawers()
                     } else {
+                        // The wallet to delete is not the current one
                         // "It's not my wallet" - Patrick
                         walletClient.removeWallet(allWallets[position].walletName)
 

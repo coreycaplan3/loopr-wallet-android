@@ -1,10 +1,10 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
 import io.realm.RealmList
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
@@ -93,7 +93,7 @@ class EthplorerServiceMockImpl : EthplorerService {
             token = req
     )
 
-    override fun getAddressInfo(address: String): Deferred<RealmList<LooprToken>> = async(CommonPool) {
+    override fun getAddressInfo(address: String): Deferred<RealmList<LooprToken>> = async(NET) {
         delay(MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -108,7 +108,7 @@ class EthplorerServiceMockImpl : EthplorerService {
         }
     }
 
-    override fun getTokenInfo(contractAddress: String): Deferred<LooprToken> = async(CommonPool) {
+    override fun getTokenInfo(contractAddress: String): Deferred<LooprToken> = async(NET) {
         delay(MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -120,7 +120,7 @@ class EthplorerServiceMockImpl : EthplorerService {
         }
     }
 
-    override fun getAddressTransferHistory(address: String): Deferred<RealmList<LooprTransfer>> = async(CommonPool) {
+    override fun getAddressTransferHistory(address: String): Deferred<RealmList<LooprTransfer>> = async(NET) {
         delay(MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {

@@ -21,7 +21,7 @@ object BarcodeUtility {
     fun encodeTextToBitmap(value: String, dimension: Int): Bitmap? {
 
         val bitMatrix = try {
-            MultiFormatWriter().encode(value, BarcodeFormat.DATA_MATRIX, dimension, dimension, null)
+            MultiFormatWriter().encode(value, BarcodeFormat.QR_CODE, dimension, dimension, null)
         } catch (ignored: IllegalArgumentException) {
             return null
         }
