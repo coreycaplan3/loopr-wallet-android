@@ -224,14 +224,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     }
 
     /**
-     * Executes the given fragment transaction, popping the current fragment from the front and
-     * moving the next one in the stack to the front
-     */
-    fun popFragmentTransaction() {
-        (activity as? BaseActivity)?.popFragmentTransaction()
-    }
-
-    /**
      * Enables the toolbar to be collapsed when scrolling
      */
     fun enableToolbarCollapsing() {

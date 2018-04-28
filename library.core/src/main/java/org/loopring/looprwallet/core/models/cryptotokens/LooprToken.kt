@@ -70,7 +70,8 @@ open class LooprToken(
                 18
         )
 
-        val WETH = LooprToken("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        val WETH = LooprToken(
+                "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
                 "WETH",
                 "Wrapped Ether",
                 "167911966384029250753914",
@@ -85,7 +86,6 @@ open class LooprToken(
                 "13950760545238578922746031",
                 18,
                 str(R.string.lrc_binary)
-
         )
 
         val APPC = LooprToken(

@@ -22,7 +22,7 @@ import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
-import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentPagerAdapter
+import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentStatePagerAdapter
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -78,7 +78,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         get() = true
 
     private val pagerAdapter by lazy {
-        LooprFragmentPagerAdapter(supportFragmentManager, listOf(
+        LooprFragmentStatePagerAdapter(supportFragmentManager, listOf(
                 str(R.string.markets) to HomeMarketsParentFragment(),
                 str(R.string.orders) to HomeOrdersParentFragment(),
                 str(R.string.transfers) to ViewTransfersFragment(),
@@ -108,11 +108,10 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         bottomNavigationView.inflateMenu(R.menu.home_bottom_navigation_menu)
 
         bottomNavigationPresenter = BottomNavigationPresenter(
-                activity = this,
                 bottomNavigationView = bottomNavigationView,
                 viewPager = mainViewPager,
                 pagerAdapter = pagerAdapter,
-                bottomNavigationFragmentStackHistory = bottomNavigationFragmentStackHistory,
+                stackHistory = bottomNavigationFragmentStackHistory,
                 savedInstanceState = savedInstanceState
         )
     }

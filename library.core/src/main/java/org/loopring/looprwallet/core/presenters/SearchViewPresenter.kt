@@ -2,12 +2,16 @@ package org.loopring.looprwallet.core.presenters
 
 import android.os.Bundle
 import android.os.Handler
+import android.support.v7.view.ActionMode
 import android.support.v7.widget.SearchView
+import android.view.Menu
 import android.view.MenuItem
 import org.loopring.looprwallet.core.animations.ToolbarToSearchAnimation
+import org.loopring.looprwallet.core.extensions.WeakRefHolder
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import java.lang.ref.WeakReference
 
 /**
  * Created by Corey Caplan on 4/7/18.
@@ -39,6 +43,8 @@ class SearchViewPresenter(
      * implementor.
      */
     interface OnSearchViewChangeListener {
+
+        var searchViewPresenter: SearchViewPresenter
 
         /**
          * Called when the query text *gains* focus
@@ -72,11 +78,21 @@ class SearchViewPresenter(
     private val baseFragment by weakReference(baseFragment)
     private val listener by weakReference(listener)
 
+    private var searchItem = WeakReference<MenuItem>(null)
+
     init {
         searchQuery = savedInstanceState?.getString(KEY_SEARCH_QUERY)
     }
 
+    val isExpanded
+        get() = searchItem.get()?.isActionViewExpanded ?: false
+
+    fun collapseSearchView() {
+        searchItem.get()?.collapseActionView()
+    }
+
     fun setupSearchView(searchItem: MenuItem, searchView: SearchView) {
+        this.searchItem = WeakReference(searchItem)
 
         searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
             if (hasFocus) {

@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.models.android.fragments
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.fragments.BaseFragment
 
@@ -14,9 +15,9 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
  * Purpose of Class:
  *
  */
-class LooprFragmentPagerAdapter(fragmentManager: FragmentManager,
-                                private val fragmentList: List<Pair<String, BaseFragment>>)
-    : FragmentPagerAdapter(fragmentManager) {
+class LooprFragmentStatePagerAdapter(fragmentManager: FragmentManager,
+                                     private val fragmentList: List<Pair<String, BaseFragment>>)
+    : FragmentStatePagerAdapter(fragmentManager) {
 
     var currentFragment: Fragment? = null
         private set

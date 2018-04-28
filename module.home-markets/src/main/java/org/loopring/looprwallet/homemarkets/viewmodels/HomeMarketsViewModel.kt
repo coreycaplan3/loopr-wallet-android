@@ -2,7 +2,10 @@ package org.loopring.looprwallet.homemarkets.viewmodels
 
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
+import io.realm.Realm
+import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
 import org.loopring.looprwallet.core.models.markets.TradingPair
@@ -46,7 +49,7 @@ class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<Tradin
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<TradingPair>) {
-        repository.addList(data)
+        repository.insertMarkets(data as RealmList<TradingPair>)
     }
 
     override fun isRefreshNecessary(parameter: MarketsFilter) = defaultIsRefreshNecessary()

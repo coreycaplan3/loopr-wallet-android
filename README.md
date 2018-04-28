@@ -2,7 +2,7 @@
 
 ### Design
 Please refer to the screenshots folder for individual components of the application. Note, some of 
-these screenshots are out of date.
+these screenshots are out of date or show pieces of screens and not the entire thing.
 
 ### Development
 
@@ -25,9 +25,9 @@ replacement for standard Android/Java threading
 speed up development in comparison with Java
 
 ##### Tools
-1. Android Studio `3.1.1`
-2. Gradle Build Tools version `3.1.1`
+1. Android Studio `3.1.2`
+2. Gradle Build Tools version `3.1.2`
 3. Gradle Wrapper version `4.4-all`
-4. Kotlin version `1.2.31`
+4. Kotlin version `1.2.40`
 5. Google Services version `3.2.0`
 6. Realm version `5.0.0`

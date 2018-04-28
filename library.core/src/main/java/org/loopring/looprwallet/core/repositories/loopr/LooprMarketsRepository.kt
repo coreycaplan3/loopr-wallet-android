@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.repositories.loopr
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.extensions.asLiveData
@@ -36,6 +37,10 @@ class LooprMarketsRepository : BaseRealmRepository(false) {
                 realm.upsert(it)
             }
         })
+    }
+
+    fun insertMarkets(list: RealmList<TradingPair>) {
+        // TODO
     }
 
     fun getMarkets(filter: MarketsFilter): LiveData<OrderedRealmCollection<TradingPair>> {

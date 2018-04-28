@@ -2,9 +2,7 @@ package org.loopring.looprwallet.core.presenters
 
 import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
@@ -15,7 +13,8 @@ import org.loopring.looprwallet.core.extensions.logv
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
-import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentPagerAdapter
+import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentStatePagerAdapter
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 
 /**
  * Created by Corey on 1/31/2018
@@ -27,17 +26,15 @@ import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentPager
  *
  * This class should be instantiated in the corresponding activity's [Activity.onCreate] method.
  *
- * @param activity The activity in which this presenter resides
  * @param bottomNavigationView The [BottomNavigationView] in which the tabs are displayed
  * @param viewPager The locked [ViewPager] in which these items are located
  * @param pagerAdapter The adapter that works in sync with the [viewPager]
- * @param bottomNavigationFragmentStackHistory The history of all the fragment's back-stack
+ * @param stackHistory The history of all the fragment's back-stack
  */
-class BottomNavigationPresenter(activity: BaseActivity,
-                                bottomNavigationView: BottomNavigationView,
+class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
                                 viewPager: ViewPager,
-                                pagerAdapter: LooprFragmentPagerAdapter,
-                                private val bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory,
+                                pagerAdapter: LooprFragmentStatePagerAdapter,
+                                private val stackHistory: BottomNavigationFragmentStackHistory,
                                 savedInstanceState: Bundle?) {
 
     interface BottomNavigationReselectedLister {
@@ -45,26 +42,26 @@ class BottomNavigationPresenter(activity: BaseActivity,
         fun onBottomNavigationReselected()
     }
 
-    private val activity by weakReference(activity)
     private val bottomNavigationView by weakReference(bottomNavigationView)
-    private var currentFragment by weakReference<Fragment>(null)
     private var viewPager by weakReference(viewPager)
     private var pagerAdapter by weakReference(pagerAdapter)
 
     init {
+        viewPager.offscreenPageLimit = 0
+
         when {
             savedInstanceState != null -> {
-                val tag = bottomNavigationFragmentStackHistory.peek()!!
+                // We don't have anything to really do...
+                val tag = stackHistory.peek()!!
                 logv("Pushing $tag fragment...")
-
-                // We don't need to select the tab actually, just update the UI
-                currentFragment = pagerAdapter.currentFragment
             }
             else -> {
-                Handler().postDelayed({
+                runBlocking {
+                    delay(200)
+
                     // Needed to allow the TabLayout animation to occur initially.
                     viewPager.adapter = pagerAdapter
-                }, 200)
+                }
             }
         }
 
@@ -88,9 +85,16 @@ class BottomNavigationPresenter(activity: BaseActivity,
      * @return True if the activity should be finished or false otherwise
      */
     fun onBackPressed(): Boolean {
-        bottomNavigationFragmentStackHistory.pop()
+        val currentFragment = pagerAdapter?.currentFragment
+        if (currentFragment is OnSearchViewChangeListener && currentFragment.searchViewPresenter.isExpanded) {
+            // The searchView is expanded. Let's collapse it and return
+            currentFragment.searchViewPresenter.collapseSearchView()
+            return false
+        }
 
-        bottomNavigationFragmentStackHistory.peek()?.let {
+        stackHistory.pop()
+
+        stackHistory.peek()?.let {
             getMenuIdFromTitle(it)?.let {
                 bottomNavigationView?.selectedItemId = it
                 return false
@@ -102,7 +106,7 @@ class BottomNavigationPresenter(activity: BaseActivity,
     }
 
     fun onSaveInstanceState(outState: Bundle?) {
-        bottomNavigationFragmentStackHistory.saveState(outState)
+        stackHistory.saveState(outState)
     }
 
     // MARK - Private Methods
@@ -130,19 +134,16 @@ class BottomNavigationPresenter(activity: BaseActivity,
 
     private fun executeFragmentTransaction(newFragmentTitle: String) {
 
-        fun commitTransaction(title: String) {
+        fun setCurrentPage(title: String) {
             val position = getPositionFromTitle(title)
             if (position != null) {
-                viewPager?.let {
-                    it.setCurrentItem(position, false)
-                    currentFragment = activity?.supportFragmentManager?.findFragmentById(it.id)
-                }
+                viewPager?.setCurrentItem(position, false)
             }
         }
 
-        bottomNavigationFragmentStackHistory.push(newFragmentTitle)
+        stackHistory.push(newFragmentTitle)
 
-        val appBarLayout = (currentFragment as? BaseFragment)?.appbarLayout
+        val appBarLayout = (pagerAdapter?.currentFragment as? BaseFragment)?.appbarLayout
         if (appBarLayout != null && !appBarLayout.isExpanded()) {
             logv("Expanding appbar before committing transaction...")
 
@@ -151,10 +152,10 @@ class BottomNavigationPresenter(activity: BaseActivity,
             // Allow the appbar to snap into place for committing the transaction
             runBlocking {
                 delay(125L)
-                commitTransaction(newFragmentTitle)
+                setCurrentPage(newFragmentTitle)
             }
         } else {
-            commitTransaction(newFragmentTitle)
+            setCurrentPage(newFragmentTitle)
         }
     }
 

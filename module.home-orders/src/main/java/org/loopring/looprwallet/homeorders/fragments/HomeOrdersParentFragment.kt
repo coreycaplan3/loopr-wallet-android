@@ -44,7 +44,7 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
     override val tabLayoutId: Int
         get() = R.id.ordersTabs
 
-    private lateinit var searchViewPresenter: SearchViewPresenter
+    override lateinit var searchViewPresenter: SearchViewPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -53,7 +53,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
 
     lateinit var searchItem: MenuItem
 
-    private lateinit var searchViewPresenter: SearchViewPresenter
+    override lateinit var searchViewPresenter: SearchViewPresenter
 
     private lateinit var viewContactsFragment: ViewContactsFragment
 
