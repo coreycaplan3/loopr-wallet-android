@@ -30,7 +30,9 @@ class TransferDetailsViewModel(currentWallet: LooprWallet) : ViewModel() {
             data = repository.getTransferByHash(hash)
         }
 
-        data?.observe(owner, Observer { transfer -> transfer?.let { onChange(it) } })
+        data?.observe(owner, Observer { transfer ->
+            transfer?.let { onChange(it) }
+        })
     }
 
 }

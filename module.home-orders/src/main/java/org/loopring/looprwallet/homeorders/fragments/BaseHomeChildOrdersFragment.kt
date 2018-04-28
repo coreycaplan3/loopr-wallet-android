@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
@@ -31,8 +32,7 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     var isSearchActive = false
         private set
 
-    lateinit var adapter: GeneralOrderAdapter
-        private set
+    private var adapter: GeneralOrderAdapter? = null
 
     private var generalOrdersViewModel: GeneralOrdersViewModel? = null
         get() {
@@ -92,16 +92,17 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     }
 
     override fun getCurrentDateFilterChange(): String {
-        return adapter.currentDateFilter
+        return adapter?.currentDateFilter ?: throw IllegalStateException("Adapter is not initialized!")
     }
 
     override fun getCurrentStatusFilterChange(): String {
-        return adapter.currentOrderStatusFilter
+        return adapter?.currentOrderStatusFilter ?: throw IllegalStateException("Adapter is not initialized!")
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        adapter.onSaveInstanceState(outState)
+        adapter?.onSaveInstanceState(outState)
     }
 
     // MARK - Private Methods
@@ -112,10 +113,13 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
      */
     private fun setOrderLiveData(ticker: String? = null) {
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
-        val orderFilter = OrderFilter(address, ticker, adapter.currentDateFilter, adapter.currentOrderStatusFilter)
 
-        generalOrdersViewModel?.getOrders(this, orderFilter) {
-            setupOfflineFirstDataObserverForAdapter(generalOrdersViewModel, adapter, it)
+        adapter?.ifNotNull { adapter ->
+            val orderFilter = OrderFilter(address, ticker, adapter.currentDateFilter, adapter.currentOrderStatusFilter)
+
+            generalOrdersViewModel?.getOrders(this, orderFilter) { data ->
+                setupOfflineFirstDataObserverForAdapter(generalOrdersViewModel, adapter, data)
+            }
         }
     }
 

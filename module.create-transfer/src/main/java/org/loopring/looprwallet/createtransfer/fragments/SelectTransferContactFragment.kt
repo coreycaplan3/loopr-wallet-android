@@ -18,6 +18,8 @@ import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
 import org.loopring.looprwallet.createtransfer.R
@@ -31,7 +33,7 @@ import org.loopring.looprwallet.createtransfer.R
  * address or select one from your address book.
  */
 class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnContactClickedListener,
-        SearchViewPresenter.OnSearchViewChangeListener {
+        SearchFragment, OnSearchViewChangeListener {
 
     companion object {
         val TAG: String = CreateTransferAmountFragment::class.java.simpleName

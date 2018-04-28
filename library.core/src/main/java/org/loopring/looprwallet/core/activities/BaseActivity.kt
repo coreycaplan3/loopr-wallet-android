@@ -15,13 +15,13 @@ import android.view.WindowManager
 import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
+import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.settings.ThemeSettings
-import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
 import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
@@ -178,7 +178,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.activityContainer)
-        if (currentFragment is OnSearchViewChangeListener && currentFragment.searchViewPresenter.isExpanded) {
+        if (currentFragment is SearchFragment && currentFragment.searchViewPresenter.isExpanded) {
             // The searchView is expanded. Let's collapse it
             currentFragment.searchViewPresenter.collapseSearchView()
             return

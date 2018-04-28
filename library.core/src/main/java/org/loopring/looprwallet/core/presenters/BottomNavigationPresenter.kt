@@ -14,7 +14,7 @@ import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentStatePagerAdapter
-import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
 
 /**
  * Created by Corey on 1/31/2018
@@ -47,7 +47,7 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
     private var pagerAdapter by weakReference(pagerAdapter)
 
     init {
-        viewPager.offscreenPageLimit = 0
+        viewPager.offscreenPageLimit = 1
 
         when {
             savedInstanceState != null -> {
@@ -64,6 +64,17 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
                 }
             }
         }
+
+        @Suppress("DEPRECATION")
+        viewPager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {}
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+            override fun onPageSelected(position: Int) {
+                (pagerAdapter.currentFragment as? BaseFragment)?.setupAppbar()
+            }
+        })
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
             executeFragmentTransaction(it.title.toString())
@@ -86,8 +97,8 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
      */
     fun onBackPressed(): Boolean {
         val currentFragment = pagerAdapter?.currentFragment
-        if (currentFragment is OnSearchViewChangeListener && currentFragment.searchViewPresenter.isExpanded) {
-            // The searchView is expanded. Let's collapse it and return
+        if (currentFragment is SearchFragment && currentFragment.searchViewPresenter.isExpanded) {
+            // The SearchView is expanded. Let's collapse it and return
             currentFragment.searchViewPresenter.collapseSearchView()
             return false
         }

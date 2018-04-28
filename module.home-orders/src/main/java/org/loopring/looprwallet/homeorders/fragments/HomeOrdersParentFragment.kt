@@ -13,9 +13,9 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
-import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
@@ -36,7 +36,7 @@ import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivi
  * between.
  */
 class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLister,
-        OnSearchViewChangeListener {
+        SearchViewPresenter.SearchFragment, OnSearchViewChangeListener {
 
     override val layoutResource: Int
         get() = R.layout.fragment_orders_parent

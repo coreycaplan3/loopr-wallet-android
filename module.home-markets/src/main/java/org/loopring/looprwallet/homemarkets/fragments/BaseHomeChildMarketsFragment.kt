@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
@@ -26,12 +27,6 @@ import org.loopring.looprwallet.homemarkets.viewmodels.HomeMarketsViewModel
 abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationReselectedLister,
         OnSearchViewChangeListener, OnGeneralMarketsFilterChangeListener {
 
-    companion object {
-
-        private const val KEY_IS_SEARCH_ACTIVE = "_IS_SEARCH_ACTIVE"
-
-    }
-
     abstract val swipeRefreshLayout: SwipeRefreshLayout?
 
     abstract val recyclerView: RecyclerView?
@@ -41,19 +36,10 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
      */
     abstract val isFavorites: Boolean
 
-    private var isSearchActive = false
-
-    lateinit var adapter: HomeMarketsAdapter
-        private set
+    private var adapter: HomeMarketsAdapter? = null
 
     private val homeMarketsViewModel by lazy {
         LooprViewModelFactory.get<HomeMarketsViewModel>(this)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        isSearchActive = savedInstanceState?.getBoolean(KEY_IS_SEARCH_ACTIVE, false) ?: false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,11 +64,9 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     }
 
     final override fun onSearchItemExpanded() {
-        isSearchActive = true
     }
 
     final override fun onSearchItemCollapsed() {
-        isSearchActive = false
     }
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
@@ -98,18 +82,17 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     }
 
     final override fun getCurrentDateFilter(): String {
-        return adapter.dateFilter
+        return adapter?.dateFilter ?: throw IllegalArgumentException("Adapter was not initialized!")
     }
 
     final override fun getCurrentSortByFilter(): String {
-        return adapter.sortBy
+        return adapter?.sortBy ?: throw IllegalArgumentException("Adapter was not initialized!")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putBoolean(KEY_IS_SEARCH_ACTIVE, isSearchActive)
-        adapter.onSaveInstanceState(outState)
+        adapter?.onSaveInstanceState(outState)
     }
 
     // MARK - Protected Methods
@@ -119,10 +102,12 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
      * provided by the [adapter].
      */
     private fun setMarketsLiveData(ticker: String? = null) {
-        val marketsFilter = MarketsFilter(ticker, isFavorites, adapter.dateFilter, adapter.sortBy)
+        adapter?.ifNotNull { adapter ->
 
-        homeMarketsViewModel.getHomeMarkets(this, marketsFilter) {
-            setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, it)
+            val marketsFilter = MarketsFilter(ticker, isFavorites, adapter.dateFilter, adapter.sortBy)
+            homeMarketsViewModel.getHomeMarkets(this, marketsFilter) { data ->
+                setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, data)
+            }
         }
     }
 

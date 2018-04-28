@@ -2,12 +2,9 @@ package org.loopring.looprwallet.core.presenters
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.view.ActionMode
 import android.support.v7.widget.SearchView
-import android.view.Menu
 import android.view.MenuItem
 import org.loopring.looprwallet.core.animations.ToolbarToSearchAnimation
-import org.loopring.looprwallet.core.extensions.WeakRefHolder
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -39,12 +36,19 @@ class SearchViewPresenter(
 ) {
 
     /**
+     * An interface for declaring a certain fragment is a *search fragment* for searching in the
+     * toolbar.
+     */
+    interface SearchFragment {
+
+        var searchViewPresenter: SearchViewPresenter
+    }
+
+    /**
      * A listener used for forwarding changes from the [SearchView] and search [MenuItem] to the
      * implementor.
      */
     interface OnSearchViewChangeListener {
-
-        var searchViewPresenter: SearchViewPresenter
 
         /**
          * Called when the query text *gains* focus

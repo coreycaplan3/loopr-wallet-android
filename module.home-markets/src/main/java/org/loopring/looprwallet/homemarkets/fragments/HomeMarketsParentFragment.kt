@@ -20,6 +20,7 @@ import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
 import org.loopring.looprwallet.homemarkets.R
@@ -34,7 +35,7 @@ import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivi
  *
  */
 class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedLister,
-        OnSearchViewChangeListener {
+        SearchFragment, OnSearchViewChangeListener {
 
     override val layoutResource: Int
         get() = R.layout.fragment_markets_parent
@@ -78,9 +79,9 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         super.onActivityResult(requestCode, resultCode, data)
 
         QRCodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
-            when(type) {
+            when (type) {
                 QRCodeCaptureActivity.TYPE_PUBLIC_KEY -> {
-                     CreateTransferActivity.route(this, value)
+                    CreateTransferActivity.route(this, value)
                 }
                 QRCodeCaptureActivity.TYPE_TRADING_PAIR -> {
                     val tradingPair = TradingPair.createFromMarket(value)

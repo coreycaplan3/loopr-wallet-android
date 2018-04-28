@@ -21,7 +21,6 @@ import android.view.*
 import android.widget.ProgressBar
 import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.R
@@ -224,6 +223,24 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     }
 
     /**
+     * Sets up the AppBar to be in sync with the activity and enables/disabled toolbar collapsing
+     * accordingly.
+     */
+    fun setupAppbar() {
+        toolbar = (0 until (appbarLayout?.childCount ?: 0))
+                .map { appbarLayout?.getChildAt(it) }
+                .filterIsInstance<Toolbar>()
+                .first()
+        (activity as? BaseActivity)?.setSupportActionBar(toolbar)
+
+        if (isToolbarCollapseEnabled) {
+            enableToolbarCollapsing()
+        } else {
+            disableToolbarCollapsing()
+        }
+    }
+
+    /**
      * Enables the toolbar to be collapsed when scrolling
      */
     fun enableToolbarCollapsing() {
@@ -287,7 +304,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         isToolbarCollapseEnabled = false
     }
 
-    protected val viewModelList = arrayListOf<OfflineFirstViewModel<*, *>>()
+    private val viewModelList = arrayListOf<OfflineFirstViewModel<*, *>>()
 
     /**
      * Setups and standardizes the usage of [TransactionViewModel]. This includes the observers
@@ -530,20 +547,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
                     ViewCompat.setTransitionName(this, fabTransitionName)
                     fragmentView.addView(this)
                 }
-    }
-
-    private fun setupAppbar() {
-        toolbar = (0 until (appbarLayout?.childCount ?: 0))
-                .map { appbarLayout?.getChildAt(it) }
-                .filterIsInstance<Toolbar>()
-                .first()
-        (activity as? BaseActivity)?.setSupportActionBar(toolbar)
-
-        if (isToolbarCollapseEnabled) {
-            enableToolbarCollapsing()
-        } else {
-            disableToolbarCollapsing()
-        }
     }
 
     protected val snackbarCallbackRemoverListener = object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
