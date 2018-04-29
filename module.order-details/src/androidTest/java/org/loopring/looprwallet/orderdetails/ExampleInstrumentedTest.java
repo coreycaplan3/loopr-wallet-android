@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order;
+package org.loopring.looprwallet.orderdetails;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

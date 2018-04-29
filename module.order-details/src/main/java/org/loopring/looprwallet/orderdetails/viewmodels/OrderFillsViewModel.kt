@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order.viewmodels
+package org.loopring.looprwallet.orderdetails.viewmodels
 
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
@@ -10,7 +10,7 @@ import org.loopring.looprwallet.core.models.sync.SyncData.Companion.SYNC_TYPE_OR
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.networking.loopr.LooprOrderService
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
-import org.loopring.looprwallet.order.repositories.OrderFillsRepository
+import org.loopring.looprwallet.orderdetails.repositories.OrderFillsRepository
 import java.util.*
 
 /**

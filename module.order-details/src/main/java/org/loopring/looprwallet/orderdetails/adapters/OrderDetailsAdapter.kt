@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order.adapters
+package org.loopring.looprwallet.orderdetails.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.order.LooprOrderFill
-import org.loopring.looprwallet.order.R
+import org.loopring.looprwallet.orderdetails.R
 
 /**
  * Created by Corey on 4/10/2018

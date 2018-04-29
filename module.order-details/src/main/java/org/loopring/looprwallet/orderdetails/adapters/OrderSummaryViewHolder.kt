@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order.adapters
+package org.loopring.looprwallet.orderdetails.adapters
 
 import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
@@ -10,8 +10,8 @@ import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
-import org.loopring.looprwallet.order.R
-import org.loopring.looprwallet.order.dagger.orderDetailsLooprComponent
+import org.loopring.looprwallet.orderdetails.R
+import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
 import javax.inject.Inject
 
 /**

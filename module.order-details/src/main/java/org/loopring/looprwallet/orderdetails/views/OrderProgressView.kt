@@ -1,11 +1,11 @@
-package org.loopring.looprwallet.order.views
+package org.loopring.looprwallet.orderdetails.views
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.order_progress.view.*
-import org.loopring.looprwallet.order.R
+import org.loopring.looprwallet.orderdetails.R
 
 
 /**

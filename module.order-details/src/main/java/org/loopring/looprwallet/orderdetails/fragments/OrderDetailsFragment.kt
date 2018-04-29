@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order.fragments
+package org.loopring.looprwallet.orderdetails.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,11 +11,11 @@ import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
-import org.loopring.looprwallet.order.R
-import org.loopring.looprwallet.order.adapters.OrderDetailsAdapter
-import org.loopring.looprwallet.order.dagger.orderDetailsLooprComponent
-import org.loopring.looprwallet.order.viewmodels.OrderFillsViewModel
-import org.loopring.looprwallet.order.viewmodels.OrderSummaryViewModel
+import org.loopring.looprwallet.orderdetails.R
+import org.loopring.looprwallet.orderdetails.adapters.OrderDetailsAdapter
+import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
+import org.loopring.looprwallet.orderdetails.viewmodels.OrderFillsViewModel
+import org.loopring.looprwallet.orderdetails.viewmodels.OrderSummaryViewModel
 import javax.inject.Inject
 
 /**

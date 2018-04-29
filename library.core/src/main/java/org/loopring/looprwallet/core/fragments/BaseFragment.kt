@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ProgressBar
@@ -227,11 +228,24 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * accordingly.
      */
     fun setupAppbar() {
-        toolbar = (0 until (appbarLayout?.childCount ?: 0))
-                .map { appbarLayout?.getChildAt(it) }
+        if (parentFragment != null) {
+            // Children don't have toolbars
+            logw("Attempted to setup an appbar in a child fragment...")
+            return
+        }
+
+        val appBarLayout = appbarLayout ?: return
+
+        logd("Setting up appbar...")
+
+        toolbar = (0 until appBarLayout.childCount)
+                .map { appBarLayout.getChildAt(it) }
                 .filterIsInstance<Toolbar>()
                 .first()
-        (activity as? BaseActivity)?.setSupportActionBar(toolbar)
+
+        val activity = (activity as? BaseActivity) ?: return
+        activity.setSupportActionBar(null) // set as null to clear it first
+        activity.setSupportActionBar(toolbar)
 
         if (isToolbarCollapseEnabled) {
             enableToolbarCollapsing()
@@ -244,7 +258,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * Enables the toolbar to be collapsed when scrolling
      */
     fun enableToolbarCollapsing() {
-        if(parentFragment != null) {
+        if (parentFragment != null) {
             // Children don't have toolbars
             return
         }
@@ -272,7 +286,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * Disables the toolbar from being collapsed when scrolling
      */
     fun disableToolbarCollapsing() {
-        if(parentFragment != null) {
+        if (parentFragment != null) {
             // Children don't have toolbars
             return
         }
@@ -394,8 +408,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * @param viewModel The [OfflineFirstViewModel] that will be registered with this fragment.
      * @param refreshLayout The refresh layout that shows the refresh drawable when the *ViewModel*
      * is loading or null otherwise
-     * @param refreshAll The function that will be called when all data needs to be refreshed. This
-     * is called when an error occurs and the user opts into a refresh/retry.
      */
     protected fun setupOfflineFirstStateAndErrorObserver(
             viewModel: OfflineFirstViewModel<*, *>?,

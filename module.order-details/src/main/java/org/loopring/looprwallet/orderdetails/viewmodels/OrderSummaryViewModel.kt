@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order.viewmodels
+package org.loopring.looprwallet.orderdetails.viewmodels
 
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred

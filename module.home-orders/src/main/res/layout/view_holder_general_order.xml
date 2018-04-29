@@ -38,7 +38,7 @@
             android:layout_marginStart="@dimen/horizontal_margin_small">
 
 
-            <org.loopring.looprwallet.order.views.OrderProgressView
+            <org.loopring.looprwallet.orderdetails.views.OrderProgressView
                 android:id="@+id/generalOrderProgress"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

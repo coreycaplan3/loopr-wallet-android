@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order.adapters
+package org.loopring.looprwallet.orderdetails.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.View

@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order;
+package org.loopring.looprwallet.orderdetails;
 
 import org.junit.Test;
 

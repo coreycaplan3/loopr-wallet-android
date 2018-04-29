@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order.adapters
+package org.loopring.looprwallet.orderdetails.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -7,8 +7,8 @@ import kotlinx.android.synthetic.main.view_holder_order_details_fill.*
 import org.loopring.looprwallet.core.models.order.LooprOrderFill
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
-import org.loopring.looprwallet.order.R
-import org.loopring.looprwallet.order.dagger.orderDetailsLooprComponent
+import org.loopring.looprwallet.orderdetails.R
+import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
 import javax.inject.Inject
 
 /**

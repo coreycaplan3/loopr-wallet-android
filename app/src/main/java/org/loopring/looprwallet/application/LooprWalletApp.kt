@@ -20,9 +20,9 @@ import org.loopring.looprwallet.homeorders.dagger.HomeOrdersLooprComponentProvid
 import org.loopring.looprwallet.hometransfers.dagger.DaggerHomeTransfersLooprComponent
 import org.loopring.looprwallet.hometransfers.dagger.HomeTransfersLooprComponent
 import org.loopring.looprwallet.hometransfers.dagger.HomeTransfersLooprComponentProvider
-import org.loopring.looprwallet.order.dagger.DaggerOrderDetailsLooprComponent
-import org.loopring.looprwallet.order.dagger.OrderDetailsLooprComponent
-import org.loopring.looprwallet.order.dagger.OrderDetailsLooprComponentProvider
+import org.loopring.looprwallet.orderdetails.dagger.DaggerOrderDetailsLooprComponent
+import org.loopring.looprwallet.orderdetails.dagger.OrderDetailsLooprComponent
+import org.loopring.looprwallet.orderdetails.dagger.OrderDetailsLooprComponentProvider
 import org.loopring.looprwallet.tradedetails.dagger.DaggerTradeDetailsLooprComponent
 import org.loopring.looprwallet.tradedetails.dagger.TradeDetailsLooprComponent
 import org.loopring.looprwallet.tradedetails.dagger.TradeDetailsLooprComponentProvider

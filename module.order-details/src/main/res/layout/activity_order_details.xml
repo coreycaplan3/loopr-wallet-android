@@ -6,13 +6,6 @@
     <FrameLayout
         android:id="@+id/activityContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <org.loopring.looprwallet.orderdetails.views.OrderProgressView
-            android:id="@id/orderProgressView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </FrameLayout>
+        android:layout_height="match_parent" />
 
 </android.support.design.widget.CoordinatorLayout>

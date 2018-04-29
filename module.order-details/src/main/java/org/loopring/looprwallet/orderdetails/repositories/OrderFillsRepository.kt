@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.order.repositories
+package org.loopring.looprwallet.orderdetails.repositories
 
 import android.arch.lifecycle.LiveData
 import io.realm.*

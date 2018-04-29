@@ -1,12 +1,12 @@
-package org.loopring.looprwallet.order.dagger
+package org.loopring.looprwallet.orderdetails.dagger
 
 import dagger.Component
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.CoreLooprComponent
 import org.loopring.looprwallet.core.dagger.LooprComponentScope
-import org.loopring.looprwallet.order.adapters.OrderDetailTradeViewHolder
-import org.loopring.looprwallet.order.adapters.OrderSummaryViewHolder
-import org.loopring.looprwallet.order.fragments.OrderDetailsFragment
+import org.loopring.looprwallet.orderdetails.adapters.OrderDetailTradeViewHolder
+import org.loopring.looprwallet.orderdetails.adapters.OrderSummaryViewHolder
+import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
 
 /**
  * Created by Corey on 4/24/2018
