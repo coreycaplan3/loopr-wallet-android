@@ -26,39 +26,39 @@ class EthTokenRepository : BaseRealmRepository(false) {
      *
      * @return An **UN-MANAGED** [LooprToken] that represents ETH.
      */
-    fun getEthNow(): LooprToken = uiRealm.use {
-        it.where<LooprToken>()
-                .equalTo(LooprToken::ticker, LooprToken.ETH.ticker)
-                .findFirst()
-                .mapIfNull {
-                    val data = uiRealm.copyToRealm(LooprToken.ETH)
-                    return@mapIfNull uiRealm.copyFromRealm(data)
-                }
-    }
+    fun getEthNow(): LooprToken = uiRealm.where<LooprToken>()
+            .equalTo(LooprToken::ticker, LooprToken.ETH.ticker)
+            .findFirst()
+            .mapIfNull {
+                val data = uiRealm.copyToRealm(LooprToken.ETH)
+                return@mapIfNull uiRealm.copyFromRealm(data)
+            }
 
     /**
      * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract
      * address.
      */
-    fun getTokenByContractAddressFromIoNow(contractAddress: String): LooprToken? = ioRealm.use {
+    fun getTokenByContractAddressFromIoNow(contractAddress: String): LooprToken? = ioRealm.let {
         val data = it.where<LooprToken>()
                 .equalTo(LooprToken::identifier, contractAddress)
                 .findFirst() ?: return null
 
-        return@use it.copyFromRealm(data)
+        return@let it.copyFromRealm(data)
     }
 
     /**
+     * ** This function must be called from the IO thread **
+     *
      * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract
      * address and wallet address as the balance owner.
      */
-    fun getTokenByContractAddressAndAddressNow(contractAddress: String, walletAddress: String): LooprToken? = uiRealm.use {
+    fun getTokenByContractAddressAndAddressNowFromIo(contractAddress: String, walletAddress: String): LooprToken? = ioRealm.let {
         val data = it.where<LooprToken>()
                 .equalTo(LooprToken::identifier, contractAddress)
                 .equalTo(listOf(LooprToken::tokenBalances), TokenBalanceInfo::address, walletAddress)
                 .findFirst() ?: return null
 
-        return@use it.copyFromRealm(data)
+        return@let it.copyFromRealm(data)
     }
 
     fun getAllTokens(): LiveData<OrderedRealmCollection<LooprToken>> {

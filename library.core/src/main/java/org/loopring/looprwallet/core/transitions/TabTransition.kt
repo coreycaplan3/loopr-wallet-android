@@ -33,10 +33,9 @@ class TabTransition : Visibility() {
                     .addTarget(tabLayoutTransitionName)
             )
 
-            (exitTransition as TransitionSet).addTransition(
-                    TabTransition()
-                            .addMode(Visibility.MODE_OUT)
-                            .addTarget(tabLayoutTransitionName) as TabTransition
+            (exitTransition as TransitionSet).addTransition(TabTransition()
+                    .addMode(Visibility.MODE_OUT)
+                    .addTarget(tabLayoutTransitionName)
             )
         }
     }

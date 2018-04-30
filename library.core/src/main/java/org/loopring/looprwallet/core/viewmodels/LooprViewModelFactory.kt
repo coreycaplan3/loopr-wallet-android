@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 
@@ -20,6 +21,15 @@ open class LooprViewModelFactory protected constructor(private val currentWallet
     : ViewModelProvider.Factory {
 
     companion object {
+
+        inline fun <reified T : ViewModel> get(activity: FragmentActivity, key: String? = null): T {
+            return ViewModelProviders.of(activity).let {
+                when (key) {
+                    null -> it.get(T::class.java)
+                    else -> it.get(key, T::class.java)
+                }
+            }
+        }
 
         inline fun <reified T : ViewModel> get(fragment: Fragment, key: String? = null): T {
             return ViewModelProviders.of(fragment).let {

@@ -34,6 +34,7 @@ import org.loopring.looprwallet.tradedetails.R
 import org.loopring.looprwallet.tradedetails.dagger.tradeDetailsLooprComponent
 import org.loopring.looprwallet.tradedetails.viewmodels.TradingPairDetailsViewModel
 import org.loopring.looprwallet.tradedetails.viewmodels.TradingPairTrendViewModel
+import javax.inject.Inject
 
 /**
  * Created by Corey on 4/23/2018
@@ -85,6 +86,7 @@ class TradingPairDetailsFragment : BaseFragment() {
 
     lateinit var filter: TradingPairFilter
 
+    @Inject
     lateinit var currencySettings: CurrencySettings
 
     private var tradingPair: TradingPair? = null

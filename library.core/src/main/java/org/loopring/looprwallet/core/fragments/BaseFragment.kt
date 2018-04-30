@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewGroupCompat
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ProgressBar
@@ -109,17 +108,15 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         allowReturnTransitionOverlap = false
 
         enterTransition = TransitionSet()
-                .addTransition(
-                        FloatingActionButtonTransition()
-                                .addMode(Visibility.MODE_IN)
-                                .addTarget(fabTransitionName)
+                .addTransition(FloatingActionButtonTransition()
+                        .addMode(Visibility.MODE_IN)
+                        .addTarget(fabTransitionName)
                 )
 
         exitTransition = TransitionSet()
-                .addTransition(
-                        FloatingActionButtonTransition()
-                                .addMode(Visibility.MODE_OUT)
-                                .addTarget(fabTransitionName)
+                .addTransition(FloatingActionButtonTransition()
+                        .addMode(Visibility.MODE_OUT)
+                        .addTarget(fabTransitionName)
                 )
     }
 
@@ -246,6 +243,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         val activity = (activity as? BaseActivity) ?: return
         activity.setSupportActionBar(null) // set as null to clear it first
         activity.setSupportActionBar(toolbar)
+        activity.invalidateOptionsMenu()
 
         if (isToolbarCollapseEnabled) {
             enableToolbarCollapsing()

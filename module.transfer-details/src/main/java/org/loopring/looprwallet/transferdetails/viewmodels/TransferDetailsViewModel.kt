@@ -31,7 +31,9 @@ class TransferDetailsViewModel(currentWallet: LooprWallet) : ViewModel() {
         }
 
         data?.observe(owner, Observer { transfer ->
-            transfer?.let { onChange(it) }
+            if (transfer != null && transfer.isValid) {
+                onChange(transfer)
+            }
         })
     }
 

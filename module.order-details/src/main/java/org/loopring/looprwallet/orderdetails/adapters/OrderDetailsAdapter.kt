@@ -43,7 +43,7 @@ class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrde
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return OrderSummaryViewHolder(parent.inflate(R.layout.view_holder_order_details_fill))
+        return OrderFillViewHolder(parent.inflate(R.layout.view_holder_order_details_fill))
     }
 
     override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -54,7 +54,7 @@ class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrde
         (holder as? OrderSummaryViewHolder)?.bind(orderSummary)
 
         item?.guard {} ?: return
-        (holder as? OrderDetailTradeViewHolder)?.bind(index, item)
+        (holder as? OrderFillViewHolder)?.bind(index, item)
     }
 
 }

@@ -55,6 +55,7 @@ abstract class BaseTabFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewPager = view.findViewById(R.id.fragmentContainer)
+        viewPager.offscreenPageLimit = 4
         viewPager.adapter = adapter
 
         tabLayout = view.findViewById(tabLayoutId)

@@ -7,11 +7,8 @@ import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.isValid
-import kotlinx.coroutines.experimental.CompletableDeferred
-import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
@@ -461,6 +458,14 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      */
     private inline fun createObserver(crossinline onChange: (T) -> Unit): Observer<T> {
         return Observer {
+            if (it != null && isDataValid(it)) {
+                onChange(it)
+            } else if (isIdle()) {
+                // This can happen if we're unable to load data and the repository is empty
+                logi("Bad data state! {state: ${mCurrentState.value}, " +
+                        "isNetworkRunning: $mIsNetworkOperationRunning}")
+            }
+
             if (mIsNetworkOperationRunning) {
                 // There is a network operation running, so we're still loading
                 mCurrentState.value = getCurrentLoadingState(it)
@@ -469,13 +474,6 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
                 mCurrentState.value = getCurrentIdleState(it)
             }
 
-            if (it != null && isDataValid(it)) {
-                onChange(it)
-            } else if (isIdle()) {
-                // This can happen if we're unable to load data and the repository is empty
-                logi("Bad data state! {state: ${mCurrentState.value}, " +
-                        "isNetworkRunning: $mIsNetworkOperationRunning}")
-            }
         }
     }
 
@@ -507,15 +505,15 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         mIsNetworkOperationRunning = isRefreshNecessary(parameter)
 
         // Reinitialize data, observers, and notify via the call to onLiveDataInitialized
-        async(UI) {
+        launch(UI) {
             mParameter = parameter
-            val liveData = async(UI) {getLiveDataFromRepository(parameter)}.await()
+            val liveData = async(UI) { getLiveDataFromRepository(parameter) }.await()
             mLiveData = liveData
             addObserver(liveData)
             onLiveDataInitialized(liveData)
         }
 
-        async(IO) {
+        launch(IO) {
             if (mIsNetworkOperationRunning) {
                 mCurrentState.postValue(getCurrentLoadingState(mLiveData?.value))
                 // Ping the network for fresh data
@@ -529,7 +527,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
             // We don't have a network operation already running and a refresh is necessary
             mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
 
-            async(IO) {
+            launch(IO) {
                 handleNetworkRequest(parameter)
             }
 

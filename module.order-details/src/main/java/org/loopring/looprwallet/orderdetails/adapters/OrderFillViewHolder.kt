@@ -18,7 +18,7 @@ import javax.inject.Inject
  *
  * Purpose of Class:
  */
-class OrderDetailTradeViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), LayoutContainer {
+class OrderFillViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
     @Inject
     lateinit var currencySettings: CurrencySettings

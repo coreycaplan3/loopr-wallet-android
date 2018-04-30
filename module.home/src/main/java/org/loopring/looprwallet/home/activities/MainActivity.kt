@@ -22,7 +22,7 @@ import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
-import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentStatePagerAdapter
+import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentSwitcherPagerAdapter
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -78,7 +78,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         get() = true
 
     private val pagerAdapter by lazy {
-        LooprFragmentStatePagerAdapter(supportFragmentManager, listOf(
+        LooprFragmentSwitcherPagerAdapter(supportFragmentManager, listOf(
                 str(R.string.markets) to HomeMarketsParentFragment(),
                 str(R.string.orders) to HomeOrdersParentFragment(),
                 str(R.string.transfers) to ViewTransfersFragment(),
@@ -86,7 +86,7 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         ))
     }
 
-    lateinit var bottomNavigationFragmentStackHistory: BottomNavigationFragmentStackHistory
+    lateinit var stackHistory: BottomNavigationFragmentStackHistory
 
     lateinit var bottomNavigationPresenter: BottomNavigationPresenter
 
@@ -103,15 +103,17 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
             }
         }
 
-        bottomNavigationFragmentStackHistory = BottomNavigationFragmentStackHistory(false, savedInstanceState)
+        stackHistory = BottomNavigationFragmentStackHistory(false, savedInstanceState).apply {
+            push(pagerAdapter.getPageTitle(0)!!.toString())
+        }
 
         bottomNavigationView.inflateMenu(R.menu.home_bottom_navigation_menu)
 
         bottomNavigationPresenter = BottomNavigationPresenter(
                 bottomNavigationView = bottomNavigationView,
-                viewPager = mainViewPager,
+                container = activityContainer,
                 pagerAdapter = pagerAdapter,
-                stackHistory = bottomNavigationFragmentStackHistory,
+                stackHistory = stackHistory,
                 savedInstanceState = savedInstanceState
         )
     }

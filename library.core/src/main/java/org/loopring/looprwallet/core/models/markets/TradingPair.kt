@@ -48,7 +48,7 @@ open class TradingPair(
 
     }
 
-    var mPrimaryToken = primaryToken
+    private var mPrimaryToken = primaryToken
 
     var primaryToken: LooprToken
         get() = mPrimaryToken ?: LooprToken.ETH

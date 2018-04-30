@@ -10,6 +10,7 @@ import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.repositories.ContactsRepository
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.validators.ContactNameValidator
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
@@ -70,7 +71,9 @@ class CreateContactDialog : BaseBottomSheetDialog() {
             val contact = Contact(address, contactName)
 
             repository?.let {
-                it.add(contact)
+                async(IO) {
+                    it.add(contact)
+                }
                 dismissAllowingStateLoss()
             }
         }

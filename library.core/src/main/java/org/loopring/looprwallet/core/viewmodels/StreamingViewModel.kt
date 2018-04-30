@@ -1,6 +1,8 @@
 package org.loopring.looprwallet.core.viewmodels
 
 import android.arch.lifecycle.LiveData
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
 
@@ -22,7 +24,9 @@ abstract class StreamingViewModel<T, U> : OfflineFirstViewModel<T, U>() {
 
     final override fun onLiveDataInitialized(liveData: LiveData<T>) {
         timer.scheduleAtFixedRate(0L, waitTime) {
-            refresh()
+            launch(UI) {
+                refresh()
+            }
         }
     }
 

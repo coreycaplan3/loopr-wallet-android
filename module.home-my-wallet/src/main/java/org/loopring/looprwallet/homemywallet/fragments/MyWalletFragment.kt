@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.card_wallet_information.*
 import kotlinx.android.synthetic.main.fragment_my_wallet.*
 import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
 import org.loopring.looprwallet.barcode.utilities.BarcodeUtility
+import org.loopring.looprwallet.contacts.activities.ViewContactsActivity
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.extensions.ifNotNull
@@ -177,41 +178,39 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
     // MARK - Private Methods
 
-    private fun setupWalletInformation() {
-        walletClient.getCurrentWallet()?.let { wallet ->
-            tokenBalanceViewModel.getAllTokensWithBalances(this, wallet.credentials.address, ::onTokenBalancesChange)
+    private fun setupWalletInformation() = walletClient.getCurrentWallet()?.let { wallet ->
+        tokenBalanceViewModel.getAllTokensWithBalances(this, wallet.credentials.address, ::onTokenBalancesChange)
 
-            // Setup Tooltips
-            TooltipCompat.setTooltipText(shareAddressButton, str(R.string.share_your_address))
-            TooltipCompat.setTooltipText(showPrivateKeyButton, str(R.string.reveal_private_key))
+        // Setup Tooltips
+        TooltipCompat.setTooltipText(shareAddressButton, str(R.string.share_your_address))
+        TooltipCompat.setTooltipText(showPrivateKeyButton, str(R.string.reveal_private_key))
 
-            // Setup the showWalletUnlockMechanismButton, based on how the type of wallet
-            when {
-                wallet.keystoreContent != null -> {
-                    TooltipCompat.setTooltipText(showWalletUnlockMechanismButton, str(R.string.copy_keystore_content))
-                    showWalletUnlockMechanismButton.visibility = View.VISIBLE
-                }
-                wallet.passphrase != null -> {
-                    TooltipCompat.setTooltipText(showWalletUnlockMechanismButton, str(R.string.view_your_passphrase))
-                    showWalletUnlockMechanismButton.visibility = View.VISIBLE
-                }
-                else -> {
-                    showWalletUnlockMechanismButton.visibility = View.GONE
-                }
+        // Setup the showWalletUnlockMechanismButton, based on how the type of wallet
+        when {
+            wallet.keystoreContent != null -> {
+                TooltipCompat.setTooltipText(showWalletUnlockMechanismButton, str(R.string.copy_keystore_content))
+                showWalletUnlockMechanismButton.visibility = View.VISIBLE
             }
-
-            // Setup the Address Barcode
-            try {
-                val address = wallet.credentials.address
-                val dimensions = resources.getDimension(R.dimen.qr_code_dimensions).roundToInt()
-                val barcode = BarcodeUtility.encodeTextToBitmap(address, dimensions)
-                addressBarcodeImage.setImageBitmap(barcode)
-                addressLabel.text = address
-            } catch (e: Throwable) {
-                addressLabel.text = str(R.string.error_creating_qr_code)
+            wallet.passphrase != null -> {
+                TooltipCompat.setTooltipText(showWalletUnlockMechanismButton, str(R.string.view_your_passphrase))
+                showWalletUnlockMechanismButton.visibility = View.VISIBLE
             }
-
+            else -> {
+                showWalletUnlockMechanismButton.visibility = View.GONE
+            }
         }
+
+        // Setup the Address Barcode
+        try {
+            val address = wallet.credentials.address
+            val dimensions = resources.getDimension(R.dimen.qr_code_dimensions).roundToInt()
+            val barcode = BarcodeUtility.encodeTextToBitmap(address, dimensions)
+            addressBarcodeImage.setImageBitmap(barcode)
+            addressLabel.text = address
+        } catch (e: Throwable) {
+            addressLabel.text = str(R.string.error_creating_qr_code)
+        }
+
     }
 
     private fun setupBalanceAndContactInformation() {
@@ -220,7 +219,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         TooltipCompat.setTooltipText(viewAllContactsButton, str(R.string.view_all_your_contacts))
 
         myWalletShowTokensButton.setOnClickListener {
-            activity?.let { ViewBalancesActivity.route(it) }
+            activity?.ifNotNull { ViewBalancesActivity.route(it) }
         }
 
         addContactButton.setOnClickListener {
@@ -229,7 +228,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         }
 
         viewAllContactsButton.setOnClickListener {
-            // TODO
+            activity?.ifNotNull { ViewContactsActivity.route(it) }
         }
 
     }

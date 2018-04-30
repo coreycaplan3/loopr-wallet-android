@@ -53,7 +53,7 @@ class MainActivityTest : BaseDaggerTest() {
         waitForActivityToBeSetup()
 
         bottomNavigationPresenter = activity.bottomNavigationPresenter
-        bottomNavigationFragmentStackHistory = activity.bottomNavigationFragmentStackHistory
+        bottomNavigationFragmentStackHistory = activity.stackHistory
 
         Thread.sleep(250) // wait the bottom navigation handler to be initialized
     }

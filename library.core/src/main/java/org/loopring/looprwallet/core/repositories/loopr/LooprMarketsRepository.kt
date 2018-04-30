@@ -40,7 +40,7 @@ class LooprMarketsRepository : BaseRealmRepository(false) {
     }
 
     fun insertMarkets(list: RealmList<TradingPair>) {
-        // TODO
+        addList(list)
     }
 
     fun getMarkets(filter: MarketsFilter): LiveData<OrderedRealmCollection<TradingPair>> {

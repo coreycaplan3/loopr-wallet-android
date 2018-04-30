@@ -3,7 +3,7 @@ package org.loopring.looprwallet.core.presenters
 import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.view.ViewPager
+import android.view.ViewGroup
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.activities.BaseActivity
@@ -13,7 +13,7 @@ import org.loopring.looprwallet.core.extensions.logv
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
-import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentStatePagerAdapter
+import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentSwitcherPagerAdapter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
 
 /**
@@ -27,13 +27,13 @@ import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragme
  * This class should be instantiated in the corresponding activity's [Activity.onCreate] method.
  *
  * @param bottomNavigationView The [BottomNavigationView] in which the tabs are displayed
- * @param viewPager The locked [ViewPager] in which these items are located
- * @param pagerAdapter The adapter that works in sync with the [viewPager]
+ * @param container The container in which the pager will be used
+ * @param pagerAdapter The adapter that works in sync with the activity container
  * @param stackHistory The history of all the fragment's back-stack
  */
 class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
-                                viewPager: ViewPager,
-                                pagerAdapter: LooprFragmentStatePagerAdapter,
+                                container: ViewGroup,
+                                pagerAdapter: LooprFragmentSwitcherPagerAdapter,
                                 private val stackHistory: BottomNavigationFragmentStackHistory,
                                 savedInstanceState: Bundle?) {
 
@@ -42,39 +42,28 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
         fun onBottomNavigationReselected()
     }
 
+    companion object {
+
+        private const val KEY_PAGER_ADAPTER_STATE = "_PAGER_ADAPTER_STATE"
+    }
+
+    private val container by weakReference(container)
     private val bottomNavigationView by weakReference(bottomNavigationView)
-    private var viewPager by weakReference(viewPager)
     private var pagerAdapter by weakReference(pagerAdapter)
 
     init {
-        viewPager.offscreenPageLimit = 1
 
         when {
             savedInstanceState != null -> {
-                // We don't have anything to really do...
                 val tag = stackHistory.peek()!!
                 logv("Pushing $tag fragment...")
+
+                pagerAdapter.restoreState(savedInstanceState.getParcelable(KEY_PAGER_ADAPTER_STATE), savedInstanceState.classLoader)
             }
             else -> {
-                runBlocking {
-                    delay(200)
-
-                    // Needed to allow the TabLayout animation to occur initially.
-                    viewPager.adapter = pagerAdapter
-                }
+                executeFragmentTransaction(stackHistory.peek()!!)
             }
         }
-
-        @Suppress("DEPRECATION")
-        viewPager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {}
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-
-            override fun onPageSelected(position: Int) {
-                (pagerAdapter.currentFragment as? BaseFragment)?.setupAppbar()
-            }
-        })
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
             executeFragmentTransaction(it.title.toString())
@@ -118,6 +107,8 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
 
     fun onSaveInstanceState(outState: Bundle?) {
         stackHistory.saveState(outState)
+
+        outState?.putParcelable(KEY_PAGER_ADAPTER_STATE, pagerAdapter?.saveState())
     }
 
     // MARK - Private Methods
@@ -147,8 +138,9 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
 
         fun setCurrentPage(title: String) {
             val position = getPositionFromTitle(title)
+            val container = container ?: return
             if (position != null) {
-                viewPager?.setCurrentItem(position, false)
+                pagerAdapter?.instantiateFragment(container, position)
             }
         }
 
@@ -162,7 +154,7 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
 
             // Allow the appbar to snap into place for committing the transaction
             runBlocking {
-                delay(125L)
+                delay(200)
                 setCurrentPage(newFragmentTitle)
             }
         } else {

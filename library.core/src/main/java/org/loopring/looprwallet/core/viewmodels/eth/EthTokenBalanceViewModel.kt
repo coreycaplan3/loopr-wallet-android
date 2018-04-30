@@ -72,7 +72,7 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<Lo
 
         val tokenBalance = newToken.tokenBalances[0]
         val token = repository.getTokenByContractAddressFromIoNow(contractAddress = newToken.identifier)
-        val tokenWithBalanceInfo = repository.getTokenByContractAddressAndAddressNow(
+        val tokenWithBalanceInfo = repository.getTokenByContractAddressAndAddressNowFromIo(
                 contractAddress = newToken.identifier,
                 walletAddress = address
         )

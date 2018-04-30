@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.transferdetails.dialogs
 
-import android.arch.lifecycle.ViewModelProviders
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -12,7 +11,6 @@ import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
-import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.ChromeCustomTabsUtility
@@ -23,7 +21,6 @@ import org.loopring.looprwallet.transferdetails.dagger.transferDetailsLooprCompo
 import org.loopring.looprwallet.transferdetails.viewmodels.TransferDetailsViewModel
 import java.math.BigInteger
 import java.text.DateFormat
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -86,9 +83,7 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ethereumBlockNumberViewModel = ViewModelProviders.of(activity!!)
-                .get(EthereumBlockNumberViewModel::class.java)
-
+        ethereumBlockNumberViewModel = LooprViewModelFactory.get(activity!!)
         ethereumBlockNumberViewModel.getEthereumBlockNumber(this) {
             ethereumBlockNumber = it
             bindStatus()
@@ -100,9 +95,23 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
     private fun onDataChange(transfer: LooprTransfer) {
         this.looprTransfer = transfer
 
+        // Send / Receive
+        val quantityFormatterText: String
+        if(transfer.isSend) {
+            transferDetailsSendImage.visibility = View.VISIBLE
+            transferDetailsReceiveImage.visibility = View.GONE
+
+            quantityFormatterText = str(R.string.formatter_received)
+        } else {
+            transferDetailsReceiveImage.visibility = View.VISIBLE
+            transferDetailsSendImage.visibility = View.GONE
+
+            quantityFormatterText = str(R.string.formatter_sent)
+        }
+
         // Quantity
         val quantity = transfer.numberOfTokens.formatAsToken(currencySettings, transfer.token)
-        transferDetailsQuantityLabel.text = str(R.string.formatter_received).format(quantity)
+        transferDetailsQuantityLabel.text = quantityFormatterText.format(quantity)
 
         // USD Value
         val usdValue = transfer.transactionFeeUsdValue.formatAsCurrency(currencySettings)
@@ -122,7 +131,7 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
         bindStatus()
     }
 
-    fun bindStatus() {
+    private fun bindStatus() {
         val transfer = looprTransfer ?: return
         val ethereumBlockNumber = ethereumBlockNumber?.blockNumber ?: return
         val transferBlockNumber = transfer.blockNumber

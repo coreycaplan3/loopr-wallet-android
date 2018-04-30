@@ -10,7 +10,6 @@ import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.isSameDay
 import org.loopring.looprwallet.core.extensions.weakReference
-import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.order.OrderFilter
 import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_CANCELLED
@@ -18,6 +17,7 @@ import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_D
 import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_FILLED
 import org.loopring.looprwallet.core.models.order.OrderFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.homeorders.R
+import org.loopring.looprwallet.orderdetails.activities.OrderDetailsActivity
 import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
 
 /**
@@ -143,12 +143,7 @@ class GeneralOrderAdapter(
         (holder as? GeneralOrderViewHolder)?.bind(item, showDateHeader) {
             val activity = this.activity ?: return@bind
 
-            val fragment = OrderDetailsFragment.getInstance(it.orderHash)
-            val tag = OrderDetailsFragment.TAG
-            FragmentTransactionController(R.id.activityContainer, fragment, tag).apply {
-                slideUpAndDownAnimation()
-                commitTransaction(activity.supportFragmentManager)
-            }
+            OrderDetailsActivity.route(activity, it.orderHash)
         }
     }
 
