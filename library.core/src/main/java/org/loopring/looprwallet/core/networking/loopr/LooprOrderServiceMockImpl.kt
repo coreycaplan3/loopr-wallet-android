@@ -27,7 +27,7 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
 
     private val order1 = LooprOrder(orderHash = "abcdef1234", tradingPair = lrcTradingPair, percentageFilled = 0, status = OrderFilter.FILTER_OPEN_NEW)
     private val order2 = LooprOrder(orderHash = "abcdef4321", tradingPair = reqTradingPair, percentageFilled = 78, status = OrderFilter.FILTER_OPEN_PARTIAL)
-    private val order3 = LooprOrder(orderHash = "abcdef4132", tradingPair = zrxTradingPair, percentageFilled = 45, status = OrderFilter.FILTER_OPEN_PARTIAL, isSell = true)
+    private val order3 = LooprOrder(orderHash = "abcdef3124", tradingPair = zrxTradingPair, percentageFilled = 45, status = OrderFilter.FILTER_OPEN_PARTIAL, isSell = true)
 
     private val fill1 = LooprOrderFill("abc", order1.orderHash, 143.00, Date(Date().time - 100000L))
     private val fill2 = LooprOrderFill("def", order1.orderHash, 2045.00, Date(Date().time - 70000L))
@@ -47,7 +47,7 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            return@async LooprOrder(tradingPair = lrcTradingPair, percentageFilled = 0)
+            return@async RealmList(order1, order2, order3).find { it.orderHash == orderHash }!!
         } else {
             throw IOException("No connection")
         }
@@ -57,7 +57,11 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            return@async RealmList(fill1, fill2, fill3)
+            val list = listOf(fill1, fill2, fill3).map {
+                it.orderHash = orderHash
+                return@map it
+            }
+            return@async RealmList<LooprOrderFill>().apply { addAll(list) }
         } else {
             throw IOException("No connection")
         }

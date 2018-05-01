@@ -1,8 +1,6 @@
 package org.loopring.looprwallet.core.viewmodels
 
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 
 /**
  * Created by Corey Caplan on 3/14/18.
@@ -14,7 +12,8 @@ import org.loopring.looprwallet.core.repositories.sync.SyncRepository
  */
 abstract class OfflineOnlyViewModel<T, U> : OfflineFirstViewModel<T, U>() {
 
-    override val syncType = throw NotImplementedError("Not needed for offline-only ViewModels")
+    override val syncType
+        get() = throw NotImplementedError("Not needed for offline-only ViewModels")
 
     override fun addNetworkDataToRepository(data: T) {
         throw NotImplementedError("This method should never be called")

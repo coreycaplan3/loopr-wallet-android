@@ -1,8 +1,10 @@
 package org.loopring.looprwallet.tradedetails.fragments
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -16,6 +18,7 @@ import io.realm.OrderedRealmCollection
 import kotlinx.android.synthetic.main.fragment_trading_pair_details.*
 import kotlinx.android.synthetic.main.trading_pair_graph.*
 import kotlinx.android.synthetic.main.trading_pair_statistics_card.*
+import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.snackbar
@@ -25,6 +28,7 @@ import org.loopring.looprwallet.core.models.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.markets.TradingPairTrend
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.repositories.loopr.LooprMarketsRepository
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.int
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -106,6 +110,7 @@ class TradingPairDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         setupOfflineFirstStateAndErrorObserver(tradingPairDetailsViewModel, tradingPairDetailsSwipeRefresh)
         tradingPairDetailsViewModel.getTradingPair(this, filter, ::bindTradingPair)
 
@@ -114,9 +119,13 @@ class TradingPairDetailsFragment : BaseFragment() {
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp)
-        floatingActionButton.setOnClickListener {
-            activity?.let { CreateOrderActivity.route(it, tradingPair) }
+        floatingActionButton.apply {
+            val drawable = ApplicationUtility.drawable(R.drawable.ic_add_white_24dp)
+            DrawableCompat.setTint(drawable, Color.WHITE)
+            this.setImageDrawable(drawable)
+            this.setOnClickListener {
+                activity?.let { CreateOrderActivity.route(it, tradingPair) }
+            }
         }
     }
 
@@ -124,10 +133,9 @@ class TradingPairDetailsFragment : BaseFragment() {
         inflater?.inflate(R.menu.menu_trading_pair_details, menu)
 
         menu?.findItem(R.id.menuTradingPairFavorite)?.ifNotNull {
-            if (tradingPair?.isFavorite == true) {
-                it.setIcon(R.drawable.ic_favorite_white_24dp)
-            } else {
-                it.setIcon(R.drawable.ic_favorite_border_white_24dp)
+            when {
+                tradingPair?.isFavorite == true -> it.setIcon(R.drawable.ic_favorite_white_24dp)
+                else -> it.setIcon(R.drawable.ic_favorite_border_white_24dp)
             }
         }
     }
@@ -135,15 +143,22 @@ class TradingPairDetailsFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         R.id.menuTradingPairFavorite -> {
             tradingPair?.ifNotNull {
-                looprMarketsRepository.toggleIsFavorite(it.market)
 
-                val message = when {
-                    it.isFavorite -> str(R.string.formatter_is_favorite).format(it.primaryTicker)
-                    else -> str(R.string.formatter_is_not_favorite).format(it.primaryTicker)
+                runBlocking {
+                    looprMarketsRepository.toggleIsFavorite(it.market).await()
                 }
 
-                activity?.invalidateOptionsMenu()
-                view?.snackbar(message)
+                when {
+                    it.isFavorite -> {
+                        view?.snackbar(str(R.string.formatter_is_favorite).format(it.primaryTicker))
+                        item.setIcon(R.drawable.ic_favorite_white_24dp)
+                    }
+                    else -> {
+                        view?.snackbar(str(R.string.formatter_is_not_favorite).format(it.primaryTicker))
+                        item.setIcon(R.drawable.ic_favorite_border_white_24dp)
+                    }
+                }
+
             }
             true
         }
@@ -192,19 +207,25 @@ class TradingPairDetailsFragment : BaseFragment() {
             tradingPairDetailsChart.visibility = View.VISIBLE
         }
 
+        if (trends.size == 0) {
+            return
+        }
+
+        val theme = context?.theme ?: return
+        val colorPrimary = theme.getResourceIdFromAttrId(R.attr.colorPrimary)
+        val textColorPrimary = theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary)
+
         val entries = trends.map { Entry(it.cycleDate.time.toFloat(), it.averagePrice.toFloat()) }
-        val lineDataSet = LineDataSet(entries, "").apply {
-            this.disableDashedLine()
-            this.setDrawCircles(false)
+        val lineDataSet = LineDataSet(entries, tradingPair?.market).apply {
+            this.setDrawCircles(true)
             this.setDrawCircleHole(false)
             this.mode = LineDataSet.Mode.LINEAR
             this.isHighlightEnabled = true
             this.cubicIntensity = 0.05F
-            this.form = null
 
             context?.theme?.ifNotNull {
-                this.color = col(it.getResourceIdFromAttrId(R.attr.colorPrimary))
-                this.valueTextColor = col(it.getResourceIdFromAttrId(android.R.attr.textColorPrimary))
+                this.color = col(colorPrimary)
+                this.valueTextColor = col(textColorPrimary)
             }
         }
 
@@ -212,6 +233,10 @@ class TradingPairDetailsFragment : BaseFragment() {
 
         tradingPairDetailsChart.data = lineData
         tradingPairDetailsChart.setDrawGridBackground(false)
+        tradingPairDetailsChart.xAxis.textColor = col(textColorPrimary)
+        tradingPairDetailsChart.axisRight.textColor = col(textColorPrimary)
+        tradingPairDetailsChart.axisLeft.isEnabled = false
+        tradingPairDetailsChart.disableScroll()
 
         if (tradingPairDetailsChart.isVisible) {
             tradingPairDetailsChart.invalidate()

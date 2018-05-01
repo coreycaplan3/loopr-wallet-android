@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_show_barcode.*
+import org.loopring.looprwallet.barcode.activities.ViewBarcodeActivity
 import org.loopring.looprwallet.barcode.utilities.BarcodeUtility
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.homemywallet.R
 import kotlin.math.roundToInt
 
@@ -45,6 +47,10 @@ class ShowBarcodeDialog : BaseBottomSheetDialog() {
             val dimensions = resources.getDimension(R.dimen.qr_code_dimensions).roundToInt()
             val bitmap = BarcodeUtility.encodeTextToBitmap(barcodeText, dimensions)
             barcodeImage.setImageBitmap(bitmap)
+            barcodeImage.setOnClickListener {
+                ViewBarcodeActivity.route(activity!!, str(R.string.my_private_key), barcodeText)
+            }
+
             barcodeLabel.text = barcodeText
         } catch (e: Throwable) {
             barcodeLabel.setText(R.string.error_creating_qr_code)

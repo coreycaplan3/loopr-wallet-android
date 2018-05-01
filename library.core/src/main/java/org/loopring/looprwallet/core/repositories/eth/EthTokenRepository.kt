@@ -5,7 +5,6 @@ import io.realm.OrderedRealmCollection
 import io.realm.kotlin.where
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
-import org.loopring.looprwallet.core.extensions.mapIfNull
 import org.loopring.looprwallet.core.extensions.notEqualTo
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
@@ -28,11 +27,7 @@ class EthTokenRepository : BaseRealmRepository(false) {
      */
     fun getEthNow(): LooprToken = uiRealm.where<LooprToken>()
             .equalTo(LooprToken::ticker, LooprToken.ETH.ticker)
-            .findFirst()
-            .mapIfNull {
-                val data = uiRealm.copyToRealm(LooprToken.ETH)
-                return@mapIfNull uiRealm.copyFromRealm(data)
-            }
+            .findFirst() ?: addAndReturn(LooprToken.ETH)
 
     /**
      * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract

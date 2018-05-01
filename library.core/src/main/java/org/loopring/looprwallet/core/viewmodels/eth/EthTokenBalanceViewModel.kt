@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.extensions.update
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
@@ -28,7 +27,9 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<Lo
 
     override val repository = EthTokenRepository()
 
-    private val ethplorerService = EthplorerService.getInstance()
+    private val ethplorerService by lazy {
+        EthplorerService.getInstance()
+    }
 
     fun getEthBalanceNow() = repository.getEthNow()
 
@@ -95,15 +96,17 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<Lo
             // There is no token in the Realm currently for this contract address
             // This should rarely ever happen but can occur. For example, if the user synced tokens
             // that are not in this app by already
-            val tokenRetrieverViewModel = TokenRetrieverViewModel()
-            val isSuccessful = runBlocking {
-                tokenRetrieverViewModel.getTokenInfoFromNetworkAndAdd(newToken.identifier)
-                        .await()
-            }
-            return when {
-                isSuccessful -> addTokenInfoToRealm(newToken)
-                else -> null
-            }
+            // TODO - We make a lot of unnecessary network calls. A better API could alleviate this
+//            val tokenRetrieverViewModel = TokenRetrieverViewModel()
+//            val isSuccessful = runBlocking {
+//                tokenRetrieverViewModel.getTokenInfoFromNetworkAndAdd(newToken.identifier)
+//                        .await()
+//            }
+//            return when {
+//                isSuccessful -> addTokenInfoToRealm(newToken)
+//                else -> null
+//            }
+            return null
         }
     }
 

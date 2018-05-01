@@ -21,6 +21,7 @@
       <module fileurl="file://$PROJECT_DIR$/module.transfer-details/module.transfer-details.iml" filepath="$PROJECT_DIR$/module.transfer-details/module.transfer-details.iml" />
       <module fileurl="file://$PROJECT_DIR$/module.view-balances/module.view-balances.iml" filepath="$PROJECT_DIR$/module.view-balances/module.view-balances.iml" />
       <module fileurl="file://$PROJECT_DIR$/module.wallet-sign-in/module.wallet-sign-in.iml" filepath="$PROJECT_DIR$/module.wallet-sign-in/module.wallet-sign-in.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module.wrap-eth/module.wrap-eth.iml" filepath="$PROJECT_DIR$/module.wrap-eth/module.wrap-eth.iml" />
     </modules>
   </component>
 </project>

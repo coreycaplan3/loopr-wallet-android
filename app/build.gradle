@@ -120,6 +120,7 @@ dependencies {
     implementation project(':module.transfer-details')
     implementation project(':module.view-balances')
     implementation project(':module.wallet-sign-in')
+    implementation project(':module.wrap-eth')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Dagger Dependency Injection

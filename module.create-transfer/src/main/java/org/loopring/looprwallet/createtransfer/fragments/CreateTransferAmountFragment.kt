@@ -12,28 +12,28 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_create_transfer_amount.*
-import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.contacts.repositories.ContactsRepository
-import org.loopring.looprwallet.createtransfer.R
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.settings.EthereumFeeSettingsFragment
-import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
+import org.loopring.looprwallet.core.models.contact.Contact
+import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
+import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate.Companion.MAX_CURRENCY_FRACTION_DIGITS
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate.Companion.MAX_EXCHANGE_RATE_FRACTION_DIGITS
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.settings.EthereumFeeSettings
+import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
 import org.loopring.looprwallet.core.viewmodels.eth.EthereumTransactionViewModel
 import org.loopring.looprwallet.core.viewmodels.price.EthTokenPriceCheckerViewModel
+import org.loopring.looprwallet.createtransfer.R
 import org.loopring.looprwallet.createtransfer.dagger.createTransferLooprComponent
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -115,33 +115,23 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                 return field
             }
 
-            val wallet = walletClient.getCurrentWallet()
-            field = wallet?.let { ContactsRepository(it).getContactByAddressNow(recipientAddress) }
+            field = ContactsRepository().getContactByAddressNow(recipientAddress)
             return field
         }
 
     @VisibleForTesting
     val ethTokenPriceCheckerViewModel: EthTokenPriceCheckerViewModel by lazy {
-        return@lazy LooprViewModelFactory.get<EthTokenPriceCheckerViewModel>(this).apply {
+        LooprViewModelFactory.get<EthTokenPriceCheckerViewModel>(this).apply {
             setupOfflineFirstStateAndErrorObserver(this, null)
         }
     }
 
     @VisibleForTesting
-    var ethTokenBalanceViewModel: EthTokenBalanceViewModel? = null
-        get() {
-            if (field != null) {
-                return field
-            }
-
-            val wallet = walletClient.getCurrentWallet() ?: return null
-
-            return LooprViewModelFactory.get<EthTokenBalanceViewModel>(this, wallet)
-                    .apply {
-                        field = this
-                        setupOfflineFirstStateAndErrorObserver(this, null)
-                    }
+    val ethTokenBalanceViewModel: EthTokenBalanceViewModel by lazy {
+        LooprViewModelFactory.get<EthTokenBalanceViewModel>(this).apply {
+            setupOfflineFirstStateAndErrorObserver(this, null)
         }
+    }
 
     @VisibleForTesting
     val ethereumTransactionViewModel by lazy {
@@ -186,14 +176,14 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             }
         }
 
-        looprToken = ethTokenBalanceViewModel?.getEthBalanceNow() ?: LooprToken.ETH
+        looprToken = ethTokenBalanceViewModel.getEthBalanceNow()
         currentToken = ethTokenPriceCheckerViewModel.currentCryptoToken ?: looprToken
 
         toolbar?.title = null
         toolbar?.subtitle = contact?.name ?: recipientAddress
 
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
-        ethTokenBalanceViewModel?.getAllTokensWithBalances(this, address) {
+        ethTokenBalanceViewModel.getAllTokensWithBalances(this, address) {
             tokenBalanceList = it
             activity?.invalidateOptionsMenu()
         }
@@ -275,8 +265,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                 bindAmountsToText()
 
                 setupTokenTicker(data[position])
-                if (balance == null || balance.equalsZero() && ethTokenBalanceViewModel?.isLoading() == false) {
-                    ethTokenBalanceViewModel?.refresh()
+                if (balance == null || balance.equalsZero() && ethTokenBalanceViewModel.isLoading() == false) {
+                    ethTokenBalanceViewModel.refresh()
                     spinner.context.longToast(R.string.error_send_tokens_with_zero_balance)
                 }
             }
@@ -387,11 +377,6 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
     // MARK - Private Methods
 
-    private fun refreshAll() {
-        ethTokenPriceCheckerViewModel.refresh()
-        ethTokenBalanceViewModel?.refresh()
-    }
-
     /**
      * Sets up [EthTokenPriceCheckerViewModel] to watch an [LooprToken].
      */
@@ -455,7 +440,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                 // This should not happen, since the button is disabled until a balance was loaded
                 loge("Could not get the user\'s token balance!", IllegalStateException())
                 view?.longSnackbarWithAction(R.string.error_retrieve_token_balance, R.string.retry) {
-                    ethTokenBalanceViewModel?.refresh()
+                    ethTokenBalanceViewModel.refresh()
                 }
             }
             ethBalance < totalTransactionCost -> view?.longSnackbarWithAction(R.string.error_insufficient_gas, R.string.gas_settings) {
@@ -586,7 +571,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
      * [ethTokenBalanceViewModel] and [ethTokenPriceCheckerViewModel], have valid data.
      */
     private fun updateUiBasedOnValidData() {
-        if (ethTokenBalanceViewModel?.hasValidData() == true && ethTokenPriceCheckerViewModel.hasValidData()) {
+        if (ethTokenBalanceViewModel.hasValidData() && ethTokenPriceCheckerViewModel.hasValidData()) {
             createTransferSwapButton.isEnabled = true
             createTransferMaxButton.isEnabled = true
             NumberPadPresenter.enableNumberPad(this)
@@ -601,7 +586,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         // This should not happen, since the button is disabled until a balance was loaded
         loge("Could not get user\'s ETH balance!", IllegalStateException())
         view?.longSnackbarWithAction(R.string.error_retrieve_eth_balance, R.string.retry) {
-            ethTokenBalanceViewModel?.refresh()
+            ethTokenBalanceViewModel.refresh()
         }
     }
 

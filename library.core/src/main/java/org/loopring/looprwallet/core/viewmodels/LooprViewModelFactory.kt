@@ -47,7 +47,6 @@ open class LooprViewModelFactory protected constructor(private val currentWallet
                     else -> it.get(key, T::class.java)
                 }
             }
-
         }
 
     }

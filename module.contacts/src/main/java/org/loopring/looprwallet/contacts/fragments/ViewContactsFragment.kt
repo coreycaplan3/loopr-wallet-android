@@ -5,13 +5,11 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.View
-import io.realm.RealmList
 import kotlinx.android.synthetic.main.fragment_view_contacts.*
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.adapters.ContactsAdapter
 import org.loopring.looprwallet.contacts.viewmodels.ContactsByAddressViewModel
 import org.loopring.looprwallet.contacts.viewmodels.ContactsByNameViewModel
-import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -39,37 +37,17 @@ class ViewContactsFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_view_contacts
 
-    private var contactsByAddressViewModel: ContactsByAddressViewModel? = null
-        get() {
-            if (field != null) {
-                return field
-            }
+    private val contactsByAddressViewModel by lazy {
+        LooprViewModelFactory.get<ContactsByAddressViewModel>(this)
+    }
 
-            val wallet = walletClient.getCurrentWallet() ?: return null
-            return LooprViewModelFactory.get<ContactsByAddressViewModel>(this, wallet)
-                    .apply {
-                        field = this
-                    }
-        }
-
-    private var contactsByNameViewModel: ContactsByNameViewModel? = null
-        get() {
-            if (field != null) {
-                return field
-            }
-
-            val wallet = walletClient.getCurrentWallet() ?: return null
-            return LooprViewModelFactory.get<ContactsByNameViewModel>(this, wallet)
-                    .apply {
-                        field = this
-                    }
-        }
+    private val contactsByNameViewModel by lazy {
+        LooprViewModelFactory.get<ContactsByNameViewModel>(this)
+    }
 
     var selectedContactAddress: String? = null
 
     var onContactClickedListener: OnContactClickedListener? by weakReference(null)
-
-    private var contactList: RealmList<Contact>? = null
 
     private var adapter: ContactsAdapter? = null
 
@@ -108,12 +86,6 @@ class ViewContactsFragment : BaseFragment() {
         queryRealmForContactsByName(name)
     }
 
-    fun getContactByAddress(address: String): Contact? {
-        return contactList?.where()
-                ?.equalTo(Contact::address, address)
-                ?.findFirst()
-    }
-
     /**
      * Scrolls to the selected contact, if a contact is selected
      *
@@ -122,8 +94,9 @@ class ViewContactsFragment : BaseFragment() {
     fun scrollToSelectedContact(address: String?) {
         address ?: return
 
-        val index = contactList?.indexOfFirstOrNull { it.address == address }
-        index?.let { viewContactsRecyclerView?.scrollToPosition(it) }
+        adapter?.data
+                ?.indexOfFirstOrNull { it.address == address }
+                ?.let { viewContactsRecyclerView?.scrollToPosition(it) }
     }
 
     /**
@@ -145,13 +118,13 @@ class ViewContactsFragment : BaseFragment() {
     }
 
     private fun queryRealmForContactsByName(name: String) {
-        contactsByNameViewModel?.getAllContactsByName(this, name) {
+        contactsByNameViewModel.getAllContactsByName(this, name) {
             adapter?.updateData(it)
         }
     }
 
     private fun queryRealmForContactsByAddress(address: String) {
-        contactsByAddressViewModel?.getAllContactsByAddress(this, address) {
+        contactsByAddressViewModel.getAllContactsByAddress(this, address) {
             adapter?.updateData(it)
         }
     }

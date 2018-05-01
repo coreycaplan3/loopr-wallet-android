@@ -58,7 +58,7 @@ class GeneralOrdersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel
     }
 
     override val syncType
-        get() = when (mParameter?.address) {
+        get() = when (mParameter?.statusFilter) {
             OrderFilter.FILTER_OPEN_ALL -> SyncData.SYNC_TYPE_ORDERS_OPEN
             OrderFilter.FILTER_FILLED -> SyncData.SYNC_TYPE_ORDERS_FILLED
             OrderFilter.FILTER_CANCELLED -> SyncData.SYNC_TYPE_ORDERS_CANCELLED

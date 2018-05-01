@@ -6,7 +6,8 @@ import android.view.View
 import android.widget.ImageButton
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_create_contact.*
-import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
+import kotlinx.coroutines.experimental.async
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.repositories.ContactsRepository
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
@@ -40,21 +41,13 @@ class CreateContactDialog : BaseBottomSheetDialog() {
     override val layoutResource: Int
         get() = R.layout.dialog_create_contact
 
-    private var repository: ContactsRepository? = null
-        get() {
-            if (field != null) {
-                return field
-            }
-
-            val wallet = walletClient.getCurrentWallet() ?: return null
-            return ContactsRepository(wallet).apply { field = this }
-        }
+    private val repository by lazy { ContactsRepository() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val barcodeButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-        QRCodeCaptureActivity.setupBarcodeScanner(this, barcodeButton, arrayOf(QRCodeCaptureActivity.TYPE_PUBLIC_KEY))
+        BarcodeCaptureActivity.setupBarcodeScanner(this, barcodeButton, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY))
 
         if (savedInstanceState == null) {
             contactAddressEditText.setText(arguments?.getString(KEY_ADDRESS))
@@ -70,18 +63,16 @@ class CreateContactDialog : BaseBottomSheetDialog() {
             val address = contactAddressEditText.text.toString()
             val contact = Contact(address, contactName)
 
-            repository?.let {
-                async(IO) {
-                    it.add(contact)
-                }
-                dismissAllowingStateLoss()
+            async(IO) {
+                repository.add(contact)
             }
+            dismissAllowingStateLoss()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        QRCodeCaptureActivity.handleActivityResult(contactAddressEditText, requestCode, resultCode, data)
+        BarcodeCaptureActivity.handleActivityResult(contactAddressEditText, requestCode, resultCode, data)
     }
 
     override fun onFormChanged() {

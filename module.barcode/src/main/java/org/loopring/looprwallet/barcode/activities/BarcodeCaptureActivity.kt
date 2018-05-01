@@ -35,7 +35,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.vision.MultiProcessor
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
-import kotlinx.android.synthetic.main.activity_qr_code_capture.*
+import kotlinx.android.synthetic.main.activity_barcode_code_capture.*
 import org.loopring.looprwallet.barcode.R
 import org.loopring.looprwallet.barcode.views.BarcodeGraphicTracker
 import org.loopring.looprwallet.barcode.views.BarcodeTrackerFactory
@@ -55,7 +55,7 @@ import java.io.IOException
  * This activity detects QR codes and displays the value with the rear facing camera. During
  * detection, overlay graphics are drawn to indicate the position, size, and ID of each barcode.
  */
-class QRCodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpdateListener {
+class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpdateListener {
 
     companion object {
 
@@ -105,7 +105,7 @@ class QRCodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpdat
         }
 
         /**
-         * Handles the activity result after returning back from this [QRCodeCaptureActivity].
+         * Handles the activity result after returning back from this [BarcodeCaptureActivity].
          *
          * @param requestCode The activity's request code
          * @param resultCode The activity's result code
@@ -129,7 +129,7 @@ class QRCodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpdat
         }
 
         private fun getIntent(allowedTypes: Array<out String>): Intent {
-            return Intent(CoreLooprWalletApp.application, QRCodeCaptureActivity::class.java)
+            return Intent(CoreLooprWalletApp.application, BarcodeCaptureActivity::class.java)
                     .putExtra(KEY_ALLOWED_TYPES, allowedTypes)
         }
 
@@ -150,7 +150,7 @@ class QRCodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpdat
     private var gestureDetector: GestureDetector? = null
 
     override val contentViewRes: Int
-        get() = R.layout.activity_qr_code_capture
+        get() = R.layout.activity_barcode_code_capture
 
     override val isSecureActivity: Boolean
         get() = false

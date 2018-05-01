@@ -35,7 +35,8 @@
                     android:id="@+id/addressBarcodeImage"
                     android:layout_width="@dimen/qr_code_dimensions"
                     android:layout_height="@dimen/qr_code_dimensions"
-                    android:contentDescription="@string/content_description_barcode" />
+                    android:contentDescription="@string/content_description_barcode"
+                    android:foreground="@drawable/ripple_effect_accent" />
 
                 <TextView
                     android:id="@+id/addressLabel"

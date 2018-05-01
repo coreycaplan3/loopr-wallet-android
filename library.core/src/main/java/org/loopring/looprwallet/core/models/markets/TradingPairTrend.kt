@@ -38,7 +38,7 @@ open class TradingPairTrend(
      */
     val cycleDate: Date
         get() {
-            val averageTime = (endDate.time - startDate.time) / 2L
+            val averageTime = (endDate.time + startDate.time) / 2L
             return Date(averageTime)
         }
 }

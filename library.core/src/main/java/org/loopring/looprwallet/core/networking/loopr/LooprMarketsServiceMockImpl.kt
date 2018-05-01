@@ -7,6 +7,7 @@ import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.markets.TradingPairTrend
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import java.io.IOException
@@ -38,29 +39,29 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         )
 
         val reqTradingPair = TradingPair(
-                "REQ",
-                "WETH",
-                true,
-                0.25,
-                "10.54%",
-                0.27,
-                0.24,
-                38030240.0,
-                380302.0,
-                LooprToken.REQ
+                primaryTicker = "REQ",
+                secondaryTicker = "WETH",
+                isFavorite = true,
+                lastPrice = 0.25,
+                change24h = "10.54%",
+                highPrice = 0.27,
+                lowPrice = 0.24,
+                amountOfPrimary = 38030240.0,
+                volumeOfSecondary = 380302.0,
+                primaryToken = LooprToken.REQ
         )
 
         val zrxTradingPair = TradingPair(
-                "ZRX",
-                "WETH",
-                true,
-                0.43,
-                "-68.25%",
-                0.44,
-                0.40,
-                20030240.0,
-                200302.0,
-                LooprToken.ZRX
+                primaryTicker = "ZRX",
+                secondaryTicker = "WETH",
+                isFavorite = true,
+                lastPrice = 0.43,
+                change24h = "-68.25%",
+                highPrice = 0.44,
+                lowPrice = 0.40,
+                amountOfPrimary = 20030240.0,
+                volumeOfSecondary = 200302.0,
+                primaryToken = LooprToken.ZRX
         )
 
     }
@@ -69,7 +70,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            RealmList(lrcTradingPair, reqTradingPair, zrxTradingPair)
+            return@async RealmList(lrcTradingPair, reqTradingPair, zrxTradingPair)
         } else {
             throw IOException("No connection")
         }
@@ -79,13 +80,13 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            return@async lrcTradingPair
+            return@async listOf(lrcTradingPair, reqTradingPair, zrxTradingPair).first { it.market == tradingPairMarket }
         } else {
             throw IOException("No connection")
         }
     }
 
-    override fun getMarketTrends(tradingPairMarket: String): Deferred<RealmList<TradingPairTrend>> = async(NET) {
+    override fun getMarketTrends(tradingPairFilter: TradingPairFilter): Deferred<RealmList<TradingPairTrend>> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -93,10 +94,13 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
             val list = RealmList<TradingPairTrend>()
             for (i in 0..25) {
                 val offset = (25 - i) * 60 * 2000L
+                val base = Math.random() * 100
+                val high = base + 25
+                val low = base - 10
                 val time = Date().time - offset
                 val startDate = Date(time)
                 val endDate = Date(time + 500L)
-                list.add(TradingPairTrend("LRC-WETH", "1H", 1.00, 0.84, startDate, endDate))
+                list.add(TradingPairTrend(tradingPairFilter.market, tradingPairFilter.graphDateFilter, high, low, startDate, endDate))
             }
 
             return@async list

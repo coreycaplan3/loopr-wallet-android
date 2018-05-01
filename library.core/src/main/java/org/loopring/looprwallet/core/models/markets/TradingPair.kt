@@ -60,7 +60,7 @@ open class TradingPair(
      * The [primaryTicker] and [secondaryTicker] formatted as *[primaryTicker]-[secondaryTicker]*
      */
     @PrimaryKey
-    var market: String = ""
+    var market: String
         private set
 
     var primaryTicker: String = ""

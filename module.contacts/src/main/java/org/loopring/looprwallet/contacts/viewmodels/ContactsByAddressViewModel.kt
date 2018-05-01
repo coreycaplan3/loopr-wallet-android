@@ -5,7 +5,6 @@ import io.realm.OrderedRealmCollection
 import org.loopring.looprwallet.contacts.repositories.ContactsRepository
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.contact.Contact
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.viewmodels.OfflineOnlyViewModel
 
 /**
@@ -16,9 +15,9 @@ import org.loopring.looprwallet.core.viewmodels.OfflineOnlyViewModel
  * Purpose of Class:
  *
  */
-class ContactsByAddressViewModel(currentWallet: LooprWallet) : OfflineOnlyViewModel<OrderedRealmCollection<Contact>, String>() {
+class ContactsByAddressViewModel : OfflineOnlyViewModel<OrderedRealmCollection<Contact>, String>() {
 
-    override val repository = ContactsRepository(currentWallet)
+    override val repository = ContactsRepository()
 
     fun getAllContactsByAddress(
             owner: ViewLifecycleFragment,

@@ -2,9 +2,11 @@ package org.loopring.looprwallet.orderdetails.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.order_progress.view.*
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import org.loopring.looprwallet.orderdetails.R
 
 
@@ -26,7 +28,17 @@ class OrderProgressView
             field = value
 
             openOrderProgressLabel.text = "$value%"
-            openOrderProgress.progress = value
+            if(value == 0) {
+                openOrderProgress.progressDrawable = drawable(R.drawable.progress_circle_none, context)
+                openOrderProgress.progress = 100
+            } else{
+                openOrderProgress.progressDrawable = drawable(R.drawable.progress_circle, context)
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    openOrderProgress.setProgress(value, true)
+                } else {
+                    openOrderProgress.progress = value
+                }
+            }
         }
 
     init {

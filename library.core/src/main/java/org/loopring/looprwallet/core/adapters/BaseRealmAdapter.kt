@@ -58,7 +58,7 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
             data.size == 0 -> TYPE_EMPTY
             position == 0 && containsHeader -> TYPE_HEADER
             position == itemCount && containsMoreData() ->
-                // We are at the last position (after the data), but there's still more data to load
+                // We are at the last position (after the data), but there's still more to load
                 TYPE_LOADING
             else -> TYPE_DATA
         }
@@ -107,7 +107,8 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: T?)
 
     final override fun getItemCount(): Int = data?.let {
-        val canLoadMore = totalItems != null && it.size == totalItems
+        val totalItems = totalItems
+        val canLoadMore = totalItems != null && it.size < totalItems
         val addition = when {
             canLoadMore && containsHeader -> 2
             canLoadMore || containsHeader -> 1

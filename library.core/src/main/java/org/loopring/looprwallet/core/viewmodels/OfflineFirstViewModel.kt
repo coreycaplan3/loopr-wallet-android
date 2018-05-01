@@ -501,8 +501,12 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         // We are going to ping a refresh. So we need to initialize the state with a network
         // operation running. Reason being, there could be a brief period in which repository
         // data has loaded but a network operation is NOT running (between the call to
-        // "refreshInternal" and the Observer's "onChange" method being called).
+        // "handleNetworkRequest" and the Observer's "onChange" method being called).
         mIsNetworkOperationRunning = isRefreshNecessary(parameter)
+
+        if(mIsNetworkOperationRunning) {
+            mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
+        }
 
         // Reinitialize data, observers, and notify via the call to onLiveDataInitialized
         launch(UI) {
@@ -515,7 +519,6 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
 
         launch(IO) {
             if (mIsNetworkOperationRunning) {
-                mCurrentState.postValue(getCurrentLoadingState(mLiveData?.value))
                 // Ping the network for fresh data
                 handleNetworkRequest(parameter)
             }
@@ -555,8 +558,8 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
             mIsNetworkOperationRunning = false
 
             // Update the current state and add the data to Realm
-            mCurrentState.postValue(STATE_IDLE_HAVE_DATA)
             addNetworkDataToRepository(data)
+            mCurrentState.postValue(STATE_IDLE_HAVE_DATA)
 
             // Add the successful sync to the logs
             addSyncDataToRepository(parameter)

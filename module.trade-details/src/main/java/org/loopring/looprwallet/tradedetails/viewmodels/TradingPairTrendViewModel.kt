@@ -34,7 +34,7 @@ class TradingPairTrendViewModel : OfflineFirstViewModel<OrderedRealmCollection<T
     }
 
     override fun getDataFromNetwork(parameter: TradingPairFilter): Deferred<OrderedRealmCollection<TradingPairTrend>> {
-        return service.getMarketTrends(parameter.market)
+        return service.getMarketTrends(parameter)
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<TradingPairTrend>) {

@@ -88,6 +88,7 @@
     <string name="enter_your_private_key">Enter your Private Key</string>
     <string name="rationale_enter_private_key">Make sure you\'re in a safe environment, and no one looking over your shoulder</string>
     <string name="private_key">Private Key</string>
+    <string name="my_private_key">My Private Key</string>
     <string name="unlock">Unlock</string>
     <string name="select_keystore_file_enter_password">Select your Keystore File and Enter your Password</string>
     <string name="select_keystore_file">Select Keystore File</string>
@@ -309,4 +310,5 @@
     <string name="view_all_your_balances">View all of your balances</string>
     <string name="view_all_your_contacts">View all of your contacts</string>
     <string name="add_a_new_contact">Add a new contact</string>
+    <string name="my_address">My Address</string>
 </resources>

@@ -14,7 +14,8 @@ import kotlinx.android.synthetic.main.card_account_balances.*
 import kotlinx.android.synthetic.main.card_contacts.*
 import kotlinx.android.synthetic.main.card_wallet_information.*
 import kotlinx.android.synthetic.main.fragment_my_wallet.*
-import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
+import org.loopring.looprwallet.barcode.activities.ViewBarcodeActivity
 import org.loopring.looprwallet.barcode.utilities.BarcodeUtility
 import org.loopring.looprwallet.contacts.activities.ViewContactsActivity
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
@@ -82,21 +83,18 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
         setupWalletInformation()
 
-        setupBalanceAndContactInformation()
-
-        showPrivateKeyButton.setOnClickListener { onShowPrivateKeyClick() }
-        showWalletUnlockMechanismButton.setOnClickListener { onShowWalletUnlockMechanismClick() }
+//        setupBalanceAndContactInformation()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        QRCodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
+        BarcodeCaptureActivity.handleActivityResult(requestCode, resultCode, data) { type, value ->
             when (type) {
-                QRCodeCaptureActivity.TYPE_PUBLIC_KEY -> {
+                BarcodeCaptureActivity.TYPE_PUBLIC_KEY -> {
                     CreateTransferActivity.route(this, value)
                 }
-                QRCodeCaptureActivity.TYPE_TRADING_PAIR -> {
+                BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
                     val tradingPair = TradingPair.createFromMarket(value)
                     TradingPairDetailsActivity.route(tradingPair, this)
                 }
@@ -117,7 +115,7 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
         R.id.menuMainScanQrCode -> {
-            QRCodeCaptureActivity.route(this, arrayOf(QRCodeCaptureActivity.TYPE_PUBLIC_KEY, QRCodeCaptureActivity.TYPE_TRADING_PAIR))
+            BarcodeCaptureActivity.route(this, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY, BarcodeCaptureActivity.TYPE_TRADING_PAIR))
             true
         }
         R.id.menuMainSettings -> {
@@ -179,7 +177,6 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     // MARK - Private Methods
 
     private fun setupWalletInformation() = walletClient.getCurrentWallet()?.let { wallet ->
-        tokenBalanceViewModel.getAllTokensWithBalances(this, wallet.credentials.address, ::onTokenBalancesChange)
 
         // Setup Tooltips
         TooltipCompat.setTooltipText(shareAddressButton, str(R.string.share_your_address))
@@ -211,6 +208,15 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
             addressLabel.text = str(R.string.error_creating_qr_code)
         }
 
+        addressBarcodeImage.setOnClickListener {
+            val titleText = str(R.string.my_address)
+            val barcodeText = wallet.credentials.address
+            ViewBarcodeActivity.route(activity!!, titleText, barcodeText)
+
+        }
+        showPrivateKeyButton.setOnClickListener { onShowPrivateKeyClick() }
+        showWalletUnlockMechanismButton.setOnClickListener { onShowWalletUnlockMechanismClick() }
+
     }
 
     private fun setupBalanceAndContactInformation() {
@@ -231,6 +237,8 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
             activity?.ifNotNull { ViewContactsActivity.route(it) }
         }
 
+        val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
+        tokenBalanceViewModel.getAllTokensWithBalances(this, address, ::onTokenBalancesChange)
     }
 
     private fun onTokenBalancesChange(tokenBalances: OrderedRealmCollection<LooprToken>) {

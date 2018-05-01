@@ -51,19 +51,12 @@ inline fun <T> List<T>.indexOfFirstOrNull(predicate: (T) -> Boolean): Int? {
 }
 
 /**
- * Finds an element based on the supplied predicate and updates [T] with [data]. If the element is
- * not found, nothing occurs.
+ * Finds an element based on the supplied predicate and updates the index with [data]. If the
+ * element is not found, nothing occurs.
  */
 inline fun <T> MutableList<T>.update(data: T, predicate: (T) -> Boolean) {
-    val value = find(predicate)
-    if (value != null) {
-        forEachIndexed { index, t ->
-            if (predicate(t)) {
-                this[index] = data
-            }
-        }
-
-        add(data)
+    indexOfFirstOrNull(predicate)?.let { index ->
+        this[index] = data
     }
 }
 

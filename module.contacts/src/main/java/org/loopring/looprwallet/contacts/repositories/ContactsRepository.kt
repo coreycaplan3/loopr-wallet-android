@@ -9,7 +9,6 @@ import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.like
 import org.loopring.looprwallet.core.extensions.sort
 import org.loopring.looprwallet.core.models.contact.Contact
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
@@ -20,7 +19,7 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class ContactsRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
+class ContactsRepository : BaseRealmRepository(true) {
 
     fun getAllContactsByName(name: String): LiveData<OrderedRealmCollection<Contact>> {
         return uiRealm.where<Contact>()

@@ -1,5 +1,7 @@
 package org.loopring.looprwallet.createtransfer.fragments
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.SearchView
@@ -9,18 +11,20 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import androidx.os.bundleOf
+import io.realm.OrderedRealmCollection
 import kotlinx.android.synthetic.main.fragment_select_address.*
-import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity
-import org.loopring.looprwallet.barcode.activities.QRCodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
+import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.contacts.fragments.ViewContactsFragment
+import org.loopring.looprwallet.contacts.repositories.ContactsRepository
 import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.validators.PublicKeyValidator
 import org.loopring.looprwallet.createtransfer.R
 
@@ -59,11 +63,17 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
 
     private lateinit var viewContactsFragment: ViewContactsFragment
 
+    private val repository by lazy {
+        ContactsRepository()
+    }
+
+    private var allContacts: LiveData<OrderedRealmCollection<Contact>>? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val barcodeScannerButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
-        QRCodeCaptureActivity.setupBarcodeScanner(this, barcodeScannerButton, arrayOf(TYPE_PUBLIC_KEY))
+        BarcodeCaptureActivity.setupBarcodeScanner(this, barcodeScannerButton, arrayOf(TYPE_PUBLIC_KEY))
 
         searchViewPresenter = SearchViewPresenter(
                 containsOverflowMenu = false,
@@ -149,7 +159,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        QRCodeCaptureActivity.handleActivityResult(recipientAddressEditText, requestCode, resultCode, data)
+        BarcodeCaptureActivity.handleActivityResult(recipientAddressEditText, requestCode, resultCode, data)
     }
 
 
@@ -177,23 +187,14 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
     override fun onFormChanged() {
         val isValid = isAllValidatorsValid()
         val recipientAddress = recipientAddressEditText.text.toString()
-        val recipientName: String?
 
         if (isValid) {
-            val contact = viewContactsFragment.getContactByAddress(recipientAddress)
-            selectedContactAddress = contact?.address
+            val contact = repository.getContactByAddressNow(recipientAddress)
+            setupContact(contact)
 
-            addContactButton.visibility = when (contact) {
-                null ->
-                    // We can't find the contact, so we can allow the user to add this new address
-                    View.VISIBLE
-                else -> View.GONE
-            }
-
-            recipientName = contact?.name ?: str(R.string.unknown)
+            selectedContactAddress = recipientAddress
         } else {
             selectedContactAddress = null
-            recipientName = null
             addContactButton.visibility = View.GONE
         }
 
@@ -201,12 +202,30 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
 
         viewContactsFragment.searchContactsByAddress(recipientAddress)
 
-        recipientNameLabel?.text = when {
-            recipientName != null -> str(R.string.formatter_recipient).format(recipientName)
-            else -> null
+        createTransferContinueButton.isEnabled = isValid
+    }
+
+    private fun setupContact(contact: Contact?) {
+
+        fun bindContact(contact: Contact?) {
+            if (contact != null) {
+                recipientNameLabel?.text = ApplicationUtility.str(R.string.formatter_recipient).format(contact.name)
+                addContactButton.visibility = View.GONE
+            } else {
+                recipientNameLabel?.text = ApplicationUtility.str(R.string.unknown)
+                addContactButton.visibility = View.VISIBLE
+            }
         }
 
-        createTransferContinueButton.isEnabled = isValid
+        bindContact(contact)
+
+        val selectedContactAddress = selectedContactAddress ?: return
+        allContacts = repository.getAllContactsByAddress(selectedContactAddress)
+        allContacts?.observe(fragmentViewLifecycleFragment!!, Observer<OrderedRealmCollection<Contact>> {
+            if(it != null && it.isValid && it.size > 0) {
+                bindContact(it[0])
+            }
+        })
     }
 
 }
