@@ -58,8 +58,8 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
         )
     }
 
-    override fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
-        return layoutInflater.inflate(R.layout.appbar_orders, fragmentView, false) as? AppBarLayout
+    override fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout {
+        return layoutInflater.inflate(R.layout.appbar_orders, fragmentView, false) as AppBarLayout
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {

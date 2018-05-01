@@ -57,8 +57,8 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         )
     }
 
-    override fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
-        return layoutInflater.inflate(R.layout.appbar_markets, fragmentView, false) as? AppBarLayout
+    override fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout {
+        return layoutInflater.inflate(R.layout.appbar_markets, fragmentView, false) as AppBarLayout
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {

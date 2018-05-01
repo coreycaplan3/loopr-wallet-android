@@ -1,7 +1,6 @@
 package org.loopring.looprwallet.core.fragments
 
 import android.arch.lifecycle.Lifecycle.Event
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.DrawableRes
@@ -14,15 +13,12 @@ import android.support.transition.TransitionSet
 import android.support.transition.Visibility
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewCompat
-import android.support.v4.view.ViewGroupCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ProgressBar
 import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
@@ -31,7 +27,6 @@ import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
-import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -101,8 +96,10 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
     override var fragmentViewLifecycleFragment: FragmentViewLifecycleOwner? = null
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        coreLooprComponent.inject(this)
 
         allowEnterTransitionOverlap = false
         allowReturnTransitionOverlap = false
@@ -118,12 +115,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
                         .addMode(Visibility.MODE_OUT)
                         .addTarget(fabTransitionName)
                 )
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        coreLooprComponent.inject(this)
 
         isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED) == true
     }
@@ -140,7 +131,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
         if (parentFragment == null) {
             // We are NOT in a child fragment
-            createAppbar(fragmentView, savedInstanceState)
+            setupAppbar(fragmentView, savedInstanceState)
             createProgressBar(fragmentView)
             createFab(fragmentView)
         }
@@ -158,8 +149,8 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         }
     }
 
-    open fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout? {
-        return layoutInflater.inflate(R.layout.appbar_main, fragmentView, false) as? AppBarLayout
+    open fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout {
+        return layoutInflater.inflate(R.layout.appbar_main, fragmentView, false) as AppBarLayout
     }
 
     /**
@@ -511,27 +502,20 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
     // MARK - Private Methods
 
-    private fun createAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) {
-        runBlocking {
-            appbarLayout = async(IO) { createAppbarLayout(fragmentView, savedInstanceState) }
-                    .await()
-        }
-
+    private fun setupAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) {
+        appbarLayout = createAppbarLayout(fragmentView, savedInstanceState)
         fragmentView.addView(appbarLayout, 0)
         toolbar = appbarLayout?.findViewById(R.id.toolbar)
-        setHasOptionsMenu(true)
-
-        ViewGroupCompat.setTransitionGroup(appbarLayout, true)
 
         val baseActivity = (activity as? BaseActivity)
-
-        baseActivity?.setSupportActionBar(toolbar)
-
         if (isUpNavigationEnabled && baseActivity != null) {
             logi("Up navigation is enabled. Setting up...")
             toolbar?.navigationIcon = ViewUtility.getNavigationIcon(navigationIcon, baseActivity.theme)
             toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
         }
+        baseActivity?.setSupportActionBar(toolbar)
+
+        setHasOptionsMenu(true)
     }
 
     private fun createProgressBar(fragmentView: ViewGroup) {

@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.core.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewCompat
@@ -39,14 +38,10 @@ abstract class BaseTabFragment : BaseFragment() {
 
     lateinit var adapter: LooprFragmentPagerAdapter
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        TabTransition.setupForBaseTabFragment(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        TabTransition.setupForBaseTabFragment(this)
 
         adapter = LooprFragmentPagerAdapter(childFragmentManager, getAdapterContent())
     }
