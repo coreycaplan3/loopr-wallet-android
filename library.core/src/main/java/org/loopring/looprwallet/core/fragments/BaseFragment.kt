@@ -134,7 +134,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
         if (parentFragment == null) {
             // We are NOT in a child fragment
-            toolbarDelegate?.setupAppbar(view as ViewGroup)
+            toolbarDelegate?.setupAppbar(fragmentView)
             createProgressBar(fragmentView)
             createFab(fragmentView)
         }

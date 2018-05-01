@@ -5,8 +5,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.SearchView
-import android.view.Menu
-import android.view.MenuInflater
+import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
@@ -69,6 +68,12 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
 
     private var allContacts: LiveData<OrderedRealmCollection<Contact>>? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -120,13 +125,15 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         validatorList = listOf(PublicKeyValidator(recipientAddressInputLayout, this::onFormChanged))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_contacts_menu, menu)
+    private val createOptionsMenu: (Toolbar?) -> Unit = {
+        it?.menu?.clear()
+        it?.inflateMenu(R.menu.search_contacts_menu)
 
-        searchItem = menu.findItem(R.id.menu_search_contacts)
-
-        val searchView = (searchItem.actionView as SearchView)
-        searchViewPresenter.setupSearchView(searchItem, searchView)
+        if (it != null) {
+            searchItem = it.menu.findItem(R.id.menu_search_contacts)
+            val searchView = (searchItem.actionView as SearchView)
+            searchViewPresenter.setupSearchView(searchItem, searchView)
+        }
     }
 
     override fun onQueryTextGainFocus() {
