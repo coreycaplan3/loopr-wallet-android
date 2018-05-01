@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView.OnNavigationItemReselectedListener
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
-import android.view.Menu
-import android.view.MenuInflater
+import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_view_transfers.*
@@ -33,7 +32,7 @@ import org.loopring.looprwallet.transferdetails.dialogs.TransferDetailsDialog
  * Purpose of Class:
  *
  */
-class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener,
+class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener,
         OnTransferClickListener {
 
     override val layoutResource: Int
@@ -48,6 +47,13 @@ class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener
             field = LooprViewModelFactory.get(this, currentWallet)
             return field
         }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
+        toolbarDelegate?.onOptionsItemSelected = optionsItemSelected
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,22 +96,28 @@ class ViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedListener
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_home, menu)
+    private val createOptionsMenu: (Toolbar?) -> Unit = {
+        it?.menu?.clear()
+        it?.inflateMenu(R.menu.menu_home)
+
+        if (it != null) {
+            (activity as? OnToolbarSetupListener)?.onToolbarSetup(it)
+        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-        android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
-        R.id.menuMainScanQrCode -> {
-            BarcodeCaptureActivity.route(this, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY, BarcodeCaptureActivity.TYPE_TRADING_PAIR))
-            true
+    private val optionsItemSelected: (MenuItem?) -> Boolean = { item ->
+        when (item?.itemId) {
+            android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+            R.id.menuMainScanQrCode -> {
+                BarcodeCaptureActivity.route(this, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY, BarcodeCaptureActivity.TYPE_TRADING_PAIR))
+                true
+            }
+            R.id.menuMainSettings -> {
+                SettingsActivity.route(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        R.id.menuMainSettings -> {
-            SettingsActivity.route(this)
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemReselected(item: MenuItem) {

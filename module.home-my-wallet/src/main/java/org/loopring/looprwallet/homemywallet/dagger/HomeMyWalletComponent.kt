@@ -4,7 +4,7 @@ import dagger.Component
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.CoreLooprComponent
 import org.loopring.looprwallet.core.dagger.LooprComponentScope
-import org.loopring.looprwallet.homemywallet.fragments.MyWalletFragment
+import org.loopring.looprwallet.homemywallet.fragments.HomeMyWalletFragment
 
 /**
  * Created by Corey on 4/17/2018
@@ -19,7 +19,7 @@ import org.loopring.looprwallet.homemywallet.fragments.MyWalletFragment
 @Component(dependencies = [CoreLooprComponent::class])
 interface HomeMyWalletLooprComponent {
 
-    fun inject(myWalletFragment: MyWalletFragment)
+    fun inject(homeMyWalletFragment: HomeMyWalletFragment)
 }
 
 interface HomeMyWalletLooprComponentProvider {

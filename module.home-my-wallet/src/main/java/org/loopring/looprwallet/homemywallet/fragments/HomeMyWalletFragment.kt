@@ -4,9 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.Toolbar
 import android.support.v7.widget.TooltipCompat
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import io.realm.OrderedRealmCollection
@@ -51,7 +50,7 @@ import kotlin.math.roundToInt
  * Purpose of Class:
  *
  */
-class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
+class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         OnSecurityConfirmedListener {
 
     companion object {
@@ -67,13 +66,16 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     lateinit var securitySettings: SecuritySettings
 
     private val tokenBalanceViewModel: EthTokenBalanceViewModel by lazy {
-        LooprViewModelFactory.get<EthTokenBalanceViewModel>(this@MyWalletFragment)
+        LooprViewModelFactory.get<EthTokenBalanceViewModel>(this@HomeMyWalletFragment)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         homeMyWalletLooprComponent.inject(this)
+
+        toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
+        toolbarDelegate?.onOptionsItemSelected = optionsItemSelected
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,21 +110,28 @@ class MyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         fragmentContainer.scrollTo(0, 0)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_home, menu)
+    private val createOptionsMenu: (Toolbar?) -> Unit = {
+        it?.menu?.clear()
+        it?.inflateMenu(R.menu.menu_home)
+
+        if (it != null) {
+            (activity as? OnToolbarSetupListener)?.onToolbarSetup(it)
+        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-        android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
-        R.id.menuMainScanQrCode -> {
-            BarcodeCaptureActivity.route(this, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY, BarcodeCaptureActivity.TYPE_TRADING_PAIR))
-            true
+    private val optionsItemSelected: (MenuItem?) -> Boolean = { item ->
+        when (item?.itemId) {
+            android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+            R.id.menuMainScanQrCode -> {
+                BarcodeCaptureActivity.route(this, arrayOf(BarcodeCaptureActivity.TYPE_PUBLIC_KEY, BarcodeCaptureActivity.TYPE_TRADING_PAIR))
+                true
+            }
+            R.id.menuMainSettings -> {
+                SettingsActivity.route(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        R.id.menuMainSettings -> {
-            SettingsActivity.route(this)
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onSecurityConfirmed(parameter: Int): Unit = when (parameter) {

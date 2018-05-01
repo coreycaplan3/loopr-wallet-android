@@ -4,8 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AlertDialog
-import android.view.Menu
-import android.view.MenuInflater
+import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -157,6 +156,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         super.onCreate(savedInstanceState)
 
         createTransferLooprComponent.inject(this)
+
+        toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
     }
 
     // TODO fix this file with price changes
@@ -185,7 +186,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
         ethTokenBalanceViewModel.getAllTokensWithBalances(this, address) {
             tokenBalanceList = it
-            activity?.invalidateOptionsMenu()
+            toolbarDelegate?.invalidateOptionsMenu()
         }
 
         createTransferSwapButton.setOnClickListener {
@@ -238,11 +239,16 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         bindAmountsToText()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.menu_create_transfer_amount, menu)
+    private val createOptionsMenu: (Toolbar?) -> Unit = create@{
+        if (it == null) {
+            loge("Toolbar was null!", IllegalStateException())
+            return@create
+        }
 
-        val spinnerItem = menu.findItem(R.id.createTransferAmountSpinner)
+        it.menu?.clear()
+        it.inflateMenu(R.menu.menu_create_transfer_amount)
+
+        val spinnerItem = it.menu.findItem(R.id.createTransferAmountSpinner)
         val spinner = (spinnerItem.actionView as Spinner)
         spinnerActionView = spinner
 

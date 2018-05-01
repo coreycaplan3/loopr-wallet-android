@@ -5,8 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.view.Menu
-import android.view.MenuInflater
+import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import androidx.os.bundleOf
@@ -103,6 +102,9 @@ class TradingPairDetailsFragment : BaseFragment() {
 
         tradeDetailsLooprComponent.inject(this)
 
+        toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
+        toolbarDelegate?.onOptionsItemSelected = optionsItemSelected
+
         val defaultTradingPair = TradingPairFilter(primaryTicker, secondaryTicker, TradingPairFilter.GRAPH_DATE_FILTER_1H)
         filter = savedInstanceState?.getParcelable(KEY_TRADING_PAIR_FILTER) ?: defaultTradingPair
     }
@@ -129,10 +131,10 @@ class TradingPairDetailsFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_trading_pair_details, menu)
-
-        menu?.findItem(R.id.menuTradingPairFavorite)?.ifNotNull {
+    private val createOptionsMenu: (Toolbar?) -> Unit = {
+        it?.menu?.clear()
+        it?.inflateMenu(R.menu.menu_trading_pair_details)
+        it?.menu?.findItem(R.id.menuTradingPairFavorite)?.ifNotNull {
             when {
                 tradingPair?.isFavorite == true -> it.setIcon(R.drawable.ic_favorite_white_24dp)
                 else -> it.setIcon(R.drawable.ic_favorite_border_white_24dp)
@@ -140,33 +142,35 @@ class TradingPairDetailsFragment : BaseFragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-        R.id.menuTradingPairFavorite -> {
-            tradingPair?.ifNotNull {
+    private val optionsItemSelected: (MenuItem?) -> Boolean = { item ->
+        when (item?.itemId) {
+            R.id.menuTradingPairFavorite -> {
+                tradingPair?.ifNotNull {
 
-                runBlocking {
-                    looprMarketsRepository.toggleIsFavorite(it.market).await()
-                }
-
-                when {
-                    it.isFavorite -> {
-                        view?.snackbar(str(R.string.formatter_is_favorite).format(it.primaryTicker))
-                        item.setIcon(R.drawable.ic_favorite_white_24dp)
+                    runBlocking {
+                        looprMarketsRepository.toggleIsFavorite(it.market).await()
                     }
-                    else -> {
-                        view?.snackbar(str(R.string.formatter_is_not_favorite).format(it.primaryTicker))
-                        item.setIcon(R.drawable.ic_favorite_border_white_24dp)
-                    }
-                }
 
+                    when {
+                        it.isFavorite -> {
+                            view?.snackbar(str(R.string.formatter_is_favorite).format(it.primaryTicker))
+                            item.setIcon(R.drawable.ic_favorite_white_24dp)
+                        }
+                        else -> {
+                            view?.snackbar(str(R.string.formatter_is_not_favorite).format(it.primaryTicker))
+                            item.setIcon(R.drawable.ic_favorite_border_white_24dp)
+                        }
+                    }
+
+                }
+                true
             }
-            true
+            R.id.menuTradingPairUnlockToken -> {
+                // TODO
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        R.id.menuTradingPairUnlockToken -> {
-            // TODO
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

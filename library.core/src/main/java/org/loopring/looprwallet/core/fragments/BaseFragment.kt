@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.design.widget.*
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import android.support.design.widget.CoordinatorLayout.LayoutParams
 import android.support.transition.TransitionSet
 import android.support.transition.Visibility
@@ -21,16 +19,15 @@ import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
+import org.loopring.looprwallet.core.delegates.BaseFragmentToolbarDelegate
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
-import org.loopring.looprwallet.core.utilities.ViewUtility
 import org.loopring.looprwallet.core.validators.BaseValidator
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
@@ -48,9 +45,9 @@ import javax.inject.Inject
  */
 abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
-    companion object {
+    interface OnToolbarSetupListener {
 
-        private const val KEY_IS_TOOLBAR_COLLAPSED = "_IS_TOOLBAR_COLLAPSED"
+        fun onToolbarSetup(toolbar: Toolbar)
     }
 
     /**
@@ -61,23 +58,25 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     @Inject
     lateinit var walletClient: WalletClient
 
-    var isToolbarCollapseEnabled: Boolean = false
-        private set
-
-    var appbarLayout: AppBarLayout? = null
-        private set
+    val isToolbarCollapseEnabled: Boolean
+        get() = toolbarDelegate?.isToolbarCollapseEnabled == true
 
     @DrawableRes
     open var navigationIcon: Int = R.drawable.ic_arrow_back_white_24dp
 
-    var toolbar: Toolbar? = null
-        private set
+    val appbarLayout: AppBarLayout?
+        get() = toolbarDelegate?.appbarLayout
+
+    val toolbar: Toolbar?
+        get() = toolbarDelegate?.toolbar
 
     var progressBar: ProgressBar? = null
         private set
 
     var floatingActionButton: FloatingActionButton? = null
         private set
+
+    var toolbarDelegate: BaseFragmentToolbarDelegate? = null
 
     private val fabTransitionName
         get() = "fab-transition-$tag"
@@ -99,6 +98,12 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        toolbarDelegate = BaseFragmentToolbarDelegate(
+                savedInstanceState = savedInstanceState,
+                isToolbarCollapseEnabled = false,
+                baseFragment = this
+        )
+
         coreLooprComponent.inject(this)
 
         allowEnterTransitionOverlap = false
@@ -115,8 +120,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
                         .addMode(Visibility.MODE_OUT)
                         .addTarget(fabTransitionName)
                 )
-
-        isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED) == true
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -131,7 +134,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
         if (parentFragment == null) {
             // We are NOT in a child fragment
-            setupAppbar(fragmentView, savedInstanceState)
+            toolbarDelegate?.setupAppbar(view as ViewGroup)
             createProgressBar(fragmentView)
             createFab(fragmentView)
         }
@@ -144,12 +147,11 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
         if (parentFragment == null) {
             // We are NOT in a child fragment
-            setupAppbar()
             floatingActionButton?.let { initializeFloatingActionButton(it) }
         }
     }
 
-    open fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout {
+    open fun createAppbarLayout(fragmentView: ViewGroup): AppBarLayout {
         return layoutInflater.inflate(R.layout.appbar_main, fragmentView, false) as AppBarLayout
     }
 
@@ -164,17 +166,9 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         floatingActionButton.visibility = View.GONE
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) = when {
-        item?.itemId == android.R.id.home -> {
-            (activity as? BaseActivity)?.onBackPressed()
-            true
-        }
-        item?.itemId == R.id.menuMainSettings -> {
-            context?.let { startActivity(Intent(it, SettingsActivity::class.java)) }
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
+    final override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {}
+
+    final override fun onOptionsItemSelected(item: MenuItem?) = false
 
     open fun onShowKeyboard() {
         // Defaults to no-op
@@ -209,102 +203,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      */
     fun pushFragmentTransaction(fragment: BaseFragment, tag: String) {
         (activity as? BaseActivity)?.pushFragmentTransaction(fragment, tag)
-    }
-
-    /**
-     * Sets up the AppBar to be in sync with the activity and enables/disabled toolbar collapsing
-     * accordingly.
-     */
-    fun setupAppbar() {
-        if (parentFragment != null) {
-            // Children don't have toolbars
-            logw("Attempted to setup an appbar in a child fragment...")
-            return
-        }
-
-        val appBarLayout = appbarLayout ?: return
-
-        logd("Setting up appbar...")
-
-        toolbar = (0 until appBarLayout.childCount)
-                .map { appBarLayout.getChildAt(it) }
-                .filterIsInstance<Toolbar>()
-                .first()
-
-        val activity = (activity as? BaseActivity) ?: return
-        activity.setSupportActionBar(null) // set as null to clear it first
-        activity.setSupportActionBar(toolbar)
-        activity.invalidateOptionsMenu()
-
-        if (isToolbarCollapseEnabled) {
-            enableToolbarCollapsing()
-        } else {
-            disableToolbarCollapsing()
-        }
-    }
-
-    /**
-     * Enables the toolbar to be collapsed when scrolling
-     */
-    fun enableToolbarCollapsing() {
-        if (parentFragment != null) {
-            // Children don't have toolbars
-            return
-        }
-
-        (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
-            it.scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
-        }
-
-        val container = view?.findViewById<View>(R.id.fragmentContainer)
-                ?: throw IllegalStateException("FragmentContainer cannot be null!")
-
-        (container.layoutParams as? LayoutParams)?.let {
-            // The container is put underneath the toolbar since it is going to be moved out of the
-            // way after scrolling
-            logd("Setting container layout params to enable scrolling behavior...")
-            it.topMargin = 0
-            it.behavior = AppBarLayout.ScrollingViewBehavior()
-            container.requestLayout()
-        }
-
-        isToolbarCollapseEnabled = true
-    }
-
-    /**
-     * Disables the toolbar from being collapsed when scrolling
-     */
-    fun disableToolbarCollapsing() {
-        if (parentFragment != null) {
-            // Children don't have toolbars
-            return
-        }
-
-        (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
-            it.scrollFlags = 0
-        }
-
-        val view = view
-        if (view == null) {
-            loge("BaseView was null!", IllegalStateException())
-            return
-        }
-
-        val container = view.findViewById<View>(R.id.fragmentContainer)
-                ?: throw IllegalStateException("FragmentContainer cannot be null!")
-
-        (container.layoutParams as? LayoutParams)?.let {
-            // The container is underneath the toolbar, so we must add margin so it is below it instead
-            val topMarginResource = context?.theme?.getResourceIdFromAttrId(android.R.attr.actionBarSize)
-            if (topMarginResource != null) {
-                it.topMargin = resources.getDimension(topMarginResource).toInt()
-            }
-
-            it.behavior = null
-            container.requestLayout()
-        }
-
-        isToolbarCollapseEnabled = false
     }
 
     private val viewModelList = arrayListOf<OfflineFirstViewModel<*, *>>()
@@ -462,6 +360,18 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         // NO OP
     }
 
+    // MARK - START TOOLBAR FUNCTIONS
+
+    fun enableToolbarCollapsing() {
+        toolbarDelegate?.enableToolbarCollapsing()
+    }
+
+    fun disableToolbarCollapsing() {
+        toolbarDelegate?.disableToolbarCollapsing()
+    }
+
+    // MARK - END TOOLBAR FUNCTIONS
+
     var indefiniteSnackbar: Snackbar? = null
 
     override fun onStart() {
@@ -497,26 +407,10 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
+        toolbarDelegate?.onSaveInstanceState(outState)
     }
 
     // MARK - Private Methods
-
-    private fun setupAppbar(fragmentView: ViewGroup, savedInstanceState: Bundle?) {
-        appbarLayout = createAppbarLayout(fragmentView, savedInstanceState)
-        fragmentView.addView(appbarLayout, 0)
-        toolbar = appbarLayout?.findViewById(R.id.toolbar)
-
-        val baseActivity = (activity as? BaseActivity)
-        if (isUpNavigationEnabled && baseActivity != null) {
-            logi("Up navigation is enabled. Setting up...")
-            toolbar?.navigationIcon = ViewUtility.getNavigationIcon(navigationIcon, baseActivity.theme)
-            toolbar?.setNavigationContentDescription(R.string.content_description_navigation_icon)
-        }
-        baseActivity?.setSupportActionBar(toolbar)
-
-        setHasOptionsMenu(true)
-    }
 
     private fun createProgressBar(fragmentView: ViewGroup) {
         progressBar = fragmentView.inflate(R.layout.fragment_progress_bar) as ProgressBar

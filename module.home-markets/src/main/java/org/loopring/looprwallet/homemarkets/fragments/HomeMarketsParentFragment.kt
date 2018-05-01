@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.SearchView
-import android.view.Menu
-import android.view.MenuInflater
+import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.ViewGroup
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
@@ -48,6 +47,9 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
+        toolbarDelegate?.onOptionsItemSelected = optionsItemSelected
+
         searchViewPresenter = SearchViewPresenter(
                 containsOverflowMenu = true,
                 numberOfVisibleMenuItems = 1,
@@ -57,7 +59,7 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         )
     }
 
-    override fun createAppbarLayout(fragmentView: ViewGroup, savedInstanceState: Bundle?): AppBarLayout {
+    override fun createAppbarLayout(fragmentView: ViewGroup): AppBarLayout {
         return layoutInflater.inflate(R.layout.appbar_markets, fragmentView, false) as AppBarLayout
     }
 
@@ -91,27 +93,32 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.menu_home_search, menu)
+    private val createOptionsMenu: (Toolbar?) -> Unit = {
+        it?.menu?.clear()
+        it?.inflateMenu(R.menu.menu_home_search)
 
-        val searchItem = menu.findItem(R.id.menuMainSearch)
-        val searchView = searchItem.actionView as SearchView
-
-        searchViewPresenter.setupSearchView(searchItem, searchView)
+        if (it != null) {
+            (activity as? OnToolbarSetupListener)?.onToolbarSetup(it)
+            val searchItem = it.menu.findItem(R.id.menuMainSearch)
+            val searchView = searchItem.actionView as SearchView
+            searchViewPresenter.setupSearchView(searchItem, searchView)
+        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-        android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
-        R.id.menuMainScanQrCode -> {
-            BarcodeCaptureActivity.route(this, arrayOf(TYPE_PUBLIC_KEY, TYPE_TRADING_PAIR))
-            true
+    // TODO navigation icon
+    private val optionsItemSelected: (MenuItem?) -> Boolean = { item ->
+        when (item?.itemId) {
+            android.R.id.home -> activity?.onOptionsItemSelected(item) ?: false
+            R.id.menuMainScanQrCode -> {
+                BarcodeCaptureActivity.route(this, arrayOf(TYPE_PUBLIC_KEY, TYPE_TRADING_PAIR))
+                true
+            }
+            R.id.menuMainSettings -> {
+                SettingsActivity.route(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        R.id.menuMainSettings -> {
-            SettingsActivity.route(this)
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onBottomNavigationReselected() {

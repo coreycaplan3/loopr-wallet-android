@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -22,15 +21,14 @@ import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
-import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentSwitcherPagerAdapter
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.homemarkets.fragments.HomeMarketsParentFragment
-import org.loopring.looprwallet.homemywallet.fragments.MyWalletFragment
+import org.loopring.looprwallet.homemywallet.fragments.HomeMyWalletFragment
 import org.loopring.looprwallet.homeorders.fragments.HomeOrdersParentFragment
-import org.loopring.looprwallet.hometransfers.fragments.ViewTransfersFragment
+import org.loopring.looprwallet.hometransfers.fragments.HomeViewTransfersFragment
 import org.loopring.looprwallet.walletsignin.activities.SignInActivity
 
 /**
@@ -77,18 +75,16 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
     override val isSecureActivity: Boolean
         get() = true
 
-    private val pagerAdapter by lazy {
-        LooprFragmentSwitcherPagerAdapter(supportFragmentManager, listOf(
-                str(R.string.markets) to HomeMarketsParentFragment(),
-                str(R.string.orders) to HomeOrdersParentFragment(),
-                str(R.string.transfers) to ViewTransfersFragment(),
-                str(R.string.my_wallet) to MyWalletFragment()
-        ))
-    }
-
     lateinit var stackHistory: BottomNavigationFragmentStackHistory
 
     lateinit var bottomNavigationPresenter: BottomNavigationPresenter
+
+    val fragmentList = listOf(
+            str(R.string.markets) to HomeMarketsParentFragment(),
+            str(R.string.orders) to HomeOrdersParentFragment(),
+            str(R.string.transfers) to HomeViewTransfersFragment(),
+            str(R.string.my_wallet) to HomeMyWalletFragment()
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,23 +99,21 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
             }
         }
 
-        stackHistory = BottomNavigationFragmentStackHistory(false, savedInstanceState).apply {
-            push(pagerAdapter.getPageTitle(0)!!.toString())
-        }
+        stackHistory = BottomNavigationFragmentStackHistory(false, savedInstanceState)
 
         bottomNavigationView.inflateMenu(R.menu.home_bottom_navigation_menu)
 
         bottomNavigationPresenter = BottomNavigationPresenter(
                 bottomNavigationView = bottomNavigationView,
-                container = activityContainer,
-                pagerAdapter = pagerAdapter,
+                activity = this,
+                fragmentList = fragmentList,
                 stackHistory = stackHistory,
                 savedInstanceState = savedInstanceState
         )
     }
 
     override fun onSecurityConfirmed(parameter: Int) {
-        val fragment = pagerAdapter.currentFragment
+        val fragment = bottomNavigationPresenter.currentFragment
         if (fragment is OnSecurityConfirmedListener) {
             fragment.onSecurityConfirmed(parameter)
         }
@@ -154,13 +148,12 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
-        android.R.id.home -> {
-            homeNavigationDrawerLayout.openDrawer(Gravity.START)
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
+    override fun onSupportNavigateUp(): Boolean {
+        homeNavigationDrawerLayout.openDrawer(Gravity.START)
+        return false
     }
+
+    // MARK - Private Methods
 
     private fun setupNavigationDrawer(toolbar: Toolbar) {
         setupNavigationHeaderView()

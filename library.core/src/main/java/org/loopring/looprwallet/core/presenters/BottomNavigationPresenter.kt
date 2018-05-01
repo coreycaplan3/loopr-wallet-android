@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.isExpanded
 import org.loopring.looprwallet.core.extensions.loge
@@ -27,13 +28,14 @@ import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragme
  * This class should be instantiated in the corresponding activity's [Activity.onCreate] method.
  *
  * @param bottomNavigationView The [BottomNavigationView] in which the tabs are displayed
- * @param container The container in which the pager will be used
- * @param pagerAdapter The adapter that works in sync with the activity container
+ * @param activity The activity in which this presenter resides
+ * @param fragmentList The list of fragments that will be presented by this [BottomNavigationPresenter].
  * @param stackHistory The history of all the fragment's back-stack
+ * @param savedInstanceState The previous state that
  */
 class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
-                                container: ViewGroup,
-                                pagerAdapter: LooprFragmentSwitcherPagerAdapter,
+                                activity: BaseActivity,
+                                fragmentList: List<Pair<String, BaseFragment>>,
                                 private val stackHistory: BottomNavigationFragmentStackHistory,
                                 savedInstanceState: Bundle?) {
 
@@ -47,22 +49,22 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
         private const val KEY_PAGER_ADAPTER_STATE = "_PAGER_ADAPTER_STATE"
     }
 
-    private val container by weakReference(container)
     private val bottomNavigationView by weakReference(bottomNavigationView)
-    private var pagerAdapter by weakReference(pagerAdapter)
+    private val pagerAdapter: LooprFragmentSwitcherPagerAdapter
+
+    val currentFragment
+        get() = pagerAdapter.currentFragment
+
+    private val container: ViewGroup = activity.findViewById(R.id.activityContainer)
 
     init {
 
-        when {
-            savedInstanceState != null -> {
-                val tag = stackHistory.peek()!!
-                logv("Pushing $tag fragment...")
+        val pagerState: Bundle? = savedInstanceState?.getParcelable(KEY_PAGER_ADAPTER_STATE) as? Bundle
+        val classLoader = savedInstanceState?.classLoader
+        pagerAdapter = LooprFragmentSwitcherPagerAdapter(container, pagerState, classLoader, activity.supportFragmentManager, fragmentList)
 
-                pagerAdapter.restoreState(savedInstanceState.getParcelable(KEY_PAGER_ADAPTER_STATE), savedInstanceState.classLoader)
-            }
-            else -> {
-                executeFragmentTransaction(stackHistory.peek()!!)
-            }
+        if (savedInstanceState == null) {
+            stackHistory.push(pagerAdapter.getPageTitle(0)!!.toString())
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
@@ -75,7 +77,7 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
             if (fragment is BottomNavigationReselectedLister) {
                 fragment.onBottomNavigationReselected()
             } else {
-                loge("Could not reselect ${fragment?.tag}!", IllegalStateException())
+                loge("Could not reselect ${fragment.tag}!", IllegalStateException())
             }
         }
     }
@@ -85,7 +87,7 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
      * @return True if the activity should be finished or false otherwise
      */
     fun onBackPressed(): Boolean {
-        val currentFragment = pagerAdapter?.currentFragment
+        val currentFragment = pagerAdapter.currentFragment
         if (currentFragment is SearchFragment && currentFragment.searchViewPresenter.isExpanded) {
             // The SearchView is expanded. Let's collapse it and return
             currentFragment.searchViewPresenter.collapseSearchView()
@@ -108,7 +110,7 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
     fun onSaveInstanceState(outState: Bundle?) {
         stackHistory.saveState(outState)
 
-        outState?.putParcelable(KEY_PAGER_ADAPTER_STATE, pagerAdapter?.saveState())
+        outState?.putParcelable(KEY_PAGER_ADAPTER_STATE, pagerAdapter.saveState())
     }
 
     // MARK - Private Methods
@@ -125,7 +127,6 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
     }
 
     private fun getPositionFromTitle(title: String): Int? {
-        val pagerAdapter = pagerAdapter ?: return null
         for (i in 0 until pagerAdapter.count) {
             if (pagerAdapter.getPageTitle(i) == title) {
                 return i
@@ -138,15 +139,14 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
 
         fun setCurrentPage(title: String) {
             val position = getPositionFromTitle(title)
-            val container = container ?: return
             if (position != null) {
-                pagerAdapter?.instantiateFragment(container, position)
+                pagerAdapter.instantiateFragment(container, position)
             }
         }
 
         stackHistory.push(newFragmentTitle)
 
-        val appBarLayout = (pagerAdapter?.currentFragment as? BaseFragment)?.appbarLayout
+        val appBarLayout = (pagerAdapter.currentFragment as? BaseFragment)?.appbarLayout
         if (appBarLayout != null && !appBarLayout.isExpanded()) {
             logv("Expanding appbar before committing transaction...")
 
