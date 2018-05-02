@@ -101,7 +101,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         toolbarDelegate = BaseFragmentToolbarDelegate(
                 savedInstanceState = savedInstanceState,
                 isToolbarCollapseEnabled = false,
-                baseFragment = this
+                fragment = this
         )
 
         coreLooprComponent.inject(this)
@@ -147,6 +147,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
         if (parentFragment == null) {
             // We are NOT in a child fragment
+            toolbarDelegate?.setupToolbarCollapsing()
             floatingActionButton?.let { initializeFloatingActionButton(it) }
         }
     }

@@ -68,6 +68,7 @@ class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedList
             }
         }
 
+        enableToolbarCollapsing()
         viewTransfersRecyclerView.layoutManager = LinearLayoutManager(view.context)
         viewTransfersRecyclerView.adapter = adapter
     }
@@ -99,10 +100,6 @@ class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedList
     private val createOptionsMenu: (Toolbar?) -> Unit = {
         it?.menu?.clear()
         it?.inflateMenu(R.menu.menu_home)
-
-        if (it != null) {
-            (activity as? OnToolbarSetupListener)?.onToolbarSetup(it)
-        }
     }
 
     private val optionsItemSelected: (MenuItem?) -> Boolean = { item ->

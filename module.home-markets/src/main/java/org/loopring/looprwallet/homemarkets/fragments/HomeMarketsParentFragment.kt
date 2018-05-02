@@ -98,7 +98,6 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         it?.inflateMenu(R.menu.menu_home_search)
 
         if (it != null) {
-            (activity as? OnToolbarSetupListener)?.onToolbarSetup(it)
             val searchItem = it.menu.findItem(R.id.menuMainSearch)
             val searchView = searchItem.actionView as SearchView
             searchViewPresenter.setupSearchView(searchItem, searchView)

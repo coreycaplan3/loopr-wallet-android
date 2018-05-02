@@ -143,11 +143,14 @@ class LooprFragmentSwitcherPagerAdapter(
     private fun restoreAdapter(savedInstanceState: Parcelable, classLoader: ClassLoader) {
         val bundle = savedInstanceState as Bundle
         bundle.classLoader = classLoader
-        mSavedState.clear()
-        mFragments.clear()
 
-        bundle.getParcelableArray("states")?.forEach { savedState ->
-            mSavedState.add(savedState as? Fragment.SavedState?)
+        fragmentList.forEach {
+            mSavedState.add(null)
+            mFragments.add(null)
+        }
+
+        bundle.getParcelableArray("states")?.forEachIndexed { index, savedState ->
+            mSavedState[index] = savedState as? Fragment.SavedState?
         }
 
         bundle.keySet().forEach { key ->
@@ -156,7 +159,7 @@ class LooprFragmentSwitcherPagerAdapter(
                 val fragment = fragmentManager.getFragment(bundle, key)
                 when {
                     fragment != null -> {
-                        mFragments.add(index, fragment)
+                        mFragments[index] = fragment
                     }
                     else -> logw("Bad fragment at key $key")
                 }

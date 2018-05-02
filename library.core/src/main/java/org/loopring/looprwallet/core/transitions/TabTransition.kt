@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.addMode
-import org.loopring.looprwallet.core.extensions.animateToHeight
-import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
 
@@ -43,9 +41,13 @@ class TabTransition : Visibility() {
     override fun onAppear(sceneRoot: ViewGroup?, view: View?, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
         logd("Tabs appearing...")
 
-        return view?.let {
-            val height = it.context.theme.getResourceIdFromAttrId(android.R.attr.actionBarSize)
-            it.animateToHeight(height, R.integer.fragment_transition_duration)
+        return view?.context?.resources?.let {
+            view.pivotY = 0F
+
+            return@let ObjectAnimator.ofFloat(view, View.SCALE_Y, 0F, 1F).apply {
+                this.duration = it.getInteger(R.integer.fragment_transition_duration).toLong()
+                this.interpolator = DecelerateInterpolator()
+            }
         }
     }
 
@@ -54,12 +56,11 @@ class TabTransition : Visibility() {
 
         return view?.context?.resources?.let {
             view.pivotY = 0F
-            val animator = ObjectAnimator.ofFloat(view, View.SCALE_Y, 1F, 0F)
-                    .setDuration(it.getInteger(R.integer.fragment_transition_duration).toLong())
 
-            animator.interpolator = DecelerateInterpolator()
-
-            animator
+            return@let ObjectAnimator.ofFloat(view, View.SCALE_Y, 1F, 0F).apply {
+                this.duration = it.getInteger(R.integer.fragment_transition_duration).toLong()
+                this.interpolator = DecelerateInterpolator()
+            }
         }
     }
 

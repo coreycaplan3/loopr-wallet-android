@@ -19,6 +19,7 @@ import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.logi
+import org.loopring.looprwallet.core.fragments.BaseFragment.OnToolbarSetupListener
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
@@ -39,7 +40,7 @@ import org.loopring.looprwallet.walletsignin.activities.SignInActivity
  * Purpose of Class: As of right now, this will translate into the *Market* screen for traders,
  * when they first open the app (assuming they are signed in & authenticated).
  */
-class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
+class MainActivity : BaseActivity(), OnSecurityConfirmedListener, OnToolbarSetupListener {
 
     companion object {
 
@@ -119,9 +120,17 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
         }
     }
 
+    override fun onToolbarSetup(toolbar: Toolbar) {
+        logi("Setting up the navigation drawer...")
+        setupNavigationDrawer(toolbar)
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
+        toolbar.setNavigationOnClickListener { onSupportNavigateUp() }
+    }
+
     override fun onBackPressed() {
-        if (bottomNavigationPresenter.onBackPressed()) {
-            finish()
+        when {
+            homeNavigationDrawerLayout.isDrawerOpen(Gravity.START) -> homeNavigationDrawerLayout.closeDrawers()
+            bottomNavigationPresenter.onBackPressed() -> finish()
         }
     }
 
@@ -137,16 +146,6 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener {
      * If this variable is **NOT** null when the drawer is closed, we can invoke it :)
      */
     private var onItemSelected: (() -> Unit)? = null
-
-    override fun setSupportActionBar(toolbar: Toolbar?) {
-        super.setSupportActionBar(toolbar)
-
-        supportActionBar?.apply {
-            logi("Setting up the navigation drawer...")
-            toolbar?.let { setupNavigationDrawer(it) }
-            setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
-        }
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         homeNavigationDrawerLayout.openDrawer(Gravity.START)

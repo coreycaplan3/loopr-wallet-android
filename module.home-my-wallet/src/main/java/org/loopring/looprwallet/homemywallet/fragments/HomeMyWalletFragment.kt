@@ -81,7 +81,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        enableToolbarCollapsing()
+        disableToolbarCollapsing()
 
         setupWalletInformation()
 
@@ -113,10 +113,6 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     private val createOptionsMenu: (Toolbar?) -> Unit = {
         it?.menu?.clear()
         it?.inflateMenu(R.menu.menu_home)
-
-        if (it != null) {
-            (activity as? OnToolbarSetupListener)?.onToolbarSetup(it)
-        }
     }
 
     private val optionsItemSelected: (MenuItem?) -> Boolean = { item ->
