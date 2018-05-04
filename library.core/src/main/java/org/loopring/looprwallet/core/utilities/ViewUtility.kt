@@ -13,6 +13,7 @@ import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.isJellybeanR1
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 
 
 /**
@@ -40,8 +41,7 @@ object ViewUtility {
 
     fun getNavigationIcon(@DrawableRes drawableResource: Int, theme: Resources.Theme): Drawable {
         val drawable = ApplicationUtility.drawable(drawableResource)
-        val colorResource = ApplicationUtility.col(theme.getResourceIdFromAttrId(R.attr.titleTextColor))
-        DrawableCompat.setTint(drawable, colorResource)
+        DrawableCompat.setTint(drawable, col(theme.getResourceIdFromAttrId(R.attr.titleTextColor)))
         return drawable
     }
 

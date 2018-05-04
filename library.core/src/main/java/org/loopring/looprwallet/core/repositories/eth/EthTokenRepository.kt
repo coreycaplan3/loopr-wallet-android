@@ -25,9 +25,16 @@ class EthTokenRepository : BaseRealmRepository(false) {
      *
      * @return An **UN-MANAGED** [LooprToken] that represents ETH.
      */
-    fun getEthNow(): LooprToken = uiRealm.where<LooprToken>()
-            .equalTo(LooprToken::ticker, LooprToken.ETH.ticker)
-            .findFirst() ?: addAndReturn(LooprToken.ETH)
+    fun getEthNow(): LooprToken {
+        val token = uiRealm.where<LooprToken>()
+                .equalTo(LooprToken::ticker, LooprToken.ETH.ticker)
+                .findFirst()
+
+        return when {
+            token != null -> uiRealm.copyFromRealm(token)
+            else -> LooprToken.ETH
+        }
+    }
 
     /**
      * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract

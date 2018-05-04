@@ -17,6 +17,7 @@ import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
 interface EtherScanService {
 
     companion object {
+
         fun getInstance(): EtherScanService {
             val environment = BuildUtility.BUILD_FLAVOR
             return when (environment) {
@@ -25,6 +26,7 @@ interface EtherScanService {
                 else -> throw IllegalArgumentException("Invalid environment, found: $environment")
             }
         }
+
     }
 
     /**

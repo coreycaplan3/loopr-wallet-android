@@ -193,7 +193,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
         switchTransferFromEthToLrcToken()
 
         // We have "no" ETH
-        fragment.looprToken.tokenBalances.first()!!.balance = BigDecimal.ZERO
+        fragment.ethToken.tokenBalances.first()!!.balance = BigDecimal.ZERO
 
         Espresso.onView(`is`(fragment.createTransferMaxButton)).perform(click())
 

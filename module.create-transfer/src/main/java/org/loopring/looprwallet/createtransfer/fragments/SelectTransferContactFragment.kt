@@ -71,6 +71,14 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        searchViewPresenter = SearchViewPresenter(
+                containsOverflowMenu = false,
+                numberOfVisibleMenuItems = 1,
+                baseFragment = this,
+                savedInstanceState = savedInstanceState,
+                listener = this
+        )
+
         toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
     }
 
@@ -80,18 +88,9 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         val barcodeScannerButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
         BarcodeCaptureActivity.setupBarcodeScanner(this, barcodeScannerButton, arrayOf(TYPE_PUBLIC_KEY))
 
-        searchViewPresenter = SearchViewPresenter(
-                containsOverflowMenu = false,
-                numberOfVisibleMenuItems = 1,
-                baseFragment = this,
-                savedInstanceState = savedInstanceState,
-                listener = this
-        )
-
-        if (savedInstanceState == null) {
-            selectedContactAddress = arguments?.getString(KEY_DEFAULT_ADDRESS)
-        } else {
-            selectedContactAddress = savedInstanceState.getString(KEY_SELECTED_CONTACT)
+        selectedContactAddress = when (savedInstanceState) {
+            null -> arguments?.getString(KEY_DEFAULT_ADDRESS)
+            else -> savedInstanceState.getString(KEY_SELECTED_CONTACT)
         }
 
         viewContactsFragment = childFragmentManager.findFragmentByTagOrCreate(ViewContactsFragment.TAG) {

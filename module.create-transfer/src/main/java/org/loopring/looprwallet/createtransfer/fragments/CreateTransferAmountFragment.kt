@@ -102,7 +102,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
     lateinit var address: String
 
     @VisibleForTesting
-    lateinit var looprToken: LooprToken
+    lateinit var ethToken: LooprToken
 
     @VisibleForTesting
     lateinit var currentToken: LooprToken
@@ -177,8 +177,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             }
         }
 
-        looprToken = ethTokenBalanceViewModel.getEthBalanceNow()
-        currentToken = ethTokenPriceCheckerViewModel.currentCryptoToken ?: looprToken
+        ethToken = ethTokenBalanceViewModel.getEthBalanceNow()
+        currentToken = ethTokenPriceCheckerViewModel.currentCryptoToken ?: ethToken
 
         toolbar?.title = null
         toolbar?.subtitle = contact?.name ?: recipientAddress
@@ -412,7 +412,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
      * issues.
      */
     private fun onSendEth(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
-        val ethBalance = looprToken.getBalanceOf(address) ?: NEGATIVE_ONE
+        val ethBalance = ethToken.getBalanceOf(address) ?: NEGATIVE_ONE
         val gasLimit = ethereumFeeSettings.currentEthTransferGasLimit
         val gasPrice = ethereumFeeSettings.currentGasPrice
         when {
@@ -436,7 +436,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
     private fun onSendToken(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
         val tokenToSendBalance = currentToken.getBalanceOf(address) ?: NEGATIVE_ONE
-        val ethBalance = looprToken.getBalanceOf(address) ?: NEGATIVE_ONE
+        val ethBalance = ethToken.getBalanceOf(address) ?: NEGATIVE_ONE
 
         val gasLimit = ethereumFeeSettings.currentTokenTransferGasLimit
         val gasPrice = ethereumFeeSettings.currentGasPrice

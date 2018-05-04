@@ -118,6 +118,25 @@ class TradingPairDetailsFragment : BaseFragment() {
 
         setupOfflineFirstStateAndErrorObserver(tradingPairTrendViewModel, tradingPairDetailsSwipeRefresh)
         tradingPairTrendViewModel.getTradingPairTrends(this, filter, ::bindTrendChange)
+
+        tradingPairDetailsChart.apply {
+            val textColorPrimary = col(context.theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary))
+
+            description.isEnabled = false
+
+            setDrawGridBackground(false)
+            isHighlightPerDragEnabled = true
+            isHighlightPerTapEnabled = true
+            isDoubleTapToZoomEnabled = false
+            setPinchZoom(false)
+            xAxis.textColor = textColorPrimary
+            xAxis.setLabelCount(6, true)
+            xAxis.setDrawGridLines(false)
+            axisRight.textColor = textColorPrimary
+            axisRight.setDrawGridLines(false)
+            axisLeft.isEnabled = false
+            disableScroll()
+        }
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
@@ -216,38 +235,39 @@ class TradingPairDetailsFragment : BaseFragment() {
         }
 
         val theme = context?.theme ?: return
-        val colorPrimary = theme.getResourceIdFromAttrId(R.attr.colorPrimary)
-        val textColorPrimary = theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary)
+        val colorPrimary = col(theme.getResourceIdFromAttrId(R.attr.colorPrimary))
+        val textColorPrimary = col(theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary))
 
         val entries = trends.map { Entry(it.cycleDate.time.toFloat(), it.averagePrice.toFloat()) }
         val lineDataSet = LineDataSet(entries, tradingPair?.market).apply {
             this.setDrawCircles(true)
             this.setDrawCircleHole(false)
             this.mode = LineDataSet.Mode.LINEAR
+            this.disableDashedLine()
             this.isHighlightEnabled = true
+            this.highLightColor = textColorPrimary
             this.cubicIntensity = 0.05F
 
             context?.theme?.ifNotNull {
-                this.color = col(colorPrimary)
-                this.valueTextColor = col(textColorPrimary)
+                this.color = colorPrimary
+                this.valueTextColor = textColorPrimary
             }
         }
 
         val lineData = LineData(lineDataSet)
 
-        tradingPairDetailsChart.data = lineData
-        tradingPairDetailsChart.setDrawGridBackground(false)
-        tradingPairDetailsChart.xAxis.textColor = col(textColorPrimary)
-        tradingPairDetailsChart.axisRight.textColor = col(textColorPrimary)
-        tradingPairDetailsChart.axisLeft.isEnabled = false
-        tradingPairDetailsChart.disableScroll()
+        tradingPairDetailsChart.apply {
+            data = lineData
 
-        if (tradingPairDetailsChart.isVisible) {
-            tradingPairDetailsChart.invalidate()
-        } else {
-            // It's not visible so we'll show it and animate it
-            tradingPairDetailsChart.visibility = View.VISIBLE
-            tradingPairDetailsChart.animateX(int(R.integer.animation_duration))
+            legend.textColor = textColorPrimary
+
+            if (isVisible) {
+                invalidate()
+            } else {
+                // It's not visible so we'll show it and animate it
+                visibility = View.VISIBLE
+                animateY(int(R.integer.animation_duration))
+            }
         }
     }
 

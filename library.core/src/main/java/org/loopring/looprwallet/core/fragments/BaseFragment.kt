@@ -95,6 +95,14 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
     override var fragmentViewLifecycleFragment: FragmentViewLifecycleOwner? = null
 
+    init {
+        injectComponents()
+    }
+
+    private fun injectComponents() {
+        coreLooprComponent.inject(this)
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -103,8 +111,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
                 isToolbarCollapseEnabled = false,
                 fragment = this
         )
-
-        coreLooprComponent.inject(this)
 
         allowEnterTransitionOverlap = false
         allowReturnTransitionOverlap = false
