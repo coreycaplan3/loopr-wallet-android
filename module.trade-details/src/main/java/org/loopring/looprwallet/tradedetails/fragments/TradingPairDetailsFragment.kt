@@ -29,12 +29,12 @@ import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.repositories.loopr.LooprMarketsRepository
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
-import org.loopring.looprwallet.core.utilities.ApplicationUtility.int
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
 import org.loopring.looprwallet.tradedetails.R
 import org.loopring.looprwallet.tradedetails.dagger.tradeDetailsLooprComponent
+import org.loopring.looprwallet.tradedetails.view.ChartMarkerView
 import org.loopring.looprwallet.tradedetails.viewmodels.TradingPairDetailsViewModel
 import org.loopring.looprwallet.tradedetails.viewmodels.TradingPairTrendViewModel
 import javax.inject.Inject
@@ -124,16 +124,24 @@ class TradingPairDetailsFragment : BaseFragment() {
 
             description.isEnabled = false
 
+            marker = ChartMarkerView(context, R.layout.custom_marker)
+
             setDrawGridBackground(false)
             isHighlightPerDragEnabled = true
             isHighlightPerTapEnabled = true
+
             isDoubleTapToZoomEnabled = false
             setPinchZoom(false)
+
             xAxis.textColor = textColorPrimary
             xAxis.setLabelCount(6, true)
+            xAxis.setDrawLabels(false)
             xAxis.setDrawGridLines(false)
+
             axisRight.textColor = textColorPrimary
             axisRight.setDrawGridLines(false)
+            axisRight.setLabelCount(6, true)
+
             axisLeft.isEnabled = false
             disableScroll()
         }
@@ -234,24 +242,25 @@ class TradingPairDetailsFragment : BaseFragment() {
             return
         }
 
-        val theme = context?.theme ?: return
+        val theme = tradingPairDetailsChart.context.theme
         val colorPrimary = col(theme.getResourceIdFromAttrId(R.attr.colorPrimary))
+        val colorPrimaryLight = col(theme.getResourceIdFromAttrId(R.attr.colorPrimaryLight))
         val textColorPrimary = col(theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary))
 
         val entries = trends.map { Entry(it.cycleDate.time.toFloat(), it.averagePrice.toFloat()) }
         val lineDataSet = LineDataSet(entries, tradingPair?.market).apply {
-            this.setDrawCircles(true)
+            this.color = colorPrimary
+            this.valueTextColor = textColorPrimary
+
+            this.setDrawCircles(false)
             this.setDrawCircleHole(false)
-            this.mode = LineDataSet.Mode.LINEAR
+            this.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
             this.disableDashedLine()
+            this.setDrawValues(false)
+            this.fillColor = colorPrimaryLight
             this.isHighlightEnabled = true
             this.highLightColor = textColorPrimary
             this.cubicIntensity = 0.05F
-
-            context?.theme?.ifNotNull {
-                this.color = colorPrimary
-                this.valueTextColor = textColorPrimary
-            }
         }
 
         val lineData = LineData(lineDataSet)
@@ -261,13 +270,11 @@ class TradingPairDetailsFragment : BaseFragment() {
 
             legend.textColor = textColorPrimary
 
-            if (isVisible) {
-                invalidate()
-            } else {
-                // It's not visible so we'll show it and animate it
+            // It's not visible so we'll show it and animate it
+            if (!this.isVisible) {
                 visibility = View.VISIBLE
-                animateY(int(R.integer.animation_duration))
             }
+            animateY(ApplicationUtility.int(R.integer.animation_duration))
         }
     }
 

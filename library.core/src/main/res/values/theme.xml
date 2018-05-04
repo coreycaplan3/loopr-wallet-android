@@ -6,6 +6,7 @@
         <!-- Main Colors -->
         <item name="colorPrimary">@color/lightPrimary</item>
         <item name="colorPrimaryDark">@color/lightPrimaryDark</item>
+        <item name="colorPrimaryLight">@color/lightPrimaryLight</item>
         <item name="colorAccent">@color/lightAccent</item>
 
         <item name="android:windowBackground">@color/lightBackground</item>
@@ -73,6 +74,7 @@
         <!-- Main Colors -->
         <item name="colorPrimary">@color/darkPrimary</item>
         <item name="colorPrimaryDark">@color/darkPrimaryDark</item>
+        <item name="colorPrimaryLight">@color/darkPrimaryLight</item>
         <item name="colorAccent">@color/darkAccent</item>
 
         <item name="android:windowBackground">@color/darkBackground</item>

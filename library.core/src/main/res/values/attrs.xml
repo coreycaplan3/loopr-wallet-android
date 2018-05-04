@@ -13,4 +13,8 @@
 
     <!-- Text Colors -->
     <attr name="textColorDisabled" format="color" />
+
+    <!-- Theme Colors -->
+    <attr name="colorPrimaryLight" format="color" />
+
 </resources>

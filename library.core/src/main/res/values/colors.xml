@@ -13,6 +13,7 @@
     <!-- LIGHT THEME -->
 
     <color name="lightPrimary">#03A9F4</color>
+    <color name="lightPrimaryLight">#81D4FA</color>
     <color name="lightPrimaryDark">#01579B</color>
     <color name="lightAccent">@color/green_400</color>
     <color name="lightBackground">#ECECEC</color>
@@ -29,6 +30,7 @@
     <!-- DARK THEME -->
 
     <color name="darkPrimary">#2196F3</color>
+    <color name="darkPrimaryLight">#90CAF9</color>
     <color name="darkPrimaryDark">#0D47A1</color>
     <color name="darkAccent">@color/lightAccent</color>
     <color name="darkBackground">#303030</color>
