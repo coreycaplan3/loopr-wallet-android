@@ -7,7 +7,9 @@
         android:name=".application.CoreLooprWalletApp"
         android:theme="@style/AppTheme.Dark">
 
-        <activity android:name=".activities.CoreTestActivity"
+        <activity
+            android:name=".activities.CoreTestActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Dark" />
 
     </application>

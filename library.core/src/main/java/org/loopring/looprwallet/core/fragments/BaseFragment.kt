@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-import android.support.design.widget.*
-import android.support.design.widget.CoordinatorLayout.LayoutParams
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.BaseTransientBottomBar
+import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.transition.TransitionSet
 import android.support.transition.Visibility
 import android.support.v4.app.Fragment
@@ -14,7 +16,6 @@ import android.support.v4.view.ViewCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.view.*
-import android.widget.ProgressBar
 import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.R
@@ -26,7 +27,6 @@ import org.loopring.looprwallet.core.delegates.BaseFragmentToolbarDelegate
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
-import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.validators.BaseValidator
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
@@ -70,9 +70,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     val toolbar: Toolbar?
         get() = toolbarDelegate?.toolbar
 
-    var progressBar: ProgressBar? = null
-        private set
-
     var floatingActionButton: FloatingActionButton? = null
         private set
 
@@ -102,7 +99,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     private fun injectComponents() {
         coreLooprComponent.inject(this)
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -141,7 +138,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         if (parentFragment == null) {
             // We are NOT in a child fragment
             toolbarDelegate?.setupAppbar(fragmentView)
-            createProgressBar(fragmentView)
             createFab(fragmentView)
         }
 
@@ -312,16 +308,32 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
             viewModelList.add(viewModel)
         }
 
-        refreshLayout?.setOnRefreshListener {
-            refreshLayout.isRefreshing = false
-            refreshAllOfflineFirstViewModels()
+        refreshLayout?.apply {
+            val theme = context.theme
+            this.setOnRefreshListener {
+                isRefreshing = true
+                refreshAllOfflineFirstViewModels()
+
+            }
+            this.setColorSchemeResources(
+                    theme.getResourceIdFromAttrId(R.attr.colorAccent),
+                    theme.getResourceIdFromAttrId(R.attr.colorPrimary),
+                    theme.getResourceIdFromAttrId(R.attr.colorAccent),
+                    theme.getResourceIdFromAttrId(R.attr.colorPrimary)
+            )
         }
 
+        val lifecycleOwner = fragmentViewLifecycleFragment ?: return
+
         // STATE OBSERVER
-        viewModel?.addCurrentStateObserver(this) {
-            progressBar?.visibility = when {
-                viewModelList.any { it.isLoading() } -> View.VISIBLE
-                else -> View.GONE
+        viewModel?.addCurrentStateObserver(lifecycleOwner) {
+            val isRefreshing = when {
+                viewModelList.any { it.isLoading() } -> true
+                else -> false
+            }
+
+            if(refreshLayout?.isRefreshing != isRefreshing) {
+                refreshLayout?.isRefreshing = isRefreshing
             }
 
             if (viewModelList.all { it.hasValidData() }) {
@@ -334,7 +346,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         }
 
         // ERROR OBSERVER
-        viewModel?.addErrorObserver(this) {
+        viewModel?.addErrorObserver(lifecycleOwner) {
             val snackbar = indefiniteSnackbar
             if (snackbar == null || !snackbar.isShownOrQueued) {
                 // If we aren't already showing the refreshAll snackbar, let's show it
@@ -418,23 +430,6 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     }
 
     // MARK - Private Methods
-
-    private fun createProgressBar(fragmentView: ViewGroup) {
-        progressBar = fragmentView.inflate(R.layout.fragment_progress_bar) as ProgressBar
-
-        if (fragmentView is CoordinatorLayout) {
-            val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-            params.leftMargin = ApplicationUtility.dimen(R.dimen.horizontal_margin).toInt()
-            params.rightMargin = ApplicationUtility.dimen(R.dimen.horizontal_margin).toInt()
-            params.anchorGravity = Gravity.BOTTOM
-            params.anchorId = R.id.appbarLayout
-            params.insetEdge = Gravity.TOP
-            params.dodgeInsetEdges = Gravity.TOP
-            fragmentView.addView(progressBar, 1, params)
-        } else {
-            fragmentView.addView(progressBar, 1)
-        }
-    }
 
     private fun createFab(fragmentView: ViewGroup) {
         floatingActionButton = (fragmentView.inflate(R.layout.floating_action_button) as FloatingActionButton)

@@ -7,12 +7,16 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.widget.Button
 import androidx.os.bundleOf
 import androidx.view.isVisible
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.listener.ChartTouchListener
+import com.github.mikephil.charting.listener.OnChartGestureListener
 import io.realm.OrderedRealmCollection
 import kotlinx.android.synthetic.main.fragment_trading_pair_details.*
 import kotlinx.android.synthetic.main.trading_pair_graph.*
@@ -29,6 +33,7 @@ import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.repositories.loopr.LooprMarketsRepository
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
@@ -94,6 +99,8 @@ class TradingPairDetailsFragment : BaseFragment() {
 
     private var tradingPair: TradingPair? = null
 
+    private var lineData: LineData? = null
+
     override val layoutResource: Int
         get() = R.layout.fragment_trading_pair_details
 
@@ -118,33 +125,24 @@ class TradingPairDetailsFragment : BaseFragment() {
 
         setupOfflineFirstStateAndErrorObserver(tradingPairTrendViewModel, tradingPairDetailsSwipeRefresh)
         tradingPairTrendViewModel.getTradingPairTrends(this, filter, ::bindTrendChange)
+        tradingPairTrendViewModel.addCurrentStateObserver(fragmentViewLifecycleFragment!!) {
+            if (tradingPairTrendViewModel.isIdle()) {
+                lineData ?: return@addCurrentStateObserver
 
-        tradingPairDetailsChart.apply {
-            val textColorPrimary = col(context.theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary))
+                // We update the observer after the currentState has been changed, since the state
+                // is always updated after the data is updated
+                tradingPairDetailsChart.data = lineData
+                tradingPairDetailsChart.legend.isEnabled = false
 
-            description.isEnabled = false
+                if (!tradingPairDetailsChart.isVisible) {
+                    tradingPairDetailsChart.isVisible = true
+                }
 
-            marker = ChartMarkerView(context, R.layout.custom_marker)
-
-            setDrawGridBackground(false)
-            isHighlightPerDragEnabled = true
-            isHighlightPerTapEnabled = true
-
-            isDoubleTapToZoomEnabled = false
-            setPinchZoom(false)
-
-            xAxis.textColor = textColorPrimary
-            xAxis.setLabelCount(6, true)
-            xAxis.setDrawLabels(false)
-            xAxis.setDrawGridLines(false)
-
-            axisRight.textColor = textColorPrimary
-            axisRight.setDrawGridLines(false)
-            axisRight.setLabelCount(6, true)
-
-            axisLeft.isEnabled = false
-            disableScroll()
+                tradingPairDetailsChart.animateY(ApplicationUtility.int(R.integer.animation_duration))
+            }
         }
+
+        setupChart()
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
@@ -208,6 +206,68 @@ class TradingPairDetailsFragment : BaseFragment() {
 
     // MARK - Private Methods
 
+    private fun setupChart() {
+        var currentButton = tradingPairDetails1hButton
+
+        fun onButtonClick(view: View) {
+            val newButton = view as Button
+            if (currentButton != newButton) {
+                val theme = context?.theme ?: return
+                currentButton.setTextColor(col(theme.getResourceIdFromAttrId(R.attr.colorPrimary)))
+                currentButton.setBackgroundResource(R.drawable.ripple_effect_accent)
+                currentButton = newButton
+
+                newButton.setTextColor(col(theme.getResourceIdFromAttrId(android.R.attr.textColorPrimaryInverseDisableOnly)))
+                newButton.setBackgroundResource(R.drawable.button_background_material)
+
+                tradingPairTrendViewModel.getTradingPairTrends(this, filter, ::bindTrendChange)
+            }
+        }
+
+        tradingPairDetails1hButton.setOnClickListener(::onButtonClick)
+        tradingPairDetails2hButton.setOnClickListener(::onButtonClick)
+        tradingPairDetails4hButton.setOnClickListener(::onButtonClick)
+        tradingPairDetails1dButton.setOnClickListener(::onButtonClick)
+        tradingPairDetails1wButton.setOnClickListener(::onButtonClick)
+
+        tradingPairDetailsChart.apply {
+            val textColorPrimary = col(context.theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary))
+
+            description.isEnabled = false
+
+            onChartGestureListener = object : TradingPairChartGestureListener() {
+                override fun onChartGestureEnd(event: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) {
+                    lockableNestedScrollView.isScrollEnabled = true
+                }
+
+                override fun onChartLongPressed(event: MotionEvent?) {
+                    lockableNestedScrollView.isScrollEnabled = false
+                }
+            }
+
+            marker = ChartMarkerView(context, R.layout.custom_marker)
+
+            setDrawGridBackground(false)
+            isHighlightPerDragEnabled = true
+            isHighlightPerTapEnabled = true
+
+            isDoubleTapToZoomEnabled = false
+            setPinchZoom(false)
+
+            xAxis.textColor = textColorPrimary
+            xAxis.setLabelCount(6, true)
+            xAxis.setDrawLabels(false)
+            xAxis.setDrawGridLines(false)
+
+            axisRight.textColor = textColorPrimary
+            axisRight.setDrawGridLines(false)
+            axisRight.setLabelCount(6, true)
+
+            axisLeft.isEnabled = false
+            disableScroll()
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     private fun bindTradingPair(tradingPair: TradingPair) {
         this.tradingPair = tradingPair
@@ -233,49 +293,48 @@ class TradingPairDetailsFragment : BaseFragment() {
     }
 
     private fun bindTrendChange(trends: OrderedRealmCollection<TradingPairTrend>) {
-        if (tradingPairDetailsChartProgress.isVisible) {
-            tradingPairDetailsChartProgress.visibility = View.GONE
-            tradingPairDetailsChart.visibility = View.VISIBLE
-        }
-
         if (trends.size == 0) {
             return
         }
 
         val theme = tradingPairDetailsChart.context.theme
         val colorPrimary = col(theme.getResourceIdFromAttrId(R.attr.colorPrimary))
-        val colorPrimaryLight = col(theme.getResourceIdFromAttrId(R.attr.colorPrimaryLight))
         val textColorPrimary = col(theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary))
 
         val entries = trends.map { Entry(it.cycleDate.time.toFloat(), it.averagePrice.toFloat()) }
         val lineDataSet = LineDataSet(entries, tradingPair?.market).apply {
-            this.color = colorPrimary
-            this.valueTextColor = textColorPrimary
-
             this.setDrawCircles(false)
             this.setDrawCircleHole(false)
-            this.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-            this.disableDashedLine()
             this.setDrawValues(false)
-            this.fillColor = colorPrimaryLight
+
+            this.setDrawHorizontalHighlightIndicator(false)
+            this.disableDashedLine()
             this.isHighlightEnabled = true
+
+            this.color = colorPrimary
+            this.lineWidth = dimen(R.dimen.graph_line_width)
+            this.valueTextColor = textColorPrimary
+            this.mode = LineDataSet.Mode.CUBIC_BEZIER
             this.highLightColor = textColorPrimary
             this.cubicIntensity = 0.05F
         }
 
-        val lineData = LineData(lineDataSet)
+        lineData = LineData(lineDataSet)
+    }
 
-        tradingPairDetailsChart.apply {
-            data = lineData
+    private abstract class TradingPairChartGestureListener : OnChartGestureListener {
 
-            legend.textColor = textColorPrimary
+        final override fun onChartFling(me1: MotionEvent?, me2: MotionEvent?, velocityX: Float, velocityY: Float) {}
 
-            // It's not visible so we'll show it and animate it
-            if (!this.isVisible) {
-                visibility = View.VISIBLE
-            }
-            animateY(ApplicationUtility.int(R.integer.animation_duration))
-        }
+        final override fun onChartSingleTapped(me: MotionEvent?) {}
+
+        final override fun onChartGestureStart(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) {}
+
+        final override fun onChartScale(me: MotionEvent?, scaleX: Float, scaleY: Float) {}
+
+        final override fun onChartDoubleTapped(me: MotionEvent?) {}
+
+        final override fun onChartTranslate(me: MotionEvent?, dX: Float, dY: Float) {}
     }
 
 }

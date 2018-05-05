@@ -5,7 +5,9 @@
         android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp"
         android:theme="@style/AppTheme.Dark">
 
-        <activity android:name=".activities.ViewContactsActivity" />
+        <activity
+            android:name=".activities.ViewContactsActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

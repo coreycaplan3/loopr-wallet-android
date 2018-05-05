@@ -7,8 +7,13 @@
         android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp"
         android:theme="@style/AppTheme.Dark">
 
-        <activity android:name=".activities.ViewBarcodeActivity" />
-        <activity android:name=".activities.BarcodeCaptureActivity" />
+        <activity
+            android:name=".activities.ViewBarcodeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activities.BarcodeCaptureActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

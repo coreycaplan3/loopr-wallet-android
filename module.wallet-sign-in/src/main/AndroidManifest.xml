@@ -5,7 +5,9 @@
         android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp"
         android:theme="@style/AppTheme.Dark">
 
-        <activity android:name=".activities.SignInActivity" />
+        <activity
+            android:name=".activities.SignInActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

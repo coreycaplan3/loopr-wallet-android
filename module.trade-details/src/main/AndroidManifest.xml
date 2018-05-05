@@ -3,6 +3,12 @@
 
     <application
         android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp"
-        android:theme="@style/AppTheme.Dark" />
+        android:theme="@style/AppTheme.Dark">
+
+        <activity
+            android:name=".activities.TradingPairDetailsActivity"
+            android:screenOrientation="portrait" />
+
+    </application>
 
 </manifest>

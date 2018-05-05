@@ -559,6 +559,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
 
             // Update the current state and add the data to Realm
             addNetworkDataToRepository(data)
+            delay(48)
             mCurrentState.postValue(STATE_IDLE_HAVE_DATA)
 
             // Add the successful sync to the logs

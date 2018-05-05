@@ -37,11 +37,16 @@
 
     <dimen name="fab_margin">16dp</dimen>
 
+    <!-- Graph Line Width -->
+
+    <dimen name="graph_line_width">1.5dp</dimen>
+
     <!-- Margin -->
 
     <dimen name="statistics_pair_margin_top">-2dp</dimen>
 
     <dimen name="standard_margin">16dp</dimen>
+    <dimen name="standard_margin_small">8dp</dimen>
     <dimen name="vertical_margin">16dp</dimen>
     <dimen name="vertical_margin_large">32dp</dimen>
     <dimen name="vertical_margin_small">8dp</dimen>
