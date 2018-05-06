@@ -55,8 +55,10 @@ class LooprFragmentSwitcherPagerAdapter(
      */
     fun instantiateFragment(container: ViewGroup, position: Int): Fragment {
 
-        val oldPosition = fragmentList.indexOfFirst { it.second.tag == currentFragment.tag }
-        saveOldFragmentState(oldPosition, currentFragment)
+        val oldPosition = mFragments.indexOfFirst { it?.tag == currentFragment.tag }
+        if(oldPosition != -1) {
+            saveOldFragmentState(oldPosition, currentFragment)
+        }
 
         val fragment = when {
             mFragments[position] != null ->

@@ -504,7 +504,8 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         // "handleNetworkRequest" and the Observer's "onChange" method being called).
         mIsNetworkOperationRunning = isRefreshNecessary(parameter)
 
-        if(mIsNetworkOperationRunning) {
+        if (mIsNetworkOperationRunning) {
+            // We're going to be loading data from the network and not just the Realm
             mCurrentState.value = getCurrentLoadingState(mLiveData?.value)
         }
 
@@ -553,9 +554,14 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     private suspend fun handleNetworkRequest(parameter: U) {
         try {
             mIsNetworkOperationRunning = true
-            val response = getDataFromNetwork(parameter)
-            val data = response.await()
-            mIsNetworkOperationRunning = false
+
+            val data: T = try {
+                val response = getDataFromNetwork(parameter)
+                response.await()
+            } finally {
+                // Since getDataFromNetwork can throw, we need to update the state in a finally block
+                mIsNetworkOperationRunning = false
+            }
 
             // Update the current state and add the data to Realm
             addNetworkDataToRepository(data)
@@ -567,11 +573,10 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         } catch (exception: Exception) {
             val looprError = when (exception) {
                 is HttpException -> {
-                    loge("NET communication addErrorObserver: ", exception)
-                    if (exception.code() >= 500) {
-                        LooprError(R.string.error_network_error, ErrorTypes.SERVER_ERROR)
-                    } else {
-                        LooprError(R.string.error_http_communication, ErrorTypes.SERVER_COMMUNICATION_ERROR)
+                    loge("Network communication error: ", exception)
+                    when {
+                        exception.code() >= 500 -> LooprError(R.string.error_network_error, ErrorTypes.SERVER_ERROR)
+                        else -> LooprError(R.string.error_http_communication, ErrorTypes.SERVER_COMMUNICATION_ERROR)
                     }
                 }
                 is IOException -> {

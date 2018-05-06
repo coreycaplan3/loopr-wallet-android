@@ -188,12 +188,14 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener, OnToolbarSetup
         // Setup the current selected menu item
         val currentWalletName = walletClient.getCurrentWallet()?.walletName
         val allWallets = walletClient.getAllWallets()
+        val walletMenu = homeNavigationView.menu.findItem(R.id.menuMyWallets).subMenu
         allWallets.forEachIndexed { index, item ->
-            homeNavigationView.menu.add(R.id.menuWalletNameGroup, Menu.NONE, index, item.walletName).let {
-                if (item.walletName == currentWalletName) {
-                    it.isChecked = true
-                }
-            }
+            walletMenu.add(Menu.NONE, Menu.NONE, index, item.walletName)
+                    .let {
+                        if (item.walletName == currentWalletName) {
+                            it.isChecked = true
+                        }
+                    }
         }
 
         homeNavigationView.menu.findItem(R.id.menuAddNewWallet).apply {

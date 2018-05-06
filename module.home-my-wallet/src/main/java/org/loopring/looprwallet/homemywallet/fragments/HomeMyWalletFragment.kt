@@ -85,7 +85,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
         setupWalletInformation()
 
-//        setupBalanceAndContactInformation()
+        setupBalanceAndContactInformation()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -243,6 +243,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         }
 
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
+        setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel, fragmentContainer)
         tokenBalanceViewModel.getAllTokensWithBalances(this, address, ::onTokenBalancesChange)
     }
 
@@ -260,6 +261,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         val builder = StringBuilder()
         val onlyTokenBalances = tokenBalances.filter { it.identifier != LooprToken.ETH.identifier }
 
+        var totalItems = 0
         onlyTokenBalances.forEachIndexed { index, item ->
             if (index < 5) {
                 val balance = item.findAddressBalance(address)
@@ -271,12 +273,15 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
                     // We're before the 5th position (4th index) and before the second-to-last item
                     if (index < 4 && index < onlyTokenBalances.size - 1) builder.append("\n")
+
+                    totalItems += 1
                 }
             }
 
-            if (index >= 5) {
+            if (totalItems >= 5) {
                 builder.append("\n")
                         .append(str(R.string.ellipsis))
+                return@forEachIndexed
             }
         }
     }

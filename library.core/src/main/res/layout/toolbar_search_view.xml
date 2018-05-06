@@ -35,7 +35,7 @@
                 android:layout_marginStart="@dimen/horizontal_margin_small"
                 android:layout_weight="1"
                 android:background="@null"
-                android:dropDownAnchor="@id/anchor_dropdown"
+                android:dropDownAnchor="@id/anchorDropdown"
                 android:dropDownHeight="wrap_content"
                 android:dropDownHorizontalOffset="0dp"
                 android:dropDownVerticalOffset="0dp"

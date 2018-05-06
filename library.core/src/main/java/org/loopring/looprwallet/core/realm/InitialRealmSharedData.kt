@@ -16,16 +16,24 @@ import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 object InitialRealmSharedData {
 
     fun getInitialData() = Realm.Transaction {
-        // LooprToken
-        it.upsert(LooprToken.ETH)
-        it.upsert(LooprToken.WETH)
-        it.upsert(LooprToken.LRC)
-        it.upsert(LooprToken.APPC)
-        it.upsert(LooprToken.REQ)
-        it.upsert(LooprToken.ZRX)
+        getTransactionBody(it)
+    }
 
-        // Currency Exchange Rate
-        it.upsert(CurrencyExchangeRate.USD)
+    fun getTransactionBody(realm: Realm) {
+        realm.apply {
+
+            // LooprToken
+            upsert(LooprToken.ETH)
+            upsert(LooprToken.WETH)
+            upsert(LooprToken.LRC)
+            upsert(LooprToken.APPC)
+            upsert(LooprToken.REQ)
+            upsert(LooprToken.ZRX)
+
+            // Currency Exchange Rate
+            upsert(CurrencyExchangeRate.USD)
+
+        }
     }
 
 }

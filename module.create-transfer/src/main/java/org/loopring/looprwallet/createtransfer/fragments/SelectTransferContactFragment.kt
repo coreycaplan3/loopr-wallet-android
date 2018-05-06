@@ -94,7 +94,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         }
 
         viewContactsFragment = childFragmentManager.findFragmentByTagOrCreate(ViewContactsFragment.TAG) {
-            val fragment = ViewContactsFragment()
+            val fragment = ViewContactsFragment.getSearchableInstance()
             childFragmentManager.beginTransaction()
                     .replace(R.id.viewContactsFragmentContainer, fragment, ViewContactsFragment.TAG)
                     .commitNow()

@@ -72,7 +72,7 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<Lo
         val address = mParameter ?: return null
 
         val tokenBalance = newToken.tokenBalances[0]
-        val token = repository.getTokenByContractAddressFromIoNow(contractAddress = newToken.identifier)
+        val token = repository.getTokenByContractAddressFromIoNow(newToken.identifier)
         val tokenWithBalanceInfo = repository.getTokenByContractAddressAndAddressNowFromIo(
                 contractAddress = newToken.identifier,
                 walletAddress = address
@@ -88,8 +88,6 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<Lo
                     // The token is in Realm but DOES NOT have a balance associated with it; insert it
                     token.tokenBalances.add(tokenBalance)
             }
-
-            repository.add(token)
 
             return token
         } else {

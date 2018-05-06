@@ -10,6 +10,7 @@ import io.realm.Realm
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.CoreTestActivity
 import org.loopring.looprwallet.core.dagger.*
@@ -99,26 +100,22 @@ open class CoreLooprWalletApp : MultiDexApplication(), Application.ActivityLifec
 
         Realm.init(this)
 
-        val job = RealmClient.initializeMigrationAndInitialDataAsync()
 
-        async(IO) {
-            job.await()
-            asyncSharedRealm = realmClient.getSharedInstance()
+        runBlocking {
+            RealmClient.initializeMigrationAndInitialDataAsync()
+                    .await()
         }
 
-        async(UI) {
-            job.await()
-            uiSharedRealm = realmClient.getSharedInstance()
-        }
+        async(IO) { asyncSharedRealm = realmClient.getSharedInstance() }
+
+        async(UI) { uiSharedRealm = realmClient.getSharedInstance() }
 
         walletClient.setOnCurrentWalletChange {
             launch(UI) {
-                job.await()
                 uiPrivateRealm = realmClient.getPrivateInstance(it)
             }
 
             launch(IO) {
-                job.await()
                 asyncPrivateRealm = realmClient.getPrivateInstance(it)
             }
         }

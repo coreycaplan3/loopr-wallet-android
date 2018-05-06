@@ -35,7 +35,7 @@ class ViewContactsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            pushFragmentTransaction(ViewContactsFragment(), ViewContactsFragment.TAG)
+            pushFragmentTransaction(ViewContactsFragment.getViewAllInstance(), ViewContactsFragment.TAG)
         }
     }
 

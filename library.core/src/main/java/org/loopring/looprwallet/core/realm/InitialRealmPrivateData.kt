@@ -2,6 +2,7 @@ package org.loopring.looprwallet.core.realm
 
 import io.realm.Realm
 import org.loopring.looprwallet.core.extensions.upsert
+import org.loopring.looprwallet.core.extensions.upsertCopyToRealm
 import org.loopring.looprwallet.core.models.contact.Contact
 
 /**
@@ -15,6 +16,8 @@ import org.loopring.looprwallet.core.models.contact.Contact
 object InitialRealmPrivateData {
 
     fun getInitialData() = Realm.Transaction {
+        InitialRealmSharedData.getTransactionBody(it)
+
         it.upsert(Contact("0x1111111111111111111111111111111111111111", "Daniel"))
         it.upsert(Contact("0x2222222222222222222222222222222222222222", "Jay"))
         it.upsert(Contact("0x3333333333333333333333333333333333333333", "Corey"))

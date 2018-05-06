@@ -15,6 +15,7 @@ import androidx.view.isVisible
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.highlight.ChartHighlighter
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import io.realm.OrderedRealmCollection
@@ -248,6 +249,7 @@ class TradingPairDetailsFragment : BaseFragment() {
             marker = ChartMarkerView(context, R.layout.custom_marker)
 
             setDrawGridBackground(false)
+
             isHighlightPerDragEnabled = true
             isHighlightPerTapEnabled = true
 

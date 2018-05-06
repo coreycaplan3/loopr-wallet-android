@@ -31,6 +31,7 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.validators.BaseValidator
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
+import org.loopring.looprwallet.core.views.LooprAppBarLayout
 import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
 
@@ -155,7 +156,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     }
 
     open fun createAppbarLayout(fragmentView: ViewGroup): AppBarLayout {
-        return layoutInflater.inflate(R.layout.appbar_main, fragmentView, false) as AppBarLayout
+        return LooprAppBarLayout.createMain(fragmentView.context)
     }
 
     /**
@@ -308,12 +309,12 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
             viewModelList.add(viewModel)
         }
 
+        // REFRESH LAYOUT
         refreshLayout?.apply {
             val theme = context.theme
             this.setOnRefreshListener {
                 isRefreshing = true
                 refreshAllOfflineFirstViewModels()
-
             }
             this.setColorSchemeResources(
                     theme.getResourceIdFromAttrId(R.attr.colorAccent),
@@ -328,7 +329,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         // STATE OBSERVER
         viewModel?.addCurrentStateObserver(lifecycleOwner) {
             val isRefreshing = when {
-                viewModelList.any { it.isLoading() } -> true
+                viewModelList.any(OfflineFirstViewModel<*, *>::isLoading) -> true
                 else -> false
             }
 

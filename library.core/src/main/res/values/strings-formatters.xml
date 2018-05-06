@@ -16,4 +16,5 @@
     <string name="formatter_is_not_favorite">%s is no longer a favorite</string>
     <string name="formatter_vol">Vol %s</string>
     <string name="formatter_trade_number">Trade %s</string>
+    <string name="formatter_delete_contact">Are you sure you want to delete %s as a contact?</string>
 </resources>

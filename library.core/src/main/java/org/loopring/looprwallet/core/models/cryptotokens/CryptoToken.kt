@@ -85,9 +85,7 @@ interface CryptoToken : TrackedRealmObject, RealmModel {
      * Finds a given address's [TokenBalanceInfo] or null if it cannot be found
      */
     fun findAddressBalance(address: String): TokenBalanceInfo? {
-        return this.tokenBalances.where()
-                .equalTo(TokenBalanceInfo::address, address)
-                .findFirst()
+        return tokenBalances.find { it?.address == address }
     }
 
 }

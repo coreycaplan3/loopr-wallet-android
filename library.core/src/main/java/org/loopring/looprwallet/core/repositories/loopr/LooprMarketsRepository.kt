@@ -32,10 +32,13 @@ class LooprMarketsRepository : BaseRealmRepository(false) {
      */
     fun toggleIsFavorite(market: String) = async(IO) {
         runTransaction(Realm.Transaction { realm ->
-            realm.where<TradingPair>().equalTo(TradingPair::market, market).findFirst()?.let {
-                it.isFavorite = !it.isFavorite
-                realm.upsert(it)
-            }
+            realm.where<TradingPair>()
+                    .equalTo(TradingPair::market, market)
+                    .findFirst()
+                    ?.let {
+                        it.isFavorite = !it.isFavorite
+                        realm.upsert(it)
+                    }
         })
     }
 

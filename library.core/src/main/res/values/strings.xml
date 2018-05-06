@@ -311,4 +311,7 @@
     <string name="view_all_your_contacts">View all of your contacts</string>
     <string name="add_a_new_contact">Add a new contact</string>
     <string name="my_address">My Address</string>
+    <string name="delete_contact">Delete Contact?</string>
+    <string name="delete">Delete</string>
+    <string name="my_contact">My Contacts</string>
 </resources>

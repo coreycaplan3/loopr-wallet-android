@@ -17,7 +17,7 @@ import org.loopring.looprwallet.core.models.contact.Contact
  * Purpose of Class:
  *
  */
-class ContactsAdapter(private var selectedContactAddress: String?,
+class ContactsAdapter(var selectedContactAddress: String?,
                       private var onContactSelected: (Contact) -> Unit
 ) : BaseRealmAdapter<Contact>() {
 
@@ -72,8 +72,10 @@ class ContactsAdapter(private var selectedContactAddress: String?,
             selectedContactAddress = contactList[index].address
             this.onContactSelected(contactList[index])
 
-            oldSelectedContactIndex?.let { notifyItemChanged(it) }
-            notifyItemChanged(index)
+            if(selectedContactAddress != null) {
+                oldSelectedContactIndex?.let { notifyItemChanged(it) }
+                notifyItemChanged(index)
+            }
         }
     }
 

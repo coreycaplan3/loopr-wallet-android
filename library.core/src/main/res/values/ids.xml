@@ -2,6 +2,8 @@
 <resources>
 
     <item name="orderProgressView" type="id"/>
+    <item name="appbarLayout" type="id"/>
+    <item name="toolbar" type="id"/>
     <item name="menuMainSettings" type="id"/>
     <item name="activityContainer" type="id"/>
     <item name="fragmentContainer" type="id"/>

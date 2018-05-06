@@ -39,7 +39,7 @@
 
     <!-- Graph Line Width -->
 
-    <dimen name="graph_line_width">1.5dp</dimen>
+    <dimen name="graph_line_width">1dp</dimen>
 
     <!-- Margin -->
 
@@ -70,6 +70,10 @@
     <dimen name="vertical_padding_small">8dp</dimen>
     <dimen name="large_horizontal_padding">32dp</dimen>
     <dimen name="large_vertical_padding">32dp</dimen>
+
+    <!-- Tabs -->
+
+    <dimen name="tabIndicatorHeight">3dp</dimen>
 
     <!-- Text -->
     <dimen name="standard_text_size">13sp</dimen>

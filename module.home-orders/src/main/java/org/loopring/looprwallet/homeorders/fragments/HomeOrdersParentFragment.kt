@@ -2,9 +2,11 @@ package org.loopring.looprwallet.homeorders.fragments
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.TabLayout
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
@@ -14,6 +16,7 @@ import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_TRADING_PAIR
 import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
@@ -21,12 +24,14 @@ import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
 import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
+import kotlin.math.roundToInt
 
 /**
  * Created by Corey on 1/17/2018.
@@ -63,7 +68,22 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
     }
 
     override fun createAppbarLayout(fragmentView: ViewGroup): AppBarLayout {
-        return layoutInflater.inflate(R.layout.appbar_orders, fragmentView, false) as AppBarLayout
+        val tabLayout = TabLayout(fragmentView.context).apply {
+            val theme = fragmentView.context.theme
+            id = R.id.ordersTabs
+
+            val height = ApplicationUtility.dimen(theme.getResourceIdFromAttrId(android.R.attr.actionBarSize))
+            layoutParams = AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, height.roundToInt())
+            background = ColorDrawable(ApplicationUtility.col(theme.getResourceIdFromAttrId(R.attr.colorPrimary)))
+            tabGravity = TabLayout.GRAVITY_FILL
+            setSelectedTabIndicatorColor(ApplicationUtility.col(theme.getResourceIdFromAttrId(R.attr.tabIndicatorColor)))
+            setSelectedTabIndicatorHeight(ApplicationUtility.dimen(R.dimen.tabIndicatorHeight).roundToInt())
+            tabMode = TabLayout.MODE_FIXED
+        }
+
+        return super.createAppbarLayout(fragmentView).apply {
+            addView(tabLayout)
+        }
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {

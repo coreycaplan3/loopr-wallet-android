@@ -1,19 +1,28 @@
 package org.loopring.looprwallet.contacts.fragments
 
+import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
+import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.View
+import androidx.os.bundleOf
+import androidx.view.isVisible
 import kotlinx.android.synthetic.main.fragment_view_contacts.*
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.adapters.ContactsAdapter
+import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.contacts.viewmodels.ContactsByAddressViewModel
 import org.loopring.looprwallet.contacts.viewmodels.ContactsByNameViewModel
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.contact.Contact
+import org.loopring.looprwallet.core.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 
 /**
@@ -31,7 +40,21 @@ class ViewContactsFragment : BaseFragment() {
     }
 
     companion object {
+
         val TAG: String = ViewContactsFragment::class.java.simpleName
+
+        private const val KEY_TYPE = "TYPE"
+        private const val KEY_SEARCHABLE = "SEARCHABLE"
+        private const val KEY_VIEW_ALL = "VIEW_ALL"
+
+        fun getSearchableInstance() = ViewContactsFragment().apply {
+            arguments = bundleOf(KEY_TYPE to KEY_SEARCHABLE)
+        }
+
+        fun getViewAllInstance() = ViewContactsFragment().apply {
+            arguments = bundleOf(KEY_TYPE to KEY_VIEW_ALL)
+        }
+
     }
 
     override val layoutResource: Int
@@ -49,6 +72,10 @@ class ViewContactsFragment : BaseFragment() {
 
     var onContactClickedListener: OnContactClickedListener? by weakReference(null)
 
+    private val fragmentType by lazy {
+        arguments?.getString(KEY_TYPE)!!
+    }
+
     private var adapter: ContactsAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,8 +85,52 @@ class ViewContactsFragment : BaseFragment() {
         viewContactsRecyclerView.layoutManager = layoutManager
         viewContactsRecyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
 
+        toolbar?.title = getString(R.string.my_contact)
+
         adapter = ContactsAdapter(selectedContactAddress, this::onContactSelected)
         viewContactsRecyclerView.adapter = adapter
+
+        if (fragmentType == KEY_VIEW_ALL) {
+            contactsByNameViewModel.getAllContactsByName(this, "*") {
+                adapter?.updateData(it)
+            }
+
+            onContactClickedListener = object : OnContactClickedListener {
+                override fun onContactSelected(contact: Contact) {
+                    val message = str(R.string.formatter_delete_contact).format(contact.name)
+                    AlertDialog.Builder(view.context)
+                            .setTitle(R.string.delete_contact)
+                            .setMessage(message)
+                            .setPositiveButton(R.string.delete) { dialog, _ ->
+                                contactsByNameViewModel.deleteContact(contact)
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .show()
+                }
+            }
+        }
+    }
+
+    override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
+
+        when (fragmentType) {
+            KEY_VIEW_ALL -> floatingActionButton.apply {
+                isVisible = true
+
+                val fabDrawable = ApplicationUtility.drawable(R.drawable.ic_person_add_white_24dp)
+                DrawableCompat.setTint(fabDrawable, Color.WHITE)
+                setImageDrawable(fabDrawable)
+
+                setOnClickListener {
+                    CreateContactDialog.getInstance(null)
+                            .show(fragmentManager, CreateContactDialog.TAG)
+                }
+            }
+        }
+
     }
 
     /**
@@ -115,6 +186,11 @@ class ViewContactsFragment : BaseFragment() {
      */
     private fun onContactSelected(contact: Contact) {
         onContactClickedListener?.onContactSelected(contact)
+        if(fragmentType == KEY_VIEW_ALL) {
+            // We want to reset it, since the ViewAll variant doesn't perform highlighting (whereas
+            // the Search variant does)
+            adapter?.selectedContactAddress = null
+        }
     }
 
     private fun queryRealmForContactsByName(name: String) {
