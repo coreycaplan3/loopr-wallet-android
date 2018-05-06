@@ -12,6 +12,9 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.ViewGroup
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_TRADING_PAIR
@@ -168,6 +171,8 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
     }
 
     override fun onSearchItemExpanded() {
+        toolbarDelegate?.removeAllOptionsMenuExceptSearch()
+
         for (i in 0 until adapter.count) {
             (adapter.getItem(i) as OnSearchViewChangeListener).onSearchItemExpanded()
         }

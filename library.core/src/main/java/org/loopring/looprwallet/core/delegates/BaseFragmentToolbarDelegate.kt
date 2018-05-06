@@ -5,18 +5,19 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.view.forEach
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
 import org.loopring.looprwallet.core.utilities.ViewUtility
-
 
 
 /**
@@ -44,7 +45,7 @@ open class BaseFragmentToolbarDelegate(
     /**
      * Set to the opposite of the initial so it can be set in the beginning (the IF statement doesn't fire if the condition is already set)
      */
-    var isToolbarCollapseEnabled =  !isToolbarCollapseEnabledInitial
+    var isToolbarCollapseEnabled = !isToolbarCollapseEnabledInitial
 
     private val activity = fragment.activity
 
@@ -66,7 +67,7 @@ open class BaseFragmentToolbarDelegate(
 
         val theme = activity?.theme
 
-        if(isLollipop() && theme != null) {
+        if (isLollipop() && theme != null) {
             activity?.window?.apply {
                 this.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 this.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -84,6 +85,26 @@ open class BaseFragmentToolbarDelegate(
         }
 
         invalidateOptionsMenu()
+    }
+
+    fun removeAllOptionsMenuExceptSearch() {
+        toolbar?.apply {
+            menu?.forEach {
+                when {
+//                    it.actionView != null && it.actionView::class != SearchView::class -> menu?.removeItem(it.itemId)
+                    it.actionView != null && it.actionView::class != SearchView::class -> it.isVisible = false
+                    else -> it.isVisible = false // Hide the search icon
+                }
+            }
+
+        }
+    }
+
+    fun resetOptionsMenu() {
+        toolbar?.apply {
+            menu.clear()
+            onCreateOptionsMenu?.invoke(this)
+        }
     }
 
     fun setupToolbarCollapsing() {

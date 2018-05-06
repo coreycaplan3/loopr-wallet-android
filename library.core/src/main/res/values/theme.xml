@@ -40,6 +40,9 @@
         <!-- Overflow Menu -->
         <item name="popupMenuStyle">@style/App.PopupMenu</item>
 
+        <!-- Search View -->
+        <item name="searchViewStyle">@style/App.SearchView</item>
+
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>
 
@@ -107,6 +110,9 @@
 
         <!-- Overflow Menu -->
         <item name="popupMenuStyle">@style/App.PopupMenu</item>
+
+        <!-- Search View -->
+        <item name="searchViewStyle">@style/App.SearchView</item>
 
         <!-- Settings -->
         <item name="preferenceTheme">@style/App.SettingsTheme</item>

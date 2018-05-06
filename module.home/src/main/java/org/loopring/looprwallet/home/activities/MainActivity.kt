@@ -24,6 +24,8 @@ import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragme
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter
+import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigation
+import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.home.R
 import org.loopring.looprwallet.homemarkets.fragments.HomeMarketsParentFragment
@@ -40,7 +42,8 @@ import org.loopring.looprwallet.walletsignin.activities.SignInActivity
  * Purpose of Class: As of right now, this will translate into the *Market* screen for traders,
  * when they first open the app (assuming they are signed in & authenticated).
  */
-class MainActivity : BaseActivity(), OnSecurityConfirmedListener, OnToolbarSetupListener {
+class MainActivity : BaseActivity(), BottomNavigation, OnSecurityConfirmedListener,
+        OnToolbarSetupListener {
 
     companion object {
 
@@ -78,9 +81,10 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener, OnToolbarSetup
 
     lateinit var stackHistory: BottomNavigationFragmentStackHistory
 
-    lateinit var bottomNavigationPresenter: BottomNavigationPresenter
+    override lateinit var bottomNavigationPresenter: BottomNavigationPresenter
+        private set
 
-    val fragmentList = listOf(
+    private val fragmentList = listOf(
             str(R.string.markets) to HomeMarketsParentFragment(),
             str(R.string.orders) to HomeOrdersParentFragment(),
             str(R.string.transfers) to HomeViewTransfersFragment(),
@@ -148,6 +152,12 @@ class MainActivity : BaseActivity(), OnSecurityConfirmedListener, OnToolbarSetup
     private var onItemSelected: (() -> Unit)? = null
 
     override fun onSupportNavigateUp(): Boolean {
+        val searchViewPresenter = (bottomNavigationPresenter.currentFragment as? SearchViewPresenter.SearchFragment)?.searchViewPresenter
+        if(searchViewPresenter?.isExpanded == true) {
+            // We cannot do anything if it's currently in "search" mode
+            return false
+        }
+
         homeNavigationDrawerLayout.openDrawer(Gravity.START)
         return false
     }

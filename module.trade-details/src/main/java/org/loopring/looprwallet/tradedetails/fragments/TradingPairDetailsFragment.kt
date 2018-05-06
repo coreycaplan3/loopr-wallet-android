@@ -251,7 +251,7 @@ class TradingPairDetailsFragment : BaseFragment() {
             setDrawGridBackground(false)
 
             isHighlightPerDragEnabled = true
-            isHighlightPerTapEnabled = true
+            isHighlightPerTapEnabled = false
 
             isDoubleTapToZoomEnabled = false
             setPinchZoom(false)

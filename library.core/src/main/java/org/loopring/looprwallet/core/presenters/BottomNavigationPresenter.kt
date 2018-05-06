@@ -3,19 +3,20 @@ package org.loopring.looprwallet.core.presenters
 import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.CoordinatorLayout
 import android.view.ViewGroup
+import androidx.view.isVisible
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.extensions.isExpanded
-import org.loopring.looprwallet.core.extensions.loge
-import org.loopring.looprwallet.core.extensions.logv
-import org.loopring.looprwallet.core.extensions.weakReference
+import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.android.fragments.BottomNavigationFragmentStackHistory
 import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentSwitcherPagerAdapter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
+import kotlin.math.roundToInt
 
 /**
  * Created by Corey on 1/31/2018
@@ -39,6 +40,11 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
                                 private val stackHistory: BottomNavigationFragmentStackHistory,
                                 savedInstanceState: Bundle?) {
 
+    interface BottomNavigation {
+
+        val bottomNavigationPresenter: BottomNavigationPresenter
+    }
+
     interface BottomNavigationReselectedLister {
 
         fun onBottomNavigationReselected()
@@ -49,6 +55,7 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
         private const val KEY_PAGER_ADAPTER_STATE = "_PAGER_ADAPTER_STATE"
     }
 
+    private val activity by weakReference(activity)
     private val bottomNavigationView by weakReference(bottomNavigationView)
     private val pagerAdapter: LooprFragmentSwitcherPagerAdapter
 
@@ -105,6 +112,28 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
 
         // The stack is empty. Time to finish the activity
         return true
+    }
+
+    fun showBottomNavigation() {
+        bottomNavigationView?.isVisible = true
+
+        activity?.findViewById<ViewGroup>(R.id.activityContainer)?.apply {
+            val oldParams = this.layoutParams as CoordinatorLayout.LayoutParams
+            oldParams.bottomMargin = dimen(context.theme.getResourceIdFromAttrId(android.R.attr.actionBarSize)).roundToInt()
+            this.layoutParams = layoutParams
+            invalidate()
+        }
+    }
+
+    fun hideBottomNavigation() {
+        bottomNavigationView?.isVisible = false
+
+        activity?.findViewById<ViewGroup>(R.id.activityContainer)?.apply {
+            val oldParams = this.layoutParams as CoordinatorLayout.LayoutParams
+            oldParams.bottomMargin = 0
+            this.layoutParams = layoutParams
+            invalidate()
+        }
     }
 
     fun onSaveInstanceState(outState: Bundle?) {

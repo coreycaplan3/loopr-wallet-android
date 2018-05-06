@@ -31,7 +31,7 @@ object ImageUtility {
             val fieldName = "token_${ticker.toLowerCase().trim()}"
             drawable(R.drawable::class.java.getField(fieldName).getInt(null))
         } catch (e: Throwable) {
-            logd("Could not load image for $ticker: ", e)
+//            logd("Could not load image for $ticker: ", e)
             drawable(R.drawable.ic_help_outline_white_24dp).apply {
                 val textColor = context.theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary)
                 DrawableCompat.setTint(this, ApplicationUtility.col(textColor))

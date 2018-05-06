@@ -1,13 +1,21 @@
 package org.loopring.looprwallet.core.presenters
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.SearchView
 import android.view.MenuItem
+import android.widget.ImageView
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.delay
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.animations.ToolbarToSearchAnimation
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.utilities.ViewUtility
 import java.lang.ref.WeakReference
 
 /**
@@ -78,6 +86,7 @@ class SearchViewPresenter(
     }
 
     var searchQuery: String? = null
+        private set
 
     private val baseFragment by weakReference(baseFragment)
     private val listener by weakReference(listener)
@@ -130,7 +139,7 @@ class SearchViewPresenter(
             private var wasInitialized = false
 
             override fun onQueryTextChange(newText: String): Boolean {
-                if (wasInitialized) {
+                if (wasInitialized && !isCollapsing) {
                     searchQuery = newText
                 } else {
                     wasInitialized = true
@@ -144,39 +153,59 @@ class SearchViewPresenter(
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
+                baseFragment?.view?.let { ViewUtility.closeKeyboard(it) }
                 return true
             }
         }
 
-    private val expandListener
-        get() = object : MenuItem.OnActionExpandListener {
+    private var isCollapsing: Boolean = false
+    private val expandListener = object : MenuItem.OnActionExpandListener {
 
-            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                logd("Collapsing MenuItem...")
+        override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+            logd("Collapsing MenuItem...")
 
-                searchQuery = null
+            isCollapsing = true
+            searchQuery = null
 
-                listener?.onSearchItemCollapsed()
+            (baseFragment.activity as? BottomNavigationPresenter.BottomNavigation)
+                    ?.bottomNavigationPresenter
+                    ?.showBottomNavigation()
 
-                if (item.isActionViewExpanded) {
-                    baseFragment?.let {
-                        ToolbarToSearchAnimation.animateToToolbar(it, numberOfVisibleMenuItems, containsOverflowMenu)
-                    }
-                }
-                return true
+            listener.onSearchItemCollapsed()
+
+            if (item.isActionViewExpanded) {
+                ToolbarToSearchAnimation.animateToToolbar(baseFragment, numberOfVisibleMenuItems, containsOverflowMenu)
             }
 
-            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                // Called when SearchView is expanding
-                logd("Expanding MenuItem...")
-                searchQuery = ""
+            async<Unit>(UI) {
+                delay(300)
 
-                listener?.onSearchItemExpanded()
-
-                baseFragment?.let {
-                    ToolbarToSearchAnimation.animateToSearch(it, numberOfVisibleMenuItems, containsOverflowMenu)
-                }
-                return true
+                // Reset it after the collapse animation finishes
+                baseFragment.toolbarDelegate?.resetOptionsMenu()
             }
+
+            return true
         }
+
+        override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+            // Called when SearchView is expanding
+            logd("Expanding MenuItem...")
+            isCollapsing = false
+            searchQuery = ""
+
+            (baseFragment.activity as? BottomNavigationPresenter.BottomNavigation)
+                    ?.bottomNavigationPresenter
+                    ?.hideBottomNavigation()
+
+            item.actionView.findViewById<ImageView>(R.id.search_button).drawable?.let {
+                DrawableCompat.setTint(it, Color.BLACK)
+            }
+
+            listener.onSearchItemExpanded()
+
+            ToolbarToSearchAnimation.animateToSearch(baseFragment, numberOfVisibleMenuItems, containsOverflowMenu)
+            return true
+        }
+    }
+
 }
