@@ -68,7 +68,8 @@ class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedList
             }
         }
 
-        enableToolbarCollapsing()
+        toolbarDelegate?.isToolbarCollapseEnabled = true
+
         viewTransfersRecyclerView.layoutManager = LinearLayoutManager(view.context)
         viewTransfersRecyclerView.adapter = adapter
     }

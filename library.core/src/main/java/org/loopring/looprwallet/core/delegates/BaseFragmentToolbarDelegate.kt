@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
@@ -39,13 +38,11 @@ open class BaseFragmentToolbarDelegate(
         private const val KEY_IS_TOOLBAR_COLLAPSED = "_IS_TOOLBAR_COLLAPSED"
     }
 
-    private var isToolbarCollapseEnabledInitial = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
-            ?: isToolbarCollapseEnabled
-
     /**
-     * Set to the opposite of the initial so it can be set in the beginning (the IF statement doesn't fire if the condition is already set)
+     * Set to the opposite of the initial so it can be set in the beginning (the IF statement
+     * doesn't fire if the condition is already set)
      */
-    var isToolbarCollapseEnabled = !isToolbarCollapseEnabledInitial
+    var isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled) ?: isToolbarCollapseEnabled
 
     private val activity = fragment.activity
 
@@ -88,16 +85,7 @@ open class BaseFragmentToolbarDelegate(
     }
 
     fun removeAllOptionsMenuExceptSearch() {
-        toolbar?.apply {
-            menu?.forEach {
-                when {
-//                    it.actionView != null && it.actionView::class != SearchView::class -> menu?.removeItem(it.itemId)
-                    it.actionView != null && it.actionView::class != SearchView::class -> it.isVisible = false
-                    else -> it.isVisible = false // Hide the search icon
-                }
-            }
-
-        }
+        toolbar?.menu?.forEach { it.isVisible = false }
     }
 
     fun resetOptionsMenu() {
@@ -108,7 +96,7 @@ open class BaseFragmentToolbarDelegate(
     }
 
     fun setupToolbarCollapsing() {
-        if (isToolbarCollapseEnabledInitial) {
+        if (isToolbarCollapseEnabled) {
             enableToolbarCollapsing()
         } else {
             disableToolbarCollapsing()
@@ -147,7 +135,7 @@ open class BaseFragmentToolbarDelegate(
      * Enables the toolbar to be collapsed when scrolling
      */
     fun enableToolbarCollapsing() {
-        if (parentFragment != null || isToolbarCollapseEnabled) {
+        if (parentFragment != null) {
             // Children don't have toolbars or it's already enabled
             return
         }
@@ -175,8 +163,8 @@ open class BaseFragmentToolbarDelegate(
      * Disables the toolbar from being collapsed when scrolling
      */
     fun disableToolbarCollapsing() {
-        if (parentFragment != null || !isToolbarCollapseEnabled) {
-            // Children don't have toolbars or it's already disabled
+        if (parentFragment != null) {
+            // Children don't have toolbars
             return
         }
 

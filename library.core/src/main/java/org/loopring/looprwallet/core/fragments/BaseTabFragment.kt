@@ -52,7 +52,7 @@ abstract class BaseTabFragment : BaseFragment() {
         tabLayout?.setupWithViewPager(viewPager)
         tabLayout?.tabTextColors = context?.theme?.getAttrColorStateList(R.attr.tabTextColor)
 
-        enableToolbarCollapsing()
+        toolbarDelegate?.isToolbarCollapseEnabled = true
     }
 
     abstract fun getAdapterContent(): List<Pair<String, BaseFragment>>

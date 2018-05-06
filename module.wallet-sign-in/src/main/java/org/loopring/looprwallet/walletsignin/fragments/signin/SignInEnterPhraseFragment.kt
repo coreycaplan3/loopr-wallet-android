@@ -143,7 +143,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
             itemTouchHelper?.attachToRecyclerView(this)
         }
 
-        enableToolbarCollapsing()
+        toolbarDelegate?.isToolbarCollapseEnabled = true
 
         setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, ::getMessageFromError)
     }
