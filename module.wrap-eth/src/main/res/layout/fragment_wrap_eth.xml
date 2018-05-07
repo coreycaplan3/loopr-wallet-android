@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/headerGuideline1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/headerGuideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.85" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="@dimen/vertical_margin_large"
+            android:gravity="center_vertical"
+            app:layout_constraintLeft_toRightOf="@id/headerGuideline1"
+            app:layout_constraintRight_toLeftOf="@id/headerGuideline2"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/wrapEthEtherImage"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="#FFF"
+                android:src="@drawable/ic_eth_white_24dp"
+                android:tint="#3F51B5" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/wrapEthEtherImage"
+                android:layout_below="@id/wrapEthEtherImage"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:width="48dp"
+                android:gravity="center_horizontal"
+                android:text="@string/eth" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:layout_toRightOf="@id/wrapEthEtherImage"
+                android:text="@string/_1_eth_1_weth" />
+
+            <ImageView
+                android:id="@+id/wrapEthWethImage"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_eth_white_24dp"
+                android:tint="@color/color_weth" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/wrapEthEtherImage"
+                android:layout_below="@id/wrapEthEtherImage"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:width="48dp"
+                android:gravity="center_horizontal"
+                android:text="@string/eth" />
+
+        </RelativeLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.design.widget.CoordinatorLayout>

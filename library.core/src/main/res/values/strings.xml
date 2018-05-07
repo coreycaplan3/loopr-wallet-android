@@ -314,4 +314,6 @@
     <string name="delete_contact">Delete Contact?</string>
     <string name="delete">Delete</string>
     <string name="my_contact">My Contacts</string>
+    <string name="eth">ETH</string>
+    <string name="_1_eth_1_weth">1 ETH = 1 WETH</string>
 </resources>

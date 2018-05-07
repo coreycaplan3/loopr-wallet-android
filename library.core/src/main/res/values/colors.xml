@@ -43,5 +43,6 @@
     <color name="whiteTextPrimary">#FFFFFFFF</color>
     <color name="whiteTextSecondary">#B2FFFFFF</color>
     <color name="whiteTextDisabled">#7FFFFFFF</color>
+    <color name="color_weth">#EC407A</color>
 
 </resources>
