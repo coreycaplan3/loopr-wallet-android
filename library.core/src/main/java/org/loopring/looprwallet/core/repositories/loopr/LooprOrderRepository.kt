@@ -5,6 +5,8 @@ import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.where
+import kotlinx.coroutines.experimental.android.HandlerContext
+import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.sort
@@ -23,16 +25,18 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class LooprOrderRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
 
-    fun getOrderByHash(orderHash: String): LiveData<LooprOrder> {
-        return uiRealm.where<LooprOrder>()
+    fun getOrderByHash(orderHash: String, context: HandlerContext = UI): LiveData<LooprOrder> {
+        return getRealmFromContext(context)
+                .where<LooprOrder>()
                 .equalTo(LooprOrder::orderHash, orderHash)
                 .findFirstAsync()
                 .asLiveData()
     }
 
-    fun getOrders(orderFilter: OrderFilter): LiveData<OrderedRealmCollection<LooprOrder>> {
+    fun getOrders(orderFilter: OrderFilter, context: HandlerContext = UI): LiveData<OrderedRealmCollection<LooprOrder>> {
         // TODO apply order filter
-        return uiRealm.where<LooprOrder>()
+        return getRealmFromContext(context)
+                .where<LooprOrder>()
                 .sort(LooprOrder::orderDate)
                 .findAllAsync()
                 .asLiveData()

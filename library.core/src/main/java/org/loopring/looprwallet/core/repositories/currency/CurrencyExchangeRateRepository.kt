@@ -3,6 +3,8 @@ package org.loopring.looprwallet.core.repositories.currency
 import android.arch.lifecycle.LiveData
 import io.realm.Realm
 import io.realm.kotlin.where
+import kotlinx.coroutines.experimental.android.HandlerContext
+import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
@@ -19,8 +21,9 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class CurrencyExchangeRateRepository : BaseRealmRepository(false) {
 
-    fun getCurrencyExchangeRate(currency: String): LiveData<CurrencyExchangeRate> {
-        return uiRealm.where<CurrencyExchangeRate>()
+    fun getCurrencyExchangeRate(currency: String, context: HandlerContext = UI): LiveData<CurrencyExchangeRate> {
+        return getRealmFromContext(context)
+                .where<CurrencyExchangeRate>()
                 .equalTo(CurrencyExchangeRate::currency, currency)
                 .findFirstAsync()
                 .asLiveData()

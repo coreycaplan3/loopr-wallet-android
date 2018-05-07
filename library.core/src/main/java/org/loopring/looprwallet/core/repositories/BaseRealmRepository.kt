@@ -4,11 +4,14 @@ import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
 import io.realm.kotlin.deleteFromRealm
+import kotlinx.coroutines.experimental.android.HandlerContext
+import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.extensions.upsertCopyToRealm
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.realm.RealmClient
 import javax.inject.Inject
 
@@ -62,26 +65,34 @@ abstract class BaseRealmRepository(isPrivateInstance: Boolean) : BaseRepository<
         return executeTransactionAndReturn { it.upsertCopyToRealm(data) }
     }
 
-    fun runTransaction(transaction: Realm.Transaction) {
-        ioRealm.executeTransaction(transaction)
+    fun runTransaction(transaction: Realm.Transaction, context: HandlerContext = IO) {
+        getRealmFromContext(context).executeTransaction(transaction)
     }
 
-    final override fun add(data: RealmModel) {
-        ioRealm.executeTransaction { it.upsert(data) }
+    final override fun add(data: RealmModel, context: HandlerContext) {
+        getRealmFromContext(context).executeTransaction { it.upsert(data) }
     }
 
-    final override fun addList(data: List<RealmModel>) {
-        ioRealm.executeTransaction { it.upsert(data) }
+    final override fun addList(data: List<RealmModel>, context: HandlerContext) {
+        getRealmFromContext(context).executeTransaction { it.upsert(data) }
     }
 
-    final override fun remove(data: RealmModel) {
-        ioRealm.executeTransaction { data.deleteFromRealm() }
+    final override fun remove(data: RealmModel, context: HandlerContext) {
+        getRealmFromContext(context).executeTransaction { data.deleteFromRealm() }
     }
 
-    final override fun remove(data: List<RealmModel>) {
+    final override fun remove(data: List<RealmModel>, context: HandlerContext) {
         if (data is RealmResults) {
-            ioRealm.executeTransaction { data.deleteAllFromRealm() }
+            getRealmFromContext(context).executeTransaction { data.deleteAllFromRealm() }
         }
+    }
+
+    // MARK - Protected Methods
+
+    protected fun getRealmFromContext(context: HandlerContext) = when(context) {
+        UI -> uiRealm
+        IO -> ioRealm
+        else -> throw IllegalArgumentException("Invalid context, found: $context")
     }
 
     // MARK - Private Methods

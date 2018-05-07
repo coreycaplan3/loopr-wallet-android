@@ -3,6 +3,8 @@ package org.loopring.looprwallet.core.repositories.eth
 import android.arch.lifecycle.LiveData
 import io.realm.Realm
 import io.realm.kotlin.where
+import kotlinx.coroutines.experimental.android.HandlerContext
+import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
@@ -18,8 +20,9 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class EthereumBlockNumberRepository : BaseRealmRepository(false) {
 
-    fun getEthereumBlockNumber(): LiveData<EthereumBlockNumber> {
-        return uiRealm.where<EthereumBlockNumber>()
+    fun getEthereumBlockNumber(context: HandlerContext = UI): LiveData<EthereumBlockNumber> {
+        return getRealmFromContext(context)
+                .where<EthereumBlockNumber>()
                 .findFirstAsync()
                 .asLiveData()
     }

@@ -73,7 +73,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     abstract val repository: BaseRepository<*>
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
-    open val syncRepository = SyncRepository.getInstance()
+    open val syncRepository = SyncRepository()
 
     /**
      * The amount of time to wait (in ms) before pinging the network for fresh data

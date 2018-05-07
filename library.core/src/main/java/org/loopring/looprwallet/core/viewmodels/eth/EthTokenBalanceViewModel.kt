@@ -6,6 +6,7 @@ import io.realm.Realm
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.extensions.update
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
@@ -72,10 +73,11 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<Lo
         val address = mParameter ?: return null
 
         val tokenBalance = newToken.tokenBalances[0]
-        val token = repository.getTokenByContractAddressFromIoNow(newToken.identifier)
-        val tokenWithBalanceInfo = repository.getTokenByContractAddressAndAddressNowFromIo(
+        val token = repository.getTokenByContractAddress(newToken.identifier, IO)
+        val tokenWithBalanceInfo = repository.getTokenByContractAddressAndAddressNow(
                 contractAddress = newToken.identifier,
-                walletAddress = address
+                walletAddress = address,
+                context = IO
         )
 
         if (token != null) {

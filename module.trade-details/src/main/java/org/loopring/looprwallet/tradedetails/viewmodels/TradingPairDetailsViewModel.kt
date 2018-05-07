@@ -2,7 +2,9 @@ package org.loopring.looprwallet.tradedetails.viewmodels
 
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -36,6 +38,8 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
     override val repository = TradingPairDetailsRepository()
 
     private val service = LooprMarketsService.getInstance()
+
+    fun doesTradingPairExist(market: String) = repository.doesTradingPairExist(market)
 
     /**
      * Gets the trading pair based on the provided [filter].

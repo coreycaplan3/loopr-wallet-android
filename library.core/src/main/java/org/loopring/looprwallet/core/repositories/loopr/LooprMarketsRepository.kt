@@ -5,6 +5,8 @@ import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
+import kotlinx.coroutines.experimental.android.HandlerContext
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
@@ -30,8 +32,8 @@ class LooprMarketsRepository : BaseRealmRepository(false) {
      *
      * @param market The *primaryTicker-secondaryTicker* or primary key of the [TradingPair]
      */
-    fun toggleIsFavorite(market: String) = async(IO) {
-        runTransaction(Realm.Transaction { realm ->
+    fun toggleIsFavorite(market: String, context: HandlerContext = IO) = async(context) {
+        runTransaction(context, Realm.Transaction { realm ->
             realm.where<TradingPair>()
                     .equalTo(TradingPair::market, market)
                     .findFirst()
@@ -42,18 +44,20 @@ class LooprMarketsRepository : BaseRealmRepository(false) {
         })
     }
 
-    fun insertMarkets(list: RealmList<TradingPair>) {
-        ioRealm.executeTransaction { realm ->
-            list.forEach {
-                realm.upsert(it.primaryToken)
-            }
-            realm.upsert(list)
-        }
+    fun insertMarkets(list: RealmList<TradingPair>, context: HandlerContext = IO) {
+        getRealmFromContext(context)
+                .executeTransaction { realm ->
+                    list.forEach {
+                        realm.upsert(it.primaryToken)
+                    }
+                    realm.upsert(list)
+                }
     }
 
-    fun getMarkets(filter: MarketsFilter): LiveData<OrderedRealmCollection<TradingPair>> {
+    fun getMarkets(filter: MarketsFilter, context: HandlerContext = UI): LiveData<OrderedRealmCollection<TradingPair>> {
         // TODO apply filter; look into making these async queries run on a background thread too
-        return uiRealm.where<TradingPair>()
+        return getRealmFromContext(context)
+                .where<TradingPair>()
                 .sort(TradingPair::primaryTicker)
                 .findAllAsync()
                 .asLiveData()

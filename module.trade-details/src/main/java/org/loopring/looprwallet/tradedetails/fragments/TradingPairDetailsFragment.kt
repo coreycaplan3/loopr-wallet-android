@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.trading_pair_statistics_card.*
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.ifNotNull
+import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.snackbar
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.TradingPair
@@ -120,6 +121,12 @@ class TradingPairDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        runBlocking {
+            if(!tradingPairDetailsViewModel.doesTradingPairExist(filter.market).await()) {
+                loge("Market does not exist: ${filter.market}!", IllegalArgumentException())
+                activity?.finish()
+            }
+        }
 
         setupOfflineFirstStateAndErrorObserver(tradingPairDetailsViewModel, tradingPairDetailsSwipeRefresh)
         tradingPairDetailsViewModel.getTradingPair(this, filter, ::bindTradingPair)

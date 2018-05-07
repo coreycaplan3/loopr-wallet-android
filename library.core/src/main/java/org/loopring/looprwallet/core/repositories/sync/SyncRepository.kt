@@ -1,9 +1,11 @@
 package org.loopring.looprwallet.core.repositories.sync
 
-import io.realm.RealmModel
+import io.realm.kotlin.where
+import kotlinx.coroutines.experimental.android.HandlerContext
+import kotlinx.coroutines.experimental.android.UI
+import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.models.sync.SyncData
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import org.loopring.looprwallet.core.repositories.BaseRepository
+import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import java.util.*
 
 /**
@@ -15,22 +17,29 @@ import java.util.*
  *
  *
  */
-interface SyncRepository : BaseRepository<RealmModel> {
-
-    companion object {
-
-        fun getInstance(): SyncRepository = SyncRepositoryImpl()
-
-    }
+class SyncRepository : BaseRealmRepository(false) {
 
     /**
      * Gets the last sync time for a given [SyncData.SyncType].
      */
-    fun getLastSyncTime(@SyncData.SyncType syncType: String): Date?
+    fun getLastSyncTime(@SyncData.SyncType syncType: String, context: HandlerContext = UI): Date? {
+        return getRealmFromContext(context)
+                .where<SyncData>()
+                .equalTo(SyncData::syncType, syncType)
+                .findFirst()
+                ?.lastSyncTime
+    }
 
     /**
      * Gets the last sync time for a given syncId's [SyncData.SyncType].
      */
-    fun getLastSyncTimeForSyncId(@SyncData.SyncType syncType: String, syncId: String): Date?
+    fun getLastSyncTimeForSyncId(syncType: String, syncId: String, context: HandlerContext = UI): Date? {
+        return getRealmFromContext(context)
+                .where<SyncData>()
+                .equalTo(SyncData::syncType, syncType)
+                .equalTo(SyncData::syncId, syncId)
+                .findFirst()
+                ?.lastSyncTime
+    }
 
 }
