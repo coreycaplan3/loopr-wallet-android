@@ -61,7 +61,7 @@
     <string name="_3">3</string>
     <string name="decimal">.</string>
     <string name="_0">0</string>
-    <string name="use_max">Use Max</string>
+    <string name="max">Max</string>
     <string name="send">Send</string>
     <string name="recipient_address">Recipient Address</string>
     <string name="contact_address">Contact Address</string>
@@ -316,4 +316,20 @@
     <string name="my_contact">My Contacts</string>
     <string name="eth">ETH</string>
     <string name="_1_eth_1_weth">1 ETH = 1 WETH</string>
+    <string name="_1_weth_1_eth">1 WETH = 1 ETH</string>
+    <string name="weth">WETH</string>
+    <string name="convert">Convert</string>
+    <string name="total_price">Total Price</string>
+    <string name="place_order">Place Order</string>
+    <string name="confirm_price">Confirm Price</string>
+    <string name="_0_00">0.00</string>
+    <string name="you_send">You Send</string>
+    <string name="you_get">You Get</string>
+    <string name="confirm_order">Confirm Order</string>
+    <string name="price">Price</string>
+    <string name="margin_split">Margin Split</string>
+    <string name="lrc_fee">LRC Fee</string>
+    <string name="placed_exclamation">Placed!</string>
+    <string name="order_placed_body">Congratulations! Your order has been submitted!</string>
+    <string name="done">Done</string>
 </resources>

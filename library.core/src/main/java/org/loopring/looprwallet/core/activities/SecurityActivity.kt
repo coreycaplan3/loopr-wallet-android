@@ -21,7 +21,7 @@ class SecurityActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_security
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = false
 
     private lateinit var dialog: AlertDialog

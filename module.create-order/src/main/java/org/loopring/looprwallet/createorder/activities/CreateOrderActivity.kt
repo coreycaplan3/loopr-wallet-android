@@ -40,7 +40,7 @@ class CreateOrderActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_create_order
 
-    override val isSecureActivity = true
+    override val isSignInRequired = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

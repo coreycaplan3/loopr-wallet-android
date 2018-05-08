@@ -24,7 +24,7 @@ open class CoreTestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecur
     override val contentViewRes: Int
         get() = R.layout.activity_test_container
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -40,7 +40,7 @@ class ViewBarcodeActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_view_barcode
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

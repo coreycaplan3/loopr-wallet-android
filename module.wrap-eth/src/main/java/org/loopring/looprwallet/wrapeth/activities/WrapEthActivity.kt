@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.wrapeth.activities
 
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.wrapeth.R
 
 /**
  * Created by Corey on 4/30/2018
@@ -13,8 +14,9 @@ import org.loopring.looprwallet.core.activities.BaseActivity
 class WrapEthActivity : BaseActivity() {
 
     override val contentViewRes: Int
-        get() = TODO("not implemented")
+        get() = R.layout.activity_wrap_eth
 
-    override val isSecureActivity: Boolean
-        get() = TODO("not implemented")
+    override val isSignInRequired: Boolean
+        get() = true
+
 }

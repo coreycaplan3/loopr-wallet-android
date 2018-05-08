@@ -152,7 +152,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
     override val contentViewRes: Int
         get() = R.layout.activity_barcode_code_capture
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = false
 
     private val allowedTypes: Array<String> by lazy {

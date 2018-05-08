@@ -76,7 +76,7 @@ class MainActivity : BaseActivity(), BottomNavigation, OnSecurityConfirmedListen
     override val contentViewRes: Int
         get() = R.layout.activity_main
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = true
 
     lateinit var stackHistory: BottomNavigationFragmentStackHistory

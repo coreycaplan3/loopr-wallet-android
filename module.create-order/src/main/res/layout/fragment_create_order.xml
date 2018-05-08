@@ -1,157 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/standard_vertical_padding"
-            android:paddingTop="@dimen/standard_vertical_padding">
+            android:layout_height="match_parent">
 
-            <android.support.v7.widget.CardView
-                style="@style/App.Card"
+            <TextView
+                android:id="@+id/createOrderQuantityLabel"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/standard_padding"
+                tools:text="Amount of LRC" />
+
+            <EditText
+                android:id="@+id/createOrderQuantityEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:layout_marginRight="@dimen/horizontal_margin"
+                android:hint="@string/_0"
+                android:inputType="none"
+                android:lines="1"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <requestFocus />
+
+            </EditText>
+
+            <TextView
+                android:id="@+id/createOrderPriceTitleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/standard_padding"
+                app:layout_constraintTop_toBottomOf="@id/createOrderQuantityLabel"
+                tools:text="Price" />
+
+            <TextView
+                android:id="@+id/createOrderPriceLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_effect_accent"
+                android:padding="@dimen/standard_padding"
+                android:textAllCaps="true"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/createOrderQuantityLabel"
+                tools:text="0.0025 WETH" />
+
+            <include
+                android:id="@+id/estimatedTotalPriceDivider"
+                layout="@layout/divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                app:layout_constraintTop_toBottomOf="@id/createOrderPriceLabel" />
+
+            <TextView
+                android:id="@+id/createOrderTotalPriceTitleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/standard_padding"
+                android:text="@string/total_price"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/estimatedTotalPriceDivider" />
+
+            <TextView
+                android:id="@+id/createOrderTotalPriceLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/standard_padding"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/estimatedTotalPriceDivider"
+                tools:text="0 WETH" />
+
+            <TextView
+                android:id="@+id/createTransferBalanceLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/vertical_margin_small"
+                android:alpha="0.54"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                app:layout_constraintBottom_toTopOf="@id/createOrderMaxButton"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="@string/default_token_balance" />
+
+            <TextView
+                android:id="@+id/createOrderMaxButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/vertical_margin_small"
+                android:text="@string/max"
+                android:textAllCaps="true"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintBottom_toTopOf="@id/createOrderHalfwayGuideline"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/createOrderHalfwayGuideline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/standard_padding">
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/quantityContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/quantityLabel"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:text="@string/number_of"
-                            tools:text="@string/create_order_default_quantity_label" />
-
-                        <EditText
-                            android:id="@+id/quantityEditText"
-                            style="@style/App.Order.EditText"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.6"
-                            android:gravity="end"
-                            android:inputType="numberDecimal"
-                            android:scrollHorizontally="true"
-                            tools:text="@string/default_order_quantity" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/priceContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/standard_vertical_padding">
-
-                        <TextView
-                            android:id="@+id/priceLabel"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:text="@string/market_price" />
-
-                        <TextView
-                            android:id="@+id/priceEditText"
-                            style="@style/App.Order.Label"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.6"
-                            tools:text="@string/default_price_in_eth" />
-
-                    </LinearLayout>
-
-                    <include
-                        layout="@layout/divider"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/divider_height"
-                        android:layout_marginBottom="@dimen/standard_vertical_padding"
-                        android:layout_marginTop="@dimen/standard_vertical_padding" />
-
-                    <LinearLayout
-                        android:id="@+id/totalContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/standard_vertical_padding">
-
-                        <TextView
-                            android:id="@+id/createOrderTotalLabel"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.4"
-                            android:text="@string/estimated_cost" />
-
-                        <TextView
-                            android:id="@+id/createOrderTotalInput"
-                            style="@style/App.Order.Label"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.6"
-                            tools:text="@string/default_order_total_in_eth" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                style="@style/App.Card"
+            <include
+                layout="@layout/number_pad"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/standard_padding">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Base.TextAppearance.AppCompat.Headline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/order_summary"
-                        android:textColor="?android:attr/textColorPrimary" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/standard_vertical_padding"
-                        android:lineSpacingMultiplier="1.15"
-                        tools:text="@string/default_order_summary" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/createOrderPlaceOrderButton"
+                app:layout_constraintTop_toBottomOf="@id/createOrderHalfwayGuideline" />
 
             <Button
-                style="@style/App.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/standard_horizontal_padding"
-                android:layout_marginRight="@dimen/standard_horizontal_padding"
-                android:layout_marginTop="@dimen/standard_vertical_padding"
-                android:text="@string/buy" />
+                android:id="@+id/createOrderPlaceOrderButton"
+                style="@style/App.Button.ConstrainBottom"
+                android:enabled="false"
+                android:text="@string/confirm_order"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-        </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>

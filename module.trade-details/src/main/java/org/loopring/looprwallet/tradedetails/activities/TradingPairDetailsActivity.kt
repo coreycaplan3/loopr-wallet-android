@@ -29,7 +29,7 @@ class TradingPairDetailsActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_trading_pair_details
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = true
 
     private val primaryTicker: String

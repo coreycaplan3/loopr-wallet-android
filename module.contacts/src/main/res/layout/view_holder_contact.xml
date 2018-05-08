@@ -9,8 +9,8 @@
     android:foreground="@drawable/ripple_effect_accent"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/standard_horizontal_padding"
-    android:paddingRight="@dimen/standard_horizontal_padding">
+    android:paddingLeft="@dimen/horizontal_padding"
+    android:paddingRight="@dimen/horizontal_padding">
 
     <TextView
         android:id="@+id/contactNameLabel"

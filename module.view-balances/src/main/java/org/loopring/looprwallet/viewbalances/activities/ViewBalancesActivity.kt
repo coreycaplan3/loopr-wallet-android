@@ -29,7 +29,7 @@ class ViewBalancesActivity: BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_view_balances
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {

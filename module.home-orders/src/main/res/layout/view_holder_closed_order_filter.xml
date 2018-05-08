@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:paddingBottom="@dimen/standard_vertical_padding"
+    android:paddingBottom="@dimen/vertical_padding"
     android:paddingLeft="@dimen/horizontal_padding_small"
     android:paddingRight="@dimen/horizontal_padding_small"
-    android:paddingTop="@dimen/standard_vertical_padding">
+    android:paddingTop="@dimen/vertical_padding">
 
     <Button
         android:id="@+id/orderClosedDate1hButton"

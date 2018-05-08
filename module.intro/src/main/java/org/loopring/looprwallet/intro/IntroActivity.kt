@@ -15,7 +15,7 @@ class IntroActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_intro
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = false
 
 }

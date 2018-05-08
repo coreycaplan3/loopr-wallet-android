@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/enterPriceExplainContainer"
+            style="@style/App.Card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginRight="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/enterPriceExplainTitleLabel"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="LRC Price" />
+
+                <TextView
+                    android:id="@+id/enterPriceExplainBodyLabel"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/vertical_margin"
+                    android:lineSpacingMultiplier="1.2"
+                    tools:text="Enter the amount you\'re willing to pay per LRC" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <EditText
+            android:id="@+id/enterPriceEnterPriceEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:ellipsize="end"
+            android:hint="@string/_0_00"
+            android:inputType="none"
+            android:minWidth="50dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enterPriceExplainContainer">
+
+            <requestFocus />
+
+        </EditText>
+
+        <TextView
+            android:id="@+id/enterPricePriceTypeLabel"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/weth"
+            app:layout_constraintBottom_toBottomOf="@id/enterPriceEnterPriceEditText"
+            app:layout_constraintLeft_toRightOf="@id/enterPriceEnterPriceEditText"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/enterPriceEnterPriceEditText"
+            app:layout_constraintWidth_min="50dp" />
+
+        <TextView
+            android:id="@+id/enterPriceCurrentPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/vertical_margin_small"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/createOrderHalfwayGuideline"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enterPriceEnterPriceEditText"
+            tools:text="Current Price: 0.0015 WETH" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/createOrderHalfwayGuideline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".55" />
+
+        <include
+            layout="@layout/number_pad"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/enterPriceConfirmButton"
+            app:layout_constraintTop_toBottomOf="@id/createOrderHalfwayGuideline" />
+
+        <Button
+            android:id="@+id/enterPriceConfirmButton"
+            style="@style/App.Button.ConstrainBottom"
+            android:enabled="false"
+            android:text="@string/confirm_price"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.design.widget.CoordinatorLayout>

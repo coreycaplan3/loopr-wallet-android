@@ -34,7 +34,7 @@ class SignInActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_sign_in
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = false
 
     val showBackButton

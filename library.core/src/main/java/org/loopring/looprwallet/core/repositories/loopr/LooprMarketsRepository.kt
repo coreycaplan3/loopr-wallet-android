@@ -33,7 +33,7 @@ class LooprMarketsRepository : BaseRealmRepository(false) {
      * @param market The *primaryTicker-secondaryTicker* or primary key of the [TradingPair]
      */
     fun toggleIsFavorite(market: String, context: HandlerContext = IO) = async(context) {
-        runTransaction(context, Realm.Transaction { realm ->
+        runTransaction(Realm.Transaction { realm ->
             realm.where<TradingPair>()
                     .equalTo(TradingPair::market, market)
                     .findFirst()
@@ -41,7 +41,7 @@ class LooprMarketsRepository : BaseRealmRepository(false) {
                         it.isFavorite = !it.isFavorite
                         realm.upsert(it)
                     }
-        })
+        }, context)
     }
 
     fun insertMarkets(list: RealmList<TradingPair>, context: HandlerContext = IO) {

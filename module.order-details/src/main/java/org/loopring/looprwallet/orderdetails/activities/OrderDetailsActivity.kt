@@ -36,7 +36,7 @@ class OrderDetailsActivity : BaseActivity() {
     override val contentViewRes: Int
         get() = R.layout.activity_order_details
 
-    override val isSecureActivity: Boolean
+    override val isSignInRequired: Boolean
         get() = true
 
     private val orderHash: String by lazy {

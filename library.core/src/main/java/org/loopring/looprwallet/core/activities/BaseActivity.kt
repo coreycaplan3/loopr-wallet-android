@@ -53,7 +53,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * True if this activity requires the user to be authenticated (enter OS passcode) or false
      * otherwise
      */
-    abstract val isSecureActivity: Boolean
+    abstract val isSignInRequired: Boolean
 
     lateinit var progressDialog: ProgressDialog
 
@@ -154,7 +154,7 @@ abstract class BaseActivity : AppCompatActivity() {
         if (!walletClient.isAndroidKeystoreUnlocked()) {
             this.longToast(R.string.unlock_device)
             walletClient.unlockAndroidKeystore()
-        } else if (isSecureActivity && walletClient.getCurrentWallet() == null) {
+        } else if (isSignInRequired && walletClient.getCurrentWallet() == null) {
             // There is no current wallet... we need to prompt the user to sign in.
             // This should never happen, since we can't get to a "securityActivity" without
             // passing through the SplashScreen first.
