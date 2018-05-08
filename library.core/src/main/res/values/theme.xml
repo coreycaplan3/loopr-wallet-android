@@ -8,10 +8,8 @@
         <item name="colorPrimaryDark">@color/lightPrimaryDark</item>
         <item name="colorPrimaryLight">@color/lightPrimaryLight</item>
         <item name="colorAccent">@color/lightAccent</item>
-
+        <item name="colorControlHighlight">@color/lightColorControlHighlight</item>
         <item name="android:windowBackground">@color/lightBackground</item>
-        <item name="colorBackground">@color/lightBackground</item>
-        <item name="android:colorBackground">@color/lightBackground</item>
 
         <item name="colorControlActivated">@color/lightAccent</item>
 
@@ -55,7 +53,7 @@
         <item name="tabIndicatorColor">@android:color/white</item>
 
         <!-- Text -->
-        <item name="android:fontFamily">@font/raleway</item>
+        <item name="android:fontFamily">@font/montserrat</item>
 
         <item name="android:textColorPrimary">@color/full_black_text_primary</item>
         <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
@@ -78,12 +76,9 @@
         <item name="colorPrimaryDark">@color/darkPrimaryDark</item>
         <item name="colorPrimaryLight">@color/darkPrimaryLight</item>
         <item name="colorAccent">@color/darkAccent</item>
-
-        <item name="android:windowBackground">@color/darkBackground</item>
-        <item name="colorBackground">@color/darkBackground</item>
-        <item name="android:colorBackground">@color/darkBackground</item>
-
+        <item name="colorControlHighlight">@color/lightColorControlHighlight</item>
         <item name="colorControlActivated">@color/darkAccent</item>
+        <item name="android:windowBackground">@color/darkBackground</item>
 
         <item name="circleBackgroundColor">@color/darkShadowColor</item>
 
@@ -125,7 +120,7 @@
         <item name="tabIndicatorColor">@android:color/white</item>
 
         <!-- Text -->
-        <item name="android:fontFamily">@font/raleway</item>
+        <item name="android:fontFamily">@font/montserrat</item>
 
         <item name="android:textColorPrimary">@color/full_white_text_primary</item>
         <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>

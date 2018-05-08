@@ -325,7 +325,7 @@
     <string name="_0_00">0.00</string>
     <string name="you_send">You Send</string>
     <string name="you_get">You Get</string>
-    <string name="confirm_order">Confirm Order</string>
+    <string name="review">Review</string>
     <string name="price">Price</string>
     <string name="margin_split">Margin Split</string>
     <string name="lrc_fee">LRC Fee</string>

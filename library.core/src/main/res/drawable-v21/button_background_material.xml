@@ -11,24 +11,24 @@
             <selector>
                 <item android:state_enabled="false">
                     <shape android:shape="rectangle">
-                        <corners android:radius="@dimen/abc_control_corner_material" />
-                        <solid android:color="?android:attr/colorButtonNormal" />
+                        <corners android:radius="@dimen/button_radius_material" />
+                        <solid android:color="?attr/colorButtonNormal" />
                         <padding
-                            android:bottom="@dimen/abc_button_padding_vertical_material"
-                            android:left="@dimen/abc_button_padding_horizontal_material"
-                            android:right="@dimen/abc_button_padding_horizontal_material"
-                            android:top="@dimen/abc_button_padding_vertical_material" />
+                            android:bottom="@dimen/button_padding_material"
+                            android:left="@dimen/button_padding_material"
+                            android:right="@dimen/button_padding_material"
+                            android:top="@dimen/button_padding_material" />
                     </shape>
                 </item>
                 <item>
                     <shape android:shape="rectangle">
-                        <corners android:radius="@dimen/abc_control_corner_material" />
-                        <solid android:color="?android:attr/colorAccent" />
+                        <corners android:radius="@dimen/button_radius_material" />
+                        <solid android:color="?attr/colorAccent" />
                         <padding
-                            android:bottom="@dimen/abc_button_padding_vertical_material"
-                            android:left="@dimen/abc_button_padding_horizontal_material"
-                            android:right="@dimen/abc_button_padding_horizontal_material"
-                            android:top="@dimen/abc_button_padding_vertical_material" />
+                            android:bottom="@dimen/button_padding_material"
+                            android:left="@dimen/button_padding_material"
+                            android:right="@dimen/button_padding_material"
+                            android:top="@dimen/button_padding_material" />
                     </shape>
                 </item>
             </selector>

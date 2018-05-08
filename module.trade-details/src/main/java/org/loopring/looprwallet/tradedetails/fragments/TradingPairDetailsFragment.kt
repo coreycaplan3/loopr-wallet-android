@@ -263,15 +263,8 @@ class TradingPairDetailsFragment : BaseFragment() {
             isDoubleTapToZoomEnabled = false
             setPinchZoom(false)
 
-            xAxis.textColor = textColorPrimary
-            xAxis.setLabelCount(6, true)
-            xAxis.setDrawLabels(false)
-            xAxis.setDrawGridLines(false)
-
-            axisRight.textColor = textColorPrimary
-            axisRight.setDrawGridLines(false)
-            axisRight.setLabelCount(6, true)
-
+            xAxis.isEnabled = false
+            axisRight.isEnabled = false
             axisLeft.isEnabled = false
             disableScroll()
         }

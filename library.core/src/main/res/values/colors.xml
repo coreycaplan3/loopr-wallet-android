@@ -5,6 +5,7 @@
     <color name="blue_100">#B3E5FC</color>
     <color name="green_400">#66BB6A</color>
     <color name="red_400">#F44336</color>
+    <color name="quantum_grey_600">#FF757575</color>
     <color name="textColorError">@color/red_400</color>
 
     <color name="tabText">#FFFFFFFF</color>
@@ -17,6 +18,7 @@
     <color name="lightPrimaryDark">#01579B</color>
     <color name="lightAccent">@color/green_400</color>
     <color name="lightBackground">#ECECEC</color>
+    <color name="lightColorControlHighlight">#33FFFFFF</color>
 
     <color name="lightButtonDisabled">#1F000000</color>
     <color name="lightShadowColor">#999999</color>
@@ -34,6 +36,7 @@
     <color name="darkPrimaryDark">#0D47A1</color>
     <color name="darkAccent">@color/lightAccent</color>
     <color name="darkBackground">#303030</color>
+    <color name="darkColorControlHighlight">#33FFFFFF</color>
 
     <color name="darkButtonDisabled">#1FFFFFFF</color>
     <color name="darkShadowColor">#555555</color>

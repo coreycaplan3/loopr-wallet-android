@@ -3,8 +3,10 @@ package org.loopring.looprwallet.core.extensions
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.support.annotation.AttrRes
+import android.support.v4.content.res.ResourcesCompat
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 
 /**
  * Created by Corey on 1/18/2018.
@@ -46,11 +48,5 @@ fun Resources.Theme.getResourceIdFromAttrId(@AttrRes attrRes: Int): Int {
  */
 fun Resources.Theme.getAttrColorStateList(@AttrRes attrRes: Int): ColorStateList? {
     val resourceId = getResourceIdFromAttrId(attrRes)
-
-    @Suppress("DEPRECATION")
-    return if (isMarshmallow()) {
-        resources.getColorStateList(resourceId, this)
-    } else {
-        resources.getColorStateList(resourceId)
-    }
+    return ResourcesCompat.getColorStateList(CoreLooprWalletApp.context.resources, resourceId, this)
 }
