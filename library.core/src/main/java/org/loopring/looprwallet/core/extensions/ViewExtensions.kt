@@ -61,26 +61,6 @@ fun RecyclerView.setupWithFab(fab: FloatingActionButton) {
 }
 
 /**
- * @param layoutRes The layout resource that will be inflated
- * @param attachToRoot True to attach it to the root or false to not attach it.
- * @return The view that was inflated if [attachToRoot] was false or the root view if [attachToRoot]
- * was set to true.
- */
-fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
-}
-
-/**
- * @param layoutRes The layout resource that will be inflated
- * @param attachToRoot True to attach it to the root or false to not attach it.
- * @return The view that was inflated if [attachToRoot] was false or the root view if [attachToRoot]
- * was set to true.
- */
-fun ViewGroup?.inflate(context: Context, @LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
-}
-
-/**
  * Sets the background tint of this view, by getting the background drawable and using
  * [DrawableCompat] to set it. The tint mode used is [PorterDuff.Mode.SRC_OVER].
  *

@@ -90,4 +90,5 @@
     <dimen name="qr_code_dimensions">96dp</dimen>
     <dimen name="button_padding_material">8dp</dimen>
     <dimen name="button_radius_material">2dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
 </resources>

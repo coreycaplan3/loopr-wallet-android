@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.guard
-import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.MarketsFilter
@@ -56,17 +55,23 @@ class HomeMarketsAdapter(
     }
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return MarketsEmptyViewHolder(parent.inflate(R.layout.view_holder_markets_empty)) {
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_markets_empty, parent, false)
+        return MarketsEmptyViewHolder(view) {
             onRefresh?.invoke()
         }
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return MarketsViewHolder(parent.inflate(R.layout.view_holder_markets), ::onTradingPairClick)
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_markets, parent, false)
+        return MarketsViewHolder(view, ::onTradingPairClick)
     }
 
     override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return MarketsFilterViewHolder(parent.inflate(R.layout.view_holder_markets_filter), this)
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_markets_filter, parent, false)
+        return MarketsFilterViewHolder(view, this)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: TradingPair?) {

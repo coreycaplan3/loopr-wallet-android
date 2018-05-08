@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.guard
-import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.models.order.LooprOrder
 import org.loopring.looprwallet.core.models.order.LooprOrderFill
 import org.loopring.looprwallet.orderdetails.R
@@ -43,11 +42,15 @@ class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrde
     }
 
     override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return OrderSummaryViewHolder(parent.inflate(R.layout.view_holder_order_details_summary))
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_order_details_summary, parent, false)
+        return OrderSummaryViewHolder(view)
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return OrderFillViewHolder(parent.inflate(R.layout.view_holder_order_details_fill))
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_order_details_fill, parent, false)
+        return OrderFillViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrderFill?) {

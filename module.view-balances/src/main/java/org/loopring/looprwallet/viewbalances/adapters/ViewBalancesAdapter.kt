@@ -3,7 +3,6 @@ package org.loopring.looprwallet.viewbalances.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
-import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.wallet.WalletClient
@@ -38,7 +37,9 @@ class ViewBalancesAdapter(listener: OnTokenLockClickListener) : BaseRealmAdapter
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return ViewBalancesViewHolder(parent.inflate(R.layout.view_holder_token_balance))
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_token_balance, parent, false)
+        return ViewBalancesViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprToken?) {

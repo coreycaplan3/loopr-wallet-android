@@ -1,12 +1,12 @@
 package org.loopring.looprwallet.contacts.adapters
 
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
-import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.models.contact.Contact
 
 /**
@@ -26,15 +26,24 @@ class ContactsAdapter(var selectedContactAddress: String?,
     override val totalItems: Int? = null
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return if (isSearching) {
-            NoContactsFoundViewHolder(parent.inflate(R.layout.view_holder_no_contact_found))
-        } else {
-            EmptyContactsViewHolder(parent.inflate(R.layout.view_holder_contact_empty))
+        val inflater = getInflater(parent)
+        val view: View
+        return when {
+            isSearching -> {
+                view = inflater.inflate(R.layout.view_holder_no_contact_found, parent, false)
+                NoContactsFoundViewHolder(view)
+            }
+            else -> {
+                view = inflater.inflate(R.layout.view_holder_contact_empty, parent, false)
+                EmptyContactsViewHolder(view)
+            }
         }
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return ContactsViewHolder(parent.inflate(R.layout.view_holder_contact))
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_contact, parent, false)
+        return ContactsViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: Contact?) {
@@ -72,7 +81,7 @@ class ContactsAdapter(var selectedContactAddress: String?,
             selectedContactAddress = contactList[index].address
             this.onContactSelected(contactList[index])
 
-            if(selectedContactAddress != null) {
+            if (selectedContactAddress != null) {
                 oldSelectedContactIndex?.let { notifyItemChanged(it) }
                 notifyItemChanged(index)
             }

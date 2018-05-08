@@ -1,13 +1,13 @@
 package org.loopring.looprwallet.core.adapters
 
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.realm.OrderedRealmCollection
 import io.realm.RealmCollection
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.extensions.inflate
 
 /**
  * Created by Corey Caplan on 3/14/18.
@@ -17,7 +17,8 @@ import org.loopring.looprwallet.core.extensions.inflate
  * Purpose of Class: An adapter fit for using realm's features out-of-the-box. This class has the
  * ability to add a header item that is always in the 0th position (first) in the list.
  */
-abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+        InflatableAdapter {
 
     companion object {
         const val TYPE_LOADING = 0
@@ -50,6 +51,8 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     var data: OrderedRealmCollection<T>? = null
         private set
 
+    override var layoutInflater: LayoutInflater? = null
+
     final override fun getItemViewType(position: Int): Int {
         val data = data ?: return TYPE_LOADING
 
@@ -65,8 +68,9 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     }
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = getInflater(parent)
         return when (viewType) {
-            TYPE_LOADING -> LoadingViewHolder(parent.inflate(R.layout.view_holder_loading))
+            TYPE_LOADING -> LoadingViewHolder(inflater.inflate(R.layout.view_holder_loading, parent, false))
             TYPE_EMPTY -> onCreateEmptyViewHolder(parent)
             TYPE_DATA -> onCreateDataViewHolder(parent)
             TYPE_HEADER -> onCreateHeaderViewHolder(parent)

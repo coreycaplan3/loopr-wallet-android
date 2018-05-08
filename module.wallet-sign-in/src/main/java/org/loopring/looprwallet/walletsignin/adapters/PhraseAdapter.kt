@@ -1,11 +1,13 @@
 package org.loopring.looprwallet.walletsignin.adapters
 
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import org.loopring.looprwallet.core.adapters.InflatableAdapter
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.adapters.ItemTouchAdapter
 import org.loopring.looprwallet.core.adapters.OnStartDragListener
-import org.loopring.looprwallet.core.extensions.inflate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,17 +29,27 @@ class PhraseAdapter(
         private val phrase: ArrayList<String>,
         private val onWordRemoved: () -> Unit,
         private val onStartDragListener: OnStartDragListener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemTouchAdapter {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), InflatableAdapter, ItemTouchAdapter {
 
     companion object {
         private const val KEY_EMPTY = 0
         private const val KEY_PHRASE = 1
     }
 
+    override var layoutInflater: LayoutInflater? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = getInflater(parent)
+        val view: View
         return when (viewType) {
-            KEY_PHRASE -> PhraseViewHolder(parent.inflate(R.layout.view_holder_phrase), onStartDragListener)
-            KEY_EMPTY -> PhraseEmptyViewHolder(parent.inflate(R.layout.view_holder_phrase_empty))
+            KEY_PHRASE -> {
+                view  = inflater.inflate(R.layout.view_holder_phrase, parent, false)
+                PhraseViewHolder(view, onStartDragListener)
+            }
+            KEY_EMPTY -> {
+                view  = inflater.inflate(R.layout.view_holder_phrase_empty, parent, false)
+                PhraseEmptyViewHolder(view)
+            }
             else -> throw IllegalArgumentException("Invalid viewType, found $viewType")
         }
     }

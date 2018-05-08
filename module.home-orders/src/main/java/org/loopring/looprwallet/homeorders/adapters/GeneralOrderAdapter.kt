@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.guard
-import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.isSameDay
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.order.LooprOrder
@@ -86,23 +85,31 @@ class GeneralOrderAdapter(
     }
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return EmptyGeneralOrderViewHolder(orderType, parent.inflate(R.layout.view_holder_general_orders_empty))
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_general_orders_empty, parent, false)
+        return EmptyGeneralOrderViewHolder(orderType, view)
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return GeneralOrderViewHolder(parent.inflate(R.layout.view_holder_general_order))
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_general_order, parent, false)
+        return GeneralOrderViewHolder(view)
     }
 
-    override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder = when (orderType) {
-        FILTER_OPEN_ALL -> {
-            val view = parent.inflate(R.layout.view_holder_open_order_filter)
-            GeneralOpenOrderFilterViewHolder(view, this, ::onCancelAllOpenOrdersClick)
+    override fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        val inflater = getInflater(parent)
+        val view: View
+        return when (orderType) {
+            FILTER_OPEN_ALL -> {
+                view = inflater.inflate(R.layout.view_holder_open_order_filter, parent, false)
+                GeneralOpenOrderFilterViewHolder(view, this, ::onCancelAllOpenOrdersClick)
+            }
+            FILTER_FILLED, FILTER_CANCELLED -> {
+                view = inflater.inflate(R.layout.view_holder_closed_order_filter, parent, false)
+                GeneralClosedOrderFilterViewHolder(view, this)
+            }
+            else -> throw IllegalArgumentException("Invalid orderType, found: $orderType")
         }
-        FILTER_FILLED, FILTER_CANCELLED -> {
-            val view = parent.inflate(R.layout.view_holder_closed_order_filter)
-            GeneralClosedOrderFilterViewHolder(view, this)
-        }
-        else -> throw IllegalArgumentException("Invalid orderType, found: $orderType")
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrder?) {

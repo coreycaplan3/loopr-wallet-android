@@ -5,10 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.BaseTransientBottomBar
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
+import android.support.design.widget.*
+import android.support.design.widget.CoordinatorLayout.*
 import android.support.transition.TransitionSet
 import android.support.transition.Visibility
 import android.support.v4.app.Fragment
@@ -27,6 +25,7 @@ import org.loopring.looprwallet.core.delegates.BaseFragmentToolbarDelegate
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.validators.BaseValidator
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
@@ -34,6 +33,7 @@ import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import org.loopring.looprwallet.core.views.LooprAppBarLayout
 import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 
 /**
@@ -333,7 +333,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
                 else -> false
             }
 
-            if(refreshLayout?.isRefreshing != isRefreshing) {
+            if (refreshLayout?.isRefreshing != isRefreshing) {
                 refreshLayout?.isRefreshing = isRefreshing
             }
 
@@ -433,11 +433,20 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     // MARK - Private Methods
 
     private fun createFab(fragmentView: ViewGroup) {
-        floatingActionButton = (fragmentView.inflate(R.layout.floating_action_button) as FloatingActionButton)
-                .apply {
-                    ViewCompat.setTransitionName(this, fabTransitionName)
-                    fragmentView.addView(this)
-                }
+        floatingActionButton = FloatingActionButton(fragmentView.context).apply {
+            layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                val margin = dimen(R.dimen.standard_margin).roundToInt()
+                topMargin = margin
+                bottomMargin = margin
+                leftMargin = margin
+                rightMargin = margin
+                compatElevation = dimen(R.dimen.fab_elevation)
+                gravity = Gravity.BOTTOM or Gravity.END
+            }
+            id = R.id.floatingActionButton
+            ViewCompat.setTransitionName(this, fabTransitionName)
+            fragmentView.addView(this)
+        }
     }
 
     protected val snackbarCallbackRemoverListener = object : BaseTransientBottomBar.BaseCallback<Snackbar>() {

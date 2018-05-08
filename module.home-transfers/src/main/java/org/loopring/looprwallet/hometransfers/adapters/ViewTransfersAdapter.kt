@@ -3,7 +3,6 @@ package org.loopring.looprwallet.hometransfers.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
-import org.loopring.looprwallet.core.extensions.inflate
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.hometransfers.R
@@ -23,11 +22,15 @@ class ViewTransfersAdapter(listener: OnTransferClickListener) : BaseRealmAdapter
     override val totalItems: Int? = null
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return ViewTransfersEmptyViewHolder(parent.inflate(R.layout.view_holder_view_transfers_empty))
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_view_transfers_empty, parent, false)
+        return ViewTransfersEmptyViewHolder(view)
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return ViewTransfersViewHolder(parent.inflate(R.layout.view_holder_view_transfers), ::onTransferClick)
+        val inflater = getInflater(parent)
+        val view = inflater.inflate(R.layout.view_holder_view_transfers, parent, false)
+        return ViewTransfersViewHolder(view, ::onTransferClick)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprTransfer?) {
