@@ -33,10 +33,10 @@
 
                 <ImageView
                     android:id="@+id/addressBarcodeImage"
+                    style="@style/App.Button.Borderless"
                     android:layout_width="@dimen/qr_code_dimensions"
                     android:layout_height="@dimen/qr_code_dimensions"
-                    android:contentDescription="@string/content_description_barcode"
-                    android:foreground="@drawable/ripple_effect_accent" />
+                    android:contentDescription="@string/content_description_barcode" />
 
                 <TextView
                     android:id="@+id/addressLabel"
@@ -70,21 +70,14 @@
             <ImageButton
                 android:id="@+id/showPrivateKeyButton"
                 style="@style/App.Button.CardAction"
-                android:layout_marginLeft="@dimen/horizontal_margin_small"
-                android:layout_marginStart="@dimen/horizontal_margin_small"
-                android:background="@drawable/ripple_effect_accent"
                 android:contentDescription="@string/content_description_reveal_private_key"
-                android:src="@drawable/ic_visibility_white_24dp"
-                android:text="@string/reveal_private_key" />
+                android:src="@drawable/ic_visibility_white_24dp" />
 
             <ImageButton
                 android:id="@+id/showWalletUnlockMechanismButton"
                 style="@style/App.Button.CardAction"
-                android:layout_marginLeft="@dimen/horizontal_margin_small"
-                android:layout_marginStart="@dimen/horizontal_margin_small"
                 android:contentDescription="@string/content_description_download_keystore"
-                android:src="@drawable/ic_view_agenda_white_24dp"
-                android:text="@string/reveal_private_key" />
+                android:src="@drawable/ic_view_agenda_white_24dp" />
 
         </LinearLayout>
 

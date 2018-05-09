@@ -133,9 +133,6 @@ dependencies {
     api gradle.lifecycleRuntime
     kapt gradle.lifecycleCompiler
 
-    // Blockchain Dependencies
-    api gradle.web3j
-
     // Dagger Dependency Injection
     implementation gradle.dagger
     kapt gradle.daggerProcessor
@@ -158,6 +155,10 @@ dependencies {
     api gradle.kotlinReflect
     api gradle.kotlinCoroutines
     api gradle.kotlinKtx
+
+    // Network Dependencies
+    api gradle.web3j
+    api gradle.looprNetwork
 
     // QR Code Scanner
     api gradle.googleVision
@@ -191,7 +192,4 @@ dependencies {
     androidTestImplementation gradle.espressoCore
     androidTestImplementation gradle.espressoIntents
     kaptAndroidTest gradle.daggerCompiler
-}
-repositories {
-    mavenCentral()
 }

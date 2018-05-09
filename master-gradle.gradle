@@ -18,9 +18,6 @@ gradle.ext.lifecycleCompiler = "android.arch.lifecycle:compiler:$androidArchitec
 gradle.ext.lifecycleExtensions = "android.arch.lifecycle:extensions:$androidArchitectureComponentsVesrion"
 gradle.ext.lifecycleRuntime = "android.arch.lifecycle:runtime:$androidArchitectureComponentsVesrion"
 
-// Blockchain Dependencies
-gradle.ext.web3j = 'org.web3j:core:3.3.1-android'
-
 // Dagger
 ext.daggerVersion = '2.15'
 gradle.ext.dagger = "com.google.dagger:dagger-android-support:$daggerVersion"
@@ -46,6 +43,10 @@ gradle.ext.kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 gradle.ext.kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 gradle.ext.kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.3"
 gradle.ext.kotlinKtx = "androidx.core:core-ktx:0.2"
+
+// Network Dependencies
+gradle.ext.web3j = "org.web3j:core:3.3.1-android"
+gradle.ext.looprNetwork = "org.loopring.looprwallet:loopr-wallet-network:0.9.0"
 
 // QR Code Scanner
 gradle.ext.googleVision = "com.google.android.gms:play-services-vision:$googleLibraryVersion"

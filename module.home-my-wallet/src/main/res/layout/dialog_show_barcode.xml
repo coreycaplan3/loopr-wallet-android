@@ -26,11 +26,11 @@
 
         <ImageView
             android:id="@+id/barcodeImage"
+            style="@style/App.Button.Borderless"
             android:layout_width="196dp"
             android:layout_height="196dp"
             android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/content_description_barcode"
-            android:foreground="@drawable/ripple_effect_accent" />
+            android:contentDescription="@string/content_description_barcode" />
 
         <TextView
             android:id="@+id/barcodeLabel"

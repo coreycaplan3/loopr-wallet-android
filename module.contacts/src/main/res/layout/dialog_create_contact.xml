@@ -39,6 +39,8 @@
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_toLeftOf="@id/barcodeScannerButton"
             android:layout_toStartOf="@id/barcodeScannerButton"
+            app:counterEnabled="true"
+            app:counterMaxLength="@integer/public_key_length"
             app:errorEnabled="true">
 
             <EditText

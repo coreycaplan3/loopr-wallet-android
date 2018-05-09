@@ -43,7 +43,7 @@
         <item name="searchViewStyle">@style/App.SearchView</item>
 
         <!-- Settings -->
-        <item name="preferenceTheme">@style/App.SettingsTheme</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <!-- Spinner -->
         <item name="spinnerStyle">@style/App.Spinner.Light</item>
@@ -63,6 +63,7 @@
         </item>
 
         <item name="android:textColorSecondary">@color/full_black_text_secondary</item>
+        <item name="textColorSecondaryOnly">@color/blackTextSecondary</item>
         <item name="android:textColorSecondaryInverse">@color/full_white_text_secondary</item>
         <item name="textColorDisabled">@color/blackTextDisabled</item>
 
@@ -112,7 +113,7 @@
         <item name="searchViewStyle">@style/App.SearchView</item>
 
         <!-- Settings -->
-        <item name="preferenceTheme">@style/App.SettingsTheme</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <!-- Spinner -->
         <item name="spinnerStyle">@style/App.Spinner</item>
@@ -133,6 +134,7 @@
         </item>
 
         <item name="android:textColorSecondary">@color/full_white_text_secondary</item>
+        <item name="textColorSecondaryOnly">@color/whiteTextSecondary</item>
         <item name="android:textColorSecondaryInverse">@color/full_white_text_secondary</item>
         <item name="textColorDisabled">@color/whiteTextDisabled</item>
 

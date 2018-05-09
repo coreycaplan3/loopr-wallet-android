@@ -39,34 +39,34 @@
         <item name="android:textColor">?attr/textColorPrimaryOnly</item>
         <item name="android:paddingLeft">@dimen/horizontal_padding_small</item>
         <item name="android:paddingRight">@dimen/horizontal_padding_small</item>
-        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="android:background">@drawable/ripple_effect_accent_flat</item>
         <item name="backgroundTint">@color/button_background_tint</item>
-        <item name="backgroundTintMode">src_in</item>
+        <item name="backgroundTintMode">add</item>
     </style>
 
     <style name="App.Button.Borderless.White" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="android:background">@drawable/ripple_effect_white_flat</item>
         <item name="backgroundTint">@color/button_background_tint_white</item>
-        <item name="backgroundTintMode">src_in</item>
+        <item name="backgroundTintMode">add</item>
     </style>
 
     <style name="App.Button.CardAction" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">@dimen/card_action_icon_size</item>
         <item name="android:layout_height">@dimen/card_action_icon_size</item>
         <item name="android:layout_marginLeft">@dimen/horizontal_margin_small</item>
-        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="android:background">@drawable/ripple_effect_accent_flat</item>
         <item name="backgroundTint">@color/button_background_tint</item>
-        <item name="backgroundTintMode">src_in</item>
+        <item name="backgroundTintMode">add</item>
         <item name="tint">?attr/colorPrimary</item>
     </style>
 
     <style name="App.Button.CardFlat" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/card_action_icon_size</item>
-        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="android:background">@drawable/ripple_effect_accent_flat</item>
         <item name="backgroundTint">@color/button_background_tint</item>
-        <item name="backgroundTintMode">src_in</item>
+        <item name="backgroundTintMode">add</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:paddingLeft">@dimen/card_padding_horizontal</item>
         <item name="android:paddingRight">@dimen/card_padding_horizontal</item>
@@ -87,13 +87,14 @@
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">@drawable/button_background_full_size</item>
-        <item name="backgroundTint">@color/button_background_tint_white</item>
+        <item name="backgroundTint">@color/button_background_tint</item>
         <item name="backgroundTintMode">add</item>
     </style>
 
     <style name="App.Button.NumberPad" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="android:background">@drawable/ripple_effect_accent_flat</item>
         <item name="backgroundTint">@color/button_background_tint</item>
+        <item name="backgroundTintMode">add</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
@@ -187,11 +188,6 @@
 
     <!-- Settings -->
 
-    <style name="App.SettingsTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
-        <item name="preferenceFragmentCompatStyle">@style/App.FragmentSettingsStyle</item>
-        <item name="preferenceFragmentStyle">@style/App.FragmentSettingsStyle</item>
-    </style>
-
     <!-- Spinner -->
 
     <style name="App.Spinner" parent="Widget.AppCompat.Spinner">
@@ -201,8 +197,6 @@
     <style name="App.Spinner.Light" parent="App.Spinner">
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
-
-    <style name="App.FragmentSettingsStyle" parent="@style/PreferenceFragment.Material" />
 
     <!-- Text -->
 

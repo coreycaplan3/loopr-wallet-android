@@ -14,6 +14,7 @@
     <!-- Text Colors -->
     <attr name="textColorDisabled" format="color" />
     <attr name="textColorPrimaryOnly" format="color" />
+    <attr name="textColorSecondaryOnly" format="color" />
 
     <!-- Theme Colors -->
     <attr name="colorPrimaryLight" format="color" />

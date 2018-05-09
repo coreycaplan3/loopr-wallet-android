@@ -6,5 +6,5 @@
     android:layout_width="@dimen/card_action_icon_size"
     android:layout_height="@dimen/card_action_icon_size"
     android:contentDescription="@string/content_description_qrcode_scanner"
-    app:srcCompat="@drawable/qrcode_scan"
-    app:tint="?android:attr/textColorPrimary" />
+    android:tint="?attr/textColorPrimaryOnly"
+    app:srcCompat="@drawable/qrcode_scan" />

@@ -66,14 +66,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <android.support.v7.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/orderDetailsOrderCompleteImage"
                 style="@style/App.Image.Bordered"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/content_description_completed_order"
                 android:src="@drawable/ic_swap_horiz_white_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                android:tint="?attr/textColorSecondaryOnly" />
 
         </FrameLayout>
 

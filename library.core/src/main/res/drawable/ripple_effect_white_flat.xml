@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Goes on top of surfaces like colored buttons -->
+<!-- Used for flat surfaces where the background as NO surface. For example, flat buttons -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
-        <color android:color="#28FFFFFF" />
+        <color android:color="#14FFFFFF" />
     </item>
     <item android:state_focused="true">
-        <color android:color="#3DFFFFFF" />
+        <color android:color="#1DFFFFFF" />
     </item>
     <item android:state_enabled="false">
         <color android:color="@android:color/transparent" />

@@ -14,23 +14,23 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true">
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/transferDetailsReceiveImage"
             style="@style/App.Image.Bordered"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:contentDescription="@string/content_description_receive"
             android:src="@drawable/transfer_receive"
-            app:tint="@color/material_green" />
+            android:tint="@color/materialGreen" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <ImageView
             android:id="@+id/transferDetailsSendImage"
             style="@style/App.Image.Bordered"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:contentDescription="@string/content_description_receive"
             android:src="@drawable/transfer_send"
-            app:tint="@color/material_red"
+            android:tint="@color/materialRed"
             tools:visibility="gone" />
 
     </FrameLayout>
