@@ -6,6 +6,12 @@
     <color name="green_400">#66BB6A</color>
     <color name="red_400">#F44336</color>
     <color name="quantum_grey_600">#FF757575</color>
+
+    <color name="materialRed">@color/red_400</color>
+
+    <color name="materialGreen">#FF4CAF50</color>
+    <color name="materialGreenDisabled">#704CAF50</color>
+
     <color name="textColorError">@color/red_400</color>
 
     <color name="tabText">#FFFFFFFF</color>

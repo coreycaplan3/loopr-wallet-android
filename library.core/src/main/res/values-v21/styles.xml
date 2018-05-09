@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Buttons -->
+
+    <style name="App.Button" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">?android:attr/textColorPrimaryInverseDisableOnly</item>
+        <item name="android:background">@drawable/button_background_material</item>
+    </style>
+
+    <style name="App.Button.Borderless" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">?attr/borderlessButtonColor</item>
+        <item name="android:paddingLeft">@dimen/horizontal_padding_small</item>
+        <item name="android:paddingRight">@dimen/horizontal_padding_small</item>
+        <item name="android:background">@drawable/ripple_effect_accent</item>
+    </style>
+
+    <style name="App.Button.Borderless.White" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/ripple_effect_accent</item>
+    </style>
+
+    <style name="App.Button.CardAction" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">@dimen/card_action_icon_size</item>
+        <item name="android:layout_height">@dimen/card_action_icon_size</item>
+        <item name="android:layout_marginLeft">@dimen/horizontal_margin_small</item>
+        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="tint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="App.Button.CardFlat" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/card_action_icon_size</item>
+        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:paddingLeft">@dimen/card_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/card_padding_horizontal</item>
+    </style>
+
+    <!-- Used in bottom sheet dialogs. There's no shape with a radius that intrinsically limits the size -->
+    <style name="App.Button.NoClipping" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/button_background_full_size</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverseDisableOnly</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <!-- Used when pinning the button to the bottom of the screen -->
+    <style name="App.Button.ConstrainBottom" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/button_background_full_size</item>
+    </style>
+
+    <style name="App.Button.NumberPad" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
+
+</resources>

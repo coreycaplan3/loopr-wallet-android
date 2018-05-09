@@ -80,7 +80,7 @@
         android:id="@+id/numberPadBackspace"
         style="@style/App.Button.NumberPad"
         android:src="@drawable/ic_keyboard_backspace_white_24dp"
-        android:tint="?android:attr/textColorPrimary"
+        android:tint="?attr/textColorPrimaryOnly"
         app:layout_constraintBottom_toTopOf="@id/horizontalGuideline4"
         app:layout_constraintEnd_toStartOf="@id/verticalGuideline3"
         app:layout_constraintStart_toEndOf="@id/verticalGuideline2"

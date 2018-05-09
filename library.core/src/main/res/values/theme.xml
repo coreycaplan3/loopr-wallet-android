@@ -57,6 +57,7 @@
         <item name="android:fontFamily">@font/montserrat</item>
 
         <item name="android:textColorPrimary">@color/full_black_text_primary</item>
+        <item name="textColorPrimaryOnly">@color/blackTextPrimary</item>
         <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
         <item name="android:textColorPrimaryInverseDisableOnly">@color/full_white_text_primary
         </item>
@@ -125,6 +126,7 @@
         <item name="android:fontFamily">@font/montserrat</item>
 
         <item name="android:textColorPrimary">@color/full_white_text_primary</item>
+        <item name="textColorPrimaryOnly">@color/whiteTextPrimary</item>
         <item name="android:textColorPrimaryInverse">@color/full_white_text_primary</item>
         <item name="android:textColorPrimaryInverseDisableOnly">
             @color/full_white_text_primary

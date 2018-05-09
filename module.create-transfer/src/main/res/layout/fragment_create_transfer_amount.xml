@@ -54,7 +54,6 @@
             android:layout_marginEnd="@dimen/horizontal_margin_small"
             android:layout_marginLeft="@dimen/horizontal_margin_small"
             android:layout_marginRight="@dimen/horizontal_margin_small"
-            android:alpha="0.5"
             android:contentDescription="@string/content_description_send_swap"
             android:src="@drawable/ic_swap_vert_white_24dp"
             app:tint="?android:attr/textColorPrimary"
