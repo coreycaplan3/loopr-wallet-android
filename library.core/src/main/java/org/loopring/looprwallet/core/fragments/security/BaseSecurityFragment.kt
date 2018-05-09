@@ -1,18 +1,22 @@
 package org.loopring.looprwallet.core.fragments.security
 
 import android.os.Bundle
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.fragment_security_pin.*
 import kotlinx.android.synthetic.main.number_pad.*
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
+import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
 import org.loopring.looprwallet.core.models.settings.UserPinSettings
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import javax.inject.Inject
 
 /**
@@ -109,9 +113,14 @@ abstract class BaseSecurityFragment : BaseFragment(), NumberPadPresenter.NumberP
      */
     protected fun bindCurrentPinToDrawable() {
 
-        fun setPinCircle(image: ImageView, minSize: Int) = when {
-            currentPin.length >= minSize -> image.setImageResource(R.drawable.primary_color_circle_filled)
-            else -> image.setImageResource(R.drawable.primary_color_circle)
+        fun setPinCircle(image: ImageView, minSize: Int) {
+            val d = when {
+                currentPin.length >= minSize -> drawable(R.drawable.primary_color_circle_filled)
+                else -> drawable(R.drawable.primary_color_circle)
+            }
+            DrawableCompat.setTint(d, col(image.context.theme.getResourceIdFromAttrId(R.attr.colorPrimary)))
+
+            image.setImageDrawable(d)
         }
 
         setPinCircle(fragmentSecurityPinCircle1, 1)

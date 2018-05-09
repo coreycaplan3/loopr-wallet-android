@@ -20,9 +20,18 @@ interface WalletClient {
 
     companion object {
 
-        fun getInstance(context: Context, looprSecureSettings: LooprSecureSettings): WalletClient {
+        private var instance: WalletClient? = null
+
+        fun getInstance(context: Context, looprSecureSettings: LooprSecureSettings): WalletClient = synchronized(this) {
+            val instance = this.instance
+            if (instance != null) {
+                return instance
+            }
+
             logd("Initializing currentWallet client...")
-            return WalletClientProductionImpl(context, looprSecureSettings)
+            return WalletClientProductionImpl(context, looprSecureSettings).also {
+                this.instance = it
+            }
         }
 
     }

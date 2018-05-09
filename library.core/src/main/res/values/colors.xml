@@ -21,7 +21,7 @@
     <color name="lightColorControlHighlight">#33FFFFFF</color>
 
     <color name="lightButtonDisabled">#1F000000</color>
-    <color name="lightShadowColor">#999999</color>
+    <color name="lightShadowColor">#FF999999</color>
 
     <color name="blackDivider">#1F000000</color>
 

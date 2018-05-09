@@ -34,6 +34,7 @@ abstract class BaseTabFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        toolbarDelegate?.isToolbarCollapseEnabled = true
         adapter = LooprFragmentPagerAdapter(childFragmentManager, getAdapterContent())
     }
 
@@ -51,8 +52,6 @@ abstract class BaseTabFragment : BaseFragment() {
 
         tabLayout?.setupWithViewPager(viewPager)
         tabLayout?.tabTextColors = context?.theme?.getAttrColorStateList(R.attr.tabTextColor)
-
-        toolbarDelegate?.isToolbarCollapseEnabled = true
     }
 
     abstract fun getAdapterContent(): List<Pair<String, BaseFragment>>

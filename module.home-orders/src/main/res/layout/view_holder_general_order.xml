@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,163 +18,164 @@
         android:paddingTop="@dimen/vertical_padding_small"
         tools:text="@string/default_date_short" />
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/generalOrderContainer"
+        style="@style/App.ViewGroup.Selectable"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="?attr/cardBackgroundColor"
-        android:clipToPadding="false"
-        android:foreground="@drawable/ripple_effect_accent">
-
-        <FrameLayout
-            android:id="@+id/orderSymbolContainer"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/horizontal_margin_small"
-            android:layout_marginLeft="@dimen/horizontal_margin_small"
-            android:layout_marginRight="@dimen/horizontal_margin_small"
-            android:layout_marginStart="@dimen/horizontal_margin_small">
-
-
-            <org.loopring.looprwallet.orderdetails.views.OrderProgressView
-                android:id="@+id/generalOrderProgress"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <ImageView
-                android:id="@+id/generalOrderCompleteImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/border"
-                android:contentDescription="@string/content_description_completed_order"
-                android:src="@drawable/ic_swap_horiz_white_24dp"
-                android:tint="?android:attr/textColorPrimary" />
-
-        </FrameLayout>
+        android:layout_height="80dp">
 
         <RelativeLayout
-            android:id="@+id/genericOrderPrimaryContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/orderSymbolContainer"
-            android:layout_toLeftOf="@id/genericOrderSecondaryContainer"
-            android:layout_toRightOf="@id/orderSymbolContainer"
-            android:layout_toStartOf="@id/genericOrderSecondaryContainer">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/genericOrderTitleContainer"
+            <FrameLayout
+                android:id="@+id/orderSymbolContainer"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/horizontal_margin_small"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginRight="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small">
+
+                <org.loopring.looprwallet.orderdetails.views.OrderProgressView
+                    android:id="@+id/generalOrderProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/generalOrderCompleteImage"
+                    style="@style/App.Image.Bordered"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/content_description_completed_order"
+                    android:padding="@dimen/standard_padding_small"
+                    android:src="@drawable/ic_swap_horiz_white_24dp"
+                    app:tint="?android:attr/textColorPrimary" />
+
+            </FrameLayout>
+
+            <RelativeLayout
+                android:id="@+id/genericOrderPrimaryContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/orderSymbolContainer"
+                android:layout_toLeftOf="@id/genericOrderSecondaryContainer"
+                android:layout_toRightOf="@id/orderSymbolContainer"
+                android:layout_toStartOf="@id/genericOrderSecondaryContainer">
+
+                <LinearLayout
+                    android:id="@+id/genericOrderTitleContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/genericOrderTradePairLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textSize="@dimen/list_primary_text_size"
+                        tools:text="@string/default_sell_order_pair" />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/horizontal_margin_small"
+                        android:layout_marginStart="@dimen/horizontal_margin_small">
+
+                        <TextView
+                            android:id="@+id/generalOrderSellCircle"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@drawable/sell_circle"
+                            android:gravity="center"
+                            android:text="@string/letter_s"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/generalOrderBuyCircle"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@drawable/buy_circle"
+                            android:gravity="center"
+                            android:text="@string/letter_b"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@android:color/white"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/genericOrderTradePairLabel"
+                    android:id="@+id/genericOrderQuantityLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    tools:text="@string/default_sell_order_pair" />
+                    android:layout_below="@id/genericOrderTitleContainer"
+                    android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textSize="13sp"
+                    tools:text="@string/default_order_quantity_with_label" />
 
-                <FrameLayout
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/genericOrderSecondaryContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/horizontal_margin_small"
+                android:layout_marginLeft="@dimen/horizontal_margin_small"
+                android:layout_marginRight="@dimen/horizontal_margin_small"
+                android:layout_marginStart="@dimen/horizontal_margin_small"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/genericOrderPriceSecondaryTokenLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/horizontal_margin_small"
-                    android:layout_marginStart="@dimen/horizontal_margin_small">
+                    android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    tools:text="@string/default_price_in_eth" />
 
-                    <TextView
-                        android:id="@+id/generalOrderSellCircle"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@drawable/sell_circle"
-                        android:gravity="center"
-                        android:text="@string/letter_s"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                        android:textColor="@android:color/white"
-                        android:textSize="12sp"
-                         />
+                <TextView
+                    android:id="@+id/genericOrderPriceFiatLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    tools:text="@string/default_price" />
 
-                    <TextView
-                        android:id="@+id/generalOrderBuyCircle"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:visibility="gone"
-                        android:background="@drawable/buy_circle"
-                        android:gravity="center"
-                        android:text="@string/letter_b"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                        android:textColor="@android:color/white"
-                        android:textSize="12sp" />
-
-                </FrameLayout>
+                <TextView
+                    android:id="@+id/genericOrderTotalPriceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    tools:text="Tot $132,023.32" />
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/genericOrderQuantityLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/genericOrderTitleContainer"
-                android:layout_marginTop="@dimen/vertical_margin_extra_small"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textSize="13sp"
-                tools:text="@string/default_order_quantity_with_label" />
+            <include
+                layout="@layout/divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/vertical_margin_small" />
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/genericOrderSecondaryContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/horizontal_margin_small"
-            android:layout_marginLeft="@dimen/horizontal_margin_small"
-            android:layout_marginRight="@dimen/horizontal_margin_small"
-            android:layout_marginStart="@dimen/horizontal_margin_small"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/genericOrderPriceSecondaryTokenLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_margin_extra_small"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textSize="13sp"
-                tools:text="@string/default_price_in_eth" />
-
-            <TextView
-                android:id="@+id/genericOrderPriceFiatLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_margin_extra_small"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textSize="13sp"
-                tools:text="@string/default_price" />
-
-            <TextView
-                android:id="@+id/genericOrderTotalPriceLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_margin_extra_small"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textSize="13sp"
-                tools:text="Tot $132,023.32" />
-
-        </LinearLayout>
-
-        <include
-            layout="@layout/divider"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/vertical_margin_small" />
-
-    </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

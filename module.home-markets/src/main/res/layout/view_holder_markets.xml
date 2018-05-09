@@ -1,96 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/App.ViewGroup.Selectable"
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:layout_marginLeft="@dimen/horizontal_margin_small"
     android:layout_marginRight="@dimen/horizontal_margin_small"
     android:layout_marginTop="@dimen/vertical_margin_small"
-    android:background="?attr/cardBackgroundColor"
-    android:foreground="@drawable/ripple_effect_accent"
     android:paddingBottom="@dimen/vertical_padding_small"
     android:paddingLeft="@dimen/horizontal_padding"
     android:paddingRight="@dimen/horizontal_padding"
     android:paddingTop="@dimen/vertical_padding_small">
 
-    <ImageView
-        android:id="@+id/marketsImage"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerVertical="true"
-        android:contentDescription="@string/content_description_token_image"
-        tools:src="@drawable/token_lrc" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/marketsTokenNameLabel"
-        style="@style/Base.TextAppearance.AppCompat.Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/horizontal_margin_extra_small"
-        android:layout_marginLeft="@dimen/horizontal_padding"
-        android:layout_marginRight="@dimen/horizontal_margin_extra_small"
-        android:layout_marginStart="@dimen/horizontal_padding"
-        android:layout_marginTop="@dimen/vertical_margin_extra_small"
-        android:layout_toEndOf="@id/marketsImage"
-        android:layout_toLeftOf="@id/marketsSecondaryContainer"
-        android:layout_toRightOf="@id/marketsImage"
-        android:layout_toStartOf="@id/marketsSecondaryContainer"
-        android:ellipsize="end"
-        android:lines="1"
-        android:textSize="@dimen/list_primary_text_size"
-        tools:text="Loopring" />
-
-    <TextView
-        android:id="@+id/marketsTickerLabel"
-        style="@style/Base.TextAppearance.AppCompat.Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/marketsTokenNameLabel"
-        android:layout_marginEnd="@dimen/horizontal_margin_extra_small"
-        android:layout_marginLeft="@dimen/horizontal_padding"
-        android:layout_marginRight="@dimen/horizontal_margin_extra_small"
-        android:layout_marginStart="@dimen/horizontal_padding"
-        android:layout_marginTop="@dimen/vertical_margin_extra_small"
-        android:layout_toEndOf="@id/marketsImage"
-        android:layout_toLeftOf="@id/marketsSecondaryContainer"
-        android:layout_toRightOf="@id/marketsImage"
-        android:layout_toStartOf="@id/marketsSecondaryContainer"
-        android:ellipsize="end"
-        android:lines="1"
-        android:textSize="@dimen/list_secondary_text_size"
-        tools:text="LRC" />
-
-    <LinearLayout
-        android:id="@+id/marketsSecondaryContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="@dimen/horizontal_margin"
-        android:layout_marginStart="@dimen/horizontal_margin"
-        android:gravity="start|center_vertical"
-        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/marketsImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/content_description_token_image"
+            tools:src="@drawable/token_lrc" />
 
         <TextView
-            android:id="@+id/marketsPercentageChangeLabel"
+            android:id="@+id/marketsTokenNameLabel"
             style="@style/Base.TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textColor="@color/material_green"
-            android:textSize="@dimen/list_secondary_text_size"
-            tools:text="@string/default_trading_pair_percentage_change" />
+            android:layout_marginEnd="@dimen/horizontal_margin_extra_small"
+            android:layout_marginLeft="@dimen/horizontal_padding"
+            android:layout_marginRight="@dimen/horizontal_margin_extra_small"
+            android:layout_marginStart="@dimen/horizontal_padding"
+            android:layout_marginTop="@dimen/vertical_margin_extra_small"
+            android:layout_toEndOf="@id/marketsImage"
+            android:layout_toLeftOf="@id/marketsSecondaryContainer"
+            android:layout_toRightOf="@id/marketsImage"
+            android:layout_toStartOf="@id/marketsSecondaryContainer"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textSize="@dimen/list_primary_text_size"
+            tools:text="Loopring" />
 
         <TextView
-            android:id="@+id/marketsCurrentPriceLabel"
+            android:id="@+id/marketsTickerLabel"
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/marketsTokenNameLabel"
+            android:layout_marginEnd="@dimen/horizontal_margin_extra_small"
+            android:layout_marginLeft="@dimen/horizontal_padding"
+            android:layout_marginRight="@dimen/horizontal_margin_extra_small"
+            android:layout_marginStart="@dimen/horizontal_padding"
             android:layout_marginTop="@dimen/vertical_margin_extra_small"
-            android:gravity="end"
+            android:layout_toEndOf="@id/marketsImage"
+            android:layout_toLeftOf="@id/marketsSecondaryContainer"
+            android:layout_toRightOf="@id/marketsImage"
+            android:layout_toStartOf="@id/marketsSecondaryContainer"
+            android:ellipsize="end"
+            android:lines="1"
             android:textSize="@dimen/list_secondary_text_size"
-            tools:text="@string/default_trading_pair_price" />
+            tools:text="LRC" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/marketsSecondaryContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:gravity="start|center_vertical"
+            android:orientation="vertical">
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/marketsPercentageChangeLabel"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textColor="@color/material_green"
+                android:textSize="@dimen/list_secondary_text_size"
+                tools:text="@string/default_trading_pair_percentage_change" />
+
+            <TextView
+                android:id="@+id/marketsCurrentPriceLabel"
+                style="@style/Base.TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/vertical_margin_extra_small"
+                android:gravity="end"
+                android:textSize="@dimen/list_secondary_text_size"
+                tools:text="@string/default_trading_pair_price" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

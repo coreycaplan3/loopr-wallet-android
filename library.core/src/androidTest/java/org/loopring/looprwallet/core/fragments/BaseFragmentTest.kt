@@ -62,7 +62,7 @@ class BaseFragmentTest : BaseDaggerFragmentTest<BaseFragmentTest.TestingBaseFrag
 
         val fragmentContainer = fragment.view?.findViewById<ViewGroup>(R.id.fragmentContainer)
         val topMargin = (fragmentContainer!!.layoutParams as CoordinatorLayout.LayoutParams).topMargin
-        val actionBarSizeResource = activity.theme.getResourceIdFromAttrId(android.R.attr.actionBarSize)
+        val actionBarSizeResource = activity.theme.getResourceIdFromAttrId(R.attr.actionBarSize)
         val actionBarSize = activity.resources.getDimension(actionBarSizeResource).toInt()
         assertEquals(actionBarSize, topMargin)
     }

@@ -23,10 +23,7 @@ import kotlinx.android.synthetic.main.fragment_trading_pair_details.*
 import kotlinx.android.synthetic.main.trading_pair_graph.*
 import kotlinx.android.synthetic.main.trading_pair_statistics_card.*
 import kotlinx.coroutines.experimental.runBlocking
-import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
-import org.loopring.looprwallet.core.extensions.ifNotNull
-import org.loopring.looprwallet.core.extensions.loge
-import org.loopring.looprwallet.core.extensions.snackbar
+import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.markets.TradingPairFilter
@@ -124,6 +121,7 @@ class TradingPairDetailsFragment : BaseFragment() {
         runBlocking {
             if(!tradingPairDetailsViewModel.doesTradingPairExist(filter.market).await()) {
                 loge("Market does not exist: ${filter.market}!", IllegalArgumentException())
+                view.context.longToast(R.string.error_trading_pair_does_not_exist)
                 activity?.finish()
             }
         }

@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.extensions
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.support.annotation.AttrRes
+import android.support.annotation.ColorRes
 import android.support.v4.content.res.ResourcesCompat
 import android.util.DisplayMetrics
 import android.util.TypedValue
@@ -29,7 +30,7 @@ fun Resources.pixelsToDp(px: Float): Float {
 
 /**
  * @return The resource ID from a given attribute. For example, passing
- * [android.R.attr.actionBarSize] returns a resource that can be used with *Resources.getDimen*
+ * *R.attr.actionBarSize* returns a resource that can be used with *Resources.getDimen*
  * to get the action bar's size.
  */
 fun Resources.Theme.getResourceIdFromAttrId(@AttrRes attrRes: Int): Int {
@@ -41,6 +42,13 @@ fun Resources.Theme.getResourceIdFromAttrId(@AttrRes attrRes: Int): Int {
     }
 
     return outValue.resourceId
+}
+
+/**
+ * @return A color state list if the given attribute resource is valid, or null otherwise
+ */
+fun Resources.Theme.getColorStateList(@ColorRes colorRes: Int): ColorStateList? {
+    return ResourcesCompat.getColorStateList(CoreLooprWalletApp.context.resources, colorRes, this)
 }
 
 /**

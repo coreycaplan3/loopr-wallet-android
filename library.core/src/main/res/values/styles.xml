@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="App" />
 
@@ -19,7 +19,7 @@
 
     <!-- Auto Complete Text View -->
 
-    <style name="App.AutoCompleteTextView.Search" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+    <style name="App.AutoCompleteTextView.Search" parent="@style/Widget.AppCompat.Light.AutoCompleteTextView">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:editTextColor">@android:color/black</item>
         <item name="android:textColorHint">@android:color/black</item>
@@ -28,57 +28,72 @@
 
     <!-- Buttons -->
 
-    <style name="App.Button" parent="Widget.AppCompat.Button.Colored">
+    <style name="App.Button" parent="@style/Widget.AppCompat.Button.Colored">
         <item name="android:textColor">?android:attr/textColorPrimaryInverseDisableOnly</item>
         <item name="android:background">@drawable/button_background_material</item>
+        <item name="backgroundTint">@color/button_background_tint</item>
+        <item name="backgroundTintMode">add</item>
     </style>
 
-    <style name="App.Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
+    <style name="App.Button.Borderless" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">?attr/borderlessButtonColor</item>
         <item name="android:paddingLeft">@dimen/horizontal_padding_small</item>
         <item name="android:paddingRight">@dimen/horizontal_padding_small</item>
         <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="backgroundTint">@color/button_background_tint</item>
+        <item name="backgroundTintMode">src_in</item>
     </style>
 
-    <style name="App.Button.Borderless.White" parent="Widget.AppCompat.Button.Borderless">
+    <style name="App.Button.Borderless.White" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@drawable/ripple_effect_white</item>
+        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="backgroundTint">@color/button_background_tint_white</item>
+        <item name="backgroundTintMode">src_in</item>
     </style>
 
-    <style name="App.Button.CardAction" parent="Widget.AppCompat.Button.Borderless">
+    <style name="App.Button.CardAction" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">@dimen/card_action_icon_size</item>
         <item name="android:layout_height">@dimen/card_action_icon_size</item>
-        <item name="android:background">@drawable/ripple_effect_accent</item>
-        <item name="android:tint">?attr/colorPrimary</item>
         <item name="android:layout_marginLeft">@dimen/horizontal_margin_small</item>
+        <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="backgroundTint">@color/button_background_tint</item>
+        <item name="backgroundTintMode">src_in</item>
+        <item name="tint">?attr/colorPrimary</item>
     </style>
 
-    <style name="App.Button.CardFlat" parent="Widget.AppCompat.Button.Borderless">
+    <style name="App.Button.CardFlat" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/card_action_icon_size</item>
         <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="backgroundTint">@color/button_background_tint</item>
+        <item name="backgroundTintMode">src_in</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:paddingLeft">@dimen/card_padding_horizontal</item>
         <item name="android:paddingRight">@dimen/card_padding_horizontal</item>
     </style>
 
     <!-- Used in bottom sheet dialogs. There's no shape with a radius that intrinsically limits the size -->
-    <style name="App.Button.NoClipping" parent="Widget.AppCompat.Button.Colored">
+    <style name="App.Button.NoClipping" parent="@style/Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/button_background_full_size</item>
+        <item name="backgroundTint">@color/button_background_tint</item>
+        <item name="backgroundTintMode">add</item>
         <item name="android:textColor">?android:attr/textColorPrimaryInverseDisableOnly</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_width">match_parent</item>
     </style>
 
     <!-- Used when pinning the button to the bottom of the screen -->
-    <style name="App.Button.ConstrainBottom" parent="Widget.AppCompat.Button.Colored">
+    <style name="App.Button.ConstrainBottom" parent="@style/Widget.AppCompat.Button.Colored">
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">@drawable/button_background_full_size</item>
+        <item name="backgroundTint">@color/button_background_tint_white</item>
+        <item name="backgroundTintMode">add</item>
     </style>
 
-    <style name="App.Button.NumberPad" parent="Widget.AppCompat.Button.Borderless">
+    <style name="App.Button.NumberPad" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:background">@drawable/ripple_effect_accent</item>
+        <item name="backgroundTint">@color/button_background_tint</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
@@ -112,57 +127,35 @@
 
     <!-- Dialogs -->
 
-    <style name="App.AlertDialog" parent="Theme.AppCompat.Dialog.Alert">
+    <style name="App.Dialog" parent="ThemeOverlay.AppCompat.Dialog" />
+
+    <style name="App.Dialog.Alert" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <!-- To tint EditText and TimePicker -->
         <item name="colorAccent">@color/darkAccent</item>
     </style>
 
-    <style name="App.AlertDialog.Light" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="App.Dialog.Alert.Light" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <!-- To tint EditText and TimePicker -->
         <item name="colorAccent">@color/lightAccent</item>
     </style>
 
-    <style name="App.AlertDialog.Content" parent="Theme.AppCompat.Dialog.Alert">
-        <!-- To tint EditText and TimePicker -->
-        <item name="colorAccent">@color/darkAccent</item>
+    <style name="App.Dialog.BottomSheet" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Design.BottomSheetDialog</item>
+        <item name="bottomSheetStyle">@style/Widget.Design.BottomSheet.Modal</item>
+
+        <!-- borderlessButtonStyle is what's used for styling the button internally -->
+        <item name="android:borderlessButtonStyle">@style/App.Button.NoClipping</item>
     </style>
 
-    <style name="App.AlertDialog.Content.Light" parent="Theme.AppCompat.Dialog.Alert">
-        <!-- To tint EditText and TimePicker -->
-        <item name="colorAccent">@color/lightAccent</item>
-    </style>
+    <!-- ImageViews -->
 
-    <style name="App.BottomSheetDialog" parent="Theme.Design.BottomSheetDialog">
-        <item name="colorButtonNormal">@color/lightButtonDisabled</item>
-        <item name="buttonStyle">@style/App.Button</item>
-        <item name="borderlessButtonColor">@color/borderless_button_color</item>
-        <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
+    <style name="App.Image" />
 
-        <item name="colorPrimary">@color/darkPrimary</item>
-        <item name="colorAccent">@color/darkAccent</item>
-        <item name="colorControlHighlight">@color/darkAccent</item>
-
-        <item name="android:textColorPrimaryInverseDisableOnly">
-            @color/full_white_text_primary
-        </item>
-
-        <item name="textColorDisabled">@color/whiteTextDisabled</item>
-    </style>
-
-    <style name="App.BottomSheetDialog.Light" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="colorButtonNormal">@color/darkButtonDisabled</item>
-        <item name="buttonStyle">@style/App.Button</item>
-        <item name="borderlessButtonColor">@color/borderless_button_color</item>
-        <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
-
-        <item name="colorPrimary">@color/lightPrimary</item>
-        <item name="colorAccent">@color/lightAccent</item>
-        <item name="colorControlHighlight">@color/lightAccent</item>
-
-        <item name="textColorDisabled">@color/blackTextDisabled</item>
-        <item name="android:textColorPrimaryInverseDisableOnly">
-            @color/full_white_text_primary
-        </item>
+    <style name="App.Image.Bordered">
+        <item name="android:background">@drawable/border</item>
+        <item name="backgroundTint">?attr/circleBackgroundColor</item>
+        <item name="android:padding">@dimen/standard_margin_small</item>
     </style>
 
     <!-- Input -->
@@ -209,11 +202,7 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
-    <!-- Custom Style for PreferenceFragmentCompat -->
-    <style name="App.FragmentSettingsStyle" parent="@style/PreferenceFragment.Material">
-        <!-- Custom layout for PreferenceFragmentCompat -->
-        <!--<item name="android:layout">@layout/pref_screen</item>-->
-    </style>
+    <style name="App.FragmentSettingsStyle" parent="@style/PreferenceFragment.Material" />
 
     <!-- Text -->
 
@@ -224,6 +213,18 @@
 
     <style name="App.ListSeparatorTextViewStyle">
         <item name="android:background">?attr/dividerColor</item>
+    </style>
+
+    <!-- View Groups -->
+
+    <style name="App.ViewGroup" />
+
+    <style name="App.ViewGroup.Selectable">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:background">?attr/cardBackgroundColor</item>
+        <item name="android:foreground">@drawable/view_group_ripple_background</item>
     </style>
 
 </resources>

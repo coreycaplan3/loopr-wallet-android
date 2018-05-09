@@ -20,7 +20,7 @@
     <string name="open">Open</string>
     <string name="closed">Closed</string>
     <string name="transfer">Transfer</string>
-    <string name="trading_pair">Trading Pair</string>
+    <string name="trading_pair_details">Trading Pair Details</string>
     <string name="welcome">Welcome</string>
     <string name="unlock_device">You must unlock your device to access this app</string>
     <string name="exit_app">Exit App?</string>
@@ -333,4 +333,6 @@
     <string name="order_placed_body">Congratulations! Your order has been submitted!</string>
     <string name="done">Done</string>
     <string name="share_this_order_with_qr_code">Share this order via the QR code</string>
+    <string name="home">Home</string>
+    <string name="error_trading_pair_does_not_exist">This trading pair does not exist!</string>
 </resources>

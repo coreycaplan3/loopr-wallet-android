@@ -49,7 +49,7 @@ class MainActivity : BaseActivity(), BottomNavigation, OnSecurityConfirmedListen
 
         /**
          * Starts this activity (as normal), clearing any previous tasks which may have pointed to
-         * here
+         * here.
          */
         fun routeAndClearOldTasks(activity: Activity) {
             val intent = Intent(CoreLooprWalletApp.context, MainActivity::class.java)

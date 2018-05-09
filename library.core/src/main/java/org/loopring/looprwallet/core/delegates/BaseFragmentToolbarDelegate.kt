@@ -156,6 +156,8 @@ open class BaseFragmentToolbarDelegate(
             container.requestLayout()
         }
 
+        container.requestLayout()
+
         isToolbarCollapseEnabled = true
     }
 
@@ -183,7 +185,7 @@ open class BaseFragmentToolbarDelegate(
 
         (container.layoutParams as? CoordinatorLayout.LayoutParams)?.let {
             // The container is underneath the toolbar, so we must add margin so it is below it instead
-            val topMarginResource = container.context.theme.getResourceIdFromAttrId(android.R.attr.actionBarSize)
+            val topMarginResource = container.context.theme.getResourceIdFromAttrId(R.attr.actionBarSize)
             it.topMargin = dimen(topMarginResource).toInt()
             it.behavior = null
             container.requestLayout()

@@ -1,7 +1,10 @@
 package org.loopring.looprwallet.walletsignin.fragments.signin
 
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
+import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.view.ViewCompat
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource

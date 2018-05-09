@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout.LayoutParams
 import android.support.v7.widget.Toolbar
-import android.view.View
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
@@ -14,14 +13,14 @@ import kotlin.math.roundToInt
 /**
  * Created by corey on 5/6/18
  *
- * Projec: loopr-android
+ * Project: loopr-android
  *
  * Purpose of Class:
  *
  */
 object LooprAppBarLayout {
 
-    val appName = str(R.string.app_name)
+    private val APP_NAME = str(R.string.app_name)
 
     /**
      * Creates the default appbar that is visible on most (if not all) pages
@@ -33,10 +32,10 @@ object LooprAppBarLayout {
 
         // Toolbar
         val toolbar = Toolbar(context).apply {
-            title = appName
+            title = APP_NAME
             id = R.id.toolbar
 
-            val height = dimen(context.theme.getResourceIdFromAttrId(android.R.attr.actionBarSize))
+            val height = dimen(context.theme.getResourceIdFromAttrId(R.attr.actionBarSize))
             layoutParams = AppBarLayout.LayoutParams(LayoutParams.MATCH_PARENT, height.roundToInt())
         }
         this.addView(toolbar)

@@ -73,7 +73,7 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
             val theme = fragmentView.context.theme
             id = R.id.marketsTabs
 
-            val height = dimen(theme.getResourceIdFromAttrId(android.R.attr.actionBarSize))
+            val height = dimen(theme.getResourceIdFromAttrId(R.attr.actionBarSize))
             layoutParams = AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, height.roundToInt())
             background = ColorDrawable(col(theme.getResourceIdFromAttrId(R.attr.colorPrimary)))
             tabGravity = TabLayout.GRAVITY_FILL

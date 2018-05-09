@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.application
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
+import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
@@ -29,7 +30,7 @@ import javax.inject.Inject
  * Purpose of Class:
  *
  */
-open class CoreLooprWalletApp : MultiDexApplication(), Application.ActivityLifecycleCallbacks,
+open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallbacks,
         CoreLooprComponentProvider {
 
     companion object {

@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.ImageButton
 import androidx.os.bundleOf
 import io.realm.OrderedRealmCollection
-import kotlinx.android.synthetic.main.fragment_select_address.*
+import kotlinx.android.synthetic.main.fragment_select_transfer_contact.*
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
@@ -52,7 +52,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
     }
 
     override val layoutResource: Int
-        get() = R.layout.fragment_select_address
+        get() = R.layout.fragment_select_transfer_contact
 
     var selectedContactAddress: String? = null
 

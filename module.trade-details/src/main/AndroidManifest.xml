@@ -7,6 +7,7 @@
 
         <activity
             android:name=".activities.TradingPairDetailsActivity"
+            android:label="@string/trading_pair_details"
             android:screenOrientation="portrait" />
 
     </application>

@@ -14,7 +14,7 @@ import org.loopring.looprwallet.walletsignin.activities.SignInActivity
  * Purpose of Class:
  *
  */
-class SplashScreenActivity : BaseActivity() {
+class InitialRoutingActivity : BaseActivity() {
 
     override val contentViewRes: Int
         get() = R.layout.activity_splash

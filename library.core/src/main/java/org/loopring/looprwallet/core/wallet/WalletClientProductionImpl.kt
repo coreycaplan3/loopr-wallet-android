@@ -49,11 +49,10 @@ class WalletClientProductionImpl(context: Context, looprSecureSettings: LooprSec
             keystoreContent: String?,
             phrase: Array<String>?
     ): Boolean {
-        return walletSettings.createWallet(walletName, privateKey, keystoreContent, phrase).let { isSuccessful ->
+        return walletSettings.createWallet(walletName, privateKey, keystoreContent, phrase).also { isSuccessful ->
             if (isSuccessful) {
                 getCurrentWallet()?.let { onChange?.invoke(it) }
             }
-            isSuccessful
         }
     }
 

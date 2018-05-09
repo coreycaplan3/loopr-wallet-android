@@ -12,7 +12,6 @@
                 <item android:state_enabled="false">
                     <shape android:shape="rectangle">
                         <corners android:radius="@dimen/button_radius_material" />
-                        <solid android:color="?attr/colorButtonNormal" />
                         <padding
                             android:bottom="@dimen/button_padding_material"
                             android:left="@dimen/button_padding_material"
@@ -22,8 +21,8 @@
                 </item>
                 <item>
                     <shape android:shape="rectangle">
-                        <corners android:radius="@dimen/button_radius_material" />
                         <solid android:color="?attr/colorAccent" />
+                        <corners android:radius="@dimen/button_radius_material" />
                         <padding
                             android:bottom="@dimen/button_padding_material"
                             android:left="@dimen/button_padding_material"

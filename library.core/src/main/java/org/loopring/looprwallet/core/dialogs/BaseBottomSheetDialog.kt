@@ -11,9 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
+import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
@@ -53,7 +55,8 @@ abstract class BaseBottomSheetDialog : BottomSheetDialogFragment(), ViewLifecycl
     }
 
     final override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(context!!, this.theme)
+        val context = context ?: throw IllegalStateException("Context was null!")
+        return BottomSheetDialog(context, context.theme.getResourceIdFromAttrId(R.attr.bottomSheetDialogTheme))
     }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -75,7 +75,7 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
             val theme = fragmentView.context.theme
             id = R.id.ordersTabs
 
-            val height = ApplicationUtility.dimen(theme.getResourceIdFromAttrId(android.R.attr.actionBarSize))
+            val height = ApplicationUtility.dimen(theme.getResourceIdFromAttrId(R.attr.actionBarSize))
             layoutParams = AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, height.roundToInt())
             background = ColorDrawable(ApplicationUtility.col(theme.getResourceIdFromAttrId(R.attr.colorPrimary)))
             tabGravity = TabLayout.GRAVITY_FILL

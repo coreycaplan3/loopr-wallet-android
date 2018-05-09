@@ -140,6 +140,8 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
             // We are NOT in a child fragment
             toolbarDelegate?.setupAppbar(fragmentView)
             createFab(fragmentView)
+
+            fragmentView.invalidate()
         }
 
         return fragmentView

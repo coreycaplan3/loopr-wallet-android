@@ -69,9 +69,6 @@ object ApplicationUtility {
      * @return The drawable that is mapped to by the given [resId].
      */
     @Suppress("deprecation")
-    fun drawable(@DrawableRes resId: Int, context: Context? = null): Drawable = when {
-        context != null -> ContextCompat.getDrawable(context, resId)!!
-        else -> application.resources.getDrawable(resId)
-    }
+    fun drawable(@DrawableRes resId: Int): Drawable = application.resources.getDrawable(resId)
 
 }

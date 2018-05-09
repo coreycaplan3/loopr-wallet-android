@@ -119,7 +119,7 @@ class BottomNavigationPresenter(bottomNavigationView: BottomNavigationView,
 
         activity?.findViewById<ViewGroup>(R.id.activityContainer)?.apply {
             val oldParams = this.layoutParams as CoordinatorLayout.LayoutParams
-            oldParams.bottomMargin = dimen(context.theme.getResourceIdFromAttrId(android.R.attr.actionBarSize)).roundToInt()
+            oldParams.bottomMargin = dimen(context.theme.getResourceIdFromAttrId(R.attr.actionBarSize)).roundToInt()
             this.layoutParams = layoutParams
             invalidate()
         }

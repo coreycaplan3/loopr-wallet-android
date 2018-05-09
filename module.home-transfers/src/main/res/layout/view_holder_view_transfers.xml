@@ -1,108 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/App.ViewGroup.Selectable"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/horizontal_margin_small"
     android:layout_marginRight="@dimen/horizontal_margin_small"
     android:layout_marginTop="@dimen/vertical_margin_small"
-    android:background="?attr/cardBackgroundColor"
-    android:foreground="@drawable/ripple_effect_accent"
     android:padding="@dimen/standard_padding">
 
-    <FrameLayout
-        android:id="@+id/viewTransfersImageContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/viewTransfersReceiveImage"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/border"
-            android:contentDescription="@string/content_description_receive"
-            android:src="@drawable/transfer_receive"
-            android:tint="@color/material_green" />
+        <FrameLayout
+            android:id="@+id/viewTransfersImageContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
 
-        <ImageView
-            android:id="@+id/viewTransfersSendImage"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/border"
-            android:contentDescription="@string/content_description_receive"
-            android:src="@drawable/transfer_send"
-            android:tint="@color/material_red"
-            tools:visibility="gone" />
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/viewTransfersReceiveImage"
+                style="@style/App.Image.Bordered"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/content_description_receive"
+                android:src="@drawable/transfer_receive"
+                app:tint="@color/material_green" />
 
-    </FrameLayout>
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/viewTransfersSendImage"
+                style="@style/App.Image.Bordered"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/content_description_receive"
+                android:src="@drawable/transfer_send"
+                app:tint="@color/material_red"
+                tools:visibility="gone" />
 
-    <TextView
-        android:id="@+id/viewTransfersTokenNameLabel"
-        style="@style/TextAppearance.AppCompat.Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/horizontal_margin"
-        android:layout_marginStart="@dimen/horizontal_margin"
-        android:layout_toEndOf="@id/viewTransfersImageContainer"
-        android:layout_toLeftOf="@id/viewTransfersSecondaryContainer"
-        android:layout_toRightOf="@id/viewTransfersImageContainer"
-        android:layout_toStartOf="@id/viewTransfersSecondaryContainer"
-        android:textSize="@dimen/list_primary_text_size"
-        tools:text="@string/default_received_token" />
-
-    <TextView
-        android:id="@+id/viewTransfersContactLabel"
-        style="@style/TextAppearance.AppCompat.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/viewTransfersTokenNameLabel"
-        android:layout_marginLeft="@dimen/horizontal_margin"
-        android:layout_marginStart="@dimen/horizontal_margin"
-        android:layout_marginTop="@dimen/vertical_margin_small"
-        android:layout_toEndOf="@id/viewTransfersImageContainer"
-        android:layout_toLeftOf="@id/viewTransfersSecondaryContainer"
-        android:layout_toRightOf="@id/viewTransfersImageContainer"
-        android:layout_toStartOf="@id/viewTransfersSecondaryContainer"
-        android:ellipsize="middle"
-        android:singleLine="true"
-        android:textSize="@dimen/list_secondary_text_size"
-        tools:text="@string/default_address" />
-
-    <LinearLayout
-        android:id="@+id/viewTransfersSecondaryContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="@dimen/horizontal_margin"
-        android:layout_marginStart="@dimen/horizontal_margin"
-        android:orientation="vertical">
+        </FrameLayout>
 
         <TextView
-            android:id="@+id/viewTransfersQuantityLabel"
+            android:id="@+id/viewTransfersTokenNameLabel"
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="end"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_toEndOf="@id/viewTransfersImageContainer"
+            android:layout_toLeftOf="@id/viewTransfersSecondaryContainer"
+            android:layout_toRightOf="@id/viewTransfersImageContainer"
+            android:layout_toStartOf="@id/viewTransfersSecondaryContainer"
             android:textSize="@dimen/list_primary_text_size"
-            tools:text="@string/default_lrc_quantity" />
+            tools:text="@string/default_received_token" />
 
         <TextView
-            android:id="@+id/viewTransfersPriceLabel"
+            android:id="@+id/viewTransfersContactLabel"
             style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_below="@id/viewTransfersTokenNameLabel"
             android:layout_marginLeft="@dimen/horizontal_margin"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:layout_marginTop="@dimen/vertical_margin_small"
-            android:gravity="end"
+            android:layout_toEndOf="@id/viewTransfersImageContainer"
+            android:layout_toLeftOf="@id/viewTransfersSecondaryContainer"
+            android:layout_toRightOf="@id/viewTransfersImageContainer"
+            android:layout_toStartOf="@id/viewTransfersSecondaryContainer"
+            android:ellipsize="middle"
+            android:singleLine="true"
             android:textSize="@dimen/list_secondary_text_size"
-            tools:text="@string/default_total_price" />
+            tools:text="@string/default_address" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/viewTransfersSecondaryContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/horizontal_margin_small"
+            android:layout_marginStart="@dimen/horizontal_margin_small"
+            android:orientation="vertical">
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/viewTransfersQuantityLabel"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:textSize="@dimen/list_primary_text_size"
+                tools:text="@string/default_lrc_quantity" />
+
+            <TextView
+                android:id="@+id/viewTransfersPriceLabel"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:layout_marginTop="@dimen/vertical_margin_small"
+                android:gravity="end"
+                android:textSize="@dimen/list_secondary_text_size"
+                tools:text="@string/default_total_price" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

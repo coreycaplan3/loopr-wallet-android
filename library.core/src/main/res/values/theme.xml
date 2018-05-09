@@ -10,6 +10,7 @@
         <item name="colorAccent">@color/lightAccent</item>
         <item name="colorControlHighlight">@color/lightColorControlHighlight</item>
         <item name="android:windowBackground">@color/lightBackground</item>
+        <item name="android:colorBackground">@color/cardview_light_background</item>
 
         <item name="colorControlActivated">@color/lightAccent</item>
 
@@ -29,8 +30,8 @@
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
 
         <!-- Dialogs -->
-        <item name="alertDialogTheme">@style/App.AlertDialog.Light</item>
-        <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog.Light</item>
+        <item name="alertDialogTheme">@style/App.Dialog.Alert.Light</item>
+        <item name="bottomSheetDialogTheme">@style/App.Dialog.BottomSheet</item>
 
         <!-- Divider -->
         <item name="dividerColor">@color/blackDivider</item>
@@ -79,6 +80,7 @@
         <item name="colorControlHighlight">@color/lightColorControlHighlight</item>
         <item name="colorControlActivated">@color/darkAccent</item>
         <item name="android:windowBackground">@color/darkBackground</item>
+        <item name="android:colorBackground">@color/cardview_dark_background</item>
 
         <item name="circleBackgroundColor">@color/darkShadowColor</item>
 
@@ -96,8 +98,8 @@
         <item name="cardBackgroundColor">@color/cardview_dark_background</item>
 
         <!-- Dialogs -->
-        <item name="alertDialogTheme">@style/App.AlertDialog</item>
-        <item name="bottomSheetDialogTheme">@style/App.BottomSheetDialog</item>
+        <item name="alertDialogTheme">@style/App.Dialog.Alert</item>
+        <item name="bottomSheetDialogTheme">@style/App.Dialog.BottomSheet</item>
 
         <!-- Divider -->
         <item name="dividerColor">@color/whiteDivider</item>
