@@ -35,7 +35,6 @@ class HomeSettingsFragment : BaseSettingsFragment() {
         val SCREEN_KEY_LOOPRING_FEES = ApplicationUtility.str(R.string.settings_loopring_fees_screen_key)
         val SCREEN_KEY_GENERAL_WALLET = ApplicationUtility.str(R.string.settings_general_wallet_screen_key)
         val SCREEN_KEY_CURRENCY = ApplicationUtility.str(R.string.settings_currency_screen_key)
-        val SCREEN_KEY_ETHEREUM_NETWORK = ApplicationUtility.str(R.string.settings_ethereum_network_screen_key)
         val SCREEN_KEY_LOOPRING_NETWORK = ApplicationUtility.str(R.string.settings_loopring_network_screen_key)
 
         val SUMMARY_VALUE_SECURITY_SCREEN = ApplicationUtility.str(R.string.summary_security_screen)
@@ -43,7 +42,6 @@ class HomeSettingsFragment : BaseSettingsFragment() {
         val SUMMARY_VALUE_LOOPRING_FEES_SCREEN = ApplicationUtility.str(R.string.summary_loopring_trading_fees)
         val SUMMARY_VALUE_GENERAL_WALLET_SCREEN = ApplicationUtility.str(R.string.summary_general_wallet_settings)
         val SUMMARY_VALUE_CURRENCY_SCREEN = ApplicationUtility.str(R.string.summary_currency_settings)
-        val SUMMARY_VALUE_ETHEREUM_NETWORK_SCREEN = ApplicationUtility.str(R.string.summary_ethereum_network)
         val SUMMARY_VALUE_LOOPRING_NETWORK_SCREEN = ApplicationUtility.str(R.string.summary_loopring_network)
     }
 
@@ -71,7 +69,6 @@ class HomeSettingsFragment : BaseSettingsFragment() {
             Pair(SCREEN_KEY_LOOPRING_FEES, SUMMARY_VALUE_LOOPRING_FEES_SCREEN),
             Pair(SCREEN_KEY_GENERAL_WALLET, SUMMARY_VALUE_GENERAL_WALLET_SCREEN),
             Pair(SCREEN_KEY_CURRENCY, SUMMARY_VALUE_CURRENCY_SCREEN),
-            Pair(SCREEN_KEY_ETHEREUM_NETWORK, SUMMARY_VALUE_ETHEREUM_NETWORK_SCREEN),
             Pair(SCREEN_KEY_LOOPRING_NETWORK, SUMMARY_VALUE_LOOPRING_NETWORK_SCREEN)
     )
 
@@ -103,7 +100,6 @@ class HomeSettingsFragment : BaseSettingsFragment() {
         SCREEN_KEY_LOOPRING_FEES -> SUMMARY_VALUE_LOOPRING_FEES_SCREEN
         SCREEN_KEY_GENERAL_WALLET -> SUMMARY_VALUE_GENERAL_WALLET_SCREEN
         SCREEN_KEY_CURRENCY -> SUMMARY_VALUE_CURRENCY_SCREEN
-        SCREEN_KEY_ETHEREUM_NETWORK -> SUMMARY_VALUE_ETHEREUM_NETWORK_SCREEN
         SCREEN_KEY_LOOPRING_NETWORK -> SUMMARY_VALUE_LOOPRING_NETWORK_SCREEN
         else -> throw IllegalArgumentException("Invalid key, found: ${preference.key}")
     }
@@ -129,10 +125,6 @@ class HomeSettingsFragment : BaseSettingsFragment() {
             }
             SCREEN_KEY_CURRENCY -> {
                 activity.onNestedFragmentClick(CurrencySettingsFragment(), CurrencySettingsFragment.TAG)
-                true
-            }
-            SCREEN_KEY_ETHEREUM_NETWORK -> {
-                activity.onNestedFragmentClick(EthereumNetworkSettingsFragment(), EthereumNetworkSettingsFragment.TAG)
                 true
             }
             SCREEN_KEY_LOOPRING_NETWORK -> {

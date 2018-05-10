@@ -10,6 +10,7 @@ import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.R.xml
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.models.settings.LooprSettings
+import kotlin.reflect.KProperty
 
 /**
  * Created by Corey Caplan on 3/27/18.
@@ -22,14 +23,13 @@ import org.loopring.looprwallet.core.models.settings.LooprSettings
 object PreferenceUtility {
 
     fun setDefaultValues() {
-        setDefaultValues(R.xml.settings_home, xml::settings_home.name)
-        setDefaultValues(R.xml.settings_security, xml::settings_security.name)
-        setDefaultValues(R.xml.settings_ethereum_fees, xml::settings_ethereum_fees.name)
-        setDefaultValues(R.xml.settings_loopring_fees, xml::settings_loopring_fees.name)
-        setDefaultValues(R.xml.settings_general_wallet, xml::settings_general_wallet.name)
-        setDefaultValues(R.xml.settings_currency, xml::settings_currency.name)
-        setDefaultValues(R.xml.settings_ethereum_network, xml::settings_ethereum_network.name)
-        setDefaultValues(R.xml.settings_loopring_network, xml::settings_loopring_network.name)
+        setDefaultValues(R.xml.settings_home, xml::settings_home)
+        setDefaultValues(R.xml.settings_security, xml::settings_security)
+        setDefaultValues(R.xml.settings_ethereum_fees, xml::settings_ethereum_fees)
+        setDefaultValues(R.xml.settings_loopring_fees, xml::settings_loopring_fees)
+        setDefaultValues(R.xml.settings_general_wallet, xml::settings_general_wallet)
+        setDefaultValues(R.xml.settings_currency, xml::settings_currency)
+        setDefaultValues(R.xml.settings_loopring_network, xml::settings_loopring_network)
     }
 
     /**
@@ -50,7 +50,7 @@ object PreferenceUtility {
      * @see .setSharedPreferencesMode
      */
     @SuppressLint("RestrictedApi")
-    private fun setDefaultValues(resId: Int, resourceName: String) {
+    private fun setDefaultValues(resId: Int, resourceName: KProperty<Int>) {
         val context = CoreLooprWalletApp.context
         val settings = LooprSettings.getInstance(context)
 
@@ -62,7 +62,7 @@ object PreferenceUtility {
             pm.sharedPreferencesMode = defaultSharedPreferencesMode
 
             val preferenceScreen = pm.inflateFromResource(context, resId, null)
-            persistPreferenceGroup(preferenceScreen, resourceName)
+            persistPreferenceGroup(preferenceScreen, resourceName.name)
 
             settings.putBoolean(key, true)
         }

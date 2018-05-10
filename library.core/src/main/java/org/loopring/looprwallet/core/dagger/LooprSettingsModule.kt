@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import org.loopring.looprwallet.core.models.settings.*
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -51,12 +52,6 @@ class LooprSettingsModule(private val context: Context) {
     @Provides
     fun provideCurrencySettings(): CurrencySettings {
         return CurrencySettings(LooprSettings.getInstance(context))
-    }
-
-    @Singleton
-    @Provides
-    fun provideEthereumNetworkSettings(): EthereumNetworkSettings {
-        return EthereumNetworkSettings(LooprSettings.getInstance(context))
     }
 
     @Singleton

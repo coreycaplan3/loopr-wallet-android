@@ -3,11 +3,11 @@ package org.loopring.looprwallet.core.viewmodels.eth
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
-import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.eth.EthereumGenericService
 import org.loopring.looprwallet.core.repositories.eth.EthereumBlockNumberRepository
 import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
+import org.loopring.looprwalletnetwork.models.ethereum.EthBlockNum
 import java.util.*
 
 /**
@@ -19,7 +19,7 @@ import java.util.*
  *
  *
  */
-class EthereumBlockNumberViewModel : StreamingViewModel<EthereumBlockNumber, Unit>() {
+class EthereumBlockNumberViewModel : StreamingViewModel<EthBlockNum, Unit>() {
 
     /**
      * 24 seconds in millis
@@ -33,19 +33,19 @@ class EthereumBlockNumberViewModel : StreamingViewModel<EthereumBlockNumber, Uni
         EthereumGenericService.getInstance()
     }
 
-    fun getEthereumBlockNumber(owner: ViewLifecycleFragment, onChange: (EthereumBlockNumber) -> Unit) {
+    fun getEthereumBlockNumber(owner: ViewLifecycleFragment, onChange: (EthBlockNum) -> Unit) {
         initializeData(owner, Unit, onChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: Unit): LiveData<EthereumBlockNumber> {
+    override fun getLiveDataFromRepository(parameter: Unit): LiveData<EthBlockNum> {
         return repository.getEthereumBlockNumber()
     }
 
-    override fun getDataFromNetwork(parameter: Unit): Deferred<EthereumBlockNumber> {
+    override fun getDataFromNetwork(parameter: Unit): Deferred<EthBlockNum> {
         return ethereumService.getBlockNumber()
     }
 
-    override fun addNetworkDataToRepository(data: EthereumBlockNumber) {
+    override fun addNetworkDataToRepository(data: EthBlockNum) {
         repository.add(data)
     }
 

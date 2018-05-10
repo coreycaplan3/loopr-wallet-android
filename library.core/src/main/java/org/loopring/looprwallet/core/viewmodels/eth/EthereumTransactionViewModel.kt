@@ -6,6 +6,7 @@ import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import org.web3j.crypto.Credentials
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.math.BigDecimal
+import java.math.BigInteger
 
 /**
  * Created by Corey Caplan on 2/20/18.
@@ -27,8 +28,8 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
             credentials: Credentials,
             recipient: String,
             amount: BigDecimal,
-            gasLimit: BigDecimal,
-            gasPrice: BigDecimal
+            gasLimit: BigInteger,
+            gasPrice: BigInteger
     ) = async<Unit> {
         try {
             mIsTransactionRunning.postValue(true)
@@ -47,16 +48,17 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
      */
     fun sendTokens(
             contractAddress: String,
+            binary: String,
             credentials: Credentials,
             recipient: String,
-            amount: BigDecimal,
-            gasLimit: BigDecimal,
-            gasPrice: BigDecimal
+            amount: BigInteger,
+            gasLimit: BigInteger,
+            gasPrice: BigInteger
     ) = async<Unit> {
         mIsTransactionRunning.postValue(true)
         try {
             EthereumService.getInstance(credentials)
-                    .sendToken(contractAddress, recipient, amount, gasLimit, gasPrice)
+                    .sendToken(contractAddress, binary, recipient, amount, gasLimit, gasPrice)
                     .await()
         } catch (e: Throwable) {
             mError.postValue(e)
@@ -73,16 +75,17 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
      */
     fun approveToken(
             contractAddress: String,
+            binary: String,
             credentials: Credentials,
             spender: String,
-            amount: BigDecimal,
-            gasLimit: BigDecimal,
-            gasPrice: BigDecimal
+            amount: BigInteger,
+            gasLimit: BigInteger,
+            gasPrice: BigInteger
     ) = async<Unit> {
         mIsTransactionRunning.postValue(true)
         try {
             EthereumService.getInstance(credentials)
-                    .approveToken(contractAddress, credentials, spender, amount, gasLimit, gasPrice)
+                    .approveToken(contractAddress, binary, credentials, spender, amount, gasLimit, gasPrice)
                     .await()
         } catch (e: Throwable) {
             mError.postValue(e)

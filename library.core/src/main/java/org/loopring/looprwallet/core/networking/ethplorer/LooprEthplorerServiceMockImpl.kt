@@ -12,7 +12,6 @@ import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.loopring.looprwallet.core.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import java.io.IOException
-import java.math.BigDecimal
 import java.math.BigInteger
 
 /**
@@ -134,10 +133,10 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
 
     private fun setTokenBalanceInfo(address: String, token: CryptoToken) {
         val balanceAmount = when (token.identifier) {
-            LooprToken.ETH.identifier -> BigDecimal("10000")
-            LooprToken.LRC.identifier -> BigDecimal("25000")
-            LooprToken.APPC.identifier -> BigDecimal("000")
-            LooprToken.REQ.identifier -> BigDecimal("25000")
+            LooprToken.ETH.identifier -> BigInteger("10000")
+            LooprToken.LRC.identifier -> BigInteger("25000")
+            LooprToken.APPC.identifier -> BigInteger("000")
+            LooprToken.REQ.identifier -> BigInteger("25000")
             else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
         }
 

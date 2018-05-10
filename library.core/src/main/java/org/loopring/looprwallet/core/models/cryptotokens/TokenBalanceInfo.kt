@@ -4,7 +4,7 @@ import io.realm.RealmObject
 import io.realm.annotations.Index
 import org.loopring.looprwallet.core.extensions.equalsZero
 import org.loopring.looprwallet.core.models.TrackedRealmObject
-import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
 
 /**
@@ -21,27 +21,27 @@ open class TokenBalanceInfo(
 
         @Index var address: String = "",
 
-        balance: BigDecimal = BigDecimal.ZERO,
+        balance: BigInteger = BigInteger.ZERO,
 
         override var lastUpdated: Date = Date()
 ) : RealmObject(), TrackedRealmObject {
 
-    var balance: BigDecimal?
-        get() = mBalance?.let { BigDecimal(it) }
+    var balance: BigInteger
+        get() = BigInteger(mBalance)
         set(value) {
-            mBalance = when {
-                value?.equalsZero() == true -> "0"
-                else -> value?.toPlainString()
+            mBalance = when (value) {
+                BigInteger.ZERO -> "0"
+                else -> value.toString(10)
             }
         }
 
-    var mBalance: String?
+    var mBalance: String
 
     init {
-        // Needed to set backing fields initially. They will be overwritten by the two calls below
-        this.mBalance = null
+        // Needed to set backing fields initially. They will be overwritten by the call below to balance
+        this.mBalance = ""
 
-        // This will set mBalance and override the initial null value
+        // This will set mBalance and override the initial empty-string value
         this.balance = balance
     }
 

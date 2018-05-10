@@ -143,31 +143,6 @@
         <item>60</item>
     </string-array>
 
-    <!-- Ethereum Network -->
-
-    <string name="settings_ethereum_network_screen_key">loopr_ethereum_network_screen_key</string>
-
-    <string name="settings_ethereum_network_node_key">loopr_settings_ethereum_network_node_key</string>
-
-    <string name="settings_ethereum_network_node_default_value">TODO</string>
-    <string name="settings_ethereum_network_node_ui_default_value">Loopring (United States)</string>
-
-    <string-array name="settings_ethereum_network_node_entries_values">
-        <item>@string/settings_ethereum_network_node_default_value</item>
-        <item>MyEtherApi TODO</item>
-        <item>EtherScan TODO</item>
-        <item>Giveth TODO</item>
-        <item>Ethereum Commonwealth MEW TODO</item>
-    </string-array>
-
-    <string-array name="settings_ethereum_network_node_entries_ui">
-        <item>@string/settings_ethereum_network_node_ui_default_value</item>
-        <item>ETH - MyEtherApi.com</item>
-        <item>ETH - EtherScan.io</item>
-        <item>ETH - Giveth.io</item>
-        <item>ETH - Ethereum Commonwealth</item>
-    </string-array>
-
     <!-- Loopring Network -->
 
     <string name="settings_loopring_network_screen_key">loopr_loopring_network_screen_key</string>
@@ -175,11 +150,10 @@
     <string name="settings_loopring_network_relay_key">loopr_settings_loopring_network_relay_key</string>
     <string name="settings_loopring_network_contract_version_key">loopr_settings_loopring_network_contract_version_key</string>
 
-    <string name="settings_loopring_network_contract_version_default_value">1.3</string>
-    <string name="settings_loopring_network_contract_version_ui_default_value">v1.3</string>
+    <string name="settings_loopring_network_contract_version_default_value">1.5.1</string>
+    <string name="settings_loopring_network_contract_version_ui_default_value">v1.5.1</string>
 
-    <!-- TODO -->
-    <string name="settings_loopring_network_relay_default_value">TODO</string>
+    <string name="settings_loopring_network_relay_default_value">https://relay1.loopring.io</string>
     <string name="settings_loopring_network_relay_ui_default_value">Default Loopring Relay</string>
 
 

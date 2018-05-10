@@ -8,7 +8,6 @@ import kotlinx.android.synthetic.main.dialog_transfer_details.*
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 import org.loopring.looprwallet.core.extensions.formatAsCurrency
 import org.loopring.looprwallet.core.extensions.formatAsToken
-import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
@@ -19,6 +18,7 @@ import org.loopring.looprwallet.core.viewmodels.eth.EthereumBlockNumberViewModel
 import org.loopring.looprwallet.transferdetails.R
 import org.loopring.looprwallet.transferdetails.dagger.transferDetailsLooprComponent
 import org.loopring.looprwallet.transferdetails.viewmodels.TransferDetailsViewModel
+import org.loopring.looprwalletnetwork.models.ethereum.EthBlockNum
 import java.math.BigInteger
 import java.text.DateFormat
 import javax.inject.Inject
@@ -66,7 +66,7 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
 
     var looprTransfer: LooprTransfer? = null
 
-    var ethereumBlockNumber: EthereumBlockNumber? = null
+    var ethBlockNum: EthBlockNum? = null
 
     @Inject
     lateinit var currencySettings: CurrencySettings
@@ -85,7 +85,7 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
 
         ethereumBlockNumberViewModel = LooprViewModelFactory.get(activity!!)
         ethereumBlockNumberViewModel.getEthereumBlockNumber(this) {
-            ethereumBlockNumber = it
+            ethBlockNum = it
             bindStatus()
         }
 
@@ -133,14 +133,14 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
 
     private fun bindStatus() {
         val transfer = looprTransfer ?: return
-        val ethereumBlockNumber = ethereumBlockNumber?.blockNumber ?: return
+        val ethereumBlockNumber = ethBlockNum?.blockNumber ?: return
         val transferBlockNumber = transfer.blockNumber
 
         val status: String
         val color: Int
         when {
             transferBlockNumber == null || ethereumBlockNumber - transferBlockNumber < BigInteger.ZERO -> {
-                //  The difference may be < 0 if the ethereumBlockNumber is stale
+                //  The difference may be < 0 if the ethBlockNum is stale
                 status = str(R.string.waiting_to_be_mined)
                 color = col(R.color.red_400, activity)
             }

@@ -251,7 +251,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
         tokenBalances.firstOrNull { it.identifier == LooprToken.ETH.identifier }?.let {
-            val balance = it.findAddressBalance(address)?.balance?.toPlainString()
+            val balance = it.findAddressBalance(address)?.balance?.toString(10)
             if (balance != null) {
                 @SuppressLint("SetTextI18n")
                 ethereumBalanceLabel.text = "$balance ${it.ticker}"
@@ -267,7 +267,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
                 val balance = item.findAddressBalance(address)
 
                 balance?.let {
-                    builder.append(it.balance?.toPlainString())
+                    builder.append(it.balance.toString(10))
                             .append(" ")
                             .append(item.ticker)
 

@@ -18,7 +18,7 @@ import org.loopring.looprwalletnetwork.services.LoopringService
 class LooprMarketsServiceProdImpl: LooprMarketsService {
 
     private val service by lazy {
-        LoopringService
+
     }
 
     override fun getMarkets(): Deferred<RealmList<TradingPair>> {

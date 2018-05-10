@@ -58,12 +58,6 @@
     <PreferenceCategory android:title="Network Settings">
 
         <Preference
-            android:icon="@drawable/ic_eth_white_24dp"
-            android:key="@string/settings_ethereum_network_screen_key"
-            android:summary="@string/summary_ethereum_network"
-            android:title="@string/ethereum_network" />
-
-        <Preference
             android:icon="@drawable/ic_loopring_white_24dp"
             android:key="@string/settings_loopring_network_screen_key"
             android:summary="@string/summary_loopring_network"

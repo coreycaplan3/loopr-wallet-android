@@ -3,7 +3,7 @@ package org.loopring.looprwallet.core.models.settings
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.int
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
-import java.math.BigDecimal
+import java.math.BigInteger
 
 /**
  * Created by Corey on 3/25/2018
@@ -27,19 +27,19 @@ class EthereumFeeSettings(private val looprSettings: LooprSettings) {
         val DEFAULT_TRANSFER_TOKEN_GAS_LIMIT = str(R.string.settings_ethereum_fees_default_send_token_gas_limit_value)
     }
 
-    val currentGasPrice: BigDecimal
+    val currentGasPrice: BigInteger
         get() = getValue(KEY_GAS_PRICE, DEFAULT_GAS_PRICE)
 
-    val currentEthTransferGasLimit: BigDecimal
+    val currentEthTransferGasLimit: BigInteger
         get() = getValue(KEY_TRANSFER_ETHER_GAS_LIMIT, DEFAULT_TRANSFER_ETHER_GAS_LIMIT)
 
-    val currentTokenTransferGasLimit: BigDecimal
+    val currentTokenTransferGasLimit: BigInteger
         get() = getValue(KEY_TRANSFER_TOKEN_GAS_LIMIT, DEFAULT_TRANSFER_TOKEN_GAS_LIMIT)
 
     // MARK - Private Methods
 
-    private fun getValue(key: String, defaultValue: String): BigDecimal {
-        return BigDecimal(looprSettings.getString(key) ?: defaultValue)
+    private fun getValue(key: String, defaultValue: String): BigInteger {
+        return BigInteger(looprSettings.getString(key) ?: defaultValue)
     }
 
 }

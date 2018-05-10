@@ -63,7 +63,14 @@ fun String.formatAsCustomToken(currencySettings: CurrencySettings, ticker: Strin
     return "$entireNumber $ticker"
 }
 
-val NEGATIVE_ONE = BigDecimal(-1)
+object BigDecimalHelper {
+    val NEGATIVE_ONE = BigDecimal(-1)
+}
+
+object BigIntegerHelper {
+    val NEGATIVE_ONE = BigInteger("-1")
+}
+
 
 /**
  * Formats a [BigDecimal] in the user's native currency
@@ -82,7 +89,7 @@ fun BigDecimal.formatAsCurrency(settings: CurrencySettings): String {
  */
 fun BigInteger.formatAsToken(settings: CurrencySettings, token: LooprToken): String {
     val formatter = settings.getNumberFormatter()
-    val result =  BigDecimal(this, token.decimalPlaces) / (BigDecimal.TEN.pow(token.decimalPlaces))
+    val result = BigDecimal(this, token.decimalPlaces) / (BigDecimal.TEN.pow(token.decimalPlaces))
     return "${formatter.format(result)} ${token.ticker}"
 }
 

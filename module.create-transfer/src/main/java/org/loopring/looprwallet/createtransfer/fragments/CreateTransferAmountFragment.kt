@@ -207,13 +207,14 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             if (isCurrencyMainLabel) {
                 // calculate max based on currency
                 // MAX = balance * princeInCurrency
-                currencyAmount = (balance * BigDecimal(priceInNativeCurrency.toString(10)))
-                        .setScale(2, RoundingMode.HALF_DOWN)
-                        .toPlainString()
+                currencyAmount = (balance * BigInteger(priceInNativeCurrency.toString(10)))
+                        .toString(10)
             } else {
                 // Calculate max based on token amount
                 // MAX is just the balance
-                tokenAmount = balance.setScale(8, RoundingMode.HALF_DOWN)
+                val tenPowEight = BigDecimal(10).pow(8)
+                tokenAmount = (BigDecimal(balance.toString(10)) / tenPowEight)
+                        .setScale(8, RoundingMode.HALF_EVEN)
                         .toPlainString()
             }
 
@@ -221,14 +222,14 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         }
 
         createTransferSendButton.setOnClickListener {
-            val bdTokenAmount = BigDecimal(tokenAmount)
+            val biTokenAmount = (BigDecimal(tokenAmount) * (BigDecimal("10").pow(8))).toBigInteger()
             val gasPrice = ethereumFeeSettings.currentGasPrice
             val totalEtherTransferAmount = gasPrice * ethereumFeeSettings.currentEthTransferGasLimit
             val totalTokenTransferAmount = gasPrice * ethereumFeeSettings.currentTokenTransferGasLimit
 
             when (currentToken.identifier) {
-                LooprToken.ETH.identifier -> onSendEth(bdTokenAmount, totalEtherTransferAmount)
-                else -> onSendToken(bdTokenAmount, totalTokenTransferAmount)
+                LooprToken.ETH.identifier -> onSendEth(biTokenAmount, totalEtherTransferAmount)
+                else -> onSendToken(biTokenAmount, totalTokenTransferAmount)
             }
         }
 
@@ -271,7 +272,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                 bindAmountsToText()
 
                 setupTokenTicker(data[position])
-                if (balance == null || balance.equalsZero() && ethTokenBalanceViewModel.isLoading() == false) {
+                if (balance == null || balance == BigInteger.ZERO && ethTokenBalanceViewModel.isLoading() == false) {
                     ethTokenBalanceViewModel.refresh()
                     spinner.context.longToast(R.string.error_send_tokens_with_zero_balance)
                 }
@@ -391,9 +392,9 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             currentToken = it
 
             val balance = it.getBalanceOf(address)?.formatAsToken(currencySettings, it)
-                    ?: NEGATIVE_ONE
+                    ?: BigIntegerHelper.NEGATIVE_ONE
             createTransferBalanceLabel.text = when (balance) {
-                NEGATIVE_ONE -> str(R.string.formatter_balance).format(balance)
+                BigIntegerHelper.NEGATIVE_ONE -> str(R.string.formatter_balance).format(balance)
                 else -> ""
             }
 
@@ -411,12 +412,12 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
      * Called when a user is attempting to send ETH. This method checks for insufficient balance
      * issues.
      */
-    private fun onSendEth(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
-        val ethBalance = ethToken.getBalanceOf(address) ?: NEGATIVE_ONE
+    private fun onSendEth(amountToSend: BigInteger, totalTransactionCost: BigInteger) {
+        val ethBalance = ethToken.getBalanceOf(address) ?: BigIntegerHelper.NEGATIVE_ONE
         val gasLimit = ethereumFeeSettings.currentEthTransferGasLimit
         val gasPrice = ethereumFeeSettings.currentGasPrice
         when {
-            ethBalance == NEGATIVE_ONE -> onEthBalanceError()
+            ethBalance == BigIntegerHelper.NEGATIVE_ONE -> onEthBalanceError()
             ethBalance < (amountToSend + totalTransactionCost) ->
                 view?.context?.longToast(R.string.cannot_send_more_eth_than_balance_and_gas)
             else ->
@@ -424,6 +425,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                     val credentials = walletClient.getCurrentWallet()!!.credentials
                     ethereumTransactionViewModel.sendTokens(
                             currentToken.identifier,
+                            currentToken.binary!!,
                             credentials,
                             address,
                             amountToSend,
@@ -434,15 +436,15 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         }
     }
 
-    private fun onSendToken(amountToSend: BigDecimal, totalTransactionCost: BigDecimal) {
-        val tokenToSendBalance = currentToken.getBalanceOf(address) ?: NEGATIVE_ONE
-        val ethBalance = ethToken.getBalanceOf(address) ?: NEGATIVE_ONE
+    private fun onSendToken(amountToSend: BigInteger, totalTransactionCost: BigInteger) {
+        val tokenToSendBalance = currentToken.getBalanceOf(address) ?: BigIntegerHelper.NEGATIVE_ONE
+        val ethBalance = ethToken.getBalanceOf(address) ?: BigIntegerHelper.NEGATIVE_ONE
 
         val gasLimit = ethereumFeeSettings.currentTokenTransferGasLimit
         val gasPrice = ethereumFeeSettings.currentGasPrice
         when {
-            ethBalance == NEGATIVE_ONE -> onEthBalanceError()
-            tokenToSendBalance == NEGATIVE_ONE -> {
+            ethBalance == BigDecimalHelper.NEGATIVE_ONE -> onEthBalanceError()
+            tokenToSendBalance == BigDecimalHelper.NEGATIVE_ONE -> {
                 // This should not happen, since the button is disabled until a balance was loaded
                 loge("Could not get the user\'s token balance!", IllegalStateException())
                 view?.longSnackbarWithAction(R.string.error_retrieve_token_balance, R.string.retry) {
@@ -467,6 +469,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                     val credentials = walletClient.getCurrentWallet()!!.credentials
                     ethereumTransactionViewModel.sendTokens(
                             currentToken.identifier,
+                            currentToken.binary!!,
                             credentials,
                             address,
                             amountToSend,

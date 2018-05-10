@@ -18,6 +18,7 @@ import org.loopring.looprwallet.core.realm.RealmClient
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import org.loopring.looprwallet.core.viewmodels.price.CurrencyExchangeRateViewModel
 import org.loopring.looprwallet.core.wallet.WalletClient
+import org.web3j.protocol.Web3j
 import javax.inject.Singleton
 
 /**
@@ -29,8 +30,8 @@ import javax.inject.Singleton
  *
  */
 @Singleton
-@Component(modules = [LooprSettingsModule::class, LooprSecureSettingsModule::class,
-    LooprRealmModule::class, LooprWalletModule::class])
+@Component(modules = [LooprSettingsModule::class, LooprNetworkModule::class,
+    LooprSecureSettingsModule::class, LooprRealmModule::class, LooprWalletModule::class])
 interface CoreLooprComponent {
 
     // Applications
@@ -74,7 +75,6 @@ interface CoreLooprComponent {
     val securitySettings: SecuritySettings
     val ethereumFeeSettings: EthereumFeeSettings
     val loopringFeeSettings: LoopringFeeSettings
-    val ethereumNetworkSettings: EthereumNetworkSettings
     val loopringNetworkSettings: LoopringNetworkSettings
     val generalWalletSettings: GeneralWalletSettings
     val userPinSettings: UserPinSettings
@@ -83,6 +83,7 @@ interface CoreLooprComponent {
 
     val realmClient: RealmClient
     val walletClient: WalletClient
+    val web3j: Web3j
 }
 
 interface CoreLooprComponentProvider {
