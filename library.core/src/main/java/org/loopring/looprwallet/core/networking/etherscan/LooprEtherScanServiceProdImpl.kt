@@ -10,10 +10,11 @@ import kotlinx.coroutines.experimental.Deferred
  * Purpose of Class:
  *
  */
-class EtherScanServiceProdImpl: EtherScanService {
+class LooprEtherScanServiceProdImpl: LooprEtherScanService {
 
     override fun getTokenBinary(contractAddress: String): Deferred<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//        return EtherscanService.getService().getTransactions(contractAddress).await()
+        TODO("...")
     }
 
 }

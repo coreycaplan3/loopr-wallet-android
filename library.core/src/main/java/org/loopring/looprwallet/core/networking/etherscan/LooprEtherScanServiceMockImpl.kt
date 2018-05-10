@@ -15,7 +15,7 @@ import java.io.IOException
  * Purpose of Class:
  *
  */
-internal class EtherScanServiceMockImpl : EtherScanService {
+internal class LooprEtherScanServiceMockImpl : LooprEtherScanService {
 
     // Get's LRC by default
     override fun getTokenBinary(contractAddress: String) = async(NET) {

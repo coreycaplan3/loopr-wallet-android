@@ -14,15 +14,15 @@ import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
  * Purpose of Class: A class for interacting with Etherscan related methods
  *
  */
-interface EtherScanService {
+interface LooprEtherScanService {
 
     companion object {
 
-        fun getInstance(): EtherScanService {
+        fun getInstance(): LooprEtherScanService {
             val environment = BuildUtility.BUILD_FLAVOR
             return when (environment) {
-                FLAVOR_MOCKNET -> EtherScanServiceMockImpl()
-                FLAVOR_TESTNET, FLAVOR_MAINNET -> EtherScanServiceProdImpl()
+                FLAVOR_MOCKNET -> LooprEtherScanServiceMockImpl()
+                FLAVOR_TESTNET, FLAVOR_MAINNET -> LooprEtherScanServiceProdImpl()
                 else -> throw IllegalArgumentException("Invalid environment, found: $environment")
             }
         }

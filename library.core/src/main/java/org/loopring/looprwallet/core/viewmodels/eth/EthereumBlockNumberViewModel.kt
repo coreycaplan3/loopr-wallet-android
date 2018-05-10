@@ -5,7 +5,7 @@ import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
 import org.loopring.looprwallet.core.models.sync.SyncData
-import org.loopring.looprwallet.core.networking.eth.EthereumService
+import org.loopring.looprwallet.core.networking.eth.EthereumGenericService
 import org.loopring.looprwallet.core.repositories.eth.EthereumBlockNumberRepository
 import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
 import java.util.*
@@ -30,7 +30,7 @@ class EthereumBlockNumberViewModel : StreamingViewModel<EthereumBlockNumber, Uni
     override val repository = EthereumBlockNumberRepository()
 
     private val ethereumService by lazy {
-        EthereumService.getInstance()
+        EthereumGenericService.getInstance()
     }
 
     fun getEthereumBlockNumber(owner: ViewLifecycleFragment, onChange: (EthereumBlockNumber) -> Unit) {

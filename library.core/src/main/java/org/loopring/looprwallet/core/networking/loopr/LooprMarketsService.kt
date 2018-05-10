@@ -5,6 +5,7 @@ import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.markets.TradingPair
 import org.loopring.looprwallet.core.models.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.markets.TradingPairTrend
+import org.loopring.looprwallet.core.utilities.BuildUtility
 
 /**
  * Created by Corey on 4/24/2018
@@ -19,8 +20,12 @@ interface LooprMarketsService {
     companion object {
 
         fun getInstance(): LooprMarketsService {
-            // TODO
-            return LooprMarketsServiceMockImpl()
+            val environment = BuildUtility.BUILD_FLAVOR
+            return when (environment) {
+                BuildUtility.FLAVOR_MOCKNET -> LooprMarketsServiceMockImpl()
+                BuildUtility.FLAVOR_TESTNET, BuildUtility.FLAVOR_MAINNET -> LooprMarketsServiceProdImpl()
+                else -> throw IllegalArgumentException("Invalid environment, found: $environment")
+            }
         }
 
     }

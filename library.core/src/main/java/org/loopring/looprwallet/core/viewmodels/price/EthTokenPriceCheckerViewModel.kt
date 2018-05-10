@@ -9,7 +9,7 @@ import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.models.sync.SyncData
-import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
+import org.loopring.looprwallet.core.networking.ethplorer.LooprEthplorerService
 import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
 import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
 import java.math.BigDecimal
@@ -40,7 +40,7 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<LooprToken, String>() {
     var currentCryptoToken: LooprToken? = null
         private set
 
-    private val ethplorerTokenApiService = EthplorerService.getInstance()
+    private val ethplorerTokenApiService = LooprEthplorerService.getInstance()
 
     /**
      * Gets the current price of the provided ticker by hitting the database first, followed by

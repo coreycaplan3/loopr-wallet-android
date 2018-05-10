@@ -12,6 +12,8 @@ import org.loopring.looprwallet.core.fragments.settings.HomeSettingsFragment
 import org.loopring.looprwallet.core.fragments.settings.LoopringFeeSettingsFragment
 import org.loopring.looprwallet.core.fragments.settings.SecuritySettingsFragment
 import org.loopring.looprwallet.core.models.settings.*
+import org.loopring.looprwallet.core.networking.eth.EthereumService
+import org.loopring.looprwallet.core.networking.eth.EthereumServiceProdImpl
 import org.loopring.looprwallet.core.realm.RealmClient
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import org.loopring.looprwallet.core.viewmodels.price.CurrencyExchangeRateViewModel
@@ -52,6 +54,10 @@ interface CoreLooprComponent {
     fun inject(securitySettingsFragment: SecuritySettingsFragment)
     fun inject(ethereumFeeSettingsFragment: EthereumFeeSettingsFragment)
     fun inject(loopringFeeSettingsFragment: LoopringFeeSettingsFragment)
+
+    // Services
+
+    fun inject(ethereumService: EthereumService)
 
     // Repositories
 

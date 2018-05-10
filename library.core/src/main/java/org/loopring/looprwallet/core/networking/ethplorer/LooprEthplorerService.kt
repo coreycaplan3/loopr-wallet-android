@@ -17,15 +17,15 @@ import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
  * Purpose of Class:
  *
  */
-interface EthplorerService {
+interface LooprEthplorerService {
 
     companion object {
 
-        fun getInstance(): EthplorerService {
+        fun getInstance(): LooprEthplorerService {
             val buildType = BuildUtility.BUILD_FLAVOR
             return when (buildType) {
-                FLAVOR_MOCKNET -> EthplorerServiceMockImpl()
-                FLAVOR_TESTNET, FLAVOR_MAINNET -> EthplorerServiceProdImpl()
+                FLAVOR_MOCKNET -> LooprEthplorerServiceMockImpl()
+                FLAVOR_TESTNET, FLAVOR_MAINNET -> LooprEthplorerServiceProdImpl()
                 else -> throw IllegalArgumentException("Invalid build type, found: $buildType")
             }
         }

@@ -7,7 +7,7 @@ import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
+import org.loopring.looprwallet.core.networking.ethplorer.LooprEthplorerService
 import org.loopring.looprwallet.core.repositories.loopr.LooprTransferRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.util.*
@@ -25,7 +25,7 @@ class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewMo
     override val repository = LooprTransferRepository(currentWallet)
 
     private val ethplorerService by lazy {
-        EthplorerService.getInstance()
+        LooprEthplorerService.getInstance()
     }
 
     fun getAllTransfers(owner: ViewLifecycleFragment, address: String, onChange: (OrderedRealmCollection<LooprTransfer>) -> Unit) {

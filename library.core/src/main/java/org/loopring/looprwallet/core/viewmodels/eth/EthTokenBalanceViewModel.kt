@@ -9,7 +9,7 @@ import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import org.loopring.looprwallet.core.models.sync.SyncData
-import org.loopring.looprwallet.core.networking.ethplorer.EthplorerService
+import org.loopring.looprwallet.core.networking.ethplorer.LooprEthplorerService
 import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.util.*
@@ -29,7 +29,7 @@ class EthTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollection<Lo
     override val repository = EthTokenRepository()
 
     private val ethplorerService by lazy {
-        EthplorerService.getInstance()
+        LooprEthplorerService.getInstance()
     }
 
     fun getEthBalanceNow() = repository.getEthNow()

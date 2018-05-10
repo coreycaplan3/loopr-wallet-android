@@ -3,7 +3,10 @@ package org.loopring.looprwallet.core.networking.ethplorer
 import io.realm.RealmList
 import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
 import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.async
+import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwalletnetwork.services.EthplorerService
 
 /**
  * Created by Corey Caplan on 3/17/18.
@@ -13,10 +16,14 @@ import org.loopring.looprwallet.core.models.transfers.LooprTransfer
  * Purpose of Class:
  *
  */
-class EthplorerServiceProdImpl : EthplorerService {
+class LooprEthplorerServiceProdImpl : LooprEthplorerService {
 
-    override fun getAddressInfo(address: String): Deferred<RealmList<LooprToken>> {
-        TODO("not implemented")
+    private val service by lazy {
+        EthplorerService.getService()
+    }
+
+    override fun getAddressInfo(address: String): Deferred<RealmList<LooprToken>> = async(NET) {
+        TODO("...")
     }
 
     override fun getTokenInfo(contractAddress: String): Deferred<LooprToken> {

@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.viewmodels.eth
 
 import kotlinx.coroutines.experimental.async
-import org.loopring.looprwallet.core.networking.eth.EthService
+import org.loopring.looprwallet.core.networking.eth.EthereumService
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import org.web3j.crypto.Credentials
 import org.web3j.protocol.core.methods.response.TransactionReceipt
@@ -21,7 +21,7 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
      * Sends ether from the sender to the recipient. This method is asynchronous and uses the
      * callbacks to communicate back to the caller.
      *
-     * @see EthService.sendEther
+     * @see EthereumService.sendEther
      */
     fun sendEther(
             credentials: Credentials,
@@ -32,7 +32,7 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
     ) = async<Unit> {
         try {
             mIsTransactionRunning.postValue(true)
-            EthService.getInstance(credentials).sendEther(recipient, amount, gasLimit, gasPrice)
+            EthereumService.getInstance(credentials).sendEther(recipient, amount, gasLimit, gasPrice)
         } catch (e: Throwable) {
             mError.postValue(e)
         } finally {
@@ -43,7 +43,7 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
     /**
      * Sends tokens from [credentials] to the [recipient]. This method is asynchronous.
      *
-     * @see EthService.sendToken
+     * @see EthereumService.sendToken
      */
     fun sendTokens(
             contractAddress: String,
@@ -55,7 +55,7 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
     ) = async<Unit> {
         mIsTransactionRunning.postValue(true)
         try {
-            EthService.getInstance(credentials)
+            EthereumService.getInstance(credentials)
                     .sendToken(contractAddress, recipient, amount, gasLimit, gasPrice)
                     .await()
         } catch (e: Throwable) {
@@ -69,7 +69,7 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
      * **ERC-20 Function**
      * Approves a given [spender] to use [amount] tokens on behalf of user ([credentials]).
      *
-     * @see EthService.approveToken
+     * @see EthereumService.approveToken
      */
     fun approveToken(
             contractAddress: String,
@@ -81,7 +81,7 @@ class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() 
     ) = async<Unit> {
         mIsTransactionRunning.postValue(true)
         try {
-            EthService.getInstance(credentials)
+            EthereumService.getInstance(credentials)
                     .approveToken(contractAddress, credentials, spender, amount, gasLimit, gasPrice)
                     .await()
         } catch (e: Throwable) {

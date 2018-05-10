@@ -23,7 +23,7 @@ import java.math.BigInteger
  * Purpose of Class:
  *
  */
-class EthplorerServiceMockImpl : EthplorerService {
+class LooprEthplorerServiceMockImpl : LooprEthplorerService {
 
     companion object {
 

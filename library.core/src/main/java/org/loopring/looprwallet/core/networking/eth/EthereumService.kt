@@ -1,31 +1,115 @@
 package org.loopring.looprwallet.core.networking.eth
 
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.blockchain.EthereumBlockNumber
+import org.loopring.looprwallet.core.dagger.coreLooprComponent
+import org.loopring.looprwallet.core.utilities.BuildUtility
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MAINNET
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MOCKNET
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
+import org.web3j.crypto.Credentials
+import org.web3j.protocol.Web3j
+import org.web3j.protocol.core.methods.response.TransactionReceipt
+import java.math.BigDecimal
 import java.math.BigInteger
+import javax.inject.Inject
 
 /**
- * Created by Corey on 4/24/2018
+ * Created by Corey Caplan on 3/10/18.
  *
- * Project: loopr-android
+ * Project: loopr-wallet-android
  *
- * Purpose of Class: For performing generic Ethereum operations, like viewing the block number
- *
+ * Purpose of Class: To interact with the Ethereum network to perform ETH related transactions,
+ * like sending tokens and Ether.
  */
-interface EthereumService {
+abstract class EthereumService {
 
     companion object {
 
-        fun getInstance(): EthereumService {
-            //TODO
-            return EthereumServiceMockImpl()
+        /**
+         * Gets an instance of the transaction repository for executing ether transactions
+         */
+        fun getInstance(credentials: Credentials): EthereumService {
+            val environment = BuildUtility.BUILD_FLAVOR
+            return when (environment) {
+                FLAVOR_MOCKNET -> EthereumServiceMockImpl()
+                FLAVOR_TESTNET, FLAVOR_MAINNET -> EthereumServiceProdImpl(credentials)
+                else -> throw IllegalArgumentException("Invalid environment, found: $environment")
+            }
         }
+    }
 
+    @Inject
+    lateinit var web3j: Web3j
+
+    init {
+        injectComponents()
     }
 
     /**
-     * @return The current block number of the Ethereum blockchain
+     * A final function used for not leaving "this" from a non-final context
      */
-    fun getBlockNumber(): Deferred<EthereumBlockNumber>
+    private fun injectComponents() {
+        coreLooprComponent.inject(this)
+    }
+
+    /**
+     * Sends ether from the sender to the recipient. This method does **NOT** block.
+     *
+     * @param recipient The recipient's address
+     * @param amount The amount of Ether to send to the recipient (represented as a whole number).
+     * For example, a value passed of 1.0 will send 1.0 ETH
+     * @param gasLimit The gas limit for sending this amount of Ether.
+     * @param gasPrice The price (in Gwei) for sending the Ether.
+     */
+    abstract fun sendEther(recipient: String,
+                           amount: BigDecimal,
+                           gasLimit: BigInteger,
+                           gasPrice: BigInteger
+    ): Deferred<TransactionReceipt>
+
+
+    /**
+     * Sends tokens from the sender to the recipient. This method does **NOT** block.
+     *
+     * @param contractAddress The address of the token's contract.
+     * @param binary The token's binary, used for executing the contract's code.
+     * @param recipient The recipient's address
+     * @param amount The amount of tokens to send to the recipient (represented as a whole number).
+     * For example, a value passed of 1.0 will send 1.0 tokens
+     * @param gasLimit The gas limit for sending this amount of tokens.
+     * @param gasPrice The price (in Gwei) for sending the tokens.
+     */
+    abstract fun sendToken(contractAddress: String,
+                           binary: String,
+                           recipient: String,
+                           amount: BigInteger,
+                           gasLimit: BigInteger,
+                           gasPrice: BigInteger
+    ): Deferred<TransactionReceipt>
+
+    /**
+     * **ERC-20 Function**
+     * Approves a given [spender] to use [amount] tokens on behalf of user ([credentials]).
+     *
+     * **THIS FUNCTION IS REQUIRED FOR LOOPRING TO TRADE ON BEHALF OF THE USER, ONCE AN ORDER IS
+     * FOUND**
+     *
+     * @param contractAddress The address of the token's contract
+     * @param binary The token's binary, used for executing the contract's code.
+     * @param credentials The [Credentials] of the user whose tokens will be spendable by the
+     * Loopring smart contract
+     * @param amount The amount of tokens that the Loopring smart contract will be able to spend
+     * @param gasLimit The amount of gas needed to perform the approval
+     * @param gasPrice The price at which the
+     */
+    abstract fun approveToken(
+            contractAddress: String,
+            binary: String,
+            credentials: Credentials,
+            spender: String,
+            amount: BigInteger,
+            gasLimit: BigInteger,
+            gasPrice: BigInteger
+    ): Deferred<TransactionReceipt>
 
 }
