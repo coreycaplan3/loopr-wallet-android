@@ -2,7 +2,6 @@ package org.loopring.looprwallet.core.repositories.loopr
 
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
-import io.realm.Realm
 import io.realm.RealmList
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
@@ -13,8 +12,8 @@ import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.sort
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.models.android.architecture.IO
-import org.loopring.looprwallet.core.models.markets.MarketsFilter
-import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
@@ -25,7 +24,7 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class LooprMarketsRepository : BaseRealmRepository(false) {
+class LooprMarketsRepository : BaseRealmRepository() {
 
     /**
      * Toggles the *favorite* status of a trading pair
@@ -33,7 +32,7 @@ class LooprMarketsRepository : BaseRealmRepository(false) {
      * @param market The *primaryTicker-secondaryTicker* or primary key of the [TradingPair]
      */
     fun toggleIsFavorite(market: String, context: HandlerContext = IO) = async(context) {
-        runTransaction(Realm.Transaction { realm ->
+        runTransaction(context) { realm ->
             realm.where<TradingPair>()
                     .equalTo(TradingPair::market, market)
                     .findFirst()
@@ -41,20 +40,28 @@ class LooprMarketsRepository : BaseRealmRepository(false) {
                         it.isFavorite = !it.isFavorite
                         realm.upsert(it)
                     }
-        }, context)
+        }
     }
 
-    fun insertMarkets(list: RealmList<TradingPair>, context: HandlerContext = IO) {
-        getRealmFromContext(context)
-                .executeTransaction { realm ->
-                    list.forEach {
-                        realm.upsert(it.primaryToken)
-                    }
-                    realm.upsert(list)
-                }
+    fun insertMarkets(list: RealmList<TradingPair>, context: HandlerContext = IO) = getRealmFromContext(context).executeTransaction { realm ->
+        val allTradingPairs = realm.where<TradingPair>().findAll()
+        list.map { newTradingPair ->
+            // We need to copy over the old information to the new ticker before insertion
+            return@map allTradingPairs.where()
+                    .equalTo(TradingPair::market, newTradingPair.market)
+                    .findFirst()
+                    ?.also { oldTradingPair ->
+                        // Copy over the old ticker's information to the new ticker
+                        newTradingPair.primaryTokenName = oldTradingPair.primaryTokenName
+                        newTradingPair.isFavorite = oldTradingPair.isFavorite
+                    } ?: newTradingPair
+
+        }.forEach { tradingPair ->
+            realm.upsert(tradingPair)
+        }
     }
 
-    fun getMarkets(filter: MarketsFilter, context: HandlerContext = UI): LiveData<OrderedRealmCollection<TradingPair>> {
+    fun getMarkets(filter: TradingPairFilter, context: HandlerContext = UI): LiveData<OrderedRealmCollection<TradingPair>> {
         // TODO apply filter; look into making these async queries run on a background thread too
         return getRealmFromContext(context)
                 .where<TradingPair>()

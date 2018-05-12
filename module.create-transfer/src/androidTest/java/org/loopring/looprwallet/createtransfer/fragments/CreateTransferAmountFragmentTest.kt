@@ -20,7 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
 import org.loopring.looprwallet.core.extensions.formatAsCurrency
 import org.loopring.looprwallet.core.extensions.formatAsToken
@@ -290,8 +290,8 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
         NetworkUtility.mockIsNetworkAvailable = false
 
         val deferred = CompletableDeferred<Boolean>()
-        fragment.ethTokenBalanceViewModel!!.addCurrentStateObserver(fragment) {
-            val viewModel = fragment.ethTokenBalanceViewModel!!
+        fragment.ethereumTokenBalanceViewModel!!.addCurrentStateObserver(fragment) {
+            val viewModel = fragment.ethereumTokenBalanceViewModel!!
             if (!viewModel.isLoading() && !viewModel.hasValidData()) {
                 deferred.complete(true)
             }
@@ -336,8 +336,8 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
 
     private fun waitForBalancesToLoad() = runBlockingUiCode {
         val deferred = CompletableDeferred<Boolean>()
-        fragment.ethTokenBalanceViewModel!!.addCurrentStateObserver(fragment) {
-            val viewModel = fragment.ethTokenBalanceViewModel!!
+        fragment.ethereumTokenBalanceViewModel!!.addCurrentStateObserver(fragment) {
+            val viewModel = fragment.ethereumTokenBalanceViewModel!!
             if (!viewModel.isLoading() && viewModel.hasValidData()) {
                 deferred.complete(true)
             }
@@ -349,7 +349,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
     private fun waitForPriceToLoad() = runBlockingUiCode {
         val deferred = CompletableDeferred<Boolean>()
         fragment.ethTokenPriceCheckerViewModel!!.addCurrentStateObserver(fragment) {
-            val viewModel = fragment.ethTokenBalanceViewModel!!
+            val viewModel = fragment.ethereumTokenBalanceViewModel!!
             if (!viewModel.isLoading() && viewModel.hasValidData()) {
                 deferred.complete(true)
             }

@@ -45,7 +45,7 @@ class EthereumBlockNumberViewModel : StreamingViewModel<EthBlockNum, Unit>() {
         return ethereumService.getBlockNumber()
     }
 
-    override fun addNetworkDataToRepository(data: EthBlockNum) {
+    override fun addNetworkDataToRepository(data: EthBlockNum, parameter: Unit) {
         repository.add(data)
     }
 

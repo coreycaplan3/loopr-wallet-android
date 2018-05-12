@@ -315,10 +315,13 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
     /**
      * Adds the given [data] to the repository so it can be cached and used offline.
      *
+     * **This method is called from the [IO] context's thread.**
+     *
      * @param data The fresh data that was just retrieved from the network.
+     * @param parameter The parameter that was used to retrieve the data
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
-    abstract fun addNetworkDataToRepository(data: T)
+    abstract fun addNetworkDataToRepository(data: T, parameter: U)
 
     /**
      * Checks if the parameter for this [OfflineFirstViewModel] is the same as the parameter being
@@ -564,7 +567,7 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
             }
 
             // Update the current state and add the data to Realm
-            addNetworkDataToRepository(data)
+            addNetworkDataToRepository(data, parameter)
             delay(48)
             mCurrentState.postValue(STATE_IDLE_HAVE_DATA)
 

@@ -36,6 +36,9 @@ import org.loopring.looprwallet.walletsignin.activities.SignInActivity
 import org.loopring.looprwallet.walletsignin.dagger.DaggerWalletLooprComponent
 import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponent
 import org.loopring.looprwallet.walletsignin.dagger.WalletLooprComponentProvider
+import org.loopring.looprwallet.wrapeth.dagger.DaggerWrapEthLooprComponent
+import org.loopring.looprwallet.wrapeth.dagger.WrapEthLooprComponent
+import org.loopring.looprwallet.wrapeth.dagger.WrapEthLooprComponentProvider
 
 /**
  * Created by Corey on 1/18/2018.
@@ -50,7 +53,7 @@ open class LooprWalletApp : CoreLooprWalletApp(), CreateTransferLooprComponentPr
         HomeOrdersLooprComponentProvider, HomeTransfersLooprComponentProvider,
         OrderDetailsLooprComponentProvider, TradeDetailsLooprComponentProvider,
         TransferDetailsLooprComponentProvider, ViewBalancesLooprComponentProvider,
-        WalletLooprComponentProvider {
+        WalletLooprComponentProvider, WrapEthLooprComponentProvider {
 
     companion object {
 
@@ -94,6 +97,10 @@ open class LooprWalletApp : CoreLooprWalletApp(), CreateTransferLooprComponentPr
             DaggerWalletLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
         }
 
+        val wrapEthLooprComponent: WrapEthLooprComponent by lazy {
+            DaggerWrapEthLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
+        }
+
     }
 
     override fun provideCreateTransferLooprComponent() = createTransferLooprComponent
@@ -115,6 +122,8 @@ open class LooprWalletApp : CoreLooprWalletApp(), CreateTransferLooprComponentPr
     override fun provideViewBalancesLooprComponent() = viewBalancesLooprComponent
 
     override fun provideWalletLooprComponent() = walletLooprComponent
+
+    override fun provideWrapEthLooprComponent() = wrapEthLooprComponent
 
     override fun onCreate() {
         super.onCreate()

@@ -15,7 +15,7 @@ abstract class OfflineOnlyViewModel<T, U> : OfflineFirstViewModel<T, U>() {
     override val syncType
         get() = throw NotImplementedError("Not needed for offline-only ViewModels")
 
-    override fun addNetworkDataToRepository(data: T) {
+    override fun addNetworkDataToRepository(data: T, parameter: U) {
         throw NotImplementedError("This method should never be called")
     }
 

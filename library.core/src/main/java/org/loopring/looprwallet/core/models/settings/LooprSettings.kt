@@ -26,8 +26,7 @@ interface LooprSettings {
             (looprSettings as? LooprSettingsDebugImpl)?.map?.clear()
         }
 
-        @Synchronized
-        fun getInstance(context: Context): LooprSettings {
+        fun getInstance(context: Context): LooprSettings = synchronized(this) {
             if (looprSettings != null) {
                 return looprSettings as LooprSettings
             }

@@ -59,4 +59,12 @@
         <item name="android:layout_height">0dp</item>
     </style>
 
+    <!-- TextView -->
+
+    <style name="TextAppearance.AppCompat.Small.Button" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:background">@drawable/ripple_effect_accent_flat</item>
+    </style>
+
 </resources>

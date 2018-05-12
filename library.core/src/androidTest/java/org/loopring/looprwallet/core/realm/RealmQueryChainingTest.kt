@@ -11,9 +11,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 
 /**
  * Created by Corey Caplan on 4/11/18.
@@ -31,7 +30,7 @@ class RealmQueryChainingTest : BaseDaggerTest() {
     @Before
     fun setup() = runBlockingUiCode {
         println("FIRST")
-        realm = realmClient.getSharedInstance()
+        realm = realmClient.getInstance()
     }
 
     @After

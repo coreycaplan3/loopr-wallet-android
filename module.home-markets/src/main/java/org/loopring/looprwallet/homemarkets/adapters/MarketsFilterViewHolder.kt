@@ -8,7 +8,7 @@ import android.widget.Button
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_markets_filter.*
 import org.loopring.looprwallet.core.extensions.loge
-import org.loopring.looprwallet.core.models.markets.MarketsFilter
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.utilities.FilterButtonUtility
 
 /**
@@ -26,7 +26,7 @@ class MarketsFilterViewHolder(itemView: View, private val listener: OnGeneralMar
         get() = itemView
 
     init {
-        val sortByAdapter = ArrayAdapter(itemView.context, android.R.layout.simple_spinner_item, MarketsFilter.SORT_BY_ARRAY_UI).apply {
+        val sortByAdapter = ArrayAdapter(itemView.context, android.R.layout.simple_spinner_item, TradingPairFilter.SORT_BY_ARRAY_UI).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
         marketsSortBySpinner.adapter = sortByAdapter
@@ -37,7 +37,7 @@ class MarketsFilterViewHolder(itemView: View, private val listener: OnGeneralMar
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val value = MarketsFilter.SORT_BY_ARRAY_VALUES[position]
+                val value = TradingPairFilter.SORT_BY_ARRAY_VALUES[position]
                 if (listener.getCurrentSortByFilter() != value) {
                     listener.onSortByChange(value)
                 }
@@ -51,13 +51,13 @@ class MarketsFilterViewHolder(itemView: View, private val listener: OnGeneralMar
      * @param filter The filter data that's used **ONLY** for binding the current values to
      * the UI (current sortBy status and date)
      */
-    fun bind(filter: MarketsFilter) {
-        val sortByIndex = MarketsFilter.SORT_BY_ARRAY_VALUES.indexOf(filter.sortBy)
+    fun bind(filter: TradingPairFilter) {
+        val sortByIndex = TradingPairFilter.SORT_BY_ARRAY_VALUES.indexOf(filter.sortBy)
         marketsSortBySpinner.setSelection(sortByIndex)
 
         // Date
         when (filter.changePeriod) {
-            MarketsFilter.CHANGE_PERIOD_1D -> FilterButtonUtility.toSelected(marketsDateFilter1dButton)
+            TradingPairFilter.CHANGE_PERIOD_1D -> FilterButtonUtility.toSelected(marketsDateFilter1dButton)
             else -> loge("Invalid changePeriod, found: ${filter.changePeriod}", IllegalArgumentException())
         }
     }

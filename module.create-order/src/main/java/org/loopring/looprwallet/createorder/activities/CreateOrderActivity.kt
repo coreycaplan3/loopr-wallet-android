@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
-import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.createorder.R
 
 /**
@@ -19,8 +19,7 @@ class CreateOrderActivity : BaseActivity() {
 
     companion object {
 
-        private const val KEY_PRIMARY_TICKER = "_PRIMARY_TICKER"
-        private const val KEY_SECONDARY_TICKER = "_SECONDARY_TICKER"
+        private const val KEY_MARKET = "MARKET"
 
         /**
          * Routes this activity to the [CreateOrderActivity].
@@ -29,8 +28,7 @@ class CreateOrderActivity : BaseActivity() {
          */
         fun route(activity: Activity, tradingPair: TradingPair? = null) {
             val intent = Intent(activity, CreateOrderActivity::class.java)
-                    .putExtra(KEY_PRIMARY_TICKER, tradingPair?.primaryTicker)
-                    .putExtra(KEY_SECONDARY_TICKER, tradingPair?.secondaryTicker)
+                    .putExtra(KEY_MARKET, tradingPair?.market)
 
             activity.startActivity(intent)
         }

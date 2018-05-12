@@ -74,9 +74,8 @@ open class CoreTestActivity : BaseActivity(), ConfirmOldSecurityFragment.OnSecur
 
     // MARK - Private Methods
 
-    @Synchronized
-    private fun isRunningTest(): Boolean {
-        return isRunningTest.mapIfNull {
+    private fun isRunningTest(): Boolean = synchronized(this) {
+        isRunningTest.mapIfNull {
             try {
                 Class.forName("android.support.test.espresso.Espresso")
                 isRunningTest = true

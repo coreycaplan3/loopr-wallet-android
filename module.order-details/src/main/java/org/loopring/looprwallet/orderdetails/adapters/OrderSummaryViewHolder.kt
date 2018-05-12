@@ -6,8 +6,8 @@ import android.view.View
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_order_details_summary.*
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
-import org.loopring.looprwallet.core.models.order.LooprOrder
-import org.loopring.looprwallet.core.models.order.OrderFilter
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.orderdetails.R

@@ -15,10 +15,8 @@ import kotlinx.android.synthetic.main.fragment_view_contacts.*
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.adapters.ContactsAdapter
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
-import org.loopring.looprwallet.contacts.viewmodels.ContactsByAddressViewModel
-import org.loopring.looprwallet.contacts.viewmodels.ContactsByNameViewModel
+import org.loopring.looprwallet.contacts.viewmodels.ContactViewModel
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
-import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
@@ -60,17 +58,13 @@ class ViewContactsFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_view_contacts
 
-    private val contactsByAddressViewModel by lazy {
-        LooprViewModelFactory.get<ContactsByAddressViewModel>(this)
-    }
-
-    private val contactsByNameViewModel by lazy {
-        LooprViewModelFactory.get<ContactsByNameViewModel>(this)
+    private val contactViewModel by lazy {
+        LooprViewModelFactory.get<ContactViewModel>(this)
     }
 
     var selectedContactAddress: String? = null
 
-    var onContactClickedListener: OnContactClickedListener? by weakReference(null)
+    var onContactClickedListener: OnContactClickedListener? = null
 
     private val fragmentType by lazy {
         arguments?.getString(KEY_TYPE)!!
@@ -90,28 +84,20 @@ class ViewContactsFragment : BaseFragment() {
         adapter = ContactsAdapter(selectedContactAddress, this::onContactSelected)
         viewContactsRecyclerView.adapter = adapter
 
-        if (fragmentType == KEY_VIEW_ALL) {
-            contactsByNameViewModel.getAllContactsByName(this, "*") {
-                adapter?.updateData(it)
-            }
+        when (fragmentType) {
+            KEY_VIEW_ALL -> {
+                contactViewModel.getAllContactsByName(this, "*") {
+                    adapter?.updateData(it)
+                }
 
-            onContactClickedListener = object : OnContactClickedListener {
-                override fun onContactSelected(contact: Contact) {
-                    val message = str(R.string.formatter_delete_contact).format(contact.name)
-                    AlertDialog.Builder(view.context)
-                            .setTitle(R.string.delete_contact)
-                            .setMessage(message)
-                            .setPositiveButton(R.string.delete) { dialog, _ ->
-                                contactsByNameViewModel.deleteContact(contact)
-                                dialog.dismiss()
-                            }
-                            .setNegativeButton(android.R.string.cancel) { dialog, _ ->
-                                dialog.dismiss()
-                            }
-                            .show()
+                onContactClickedListener = object : OnContactClickedListener {
+                    override fun onContactSelected(contact: Contact) {
+                        showDeleteContactDialog(view, contact)
+                    }
                 }
             }
         }
+
     }
 
     override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
@@ -186,7 +172,7 @@ class ViewContactsFragment : BaseFragment() {
      */
     private fun onContactSelected(contact: Contact) {
         onContactClickedListener?.onContactSelected(contact)
-        if(fragmentType == KEY_VIEW_ALL) {
+        if (fragmentType == KEY_VIEW_ALL) {
             // We want to reset it, since the ViewAll variant doesn't perform highlighting (whereas
             // the Search variant does)
             adapter?.selectedContactAddress = null
@@ -194,15 +180,35 @@ class ViewContactsFragment : BaseFragment() {
     }
 
     private fun queryRealmForContactsByName(name: String) {
-        contactsByNameViewModel.getAllContactsByName(this, name) {
+        contactViewModel.getAllContactsByName(this, name) {
             adapter?.updateData(it)
         }
     }
 
     private fun queryRealmForContactsByAddress(address: String) {
-        contactsByAddressViewModel.getAllContactsByAddress(this, address) {
+        val addressToSearch = when {
+            address.trim().isEmpty() -> "*"
+            else -> address
+        }
+
+        contactViewModel.getAllContactsByAddress(this, addressToSearch) {
             adapter?.updateData(it)
         }
+    }
+
+    private fun showDeleteContactDialog(view: View, contact: Contact) {
+        val message = str(R.string.formatter_delete_contact).format(contact.name)
+        AlertDialog.Builder(view.context)
+                .setTitle(R.string.delete_contact)
+                .setMessage(message)
+                .setPositiveButton(R.string.delete) { dialog, _ ->
+                    contactViewModel.deleteContact(contact)
+                    dialog.dismiss()
+                }
+                .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
     }
 
 }

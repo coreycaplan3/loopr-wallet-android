@@ -103,9 +103,7 @@
 
         <Button
             android:id="@+id/createTransferContinueButton"
-            style="@style/App.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/App.Button.ConstrainBottom"
             android:layout_alignParentBottom="true"
             android:text="@string/_continue" />
 

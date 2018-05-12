@@ -128,7 +128,7 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
 
         keystoreUnlockButton.setOnClickListener(::onUnlockButtonClick)
 
-        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, ::getMessageFromError)
+        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, convertErrorToMessage = ::getMessageFromError)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {

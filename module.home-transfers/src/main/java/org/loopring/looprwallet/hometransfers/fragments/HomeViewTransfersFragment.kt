@@ -13,8 +13,8 @@ import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.extensions.setupWithFab
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.markets.TradingPair
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
 import org.loopring.looprwallet.hometransfers.R
@@ -38,15 +38,9 @@ class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedList
     override val layoutResource: Int
         get() = R.layout.fragment_view_transfers
 
-    private var viewAllTransfersViewModel: ViewAllTransfersViewModel? = null
-        @Synchronized
-        get() {
-            if (field != null) return field
-
-            val currentWallet = walletClient.getCurrentWallet() ?: return null
-            field = LooprViewModelFactory.get(this, currentWallet)
-            return field
-        }
+    private val viewAllTransfersViewModel: ViewAllTransfersViewModel by lazy {
+        LooprViewModelFactory.get<ViewAllTransfersViewModel>(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +57,7 @@ class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedList
 
         val address = walletClient.getCurrentWallet()?.credentials?.address
         if (address != null) {
-            viewAllTransfersViewModel?.getAllTransfers(this, address) {
+            viewAllTransfersViewModel.getAllTransfers(this, address) {
                 setupOfflineFirstDataObserverForAdapter(viewAllTransfersViewModel, adapter, it)
             }
         }
@@ -91,8 +85,7 @@ class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedList
                     CreateTransferActivity.route(this, value)
                 }
                 BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
-                    val tradingPair = TradingPair.createFromMarket(value)
-                    TradingPairDetailsActivity.route(tradingPair, this)
+                    TradingPairDetailsActivity.route(TradingPair(value), this)
                 }
             }
         }

@@ -4,7 +4,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import io.realm.RealmModel
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
@@ -68,7 +68,7 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<LooprToken, String>() {
         return ethplorerTokenApiService.getTokenInfo(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: LooprToken) {
+    override fun addNetworkDataToRepository(data: LooprToken, parameter: String) {
         (data as? RealmModel)?.let { repository.add(it) }
     }
 

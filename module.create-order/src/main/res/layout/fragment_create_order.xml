@@ -97,12 +97,12 @@
 
             <TextView
                 android:id="@+id/createOrderMaxButton"
+                style="@style/TextAppearance.AppCompat.Small.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/vertical_margin_small"
+                android:padding="@dimen/standard_margin_small"
                 android:text="@string/max"
-                android:textAllCaps="true"
-                android:textColor="?android:attr/textColorPrimary"
                 app:layout_constraintBottom_toTopOf="@id/createOrderHalfwayGuideline"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
+                app:layout_constraintGuide_percent=".55" />
 
             <include
                 layout="@layout/number_pad"

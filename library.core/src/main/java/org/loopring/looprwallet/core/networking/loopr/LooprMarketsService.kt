@@ -2,9 +2,9 @@ package org.loopring.looprwallet.core.networking.loopr
 
 import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.markets.TradingPair
-import org.loopring.looprwallet.core.models.markets.TradingPairFilter
-import org.loopring.looprwallet.core.models.markets.TradingPairTrend
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairTrend
 import org.loopring.looprwallet.core.utilities.BuildUtility
 
 /**
@@ -34,6 +34,6 @@ interface LooprMarketsService {
 
     fun getMarketDetails(tradingPairMarket: String): Deferred<TradingPair>
 
-    fun getMarketTrends(tradingPairFilter: TradingPairFilter): Deferred<RealmList<TradingPairTrend>>
+    fun getMarketTrends(tradingPairGraphFilter: TradingPairGraphFilter): Deferred<RealmList<TradingPairTrend>>
 
 }

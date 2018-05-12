@@ -10,7 +10,6 @@ import android.support.multidex.MultiDexApplication
 import io.realm.Realm
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.CoreTestActivity
@@ -35,26 +34,17 @@ open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallback
 
     companion object {
 
-        @SuppressLint("StaticFieldLeak")
-        lateinit var uiSharedRealm: Realm
-
         /**
-         * A shared realm that can only be access from a **IO** co-routine thread thread
+         * A realm that can be accessed from only the [UI] co-routine context/thread
          */
         @SuppressLint("StaticFieldLeak")
-        lateinit var uiPrivateRealm: Realm
+        lateinit var uiGlobalRealm: Realm
 
         /**
-         * A shared realm that can only be access from a **IO** co-routine thread thread
+         * A realm that can be accessed from only the [IO] co-routine context/thread
          */
         @SuppressLint("StaticFieldLeak")
-        lateinit var asyncSharedRealm: Realm
-
-        /**
-         * A private realm that can only be access from a **IO** co-routine thread thread
-         */
-        @SuppressLint("StaticFieldLeak")
-        lateinit var asyncPrivateRealm: Realm
+        lateinit var asyncGlobalRealm: Realm
 
         /**
          * The class representing the *MainActivity* for the app
@@ -101,25 +91,15 @@ open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallback
 
         Realm.init(this)
 
-
         runBlocking {
             RealmClient.initializeMigrationAndInitialDataAsync()
                     .await()
         }
 
-        async(IO) { asyncSharedRealm = realmClient.getSharedInstance() }
+        async(IO) { asyncGlobalRealm = realmClient.getInstance() }
 
-        async(UI) { uiSharedRealm = realmClient.getSharedInstance() }
+        async(UI) { uiGlobalRealm = realmClient.getInstance() }
 
-        walletClient.setOnCurrentWalletChange {
-            launch(UI) {
-                uiPrivateRealm = realmClient.getPrivateInstance(it)
-            }
-
-            launch(IO) {
-                asyncPrivateRealm = realmClient.getPrivateInstance(it)
-            }
-        }
     }
 
     override fun provideCoreLooprComponent() = coreLooprComponent

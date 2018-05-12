@@ -15,7 +15,7 @@ import org.loopring.looprwallet.core.validators.TokenDecimalValidator
 import org.loopring.looprwallet.core.validators.TokenNameValidator
 import org.loopring.looprwallet.core.validators.TokenTickerValidator
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
-import org.loopring.looprwallet.core.viewmodels.eth.TokenRetrieverViewModel
+import org.loopring.looprwallet.core.viewmodels.eth.InitialTokenAdderViewModel
 import java.io.IOException
 
 /**
@@ -33,7 +33,7 @@ class AddTokenDialog : BaseBottomSheetDialog() {
         get() = R.layout.dialog_add_token
 
     private val tokenRetrieverViewModel by lazy {
-        LooprViewModelFactory.get<TokenRetrieverViewModel>(this)
+        LooprViewModelFactory.get<InitialTokenAdderViewModel>(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,7 +77,8 @@ class AddTokenDialog : BaseBottomSheetDialog() {
 
     private fun onAddCustomTokenClick() {
         val contractAddress = addTokenContractAddressEditText.text.toString()
-        tokenRetrieverViewModel.getTokenInfoFromNetworkAndAdd(contractAddress)
+        val address = walletClient.getCurrentWallet()?.credentials?.address
+        tokenRetrieverViewModel.getTokenInfoFromNetworkAndAdd(contractAddress, address)
     }
 
 }

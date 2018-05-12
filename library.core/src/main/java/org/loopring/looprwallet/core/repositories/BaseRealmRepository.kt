@@ -1,19 +1,13 @@
 package org.loopring.looprwallet.core.repositories
 
-import io.realm.Realm
-import io.realm.RealmModel
-import io.realm.RealmResults
+import io.realm.*
 import io.realm.kotlin.deleteFromRealm
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
-import org.loopring.looprwallet.core.dagger.coreLooprComponent
-import org.loopring.looprwallet.core.extensions.logw
+import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.upsert
-import org.loopring.looprwallet.core.extensions.upsertCopyToRealm
 import org.loopring.looprwallet.core.models.android.architecture.IO
-import org.loopring.looprwallet.core.realm.RealmClient
-import javax.inject.Inject
 
 /**
  * Created by Corey Caplan on 3/17/18.
@@ -22,100 +16,83 @@ import javax.inject.Inject
  *
  * Purpose of Class: To persist information to a [Realm] and allow queries to be written against
  * [Realm] as well.
- *
  */
-abstract class BaseRealmRepository(isPrivateInstance: Boolean) : BaseRepository<RealmModel> {
-
-    @Inject
-    lateinit var realmClient: RealmClient
+abstract class BaseRealmRepository : BaseRepository<RealmModel> {
 
     /**
      * This realm can **ONLY** be used from the UI thread
      */
-    protected val uiRealm: Realm
+    private val uiRealm: Realm = CoreLooprWalletApp.uiGlobalRealm
 
     /**
      * This realm can **ONLY** be accessed from the IO thread
      */
-    protected val ioRealm: Realm
-
-    init {
-        coreLooprComponent.inject(this)
-
-        when (isPrivateInstance) {
-            true -> {
-                uiRealm = CoreLooprWalletApp.uiPrivateRealm
-                ioRealm = CoreLooprWalletApp.asyncPrivateRealm
-            }
-            else -> {
-                uiRealm = CoreLooprWalletApp.uiSharedRealm
-                ioRealm = CoreLooprWalletApp.asyncSharedRealm
-            }
-        }
-    }
+    private val ioRealm: Realm = CoreLooprWalletApp.asyncGlobalRealm
 
     /**
-     * ** THIS METHOD MUST BE CALLED FROM THE MAIN THREAD**
+     * Runs a given transaction on the provided [context]'s [Realm] instance.
      *
-     * Copies [data] to the [Realm] and returns it.
-     *
-     * @param data The data to copy into the [Realm]
+     * ** This method is called assuming it's on the proper thread!**
      */
-    fun <T : RealmModel> addAndReturn(data: T): T {
-        return executeTransactionAndReturn { it.upsertCopyToRealm(data) }
-    }
-
-    fun runTransaction(transaction: Realm.Transaction, context: HandlerContext = IO) {
+    fun runTransaction(context: HandlerContext = IO, transaction: (Realm) -> Unit) {
         getRealmFromContext(context).executeTransaction(transaction)
     }
 
+    /**
+     * Runs a given *add transaction* on the provided [context]'s [Realm] instance.
+     *
+     * ** This method is called assuming it's on the proper thread!**
+     */
     final override fun add(data: RealmModel, context: HandlerContext) {
-        getRealmFromContext(context).executeTransaction { it.upsert(data) }
+        getRealmFromContext(context)
+                .executeTransaction { it.upsert(data) }
     }
 
+    /**
+     * Runs a given *add list transaction* on the provided [context]'s [Realm] instance.
+     *
+     * ** This method is called assuming it's on the proper thread!**
+     */
     final override fun addList(data: List<RealmModel>, context: HandlerContext) {
-        getRealmFromContext(context).executeTransaction { it.upsert(data) }
+        getRealmFromContext(context)
+                .executeTransaction { it.upsert(data) }
     }
 
+    /**
+     * Runs a given *remove transaction* on the provided [context]'s [Realm] instance.
+     *
+     * ** This method is called assuming it's on the proper thread!**
+     */
     final override fun remove(data: RealmModel, context: HandlerContext) {
-        getRealmFromContext(context).executeTransaction { data.deleteFromRealm() }
+        getRealmFromContext(context)
+                .executeTransaction { data.deleteFromRealm() }
     }
 
+    /**
+     * Runs a given *remove list transaction* on the provided [context]'s [Realm] instance.
+     *
+     * ** This method is called assuming it's on the proper thread!**
+     */
     final override fun remove(data: List<RealmModel>, context: HandlerContext) {
-        if (data is RealmResults) {
-            getRealmFromContext(context).executeTransaction { data.deleteAllFromRealm() }
+        val realm = getRealmFromContext(context)
+        when (data) {
+            is OrderedRealmCollection -> realm.executeTransaction { data.deleteAllFromRealm() }
+            is RealmResults -> realm.executeTransaction { data.deleteAllFromRealm() }
+            is RealmList -> realm.executeTransaction { data.deleteAllFromRealm() }
+            else -> loge("Invalid list type, found: ${data::class.java.simpleName}", IllegalArgumentException())
         }
     }
 
     // MARK - Protected Methods
 
-    protected fun getRealmFromContext(context: HandlerContext) = when(context) {
+    /**
+     * Gets a given [Realm] instance, based on the [HandlerContext] passed as an argument.
+     * @return A [Realm] that can be used for reading/writing to the mobile database.
+     */
+    protected fun getRealmFromContext(context: HandlerContext) = when (context) {
         UI -> uiRealm
         IO -> ioRealm
         else -> throw IllegalArgumentException("Invalid context, found: $context")
-    }
-
-    // MARK - Private Methods
-
-    /**
-     * Executes a realm transaction with a one-time-use [Realm] (not a UI realm) and returns the
-     * result.
-     *
-     * @param transaction A function that is executed from **within** a [Realm] transaction
-     */
-    private inline fun <T> executeTransactionAndReturn(crossinline transaction: (Realm) -> T): T {
-        ioRealm.beginTransaction()
-        return try {
-            val result = transaction(ioRealm)
-            ioRealm.commitTransaction()
-            result
-        } catch (e: Throwable) {
-            when {
-                ioRealm.isInTransaction -> ioRealm.cancelTransaction()
-                else -> logw("Could not cancel transaction, not currently in one.")
-            }
-            throw e
-        }
     }
 
 }

@@ -45,7 +45,8 @@
                 android:layout_marginEnd="@dimen/horizontal_margin_small"
                 android:layout_marginRight="@dimen/horizontal_margin_small"
                 android:contentDescription="@string/content_description_pin_circle"
-                android:src="@drawable/primary_color_circle" />
+                android:src="@drawable/primary_color_circle"
+                android:tint="?attr/colorPrimary" />
 
             <ImageView
                 android:id="@+id/fragmentSecurityPinCircle2"
@@ -54,7 +55,8 @@
                 android:layout_marginEnd="@dimen/horizontal_margin_small"
                 android:layout_marginRight="@dimen/horizontal_margin_small"
                 android:contentDescription="@string/content_description_pin_circle"
-                android:src="@drawable/primary_color_circle" />
+                android:src="@drawable/primary_color_circle"
+                android:tint="?attr/colorPrimary" />
 
             <ImageView
                 android:id="@+id/fragmentSecurityPinCircle3"
@@ -63,14 +65,16 @@
                 android:layout_marginEnd="@dimen/horizontal_margin_small"
                 android:layout_marginRight="@dimen/horizontal_margin_small"
                 android:contentDescription="@string/content_description_pin_circle"
-                android:src="@drawable/primary_color_circle" />
+                android:src="@drawable/primary_color_circle"
+                android:tint="?attr/colorPrimary" />
 
             <ImageView
                 android:id="@+id/fragmentSecurityPinCircle4"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:contentDescription="@string/content_description_pin_circle"
-                android:src="@drawable/primary_color_circle" />
+                android:src="@drawable/primary_color_circle"
+                android:tint="?attr/colorPrimary" />
 
         </LinearLayout>
 

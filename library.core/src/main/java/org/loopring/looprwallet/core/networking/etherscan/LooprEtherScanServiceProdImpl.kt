@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.networking.etherscan
 
-import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.BuildConfig
+import org.loopring.looprwalletnetwork.services.EtherscanService
 
 /**
  * Created by Corey Caplan on 3/31/18.
@@ -12,9 +13,8 @@ import kotlinx.coroutines.experimental.Deferred
  */
 class LooprEtherScanServiceProdImpl: LooprEtherScanService {
 
-    override fun getTokenBinary(contractAddress: String): Deferred<String> {
-//        return EtherscanService.getService().getTransactions(contractAddress).await()
-        TODO("...")
+    init {
+        EtherscanService.apiKey = BuildConfig.ETHERSCAN_API_KEY
     }
 
 }

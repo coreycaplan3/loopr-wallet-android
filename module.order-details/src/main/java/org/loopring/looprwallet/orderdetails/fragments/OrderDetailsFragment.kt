@@ -7,8 +7,8 @@ import android.view.View
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_order_details.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.order.LooprOrder
-import org.loopring.looprwallet.core.models.order.OrderFilter
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
@@ -50,29 +50,13 @@ class OrderDetailsFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_order_details
 
-    private var orderSummaryViewModel: OrderSummaryViewModel? = null
-        @Synchronized
-        get() {
-            if (field != null) {
-                return field
-            }
+    private val orderSummaryViewModel: OrderSummaryViewModel by lazy {
+        LooprViewModelFactory.get<OrderSummaryViewModel>(this)
+    }
 
-            val wallet = walletClient.getCurrentWallet() ?: return null
-            field = LooprViewModelFactory.get(this, wallet)
-            return field
-        }
-
-    private var orderFillsViewModel: OrderFillsViewModel? = null
-        @Synchronized
-        get() {
-            if (field != null) {
-                return field
-            }
-
-            val wallet = walletClient.getCurrentWallet() ?: return null
-            field = LooprViewModelFactory.get(this, wallet)
-            return field
-        }
+    private val orderFillsViewModel: OrderFillsViewModel by lazy {
+        LooprViewModelFactory.get<OrderFillsViewModel>(this)
+    }
 
     @Inject
     lateinit var currencySettings: CurrencySettings
@@ -89,7 +73,7 @@ class OrderDetailsFragment : BaseFragment() {
         toolbar?.setTitle(R.string.order_details)
         toolbar?.navigationIcon = drawable(R.drawable.ic_clear_white_24dp)
 
-        orderSummaryViewModel?.getOrderByHash(this, orderHash) {
+        orderSummaryViewModel.getOrderByHash(this, orderHash) {
             when {
                 adapter != null -> adapter?.orderSummary = it
                 else -> setupAdapter(view, it)
@@ -110,7 +94,7 @@ class OrderDetailsFragment : BaseFragment() {
         orderDetailsRecyclerView.adapter = adapter
 
         // We can now retrieve order fills, since we initialized the adapter with the order data
-        orderFillsViewModel?.getOrderFills(this, orderHash) {
+        orderFillsViewModel.getOrderFills(this, orderHash) {
             setupOfflineFirstDataObserverForAdapter(orderFillsViewModel, adapter, it)
         }
         setupOfflineFirstStateAndErrorObserver(orderFillsViewModel, orderDetailsSwipeRefreshLayout)

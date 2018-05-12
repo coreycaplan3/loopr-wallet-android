@@ -2,8 +2,14 @@ package org.loopring.looprwallet.core.networking.loopr
 
 import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.order.LooprOrder
-import org.loopring.looprwallet.core.models.order.LooprOrderFill
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
+import org.loopring.looprwallet.core.utilities.BuildUtility
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MOCKNET
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
+import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MAINNET
 
 /**
  * Created by Corey on 4/24/2018
@@ -18,13 +24,17 @@ interface LooprOrderService {
     companion object {
 
         fun getInstance(): LooprOrderService {
-            // TODO
-            return LooprOrderServiceMockImpl()
+            val buildFlavor = BuildUtility.BUILD_FLAVOR
+            return when (buildFlavor) {
+                FLAVOR_MOCKNET -> LooprOrderServiceMockImpl()
+                FLAVOR_TESTNET, FLAVOR_MAINNET -> LooprOrderServiceProdImpl()
+                else -> throw IllegalArgumentException("Invalid build type, found: $buildFlavor")
+            }
         }
 
     }
 
-    fun getOrdersByAddress(address: String): Deferred<RealmList<LooprOrder>>
+    fun getOrdersByAddress(orderFilter: OrderFilter): Deferred<LooprOrderContainer>
 
     fun getOrderByHash(orderHash: String): Deferred<LooprOrder>
 

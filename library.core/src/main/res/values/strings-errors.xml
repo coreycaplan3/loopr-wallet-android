@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="error_invalid_qr_code">This QR code is invalid</string>
+    <string name="error_insufficient_eth_balance_title">Insufficient ETH Balance</string>
 </resources>

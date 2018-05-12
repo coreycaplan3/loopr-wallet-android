@@ -53,7 +53,7 @@ class CurrencyExchangeRateViewModel() : StreamingViewModel<CurrencyExchangeRate,
         return currencyExchangeService.getCurrentCurrencyExchangeRate(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: CurrencyExchangeRate) {
+    override fun addNetworkDataToRepository(data: CurrencyExchangeRate, parameter: String) {
         repository.add(data)
     }
 

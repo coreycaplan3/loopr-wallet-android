@@ -50,6 +50,7 @@ android {
         mocknet {
             resConfigs ("en", "xxhdpi")
 
+            buildConfigProperty "ETHERSCAN_API_KEY", buildProperties.secrets["etherScanApiKey"]
             buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mocknetServerUrl"]
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 10L"
@@ -62,6 +63,7 @@ android {
         }
 
         infuraTestnet {
+            buildConfigProperty "ETHERSCAN_API_KEY", buildProperties.secrets["etherScanApiKey"]
             buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["testnetServerUrl"]
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"
@@ -74,6 +76,7 @@ android {
         }
 
         mainnet {
+            buildConfigProperty "ETHERSCAN_API_KEY", buildProperties.secrets["etherScanApiKey"]
             buildConfigProperty "ETHEREUM_URL", buildProperties.secrets["mainnetServerUrl"]
 
             buildConfigField "Long", "SECURITY_LOCKOUT_TIME", "1000L * 60L * 5L"

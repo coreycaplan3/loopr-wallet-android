@@ -3,8 +3,9 @@ package org.loopring.looprwallet.contacts.repositories
 import android.arch.lifecycle.LiveData
 import io.realm.Case
 import io.realm.OrderedRealmCollection
-import io.realm.Realm
 import io.realm.kotlin.where
+import kotlinx.coroutines.experimental.android.HandlerContext
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
@@ -22,38 +23,41 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class ContactsRepository : BaseRealmRepository(true) {
+class ContactsRepository : BaseRealmRepository() {
 
     /**
-     * Executes this removal as a coroutine on the IO thread
+     * Executes this removal the given [context]'s thread
      */
-    fun removeContactByAddress(address: String) = async(IO) {
-        runTransaction(Realm.Transaction {
+    fun removeContactByAddress(address: String, context: HandlerContext = IO) = async(context) {
+        runTransaction(context) {
             it.where<Contact>()
                     .equalTo(Contact::address, address)
                     .findFirst()
                     ?.deleteFromRealm()
-        })
+        }
     }
 
-    fun getAllContactsByName(name: String): LiveData<OrderedRealmCollection<Contact>> {
-        return uiRealm.where<Contact>()
+    fun getAllContactsByName(name: String, context: HandlerContext = UI): LiveData<OrderedRealmCollection<Contact>> {
+        return getRealmFromContext(context)
+                .where<Contact>()
                 .like(Contact::name, name)
                 .sort(Contact::name)
                 .findAllAsync()
                 .asLiveData()
     }
 
-    fun getAllContactsByAddress(address: String): LiveData<OrderedRealmCollection<Contact>> {
-        return uiRealm.where<Contact>()
+    fun getAllContactsByAddress(address: String, context: HandlerContext = UI): LiveData<OrderedRealmCollection<Contact>> {
+        return getRealmFromContext(context)
+                .where<Contact>()
                 .like(Contact::address, address)
                 .sort(Contact::name)
                 .findAllAsync()
                 .asLiveData()
     }
 
-    fun getContactByAddressNow(address: String): Contact? {
-        return uiRealm.where<Contact>()
+    fun getContactByAddressNow(address: String, context: HandlerContext = UI): Contact? {
+        return getRealmFromContext(context)
+                .where<Contact>()
                 .equalTo(Contact::address, address, Case.INSENSITIVE)
                 .findFirst()
     }

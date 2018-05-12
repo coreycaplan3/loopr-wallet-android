@@ -18,7 +18,7 @@ import org.loopring.looprwalletnetwork.models.ethereum.EthBlockNum
  *
  *
  */
-class EthereumBlockNumberRepository : BaseRealmRepository(false) {
+class EthereumBlockNumberRepository : BaseRealmRepository() {
 
     fun getEthereumBlockNumber(context: HandlerContext = UI): LiveData<EthBlockNum> {
         return getRealmFromContext(context)

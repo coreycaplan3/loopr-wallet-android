@@ -2,11 +2,9 @@ package org.loopring.looprwallet.tradedetails.viewmodels
 
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
-import org.loopring.looprwallet.core.models.android.architecture.IO
-import org.loopring.looprwallet.core.models.markets.TradingPair
-import org.loopring.looprwallet.core.models.markets.TradingPairFilter
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
@@ -21,14 +19,14 @@ import java.util.*
  * Purpose of Class:
  *
  */
-class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPairFilter>() {
+class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPairGraphFilter>() {
 
     companion object {
 
         /**
          * Gets the sync ID for the [syncRepository].
          */
-        fun getSyncId(filter: TradingPairFilter): String {
+        fun getSyncId(filter: TradingPairGraphFilter): String {
             // DO NOT CHANGE - Doing so will mess up the sync ID for all backwards-compatible version
             return "${filter.market}-${filter.graphDateFilter}"
         }
@@ -44,29 +42,29 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
     /**
      * Gets the trading pair based on the provided [filter].
      */
-    fun getTradingPair(owner: ViewLifecycleFragment, filter: TradingPairFilter, onChange: (TradingPair) -> Unit) {
+    fun getTradingPair(owner: ViewLifecycleFragment, filter: TradingPairGraphFilter, onChange: (TradingPair) -> Unit) {
         initializeData(owner, filter, onChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: TradingPairFilter): LiveData<TradingPair> {
+    override fun getLiveDataFromRepository(parameter: TradingPairGraphFilter): LiveData<TradingPair> {
         return repository.getTradingPairByMarket(parameter.primaryTicker, parameter.secondaryTicker)
     }
 
-    override fun getDataFromNetwork(parameter: TradingPairFilter): Deferred<TradingPair> {
+    override fun getDataFromNetwork(parameter: TradingPairGraphFilter): Deferred<TradingPair> {
         return service.getMarketDetails(parameter.market)
     }
 
-    override fun addNetworkDataToRepository(data: TradingPair) {
+    override fun addNetworkDataToRepository(data: TradingPair, parameter: TradingPairGraphFilter) {
         repository.add(data)
     }
 
-    override fun isRefreshNecessary(parameter: TradingPairFilter): Boolean {
+    override fun isRefreshNecessary(parameter: TradingPairGraphFilter): Boolean {
         // DO NOT CHANGE - Doing so will mess up the sync ID for all backwards-compatible version
         val syncId = "${parameter.market}-${parameter.graphDateFilter}"
         return defaultIsRefreshNecessary(syncId)
     }
 
-    override fun addSyncDataToRepository(parameter: TradingPairFilter) {
+    override fun addSyncDataToRepository(parameter: TradingPairGraphFilter) {
         syncRepository.add(SyncData(parameter.market, parameter.graphDateFilter, Date()))
     }
 

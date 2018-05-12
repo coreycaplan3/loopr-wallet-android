@@ -25,13 +25,13 @@ import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
-import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
-import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
+import org.loopring.looprwallet.core.viewmodels.eth.EthereumTokenBalanceViewModel
 import org.loopring.looprwallet.createtransfer.activities.CreateTransferActivity
 import org.loopring.looprwallet.homemywallet.R
 import org.loopring.looprwallet.homemywallet.dagger.homeMyWalletLooprComponent
@@ -65,8 +65,8 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     @Inject
     lateinit var securitySettings: SecuritySettings
 
-    private val tokenBalanceViewModel: EthTokenBalanceViewModel by lazy {
-        LooprViewModelFactory.get<EthTokenBalanceViewModel>(this@HomeMyWalletFragment)
+    private val tokenBalanceViewModel: EthereumTokenBalanceViewModel by lazy {
+        LooprViewModelFactory.get<EthereumTokenBalanceViewModel>(this@HomeMyWalletFragment)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,8 +97,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
                     CreateTransferActivity.route(this, value)
                 }
                 BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
-                    val tradingPair = TradingPair.createFromMarket(value)
-                    TradingPairDetailsActivity.route(tradingPair, this)
+                    TradingPairDetailsActivity.route(TradingPair(value), this)
                 }
             }
         }

@@ -5,8 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-import android.support.design.widget.*
-import android.support.design.widget.CoordinatorLayout.*
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.BaseTransientBottomBar
+import android.support.design.widget.CoordinatorLayout.LayoutParams
+import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.transition.TransitionSet
 import android.support.transition.Visibility
 import android.support.v4.app.Fragment
@@ -221,30 +224,40 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * @param progressMessage The message to be displayed by the activity's progressDialog when the
      * transaction is running.
      * @param convertErrorToMessage A function that takes a [Throwable] and converts it to a string
-     * to be displayed in a *Toast*.
+     * to be displayed in a *Toast*. If the result of the function invocation is *null*, a default
+     * error is displayed.
      */
-    protected inline fun <T> setupTransactionViewModel(
+    protected fun <T> setupTransactionViewModel(
             viewModel: TransactionViewModel<T>,
             @StringRes progressMessage: Int,
-            crossinline convertErrorToMessage: (Throwable) -> String
+            startMainActivityAndCloseOnSuccess: Boolean = true,
+            convertErrorToMessage: ((Throwable) -> String?)? = null
     ) {
-        setupTransactionViewModel(viewModel, str(progressMessage), convertErrorToMessage)
+        setupTransactionViewModel(viewModel, str(progressMessage), startMainActivityAndCloseOnSuccess, convertErrorToMessage)
     }
 
     /**
      * Setups and standardizes the usage of [TransactionViewModel]. This includes the observers
      * used to watch for transactions and errors.
      *
+     * When a transaction finishes successfully, the main activity will be started and this
+     * activity will be finished.
+     *
      * @param viewModel The generator used for running transactions
      * @param progressMessage The message to be displayed by the activity's progressDialog when the
      * transaction is running.
+     * @param startMainActivityAndCloseOnSuccess True to start the Main Activity and close the
+     * current one on success, or false to ignore success. However, it is then expected that you
+     * will observe the [TransactionViewModel.result] manually, instead of relying on this function.
      * @param convertErrorToMessage A function that takes a [Throwable] and converts it to a string
-     * to be displayed in a *Toast*.
+     * to be displayed in a *Toast*. If the result of the function invocation is *null*, a default
+     * error is displayed.
      */
-    protected inline fun <T> setupTransactionViewModel(
+    protected fun <T> setupTransactionViewModel(
             viewModel: TransactionViewModel<T>,
             progressMessage: String,
-            crossinline convertErrorToMessage: (Throwable) -> String
+            startMainActivityAndCloseOnSuccess: Boolean = true,
+            convertErrorToMessage: ((Throwable) -> String?)? = null
     ) {
         viewModel.isTransactionRunning.observeForDoubleSpend(this, {
             val progress = (activity as? BaseActivity)?.progressDialog
@@ -256,15 +269,19 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
             }
         })
 
-        viewModel.result.observeForDoubleSpend(this) {
-            activity?.let {
-                it.finish()
-                it.startActivity(Intent(it, CoreLooprWalletApp.mainClass))
+        if (startMainActivityAndCloseOnSuccess) {
+            viewModel.result.observeForDoubleSpend(this) {
+                activity?.let {
+                    it.finish()
+                    it.startActivity(Intent(it, CoreLooprWalletApp.mainClass))
+                }
             }
         }
 
-        viewModel.error.observeForDoubleSpend(this) {
-            activity?.longToast(convertErrorToMessage(it))
+        viewModel.error.observeForDoubleSpend(this) { throwable ->
+            convertErrorToMessage?.invoke(throwable)?.let {
+                activity?.longToast(it)
+            }
         }
     }
 

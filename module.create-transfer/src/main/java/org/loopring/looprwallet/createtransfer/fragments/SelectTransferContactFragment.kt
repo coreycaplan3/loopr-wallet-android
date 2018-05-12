@@ -100,13 +100,11 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
                     .commitNow()
 
             return@findFragmentByTagOrCreate fragment
+        }.also {
+            it.onContactClickedListener = this
+            it.selectedContactAddress = selectedContactAddress
+            it.searchContactsByAddress(recipientAddressEditText.text.toString())
         }
-
-        viewContactsFragment.onContactClickedListener = this
-
-        viewContactsFragment.selectedContactAddress = selectedContactAddress
-
-        viewContactsFragment.searchContactsByAddress(recipientAddressEditText.text.toString())
 
         addContactButton.setOnClickListener {
             val currentAddress = recipientAddressEditText.text.toString()
@@ -228,7 +226,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
         val selectedContactAddress = selectedContactAddress ?: return
         allContacts = repository.getAllContactsByAddress(selectedContactAddress)
         allContacts?.observe(fragmentViewLifecycleFragment!!, Observer<OrderedRealmCollection<Contact>> {
-            if(it != null && it.isValid && it.size > 0) {
+            if (it != null && it.isValid && it.size > 0) {
                 bindContact(it[0])
             }
         })

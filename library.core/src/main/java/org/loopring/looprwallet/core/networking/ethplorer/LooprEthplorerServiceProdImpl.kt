@@ -1,11 +1,11 @@
 package org.loopring.looprwallet.core.networking.ethplorer
 
 import io.realm.RealmList
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.models.android.architecture.NET
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwalletnetwork.services.EthplorerService
 
 /**
@@ -22,7 +22,7 @@ class LooprEthplorerServiceProdImpl : LooprEthplorerService {
         EthplorerService.getService()
     }
 
-    override fun getAddressInfo(address: String): Deferred<RealmList<LooprToken>> = async(NET) {
+    override fun getAddressBalances(address: String): Deferred<RealmList<LooprToken>> = async(NET) {
         TODO("...")
     }
 

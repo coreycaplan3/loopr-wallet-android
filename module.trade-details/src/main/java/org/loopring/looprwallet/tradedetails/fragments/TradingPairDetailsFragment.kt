@@ -15,7 +15,6 @@ import androidx.view.isVisible
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import io.realm.OrderedRealmCollection
@@ -25,9 +24,9 @@ import kotlinx.android.synthetic.main.trading_pair_statistics_card.*
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.markets.TradingPair
-import org.loopring.looprwallet.core.models.markets.TradingPairFilter
-import org.loopring.looprwallet.core.models.markets.TradingPairTrend
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairTrend
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.repositories.loopr.LooprMarketsRepository
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
@@ -91,7 +90,7 @@ class TradingPairDetailsFragment : BaseFragment() {
         LooprMarketsRepository()
     }
 
-    lateinit var filter: TradingPairFilter
+    lateinit var filter: TradingPairGraphFilter
 
     @Inject
     lateinit var currencySettings: CurrencySettings
@@ -111,7 +110,7 @@ class TradingPairDetailsFragment : BaseFragment() {
         toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
         toolbarDelegate?.onOptionsItemSelected = optionsItemSelected
 
-        val defaultTradingPair = TradingPairFilter(primaryTicker, secondaryTicker, TradingPairFilter.GRAPH_DATE_FILTER_1H)
+        val defaultTradingPair = TradingPairGraphFilter(primaryTicker, secondaryTicker, TradingPairGraphFilter.GRAPH_DATE_FILTER_1H)
         filter = savedInstanceState?.getParcelable(KEY_TRADING_PAIR_FILTER) ?: defaultTradingPair
     }
 
@@ -119,7 +118,7 @@ class TradingPairDetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         runBlocking {
-            if(!tradingPairDetailsViewModel.doesTradingPairExist(filter.market).await()) {
+            if (!tradingPairDetailsViewModel.doesTradingPairExist(filter.market).await()) {
                 loge("Market does not exist: ${filter.market}!", IllegalArgumentException())
                 view.context.longToast(R.string.error_trading_pair_does_not_exist)
                 activity?.finish()
@@ -237,8 +236,6 @@ class TradingPairDetailsFragment : BaseFragment() {
         tradingPairDetails1wButton.setOnClickListener(::onButtonClick)
 
         tradingPairDetailsChart.apply {
-            val textColorPrimary = col(context.theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary))
-
             description.isEnabled = false
 
             onChartGestureListener = object : TradingPairChartGestureListener() {
@@ -285,7 +282,7 @@ class TradingPairDetailsFragment : BaseFragment() {
         }
 
         tradingPairStats24hChangeLabel.text = tradingPair.change24h
-        if (tradingPair.change24h.startsWith("-")) {
+        if (tradingPair.change24h?.startsWith("-") == true) {
             tradingPairStats24hChangeLabel.setTextColor(col(R.color.red_400))
         } else {
             tradingPairStats24hChangeLabel.setTextColor(col(R.color.green_400))

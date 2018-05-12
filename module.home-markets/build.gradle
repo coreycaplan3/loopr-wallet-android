@@ -5,6 +5,7 @@ dependencies {
     implementation project(path: ':module.barcode')
     implementation project(path: ':module.create-transfer')
     implementation project(path: ':module.trade-details')
+    implementation project(path: ':module.wrap-eth')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

@@ -25,11 +25,11 @@ interface WalletClient {
         fun getInstance(context: Context, looprSecureSettings: LooprSecureSettings): WalletClient = synchronized(this) {
             val instance = this.instance
             if (instance != null) {
-                return instance
+                return@synchronized instance
             }
 
             logd("Initializing currentWallet client...")
-            return WalletClientProductionImpl(context, looprSecureSettings).also {
+            return@synchronized WalletClientProductionImpl(context, looprSecureSettings).also {
                 this.instance = it
             }
         }

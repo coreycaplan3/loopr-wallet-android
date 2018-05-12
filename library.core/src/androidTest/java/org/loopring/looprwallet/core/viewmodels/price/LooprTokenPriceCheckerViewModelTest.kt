@@ -8,7 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.sync.SyncData
 import java.math.BigDecimal
 import java.util.*

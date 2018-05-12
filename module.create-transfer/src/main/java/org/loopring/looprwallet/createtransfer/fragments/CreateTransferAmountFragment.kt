@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.createtransfer.fragments
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AlertDialog
@@ -18,8 +17,8 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.settings.EthereumFeeSettingsFragment
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.contact.Contact
-import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.CryptoToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate.Companion.MAX_CURRENCY_FRACTION_DIGITS
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate.Companion.MAX_EXCHANGE_RATE_FRACTION_DIGITS
@@ -29,7 +28,8 @@ import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
-import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
+import org.loopring.looprwallet.core.viewmodels.eth.EthereumTokenBalanceViewModel
+import org.loopring.looprwallet.core.viewmodels.eth.EthereumTokenTransactionViewModel
 import org.loopring.looprwallet.core.viewmodels.eth.EthereumTransactionViewModel
 import org.loopring.looprwallet.core.viewmodels.price.EthTokenPriceCheckerViewModel
 import org.loopring.looprwallet.createtransfer.R
@@ -126,19 +126,24 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
     }
 
     @VisibleForTesting
-    val ethTokenBalanceViewModel: EthTokenBalanceViewModel by lazy {
-        LooprViewModelFactory.get<EthTokenBalanceViewModel>(this).apply {
+    val ethereumTokenBalanceViewModel: EthereumTokenBalanceViewModel by lazy {
+        LooprViewModelFactory.get<EthereumTokenBalanceViewModel>(this).apply {
             setupOfflineFirstStateAndErrorObserver(this, null)
         }
     }
 
     @VisibleForTesting
     val ethereumTransactionViewModel by lazy {
-        ViewModelProviders.of(this).get(EthereumTransactionViewModel::class.java)
+        LooprViewModelFactory.get<EthereumTransactionViewModel>(this)
     }
 
     @VisibleForTesting
-    var tokenBalanceList = listOf<CryptoToken>()
+    val ethereumTokenTransactionViewModel by lazy {
+        LooprViewModelFactory.get<EthereumTokenTransactionViewModel>(this)
+    }
+
+    @VisibleForTesting
+    var tokenBalanceList = listOf<LooprToken>()
 
     @VisibleForTesting
     val maxDecimalPlaces: Int
@@ -177,14 +182,14 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             }
         }
 
-        ethToken = ethTokenBalanceViewModel.getEthBalanceNow()
+        ethToken = ethereumTokenBalanceViewModel.getEthBalanceNow()
         currentToken = ethTokenPriceCheckerViewModel.currentCryptoToken ?: ethToken
 
         toolbar?.title = null
         toolbar?.subtitle = contact?.name ?: recipientAddress
 
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
-        ethTokenBalanceViewModel.getAllTokensWithBalances(this, address) {
+        ethereumTokenBalanceViewModel.getAllTokensWithBalances(this, address) {
             tokenBalanceList = it
             toolbarDelegate?.invalidateOptionsMenu()
         }
@@ -223,13 +228,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
         createTransferSendButton.setOnClickListener {
             val biTokenAmount = (BigDecimal(tokenAmount) * (BigDecimal("10").pow(8))).toBigInteger()
-            val gasPrice = ethereumFeeSettings.currentGasPrice
-            val totalEtherTransferAmount = gasPrice * ethereumFeeSettings.currentEthTransferGasLimit
-            val totalTokenTransferAmount = gasPrice * ethereumFeeSettings.currentTokenTransferGasLimit
-
+            val gasPrice = ethereumFeeSettings.convertGasPriceToWei
             when (currentToken.identifier) {
-                LooprToken.ETH.identifier -> onSendEth(biTokenAmount, totalEtherTransferAmount)
-                else -> onSendToken(biTokenAmount, totalTokenTransferAmount)
+                LooprToken.ETH.identifier -> onSendEth(biTokenAmount, ethereumFeeSettings.ethTransferGasLimit, gasPrice)
+                else -> onSendToken(biTokenAmount, ethereumFeeSettings.tokenTransferGasLimit, gasPrice)
             }
         }
 
@@ -272,8 +274,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                 bindAmountsToText()
 
                 setupTokenTicker(data[position])
-                if (balance == null || balance == BigInteger.ZERO && ethTokenBalanceViewModel.isLoading() == false) {
-                    ethTokenBalanceViewModel.refresh()
+                if (balance == null || balance == BigInteger.ZERO && ethereumTokenBalanceViewModel.isLoading() == false) {
+                    ethereumTokenBalanceViewModel.refresh()
                     spinner.context.longToast(R.string.error_send_tokens_with_zero_balance)
                 }
             }
@@ -291,37 +293,12 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
     }
 
     /**
-     * Counts the number of digits before the decimal point. If there's no decimal point, it
-     * counts all the digits
-     */
-    fun getAmountBeforeDecimal(s: String): Int {
-        s.forEachIndexed { i, ch ->
-            if (ch == '.') return i
-        }
-        return s.length
-    }
-
-    /**
-     * Counts the number of digits after the decimal point. If there's no decimal point, 0 is
-     * returned.
-     */
-    fun getAmountAfterDecimal(s: String): Int {
-        var decimalFlag = false
-        var counter = 0
-        s.forEach { ch ->
-            if (decimalFlag) counter += 1
-            if (ch == '.') decimalFlag = true
-        }
-        return counter
-    }
-
-    /**
      * @return The new string with the newly appended number
      */
     override fun onNumberClick(number: String) {
         var amount = getAmountBasedOnCurrencyMainLabel()
-        val amountBefore = getAmountBeforeDecimal(amount)
-        val amountAfter = getAmountAfterDecimal(amount)
+        val amountBefore = amount.getAmountBeforeDecimal()
+        val amountAfter = amount.getAmountAfterDecimal()
         val hasDecimal = amount.contains(".")
 
         amount = when (number) {
@@ -410,24 +387,25 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
     /**
      * Called when a user is attempting to send ETH. This method checks for insufficient balance
-     * issues.
+     * issues before confirming a send.
+     *
+     * @param amountToSend The amount to send, formatted with 18 decimal places.
+     * @param gasLimit The gas limit for the transaction
+     * @param gasPrice The gas price for the transaction, formatted in WEI
      */
-    private fun onSendEth(amountToSend: BigInteger, totalTransactionCost: BigInteger) {
+    private fun onSendEth(amountToSend: BigInteger, gasLimit: BigInteger, gasPrice: BigInteger) {
+        val totalTransactionCost = gasPrice * gasLimit
         val ethBalance = ethToken.getBalanceOf(address) ?: BigIntegerHelper.NEGATIVE_ONE
-        val gasLimit = ethereumFeeSettings.currentEthTransferGasLimit
-        val gasPrice = ethereumFeeSettings.currentGasPrice
         when {
             ethBalance == BigIntegerHelper.NEGATIVE_ONE -> onEthBalanceError()
             ethBalance < (amountToSend + totalTransactionCost) ->
                 view?.context?.longToast(R.string.cannot_send_more_eth_than_balance_and_gas)
             else ->
                 buildSendConfirmationDialog {
-                    val credentials = walletClient.getCurrentWallet()!!.credentials
-                    ethereumTransactionViewModel.sendTokens(
-                            currentToken.identifier,
-                            currentToken.binary!!,
-                            credentials,
-                            address,
+                    val wallet = walletClient.getCurrentWallet()
+                    ethereumTransactionViewModel.sendEther(
+                            wallet!!,
+                            recipientAddress,
                             amountToSend,
                             gasLimit,
                             gasPrice
@@ -436,46 +414,56 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         }
     }
 
-    private fun onSendToken(amountToSend: BigInteger, totalTransactionCost: BigInteger) {
+    /**
+     * Called when a user is attempting to send a token. This method checks for insufficient balance
+     * issues before confirming a send.
+     *
+     * @param amountToSend The amount to send, formatted with [LooprToken.decimalPlaces].
+     * @param gasLimit The gas limit for the transaction, in WEI
+     * @param gasPrice The gas price for the transaction, in GWEI
+     */
+    private fun onSendToken(amountToSend: BigInteger, gasLimit: BigInteger, gasPrice: BigInteger) {
+        val context = context ?: return
         val tokenToSendBalance = currentToken.getBalanceOf(address) ?: BigIntegerHelper.NEGATIVE_ONE
         val ethBalance = ethToken.getBalanceOf(address) ?: BigIntegerHelper.NEGATIVE_ONE
-
-        val gasLimit = ethereumFeeSettings.currentTokenTransferGasLimit
-        val gasPrice = ethereumFeeSettings.currentGasPrice
+        val totalTransactionCost = ethereumFeeSettings.getTotalTransactionCost(gasLimit)
         when {
             ethBalance == BigDecimalHelper.NEGATIVE_ONE -> onEthBalanceError()
             tokenToSendBalance == BigDecimalHelper.NEGATIVE_ONE -> {
                 // This should not happen, since the button is disabled until a balance was loaded
                 loge("Could not get the user\'s token balance!", IllegalStateException())
                 view?.longSnackbarWithAction(R.string.error_retrieve_token_balance, R.string.retry) {
-                    ethTokenBalanceViewModel.refresh()
+                    ethereumTokenBalanceViewModel.refresh()
                 }
             }
-            ethBalance < totalTransactionCost -> view?.longSnackbarWithAction(R.string.error_insufficient_gas, R.string.gas_settings) {
-                val fragment = EthereumFeeSettingsFragment()
-                val tag = EthereumFeeSettingsFragment.TAG
+            ethBalance < totalTransactionCost -> {
+                AlertDialog.Builder(context)
+                        .setTitle(R.string.error_insufficient_eth_balance_title)
+                        .setMessage(R.string.error_insufficient_gas)
+                        .setPositiveButton(R.string.gas_settings) { dialog, _ ->
+                            dialog.dismiss()
 
-                FragmentTransactionController(R.id.activityContainer, fragment, tag)
-                        .apply {
-                            slideUpAndDownAnimation()
-                            commitTransaction(requireFragmentManager())
+                            val fragment = EthereumFeeSettingsFragment()
+                            val tag = EthereumFeeSettingsFragment.TAG
+
+                            FragmentTransactionController(R.id.activityContainer, fragment, tag)
+                                    .apply {
+                                        slideUpAndDownAnimation()
+                                        commitTransaction(requireFragmentManager())
+                                    }
                         }
+                        .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                            dialog.cancel()
+                        }
+                        .show()
             }
             tokenToSendBalance < amountToSend -> {
                 view?.context?.longToast(R.string.error_insufficient_token_balance)
             }
             else -> {
                 buildSendConfirmationDialog {
-                    val credentials = walletClient.getCurrentWallet()!!.credentials
-                    ethereumTransactionViewModel.sendTokens(
-                            currentToken.identifier,
-                            currentToken.binary!!,
-                            credentials,
-                            address,
-                            amountToSend,
-                            gasLimit,
-                            gasPrice
-                    )
+                    val wallet = walletClient.getCurrentWallet()!!
+                    ethereumTokenTransactionViewModel.sendTokens(currentToken, wallet, address, amountToSend, gasLimit, gasPrice)
                 }
             }
         }
@@ -577,10 +565,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
     /**
      * Updates the swap, max, and number pad based on whether the two essential data providers,
-     * [ethTokenBalanceViewModel] and [ethTokenPriceCheckerViewModel], have valid data.
+     * [ethereumTokenBalanceViewModel] and [ethTokenPriceCheckerViewModel], have valid data.
      */
     private fun updateUiBasedOnValidData() {
-        if (ethTokenBalanceViewModel.hasValidData() && ethTokenPriceCheckerViewModel.hasValidData()) {
+        if (ethereumTokenBalanceViewModel.hasValidData() && ethTokenPriceCheckerViewModel.hasValidData()) {
             createTransferSwapButton.isEnabled = true
             createTransferMaxButton.isEnabled = true
             NumberPadPresenter.enableNumberPad(this)
@@ -595,7 +583,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         // This should not happen, since the button is disabled until a balance was loaded
         loge("Could not get user\'s ETH balance!", IllegalStateException())
         view?.longSnackbarWithAction(R.string.error_retrieve_eth_balance, R.string.retry) {
-            ethTokenBalanceViewModel.refresh()
+            ethereumTokenBalanceViewModel.refresh()
         }
     }
 

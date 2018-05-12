@@ -60,10 +60,6 @@ interface CoreLooprComponent {
 
     fun inject(ethereumService: EthereumService)
 
-    // Repositories
-
-    fun inject(baseRealmRepository: BaseRealmRepository)
-
     // View Models
 
     fun inject(currencyExchangeRateViewModel: CurrencyExchangeRateViewModel)
@@ -91,5 +87,5 @@ interface CoreLooprComponentProvider {
     fun provideCoreLooprComponent(): CoreLooprComponent
 }
 
-val coreLooprComponent: CoreLooprComponent
+internal val coreLooprComponent: CoreLooprComponent
     get() = (CoreLooprWalletApp.application as CoreLooprComponentProvider).provideCoreLooprComponent()

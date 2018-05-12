@@ -5,12 +5,14 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.models.android.architecture.NET
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
-import org.loopring.looprwallet.core.models.markets.TradingPair
-import org.loopring.looprwallet.core.models.markets.TradingPairFilter
-import org.loopring.looprwallet.core.models.markets.TradingPairTrend
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairTrend
 import org.loopring.looprwallet.core.utilities.NetworkUtility
+import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprTicker
 import java.io.IOException
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
 
 /**
@@ -25,44 +27,26 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
 
     companion object {
 
-        val lrcTradingPair = TradingPair(
-                primaryTicker = "LRC",
-                secondaryTicker = "WETH",
-                isFavorite = true,
-                lastPrice = 0.85,
-                change24h = "20.25%",
-                highPrice = 0.88,
-                lowPrice = 0.80,
-                amountOfPrimary = 19430240.0,
-                volumeOfSecondary = 194302.0,
-                primaryToken = LooprToken.LRC
-        )
+        private fun getRandomLooprTicker(market: String) = LooprTicker().apply {
+            this.market = market
+            this.buy = BigDecimal(Math.random())
+            this.sell = BigDecimal(Math.random())
+            this.vol = BigDecimal(Math.random() * 1000.0)
+            this.amount = BigDecimal(Math.random() * 10.0)
 
-        val reqTradingPair = TradingPair(
-                primaryTicker = "REQ",
-                secondaryTicker = "WETH",
-                isFavorite = true,
-                lastPrice = 0.25,
-                change24h = "10.54%",
-                highPrice = 0.27,
-                lowPrice = 0.24,
-                amountOfPrimary = 38030240.0,
-                volumeOfSecondary = 380302.0,
-                primaryToken = LooprToken.REQ
-        )
+            val amount = BigDecimal(Math.random()).setScale(2, RoundingMode.HALF_EVEN)
+            if (Math.random() >= 0.5) {
+                this.change = "-${amount.toPlainString()}%"
+            } else {
+                this.change = "${amount.toPlainString()}%"
+            }
+        }
 
-        val zrxTradingPair = TradingPair(
-                primaryTicker = "ZRX",
-                secondaryTicker = "WETH",
-                isFavorite = true,
-                lastPrice = 0.43,
-                change24h = "-68.25%",
-                highPrice = 0.44,
-                lowPrice = 0.40,
-                amountOfPrimary = 20030240.0,
-                volumeOfSecondary = 200302.0,
-                primaryToken = LooprToken.ZRX
-        )
+        val lrcTradingPair = TradingPair("LRC-WETH", "Loopring", getRandomLooprTicker("LRC-WETH"))
+
+        val reqTradingPair = TradingPair("REQ-WETH", "Request Network", getRandomLooprTicker("REQ-WETH"))
+
+        val zrxTradingPair = TradingPair("ZRX-WETH", "0x", getRandomLooprTicker("ZRX-WETH"))
 
     }
 
@@ -86,7 +70,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         }
     }
 
-    override fun getMarketTrends(tradingPairFilter: TradingPairFilter): Deferred<RealmList<TradingPairTrend>> = async(NET) {
+    override fun getMarketTrends(tradingPairGraphFilter: TradingPairGraphFilter): Deferred<RealmList<TradingPairTrend>> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -100,7 +84,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
                 val time = Date().time - offset
                 val startDate = Date(time)
                 val endDate = Date(time + 500L)
-                list.add(TradingPairTrend(tradingPairFilter.market, tradingPairFilter.graphDateFilter, high, low, startDate, endDate))
+                list.add(TradingPairTrend(tradingPairGraphFilter.market, tradingPairGraphFilter.graphDateFilter, high, low, startDate, endDate))
             }
 
             return@async list

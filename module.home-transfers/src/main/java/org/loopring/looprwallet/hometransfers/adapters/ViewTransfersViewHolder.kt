@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.view_holder_view_transfers.*
 import org.loopring.looprwallet.core.extensions.formatAsCurrency
 import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwallet.hometransfers.dagger.homeTransfersLooprComponent
 import javax.inject.Inject
 

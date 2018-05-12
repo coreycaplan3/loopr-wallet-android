@@ -2,7 +2,7 @@ package org.loopring.looprwallet.tradedetails.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import org.loopring.looprwallet.core.models.order.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
 
 /**
  * Created by Corey Caplan on 1/29/18.

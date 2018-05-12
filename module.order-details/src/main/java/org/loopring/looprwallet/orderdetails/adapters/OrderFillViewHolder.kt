@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_order_details_fill.*
-import org.loopring.looprwallet.core.models.order.LooprOrderFill
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.orderdetails.R

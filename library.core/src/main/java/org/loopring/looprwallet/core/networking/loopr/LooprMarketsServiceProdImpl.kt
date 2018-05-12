@@ -2,10 +2,9 @@ package org.loopring.looprwallet.core.networking.loopr
 
 import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.markets.TradingPair
-import org.loopring.looprwallet.core.models.markets.TradingPairFilter
-import org.loopring.looprwallet.core.models.markets.TradingPairTrend
-import org.loopring.looprwalletnetwork.services.LoopringService
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairTrend
 
 /**
  * Created by corey on 5/9/18
@@ -29,7 +28,7 @@ class LooprMarketsServiceProdImpl: LooprMarketsService {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getMarketTrends(tradingPairFilter: TradingPairFilter): Deferred<RealmList<TradingPairTrend>> {
+    override fun getMarketTrends(tradingPairGraphFilter: TradingPairGraphFilter): Deferred<RealmList<TradingPairTrend>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

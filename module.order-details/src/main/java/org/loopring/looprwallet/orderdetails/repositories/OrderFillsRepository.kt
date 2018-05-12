@@ -1,13 +1,15 @@
 package org.loopring.looprwallet.orderdetails.repositories
 
 import android.arch.lifecycle.LiveData
-import io.realm.*
+import io.realm.OrderedRealmCollection
+import io.realm.Sort
 import io.realm.kotlin.where
+import kotlinx.coroutines.experimental.android.HandlerContext
+import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.sort
-import org.loopring.looprwallet.core.models.order.LooprOrderFill
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
@@ -17,10 +19,10 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  *
  * Purpose of Class:
  */
-class OrderFillsRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
+class OrderFillsRepository : BaseRealmRepository() {
 
-    fun getOrderDepth(orderHash: String): LiveData<OrderedRealmCollection<LooprOrderFill>> {
-        return uiRealm.where<LooprOrderFill>()
+    fun getOrderDepth(orderHash: String, context: HandlerContext = UI): LiveData<OrderedRealmCollection<LooprOrderFill>> {
+        return getRealmFromContext(context).where<LooprOrderFill>()
                 .equalTo(LooprOrderFill::orderHash, orderHash)
                 .sort(LooprOrderFill::tradeDate, Sort.ASCENDING)
                 .findAllAsync()

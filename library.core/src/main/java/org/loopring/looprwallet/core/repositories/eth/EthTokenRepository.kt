@@ -8,9 +8,9 @@ import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.notEqualTo
-import org.loopring.looprwallet.core.models.android.architecture.IO
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
-import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
+import org.loopring.looprwallet.core.extensions.sort
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.TokenBalanceInfo
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
@@ -21,7 +21,7 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class EthTokenRepository : BaseRealmRepository(false) {
+class EthTokenRepository : BaseRealmRepository() {
 
     /**
      * Finds [LooprToken.ETH] synchronously. If not found, it is inserted and returned from realm.
@@ -35,7 +35,7 @@ class EthTokenRepository : BaseRealmRepository(false) {
                 .findFirst()
 
         return when {
-            token != null -> uiRealm.copyFromRealm(token)
+            token != null -> getRealmFromContext(context).copyFromRealm(token)
             else -> LooprToken.ETH
         }
     }
@@ -44,36 +44,21 @@ class EthTokenRepository : BaseRealmRepository(false) {
      * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract
      * address.
      */
-    fun getTokenByContractAddress(contractAddress: String, context: HandlerContext = IO): LooprToken? {
-        return getRealmFromContext(context).let {
-            val data = it.where<LooprToken>()
-                    .equalTo(LooprToken::identifier, contractAddress)
-                    .findFirst() ?: return null
+    fun getTokenByContractAddressNow(contractAddress: String, context: HandlerContext = UI): LooprToken? {
+        return getRealmFromContext(context)
+                .let { realm ->
+                    val data = realm.where<LooprToken>()
+                            .equalTo(LooprToken::identifier, contractAddress)
+                            .findFirst() ?: return null
 
-            return@let it.copyFromRealm(data)
-        }
-    }
-
-    /**
-     * ** This function must be called from the IO thread **
-     *
-     * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract
-     * address and wallet address as the balance owner.
-     */
-    fun getTokenByContractAddressAndAddressNow(contractAddress: String, walletAddress: String, context: HandlerContext = UI): LooprToken? {
-        return getRealmFromContext(context).let {
-            val data = it.where<LooprToken>()
-                    .equalTo(LooprToken::identifier, contractAddress)
-                    .equalTo(listOf(LooprToken::tokenBalances), TokenBalanceInfo::address, walletAddress)
-                    .findFirst() ?: return null
-
-            return@let it.copyFromRealm(data)
-        }
+                    return@let realm.copyFromRealm(data)
+                }
     }
 
     fun getAllTokens(context: HandlerContext = UI): LiveData<OrderedRealmCollection<LooprToken>> {
         return getRealmFromContext(context)
                 .where<LooprToken>()
+                .sort(LooprToken::name)
                 .findAllAsync()
                 .asLiveData()
     }
@@ -84,7 +69,9 @@ class EthTokenRepository : BaseRealmRepository(false) {
     fun getAllTokensWithoutZeroBalance(address: String, context: HandlerContext = UI): LiveData<OrderedRealmCollection<LooprToken>> {
         return getRealmFromContext(context)
                 .where<LooprToken>()
+                .equalTo(listOf(LooprToken::tokenBalances), TokenBalanceInfo::address, address)
                 .notEqualTo(listOf(LooprToken::tokenBalances), TokenBalanceInfo::mBalance, "0")
+                .sort(LooprToken::name)
                 .findAllAsync()
                 .asLiveData()
     }

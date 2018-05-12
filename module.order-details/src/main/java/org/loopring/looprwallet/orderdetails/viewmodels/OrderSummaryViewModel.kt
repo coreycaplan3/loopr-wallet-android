@@ -2,11 +2,9 @@ package org.loopring.looprwallet.orderdetails.viewmodels
 
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
-import org.loopring.looprwallet.core.models.order.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
 import org.loopring.looprwallet.core.models.sync.SyncData
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.networking.loopr.LooprOrderService
 import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
@@ -19,9 +17,9 @@ import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
  * Purpose of Class: A view-model for showing a single [LooprOrder] based on its order hash.
  *
  */
-class OrderSummaryViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<LooprOrder, String>() {
+class OrderSummaryViewModel : OfflineFirstViewModel<LooprOrder, String>() {
 
-    override val repository = LooprOrderRepository(currentWallet)
+    override val repository = LooprOrderRepository()
 
     private val service = LooprOrderService.getInstance()
 
@@ -37,7 +35,7 @@ class OrderSummaryViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<
         return service.getOrderByHash(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: LooprOrder) {
+    override fun addNetworkDataToRepository(data: LooprOrder, parameter: String) {
         repository.add(data)
     }
 

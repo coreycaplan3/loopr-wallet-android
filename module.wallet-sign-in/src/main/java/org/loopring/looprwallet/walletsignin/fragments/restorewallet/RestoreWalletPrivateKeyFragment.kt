@@ -44,7 +44,7 @@ class RestoreWalletPrivateKeyFragment : BaseFragment() {
 
         privateKeyUnlockButton.setOnClickListener { onUnlockWalletClick() }
 
-        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, ::getMessageFromError)
+        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, convertErrorToMessage = ::getMessageFromError)
     }
 
     override fun onFormChanged() {

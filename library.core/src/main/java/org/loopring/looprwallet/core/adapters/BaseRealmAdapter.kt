@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.realm.OrderedRealmCollection
-import io.realm.RealmCollection
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 
 /**
  * Created by Corey Caplan on 3/14/18.
@@ -21,24 +21,13 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
         InflatableAdapter {
 
     companion object {
-        const val TYPE_LOADING = 0
+        const val TYPE_LOADING_INITIAL = 0
         const val TYPE_EMPTY = 1
         const val TYPE_DATA = 2
         const val TYPE_HEADER = 3
+        const val TYPE_LOADING_END = 4
+        const val TYPE_PAGING_END = 5
     }
-
-    /**
-     * The total number of items that can be loaded and stored in *data*. This represents the total
-     * amount of data, not the current page size or the amount loaded in a network call. This  field
-     * is then used to create/check the viewType, given a position. Mainly to distinguish between
-     * whether or not we should "load more" data after scrolling beyond the current data's
-     * capacity.
-     *
-     * Set this field to *null* if it shouldn't be used. For example:
-     * - The app is loading data only locally and we know there's nothing more to load.
-     * - We don't know how many items there are in the list
-     */
-    abstract val totalItems: Int?
 
     var containsHeader: Boolean = false
         set(value) {
@@ -48,21 +37,32 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
             }
         }
 
+    abstract var pager: LooprAdapterPager<T>
+        protected set
+
     var data: OrderedRealmCollection<T>? = null
-        private set
 
     override var layoutInflater: LayoutInflater? = null
 
+    /**
+     * A function that is invoked when the user scrolls to the bottom of the container and wants to
+     * load more data
+     */
+    var onLoadMore: () -> Unit = {}
+
     final override fun getItemViewType(position: Int): Int {
-        val data = data ?: return TYPE_LOADING
+        val data = pager.data
 
         return when {
-            !data.isValid -> TYPE_LOADING
+            data == null -> TYPE_LOADING_INITIAL
             data.size == 0 -> TYPE_EMPTY
             position == 0 && containsHeader -> TYPE_HEADER
-            position == itemCount && containsMoreData() ->
+            position == itemCount - 1 && pager.containsMoreData ->
                 // We are at the last position (after the data), but there's still more to load
-                TYPE_LOADING
+                TYPE_LOADING_END
+            position == itemCount - 1 && !pager.containsMoreData ->
+                // We are at the last position (after the data), and there's no data to load
+                TYPE_PAGING_END
             else -> TYPE_DATA
         }
     }
@@ -70,10 +70,12 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = getInflater(parent)
         return when (viewType) {
-            TYPE_LOADING -> LoadingViewHolder(inflater.inflate(R.layout.view_holder_loading, parent, false))
+            TYPE_LOADING_INITIAL -> LoadingInitialViewHolder(inflater.inflate(R.layout.view_holder_loading_initial, parent, false))
             TYPE_EMPTY -> onCreateEmptyViewHolder(parent)
             TYPE_DATA -> onCreateDataViewHolder(parent)
             TYPE_HEADER -> onCreateHeaderViewHolder(parent)
+            TYPE_LOADING_END -> LoadingEndViewHolder(inflater.inflate(R.layout.view_holder_loading_end, parent, false))
+            TYPE_PAGING_END -> PagingEndViewHolder(inflater.inflate(R.layout.view_holder_paging_end, parent, false))
             else -> throw IllegalArgumentException("Invalid viewType, found $viewType")
         }
     }
@@ -85,10 +87,17 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     }
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val data = data
+        if (holder is LoadingEndViewHolder) {
+            onLoadMore()
+            return
+        }
+
         val newPosition = position + dataOffsetPosition
-        if (data != null && newPosition >= 0 && newPosition < data.size) {
+        val data = data
+        if (data != null && newPosition < data.size && newPosition >= 0) {
             onBindViewHolder(holder, position, data[newPosition])
+        } else {
+            onBindViewHolder(holder, position, null)
         }
     }
 
@@ -108,43 +117,25 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
             else -> 0
         }
 
+    /**
+     * Called during [onBindViewHolder].
+     *
+     * @param holder The ViewHolder to be bound
+     * @param index The index at which this ViewHolder currently resides
+     * @param item The item at the given position or null if the item could not be retrieved,
+     * was out bounds, etc.
+     */
     abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: T?)
 
     final override fun getItemCount(): Int = data?.let {
-        val totalItems = totalItems
-        val canLoadMore = totalItems != null && it.size < totalItems
         val addition = when {
-            canLoadMore && containsHeader -> 2
-            canLoadMore || containsHeader -> 1
-            else -> 0
+            pager.containsMoreData && containsHeader -> 2
+            else -> 1
         }
         return@let it.size + addition
     } ?: 1
 
-    // MARK - Protected Methods
-
-    /**
-     * Gets the number of items in the adapter based on the amount of data currently and if there's
-     * any more available after loading more from the network.
-     */
-    protected fun getItemCountForOnlyData(data: RealmCollection<T>): Int = data.size.let {
-        return@let when {
-            containsMoreData() ->
-                // There's still some items left to load
-                it + 1
-            else -> it
-        }
-    }
-
     // MARK - Private Methods
-
-    /**
-     * @return True if this adapter contains more data to load from the network or false otherwise
-     */
-    private fun containsMoreData(): Boolean {
-        val totalItems = totalItems ?: return false
-        return data?.size?.let { it < totalItems } ?: false
-    }
 
     /**
      * Returns the item associated with the specified position.
@@ -169,9 +160,14 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     }
 
     private fun isDataValid(): Boolean {
-        return data != null && data!!.isValid
+        val data = data
+        return data != null && data.isValid
     }
 
-    private class LoadingViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+    private class LoadingInitialViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+
+    private class LoadingEndViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+
+    private class PagingEndViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)
 
 }

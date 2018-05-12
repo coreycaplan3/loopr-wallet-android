@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_markets.*
-import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.core.utilities.ImageUtility
@@ -42,10 +42,10 @@ class MarketsViewHolder(itemView: View, onTradingPairClick: (Int) -> Unit)
         val image = ImageUtility.getImageFromTicker(tradingPair.primaryTicker, context)
         marketsImage.setImageDrawable(image)
 
-        marketsTokenNameLabel.text = tradingPair.primaryToken.name
+        marketsTokenNameLabel.text = tradingPair.primaryTokenName
         marketsTickerLabel.text = tradingPair.primaryTicker
 
-        if (tradingPair.change24h.startsWith("-")) {
+        if (tradingPair.change24h?.startsWith("-") == true) {
             marketsPercentageChangeLabel.setTextColor(col(R.color.red_400))
         } else {
             marketsPercentageChangeLabel.setTextColor(col(R.color.green_400))

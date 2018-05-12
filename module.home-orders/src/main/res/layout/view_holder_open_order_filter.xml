@@ -1,39 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/standard_padding">
-
-    <Spinner
-        android:id="@+id/openOrderFilterDateSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/horizontal_margin"
-        android:layout_marginRight="@dimen/horizontal_margin"
-        android:spinnerMode="dialog" />
-
-    <Spinner
-        android:id="@+id/openOrderFilterStatusSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/horizontal_margin"
-        android:layout_marginRight="@dimen/horizontal_margin"
-        android:layout_toLeftOf="@id/openOrderCancelAllButton"
-        android:layout_toStartOf="@id/openOrderCancelAllButton"
-        android:spinnerMode="dialog" />
+    android:layout_height="48dp"
+    android:paddingBottom="@dimen/standard_padding_small"
+    android:paddingLeft="@dimen/standard_padding"
+    android:paddingRight="@dimen/standard_padding"
+    android:paddingTop="@dimen/standard_padding_small">
 
     <Button
         android:id="@+id/openOrderCancelAllButton"
         style="@style/App.Button.Borderless"
         android:layout_width="wrap_content"
-        android:layout_height="31dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_height="32dp"
         android:text="@string/cancel_all"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        app:layout_constraintRight_toRightOf="parent" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

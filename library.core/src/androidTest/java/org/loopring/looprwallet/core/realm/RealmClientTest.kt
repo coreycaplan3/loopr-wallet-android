@@ -1,7 +1,7 @@
 package org.loopring.looprwallet.core.realm
 
 import android.support.test.runner.AndroidJUnit4
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.currency.CurrencyExchangeRate
 import io.realm.Realm
 import io.realm.kotlin.where

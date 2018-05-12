@@ -78,10 +78,18 @@
     <string name="settings_ethereum_fees_gas_price_key">loopr_settings_ethereum_fees_gas_price_key</string>
     <string name="settings_ethereum_fees_send_ether_gas_limit_key">settings_ethereum_fees_send_ether_gas_limit_key</string>
     <string name="settings_ethereum_fees_send_token_gas_limit_key">loopr_settings_ethereum_fees_send_token_gas_limit_key</string>
+    <string name="settings_ethereum_fees_deposit_weth_gas_limit_key">loopr_settings_ethereum_fees_deposit_weth_gas_limit_key</string>
+    <string name="settings_ethereum_fees_cancel_all_orders_gas_limit_key">loopr_settings_ethereum_fees_cancel_all_orders_gas_limit_key</string>
+    <string name="settings_ethereum_fees_cancel_order_gas_limit_key">loopr_settings_ethereum_fees_cancel_order_gas_limit_key</string>
+    <string name="settings_ethereum_fees_cancel_orders_by_trading_pair_gas_limit_key">loopr_settings_ethereum_fees_cancel_orders_by_trading_pair_gas_limit_key</string>
 
     <integer name="settings_ethereum_fees_gas_price_default_value">10</integer>
     <string name="settings_ethereum_fees_default_send_ether_gas_limit_value">21000</string>
     <string name="settings_ethereum_fees_default_send_token_gas_limit_value">90000</string>
+    <string name="settings_ethereum_fees_default_deposit_weth_gas_limit_value">50000</string>
+    <string name="settings_ethereum_fees_default_deposit_cancel_all_orders_gas_limit_value">50000</string>
+    <string name="settings_ethereum_fees_default_deposit_cancel_order_gas_limit_value">90000</string>
+    <string name="settings_ethereum_fees_default_deposit_cancel_orders_by_trading_pair_gas_limit_value">50000</string>
 
     <!-- Loopring Fees -->
 

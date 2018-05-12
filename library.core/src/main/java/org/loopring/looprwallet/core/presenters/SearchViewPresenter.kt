@@ -85,6 +85,9 @@ class SearchViewPresenter(
         private const val KEY_SEARCH_QUERY = "_SEARCH_QUERY"
     }
 
+    /**
+     * The current search query if searching is active or *null* if it's inactive
+     */
     var searchQuery: String? = null
         private set
 

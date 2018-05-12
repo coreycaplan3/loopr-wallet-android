@@ -19,7 +19,7 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class CurrencyExchangeRateRepository : BaseRealmRepository(false) {
+class CurrencyExchangeRateRepository : BaseRealmRepository() {
 
     fun getCurrencyExchangeRate(currency: String, context: HandlerContext = UI): LiveData<CurrencyExchangeRate> {
         return getRealmFromContext(context)

@@ -2,6 +2,7 @@ package org.loopring.looprwallet.transferdetails.dialogs
 
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.view.View
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_transfer_details.*
@@ -9,7 +10,7 @@ import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 import org.loopring.looprwallet.core.extensions.formatAsCurrency
 import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.ChromeCustomTabsUtility
@@ -46,17 +47,9 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
 
     }
 
-    private var transferDetailsViewModel: TransferDetailsViewModel? = null
-        @Synchronized
-        get() {
-            if (field != null) {
-                return field
-            }
-
-            val wallet = walletClient.getCurrentWallet() ?: return null
-            field = LooprViewModelFactory.get(this, wallet)
-            return field
-        }
+    private val transferDetailsViewModel: TransferDetailsViewModel by lazy {
+        LooprViewModelFactory.get<TransferDetailsViewModel>(this)
+    }
 
     private lateinit var ethereumBlockNumberViewModel: EthereumBlockNumberViewModel
 
@@ -64,8 +57,10 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
         arguments?.getString(KEY_TRANSFER)!!
     }
 
+    @VisibleForTesting
     var looprTransfer: LooprTransfer? = null
 
+    @VisibleForTesting
     var ethBlockNum: EthBlockNum? = null
 
     @Inject
@@ -77,19 +72,22 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        activity?.let {
+            ethereumBlockNumberViewModel = LooprViewModelFactory.get(it)
+        }
+
         transferDetailsLooprComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ethereumBlockNumberViewModel = LooprViewModelFactory.get(activity!!)
         ethereumBlockNumberViewModel.getEthereumBlockNumber(this) {
             ethBlockNum = it
             bindStatus()
         }
 
-        transferDetailsViewModel?.getTransferByHash(this, transactionHash, ::onDataChange)
+        transferDetailsViewModel.getTransferByHash(this, transactionHash, ::onDataChange)
     }
 
     private fun onDataChange(transfer: LooprTransfer) {
@@ -97,7 +95,7 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
 
         // Send / Receive
         val quantityFormatterText: String
-        if(transfer.isSend) {
+        if (transfer.isSend) {
             transferDetailsSendImage.visibility = View.VISIBLE
             transferDetailsReceiveImage.visibility = View.GONE
 

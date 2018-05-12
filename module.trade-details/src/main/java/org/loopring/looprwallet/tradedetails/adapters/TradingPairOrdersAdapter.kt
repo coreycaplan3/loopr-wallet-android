@@ -3,7 +3,7 @@ package org.loopring.looprwallet.tradedetails.adapters
 import android.view.ViewGroup
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
-import org.loopring.looprwallet.core.models.order.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
 
 /**
  * Created by Corey Caplan on 1/29/18.

@@ -4,8 +4,7 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwallet.core.repositories.loopr.LooprTransferRepository
 
 /**
@@ -17,9 +16,9 @@ import org.loopring.looprwallet.core.repositories.loopr.LooprTransferRepository
  *
  *
  */
-class TransferDetailsViewModel(currentWallet: LooprWallet) : ViewModel() {
+class TransferDetailsViewModel : ViewModel() {
 
-    private val repository = LooprTransferRepository(currentWallet)
+    private val repository = LooprTransferRepository()
 
     private var hash: String? = null
     private var data: LiveData<LooprTransfer>? = null

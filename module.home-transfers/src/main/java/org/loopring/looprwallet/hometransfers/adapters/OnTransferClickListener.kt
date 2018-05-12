@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.hometransfers.adapters
 
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 
 /**
  * Created by Corey on 4/20/2018

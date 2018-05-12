@@ -1,18 +1,18 @@
 package org.loopring.looprwallet.core.repositories.loopr
 
 import android.arch.lifecycle.LiveData
-import io.realm.OrderedRealmCollection
-import io.realm.RealmModel
-import io.realm.RealmResults
+import io.realm.Case
+import io.realm.Sort
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.sort
-import org.loopring.looprwallet.core.models.order.LooprOrder
-import org.loopring.looprwallet.core.models.order.OrderFilter
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
@@ -23,7 +23,16 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class LooprOrderRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
+class LooprOrderRepository : BaseRealmRepository() {
+
+    fun getOrderContainerByKeyNow(criteria: String, context: HandlerContext = UI): LooprOrderContainer? {
+        val item = getRealmFromContext(context)
+                .where<LooprOrderContainer>()
+                .equalTo(LooprOrderContainer::criteria, criteria)
+                .findFirst()
+
+        return item?.let { getRealmFromContext(context).copyFromRealm(it) }
+    }
 
     fun getOrderByHash(orderHash: String, context: HandlerContext = UI): LiveData<LooprOrder> {
         return getRealmFromContext(context)
@@ -33,12 +42,26 @@ class LooprOrderRepository(private val currentWallet: LooprWallet) : BaseRealmRe
                 .asLiveData()
     }
 
-    fun getOrders(orderFilter: OrderFilter, context: HandlerContext = UI): LiveData<OrderedRealmCollection<LooprOrder>> {
-        // TODO apply order filter
+    fun getOrders(orderFilter: OrderFilter, context: HandlerContext = UI): LiveData<LooprOrderContainer> {
         return getRealmFromContext(context)
-                .where<LooprOrder>()
-                .sort(LooprOrder::orderDate)
-                .findAllAsync()
+                .where<LooprOrderContainer>()
+                .apply {
+                    // Market
+                    val marketPropertyList = listOf(LooprOrderContainer::data, LooprOrder::tradingPair)
+                    val marketProperty = TradingPair::market
+
+                    if (orderFilter.market != null) {
+                        equalTo(marketPropertyList, marketProperty, "${orderFilter.market}", Case.INSENSITIVE)
+                    }
+
+                    if (orderFilter.address != null) {
+                        equalTo(LooprOrder::address, orderFilter.address)
+                    }
+
+                    equalTo(LooprOrder::status, orderFilter.status)
+                }
+                .sort(LooprOrder::orderDate, Sort.DESCENDING)
+                .findFirstAsync()
                 .asLiveData()
     }
 

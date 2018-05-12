@@ -25,7 +25,6 @@
     <string name="unlock_device">You must unlock your device to access this app</string>
     <string name="exit_app">Exit App?</string>
     <string name="exit_app_rationale">Are you sure you want to exit the app? Your progress will be lost</string>
-    <string name="exit">Exit</string>
     <string name="market_price">Market Price</string>
     <string name="estimated_cost">Estimated Cost</string>
     <string name="order_summary">Order Summary</string>
@@ -264,7 +263,6 @@
     <string name="explain_application_lock">An application lock protects the assets on your device by adding a lock screen before opening this app, or when you want to view your private key.</string>
     <string name="question_send_tokens">Send Tokens?</string>
     <string name="sending">Sending…</string>
-    <string name="cancel_all">Cancel All</string>
     <string name="filled_amount">Filled/Amount</string>
     <string name="total">Total</string>
     <string name="expired">Expired</string>
@@ -280,8 +278,6 @@
     <string name="warning">Warning</string>
     <string name="help_export_keystore">We do not recommend exporting your keystore, because other apps will be able to see it. It\'s safest to keep the keystore in this app. For this reason, we recommend using a 12-word phrase for securing your wallet.</string>
     <string name="export_anyway">Export Anyway</string>
-    <string name="unlocking_token">Unlocking token…</string>
-    <string name="locking_token">Locking token…</string>
     <string name="error_unlocking_token">There was an error unlocking this token</string>
     <string name="contract_address">Contract Address</string>
     <string name="name">Name</string>
@@ -335,4 +331,15 @@
     <string name="share_this_order_with_qr_code">Share this order via the QR code</string>
     <string name="home">Home</string>
     <string name="error_trading_pair_does_not_exist">This trading pair does not exist!</string>
+    <string name="help">Help</string>
+    <string name="converting">Converting…</string>
+    <string name="wrapping_eth_into_weth">Wrapping ETH into WETH…</string>
+    <string name="unwrapping_weth_into_eth">Unwrapping WETH into ETH…</string>
+    <string name="cancel_all_orders">Cancel All Orders?</string>
+    <string name="cancel_all_rationale">Are you sure you want to cancel all of your open orders? This action cannot be undone.</string>
+    <string name="cancel_all">Cancel All</string>
+    <string name="exit">Exit</string>
+    <string name="dot">•</string>
+    <string name="cancelling_all_open_orders">Cancelling all open orders…</string>
+    <string name="your_orderes_will_be_cancelled">Your orders will be cancelled</string>
 </resources>

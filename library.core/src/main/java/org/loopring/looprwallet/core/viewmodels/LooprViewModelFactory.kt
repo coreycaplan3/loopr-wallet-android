@@ -40,17 +40,12 @@ open class LooprViewModelFactory protected constructor(private val currentWallet
             }
         }
 
-        inline fun <reified T : ViewModel> get(fragment: Fragment, currentWallet: LooprWallet, key: String? = null): T {
-            return ViewModelProviders.of(fragment, LooprViewModelFactory(currentWallet)).let {
-                when (key) {
-                    null -> it.get(T::class.java)
-                    else -> it.get(key, T::class.java)
-                }
-            }
-        }
-
     }
 
+    /**
+     * An example implementation that inflates a [ViewModel] with a constructor containing a
+     * [LooprWallet].
+     */
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 
         val constructor = modelClass.getConstructor(LooprWallet::class.java)

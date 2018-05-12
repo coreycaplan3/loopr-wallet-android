@@ -9,9 +9,8 @@ import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.sort
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
@@ -22,7 +21,7 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class LooprTransferRepository(private val currentWallet: LooprWallet) : BaseRealmRepository(true) {
+class LooprTransferRepository : BaseRealmRepository() {
 
     fun getTransferByHash(transferHash: String, context: HandlerContext = UI): LiveData<LooprTransfer> {
         // We're in a private realm instance, so we're already querying by all of this address's

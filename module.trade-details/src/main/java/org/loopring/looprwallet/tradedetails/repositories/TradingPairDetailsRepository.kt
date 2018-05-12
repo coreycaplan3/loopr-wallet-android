@@ -3,11 +3,12 @@ package org.loopring.looprwallet.tradedetails.repositories
 import android.arch.lifecycle.LiveData
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.models.android.architecture.IO
-import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
@@ -18,7 +19,7 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  * Purpose of Class:
  *
  */
-class TradingPairDetailsRepository : BaseRealmRepository(false) {
+class TradingPairDetailsRepository : BaseRealmRepository() {
 
     fun doesTradingPairExist(market: String, context: HandlerContext = IO) = async(context) {
         getRealmFromContext(context)
@@ -27,8 +28,9 @@ class TradingPairDetailsRepository : BaseRealmRepository(false) {
                 .findFirst() != null
     }
 
-    fun getTradingPairByMarket(primaryTicker: String, secondaryTicker: String): LiveData<TradingPair> {
-        return uiRealm.where<TradingPair>()
+    fun getTradingPairByMarket(primaryTicker: String, secondaryTicker: String, context: HandlerContext = UI): LiveData<TradingPair> {
+        return getRealmFromContext(context)
+                .where<TradingPair>()
                 .equalTo(TradingPair::primaryTicker, primaryTicker)
                 .equalTo(TradingPair::secondaryTicker, secondaryTicker)
                 .findFirstAsync()

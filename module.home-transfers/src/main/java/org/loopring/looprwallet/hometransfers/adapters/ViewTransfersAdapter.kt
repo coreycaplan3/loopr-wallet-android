@@ -4,7 +4,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.weakReference
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.models.loopr.paging.DefaultLooprPagerAdapter
+import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwallet.hometransfers.R
 
 /**
@@ -19,7 +21,7 @@ class ViewTransfersAdapter(listener: OnTransferClickListener) : BaseRealmAdapter
 
     private val listener by weakReference(listener)
 
-    override val totalItems: Int? = null
+    override var pager: LooprAdapterPager<LooprTransfer> = DefaultLooprPagerAdapter()
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val inflater = getInflater(parent)

@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.core.extensions
 
-import org.loopring.looprwallet.core.models.TrackedRealmObject
+import org.loopring.looprwallet.core.models.realm.TrackedRealmObject
 import org.loopring.looprwallet.core.utilities.RealmUtility
 import io.realm.*
 import java.util.*

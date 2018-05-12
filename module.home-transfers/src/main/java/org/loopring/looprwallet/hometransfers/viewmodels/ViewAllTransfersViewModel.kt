@@ -5,8 +5,7 @@ import io.realm.OrderedRealmCollection
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.sync.SyncData
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwallet.core.networking.ethplorer.LooprEthplorerService
 import org.loopring.looprwallet.core.repositories.loopr.LooprTransferRepository
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
@@ -20,9 +19,9 @@ import java.util.*
  * Purpose of Class: To retrieve this user's transfers of ETH, tokens, etc.
  *
  */
-class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<LooprTransfer>, String>() {
+class ViewAllTransfersViewModel : OfflineFirstViewModel<OrderedRealmCollection<LooprTransfer>, String>() {
 
-    override val repository = LooprTransferRepository(currentWallet)
+    override val repository = LooprTransferRepository()
 
     private val ethplorerService by lazy {
         LooprEthplorerService.getInstance()
@@ -40,7 +39,7 @@ class ViewAllTransfersViewModel(currentWallet: LooprWallet) : OfflineFirstViewMo
         return ethplorerService.getAddressTransferHistory(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprTransfer>) {
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprTransfer>, parameter: String) {
         repository.addList(data)
     }
 

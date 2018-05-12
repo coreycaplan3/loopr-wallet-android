@@ -4,8 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_token_balance.*
-import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.CryptoToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.ImageUtility
 import org.loopring.looprwallet.viewbalances.R

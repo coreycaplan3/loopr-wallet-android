@@ -29,6 +29,6 @@ class HomeAllMarketsFragment : BaseHomeChildMarketsFragment() {
     override val isFavorites: Boolean = false
 
     override fun provideAdapter(savedInstanceState: Bundle?): HomeMarketsAdapter {
-        return HomeMarketsAdapter(savedInstanceState, this, this, ::refreshAllOfflineFirstViewModels)
+        return HomeMarketsAdapter(savedInstanceState, this, this, false, ::refreshAllOfflineFirstViewModels)
     }
 }

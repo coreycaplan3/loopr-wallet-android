@@ -145,7 +145,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
 
         toolbarDelegate?.isToolbarCollapseEnabled = true
 
-        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, ::getMessageFromError)
+        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, convertErrorToMessage = ::getMessageFromError)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

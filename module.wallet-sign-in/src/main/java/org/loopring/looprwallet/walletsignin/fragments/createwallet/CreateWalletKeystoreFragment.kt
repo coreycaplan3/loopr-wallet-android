@@ -81,7 +81,7 @@ class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.OnPas
             filePermissionsDialog?.show()
         }
 
-        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, ::getMessageFromError)
+        setupTransactionViewModel(walletGeneratorViewModel, R.string.creating_wallet, convertErrorToMessage = ::getMessageFromError)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

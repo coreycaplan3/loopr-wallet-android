@@ -1,9 +1,10 @@
 package org.loopring.looprwallet.core.extensions
 
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.math.RoundingMode
 import java.text.NumberFormat
 
 /**
@@ -85,12 +86,30 @@ fun BigDecimal.formatAsCurrency(settings: CurrencySettings): String {
 }
 
 /**
- * Formats a [BigDecimal] as a token
+ * Formats a [BigInteger] as a decimal (using the proper number of decimal places)
  */
-fun BigInteger.formatAsToken(settings: CurrencySettings, token: LooprToken): String {
+fun BigInteger.formatAsDecimal(settings: CurrencySettings, token: LooprToken): String {
     val formatter = settings.getNumberFormatter()
     val result = BigDecimal(this, token.decimalPlaces) / (BigDecimal.TEN.pow(token.decimalPlaces))
-    return "${formatter.format(result)} ${token.ticker}"
+    return formatter.format(result)
+}
+
+/**
+ * Formats a [BigInteger] as a token
+ */
+fun BigInteger.formatAsToken(settings: CurrencySettings, token: LooprToken): String {
+    return "${formatAsDecimal(settings, token)} ${token.ticker}"
+}
+
+/**
+ * Converts the given [BigDecimal] to the equivalent [BigInteger], by moving the decimal place over
+ * by [LooprToken.decimalPlaces].
+ */
+fun BigDecimal.toTokenBigInteger(token: LooprToken): BigInteger {
+    val multiplier = BigDecimal.TEN.pow(token.decimalPlaces)
+    return (this * multiplier) // this * 10^decimal
+            .setScale(token.decimalPlaces, RoundingMode.HALF_DOWN)
+            .toBigInteger()
 }
 
 /**

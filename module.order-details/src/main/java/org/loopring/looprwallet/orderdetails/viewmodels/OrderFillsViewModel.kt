@@ -4,10 +4,9 @@ import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
-import org.loopring.looprwallet.core.models.order.LooprOrderFill
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.models.sync.SyncData.Companion.SYNC_TYPE_ORDER_FILLS
-import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.networking.loopr.LooprOrderService
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.orderdetails.repositories.OrderFillsRepository
@@ -21,9 +20,9 @@ import java.util.*
  * Purpose of Class: An [OfflineFirstViewModel] that retrieves the details of an order (order fills)
  * by using the order's unique hash as the parameter.
  */
-class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<OrderedRealmCollection<LooprOrderFill>, String>() {
+class OrderFillsViewModel : OfflineFirstViewModel<OrderedRealmCollection<LooprOrderFill>, String>() {
 
-    override val repository = OrderFillsRepository(currentWallet)
+    override val repository = OrderFillsRepository()
 
     private val service by lazy {
         LooprOrderService.getInstance()
@@ -47,7 +46,7 @@ class OrderFillsViewModel(currentWallet: LooprWallet) : OfflineFirstViewModel<Or
         return service.getOrderFillsByOrderHash(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprOrderFill>) {
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprOrderFill>, parameter: String) {
         repository.addList(data)
     }
 

@@ -5,9 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
-import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.models.contact.Contact
+import org.loopring.looprwallet.core.models.loopr.paging.DefaultLooprPagerAdapter
+import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 
 /**
  * Created by Corey Caplan on 3/11/18.
@@ -21,9 +22,9 @@ class ContactsAdapter(var selectedContactAddress: String?,
                       private var onContactSelected: (Contact) -> Unit
 ) : BaseRealmAdapter<Contact>() {
 
-    var isSearching = false
+    override var pager: LooprAdapterPager<Contact> = DefaultLooprPagerAdapter()
 
-    override val totalItems: Int? = null
+    var isSearching = false
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val inflater = getInflater(parent)
@@ -47,8 +48,7 @@ class ContactsAdapter(var selectedContactAddress: String?,
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: Contact?) {
-
-        item?.guard { } ?: return
+        item ?: return
         (holder as? ContactsViewHolder)?.bind(item, selectedContactAddress) {
             onContactViewHolderSelected(it)
         }

@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.markets.MarketsFilter
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
@@ -104,7 +104,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     private fun setMarketsLiveData(ticker: String? = null) {
         adapter?.ifNotNull { adapter ->
 
-            val marketsFilter = MarketsFilter(ticker, isFavorites, adapter.dateFilter, adapter.sortBy)
+            val marketsFilter = TradingPairFilter(ticker, isFavorites, adapter.dateFilter, adapter.sortBy)
             homeMarketsViewModel.getHomeMarkets(this, marketsFilter) { data ->
                 setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, data)
             }

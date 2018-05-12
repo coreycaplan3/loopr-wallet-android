@@ -2,7 +2,7 @@ package org.loopring.looprwallet.core.viewmodels
 
 import android.support.test.runner.AndroidJUnit4
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where

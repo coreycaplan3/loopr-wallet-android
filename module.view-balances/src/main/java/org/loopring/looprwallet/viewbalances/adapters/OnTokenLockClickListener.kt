@@ -1,6 +1,6 @@
 package org.loopring.looprwallet.viewbalances.adapters
 
-import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 
 /**
  * Created by Corey on 4/18/2018
@@ -13,9 +13,9 @@ import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
 interface OnTokenLockClickListener {
 
     /**
-     * Called when the user clicks on the lock button for a [CryptoToken].
+     * Called when the user clicks on the lock button for a [LooprToken].
      *
-     * @param token The [CryptoToken] that was clicked
+     * @param token The [LooprToken] that was clicked
      */
-    fun onTokenLockClick(token: CryptoToken)
+    fun onTokenLockClick(token: LooprToken)
 }

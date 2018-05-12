@@ -8,8 +8,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
-import org.loopring.looprwallet.core.viewmodels.eth.EthTokenBalanceViewModel
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
+import org.loopring.looprwallet.core.viewmodels.eth.EthereumTokenBalanceViewModel
 import java.util.*
 
 /**
@@ -22,21 +22,21 @@ import java.util.*
 @RunWith(AndroidJUnit4::class)
 class LooprTokenBalanceViewModelTest : BaseDaggerTest() {
 
-    private lateinit var ethTokenBalanceViewModel: EthTokenBalanceViewModel
+    private lateinit var ethereumTokenBalanceViewModel: EthereumTokenBalanceViewModel
 
     @Before
     fun setup() = runBlockingUiCode {
-        ethTokenBalanceViewModel = EthTokenBalanceViewModel()
+        ethereumTokenBalanceViewModel = EthereumTokenBalanceViewModel()
     }
 
     @After
     fun tearDown() = runBlockingUiCode {
-        ethTokenBalanceViewModel.clear()
+        ethereumTokenBalanceViewModel.clear()
     }
 
     @Test
     fun getLiveDataFromRepository() = runBlockingUiCode {
-        val data = ethTokenBalanceViewModel.getLiveDataFromRepository(address)
+        val data = ethereumTokenBalanceViewModel.getLiveDataFromRepository(address)
         val realmData = data.value as RealmResults<LooprToken>
 
         assertTrue(realmData.load())
@@ -47,16 +47,16 @@ class LooprTokenBalanceViewModelTest : BaseDaggerTest() {
 
     @Test
     fun getDataFromNetwork() = runBlockingUiCode {
-        val list = ethTokenBalanceViewModel.getDataFromNetwork(address).await()
+        val list = ethereumTokenBalanceViewModel.getDataFromNetwork(address).await()
         assertEquals(4, list.size)
     }
 
     @Test
     fun addNetworkDataToRepository() = runBlockingUiCode {
-        val list = ethTokenBalanceViewModel.getDataFromNetwork(address).await()
-        ethTokenBalanceViewModel.addNetworkDataToRepository(list)
+        val list = ethereumTokenBalanceViewModel.getDataFromNetwork(address).await()
+        ethereumTokenBalanceViewModel.addNetworkDataToRepository(list)
 
-        val allTokens = (ethTokenBalanceViewModel.repository.getAllTokens().value as RealmResults<LooprToken>)
+        val allTokens = (ethereumTokenBalanceViewModel.repository.getAllTokens().value as RealmResults<LooprToken>)
         assertTrue(allTokens.load())
         val date = Date()
         allTokens.forEach {

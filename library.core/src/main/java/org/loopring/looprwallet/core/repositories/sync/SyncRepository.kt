@@ -17,7 +17,7 @@ import java.util.*
  *
  *
  */
-class SyncRepository : BaseRealmRepository(false) {
+class SyncRepository : BaseRealmRepository() {
 
     /**
      * Gets the last sync time for a given [SyncData.SyncType].

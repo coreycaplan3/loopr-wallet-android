@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="lock_or_unlock_token">
+        <item>Unlock Token</item>
+        <item>Lock Token</item>
+    </array>
+
+</resources>

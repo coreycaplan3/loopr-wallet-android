@@ -46,7 +46,7 @@ import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.extensions.snackbar
-import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.web3j.crypto.WalletUtils
 import java.io.IOException

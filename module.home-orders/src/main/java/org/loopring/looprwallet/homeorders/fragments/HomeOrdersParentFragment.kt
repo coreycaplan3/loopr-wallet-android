@@ -12,9 +12,6 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.ViewGroup
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_TRADING_PAIR
@@ -23,7 +20,7 @@ import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.BaseTabFragment
-import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
@@ -115,8 +112,7 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
                     CreateTransferActivity.route(this, value)
                 }
                 BarcodeCaptureActivity.TYPE_TRADING_PAIR -> {
-                    val tradingPair = TradingPair.createFromMarket(value)
-                    TradingPairDetailsActivity.route(tradingPair, this)
+                    TradingPairDetailsActivity.route(TradingPair(value), this)
                 }
             }
         }

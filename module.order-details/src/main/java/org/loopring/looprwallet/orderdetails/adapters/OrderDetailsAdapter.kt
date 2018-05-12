@@ -4,9 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
-import org.loopring.looprwallet.core.extensions.guard
-import org.loopring.looprwallet.core.models.order.LooprOrder
-import org.loopring.looprwallet.core.models.order.LooprOrderFill
+import org.loopring.looprwallet.core.models.loopr.paging.DefaultLooprPagerAdapter
+import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
 import org.loopring.looprwallet.orderdetails.R
 
 /**
@@ -20,18 +21,13 @@ import org.loopring.looprwallet.orderdetails.R
  */
 class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrderFill>() {
 
-    init {
-        containsHeader = true
-    }
+    override var pager: LooprAdapterPager<LooprOrderFill> = DefaultLooprPagerAdapter()
 
     var orderSummary: LooprOrder = orderSummary
         set(value) {
             field = value
             notifyItemChanged(0)
         }
-
-    override val totalItems: Int?
-        get() = data?.size ?: 3 // TODO
 
     init {
         containsHeader = true
@@ -56,7 +52,7 @@ class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrde
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrderFill?) {
         (holder as? OrderSummaryViewHolder)?.bind(orderSummary)
 
-        item?.guard {} ?: return
+        item ?: return
         (holder as? OrderFillViewHolder)?.bind(index, item)
     }
 

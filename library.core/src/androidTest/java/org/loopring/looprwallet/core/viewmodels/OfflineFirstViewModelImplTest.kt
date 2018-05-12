@@ -2,7 +2,7 @@ package org.loopring.looprwallet.core.viewmodels
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.repositories.BaseRepository
 import org.loopring.looprwallet.core.repositories.sync.SyncRepository
 import io.realm.RealmModel

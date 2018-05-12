@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 import org.loopring.looprwallet.core.dagger.BaseDaggerTest
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.removeAllListenersAndClose
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 
 /**
  * Created by Corey on 3/22/2018

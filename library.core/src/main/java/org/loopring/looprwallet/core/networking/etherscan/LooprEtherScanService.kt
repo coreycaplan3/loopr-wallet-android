@@ -29,9 +29,4 @@ interface LooprEtherScanService {
 
     }
 
-    /**
-     * Gets a token's binary from the Etherscan service
-     */
-    fun getTokenBinary(contractAddress: String): Deferred<String>
-
 }

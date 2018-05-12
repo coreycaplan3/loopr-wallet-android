@@ -5,10 +5,10 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.models.android.architecture.NET
-import org.loopring.looprwallet.core.models.cryptotokens.CryptoToken
-import org.loopring.looprwallet.core.models.cryptotokens.LooprToken
-import org.loopring.looprwallet.core.models.cryptotokens.TokenBalanceInfo
-import org.loopring.looprwallet.core.models.transfers.LooprTransfer
+import org.loopring.looprwallet.core.models.loopr.tokens.CryptoToken
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.TokenBalanceInfo
+import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.loopring.looprwallet.core.utilities.NetworkUtility.MOCK_SERVICE_CALL_DURATION
 import java.io.IOException
@@ -92,7 +92,7 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
             token = req
     )
 
-    override fun getAddressInfo(address: String): Deferred<RealmList<LooprToken>> = async(NET) {
+    override fun getAddressBalances(address: String): Deferred<RealmList<LooprToken>> = async(NET) {
         delay(MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {

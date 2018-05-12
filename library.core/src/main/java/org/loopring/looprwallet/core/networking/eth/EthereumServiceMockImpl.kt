@@ -21,25 +21,29 @@ import java.math.BigInteger
  */
 internal class EthereumServiceMockImpl : EthereumService() {
 
-    private val mockTransactionReceipt = TransactionReceipt(
-            "0xabcdef",
-            "1",
-            "0x123456789",
-            "5000000",
-            "10000",
-            "10000",
-            null,
-            null,
-            null,
-            "0x1234567812345678123456781234567812345678",
-            "0x1234567812345678123456781234567812345678",
-            listOf(),
-            null
-    )
+    companion object {
+
+        val mockTransactionReceipt = TransactionReceipt(
+                "0xad0860212c3985a8cd46e82118ceb097e1b7e7921ebe3b4f1272b2453805c049",
+                "1",
+                "0x88bcbc5679662927729e5d64846647af4b3b8047cb2aaf5bc2bd8c30d2ed2339",
+                "5000000",
+                "21000",
+                "21000",
+                null,
+                null,
+                null,
+                "0x1234567812345678123456781234567812345678",
+                "0x1234567812345678123456781234567812345678",
+                listOf(),
+                null
+        )
+
+    }
 
     override fun sendEther(
             recipient: String,
-            amount: BigDecimal,
+            amount: BigInteger,
             gasLimit: BigInteger,
             gasPrice: BigInteger
     ): Deferred<TransactionReceipt> = async(NET) {
@@ -54,7 +58,6 @@ internal class EthereumServiceMockImpl : EthereumService() {
 
     override fun sendToken(
             contractAddress: String,
-            binary: String,
             recipient: String,
             amount: BigInteger,
             gasLimit: BigInteger,
@@ -71,7 +74,6 @@ internal class EthereumServiceMockImpl : EthereumService() {
 
     override fun approveToken(
             contractAddress: String,
-            binary: String,
             credentials: Credentials,
             spender: String,
             amount: BigInteger,
@@ -85,6 +87,37 @@ internal class EthereumServiceMockImpl : EthereumService() {
             NetworkUtility.isNetworkAvailable() -> mockTransactionReceipt
             else -> throw IOException("No connection!")
         }
+    }
 
+    override fun depositWeth(
+            contractAddress: String,
+            credentials: Credentials,
+            amount: BigInteger,
+            gasLimit: BigInteger,
+            gasPrice: BigInteger
+    ) = async(NET) {
+
+        delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
+
+        return@async when {
+            NetworkUtility.isNetworkAvailable() -> mockTransactionReceipt
+            else -> throw IOException("No connection!")
+        }
+    }
+
+    override fun withdrawWeth(
+            contractAddress: String,
+            credentials: Credentials,
+            amount: BigInteger,
+            gasLimit: BigInteger,
+            gasPrice: BigInteger
+    ) = async(NET) {
+
+        delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
+
+        return@async when {
+            NetworkUtility.isNetworkAvailable() -> mockTransactionReceipt
+            else -> throw IOException("No connection!")
+        }
     }
 }

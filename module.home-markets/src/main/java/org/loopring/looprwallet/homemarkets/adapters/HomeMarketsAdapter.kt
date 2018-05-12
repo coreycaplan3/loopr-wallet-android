@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
-import org.loopring.looprwallet.core.extensions.guard
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.markets.MarketsFilter
-import org.loopring.looprwallet.core.models.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.paging.DefaultLooprPagerAdapter
+import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.homemarkets.R
 import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 
@@ -27,6 +28,7 @@ class HomeMarketsAdapter(
         savedInstanceState: Bundle?,
         fragment: BaseFragment,
         listener: OnGeneralMarketsFilterChangeListener,
+        val isFavorites: Boolean,
         onRefresh: () -> Unit
 ) : BaseRealmAdapter<TradingPair>(), OnGeneralMarketsFilterChangeListener {
 
@@ -45,13 +47,12 @@ class HomeMarketsAdapter(
     var dateFilter: String
         private set
 
-    override val totalItems: Int?
-        get() = null
+    override var pager: LooprAdapterPager<TradingPair> = DefaultLooprPagerAdapter()
 
     init {
         containsHeader = true
-        sortBy = savedInstanceState?.getString(KEY_SORT_BY) ?: MarketsFilter.SORT_BY_TICKER_ASC
-        dateFilter = savedInstanceState?.getString(KEY_DATE_FILTER) ?: MarketsFilter.CHANGE_PERIOD_1D
+        sortBy = savedInstanceState?.getString(KEY_SORT_BY) ?: TradingPairFilter.SORT_BY_TICKER_ASC
+        dateFilter = savedInstanceState?.getString(KEY_DATE_FILTER) ?: TradingPairFilter.CHANGE_PERIOD_1D
     }
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -75,13 +76,13 @@ class HomeMarketsAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: TradingPair?) {
-        val filter = MarketsFilter(null, false, sortBy, dateFilter)
+        val filter = TradingPairFilter(null, isFavorites, sortBy, dateFilter)
         (holder as? MarketsFilterViewHolder)?.let {
             it.bind(filter)
             return
         }
 
-        item?.guard { } ?: return
+        item ?: return
         (holder as? MarketsViewHolder)?.bind(item)
     }
 

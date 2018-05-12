@@ -1,11 +1,11 @@
 package org.loopring.looprwallet.core.viewmodels.eth
 
 import kotlinx.coroutines.experimental.async
+import org.loopring.looprwallet.core.models.android.architecture.IO
+import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.networking.eth.EthereumService
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
-import org.web3j.crypto.Credentials
 import org.web3j.protocol.core.methods.response.TransactionReceipt
-import java.math.BigDecimal
 import java.math.BigInteger
 
 /**
@@ -19,74 +19,31 @@ import java.math.BigInteger
 class EthereumTransactionViewModel : TransactionViewModel<TransactionReceipt>() {
 
     /**
-     * Sends ether from the sender to the recipient. This method is asynchronous and uses the
-     * callbacks to communicate back to the caller.
+     * Sends ether from the sender to the recipient.
      *
-     * @see EthereumService.sendEther
+     * This method runs on the [IO] context's thread.
+     *
+     * @param recipient The recipient's address
+     * @param amount The amount of Ether to send to the recipient (represented as a whole number).
+     * For example, a value passed of 1.0 will send 1.0 ETH
+     * @param gasLimit The gas limit for sending this amount of Ether.
+     * @param gasPrice The price (in Gwei) for sending the Ether.
      */
     fun sendEther(
-            credentials: Credentials,
+            wallet: LooprWallet,
             recipient: String,
-            amount: BigDecimal,
+            amount: BigInteger,
             gasLimit: BigInteger,
             gasPrice: BigInteger
-    ) = async<Unit> {
+    ) = async(IO) {
         try {
             mIsTransactionRunning.postValue(true)
-            EthereumService.getInstance(credentials).sendEther(recipient, amount, gasLimit, gasPrice)
-        } catch (e: Throwable) {
-            mError.postValue(e)
-        } finally {
-            mIsTransactionRunning.postValue(false)
-        }
-    }
 
-    /**
-     * Sends tokens from [credentials] to the [recipient]. This method is asynchronous.
-     *
-     * @see EthereumService.sendToken
-     */
-    fun sendTokens(
-            contractAddress: String,
-            binary: String,
-            credentials: Credentials,
-            recipient: String,
-            amount: BigInteger,
-            gasLimit: BigInteger,
-            gasPrice: BigInteger
-    ) = async<Unit> {
-        mIsTransactionRunning.postValue(true)
-        try {
-            EthereumService.getInstance(credentials)
-                    .sendToken(contractAddress, binary, recipient, amount, gasLimit, gasPrice)
+            val result = EthereumService.getInstance(wallet.credentials)
+                    .sendEther(recipient, amount, gasLimit, gasPrice)
                     .await()
-        } catch (e: Throwable) {
-            mError.postValue(e)
-        } finally {
-            mIsTransactionRunning.postValue(false)
-        }
-    }
 
-    /**
-     * **ERC-20 Function**
-     * Approves a given [spender] to use [amount] tokens on behalf of user ([credentials]).
-     *
-     * @see EthereumService.approveToken
-     */
-    fun approveToken(
-            contractAddress: String,
-            binary: String,
-            credentials: Credentials,
-            spender: String,
-            amount: BigInteger,
-            gasLimit: BigInteger,
-            gasPrice: BigInteger
-    ) = async<Unit> {
-        mIsTransactionRunning.postValue(true)
-        try {
-            EthereumService.getInstance(credentials)
-                    .approveToken(contractAddress, binary, credentials, spender, amount, gasLimit, gasPrice)
-                    .await()
+            mResult.postValue(result)
         } catch (e: Throwable) {
             mError.postValue(e)
         } finally {

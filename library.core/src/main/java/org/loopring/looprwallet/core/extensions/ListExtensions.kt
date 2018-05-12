@@ -17,8 +17,7 @@ package org.loopring.looprwallet.core.extensions
  * @return True if all elements are not null or false otherwise.
  */
 inline fun <T> List<T?>.allNonnull(block: (List<T>) -> Unit): Boolean {
-    val nonNullList = this.map { it ?: return false }
-
+    val nonNullList = this.map { it ?: return false } // Returns on bad predicate
     block(nonNullList)
     return true
 }
@@ -53,11 +52,15 @@ inline fun <T> List<T>.indexOfFirstOrNull(predicate: (T) -> Boolean): Int? {
 /**
  * Finds an element based on the supplied predicate and updates the index with [data]. If the
  * element is not found, nothing occurs.
+ *
+ * @return True if an update occurred or false if it one did not.
  */
-inline fun <T> MutableList<T>.update(data: T, predicate: (T) -> Boolean) {
+inline fun <T> MutableList<T>.update(data: T, predicate: (T) -> Boolean): Boolean {
     indexOfFirstOrNull(predicate)?.let { index ->
         this[index] = data
+        return true
     }
+    return false
 }
 
 /**
