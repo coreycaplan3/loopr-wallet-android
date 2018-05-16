@@ -5,13 +5,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_order_details_summary.*
+import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.extensions.formatAsTokenNoTicker
+import org.loopring.looprwallet.core.extensions.toBigDecimal
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
+import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.orderdetails.R
 import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
+import java.math.BigDecimal
 import javax.inject.Inject
 
 /**
@@ -36,46 +40,45 @@ class OrderSummaryViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
     }
 
     @SuppressLint("SetTextI18n")
-    fun bind(order: LooprOrder) {
-        val numberFormatter = currencySettings.getNumberFormatter()
-
-        val totalQuantity = numberFormatter.format(order.amount)
-        val ticker = order.tradingPair.primaryTicker
+    fun bind(order: AppLooprOrder) {
+        val totalQuantityWithTicker = order.amount.formatAsToken(currencySettings, order.tradingPair.primaryToken)
         if (order.percentageFilled == 100) {
-            orderDetailsFilledAmountLabel.text = "$totalQuantity $ticker"
+            orderDetailsFilledAmountLabel.text = totalQuantityWithTicker
         } else {
-            val amountFilled = (order.percentageFilled / 100.0) * order.amount
-            val formattedAmountFilled = numberFormatter.format(amountFilled)
-            orderDetailsFilledAmountLabel.text = "$formattedAmountFilled /$totalQuantity $ticker"
+            order.tradingPair.primaryToken.let { token ->
+                val amountFilled = BigDecimal(order.percentageFilled / 100.0) * order.amount.toBigDecimal(token)
+
+                val formattedAmountFilled = amountFilled.formatAsTokenNoTicker(currencySettings)
+                orderDetailsFilledAmountLabel.text = "$formattedAmountFilled / $totalQuantityWithTicker"
+            }
         }
 
 
         when (order.status) {
-            OrderFilter.FILTER_OPEN_NEW -> {
+            OrderSummaryFilter.FILTER_OPEN_NEW -> {
                 val textColor = itemView.context.theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary)
                 orderDetailsStatusLabel.setTextColor(col(textColor))
                 orderDetailsStatusLabel.setText(R.string._new)
             }
-            OrderFilter.FILTER_OPEN_PARTIAL -> {
+            OrderSummaryFilter.FILTER_OPEN_PARTIAL -> {
                 orderDetailsStatusLabel.setTextColor(col(R.color.amber_500))
                 orderDetailsStatusLabel.setText(R.string.partial)
             }
-            OrderFilter.FILTER_FILLED -> {
+            OrderSummaryFilter.FILTER_FILLED -> {
                 orderDetailsStatusLabel.setTextColor(col(R.color.green_400))
                 orderDetailsStatusLabel.setText(R.string.filled)
             }
-            OrderFilter.FILTER_CANCELLED -> {
+            OrderSummaryFilter.FILTER_CANCELLED -> {
                 orderDetailsStatusLabel.setTextColor(col(R.color.red_400))
                 orderDetailsStatusLabel.setText(R.string.cancelled)
             }
-            OrderFilter.FILTER_EXPIRED -> {
+            OrderSummaryFilter.FILTER_EXPIRED -> {
                 orderDetailsStatusLabel.setTextColor(col(R.color.red_400))
                 orderDetailsStatusLabel.setText(R.string.expired)
             }
         }
 
-        val secondaryTicker = order.tradingPair.secondaryTicker
-        orderDetailsTotalLabel.text = "${numberFormatter.format(order.total)} $secondaryTicker"
+        orderDetailsTotalLabel.text = order.totalPrice.formatAsToken(currencySettings, order.tradingPair.secondaryToken)
     }
 
 }

@@ -2,6 +2,7 @@ package org.loopring.looprwallet.core.models.loopr.markets
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprTicker
 import java.math.BigDecimal
 
@@ -13,7 +14,6 @@ import java.math.BigDecimal
  * Purpose of Class: To represent a trading pair for a token.
  *
  * @property market The market for the ticker, formatted as XXX-XXX (where X is an uppercase letter)
- * @property primaryTokenName The full name of the primary token
  * @property primaryTicker The main ticker for this trading pair. For example the primary ticker for
  * "LRC-WETH" is LRC.
  * @property secondaryTicker The base for this trading pair. For example, the secondary ticker for
@@ -27,8 +27,9 @@ import java.math.BigDecimal
  */
 open class TradingPair(
         @PrimaryKey var market: String = "",
-        var primaryTokenName: String? = null,
-        looprTicker: LooprTicker? = null
+        private var looprTicker: LooprTicker? = null,
+        primaryToken: LooprToken? = null,
+        secondaryToken: LooprToken? = null
 ) : RealmObject() {
 
     companion object {
@@ -40,30 +41,44 @@ open class TradingPair(
     var isFavorite: Boolean = false
 
     val lastPrice: BigDecimal?
-        get() = mLooprTicker?.last
+        get() = looprTicker?.last
 
     val change24h: String?
-        get() = mLooprTicker?.change
+        get() = looprTicker?.change
 
     val highPrice: BigDecimal?
-        get() = mLooprTicker?.high
+        get() = looprTicker?.high
 
     val lowPrice: BigDecimal?
-        get() = mLooprTicker?.low
+        get() = looprTicker?.low
 
     val amountOfPrimary: BigDecimal?
-        get() = mLooprTicker?.amount
+        get() = looprTicker?.amount
 
     val volumeOfSecondary: BigDecimal?
-        get() = mLooprTicker?.vol
-
-    private var mLooprTicker: LooprTicker? = looprTicker
+        get() = looprTicker?.vol
 
     val primaryTicker: String
         get() = market.split("-")[0]
 
     val secondaryTicker: String
         get() = market.split("-")[1]
+
+    private var mPrimaryToken = primaryToken
+
+    var primaryToken: LooprToken
+        get() = mPrimaryToken!!
+        set(value) {
+            mPrimaryToken = primaryToken
+        }
+
+    private var mSecondaryToken = secondaryToken
+
+    var secondaryToken: LooprToken
+        get() = mSecondaryToken!!
+        set(value) {
+            mSecondaryToken = secondaryToken
+        }
 
     init {
         market = market.toUpperCase()

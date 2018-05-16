@@ -29,7 +29,7 @@ interface LooprAdapterPager<T : RealmModel> {
     val totalNumberOfItems: Int
 
     /**
-     * The data in this collection wrapper
+     * The data in this collection wrapper, backed by realm.
      */
     var data: OrderedRealmCollection<T>?
 

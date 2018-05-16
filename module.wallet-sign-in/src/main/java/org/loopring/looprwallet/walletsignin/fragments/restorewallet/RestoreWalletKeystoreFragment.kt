@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.view.View
@@ -61,11 +62,19 @@ class RestoreWalletKeystoreFragment : BaseFragment() {
         )
     }
 
-    val filePermissionsDialog: AlertDialog? by lazy {
-        context?.let {
-            DialogUtility.createFilePermissionsDialog(it, filePermissionsHandler)
+    @VisibleForTesting
+    var filePermissionsDialog: AlertDialog? = null
+        get() = synchronized(this) {
+            if (field != null) return field
+
+            val context = context ?: return null
+            return DialogUtility.getFilePermissionsDialog(context, filePermissionsHandler)
         }
-    }
+        set(value) {
+            if (value != null) {
+                field = value
+            }
+        }
 
     var keystoreUri: Uri? = null
         set(value) {

@@ -6,7 +6,6 @@ import android.support.annotation.VisibleForTesting
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_wrap_eth.*
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.*
@@ -207,8 +206,8 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
         address?.ifNotNull { address ->
             bindTokenBalanceToAvailableLabel(address, token)
 
-            val balance = token.findAddressBalance(address)?.balance?.formatAsDecimal(currencySettings, token)
-            balance?.let { wrapEtherInputEditText.setText(it, TextView.BufferType.EDITABLE) }
+            val balance = token.findAddressBalance(address)?.balance?.formatAsToken(currencySettings, token)
+            balance?.let { wrapEtherInputEditText.setText(it) }
         }
     }
 
@@ -262,16 +261,17 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
 
                     val amount = wrapEtherInputEditText.text.toString()
                             .toBigDecimalOrNull()
-                            ?.toTokenBigInteger(ethToken) ?: return@setPositiveButton
+                            ?.toBigInteger(ethToken) ?: return@setPositiveButton
 
                     (activity as? BaseActivity)?.progressDialog?.let {
                         it.setMessage(getString(R.string.converting))
                         it.show()
                     }
 
+                    val wallet = walletClient.getCurrentWallet() ?: return@setPositiveButton
                     when {
-                        isSwappingToWrapped -> depositEthViewModel.convertToWrapped(amount)
-                        else -> withdrawEthViewModel.convertToEther(amount)
+                        isSwappingToWrapped -> depositEthViewModel.convertToWrapped(amount, wallet)
+                        else -> withdrawEthViewModel.convertToEther(amount, wallet)
                     }
                 }
                 .setNegativeButton(android.R.string.cancel) { dialog, _ ->

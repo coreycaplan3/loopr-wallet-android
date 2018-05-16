@@ -21,14 +21,7 @@ import javax.inject.Inject
  * Purpose of Class:
  *
  */
-class WrapEthViewModel(private val wallet: LooprWallet) : TransactionViewModel<TransactionReceipt>() {
-
-    private val credentials
-        get() = wallet.credentials
-
-    private val service by lazy {
-        EthereumService.getInstance(credentials)
-    }
+class WrapEthViewModel : TransactionViewModel<TransactionReceipt>() {
 
     @Inject
     lateinit var ethereumFeeSettings: EthereumFeeSettings
@@ -42,13 +35,14 @@ class WrapEthViewModel(private val wallet: LooprWallet) : TransactionViewModel<T
      * @param amount The amount of WETH/ETH to convert, formatted as a big number with 18 decimal
      * places
      */
-    fun convertToWrapped(amount: BigInteger) {
+    fun convertToWrapped(amount: BigInteger, wallet: LooprWallet) {
         performTransaction {
             val contractAddress = LooprToken.WETH.identifier
             val gasPrice = ethereumFeeSettings.gasPriceInGwei
             val gasLimit = ethereumFeeSettings.wethDepositGasLimit
 
-            return@performTransaction service.depositWeth(contractAddress, credentials, amount, gasLimit, gasPrice)
+            val service = EthereumService.getInstance(wallet.credentials)
+            return@performTransaction service.depositWeth(contractAddress, wallet.credentials, amount, gasLimit, gasPrice)
         }
     }
 
@@ -57,13 +51,14 @@ class WrapEthViewModel(private val wallet: LooprWallet) : TransactionViewModel<T
      * @param amount The amount of WETH/ETH to convert, formatted as a big number with 18 decimal
      * places
      */
-    fun convertToEther(amount: BigInteger) {
+    fun convertToEther(amount: BigInteger, wallet: LooprWallet) {
         performTransaction {
             val contractAddress = LooprToken.WETH.identifier
             val gasPrice = ethereumFeeSettings.gasPriceInGwei
             val gasLimit = ethereumFeeSettings.wethDepositGasLimit
 
-            return@performTransaction service.depositWeth(contractAddress, credentials, amount, gasLimit, gasPrice)
+            val service = EthereumService.getInstance(wallet.credentials)
+            return@performTransaction service.depositWeth(contractAddress, wallet.credentials, amount, gasLimit, gasPrice)
         }
     }
 

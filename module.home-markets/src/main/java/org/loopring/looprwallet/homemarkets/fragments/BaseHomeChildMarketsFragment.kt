@@ -5,6 +5,8 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
@@ -67,10 +69,13 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     }
 
     final override fun onSearchItemCollapsed() {
+        adapter?.clearFilter()
     }
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
-        setMarketsLiveData(searchQuery)
+        async(UI) {
+            adapter?.filterData { it.market.contains(searchQuery, ignoreCase = true) }
+        }
     }
 
     final override fun onSortByChange(newSortByFilter: String) {
@@ -101,10 +106,10 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
      * Sets the [adapter] to to use a new data set, based on the filter criteria that was
      * provided by the [adapter].
      */
-    private fun setMarketsLiveData(ticker: String? = null) {
+    private fun setMarketsLiveData() {
         adapter?.ifNotNull { adapter ->
 
-            val marketsFilter = TradingPairFilter(ticker, isFavorites, adapter.dateFilter, adapter.sortBy)
+            val marketsFilter = TradingPairFilter(isFavorites, adapter.dateFilter, adapter.sortBy)
             homeMarketsViewModel.getHomeMarkets(this, marketsFilter) { data ->
                 setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, data)
             }

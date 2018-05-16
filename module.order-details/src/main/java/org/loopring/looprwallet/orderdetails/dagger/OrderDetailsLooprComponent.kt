@@ -7,7 +7,7 @@ import org.loopring.looprwallet.core.dagger.LooprComponentScope
 import org.loopring.looprwallet.orderdetails.adapters.OrderFillViewHolder
 import org.loopring.looprwallet.orderdetails.adapters.OrderSummaryViewHolder
 import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
-import org.loopring.looprwallet.orderdetails.viewmodels.CancelAllOrdersViewModel
+import org.loopring.looprwallet.orderdetails.viewmodels.CancelOrderViewModel
 
 /**
  * Created by Corey on 4/24/2018
@@ -26,7 +26,7 @@ interface OrderDetailsLooprComponent {
     fun inject(viewHolder: OrderSummaryViewHolder)
     fun inject(viewHolder: OrderFillViewHolder)
 
-    fun inject(cancelAllOrdersViewModel: CancelAllOrdersViewModel)
+    fun inject(cancelOrderViewModel: CancelOrderViewModel)
 }
 
 interface OrderDetailsLooprComponentProvider {

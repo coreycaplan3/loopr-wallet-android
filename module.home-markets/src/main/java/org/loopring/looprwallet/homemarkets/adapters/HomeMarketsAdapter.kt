@@ -76,7 +76,7 @@ class HomeMarketsAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: TradingPair?) {
-        val filter = TradingPairFilter(null, isFavorites, sortBy, dateFilter)
+        val filter = TradingPairFilter(isFavorites, sortBy, dateFilter)
         (holder as? MarketsFilterViewHolder)?.let {
             it.bind(filter)
             return
@@ -89,7 +89,6 @@ class HomeMarketsAdapter(
     override fun onSortByChange(newSortByFilter: String) {
         if (newSortByFilter != sortBy) {
             sortBy = newSortByFilter
-            notifyItemChanged(0)
             listener?.onSortByChange(newSortByFilter)
         }
     }
@@ -97,7 +96,6 @@ class HomeMarketsAdapter(
     override fun onDateFilterChange(newDateFilter: String) {
         if (newDateFilter != dateFilter) {
             dateFilter = newDateFilter
-            notifyItemChanged(0)
             listener?.onDateFilterChange(newDateFilter)
         }
     }

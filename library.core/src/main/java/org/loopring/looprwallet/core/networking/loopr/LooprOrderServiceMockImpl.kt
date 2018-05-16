@@ -6,10 +6,7 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.models.android.architecture.NET
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
+import org.loopring.looprwallet.core.models.loopr.orders.*
 import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingItem
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImpl.Companion.lrcTradingPair
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImpl.Companion.reqTradingPair
@@ -39,15 +36,25 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
 
     }
 
-    private val order1 = LooprOrder(orderHash = createHash(), tradingPair = lrcTradingPair, percentageFilled = 0, status = OrderFilter.FILTER_OPEN_NEW)
-    private val order2 = LooprOrder(orderHash = createHash(), tradingPair = reqTradingPair, percentageFilled = 78, status = OrderFilter.FILTER_OPEN_PARTIAL)
-    private val order3 = LooprOrder(orderHash = createHash(), tradingPair = zrxTradingPair, percentageFilled = 45, status = OrderFilter.FILTER_OPEN_PARTIAL, isSell = true)
+    private val order1 = AppLooprOrder(orderHash = createHash(), tradingPair = lrcTradingPair, percentageFilled = 0, status = OrderSummaryFilter.FILTER_OPEN_NEW)
+    private val order2 = AppLooprOrder(orderHash = createHash(), tradingPair = reqTradingPair, percentageFilled = 78, status = OrderSummaryFilter.FILTER_OPEN_PARTIAL)
+    private val order3 = AppLooprOrder(orderHash = createHash(), tradingPair = zrxTradingPair, percentageFilled = 45, status = OrderSummaryFilter.FILTER_OPEN_PARTIAL, isSell = true)
 
     private val fill1 = LooprOrderFill("abc", order1.orderHash, 143.00, Date(Date().time - 100000L))
     private val fill2 = LooprOrderFill("def", order1.orderHash, 2045.00, Date(Date().time - 70000L))
     private val fill3 = LooprOrderFill("acd", order1.orderHash, 1043.00, Date(Date().time - 30000L))
 
-    override fun getOrdersByAddress(orderFilter: OrderFilter): Deferred<LooprOrderContainer> = async(NET) {
+    override fun submitOrder(looprOrder: AppLooprOrder): Deferred<Unit> = async(NET) {
+        delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
+
+        if (NetworkUtility.isNetworkAvailable()) {
+            return@async
+        } else {
+            throw IOException("No connection")
+        }
+    }
+
+    override fun getOrdersByAddress(orderFilter: OrderSummaryFilter): Deferred<LooprOrderContainer> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -60,7 +67,7 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         }
     }
 
-    override fun getOrderByHash(orderHash: String): Deferred<LooprOrder> = async(NET) {
+    override fun getOrderByHash(orderHash: String): Deferred<AppLooprOrder> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -70,15 +77,19 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         }
     }
 
-    override fun getOrderFillsByOrderHash(orderHash: String): Deferred<RealmList<LooprOrderFill>> = async(NET) {
+    override fun getOrderFillsByOrderHash(orderFillFilter: OrderFillFilter): Deferred<LooprOrderFillContainer> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
             val list = listOf(fill1, fill2, fill3).map {
-                it.orderHash = orderHash
+                it.orderHash = orderFillFilter.orderHash
                 return@map it
             }
-            return@async RealmList<LooprOrderFill>().apply { addAll(list) }
+            val realmList = RealmList<LooprOrderFill>().apply { addAll(list) }
+
+            val criteria = LooprOrderFillContainer.createCriteria(orderFillFilter)
+            val pagingItems = RealmList<LooprPagingItem>(LooprPagingItem(criteria, orderFillFilter.pageIndex, list.size * 3))
+            return@async LooprOrderFillContainer(criteria, OrderFillFilter.ITEMS_PER_PAGE, pagingItems, realmList)
         } else {
             throw IOException("No connection")
         }

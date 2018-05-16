@@ -3,12 +3,6 @@ package org.loopring.looprwallet.core.models.loopr.orders
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_CANCELLED
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_EXPIRED
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_FILLED
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_OPEN_ALL
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_OPEN_NEW
-import org.loopring.looprwallet.core.models.loopr.OrderFilter.Companion.FILTER_OPEN_PARTIAL
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 
 /**
@@ -33,7 +27,7 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
  * is reached.
  */
 @Parcelize
-data class OrderFilter(
+data class OrderSummaryFilter(
         val address: String?,
         val market: String?,
         val status: String,

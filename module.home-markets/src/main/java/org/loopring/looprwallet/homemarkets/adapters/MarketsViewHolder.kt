@@ -42,7 +42,7 @@ class MarketsViewHolder(itemView: View, onTradingPairClick: (Int) -> Unit)
         val image = ImageUtility.getImageFromTicker(tradingPair.primaryTicker, context)
         marketsImage.setImageDrawable(image)
 
-        marketsTokenNameLabel.text = tradingPair.primaryTokenName
+        marketsTokenNameLabel.text = tradingPair.primaryToken.name
         marketsTickerLabel.text = tradingPair.primaryTicker
 
         if (tradingPair.change24h?.startsWith("-") == true) {

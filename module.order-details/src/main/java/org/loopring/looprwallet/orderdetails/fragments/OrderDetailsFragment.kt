@@ -2,19 +2,30 @@ package org.loopring.looprwallet.orderdetails.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.view.View
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_order_details.*
+import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.extensions.ifNotNull
+import org.loopring.looprwallet.core.extensions.longToast
+import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
+import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFillFilter
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFillLooprPager
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.orderdetails.R
 import org.loopring.looprwallet.orderdetails.adapters.OrderDetailsAdapter
 import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
+import org.loopring.looprwallet.orderdetails.viewmodels.CancelOrderViewModel
 import org.loopring.looprwallet.orderdetails.viewmodels.OrderFillsViewModel
 import org.loopring.looprwallet.orderdetails.viewmodels.OrderSummaryViewModel
 import javax.inject.Inject
@@ -50,11 +61,18 @@ class OrderDetailsFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_order_details
 
-    private val orderSummaryViewModel: OrderSummaryViewModel by lazy {
+    @VisibleForTesting
+    val cancelOrderViewModel: CancelOrderViewModel by lazy {
+        LooprViewModelFactory.get<CancelOrderViewModel>(this)
+    }
+
+    @VisibleForTesting
+    val orderSummaryViewModel: OrderSummaryViewModel by lazy {
         LooprViewModelFactory.get<OrderSummaryViewModel>(this)
     }
 
-    private val orderFillsViewModel: OrderFillsViewModel by lazy {
+    @VisibleForTesting
+    val orderFillsViewModel: OrderFillsViewModel by lazy {
         LooprViewModelFactory.get<OrderFillsViewModel>(this)
     }
 
@@ -65,6 +83,9 @@ class OrderDetailsFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         orderDetailsLooprComponent.inject(this)
+
+        toolbarDelegate?.onCreateOptionsMenu = ::createOptionsMenu
+        toolbarDelegate?.onOptionsItemSelected = ::optionsItemSelected
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,6 +93,11 @@ class OrderDetailsFragment : BaseFragment() {
 
         toolbar?.setTitle(R.string.order_details)
         toolbar?.navigationIcon = drawable(R.drawable.ic_clear_white_24dp)
+
+        cancelOrderViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
+            view.context.longToast(R.string.your_orders_will_be_cancelled)
+        }
+        setupTransactionViewModel(cancelOrderViewModel, R.string.cancelling_all_open_orders, false, null)
 
         orderSummaryViewModel.getOrderByHash(this, orderHash) {
             when {
@@ -85,7 +111,45 @@ class OrderDetailsFragment : BaseFragment() {
 
     // MARK - Private Methods
 
-    private fun setupAdapter(view: View, looprOrder: LooprOrder) {
+    private fun createOptionsMenu(toolbar: Toolbar?) {
+        toolbar?.menu?.clear()
+
+        orderSummaryViewModel.data?.ifNotNull {
+            if (it.isOpen) {
+                toolbar?.inflateMenu(R.menu.menu_order_details)
+            }
+        }
+    }
+
+    private fun optionsItemSelected(menuItem: MenuItem?): Boolean {
+        when (menuItem?.itemId) {
+            R.id.orderDetailsCancelOrder -> {
+                val context = context ?: return false
+                val order = orderSummaryViewModel.data ?: return false
+
+                AlertDialog.Builder(context)
+                        .setTitle(R.string.question_cancel_order)
+                        .setMessage(R.string.rationale_cancel_order)
+                        .setPositiveButton(R.string.cancel_order) { dialog, _ ->
+                            dialog.dismiss()
+
+                            val wallet = walletClient.getCurrentWallet()
+                            if (wallet != null) {
+                                cancelOrderViewModel.cancelOrder(wallet, order)
+                            }
+                        }.setNegativeButton(R.string.exit) { dialog, _ ->
+                            dialog.cancel()
+                        }
+                        .show()
+
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private fun setupAdapter(view: View, looprOrder: AppLooprOrder) {
         val adapter = OrderDetailsAdapter(looprOrder).apply {
             adapter = this
         }
@@ -94,14 +158,15 @@ class OrderDetailsFragment : BaseFragment() {
         orderDetailsRecyclerView.adapter = adapter
 
         // We can now retrieve order fills, since we initialized the adapter with the order data
-        orderFillsViewModel.getOrderFills(this, orderHash) {
-            setupOfflineFirstDataObserverForAdapter(orderFillsViewModel, adapter, it)
+        orderFillsViewModel.getOrderFills(this, OrderFillFilter(orderHash, 1)) {
+            (adapter.pager as OrderFillLooprPager).orderFillContainer = it
+            setupOfflineFirstDataObserverForAdapter(orderFillsViewModel, adapter, it.data)
         }
         setupOfflineFirstStateAndErrorObserver(orderFillsViewModel, orderDetailsSwipeRefreshLayout)
     }
 
     @SuppressLint("SetTextI18n")
-    private fun bindLooprOrder(order: LooprOrder) {
+    private fun bindLooprOrder(order: AppLooprOrder) {
 
         // Title
         val primaryTicker = order.tradingPair.primaryTicker
@@ -120,31 +185,31 @@ class OrderDetailsFragment : BaseFragment() {
         // Order Progress
         // TODO standardize this binding between order details and the home orders fragment
         when (order.status) {
-            OrderFilter.FILTER_OPEN_NEW -> {
+            OrderSummaryFilter.FILTER_OPEN_NEW -> {
                 orderDetailsOrderProgressView.visibility = View.VISIBLE
                 orderDetailsOrderProgressView.progress = 0
 
                 orderDetailsOrderCompleteImage.visibility = View.GONE
             }
-            OrderFilter.FILTER_OPEN_PARTIAL -> {
+            OrderSummaryFilter.FILTER_OPEN_PARTIAL -> {
                 orderDetailsOrderProgressView.visibility = View.VISIBLE
                 orderDetailsOrderProgressView.progress = order.percentageFilled
 
                 orderDetailsOrderCompleteImage.visibility = View.GONE
             }
-            OrderFilter.FILTER_FILLED -> {
+            OrderSummaryFilter.FILTER_FILLED -> {
                 orderDetailsOrderCompleteImage.visibility = View.VISIBLE
                 orderDetailsOrderCompleteImage.setImageResource(R.drawable.ic_swap_horiz_white_24dp)
 
                 orderDetailsOrderProgressView.visibility = View.GONE
             }
-            OrderFilter.FILTER_CANCELLED -> {
+            OrderSummaryFilter.FILTER_CANCELLED -> {
                 orderDetailsOrderCompleteImage.visibility = View.VISIBLE
                 orderDetailsOrderCompleteImage.setImageResource(R.drawable.ic_cancel_white_24dp)
 
                 orderDetailsOrderProgressView.visibility = View.GONE
             }
-            OrderFilter.FILTER_EXPIRED -> {
+            OrderSummaryFilter.FILTER_EXPIRED -> {
                 orderDetailsOrderCompleteImage.visibility = View.VISIBLE
                 orderDetailsOrderCompleteImage.setImageResource(R.drawable.ic_alarm_white_24dp)
 
@@ -153,12 +218,12 @@ class OrderDetailsFragment : BaseFragment() {
         }
 
         // Token Amount
-        val numberFormatter = currencySettings.getNumberFormatter()
-        orderDetailsTokenAmountLabel.text = "${numberFormatter.format(order.amount)} $primaryTicker"
+        orderDetailsTokenAmountLabel.text = order.amount.formatAsToken(currencySettings, order.tradingPair.primaryToken)
 
-        // Fiat Amount
-        val currencyFormatter = currencySettings.getCurrencyFormatter()
-        orderDetailsFiatAmountLabel.text = currencyFormatter.format(order.priceInUsd)
+        // Price
+        order.tradingPair.secondaryToken.let { token ->
+            orderDetailsFiatAmountLabel.text = order.priceInSecondaryTicker.formatAsToken(currencySettings, token)
+        }
 
         orderDetailsSwipeRefreshLayout.isEnabled = !order.isComplete
     }

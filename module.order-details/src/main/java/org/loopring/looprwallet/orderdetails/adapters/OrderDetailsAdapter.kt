@@ -4,10 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
-import org.loopring.looprwallet.core.models.loopr.paging.DefaultLooprPagerAdapter
-import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFillFilter
+import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 import org.loopring.looprwallet.orderdetails.R
 
 /**
@@ -19,11 +19,11 @@ import org.loopring.looprwallet.orderdetails.R
  *
  *
  */
-class OrderDetailsAdapter(orderSummary: LooprOrder) : BaseRealmAdapter<LooprOrderFill>() {
+class OrderDetailsAdapter(orderSummary: AppLooprOrder) : BaseRealmAdapter<LooprOrderFill>() {
 
-    override var pager: LooprAdapterPager<LooprOrderFill> = DefaultLooprPagerAdapter()
+    override var pager: LooprAdapterPager<LooprOrderFill> = OrderDetailsAdapterPager(OrderFillFilter(orderSummary.orderHash, 1))
 
-    var orderSummary: LooprOrder = orderSummary
+    var orderSummary: AppLooprOrder = orderSummary
         set(value) {
             field = value
             notifyItemChanged(0)

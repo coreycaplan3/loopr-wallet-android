@@ -170,7 +170,6 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
             AlertDialog.Builder(context)
                     .setTitle(R.string.your_phrase)
                     .setMessage(formattedPhrase)
-                    .create()
                     .show()
         }
         else -> {

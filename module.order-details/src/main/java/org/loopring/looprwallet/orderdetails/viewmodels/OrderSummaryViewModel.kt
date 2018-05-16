@@ -3,7 +3,7 @@ package org.loopring.looprwallet.orderdetails.viewmodels
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.loopr.LooprOrderService
 import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository
@@ -14,28 +14,30 @@ import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
  *
  * Project: loopr-android
  *
- * Purpose of Class: A view-model for showing a single [LooprOrder] based on its order hash.
+ * Purpose of Class: A view-model for showing a single [AppLooprOrder] based on its order hash.
  *
  */
-class OrderSummaryViewModel : OfflineFirstViewModel<LooprOrder, String>() {
+class OrderSummaryViewModel : OfflineFirstViewModel<AppLooprOrder, String>() {
 
     override val repository = LooprOrderRepository()
 
-    private val service = LooprOrderService.getInstance()
+    private val service by lazy {
+        LooprOrderService.getInstance()
+    }
 
-    fun getOrderByHash(owner: ViewLifecycleFragment, orderHash: String, onChange: (LooprOrder) -> Unit) {
+    fun getOrderByHash(owner: ViewLifecycleFragment, orderHash: String, onChange: (AppLooprOrder) -> Unit) {
         initializeData(owner, orderHash, onChange)
     }
 
-    override fun getLiveDataFromRepository(parameter: String): LiveData<LooprOrder> {
+    override fun getLiveDataFromRepository(parameter: String): LiveData<AppLooprOrder> {
         return repository.getOrderByHash(parameter)
     }
 
-    override fun getDataFromNetwork(parameter: String): Deferred<LooprOrder> {
+    override fun getDataFromNetwork(parameter: String): Deferred<AppLooprOrder> {
         return service.getOrderByHash(parameter)
     }
 
-    override fun addNetworkDataToRepository(data: LooprOrder, parameter: String) {
+    override fun addNetworkDataToRepository(data: AppLooprOrder, parameter: String) {
         repository.add(data)
     }
 

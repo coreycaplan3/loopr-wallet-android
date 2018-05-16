@@ -20,23 +20,20 @@ import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingItem
  * getting total number of orders by address and total by trading pair, etc. Created by calling
  * [createCriteria]
  */
-open class LooprOrderContainer(
+open class LooprOrderFillContainer(
         @PrimaryKey override var criteria: String = "",
         override var pageSize: Int = 50,
         override var pagingItems: RealmList<LooprPagingItem> = RealmList(),
-        override var data: RealmList<AppLooprOrder> = RealmList()
-) : RealmObject(), LooprPagingContainer<AppLooprOrder> {
+        override var data: RealmList<LooprOrderFill> = RealmList()
+) : RealmObject(), LooprPagingContainer<LooprOrderFill> {
 
     companion object {
 
         /**
          * Creates the criteria key to be used with [pagingItems].
          */
-        fun createCriteria(filter: OrderSummaryFilter): String = filter.run {
-            val address = address?.toUpperCase()
-            val market = market?.toUpperCase()
-            val status = status.toUpperCase()
-            return@run "$address-$market-$status"
+        fun createCriteria(filter: OrderFillFilter): String = filter.run {
+            return@run orderHash.toUpperCase()
         }
     }
 

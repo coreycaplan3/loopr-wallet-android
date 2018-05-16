@@ -13,6 +13,7 @@ import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_DEBUG
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_RELEASE
 import org.loopring.looprwallet.core.utilities.BuildUtility.BUILD_STAGING
 import org.loopring.looprwallet.core.utilities.RealmUtility
+import org.loopring.looprwalletnetwork.realm.LooprWalletNetworkRealmModule
 
 /**
  * Created by Corey Caplan on 1/30/18.
@@ -26,7 +27,7 @@ abstract class RealmClient {
 
     companion object {
 
-        private const val REALM_NAME = "loopr-android"
+        private const val REALM_NAME = "loopr-android.realm"
 
         private const val KEY_REALM_ENCRYPTION_KEY = "loopr-android-encryption-key"
 
@@ -57,6 +58,11 @@ abstract class RealmClient {
             val configuration = client.getSharedRealmConfigurationBuilder(REALM_NAME)
                     .migration(LooprRealmMigration())
                     .initialData(InitialRealmData.getInitialData())
+                    .also {
+                        if (BuildUtility.BUILD_TYPE == BuildUtility.BUILD_DEBUG) {
+                            it.inMemory()
+                        }
+                    }
                     .build()
 
             Realm.getInstance(configuration)
@@ -66,7 +72,7 @@ abstract class RealmClient {
 
     abstract val schemaVersion: Long
 
-    private val encryptionKey: ByteArray
+    protected val encryptionKey: ByteArray
 
     init {
         val settings = LooprSecureSettings.getInstance(CoreLooprWalletApp.context)
@@ -85,8 +91,7 @@ abstract class RealmClient {
     fun getSharedRealmConfigurationBuilder(realmName: String): RealmConfiguration.Builder {
         return RealmConfiguration.Builder()
                 .name(realmName)
-                .encryptionKey(encryptionKey)
-                .modules(CoreLooprRealmModule())
+                .modules(CoreLooprRealmModule(), LooprWalletNetworkRealmModule())
                 .schemaVersion(schemaVersion)
     }
 
@@ -110,6 +115,7 @@ abstract class RealmClient {
 
         override fun getInstance(): Realm {
             val configuration = getSharedRealmConfigurationBuilder(REALM_NAME)
+                    .encryptionKey(encryptionKey)
                     .build()
 
             return Realm.getInstance(configuration)

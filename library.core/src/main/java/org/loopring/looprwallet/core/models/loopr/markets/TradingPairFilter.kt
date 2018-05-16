@@ -1,9 +1,6 @@
 package org.loopring.looprwallet.core.models.loopr.markets
 
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.models.loopr.TradingPairFilter.Companion.CHANGE_PERIOD_1D
-import org.loopring.looprwallet.core.models.loopr.TradingPairFilter.Companion.SORT_BY_ARRAY_UI
-import org.loopring.looprwallet.core.models.loopr.TradingPairFilter.Companion.SORT_BY_ARRAY_VALUES
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.strArray
 
@@ -14,7 +11,6 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.strArray
  *
  * Purpose of Class: To provide sorting criteria for the markets page
  *
- * @property ticker The ticker that is being searched for, or *null* for all
  * @property isFavorites True if the filter should find *favorites* tickers or false otherwise
  * @property sortBy The criteria on which to sort the markets page
  * @property changePeriod The period over which the market changes are calculated. For example,
@@ -24,7 +20,7 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.strArray
  * @see SORT_BY_ARRAY_VALUES
  * @see CHANGE_PERIOD_1D
  */
-data class TradingPairFilter(val ticker: String? = null, val isFavorites: Boolean, val sortBy: String, val changePeriod: String) {
+data class TradingPairFilter(val isFavorites: Boolean, val sortBy: String, val changePeriod: String) {
 
     companion object {
 

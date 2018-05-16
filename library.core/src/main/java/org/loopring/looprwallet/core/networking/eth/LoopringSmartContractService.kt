@@ -3,7 +3,7 @@ package org.loopring.looprwallet.core.networking.eth
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.utilities.BuildUtility
-import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprOrderItem
+import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprOrder
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.math.BigInteger
 
@@ -63,7 +63,7 @@ interface LoopringSmartContractService {
      * @param gasPrice The gas price of the tx, in GWEI
      */
     fun cancelOrder(
-            order: LooprOrderItem,
+            order: LooprOrder,
             wallet: LooprWallet,
             gasLimit: BigInteger,
             gasPrice: BigInteger

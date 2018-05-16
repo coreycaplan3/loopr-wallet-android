@@ -341,5 +341,8 @@
     <string name="exit">Exit</string>
     <string name="dot">•</string>
     <string name="cancelling_all_open_orders">Cancelling all open orders…</string>
-    <string name="your_orderes_will_be_cancelled">Your orders will be cancelled</string>
+    <string name="your_orders_will_be_cancelled">Your orders will be cancelled</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="question_cancel_order">Cancel Order?</string>
+    <string name="rationale_cancel_order">Are you sure you want to cancel this order? This action cannot be undone.</string>
 </resources>

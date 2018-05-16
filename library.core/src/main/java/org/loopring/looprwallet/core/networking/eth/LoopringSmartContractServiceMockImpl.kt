@@ -5,6 +5,7 @@ import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.utilities.NetworkUtility
+import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprOrder
 import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprOrderItem
 import java.io.IOException
 import java.math.BigInteger
@@ -39,7 +40,7 @@ class LoopringSmartContractServiceMockImpl : LoopringSmartContractService {
         }
     }
 
-    override fun cancelOrder(order: LooprOrderItem, wallet: LooprWallet, gasLimit: BigInteger, gasPrice: BigInteger) = async(NET) {
+    override fun cancelOrder(order: LooprOrder, wallet: LooprWallet, gasLimit: BigInteger, gasPrice: BigInteger) = async(NET) {
 
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 

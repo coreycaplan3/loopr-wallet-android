@@ -6,12 +6,10 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import io.realm.RealmList
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
-import org.loopring.looprwallet.core.models.loopr.orders.OrderLooprPager
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryPager
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
@@ -79,24 +77,13 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     }
 
     final override fun onSearchItemCollapsed() {
-        adapter?.let {
-            it.updateData(it.pager.data)
-        }
+        adapter?.clearFilter()
     }
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
-        val adapter = adapter ?: return
         async(UI) {
-            val filteredList: List<LooprOrder>? = adapter.data?.filter {
+            adapter?.filterData {
                 it.tradingPair.market.contains("*$searchQuery*", ignoreCase = true)
-            }
-
-            if (filteredList != null) {
-                val realmList = RealmList<LooprOrder>().apply {
-                    addAll(filteredList)
-                }
-
-                adapter.updateData(realmList)
             }
         }
     }
@@ -124,8 +111,9 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
 
         adapter.orderFilter.pageNumber = pageNumber
         homeOrdersViewModel.getOrders(this, adapter.orderFilter) { orderContainer ->
+
             setupOfflineFirstDataObserverForAdapter(homeOrdersViewModel, adapter, orderContainer.data)
-            (adapter.pager as? OrderLooprPager)?.orderContainer = orderContainer
+            (adapter.pager as? OrderSummaryPager)?.orderContainer = orderContainer
 
             val presenter = (parentFragment as? SearchFragment)?.searchViewPresenter
             val searchQuery = presenter?.searchQuery

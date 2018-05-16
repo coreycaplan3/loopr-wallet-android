@@ -20,16 +20,14 @@ object DialogUtility {
      * @param permissionDelegate A [PermissionDelegate] used to invoke
      * [PermissionDelegate.requestPermission] when the user clicks the positive button
      */
-    fun createFilePermissionsDialog(context: Context, permissionDelegate: PermissionDelegate): AlertDialog {
-        return AlertDialog.Builder(context)
-                .setTitle(R.string.file_permissions_needed)
-                .setMessage(R.string.rationale_file_permission)
-                .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
-                .setPositiveButton(R.string.request_permission) { dialog, _ ->
-                    dialog.dismiss()
-                    permissionDelegate.requestPermission()
-                }
-                .create()
-    }
+    fun getFilePermissionsDialog(context: Context, permissionDelegate: PermissionDelegate): AlertDialog = AlertDialog.Builder(context)
+            .setTitle(R.string.file_permissions_needed)
+            .setMessage(R.string.rationale_file_permission)
+            .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
+            .setPositiveButton(R.string.request_permission) { dialog, _ ->
+                dialog.dismiss()
+                permissionDelegate.requestPermission()
+            }
+            .create()
 
 }

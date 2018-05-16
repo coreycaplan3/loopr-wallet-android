@@ -1,8 +1,10 @@
 package org.loopring.looprwallet.core.repositories.loopr
 
 import android.arch.lifecycle.LiveData
+import io.realm.Case
 import io.realm.OrderedRealmCollection
 import io.realm.RealmList
+import io.realm.Sort
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
@@ -52,7 +54,8 @@ class LooprMarketsRepository : BaseRealmRepository() {
                     .findFirst()
                     ?.also { oldTradingPair ->
                         // Copy over the old ticker's information to the new ticker
-                        newTradingPair.primaryTokenName = oldTradingPair.primaryTokenName
+                        newTradingPair.primaryToken = oldTradingPair.primaryToken
+                        newTradingPair.secondaryToken = oldTradingPair.secondaryToken
                         newTradingPair.isFavorite = oldTradingPair.isFavorite
                     } ?: newTradingPair
 
@@ -61,11 +64,29 @@ class LooprMarketsRepository : BaseRealmRepository() {
         }
     }
 
+    fun getMarketNow(market: String, context: HandlerContext = IO): TradingPair? {
+        val tradingPair = getRealmFromContext(context)
+                .where<TradingPair>()
+                .equalTo(TradingPair::market, market, Case.INSENSITIVE)
+                .findFirst()
+
+        return tradingPair?.let { getRealmFromContext(context).copyFromRealm(it) }
+    }
+
     fun getMarkets(filter: TradingPairFilter, context: HandlerContext = UI): LiveData<OrderedRealmCollection<TradingPair>> {
         // TODO apply filter; look into making these async queries run on a background thread too
         return getRealmFromContext(context)
                 .where<TradingPair>()
-                .sort(TradingPair::primaryTicker)
+                .apply {
+                    equalTo(TradingPair::isFavorite, filter.isFavorites)
+
+                    when (filter.sortBy) {
+                        TradingPairFilter.SORT_BY_TICKER_ASC -> sort(TradingPair::primaryTicker, Sort.ASCENDING)
+                        TradingPairFilter.SORT_BY_PERCENTAGE_CHANGE_ASC -> sort(TradingPair::primaryTicker, Sort.ASCENDING)
+                        TradingPairFilter.SORT_BY_PERCENTAGE_CHANGE_DESC -> sort(TradingPair::primaryTicker, Sort.DESCENDING)
+                    }
+
+                }
                 .findAllAsync()
                 .asLiveData()
     }

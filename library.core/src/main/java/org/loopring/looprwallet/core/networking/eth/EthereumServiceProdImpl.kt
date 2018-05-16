@@ -4,7 +4,7 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwalletnetwork.services.Erc20Service
-import org.loopring.looprwalletnetwork.services.EthService
+import org.loopring.looprwalletnetwork.services.SendEth
 import org.web3j.crypto.Credentials
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.math.BigInteger
@@ -26,7 +26,7 @@ internal class EthereumServiceProdImpl(private val credentials: Credentials) : E
             gasLimit: BigInteger,
             gasPrice: BigInteger
     ): Deferred<TransactionReceipt> = async(NET) {
-        EthService.getService(web3j)
+        SendEth.getService(web3j)
                 .sendEther(recipient, amount.toBigDecimal(), credentials, gasPrice, gasLimit)
                 .await()
     }
@@ -38,7 +38,7 @@ internal class EthereumServiceProdImpl(private val credentials: Credentials) : E
             gasLimit: BigInteger,
             gasPrice: BigInteger
     ): Deferred<TransactionReceipt> = async(NET) {
-        Erc20Service.getInstance(contractAddress, web3j, credentials, gasPrice, gasLimit, "")
+        Erc20Service.getService(contractAddress, web3j, credentials, gasPrice, gasLimit, "")
                 .transfer(recipient, amount)
                 .await()
     }
@@ -51,7 +51,7 @@ internal class EthereumServiceProdImpl(private val credentials: Credentials) : E
             gasLimit: BigInteger,
             gasPrice: BigInteger
     ): Deferred<TransactionReceipt> = async(NET) {
-        Erc20Service.getInstance(contractAddress, web3j, credentials, gasPrice, gasLimit, "")
+        Erc20Service.getService(contractAddress, web3j, credentials, gasPrice, gasLimit, "")
                 .approve(spender, amount)
                 .await()
     }

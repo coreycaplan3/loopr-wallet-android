@@ -1,10 +1,12 @@
 package org.loopring.looprwallet.core.adapters
 
+import android.support.annotation.VisibleForTesting
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.realm.OrderedRealmCollection
+import io.realm.RealmList
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
@@ -21,12 +23,12 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
         InflatableAdapter {
 
     companion object {
-        const val TYPE_LOADING_INITIAL = 0
-        const val TYPE_EMPTY = 1
-        const val TYPE_DATA = 2
-        const val TYPE_HEADER = 3
-        const val TYPE_LOADING_END = 4
-        const val TYPE_PAGING_END = 5
+        const val TYPE_LOADING_INITIAL = 1
+        const val TYPE_EMPTY = 2
+        const val TYPE_DATA = 3
+        const val TYPE_HEADER = 4
+        const val TYPE_LOADING_END = 5
+        const val TYPE_PAGING_END = 6
     }
 
     var containsHeader: Boolean = false
@@ -40,6 +42,7 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     abstract var pager: LooprAdapterPager<T>
         protected set
 
+    @VisibleForTesting
     var data: OrderedRealmCollection<T>? = null
 
     override var layoutInflater: LayoutInflater? = null
@@ -49,6 +52,25 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      * load more data
      */
     var onLoadMore: () -> Unit = {}
+
+    /**
+     * Filters the data using the provided [predicate] and rebinds the data in the adapter.
+     */
+    inline fun filterData(predicate: (T) -> Boolean) {
+        data?.filter(predicate)?.let { filteredList ->
+            data = RealmList<T>().apply { addAll(filteredList) }
+            notifyDataSetChanged()
+        }
+    }
+
+    /**
+     * Clears the filter so the original data is re-bound to the adapter (before the filter was
+     * applied)
+     */
+    fun clearFilter() {
+        data = pager.data
+        notifyDataSetChanged()
+    }
 
     final override fun getItemViewType(position: Int): Int {
         val data = pager.data

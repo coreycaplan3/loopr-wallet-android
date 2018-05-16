@@ -9,12 +9,12 @@ import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.isSameDay
 import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter.Companion.FILTER_CANCELLED
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter.Companion.FILTER_FILLED
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter.Companion.FILTER_OPEN_ALL
-import org.loopring.looprwallet.core.models.loopr.orders.OrderLooprPager
+import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_CANCELLED
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_FILLED
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_OPEN_ALL
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryPager
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.orderdetails.activities.OrderDetailsActivity
 import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
@@ -37,9 +37,9 @@ import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
  * @param cancelAllClickListener A listener for passing a click event to *cancel all orders* back
  * to the caller. This parameter should be **NOT** be null if the *orderType* is [FILTER_OPEN_ALL].
  *
- * @see OrderFilter.FILTER_OPEN_ALL
- * @see OrderFilter.FILTER_FILLED
- * @see OrderFilter.FILTER_CANCELLED
+ * @see OrderSummaryFilter.FILTER_OPEN_ALL
+ * @see OrderSummaryFilter.FILTER_FILLED
+ * @see OrderSummaryFilter.FILTER_CANCELLED
  */
 class HomeOrderAdapter(
         savedInstanceState: Bundle?,
@@ -48,7 +48,7 @@ class HomeOrderAdapter(
         activity: BaseActivity,
         listener: OnHomeOrderFilterChangeListener,
         cancelAllClickListener: (() -> Unit)? = null
-) : BaseRealmAdapter<LooprOrder>(),
+) : BaseRealmAdapter<AppLooprOrder>(),
         OnHomeOrderFilterChangeListener {
 
     companion object {
@@ -67,9 +67,9 @@ class HomeOrderAdapter(
 
     }
 
-    val orderFilter: OrderFilter = savedInstanceState?.getParcelable(KEY_ORDER_FILTER) ?: OrderFilter(address, null, orderType, 1)
+    val orderFilter: OrderSummaryFilter = savedInstanceState?.getParcelable(KEY_ORDER_FILTER) ?: OrderSummaryFilter(address, null, orderType, 1)
 
-    override var pager: LooprAdapterPager<LooprOrder> = OrderLooprPager(orderFilter)
+    override var pager: LooprAdapterPager<AppLooprOrder> = OrderSummaryPager(orderFilter)
 
     init {
 
@@ -114,7 +114,7 @@ class HomeOrderAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: LooprOrder?) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: AppLooprOrder?) {
         (holder as? EmptyHomeOrderViewHolder)?.let {
             it.bind()
             return

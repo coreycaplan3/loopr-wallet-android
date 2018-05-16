@@ -10,11 +10,11 @@ import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.findViewById
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter.Companion.FILTER_OPEN_ALL
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.homeorders.adapters.HomeOrderAdapter
-import org.loopring.looprwallet.orderdetails.viewmodels.CancelAllOrdersViewModel
+import org.loopring.looprwallet.orderdetails.viewmodels.CancelOrderViewModel
 
 /**
  * Created by Corey Caplan on 1/19/18.
@@ -36,8 +36,8 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
         get() = findViewById(R.id.fragmentContainer)
 
     @VisibleForTesting
-    val cancelAllOrdersViewModel: CancelAllOrdersViewModel by lazy {
-        LooprViewModelFactory.get<CancelAllOrdersViewModel>(this)
+    val cancelOrderViewModel: CancelOrderViewModel by lazy {
+        LooprViewModelFactory.get<CancelOrderViewModel>(this)
     }
 
     override fun provideAdapter(savedInstanceState: Bundle?, address: String): HomeOrderAdapter {
@@ -50,10 +50,10 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cancelAllOrdersViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
-            view.context.longToast(R.string.your_orderes_will_be_cancelled)
+        cancelOrderViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
+            view.context.longToast(R.string.your_orders_will_be_cancelled)
         }
-        setupTransactionViewModel(cancelAllOrdersViewModel, R.string.cancelling_all_open_orders, false, null)
+        setupTransactionViewModel(cancelOrderViewModel, R.string.cancelling_all_open_orders, false, null)
     }
 
     // MARK - Private Methods
@@ -68,7 +68,7 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
 
                     val wallet = walletClient.getCurrentWallet()
                     if (wallet != null) {
-                        cancelAllOrdersViewModel.cancelAllOrders(wallet)
+                        cancelOrderViewModel.cancelAllOrders(wallet)
                     }
                 }
                 .setNegativeButton(R.string.exit) { dialog, _ ->

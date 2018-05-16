@@ -491,7 +491,6 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                     onPositiveButtonClick()
                 }
                 .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
-                .create()
                 .show()
     }
 

@@ -8,6 +8,7 @@ import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairTrend
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprTicker
 import java.io.IOException
@@ -42,11 +43,11 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
             }
         }
 
-        val lrcTradingPair = TradingPair("LRC-WETH", "Loopring", getRandomLooprTicker("LRC-WETH"))
+        val lrcTradingPair = TradingPair("LRC-WETH", getRandomLooprTicker("LRC-WETH"), LooprToken.LRC, LooprToken.WETH)
 
-        val reqTradingPair = TradingPair("REQ-WETH", "Request Network", getRandomLooprTicker("REQ-WETH"))
+        val reqTradingPair = TradingPair("REQ-WETH", getRandomLooprTicker("REQ-WETH"), LooprToken.REQ, LooprToken.WETH)
 
-        val zrxTradingPair = TradingPair("ZRX-WETH", "0x", getRandomLooprTicker("ZRX-WETH"))
+        val zrxTradingPair = TradingPair("ZRX-WETH", getRandomLooprTicker("ZRX-WETH"), LooprToken.ZRX, LooprToken.WETH)
 
     }
 

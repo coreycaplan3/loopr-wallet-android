@@ -1,11 +1,7 @@
 package org.loopring.looprwallet.core.networking.loopr
 
-import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
+import org.loopring.looprwallet.core.models.loopr.orders.*
 import org.loopring.looprwallet.core.utilities.BuildUtility
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_MOCKNET
 import org.loopring.looprwallet.core.utilities.BuildUtility.FLAVOR_TESTNET
@@ -34,10 +30,12 @@ interface LooprOrderService {
 
     }
 
-    fun getOrdersByAddress(orderFilter: OrderFilter): Deferred<LooprOrderContainer>
+    fun submitOrder(looprOrder: AppLooprOrder): Deferred<Unit>
 
-    fun getOrderByHash(orderHash: String): Deferred<LooprOrder>
+    fun getOrdersByAddress(orderFilter: OrderSummaryFilter): Deferred<LooprOrderContainer>
 
-    fun getOrderFillsByOrderHash(orderHash: String): Deferred<RealmList<LooprOrderFill>>
+    fun getOrderByHash(orderHash: String): Deferred<AppLooprOrder>
+
+    fun getOrderFillsByOrderHash(orderFillFilter: OrderFillFilter): Deferred<LooprOrderFillContainer>
 
 }

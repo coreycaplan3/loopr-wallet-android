@@ -52,11 +52,18 @@ class CreateWalletKeystoreFragment : BaseFragment(), ConfirmPasswordDialog.OnPas
         )
     }
 
-    private val filePermissionsDialog: AlertDialog? by lazy {
-        context?.let {
-            DialogUtility.createFilePermissionsDialog(it, filePermissionsHandler)
+    private var filePermissionsDialog: AlertDialog? = null
+        get() = synchronized(this) {
+            if (field != null) return field
+
+            val context = context ?: return null
+            return DialogUtility.getFilePermissionsDialog(context, filePermissionsHandler)
         }
-    }
+        set(value) {
+            if (value != null) {
+                field = value
+            }
+        }
 
     private val walletNameValidator: WalletNameValidator by lazy {
         WalletNameValidator(walletNameInputLayout, this::onFormChanged)

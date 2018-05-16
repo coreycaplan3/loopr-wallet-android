@@ -177,7 +177,7 @@ interface LooprSecureSettings : LooprSettings {
         }
 
         override fun putByteArray(key: String, value: ByteArray?) {
-            putString(key, value?.let { String(it, Charsets.UTF_8) })
+            putString(key, value?.let { String(it) })
         }
 
         override fun putInt(key: String, value: Int?) {

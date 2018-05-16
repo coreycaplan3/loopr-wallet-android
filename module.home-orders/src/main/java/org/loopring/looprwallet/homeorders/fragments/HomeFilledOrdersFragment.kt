@@ -5,7 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.findViewById
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter.Companion.FILTER_FILLED
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_FILLED
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.homeorders.adapters.HomeOrderAdapter
 

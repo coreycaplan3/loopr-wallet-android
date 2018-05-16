@@ -236,6 +236,46 @@ inline fun <E : RealmModel, reified T> RealmQuery<E>.notEqualTo(
 }
 
 /**
+ * Sorting
+ *
+ * Example calls for [orderedNestedFields] and [lastField] on a *DogOwner* class:
+ * - list(), "numberOfDogs" --> "numberOfDogs"
+ * - list("dogs"), "breed" --> "dogs.breed"
+ * - list("dogs", "animalType"), "mammal" --> "dogs.animalType.mammal"
+ * - list("dogs", "animalType", "mammal"), "mammal" --> EXCEPTION for duplicate type
+ *
+ * @param orderedNestedFields The first list of fields for the query. Adding more than one field
+ * maps to this query to be a nested query. Each property is appended onto the each other to create
+ * the nest. For example, chaining \["dogs", "color"\] --> to "dogs.color". This field can be left
+ * empty and should only be used for nested queries. This list should **NOT** contain the
+ * [lastField] value.
+ * @param lastField The last field in the nested chain to be used in the query.
+ * @param value the value to compare with.
+ * @param case The case to use, if the [value] provided is of type string.
+ * @return The query object.
+ */
+inline fun <E : RealmModel, reified T> RealmQuery<E>.sort(
+        orderedNestedFields: List<KProperty<*>>,
+        lastField: KProperty<T>,
+        sortOrder: Sort = Sort.ASCENDING
+): RealmQuery<E> {
+    val formattedFields: String = RealmUtility.formatNestedFields(orderedNestedFields, lastField)
+    return when (T::class) {
+        String::class -> this.sort(formattedFields, sortOrder)
+        Byte::class -> this.sort(formattedFields)
+        ByteArray::class -> this.sort(formattedFields)
+        Short::class -> this.sort(formattedFields)
+        Int::class -> this.sort(formattedFields)
+        Long::class -> this.sort(formattedFields)
+        Double::class -> this.sort(formattedFields)
+        Float::class -> this.sort(formattedFields)
+        Boolean::class -> this.sort(formattedFields)
+        Date::class -> this.sort(formattedFields)
+        else -> throw IllegalArgumentException("Invalid argument type, found: ")
+    }
+}
+
+/**
  * @param sortField The field on which to sort.
  * @param sortOrder Either [Sort.DESCENDING] or [Sort.ASCENDING]
  */
@@ -243,5 +283,5 @@ fun <E : RealmModel> RealmQuery<E>.sort(
         sortField: KProperty<*>,
         sortOrder: Sort = Sort.ASCENDING
 ): RealmQuery<E> {
-    return this.sort(sortField.name, sortOrder)
+    return this.sort(listOf(), sortField, sortOrder)
 }

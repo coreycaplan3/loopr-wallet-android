@@ -2,7 +2,7 @@ package org.loopring.looprwallet.core.networking.eth
 
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
-import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprOrderItem
+import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprOrder
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.math.BigInteger
 
@@ -24,7 +24,7 @@ class LoopringSmartContractServiceProdImpl: LoopringSmartContractService {
         TODO("not implemented")
     }
 
-    override fun cancelOrder(order: LooprOrderItem, wallet: LooprWallet, gasLimit: BigInteger, gasPrice: BigInteger): Deferred<TransactionReceipt> {
+    override fun cancelOrder(order: LooprOrder, wallet: LooprWallet, gasLimit: BigInteger, gasPrice: BigInteger): Deferred<TransactionReceipt> {
         TODO("not implemented")
     }
 }

@@ -46,7 +46,7 @@ gradle.ext.kotlinKtx = "androidx.core:core-ktx:0.2"
 
 // Network Dependencies
 gradle.ext.web3j = "org.web3j:core:3.3.1-android"
-gradle.ext.looprNetwork = "org.loopring.looprwallet:loopr-wallet-network:0.9.2"
+gradle.ext.looprNetwork = "org.loopring.looprwallet:loopr-wallet-network:0.9.3"
 
 // QR Code Scanner
 gradle.ext.googleVision = "com.google.android.gms:play-services-vision:$googleLibraryVersion"

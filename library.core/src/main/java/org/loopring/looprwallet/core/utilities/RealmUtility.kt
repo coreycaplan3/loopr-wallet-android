@@ -1,6 +1,10 @@
 package org.loopring.looprwallet.core.utilities
 
 import io.realm.RealmConfiguration.KEY_LENGTH
+import io.realm.RealmModel
+import org.loopring.looprwallet.core.extensions.update
+import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingContainer
+import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import java.security.SecureRandom
 import javax.crypto.KeyGenerator
 import kotlin.reflect.KProperty
@@ -24,7 +28,7 @@ object RealmUtility {
      */
     fun createKey(): ByteArray {
         val kg = KeyGenerator.getInstance("AES")
-        kg.init(KEY_LENGTH)
+        kg.init(KEY_LENGTH * 8) // The key size is in bits; 8 bits in a byte --> 64 * 8
         return kg.generateKey().encoded
     }
 
@@ -41,6 +45,38 @@ object RealmUtility {
         return orderedNestedFields.toMutableList()
                 .apply { add(lastField) }
                 .joinToString(".") { it.name }
+    }
+
+    inline fun <T : RealmModel> diffContainerAndAddToRepository(
+            repository: BaseRealmRepository,
+            oldContainer: LooprPagingContainer<T>?,
+            newContainer: LooprPagingContainer<T>,
+            diffPredicate: (T, T) -> Boolean
+    ) {
+        when {
+            oldContainer != null -> {
+                val pagingItem = newContainer.pagingItems.first()
+                val didUpdatePagingItem = oldContainer.pagingItems.update(pagingItem) {
+                    it.criteria == newContainer.criteria
+                }
+                if (!didUpdatePagingItem) {
+                    oldContainer.pagingItems.add(pagingItem)
+                }
+
+                newContainer.data.forEach { newOrder ->
+                    val didUpdateOrder = oldContainer.data.update(newOrder) { oldOrder ->
+                        diffPredicate(oldOrder, newOrder)
+                    }
+                    if (!didUpdateOrder) {
+                        oldContainer.data.add(newOrder)
+                    }
+                }
+
+                repository.add(oldContainer)
+            }
+
+            else -> repository.add(newContainer)
+        }
     }
 
 }

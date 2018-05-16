@@ -1,11 +1,7 @@
 package org.loopring.looprwallet.core.networking.loopr
 
-import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrder
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFilter
+import org.loopring.looprwallet.core.models.loopr.orders.*
 import org.loopring.looprwalletnetwork.services.LoopringService
 
 /**
@@ -22,7 +18,11 @@ class LooprOrderServiceProdImpl : LooprOrderService {
         LoopringService()
     }
 
-    override fun getOrdersByAddress(orderFilter: OrderFilter): Deferred<LooprOrderContainer> {
+    override fun submitOrder(looprOrder: AppLooprOrder): Deferred<Unit> {
+        TODO("not implemented")
+    }
+
+    override fun getOrdersByAddress(orderFilter: OrderSummaryFilter): Deferred<LooprOrderContainer> {
         TODO("Have Adam change get orders to allow null parameters")
 //        return service.getOrders(
 //                orderFilter.address,
@@ -31,13 +31,13 @@ class LooprOrderServiceProdImpl : LooprOrderService {
 //                orderFilter.market,
 //                null,
 //                orderFilter.pageNumber,
-//                OrderFilter.ITEMS_PER_PAGE
+//                OrderSummaryFilter.ITEMS_PER_PAGE
 //        )
     }
 
-    override fun getOrderByHash(orderHash: String): Deferred<LooprOrder> {
+    override fun getOrderByHash(orderHash: String): Deferred<AppLooprOrder> {
         TODO("Have Adam change get orders to allow null parameters")
-//        val order = runBlocking<LooprOrder> {
+//        val order = runBlocking<AppLooprOrder> {
 //            val ordersContainer = service.getOrders(
 //                    null,
 //                    orderHash,
@@ -45,7 +45,7 @@ class LooprOrderServiceProdImpl : LooprOrderService {
 //                    null,
 //                    null,
 //                    1,
-//                    OrderFilter.ITEMS_PER_PAGE
+//                    OrderSummaryFilter.ITEMS_PER_PAGE
 //            ).await()
 //            val orders = ordersContainer.orders
 //            if (orders != null && orders.size >= 1) {
@@ -55,10 +55,10 @@ class LooprOrderServiceProdImpl : LooprOrderService {
 //            }
 //        }
 //
-//        return CompletableDeferred<LooprOrder>(order)
+//        return CompletableDeferred<AppLooprOrder>(order)
     }
 
-    override fun getOrderFillsByOrderHash(orderHash: String): Deferred<RealmList<LooprOrderFill>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getOrderFillsByOrderHash(orderFillFilter: OrderFillFilter): Deferred<LooprOrderFillContainer> {
+        TODO("not implemented")
     }
 }

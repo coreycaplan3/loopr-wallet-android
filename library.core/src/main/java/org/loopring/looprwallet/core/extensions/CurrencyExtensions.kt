@@ -72,7 +72,6 @@ object BigIntegerHelper {
     val NEGATIVE_ONE = BigInteger("-1")
 }
 
-
 /**
  * Formats a [BigDecimal] in the user's native currency
  */
@@ -86,47 +85,53 @@ fun BigDecimal.formatAsCurrency(settings: CurrencySettings): String {
 }
 
 /**
- * Formats a [BigInteger] as a decimal (using the proper number of decimal places)
- */
-fun BigInteger.formatAsDecimal(settings: CurrencySettings, token: LooprToken): String {
-    val formatter = settings.getNumberFormatter()
-    val result = BigDecimal(this, token.decimalPlaces) / (BigDecimal.TEN.pow(token.decimalPlaces))
-    return formatter.format(result)
-}
-
-/**
- * Formats a [BigInteger] as a token
+ * Formats a [BigInteger] that has all padding, as a token for the UI. For example, "142.25 LRC"
  */
 fun BigInteger.formatAsToken(settings: CurrencySettings, token: LooprToken): String {
-    return "${formatAsDecimal(settings, token)} ${token.ticker}"
+    return toBigDecimal(token).formatAsToken(settings, token)
 }
 
 /**
- * Converts the given [BigDecimal] to the equivalent [BigInteger], by moving the decimal place over
- * by [LooprToken.decimalPlaces].
+ * Formats a [BigDecimal] as a token for the UI. For example "132.29 LRC"
  */
-fun BigDecimal.toTokenBigInteger(token: LooprToken): BigInteger {
-    val multiplier = BigDecimal.TEN.pow(token.decimalPlaces)
-    return (this * multiplier) // this * 10^decimal
-            .setScale(token.decimalPlaces, RoundingMode.HALF_DOWN)
-            .toBigInteger()
+fun BigDecimal.formatAsTokenNoTicker(settings: CurrencySettings): String {
+    return settings.getNumberFormatter().format(this)
 }
 
 /**
- * Formats a [BigDecimal] as a token
+ * Formats a [BigDecimal] as a token for the UI. For example "132.29 LRC"
  */
 fun BigDecimal.formatAsToken(settings: CurrencySettings, token: LooprToken): String {
-    val formatter = settings.getNumberFormatter()
-    return "${formatter.format(this)} ${token.ticker}"
+    return "${formatAsTokenNoTicker(settings)} ${token.ticker}"
 }
 
 /**
- * Formats a [BigDecimal] as the user's national currency
+ * Formats a [BigDecimal] as the user's national currency for the UI. For example "$132.24"
  */
 fun BigInteger.formatAsCurrency(settings: CurrencySettings): String {
     val formatter = settings.getCurrencyFormatter()
     val result = BigDecimal(this, 2) / BigDecimal(100)
     return formatter.format(result)
+}
+
+/**
+ * Formats a [BigInteger] as a decimal (using the proper number of decimal places). For example,
+ * 10000000000000000000 (equivalent of 10, with 18 decimals) becomes 10.000000000000000000
+ */
+fun BigInteger.toBigDecimal(token: LooprToken): BigDecimal {
+    return BigDecimal(this, token.decimalPlaces) / (BigDecimal.TEN.pow(token.decimalPlaces))
+}
+
+/**
+ * Converts the given [BigDecimal] to the equivalent [BigInteger] (integer), by moving the decimal
+ * place over by [LooprToken.decimalPlaces] (and padding with extra zeros, where appropriate). For
+ * example, 10.00 becomes 10000000000000000000 (equivalent of 10, with 18 decimals)
+ */
+fun BigDecimal.toBigInteger(token: LooprToken): BigInteger {
+    val multiplier = BigDecimal.TEN.pow(token.decimalPlaces)
+    return (this * multiplier) // this * 10^decimal
+            .setScale(token.decimalPlaces, RoundingMode.HALF_DOWN)
+            .toBigInteger()
 }
 
 fun BigDecimal.equalsZero(): Boolean {
