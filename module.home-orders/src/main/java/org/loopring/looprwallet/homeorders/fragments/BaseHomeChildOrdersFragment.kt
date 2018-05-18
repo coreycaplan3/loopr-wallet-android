@@ -6,9 +6,10 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryPager
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
@@ -28,6 +29,12 @@ import org.loopring.looprwallet.homeorders.viewmodels.HomeOrdersViewModel
 abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationReselectedLister,
         OnSearchViewChangeListener, OnHomeOrderFilterChangeListener, OnRefreshListener {
 
+    companion object {
+
+        private const val KEY_ORDER_FILTER = "ORDER_FILTER"
+
+    }
+
     abstract val swipeRefreshLayout: SwipeRefreshLayout?
     abstract val recyclerView: RecyclerView?
 
@@ -40,13 +47,17 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     override val currentStatusFilter: String
         get() = adapter?.currentStatusFilter ?: throw IllegalStateException("Adapter is null!")
 
+    private lateinit var orderFilter: OrderSummaryFilter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val address = walletClient.getCurrentWallet()?.credentials?.address
 
+        val defaultFilter = OrderSummaryFilter(address, null, orderType, 1)
+        orderFilter = savedInstanceState?.getParcelable(KEY_ORDER_FILTER) ?: defaultFilter
         if (address != null) {
-            adapter = provideAdapter(savedInstanceState, address).apply {
+            adapter = provideAdapter(orderFilter).apply {
                 this.onLoadMore = ::onLoadMoreHomeOrders
             }
         }
@@ -55,10 +66,12 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
 
         setupOfflineFirstStateAndErrorObserver(homeOrdersViewModel, swipeRefreshLayout)
-        setOrderLiveData(1)
+        setOrderLiveData()
     }
 
-    abstract fun provideAdapter(savedInstanceState: Bundle?, address: String): HomeOrderAdapter
+    abstract val orderType: String
+
+    abstract fun provideAdapter(orderFilter: OrderSummaryFilter): HomeOrderAdapter
 
     override fun onRefresh() {
         homeOrdersViewModel.refresh()
@@ -81,36 +94,30 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     }
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
-        async(UI) {
-            adapter?.filterData {
-                it.tradingPair.market.contains("*$searchQuery*", ignoreCase = true)
-            }
-        }
+        adapter?.filterData(listOf(AppLooprOrder::tradingPair), TradingPair::market, "*$searchQuery*")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        adapter?.onSaveInstanceState(outState)
+        outState.putParcelable(KEY_ORDER_FILTER, orderFilter)
     }
 
     // MARK - Private Methods
 
     private fun onLoadMoreHomeOrders() {
-        adapter?.orderFilter?.pageNumber?.let { pageNumber ->
-            setOrderLiveData(pageNumber + 1)
-        }
+        orderFilter.pageNumber += 1
+        homeOrdersViewModel.refresh()
     }
 
     /**
      * Resets the [adapter] to its initial set of data, based on the filter criteria that was
      * provided by the [adapter].
      */
-    private fun setOrderLiveData(pageNumber: Int) {
+    private fun setOrderLiveData() {
         val adapter = adapter ?: return
 
-        adapter.orderFilter.pageNumber = pageNumber
-        homeOrdersViewModel.getOrders(this, adapter.orderFilter) { orderContainer ->
+        homeOrdersViewModel.getOrders(this, orderFilter) { orderContainer ->
 
             setupOfflineFirstDataObserverForAdapter(homeOrdersViewModel, adapter, orderContainer.data)
             (adapter.pager as? OrderSummaryPager)?.orderContainer = orderContainer

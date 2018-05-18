@@ -17,6 +17,7 @@ import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_DEFAULT_VALUE_SECURITY
 import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.TYPE_PIN_SECURITY
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import javax.inject.Inject
 
 
@@ -39,10 +40,19 @@ class SecuritySettingsFragment : BaseSettingsFragment(), OnSecurityChangeListene
     @Inject
     lateinit var securitySettings: SecuritySettings
 
+    // CALLED BEFORE the onCreate method
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        super.onCreatePreferences(savedInstanceState, rootKey)
+
         coreLooprComponent.inject(this)
 
         addPreferencesFromResource(R.xml.settings_security)
+
+        if (securitySettings.isSecurityActive()) {
+            onSecurityEnabled(securitySettings.getCurrentSecurityType())
+        } else {
+            onSecurityDisabled()
+        }
     }
 
     override fun getPreferenceKeysAndDefaultValues() = listOf(
@@ -94,8 +104,9 @@ class SecuritySettingsFragment : BaseSettingsFragment(), OnSecurityChangeListene
         KEY_SECURITY_TYPE -> getSummaryForListPreference(preference as ListPreference, value)
         KEY_SECURITY_TIMEOUT -> {
             val uiEntry = getSummaryForListPreference(preference as ListPreference, value)
-            val summaryFormatter = ApplicationUtility.str(R.string.formatter_automatically_lock_after_timeout)
-            String.format(summaryFormatter, uiEntry)
+
+            str(R.string.formatter_automatically_lock_after_timeout)
+                    .format(uiEntry)
         }
         else -> throw IllegalArgumentException("Invalid preference key, found: ${preference.key}")
     }
@@ -109,14 +120,9 @@ class SecuritySettingsFragment : BaseSettingsFragment(), OnSecurityChangeListene
             it.summary = getSummaryForListPreference(it, TYPE_PIN_SECURITY)
         }
 
-        findPreference(KEY_SECURITY_TIMEOUT)?.let {
-            it.summary = getSummaryValue(it, securitySettings.getCurrentSecurityTimeout().toString())
-            it.isEnabled = true
-        }
-
         getPreferenceKeysAndDefaultValues().forEach {
             if (it.first != KEY_SECURITY_TYPE) {
-                findPreference(it.first).isEnabled = true
+                findPreference(it.first)?.isEnabled = true
             }
         }
     }
@@ -127,12 +133,6 @@ class SecuritySettingsFragment : BaseSettingsFragment(), OnSecurityChangeListene
         (findPreference(KEY_SECURITY_TYPE) as? ListPreference)?.let {
             it.summary = getSummaryForListPreference(it, TYPE_DEFAULT_VALUE_SECURITY)
         }
-
-        findPreference(KEY_SECURITY_TIMEOUT)?.let {
-            it.summary = getString(R.string.disabled_application_lock)
-            it.isEnabled = false
-        }
-
 
         getPreferenceKeysAndDefaultValues().forEach {
             if (it.first != KEY_SECURITY_TYPE) {

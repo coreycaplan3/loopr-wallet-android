@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import io.realm.OrderedRealmCollection
 import io.realm.RealmList
 import io.realm.RealmModel
+import io.realm.RealmResults
 import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.extensions.like
 import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
+import kotlin.reflect.KProperty
 
 /**
  * Created by Corey Caplan on 3/14/18.
@@ -54,13 +57,14 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     var onLoadMore: () -> Unit = {}
 
     /**
-     * Filters the data using the provided [predicate] and rebinds the data in the adapter.
+     * Filters the data using a like query, based on the given [property] and [value].
      */
-    inline fun filterData(predicate: (T) -> Boolean) {
-        data?.filter(predicate)?.let { filteredList ->
-            data = RealmList<T>().apply { addAll(filteredList) }
-            notifyDataSetChanged()
-        }
+    fun filterData(propertyList: List<KProperty<*>> = listOf(), property: KProperty<String>, value: String) {
+        data = data?.where()
+                ?.like(propertyList, property, value)
+                ?.findAllAsync()
+
+        updateData(data)
     }
 
     /**
@@ -68,8 +72,7 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      * applied)
      */
     fun clearFilter() {
-        data = pager.data
-        notifyDataSetChanged()
+        updateData(pager.data)
     }
 
     final override fun getItemViewType(position: Int): Int {
@@ -176,14 +179,41 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      *
      * @param data the new [OrderedRealmCollection] to display.
      */
-    fun updateData(data: OrderedRealmCollection<T>?) {
+    fun updateData(data: OrderedRealmCollection<T>?) = synchronized(this) {
+        removeChangeListener(data)
         this.data = data
-        notifyDataSetChanged()
+        addChangeListener(data)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        addChangeListener(data)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+
+        removeChangeListener(data)
     }
 
     private fun isDataValid(): Boolean {
         val data = data
         return data != null && data.isValid
+    }
+
+    private fun addChangeListener(data: OrderedRealmCollection<T>?) {
+        when (data) {
+            is RealmList -> data.addChangeListener { _: RealmList<T> -> notifyDataSetChanged() }
+            is RealmResults -> data.addChangeListener { _: RealmResults<T> -> notifyDataSetChanged() }
+        }
+    }
+
+    private fun removeChangeListener(data: OrderedRealmCollection<T>?) {
+        when (data) {
+            is RealmList -> data.removeAllChangeListeners()
+            is RealmResults -> data.removeAllChangeListeners()
+        }
     }
 
     private class LoadingInitialViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView)

@@ -39,7 +39,7 @@
         <item name="android:textColor">?attr/textColorPrimaryOnly</item>
         <item name="android:paddingLeft">@dimen/horizontal_padding_small</item>
         <item name="android:paddingRight">@dimen/horizontal_padding_small</item>
-        <item name="android:background">@drawable/ripple_effect_accent_flat</item>
+        <item name="background">@drawable/ripple_effect_accent_flat</item>
         <item name="backgroundTint">@color/button_background_tint</item>
         <item name="backgroundTintMode">add</item>
     </style>

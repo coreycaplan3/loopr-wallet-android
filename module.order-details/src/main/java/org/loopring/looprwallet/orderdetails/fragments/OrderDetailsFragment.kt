@@ -9,16 +9,11 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import androidx.os.bundleOf
+import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_order_details.*
-import org.loopring.looprwallet.core.extensions.formatAsToken
-import org.loopring.looprwallet.core.extensions.ifNotNull
-import org.loopring.looprwallet.core.extensions.longToast
-import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
+import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFillFilter
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFillLooprPager
-import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
+import org.loopring.looprwallet.core.models.loopr.orders.*
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
@@ -44,6 +39,8 @@ class OrderDetailsFragment : BaseFragment() {
         val TAG: String = OrderDetailsFragment::class.java.simpleName!!
 
         private const val KEY_ORDER = "_ORDER"
+
+        private const val KEY_ORDER_FILTER = "ORDER_FILTER"
 
         fun getInstance(orderHash: String) = OrderDetailsFragment().apply {
             arguments = bundleOf(KEY_ORDER to orderHash)
@@ -79,8 +76,12 @@ class OrderDetailsFragment : BaseFragment() {
     @Inject
     lateinit var currencySettings: CurrencySettings
 
+    private lateinit var orderFilter: OrderFillFilter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        orderFilter = savedInstanceState?.getParcelable(KEY_ORDER_FILTER) ?: OrderFillFilter(orderHash, 1)
 
         orderDetailsLooprComponent.inject(this)
 
@@ -109,7 +110,18 @@ class OrderDetailsFragment : BaseFragment() {
         setupOfflineFirstStateAndErrorObserver(orderSummaryViewModel, orderDetailsSwipeRefreshLayout)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putParcelable(KEY_ORDER_FILTER, orderFilter)
+    }
+
     // MARK - Private Methods
+
+    private fun onLoadMore() {
+        orderFilter.pageNumber += 1
+        orderFillsViewModel.refresh()
+    }
 
     private fun createOptionsMenu(toolbar: Toolbar?) {
         toolbar?.menu?.clear()
@@ -152,15 +164,16 @@ class OrderDetailsFragment : BaseFragment() {
     private fun setupAdapter(view: View, looprOrder: AppLooprOrder) {
         val adapter = OrderDetailsAdapter(looprOrder).apply {
             adapter = this
+            onLoadMore = ::onLoadMore
         }
 
         orderDetailsRecyclerView.layoutManager = LinearLayoutManager(view.context)
         orderDetailsRecyclerView.adapter = adapter
 
         // We can now retrieve order fills, since we initialized the adapter with the order data
-        orderFillsViewModel.getOrderFills(this, OrderFillFilter(orderHash, 1)) {
+        orderFillsViewModel.getOrderFills(this, orderFilter) {
             (adapter.pager as OrderFillLooprPager).orderFillContainer = it
-            setupOfflineFirstDataObserverForAdapter(orderFillsViewModel, adapter, it.data)
+            setupOfflineFirstDataObserverForAdapter(orderFillsViewModel, adapter, it.data, LooprOrderFill::tradeDate, Sort.ASCENDING)
         }
         setupOfflineFirstStateAndErrorObserver(orderFillsViewModel, orderDetailsSwipeRefreshLayout)
     }

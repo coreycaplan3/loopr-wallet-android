@@ -17,10 +17,10 @@ class OrderFillLooprPager(val orderFillFilter: OrderFillFilter) : LooprAdapterPa
 
     override val currentPage: Int
         get() {
-            val container = orderFillContainer ?: return orderFillFilter.pageIndex
+            val container = orderFillContainer ?: return orderFillFilter.pageNumber
             return container.pagingItems
                     .find { it.criteria == container.criteria }
-                    ?.totalNumberOfItems ?: return orderFillFilter.pageIndex
+                    ?.totalNumberOfItems ?: return orderFillFilter.pageNumber
         }
 
     override val itemsPerPage: Int

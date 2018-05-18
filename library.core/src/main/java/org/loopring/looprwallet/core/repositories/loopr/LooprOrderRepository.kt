@@ -2,6 +2,7 @@ package org.loopring.looprwallet.core.repositories.loopr
 
 import android.arch.lifecycle.LiveData
 import io.realm.Case
+import io.realm.RealmResults
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
@@ -38,6 +39,26 @@ class LooprOrderRepository : BaseRealmRepository() {
                 .equalTo(AppLooprOrder::orderHash, orderHash)
                 .findFirstAsync()
                 .asLiveData()
+    }
+
+    fun getOrdersByFilterNow(orderFilter: OrderSummaryFilter, context: HandlerContext = UI): RealmResults<AppLooprOrder> {
+        return getRealmFromContext(context)
+                .where<AppLooprOrder>()
+                .apply {
+                    // Market
+                    val marketProperty = TradingPair::market
+
+                    if (orderFilter.market != null) {
+                        equalTo(marketProperty, "${orderFilter.market}", Case.INSENSITIVE)
+                    }
+
+                    if (orderFilter.address != null) {
+                        equalTo(AppLooprOrder::address, orderFilter.address)
+                    }
+
+                    equalTo(AppLooprOrder::status, orderFilter.status)
+                }
+                .findAll()
     }
 
     fun getOrders(orderFilter: OrderSummaryFilter, context: HandlerContext = UI): LiveData<LooprOrderContainer> {

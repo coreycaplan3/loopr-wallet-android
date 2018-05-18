@@ -9,6 +9,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
@@ -73,9 +74,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     }
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
-        async(UI) {
-            adapter?.filterData { it.market.contains(searchQuery, ignoreCase = true) }
-        }
+        adapter?.filterData(listOf(), TradingPair::market, "*$searchQuery*")
     }
 
     final override fun onSortByChange(newSortByFilter: String) {
@@ -107,12 +106,11 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
      * provided by the [adapter].
      */
     private fun setMarketsLiveData() {
-        adapter?.ifNotNull { adapter ->
+        val adapter = adapter ?: return
 
-            val marketsFilter = TradingPairFilter(isFavorites, adapter.dateFilter, adapter.sortBy)
-            homeMarketsViewModel.getHomeMarkets(this, marketsFilter) { data ->
-                setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, data)
-            }
+        val marketsFilter = TradingPairFilter(isFavorites, adapter.dateFilter)
+        homeMarketsViewModel.getHomeMarkets(this, marketsFilter) { data ->
+            setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, data)
         }
     }
 

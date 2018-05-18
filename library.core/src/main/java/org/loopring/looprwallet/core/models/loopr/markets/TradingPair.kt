@@ -13,7 +13,7 @@ import java.math.BigDecimal
  *
  * Purpose of Class: To represent a trading pair for a token.
  *
- * @property market The market for the ticker, formatted as XXX-XXX (where X is an uppercase letter)
+ * @property market The market for the ticker, formatted as ABC-DEF (ALL UPPERCASE LETTERS)
  * @property primaryTicker The main ticker for this trading pair. For example the primary ticker for
  * "LRC-WETH" is LRC.
  * @property secondaryTicker The base for this trading pair. For example, the secondary ticker for
@@ -27,7 +27,7 @@ import java.math.BigDecimal
  */
 open class TradingPair(
         @PrimaryKey var market: String = "",
-        private var looprTicker: LooprTicker? = null,
+        var looprTicker: LooprTicker? = null,
         primaryToken: LooprToken? = null,
         secondaryToken: LooprToken? = null
 ) : RealmObject() {

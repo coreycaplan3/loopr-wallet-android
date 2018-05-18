@@ -67,6 +67,7 @@ abstract class RealmClient {
 
             Realm.getInstance(configuration)
                     .close()
+
         }
     }
 

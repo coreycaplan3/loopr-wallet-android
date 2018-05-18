@@ -2,19 +2,18 @@ package org.loopring.looprwallet.core.fragments.settings
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.annotation.CallSuper
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.ListPreference
-import android.support.v7.preference.Preference
+import android.support.v7.preference.*
 import android.support.v7.preference.Preference.OnPreferenceChangeListener
 import android.support.v7.preference.Preference.OnPreferenceClickListener
-import android.support.v7.preference.PreferenceFragmentCompat
-import android.support.v7.preference.SeekBarPreference
 import android.view.View
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.allNonNull
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
+import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.models.settings.LooprSettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility
 
@@ -27,6 +26,12 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility
  */
 abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceClickListener,
         OnPreferenceChangeListener {
+
+    @CallSuper
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        val settings = LooprSettings.getInstance(context!!)
+        preferenceManager.preferenceDataStore = settings.preferenceDataStore
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -136,7 +141,10 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
 
         // Set the summary to reflect the new value.
         return if (index >= 0) preference.entries[index].toString()
-        else value
+        else {
+            loge("Could not get preference for $preference")
+            value
+        }
     }
 
     // MARK - Private Methods
@@ -157,8 +165,6 @@ abstract class BaseSettingsFragment : PreferenceFragmentCompat(), OnPreferenceCl
             defaultValue: String
     ) {
         val preference = findPreference(preferenceKey)
-
-        preference.preferenceDataStore = LooprSettings.getInstance(CoreLooprWalletApp.context).preferenceDataStore
 
         val icon = preference.icon
         val textColorResource = context?.theme?.getResourceIdFromAttrId(android.R.attr.textColorSecondary)

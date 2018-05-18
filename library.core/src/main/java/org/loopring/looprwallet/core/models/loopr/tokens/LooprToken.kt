@@ -36,7 +36,7 @@ open class LooprToken(
 
         override var name: String = ETH.name,
 
-        totalSupply: String = "",
+        totalSupply: BigInteger = BigInteger.ONE,
 
         override var decimalPlaces: Int = ETH.decimalPlaces,
 
@@ -72,7 +72,7 @@ open class LooprToken(
                 "ETH",
                 "ETH",
                 "Ethereum",
-                "120000000",
+                BigInteger("120000000000000000000000000"),
                 18
         )
 
@@ -80,7 +80,7 @@ open class LooprToken(
                 "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
                 "WETH",
                 "Wrapped Ether",
-                "167911966384029250753914",
+                BigInteger("120000000000000000000000000"),
                 18
         )
 
@@ -88,7 +88,7 @@ open class LooprToken(
                 "0xef68e7c694f40c8202821edf525de3782458639f",
                 "LRC",
                 "Loopring",
-                "13950760545238578922746031",
+                BigInteger("1395076054523857892274603100"),
                 18
         )
 
@@ -96,7 +96,7 @@ open class LooprToken(
                 "0x1a7a8bd9106f2b8d977e08582dc7d24c723ab0db",
                 "APPC",
                 "AppCoins",
-                "246203093000000000000000000",
+                BigInteger("246203093000000000000000000"),
                 18
         )
 
@@ -104,7 +104,7 @@ open class LooprToken(
                 "0x8f8221afbb33998d8584a2b05749ba73c37a938a",
                 "REQ",
                 "Request Network",
-                "999999999244592134526985951",
+                BigInteger("999999999244592134526985951"),
                 18
         )
 
@@ -112,7 +112,7 @@ open class LooprToken(
                 "0xe41d2489571d322189246dafa5ebde1f4699f498",
                 "ZRX",
                 "0x",
-                "1000000000000000000000000000",
+                BigInteger("1000000000000000000000000000"),
                 18
         )
     }
@@ -123,7 +123,7 @@ open class LooprToken(
             mTotalSupply = value.toString(10)
         }
 
-    private var mTotalSupply: String = totalSupply
+    private var mTotalSupply: String = totalSupply.toString(10)
 
     /**
      * This is a backing field.

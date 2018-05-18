@@ -8,6 +8,7 @@ import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.models.android.architecture.IO
+import org.loopring.looprwallet.core.models.android.architecture.NET
 
 /**
  * Created by Corey Caplan on 3/17/18.
@@ -17,22 +18,25 @@ import org.loopring.looprwallet.core.models.android.architecture.IO
  * Purpose of Class: To persist information to a [Realm] and allow queries to be written against
  * [Realm] as well.
  */
-abstract class BaseRealmRepository : BaseRepository<RealmModel> {
+open class BaseRealmRepository : BaseRepository<RealmModel> {
 
     /**
-     * This realm can **ONLY** be used from the UI thread
+     * This realm can **ONLY** be used from the [UI] thread
      */
     private val uiRealm: Realm = CoreLooprWalletApp.uiGlobalRealm
 
     /**
-     * This realm can **ONLY** be accessed from the IO thread
+     * This realm can **ONLY** be accessed from the [IO] thread
      */
-    private val ioRealm: Realm = CoreLooprWalletApp.asyncGlobalRealm
+    private val ioRealm: Realm = CoreLooprWalletApp.ioGlobalRealm
+
+    /**
+     * This realm can **ONLY** be accessed from the [NET] thread
+     */
+    private val netRealm: Realm = CoreLooprWalletApp.netGlobalRealm
 
     /**
      * Runs a given transaction on the provided [context]'s [Realm] instance.
-     *
-     * ** This method is called assuming it's on the proper thread!**
      */
     fun runTransaction(context: HandlerContext = IO, transaction: (Realm) -> Unit) {
         getRealmFromContext(context).executeTransaction(transaction)
@@ -40,8 +44,6 @@ abstract class BaseRealmRepository : BaseRepository<RealmModel> {
 
     /**
      * Runs a given *add transaction* on the provided [context]'s [Realm] instance.
-     *
-     * ** This method is called assuming it's on the proper thread!**
      */
     final override fun add(data: RealmModel, context: HandlerContext) {
         getRealmFromContext(context)
@@ -50,8 +52,6 @@ abstract class BaseRealmRepository : BaseRepository<RealmModel> {
 
     /**
      * Runs a given *add list transaction* on the provided [context]'s [Realm] instance.
-     *
-     * ** This method is called assuming it's on the proper thread!**
      */
     final override fun addList(data: List<RealmModel>, context: HandlerContext) {
         getRealmFromContext(context)
@@ -60,8 +60,6 @@ abstract class BaseRealmRepository : BaseRepository<RealmModel> {
 
     /**
      * Runs a given *remove transaction* on the provided [context]'s [Realm] instance.
-     *
-     * ** This method is called assuming it's on the proper thread!**
      */
     final override fun remove(data: RealmModel, context: HandlerContext) {
         getRealmFromContext(context)
@@ -70,8 +68,6 @@ abstract class BaseRealmRepository : BaseRepository<RealmModel> {
 
     /**
      * Runs a given *remove list transaction* on the provided [context]'s [Realm] instance.
-     *
-     * ** This method is called assuming it's on the proper thread!**
      */
     final override fun remove(data: List<RealmModel>, context: HandlerContext) {
         val realm = getRealmFromContext(context)
@@ -92,6 +88,7 @@ abstract class BaseRealmRepository : BaseRepository<RealmModel> {
     protected fun getRealmFromContext(context: HandlerContext) = when (context) {
         UI -> uiRealm
         IO -> ioRealm
+        NET -> netRealm
         else -> throw IllegalArgumentException("Invalid context, found: $context")
     }
 

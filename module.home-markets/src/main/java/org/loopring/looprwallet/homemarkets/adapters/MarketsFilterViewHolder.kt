@@ -47,18 +47,15 @@ class MarketsFilterViewHolder(itemView: View, private val listener: OnGeneralMar
         setDateFilterButtonListener(marketsDateFilter1dButton, listener)
     }
 
-    /**
-     * @param filter The filter data that's used **ONLY** for binding the current values to
-     * the UI (current sortBy status and date)
-     */
-    fun bind(filter: TradingPairFilter) {
-        val sortByIndex = TradingPairFilter.SORT_BY_ARRAY_VALUES.indexOf(filter.sortBy)
+    fun bind(sortBy: String, changePeriod: String) {
+        // Sorting
+        val sortByIndex = TradingPairFilter.SORT_BY_ARRAY_VALUES.indexOf(sortBy)
         marketsSortBySpinner.setSelection(sortByIndex)
 
         // Date
-        when (filter.changePeriod) {
+        when (changePeriod) {
             TradingPairFilter.CHANGE_PERIOD_1D -> FilterButtonUtility.toSelected(marketsDateFilter1dButton)
-            else -> loge("Invalid changePeriod, found: ${filter.changePeriod}", IllegalArgumentException())
+            else -> loge("Invalid changePeriod, found: $changePeriod", IllegalArgumentException())
         }
     }
 

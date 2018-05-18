@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
  *
  */
 @Parcelize
-data class OrderFillFilter(val orderHash: String, var pageIndex: Int) : Parcelable {
+data class OrderFillFilter(val orderHash: String, var pageNumber: Int) : Parcelable {
 
     companion object {
 

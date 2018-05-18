@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AlertDialog
+import android.text.InputType
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_wrap_eth.*
 import org.loopring.looprwallet.core.activities.BaseActivity
@@ -63,10 +64,10 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
 
     @VisibleForTesting
     var ethToken: LooprToken? = null
-        set(value) {
+        set(value) = synchronized(this) {
             field = value
 
-            val token = ethToken ?: return
+            val token = field ?: return
             val address = address ?: return
             if (isSwappingToWrapped) {
                 bindTokenBalanceToAvailableLabel(address, token)
@@ -75,15 +76,17 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
 
     @VisibleForTesting
     var wethToken: LooprToken? = null
-        set(value) {
+        set(value) = synchronized(this) {
             field = value
 
-            val token = wethToken ?: return
+            val token = field ?: return
             val address = address ?: return
             if (!isSwappingToWrapped) {
                 bindTokenBalanceToAvailableLabel(address, token)
             }
         }
+
+    override val isDecimalVisible = true
 
     @Inject
     lateinit var currencySettings: CurrencySettings
@@ -97,6 +100,8 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar?.title = str(R.string.convert)
 
         NumberPadPresenter.setupNumberPad(this, this)
         wrapEtherMaxButton.setOnClickListener { onMaxButtonClick() }
@@ -115,36 +120,30 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
             }
         }
 
+        wrapEtherInputEditText.inputType = InputType.TYPE_NULL
+        wrapEtherInputEditText.setTextIsSelectable(true)
+
         address?.let { address ->
             setupOfflineFirstStateAndErrorObserver(tokenBalanceViewModel, fragmentContainer)
             tokenBalanceViewModel.getAllTokensWithBalances(this, address) { tokens ->
-                ethToken = tokens.where().equalTo(LooprToken::identifier, LooprToken.ETH).findFirst()
-                wethToken = tokens.where().equalTo(LooprToken::identifier, LooprToken.WETH).findFirst()
+                ethToken = tokens.where().equalTo(LooprToken::identifier, LooprToken.ETH.identifier).findFirst()
+                wethToken = tokens.where().equalTo(LooprToken::identifier, LooprToken.WETH.identifier).findFirst()
             }
         }
     }
 
     override fun onNumberClick(number: String) {
-        val cursorPosition = wrapEtherInputEditText.selectionStart
-        if (cursorPosition == -1) {
-            loge("Cursor position was -1...", IllegalStateException())
-            return
-        }
-
         val text = wrapEtherInputEditText.text.toString()
 
         val decimalPoint = currencySettings.getDecimalSeparator().first()
         val decimalIndex = text.indexOfFirst { it == decimalPoint }
 
-        if (decimalIndex > -1 &&
-                cursorPosition > decimalIndex &&
-                text.getAmountAfterDecimal() <= CurrencyExchangeRate.MAX_EXCHANGE_RATE_FRACTION_DIGITS) {
+        if (decimalIndex > -1 && text.getAmountAfterDecimal() < CurrencyExchangeRate.MAX_EXCHANGE_RATE_FRACTION_DIGITS) {
             // We can append after a decimal if we haven't surpassed the number of digits usable
             appendCharacterToEditText(number)
         }
 
-        if ((decimalIndex == -1 || cursorPosition <= decimalIndex)
-                && text.getAmountBeforeDecimal() <= CurrencyExchangeRate.MAX_INTEGER_DIGITS) {
+        if (decimalIndex == -1 && text.getAmountBeforeDecimal() < CurrencyExchangeRate.MAX_INTEGER_DIGITS) {
             // We can append before a decimal if we haven't surpassed the number of digits usable
             appendCharacterToEditText(number)
         }
@@ -163,25 +162,17 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
     }
 
     override fun onBackspaceClick() {
-        val cursorPosition = wrapEtherInputEditText.selectionStart
-        if (cursorPosition == -1) {
-            loge("Cursor position was -1...", IllegalStateException())
-            return
+        val text = wrapEtherInputEditText.text.toString()
+        if (!text.isEmpty()) {
+
+            val modifiedText = StringBuilder(text)
+                    .deleteCharAt(text.length - 1)
+                    .toString()
+
+            wrapEtherInputEditText.setText(modifiedText)
+            onFormChanged()
         }
-
-        if (cursorPosition > 0) {
-            val text = wrapEtherInputEditText.text.toString()
-
-            val builder = StringBuilder(text)
-                    .deleteCharAt(cursorPosition - 1)
-
-            wrapEtherInputEditText.setText(builder.toString())
-        }
-
-        onFormChanged()
     }
-
-    override val isDecimalVisible = true
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -252,10 +243,24 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
 
     private fun onConvertButtonClick(view: View) {
         val ethToken = ethToken ?: return
+        val wethToken = wethToken ?: return
+
+        val primaryTicker: String
+        val secondaryTicker: String
+        when {
+            isSwappingToWrapped -> {
+                primaryTicker = ethToken.ticker
+                secondaryTicker = wethToken.ticker
+            }
+            else -> {
+                primaryTicker = wethToken.ticker
+                secondaryTicker = ethToken.ticker
+            }
+        }
 
         AlertDialog.Builder(view.context)
-                .setTitle(getString(R.string.formatter_convert_to))
-                .setMessage("Are you sure you want to convert %$1s to %$2s?")
+                .setTitle(str(R.string.formatter_convert_to).format(primaryTicker))
+                .setMessage(str(R.string.formatter_convert_weth_to_eth).format(primaryTicker, secondaryTicker))
                 .setPositiveButton(R.string.convert) setPositiveButton@{ dialog, _ ->
                     dialog.dismiss()
 
@@ -274,9 +279,7 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
                         else -> withdrawEthViewModel.convertToEther(amount, wallet)
                     }
                 }
-                .setNegativeButton(android.R.string.cancel) { dialog, _ ->
-                    dialog.dismiss()
-                }
+                .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss() }
                 .show()
     }
 
@@ -284,20 +287,12 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
     private fun appendCharacterToEditText(s: String) {
         val cursorPosition = wrapEtherInputEditText.selectionStart
         if (cursorPosition == -1) {
-            loge("Cursor position was -1...", IllegalStateException())
+            loge("Cursor position was -1…", IllegalStateException())
             return
         }
 
         val text = wrapEtherInputEditText.text.toString()
-
-        when {
-            cursorPosition - 1 < 0 -> wrapEtherInputEditText.setText("$s$text")
-            else -> {
-                val startSubstring = text.substring(0, cursorPosition - 1)
-                val endSubstring = text.substring(cursorPosition, text.length)
-                wrapEtherInputEditText.setText("$startSubstring$s$endSubstring")
-            }
-        }
+        wrapEtherInputEditText.setText("$text$s")
     }
 
     private fun bindTokenBalanceToAvailableLabel(address: String, token: LooprToken) {

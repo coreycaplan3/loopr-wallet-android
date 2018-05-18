@@ -19,7 +19,7 @@ class OrderDetailsAdapterPager(val orderFillFilter: OrderFillFilter) : LooprAdap
     var orderFillContainer: LooprOrderContainer? = null
 
     override val currentPage: Int
-        get() = orderFillFilter.pageIndex
+        get() = orderFillFilter.pageNumber
 
     override val itemsPerPage: Int
         get() = OrderFillFilter.ITEMS_PER_PAGE

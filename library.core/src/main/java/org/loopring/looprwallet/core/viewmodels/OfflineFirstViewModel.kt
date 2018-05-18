@@ -305,7 +305,8 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
 
     /**
      * Performs the network request for this ViewModel. This request should not block. Instead, it
-     * returns a [Deferred] object (a promise).
+     * returns a [Deferred] object (a promise). This method is called from the [IO] thread, but
+     * the network request should be called from the **NET** thread.
      *
      * @param parameter The parameter passed into [initializeData] for querying the network.
      */
@@ -593,12 +594,14 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
 
             // Update the current state and mError
 
-            val state = getCurrentIdleState(mLiveData?.value)
-            mCurrentState.postValue(state)
+            async(UI) {
+                val state = getCurrentIdleState(mLiveData?.value)
+                mCurrentState.value = state
 
-            // We need to make sure that the state is transferred before the error
-            delay(16L)
-            mError.postValue(looprError)
+                delay(16L)
+                mError.value = looprError
+            }
+
         }
     }
 

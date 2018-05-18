@@ -7,9 +7,11 @@ import android.support.v4.app.TaskStackBuilder
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
@@ -47,6 +49,7 @@ class HomeSettingsFragment : BaseSettingsFragment() {
 
     @Inject
     lateinit var themeSettings: ThemeSettings
+
     private val themeChangeKey = ApplicationUtility.str(R.string.settings_theme_key)
 
     override val fragmentTitle: String
@@ -59,6 +62,7 @@ class HomeSettingsFragment : BaseSettingsFragment() {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        super.onCreatePreferences(savedInstanceState, rootKey)
         addPreferencesFromResource(R.xml.settings_home)
     }
 
@@ -74,7 +78,7 @@ class HomeSettingsFragment : BaseSettingsFragment() {
 
     override fun onPreferenceValueChange(preference: Preference, value: String): Boolean {
         if (preference.key == themeChangeKey && themeSettings.getCurrentThemeForSettings() != value) {
-            launch(UI) {
+            async<Unit>(UI) {
                 // We need to add a delay so the dialog close animations can finish
                 delay(150L)
 
@@ -131,7 +135,7 @@ class HomeSettingsFragment : BaseSettingsFragment() {
                 activity.onNestedFragmentClick(LoopringNetworkSettingsFragment(), LoopringNetworkSettingsFragment.TAG)
                 true
             }
-            else -> false
+            else -> true
         }
     }
 

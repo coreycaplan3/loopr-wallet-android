@@ -4,18 +4,16 @@ import android.arch.lifecycle.LiveData
 import io.realm.Case
 import io.realm.OrderedRealmCollection
 import io.realm.RealmList
-import io.realm.Sort
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
-import org.loopring.looprwallet.core.extensions.sort
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.models.android.architecture.IO
-import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
@@ -64,6 +62,9 @@ class LooprMarketsRepository : BaseRealmRepository() {
         }
     }
 
+    /**
+     * @return An **UN-MANAGED** copy of a [TradingPair] object based on the supplied market
+     */
     fun getMarketNow(market: String, context: HandlerContext = IO): TradingPair? {
         val tradingPair = getRealmFromContext(context)
                 .where<TradingPair>()
@@ -74,19 +75,9 @@ class LooprMarketsRepository : BaseRealmRepository() {
     }
 
     fun getMarkets(filter: TradingPairFilter, context: HandlerContext = UI): LiveData<OrderedRealmCollection<TradingPair>> {
-        // TODO apply filter; look into making these async queries run on a background thread too
         return getRealmFromContext(context)
                 .where<TradingPair>()
-                .apply {
-                    equalTo(TradingPair::isFavorite, filter.isFavorites)
-
-                    when (filter.sortBy) {
-                        TradingPairFilter.SORT_BY_TICKER_ASC -> sort(TradingPair::primaryTicker, Sort.ASCENDING)
-                        TradingPairFilter.SORT_BY_PERCENTAGE_CHANGE_ASC -> sort(TradingPair::primaryTicker, Sort.ASCENDING)
-                        TradingPairFilter.SORT_BY_PERCENTAGE_CHANGE_DESC -> sort(TradingPair::primaryTicker, Sort.DESCENDING)
-                    }
-
-                }
+                .equalTo(TradingPair::isFavorite, filter.isFavorites)
                 .findAllAsync()
                 .asLiveData()
     }

@@ -345,4 +345,6 @@
     <string name="cancel_order">Cancel Order</string>
     <string name="question_cancel_order">Cancel Order?</string>
     <string name="rationale_cancel_order">Are you sure you want to cancel this order? This action cannot be undone.</string>
+    <string name="changing_theme">Changing theme…</string>
+    <string name="formatter_convert_weth_to_eth">Are you sure you want to convert %1$s to %2$s?</string>
 </resources>

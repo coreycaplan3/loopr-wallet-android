@@ -28,6 +28,7 @@ class LoopringNetworkSettingsFragment : BaseSettingsFragment() {
     override val fragmentTitle = ApplicationUtility.str(R.string.loopring_network)
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        super.onCreatePreferences(savedInstanceState, rootKey)
         addPreferencesFromResource(R.xml.settings_loopring_network)
     }
 

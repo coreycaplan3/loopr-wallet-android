@@ -23,15 +23,15 @@ object InitialRealmData {
         realm.apply {
 
             // LooprToken
-            upsert(LooprToken.ETH)
-            upsert(LooprToken.WETH)
-            upsert(LooprToken.LRC)
-            upsert(LooprToken.APPC)
-            upsert(LooprToken.REQ)
-            upsert(LooprToken.ZRX)
+            copyToRealm(LooprToken.ETH)
+            copyToRealm(LooprToken.WETH)
+            copyToRealm(LooprToken.LRC)
+            copyToRealm(LooprToken.APPC)
+            copyToRealm(LooprToken.REQ)
+            copyToRealm(LooprToken.ZRX)
 
             // Currency Exchange Rate
-            upsert(CurrencyExchangeRate.USD)
+            copyToRealm(CurrencyExchangeRate.USD)
 
         }
     }

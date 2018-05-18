@@ -10,6 +10,7 @@ import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.findViewById
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.homeorders.R
@@ -40,11 +41,14 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
         LooprViewModelFactory.get<CancelOrderViewModel>(this)
     }
 
-    override fun provideAdapter(savedInstanceState: Bundle?, address: String): HomeOrderAdapter {
+    override val orderType: String
+        get() = FILTER_OPEN_ALL
+
+    override fun provideAdapter(orderFilter: OrderSummaryFilter): HomeOrderAdapter {
         val activity = activity as? BaseActivity
                 ?: throw IllegalStateException("Activity cannot be cast!")
 
-        return HomeOrderAdapter(savedInstanceState, address, FILTER_OPEN_ALL, activity, this, ::onCancelAllClick)
+        return HomeOrderAdapter(orderFilter, orderType, activity, this, ::onCancelAllClick)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

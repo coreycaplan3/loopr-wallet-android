@@ -28,6 +28,7 @@ class GeneralWalletSettingsFragment : BaseSettingsFragment() {
     )
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        super.onCreatePreferences(savedInstanceState, rootKey)
         addPreferencesFromResource(R.xml.settings_general_wallet)
     }
 

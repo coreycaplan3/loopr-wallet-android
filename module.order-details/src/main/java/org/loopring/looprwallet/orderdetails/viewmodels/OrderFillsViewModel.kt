@@ -49,7 +49,15 @@ class OrderFillsViewModel : OfflineFirstViewModel<LooprOrderFillContainer, Order
     override fun isRefreshNecessary(parameter: OrderFillFilter) = defaultIsRefreshNecessary(parameter.orderHash)
 
     override fun getDataFromNetwork(parameter: OrderFillFilter): Deferred<LooprOrderFillContainer> {
-        return service.getOrderFillsByOrderHash(parameter)
+        val result = service.getOrderFillsByOrderHash(parameter)
+
+        if (parameter.pageNumber == 1) {
+            // Clear all old ones since our paging is "messed up"
+            val list = repository.getOrderFillsNow(parameter, IO)
+            repository.remove(list, IO)
+        }
+
+        return result
     }
 
     override fun addNetworkDataToRepository(data: LooprOrderFillContainer, parameter: OrderFillFilter) {

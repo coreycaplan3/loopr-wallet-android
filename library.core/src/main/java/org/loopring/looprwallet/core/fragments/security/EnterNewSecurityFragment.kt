@@ -22,7 +22,7 @@ import org.loopring.looprwallet.core.models.settings.SecuritySettings.Companion.
 class EnterNewSecurityFragment : BaseSecurityFragment() {
 
     /**
-     * An interface used for notifying listeners that a new secruity type has been successfully
+     * An interface used for notifying listeners that a new security type has been successfully
      * inputted.
      */
     interface OnNewSecurityInputtedListener {

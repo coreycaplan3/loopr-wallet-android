@@ -64,7 +64,9 @@ class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
 
         setSupportActionBar(toolbar)
         toolbar?.navigationIcon = ViewUtility.getNavigationIcon(R.drawable.ic_arrow_back_white_24dp, theme)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar?.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
         isIntentForClosingApplication()
     }
@@ -73,7 +75,7 @@ class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
      * Called when a nested fragment needs to be added to the fragment stack.
      *
      * @param fragment The nested fragment to be pushed to the front
-     * @param tag The tag to associate with the fragment and its position in the backstack.
+     * @param tag The tag to associate with the fragment and its position in the back-stack.
      */
     fun onNestedFragmentClick(fragment: BaseSettingsFragment, tag: String) {
         supportFragmentManager.beginTransaction()
@@ -94,7 +96,7 @@ class SettingsActivity : AppCompatActivity(), OnSecurityChangeListener {
                 .setCustomAnimations(R.anim.slide_up, 0, 0, R.anim.slide_down)
                 .replace(R.id.activityContainer, fragment, tag)
                 .addToBackStack(tag)
-                .commit()
+                .commitAllowingStateLoss()
     }
 
     override fun onSecurityEnabled(securityType: String) {

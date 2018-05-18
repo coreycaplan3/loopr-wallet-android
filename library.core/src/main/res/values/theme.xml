@@ -79,7 +79,7 @@
         <item name="colorPrimaryDark">@color/darkPrimaryDark</item>
         <item name="colorPrimaryLight">@color/darkPrimaryLight</item>
         <item name="colorAccent">@color/darkAccent</item>
-        <item name="colorControlHighlight">@color/lightColorControlHighlight</item>
+        <item name="colorControlHighlight">@color/darkColorControlHighlight</item>
         <item name="colorControlActivated">@color/darkAccent</item>
         <item name="android:windowBackground">@color/darkBackground</item>
         <item name="android:colorBackground">@color/cardview_dark_background</item>

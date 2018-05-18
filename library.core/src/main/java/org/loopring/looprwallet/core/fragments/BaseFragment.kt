@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
+import io.realm.Sort
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
@@ -37,6 +38,7 @@ import org.loopring.looprwallet.core.views.LooprAppBarLayout
 import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
 import kotlin.math.roundToInt
+import kotlin.reflect.KProperty
 
 
 /**
@@ -139,8 +141,9 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
 
         val fragmentView = inflater.inflate(layoutResource, container, false) as ViewGroup
 
-        if (parentFragment == null) {
-            // We are NOT in a child fragment
+        if (parentFragment == null && activity is BaseActivity) {
+            // We are NOT in a child fragment and the activity is a BaseActivity (like the
+            // settings activity does not have a typical toolbar)
             toolbarDelegate?.setupAppbar(fragmentView)
             createFab(fragmentView)
 
@@ -153,8 +156,8 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (parentFragment == null) {
-            // We are NOT in a child fragment
+        if (parentFragment == null && activity is BaseActivity) {
+            // We are NOT in a child fragment and our activity is a BaseActivity
             toolbarDelegate?.setupToolbarCollapsing()
             floatingActionButton?.let { initializeFloatingActionButton(it) }
         }
@@ -293,20 +296,47 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * @param adapter The adapter whose data will be updated
      * @param data The data that will be bound to the [adapter]
      */
-    protected fun <T : RealmModel> setupOfflineFirstDataObserverForAdapter(
+    protected fun <E : RealmModel> setupOfflineFirstDataObserverForAdapter(
             viewModel: OfflineFirstViewModel<*, *>?,
-            adapter: BaseRealmAdapter<T>,
-            data: OrderedRealmCollection<T>
+            adapter: BaseRealmAdapter<E>,
+            data: OrderedRealmCollection<E>
     ) {
-//        viewModel?.removeDataObserver(this) // TODO fix me
-        adapter.updateData(data)
+        setupOfflineFirstDataObserverForAdapter<E, Any>(viewModel, adapter, data)
+    }
+
+    /**
+     * Sets up the offline-first data observer by updating the [adapter] and removing the
+     * [viewModel]'s data observer (since the [adapter] registers its own data observer).
+     *
+     * @param viewModel The view model whose data observer will be unregistered
+     * @param adapter The adapter whose data will be updated
+     * @param data The data that will be bound to the [adapter]
+     */
+    protected inline fun <E : RealmModel, reified T : Any> setupOfflineFirstDataObserverForAdapter(
+            viewModel: OfflineFirstViewModel<*, *>?,
+            adapter: BaseRealmAdapter<E>,
+            data: OrderedRealmCollection<E>,
+            sortByProperty: KProperty<T>? = null,
+            sortOrder: Sort = Sort.ASCENDING
+    ) {
+        viewModel?.removeDataObserver(this) // TODO fix me
+
+        if (sortByProperty != null) {
+            val sortedData = data.where()
+                    .sort(sortByProperty, sortOrder)
+                    .findAllAsync()
+
+            adapter.updateData(sortedData)
+        } else {
+            adapter.updateData(data)
+        }
     }
 
     /**
      * This method is responsible for two things:
      *
      * Sets up the [OfflineFirstViewModel] to handle state changes in data. This method will then
-     * show/hide the [BaseFragment]'s [progressBar] accordingly.
+     * show/hide the [BaseFragment]'s [refreshLayout] accordingly.
      *
      * This method registers the *errorObserver* for this [OfflineFirstViewModel] and shows an error
      * snackbar on error. If an error occurs, an indefinite or long snackbar will appear, depending

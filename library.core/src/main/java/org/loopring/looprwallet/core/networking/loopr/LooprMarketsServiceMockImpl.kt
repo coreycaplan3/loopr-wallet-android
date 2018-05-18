@@ -9,7 +9,9 @@ import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairTrend
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
+import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import org.loopring.looprwallet.core.utilities.NetworkUtility
+import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprMarketPairs
 import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprTicker
 import java.io.IOException
 import java.math.BigDecimal
@@ -56,6 +58,35 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
 
         if (NetworkUtility.isNetworkAvailable()) {
             return@async RealmList(lrcTradingPair, reqTradingPair, zrxTradingPair)
+        } else {
+            throw IOException("No connection")
+        }
+    }
+
+    override fun syncSupportedMarkets(): Deferred<Unit> = async(NET) {
+        delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
+
+        if (NetworkUtility.isNetworkAvailable()) {
+            val repository = BaseRealmRepository()
+
+            val tokens = RealmList<LooprToken>(LooprToken.APPC, LooprToken.ETH, LooprToken.LRC, LooprToken.REQ, LooprToken.WETH, LooprToken.ZRX)
+            repository.addList(tokens, NET)
+
+            val tradingPairList = RealmList<TradingPair>()
+
+            val appcMarket = "APPC-WETH"
+            tradingPairList.add(TradingPair(appcMarket, getRandomLooprTicker(appcMarket), LooprToken.APPC, LooprToken.WETH))
+
+            val lrcMarket = "LRC-WETH"
+            tradingPairList.add(TradingPair(lrcMarket, getRandomLooprTicker(lrcMarket), LooprToken.LRC, LooprToken.WETH))
+
+            val reqMarket = "REQ-WETH"
+            tradingPairList.add(TradingPair(reqMarket, getRandomLooprTicker(reqMarket), LooprToken.REQ, LooprToken.WETH))
+
+            val zrxMarket = "ZRX-WETH"
+            tradingPairList.add(TradingPair(zrxMarket, getRandomLooprTicker(zrxMarket), LooprToken.ZRX, LooprToken.WETH))
+
+            repository.addList(tradingPairList, NET)
         } else {
             throw IOException("No connection")
         }

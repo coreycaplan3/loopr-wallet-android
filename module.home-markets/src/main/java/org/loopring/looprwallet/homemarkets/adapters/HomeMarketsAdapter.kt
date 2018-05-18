@@ -28,7 +28,6 @@ class HomeMarketsAdapter(
         savedInstanceState: Bundle?,
         fragment: BaseFragment,
         listener: OnGeneralMarketsFilterChangeListener,
-        val isFavorites: Boolean,
         onRefresh: () -> Unit
 ) : BaseRealmAdapter<TradingPair>(), OnGeneralMarketsFilterChangeListener {
 
@@ -76,9 +75,8 @@ class HomeMarketsAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: TradingPair?) {
-        val filter = TradingPairFilter(isFavorites, sortBy, dateFilter)
         (holder as? MarketsFilterViewHolder)?.let {
-            it.bind(filter)
+            it.bind(sortBy, dateFilter)
             return
         }
 
@@ -96,6 +94,7 @@ class HomeMarketsAdapter(
     override fun onDateFilterChange(newDateFilter: String) {
         if (newDateFilter != dateFilter) {
             dateFilter = newDateFilter
+            notifyItemChanged(0)
             listener?.onDateFilterChange(newDateFilter)
         }
     }

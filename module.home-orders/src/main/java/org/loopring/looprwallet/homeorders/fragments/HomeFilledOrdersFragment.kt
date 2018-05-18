@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.findViewById
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_FILLED
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.homeorders.adapters.HomeOrderAdapter
@@ -28,10 +29,13 @@ class HomeFilledOrdersFragment : BaseHomeChildOrdersFragment() {
     override val recyclerView: RecyclerView?
         get() = findViewById(R.id.fragmentContainer)
 
-    override fun provideAdapter(savedInstanceState: Bundle?, address: String): HomeOrderAdapter {
+    override val orderType: String
+        get() = FILTER_FILLED
+
+    override fun provideAdapter(orderFilter: OrderSummaryFilter): HomeOrderAdapter {
         val activity = activity as? BaseActivity
                 ?: throw IllegalStateException("Cannot cast activity")
-        return HomeOrderAdapter(savedInstanceState, address, FILTER_FILLED, activity, this)
+        return HomeOrderAdapter(orderFilter, orderType, activity, this)
     }
 
 }

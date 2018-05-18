@@ -30,6 +30,7 @@ class CurrencySettingsFragment : BaseSettingsFragment() {
     override val fragmentTitle = str(R.string.currency_defaults)
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        super.onCreatePreferences(savedInstanceState, rootKey)
         addPreferencesFromResource(R.xml.settings_currency)
     }
 

@@ -60,7 +60,15 @@ class HomeOrdersViewModel : OfflineFirstViewModel<LooprOrderContainer, OrderSumm
     }
 
     override fun getDataFromNetwork(parameter: OrderSummaryFilter): Deferred<LooprOrderContainer> {
-        return service.getOrdersByAddress(parameter)
+        val result = service.getOrdersByAddress(parameter)
+
+        if (parameter.pageNumber == 1) {
+            // Clear all old ones since our paging is "messed up"
+            val list = repository.getOrdersByFilterNow(parameter, IO)
+            repository.remove(list, IO)
+        }
+
+        return result
     }
 
     override fun addNetworkDataToRepository(data: LooprOrderContainer, parameter: OrderSummaryFilter) {

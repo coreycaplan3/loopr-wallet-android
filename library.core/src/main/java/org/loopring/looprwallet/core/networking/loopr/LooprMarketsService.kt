@@ -32,6 +32,8 @@ interface LooprMarketsService {
 
     fun getMarkets(): Deferred<RealmList<TradingPair>>
 
+    fun syncSupportedMarkets(): Deferred<Unit>
+
     fun getMarketDetails(tradingPairMarket: String): Deferred<TradingPair>
 
     fun getMarketTrends(tradingPairGraphFilter: TradingPairGraphFilter): Deferred<RealmList<TradingPairTrend>>

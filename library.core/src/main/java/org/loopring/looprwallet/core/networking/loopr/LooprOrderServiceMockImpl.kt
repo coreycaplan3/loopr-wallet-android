@@ -88,7 +88,7 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
             val realmList = RealmList<LooprOrderFill>().apply { addAll(list) }
 
             val criteria = LooprOrderFillContainer.createCriteria(orderFillFilter)
-            val pagingItems = RealmList<LooprPagingItem>(LooprPagingItem(criteria, orderFillFilter.pageIndex, list.size * 3))
+            val pagingItems = RealmList<LooprPagingItem>(LooprPagingItem(criteria, orderFillFilter.pageNumber, list.size * 3))
             return@async LooprOrderFillContainer(criteria, OrderFillFilter.ITEMS_PER_PAGE, pagingItems, realmList)
         } else {
             throw IOException("No connection")

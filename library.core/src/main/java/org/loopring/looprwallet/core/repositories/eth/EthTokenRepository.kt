@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.core.repositories.eth
 
 import android.arch.lifecycle.LiveData
+import io.realm.Case
 import io.realm.OrderedRealmCollection
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
@@ -53,6 +54,19 @@ class EthTokenRepository : BaseRealmRepository() {
 
                     return@let realm.copyFromRealm(data)
                 }
+    }
+
+    /**
+     * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided ticker.
+     */
+    fun getTokenByTickerNow(ticker: String, context: HandlerContext = UI): LooprToken? {
+        return getRealmFromContext(context).let { realm ->
+            val data = realm.where<LooprToken>()
+                    .equalTo(LooprToken::ticker, ticker, Case.INSENSITIVE)
+                    .findFirst() ?: return null
+
+            return@let realm.copyFromRealm(data)
+        }
     }
 
     fun getAllTokens(context: HandlerContext = UI): LiveData<OrderedRealmCollection<LooprToken>> {

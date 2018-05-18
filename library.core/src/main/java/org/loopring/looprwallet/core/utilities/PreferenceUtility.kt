@@ -103,10 +103,10 @@ object PreferenceUtility {
         }
     }
 
-    private fun getDefaultSharedPreferencesName(context: Context): String {
+    fun getDefaultSharedPreferencesName(context: Context): String {
         return context.packageName + "_preferences"
     }
 
-    private const val defaultSharedPreferencesMode = Context.MODE_PRIVATE
+    const val defaultSharedPreferencesMode = Context.MODE_PRIVATE
 
 }

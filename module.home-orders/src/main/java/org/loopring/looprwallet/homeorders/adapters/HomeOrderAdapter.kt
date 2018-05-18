@@ -42,19 +42,13 @@ import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
  * @see OrderSummaryFilter.FILTER_CANCELLED
  */
 class HomeOrderAdapter(
-        savedInstanceState: Bundle?,
-        address: String,
-        private val orderType: String,
+        orderFilter: OrderSummaryFilter,
+        val orderType: String,
         activity: BaseActivity,
         listener: OnHomeOrderFilterChangeListener,
         cancelAllClickListener: (() -> Unit)? = null
 ) : BaseRealmAdapter<AppLooprOrder>(),
         OnHomeOrderFilterChangeListener {
-
-    companion object {
-
-        private const val KEY_ORDER_FILTER = "ORDER_FILTER"
-    }
 
     override val currentStatusFilter: String
         get() = orderType
@@ -62,12 +56,6 @@ class HomeOrderAdapter(
     private val activity by weakReference(activity)
     private val listener by weakReference(listener)
     private val cancelAllClickListener by weakReference(cancelAllClickListener)
-
-    init {
-
-    }
-
-    val orderFilter: OrderSummaryFilter = savedInstanceState?.getParcelable(KEY_ORDER_FILTER) ?: OrderSummaryFilter(address, null, orderType, 1)
 
     override var pager: LooprAdapterPager<AppLooprOrder> = OrderSummaryPager(orderFilter)
 
@@ -159,10 +147,6 @@ class HomeOrderAdapter(
     @Suppress("UNUSED_PARAMETER")
     private fun onCancelAllOpenOrdersClick(view: View) {
         cancelAllClickListener?.invoke()
-    }
-
-    fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(KEY_ORDER_FILTER, orderFilter)
     }
 
 }

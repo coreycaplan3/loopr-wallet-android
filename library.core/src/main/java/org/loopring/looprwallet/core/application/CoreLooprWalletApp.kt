@@ -16,6 +16,7 @@ import org.loopring.looprwallet.core.activities.CoreTestActivity
 import org.loopring.looprwallet.core.dagger.*
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.models.android.architecture.IO
+import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.realm.RealmClient
 import org.loopring.looprwallet.core.utilities.PreferenceUtility
 import org.loopring.looprwallet.core.wallet.WalletClient
@@ -44,7 +45,13 @@ open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallback
          * A realm that can be accessed from only the [IO] co-routine context/thread
          */
         @SuppressLint("StaticFieldLeak")
-        lateinit var asyncGlobalRealm: Realm
+        lateinit var ioGlobalRealm: Realm
+
+        /**
+         * A realm that can be accessed from only the [NET] co-routine context/thread
+         */
+        @SuppressLint("StaticFieldLeak")
+        lateinit var netGlobalRealm: Realm
 
         /**
          * The class representing the *MainActivity* for the app
@@ -87,7 +94,9 @@ open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallback
 
         coreLooprComponent.inject(this)
 
-        PreferenceUtility.setDefaultValues()
+        async(IO) {
+            PreferenceUtility.setDefaultValues()
+        }
 
         Realm.init(this)
 
@@ -96,9 +105,11 @@ open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallback
                     .await()
         }
 
-        async(IO) { asyncGlobalRealm = realmClient.getInstance() }
-
         async(UI) { uiGlobalRealm = realmClient.getInstance() }
+
+        async(IO) { ioGlobalRealm = realmClient.getInstance() }
+
+        async(NET) { netGlobalRealm = realmClient.getInstance() }
 
     }
 

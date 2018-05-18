@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
@@ -42,8 +43,10 @@ class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<Tradin
         return repository.getMarkets(parameter)
     }
 
-    override fun getDataFromNetwork(parameter: TradingPairFilter): Deferred<OrderedRealmCollection<TradingPair>> {
-        return service.getMarkets()
+    override fun getDataFromNetwork(parameter: TradingPairFilter): Deferred<OrderedRealmCollection<TradingPair>> = runBlocking {
+        service.syncSupportedMarkets().await()
+
+        return@runBlocking service.getMarkets()
     }
 
     override fun addNetworkDataToRepository(data: OrderedRealmCollection<TradingPair>, parameter: TradingPairFilter) {

@@ -271,7 +271,7 @@ inline fun <E : RealmModel, reified T> RealmQuery<E>.sort(
         Float::class -> this.sort(formattedFields)
         Boolean::class -> this.sort(formattedFields)
         Date::class -> this.sort(formattedFields)
-        else -> throw IllegalArgumentException("Invalid argument type, found: ")
+        else -> throw IllegalArgumentException("Invalid argument type, found: ${T::class.simpleName}")
     }
 }
 
@@ -279,8 +279,8 @@ inline fun <E : RealmModel, reified T> RealmQuery<E>.sort(
  * @param sortField The field on which to sort.
  * @param sortOrder Either [Sort.DESCENDING] or [Sort.ASCENDING]
  */
-fun <E : RealmModel> RealmQuery<E>.sort(
-        sortField: KProperty<*>,
+inline fun <E : RealmModel, reified T : Any> RealmQuery<E>.sort(
+        sortField: KProperty<T>,
         sortOrder: Sort = Sort.ASCENDING
 ): RealmQuery<E> {
     return this.sort(listOf(), sortField, sortOrder)

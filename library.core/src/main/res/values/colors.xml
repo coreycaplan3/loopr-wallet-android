@@ -24,7 +24,7 @@
     <color name="lightPrimaryDark">#01579B</color>
     <color name="lightAccent">@color/green_400</color>
     <color name="lightBackground">#ECECEC</color>
-    <color name="lightColorControlHighlight">#33FFFFFF</color>
+    <color name="lightColorControlHighlight">#33000000</color>
 
     <color name="lightButtonDisabled">#1F000000</color>
     <color name="lightShadowColor">#FF999999</color>

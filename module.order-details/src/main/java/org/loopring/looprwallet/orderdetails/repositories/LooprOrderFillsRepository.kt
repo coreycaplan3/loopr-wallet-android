@@ -1,13 +1,13 @@
 package org.loopring.looprwallet.orderdetails.repositories
 
 import android.arch.lifecycle.LiveData
-import io.realm.Sort
+import io.realm.RealmResults
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
-import org.loopring.looprwallet.core.extensions.sort
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFillContainer
 import org.loopring.looprwallet.core.models.loopr.orders.OrderFillFilter
@@ -24,17 +24,24 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 class LooprOrderFillsRepository : BaseRealmRepository() {
 
     fun getOrderFillContainerByKeyNow(criteria: String, context: HandlerContext = UI): LooprOrderFillContainer? {
-        val container = getRealmFromContext(context).where<LooprOrderFillContainer>()
+        val container = getRealmFromContext(context)
+                .where<LooprOrderFillContainer>()
                 .equalTo(listOf(LooprOrderFillContainer::pagingItems), LooprPagingItem::criteria, criteria)
                 .findFirst()
 
         return container?.let { getRealmFromContext(context).copyFromRealm(it) }
     }
 
+    fun getOrderFillsNow(orderFillFilter: OrderFillFilter, context: HandlerContext = IO): RealmResults<LooprOrderFill> {
+        return getRealmFromContext(context)
+                .where<LooprOrderFill>()
+                .equalTo(LooprOrderFill::orderHash, orderFillFilter.orderHash)
+                .findAll()
+    }
+
     fun getOrderFillContainer(orderFillFilter: OrderFillFilter, context: HandlerContext = UI): LiveData<LooprOrderFillContainer> {
         return getRealmFromContext(context).where<LooprOrderFillContainer>()
                 .equalTo(listOf(LooprOrderFillContainer::data), LooprOrderFill::orderHash, orderFillFilter.orderHash)
-                .sort(listOf(LooprOrderFillContainer::data), LooprOrderFill::tradeDate, Sort.ASCENDING)
                 .findFirstAsync()
                 .asLiveData()
     }

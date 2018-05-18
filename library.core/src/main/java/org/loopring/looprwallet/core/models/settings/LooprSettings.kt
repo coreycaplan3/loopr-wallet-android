@@ -40,7 +40,7 @@ interface LooprSettings {
 
             logd("Initialized $flavor LooprSettings to ${looprSettings!!::class.java.simpleName}")
 
-            return looprSettings as LooprSecureSettings
+            return looprSettings as LooprSettings
         }
 
     }

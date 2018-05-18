@@ -14,7 +14,7 @@
         android:title="@string/application_lock" />
 
     <ListPreference
-        android:defaultValue="@string/settings_security_timeout_key"
+        android:defaultValue="@string/settings_security_timeout_entries_values_default"
         android:entries="@array/settings_security_timeout_entries_ui"
         android:entryValues="@array/settings_security_timeout_entries_values"
         android:key="@string/settings_security_timeout_key"
