@@ -8,6 +8,8 @@ import android.content.Context
 import android.os.Bundle
 import android.support.multidex.MultiDexApplication
 import io.realm.Realm
+import kotlinx.coroutines.experimental.CompletableDeferred
+import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
@@ -17,6 +19,8 @@ import org.loopring.looprwallet.core.dagger.*
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.android.architecture.NET
+import org.loopring.looprwallet.core.models.settings.LooprSettings
+import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService
 import org.loopring.looprwallet.core.realm.RealmClient
 import org.loopring.looprwallet.core.utilities.PreferenceUtility
 import org.loopring.looprwallet.core.wallet.WalletClient
@@ -62,6 +66,8 @@ open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallback
 
         lateinit var application: Application
 
+        private lateinit var initialSyncJob: Deferred<Unit>
+
         val context: Context
             get() = application
 
@@ -75,6 +81,10 @@ open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallback
                         .looprRealmModule(LooprRealmModule())
                         .looprWalletModule(LooprWalletModule(context))
                         .build()
+
+        suspend fun awaitInitialSync() {
+            initialSyncJob.await()
+        }
 
     }
 
@@ -96,6 +106,16 @@ open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallback
 
         async(IO) {
             PreferenceUtility.setDefaultValues()
+        }
+
+        async(NET) {
+            val settings = LooprSettings.getInstance(application)
+            val hasSyncedBefore = settings.getBoolean(LooprMarketsService.KEY_HAS_SYNCED_MARKETS, false)
+
+            initialSyncJob = when {
+                !hasSyncedBefore -> LooprMarketsService.getInstance().syncSupportedMarkets()
+                else -> CompletableDeferred(Unit).also { it.complete(Unit) }
+            }
         }
 
         Realm.init(this)

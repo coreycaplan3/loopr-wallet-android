@@ -56,11 +56,14 @@ inline fun <T> List<T>.indexOfFirstOrNull(predicate: (T) -> Boolean): Int? {
  * @return True if an update occurred or false if it one did not.
  */
 inline fun <T> MutableList<T>.update(data: T, predicate: (T) -> Boolean): Boolean {
-    indexOfFirstOrNull(predicate)?.let { index ->
-        this[index] = data
-        return true
+    val index = indexOfFirstOrNull(predicate)
+    return when {
+        index != null -> {
+            this[index] = data
+            true
+        }
+        else -> false
     }
-    return false
 }
 
 /**

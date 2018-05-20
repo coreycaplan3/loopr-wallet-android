@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.orderdetails.repositories
 
 import android.arch.lifecycle.LiveData
+import io.realm.OrderedRealmCollection
 import io.realm.RealmResults
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
@@ -39,11 +40,18 @@ class LooprOrderFillsRepository : BaseRealmRepository() {
                 .findAll()
     }
 
-    fun getOrderFillContainer(orderFillFilter: OrderFillFilter, context: HandlerContext = UI): LiveData<LooprOrderFillContainer> {
-        return getRealmFromContext(context).where<LooprOrderFillContainer>()
-                .equalTo(listOf(LooprOrderFillContainer::data), LooprOrderFill::orderHash, orderFillFilter.orderHash)
+    fun getOrderFills(orderFillFilter: OrderFillFilter, context: HandlerContext = UI): OrderedRealmCollection<LooprOrderFill> {
+        return getRealmFromContext(context)
+                .where<LooprOrderFill>()
+                .equalTo(LooprOrderFill::orderHash, orderFillFilter.orderHash)
+                .findAllAsync()
+    }
+
+    fun getOrderFillContainer(filter: OrderFillFilter, context: HandlerContext = UI): LooprOrderFillContainer {
+        return getRealmFromContext(context)
+                .where<LooprOrderFillContainer>()
+                .equalTo(LooprOrderFillContainer::criteria, LooprOrderFillContainer.createCriteria(filter))
                 .findFirstAsync()
-                .asLiveData()
     }
 
 }

@@ -2,6 +2,7 @@ package org.loopring.looprwallet.orderdetails.viewmodels
 
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFillContainer
@@ -30,6 +31,8 @@ class OrderFillsViewModel : OfflineFirstViewModel<LooprOrderFillContainer, Order
         LooprOrderService.getInstance()
     }
 
+    private var oldParameter: OrderFillFilter? = null
+
     fun getOrderFills(
             owner: ViewLifecycleFragment,
             orderHash: OrderFillFilter,
@@ -40,13 +43,27 @@ class OrderFillsViewModel : OfflineFirstViewModel<LooprOrderFillContainer, Order
 
     override fun getLiveDataFromRepository(parameter: OrderFillFilter): LiveData<LooprOrderFillContainer> {
         return repository.getOrderFillContainer(parameter)
+                .also {
+                    it.orderFillList = repository.getOrderFills(parameter)
+                }
+                .asLiveData()
     }
 
     override fun isPredicatesEqual(oldParameter: OrderFillFilter?, newParameter: OrderFillFilter): Boolean {
+        this.oldParameter = oldParameter
+
         return oldParameter?.orderHash == newParameter.orderHash
     }
 
-    override fun isRefreshNecessary(parameter: OrderFillFilter) = defaultIsRefreshNecessary(parameter.orderHash)
+    override fun isRefreshNecessary(parameter: OrderFillFilter): Boolean {
+        val oldParameter = oldParameter
+        if (oldParameter != null && parameter.pageNumber != oldParameter.pageNumber) {
+            // We're working with different pages
+            return true
+        }
+
+        return defaultIsRefreshNecessary(parameter.orderHash)
+    }
 
     override fun getDataFromNetwork(parameter: OrderFillFilter): Deferred<LooprOrderFillContainer> {
         val result = service.getOrderFillsByOrderHash(parameter)

@@ -1,20 +1,18 @@
 package org.loopring.looprwallet.homeorders.adapters
 
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.isSameDay
-import org.loopring.looprwallet.core.extensions.weakReference
-import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_CANCELLED
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_FILLED
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryPager
+import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.orderdetails.activities.OrderDetailsActivity
 import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
@@ -26,9 +24,6 @@ import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
  *
  * Purpose of Class: To display orders that appear on the home screen to the user
  *
- * @param savedInstanceState The implementor's savedInstanceState which is used to restore some of
- * the visual state of this adapter.
- * @param address The address of the user whose orders are being viewed.
  * @param orderType The order type to be displayed in this adapter.
  * @param activity The activity in which this adapter resides. The adapter stores a weak reference
  * to it for starting an instance of [OrderDetailsFragment] when necessary.
@@ -43,19 +38,15 @@ import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
  */
 class HomeOrderAdapter(
         orderFilter: OrderSummaryFilter,
-        val orderType: String,
-        activity: BaseActivity,
-        listener: OnHomeOrderFilterChangeListener,
-        cancelAllClickListener: (() -> Unit)? = null
+        private val orderType: String,
+        private val activity: BaseActivity,
+        private val listener: OnHomeOrderFilterChangeListener,
+        private val cancelAllClickListener: (() -> Unit)? = null
 ) : BaseRealmAdapter<AppLooprOrder>(),
         OnHomeOrderFilterChangeListener {
 
     override val currentStatusFilter: String
         get() = orderType
-
-    private val activity by weakReference(activity)
-    private val listener by weakReference(listener)
-    private val cancelAllClickListener by weakReference(cancelAllClickListener)
 
     override var pager: LooprAdapterPager<AppLooprOrder> = OrderSummaryPager(orderFilter)
 
@@ -76,13 +67,13 @@ class HomeOrderAdapter(
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val inflater = getInflater(parent)
-        val view = inflater.inflate(R.layout.view_holder_general_orders_empty, parent, false)
+        val view = inflater.inflate(R.layout.view_holder_home_orders_empty, parent, false)
         return EmptyHomeOrderViewHolder(orderType, view)
     }
 
     override fun onCreateDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val inflater = getInflater(parent)
-        val view = inflater.inflate(R.layout.view_holder_general_order, parent, false)
+        val view = inflater.inflate(R.layout.view_holder_home_order, parent, false)
         return HomeOrderViewHolder(view)
     }
 
@@ -109,7 +100,7 @@ class HomeOrderAdapter(
         }
 
         (holder as? HomeOpenOrderFilterViewHolder)?.let {
-            it.bind()
+            it.bind(data)
             return
         }
 
@@ -138,8 +129,6 @@ class HomeOrderAdapter(
         }
 
         (holder as? HomeOrderViewHolder)?.bind(item, showDateHeader) {
-            val activity = this.activity ?: return@bind
-
             OrderDetailsActivity.route(activity, it.orderHash)
         }
     }

@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package org.loopring.looprwallet.core.extensions
 
 import android.os.Build
@@ -15,29 +17,29 @@ import android.os.Build
 /**
  * @return True if running on API version >= 16
  */
-fun isJellybean(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+inline fun isJellybean(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
 
 /**
  * @return True if running on API version >= 18
  */
-fun isJellybeanR1(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+inline fun isJellybeanR1(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
 
 /**
  * @return True if running on API version >= 18
  */
-fun isJellybeanR2(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
+inline fun isJellybeanR2(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
 
 /**
  * @return True if running on API version >= 19
  */
-fun isKitkat(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+inline fun isKitkat(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
 /**
  * @return  True if running on API version >= 21
  */
-fun isLollipop(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+inline fun isLollipop(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
 /**
  * @return True if running on API version >= 23
  */
-fun isMarshmallow(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+inline fun isMarshmallow(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

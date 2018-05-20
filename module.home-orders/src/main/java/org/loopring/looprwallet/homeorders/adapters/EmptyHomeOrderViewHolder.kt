@@ -3,7 +3,7 @@ package org.loopring.looprwallet.homeorders.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_general_orders_empty.*
+import kotlinx.android.synthetic.main.view_holder_home_orders_empty.*
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.homeorders.R
 

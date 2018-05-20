@@ -2,8 +2,10 @@ package org.loopring.looprwallet.homeorders.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import io.realm.OrderedRealmCollection
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_open_order_filter.*
+import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 
 /**
  * Created by Corey on 4/10/2018
@@ -14,7 +16,7 @@ import kotlinx.android.synthetic.main.view_holder_open_order_filter.*
  */
 class HomeOpenOrderFilterViewHolder(
         itemView: View,
-        onCancelAllClickListener: ((View) -> Unit)
+        onCancelAllClickListener: (View) -> Unit
 ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
 
     override val containerView: View
@@ -25,8 +27,9 @@ class HomeOpenOrderFilterViewHolder(
         openOrderCancelAllButton.setOnClickListener(onCancelAllClickListener)
     }
 
-    fun bind() {
-
+    fun bind(data: OrderedRealmCollection<AppLooprOrder>?) {
+        // If the data is null, invalid or empty --> the button is disabled
+        openOrderCancelAllButton.isEnabled = !(data == null || !data.isValid || data.size == 0)
     }
 
 }

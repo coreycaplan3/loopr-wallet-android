@@ -100,13 +100,13 @@ class ViewContactsFragment : BaseFragment() {
 
     }
 
-    override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
+    override fun initializeFloatingActionButton(fab: FloatingActionButton) {
 
         when (fragmentType) {
-            KEY_VIEW_ALL -> floatingActionButton.apply {
+            KEY_VIEW_ALL -> fab.apply {
                 isVisible = true
 
-                val fabDrawable = ApplicationUtility.drawable(R.drawable.ic_person_add_white_24dp)
+                val fabDrawable = ApplicationUtility.drawable(R.drawable.ic_person_add_white_24dp, fab.context)
                 DrawableCompat.setTint(fabDrawable, Color.WHITE)
                 setImageDrawable(fabDrawable)
 

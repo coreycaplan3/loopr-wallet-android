@@ -66,7 +66,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     lateinit var securitySettings: SecuritySettings
 
     private val tokenBalanceViewModel: EthereumTokenBalanceViewModel by lazy {
-        LooprViewModelFactory.get<EthereumTokenBalanceViewModel>(this@HomeMyWalletFragment)
+        LooprViewModelFactory.get<EthereumTokenBalanceViewModel>(activity!!, "balance")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -108,6 +108,14 @@
         <item name="contentPadding">@dimen/standard_padding</item>
     </style>
 
+    <style name="App.Card.Selectable" parent="App.Card">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:background">?attr/cardBackgroundColor</item>
+        <item name="android:foreground">@drawable/view_group_ripple_background</item>
+    </style>
+
     <style name="App.Card.Title">
         <item name="contentPaddingLeft">@dimen/card_padding_horizontal</item>
         <item name="contentPaddingRight">@dimen/card_padding_horizontal</item>
@@ -128,16 +136,16 @@
 
     <!-- Dialogs -->
 
-    <style name="App.Dialog" parent="ThemeOverlay.AppCompat.Dialog" />
+    <style name="App.Dialog" />
 
-    <style name="App.Dialog.Alert" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+    <style name="App.Dialog.Alert" parent="Theme.AppCompat.Dialog.Alert">
         <!-- To tint EditText and TimePicker -->
         <item name="colorAccent">@color/darkAccent</item>
     </style>
 
     <style name="App.Dialog.Alert.Light" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <!-- To tint EditText and TimePicker -->
-        <item name="colorAccent">@color/lightAccent</item>
+        <item name="colorAccent">?attr/colorAccent</item>
     </style>
 
     <style name="App.Dialog.BottomSheet" parent="ThemeOverlay.AppCompat.Dialog">

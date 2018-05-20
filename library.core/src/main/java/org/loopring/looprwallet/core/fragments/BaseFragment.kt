@@ -168,14 +168,14 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     }
 
     /**
-     * Called when the [floatingActionButton] is safe to be initialized. This may include setting
+     * Called when the [fab] is safe to be initialized. This may include setting
      * its visibility, click listeners, icons, etc.
      *
      * The default implementation sets the fab's visibility to GONE (it assumes the fragment does
      * not need a fab).
      */
-    open fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.visibility = View.GONE
+    open fun initializeFloatingActionButton(fab: FloatingActionButton) {
+        fab.visibility = View.GONE
     }
 
     final override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {}
@@ -301,35 +301,8 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
             adapter: BaseRealmAdapter<E>,
             data: OrderedRealmCollection<E>
     ) {
-        setupOfflineFirstDataObserverForAdapter<E, Any>(viewModel, adapter, data)
-    }
-
-    /**
-     * Sets up the offline-first data observer by updating the [adapter] and removing the
-     * [viewModel]'s data observer (since the [adapter] registers its own data observer).
-     *
-     * @param viewModel The view model whose data observer will be unregistered
-     * @param adapter The adapter whose data will be updated
-     * @param data The data that will be bound to the [adapter]
-     */
-    protected inline fun <E : RealmModel, reified T : Any> setupOfflineFirstDataObserverForAdapter(
-            viewModel: OfflineFirstViewModel<*, *>?,
-            adapter: BaseRealmAdapter<E>,
-            data: OrderedRealmCollection<E>,
-            sortByProperty: KProperty<T>? = null,
-            sortOrder: Sort = Sort.ASCENDING
-    ) {
-        viewModel?.removeDataObserver(this) // TODO fix me
-
-        if (sortByProperty != null) {
-            val sortedData = data.where()
-                    .sort(sortByProperty, sortOrder)
-                    .findAllAsync()
-
-            adapter.updateData(sortedData)
-        } else {
-            adapter.updateData(data)
-        }
+        viewModel?.removeDataObserver(this)
+        adapter.updateData(data)
     }
 
     /**

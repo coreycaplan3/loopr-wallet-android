@@ -4,9 +4,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_markets.*
+import kotlinx.android.synthetic.main.view_holder_markets_filter.*
+import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
+import org.loopring.looprwallet.core.utilities.FilterButtonUtility
 import org.loopring.looprwallet.core.utilities.ImageUtility
 import org.loopring.looprwallet.homemarkets.R
 import org.loopring.looprwallet.homemarkets.dagger.homeMarketsLooprComponent
@@ -39,6 +42,7 @@ class MarketsViewHolder(itemView: View, onTradingPairClick: (Int) -> Unit)
 
     fun bind(tradingPair: TradingPair) {
         val context = itemView.context
+
         val image = ImageUtility.getImageFromTicker(tradingPair.primaryTicker, context)
         marketsImage.setImageDrawable(image)
 
@@ -52,8 +56,7 @@ class MarketsViewHolder(itemView: View, onTradingPairClick: (Int) -> Unit)
         }
         marketsPercentageChangeLabel.text = tradingPair.change24h
 
-        val formatter = currencySettings.getCurrencyFormatter()
-        marketsCurrentPriceLabel.text = formatter.format(tradingPair.lastPrice)
+        marketsCurrentPriceLabel.text = tradingPair.lastPrice?.formatAsToken(currencySettings, tradingPair.secondaryToken)
     }
 
 }

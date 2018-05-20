@@ -39,7 +39,7 @@ class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedList
         get() = R.layout.fragment_view_transfers
 
     private val viewAllTransfersViewModel: ViewAllTransfersViewModel by lazy {
-        LooprViewModelFactory.get<ViewAllTransfersViewModel>(this)
+        LooprViewModelFactory.get<ViewAllTransfersViewModel>(activity!!, "transfers")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,12 +68,12 @@ class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedList
         viewTransfersRecyclerView.adapter = adapter
     }
 
-    override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.setImageResource(R.drawable.ic_send_white_24dp)
-        floatingActionButton.setOnClickListener {
+    override fun initializeFloatingActionButton(fab: FloatingActionButton) {
+        fab.setImageResource(R.drawable.ic_send_white_24dp)
+        fab.setOnClickListener {
             CreateTransferActivity.route(this)
         }
-        viewTransfersRecyclerView.setupWithFab(floatingActionButton)
+        viewTransfersRecyclerView.setupWithFab(fab)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

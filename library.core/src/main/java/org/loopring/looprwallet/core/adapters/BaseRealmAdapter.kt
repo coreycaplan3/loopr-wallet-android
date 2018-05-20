@@ -56,10 +56,13 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      */
     var onLoadMore: () -> Unit = {}
 
+    private var isFiltering: Boolean = false
+
     /**
      * Filters the data using a like query, based on the given [property] and [value].
      */
     fun filterData(propertyList: List<KProperty<*>> = listOf(), property: KProperty<String>, value: String) {
+        isFiltering = true
         data = data?.where()
                 ?.like(propertyList, property, value)
                 ?.findAllAsync()
@@ -72,11 +75,12 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      * applied)
      */
     fun clearFilter() {
+        isFiltering = false
         updateData(pager.data)
     }
 
     final override fun getItemViewType(position: Int): Int {
-        val data = pager.data
+        val data = data
 
         return when {
             data == null -> TYPE_LOADING_INITIAL
@@ -154,6 +158,7 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
 
     final override fun getItemCount(): Int = data?.let {
         val addition = when {
+            it.size == 0 -> 1
             pager.containsMoreData && containsHeader -> 2
             else -> 1
         }
@@ -204,8 +209,18 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
 
     private fun addChangeListener(data: OrderedRealmCollection<T>?) {
         when (data) {
-            is RealmList -> data.addChangeListener { _: RealmList<T> -> notifyDataSetChanged() }
-            is RealmResults -> data.addChangeListener { _: RealmResults<T> -> notifyDataSetChanged() }
+            is RealmList -> data.addChangeListener { data: RealmList<T> ->
+                if (!isFiltering) {
+                    this.data = data
+                }
+                notifyDataSetChanged()
+            }
+            is RealmResults -> data.addChangeListener { data: RealmResults<T> ->
+                if (!isFiltering) {
+                    this.data = data
+                }
+                notifyDataSetChanged()
+            }
         }
     }
 

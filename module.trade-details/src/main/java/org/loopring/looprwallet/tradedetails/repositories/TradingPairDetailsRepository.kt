@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.tradedetails.repositories
 
 import android.arch.lifecycle.LiveData
+import io.realm.Case
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
@@ -31,8 +32,7 @@ class TradingPairDetailsRepository : BaseRealmRepository() {
     fun getTradingPairByMarket(primaryTicker: String, secondaryTicker: String, context: HandlerContext = UI): LiveData<TradingPair> {
         return getRealmFromContext(context)
                 .where<TradingPair>()
-                .equalTo(TradingPair::primaryTicker, primaryTicker)
-                .equalTo(TradingPair::secondaryTicker, secondaryTicker)
+                .equalTo(TradingPair::market, "$primaryTicker-$secondaryTicker", Case.INSENSITIVE)
                 .findFirstAsync()
                 .asLiveData()
     }

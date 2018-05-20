@@ -150,9 +150,9 @@ class TradingPairDetailsFragment : BaseFragment() {
         setupChart()
     }
 
-    override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.apply {
-            val drawable = ApplicationUtility.drawable(R.drawable.ic_add_white_24dp)
+    override fun initializeFloatingActionButton(fab: FloatingActionButton) {
+        fab.apply {
+            val drawable = ApplicationUtility.drawable(R.drawable.ic_add_white_24dp, fab.context)
             DrawableCompat.setTint(drawable, Color.WHITE)
             this.setImageDrawable(drawable)
             this.setOnClickListener {
@@ -175,7 +175,7 @@ class TradingPairDetailsFragment : BaseFragment() {
     private val optionsItemSelected: (MenuItem?) -> Boolean = { item ->
         when (item?.itemId) {
             R.id.menuTradingPairFavorite -> {
-                tradingPair?.ifNotNull {
+                tradingPair?.let<TradingPair, Unit> {
 
                     runBlocking {
                         looprMarketsRepository.toggleIsFavorite(it.market).await()

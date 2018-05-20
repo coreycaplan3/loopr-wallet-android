@@ -1,6 +1,7 @@
 package org.loopring.looprwallet.wrapeth.fragments
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.constraint.ConstraintLayout
@@ -109,13 +110,19 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
         wrapEtherConvertButton.setOnClickListener(::onConvertButtonClick)
 
         depositEthViewModel.let {
-            setupTransactionViewModel(it, R.string.wrapping_eth_into_weth) { _ ->
+            it.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
+                onSuccess(true)
+            }
+            setupTransactionViewModel(it, R.string.wrapping_eth_into_weth, false) { _ ->
                 TODO("Add me...")
             }
         }
 
         withdrawEthViewModel.let {
-            setupTransactionViewModel(it, R.string.unwrapping_weth_into_eth) { _ ->
+            it.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
+                onSuccess(false)
+            }
+            setupTransactionViewModel(it, R.string.unwrapping_weth_into_eth, false) { _ ->
                 TODO("Add me...")
             }
         }
@@ -281,6 +288,16 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
                 }
                 .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss() }
                 .show()
+    }
+
+    private fun onSuccess(isDepositEth: Boolean) = activity?.let {
+        it.finish()
+
+        if (isDepositEth) {
+            it.longToast(R.string.your_eth_will_be_converted)
+        } else {
+            it.longToast(R.string.your_weth_will_be_converted)
+        }
     }
 
     @SuppressLint("SetTextI18n")

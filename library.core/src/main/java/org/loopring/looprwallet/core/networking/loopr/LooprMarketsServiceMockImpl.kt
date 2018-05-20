@@ -9,6 +9,7 @@ import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairTrend
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
+import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService.Companion.SYNC_CONTEXT
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprMarketPairs
@@ -36,6 +37,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
             this.sell = BigDecimal(Math.random())
             this.vol = BigDecimal(Math.random() * 1000.0)
             this.amount = BigDecimal(Math.random() * 10.0)
+            this.last = (buy!! + sell!!) / BigDecimal("2.0")
 
             val amount = BigDecimal(Math.random()).setScale(2, RoundingMode.HALF_EVEN)
             if (Math.random() >= 0.5) {
@@ -46,6 +48,8 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         }
 
         val lrcTradingPair = TradingPair("LRC-WETH", getRandomLooprTicker("LRC-WETH"), LooprToken.LRC, LooprToken.WETH)
+
+        val appcTradingPair = TradingPair("LRC-WETH", getRandomLooprTicker("APPC-WETH"), LooprToken.APPC, LooprToken.WETH)
 
         val reqTradingPair = TradingPair("REQ-WETH", getRandomLooprTicker("REQ-WETH"), LooprToken.REQ, LooprToken.WETH)
 
@@ -63,8 +67,8 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         }
     }
 
-    override fun syncSupportedMarkets(): Deferred<Unit> = async(NET) {
-        delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
+    override fun syncSupportedMarkets(): Deferred<Unit> = async(SYNC_CONTEXT) {
+        delay(3000L) // purposely make this take a long time
 
         if (NetworkUtility.isNetworkAvailable()) {
             val repository = BaseRealmRepository()

@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.utilities
 import io.realm.RealmConfiguration.KEY_LENGTH
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.extensions.update
+import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingContainer
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import java.security.SecureRandom
@@ -60,6 +61,7 @@ object RealmUtility {
                     it.criteria == newContainer.criteria
                 }
                 if (!didUpdatePagingItem) {
+                    // It's not in the list, so we can just add it
                     oldContainer.pagingItems.add(pagingItem)
                 }
 
@@ -68,14 +70,24 @@ object RealmUtility {
                         diffPredicate(oldOrder, newOrder)
                     }
                     if (!didUpdateOrder) {
+                        // It's not in the list, so we can just add it
                         oldContainer.data.add(newOrder)
                     }
                 }
 
+                repository.runTransaction {
+                    it.upsert(oldContainer.data)
+                    it.upsert(oldContainer)
+                }
                 repository.add(oldContainer)
             }
 
-            else -> repository.add(newContainer)
+            else ->
+                // The container doesn't exist yet
+                repository.runTransaction {
+                    it.upsert(newContainer.data)
+                    it.upsert(newContainer)
+                }
         }
     }
 

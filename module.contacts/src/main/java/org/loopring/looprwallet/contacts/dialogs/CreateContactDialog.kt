@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageButton
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_create_contact.*
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.contacts.R
@@ -63,10 +64,13 @@ class CreateContactDialog : BaseBottomSheetDialog() {
             val address = contactAddressEditText.text.toString()
             val contact = Contact(address, contactName)
 
-            async(IO) {
-                repository.add(contact)
+            async(UI) {
+                async(IO) {
+                    repository.add(contact)
+                }.await()
+
+                dismissAllowingStateLoss()
             }
-            dismissAllowingStateLoss()
         }
     }
 

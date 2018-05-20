@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/App.ViewGroup.Selectable"
+    style="@style/App.Card.Selectable"
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:layout_marginLeft="@dimen/horizontal_margin_small"
     android:layout_marginRight="@dimen/horizontal_margin_small"
     android:layout_marginTop="@dimen/vertical_margin_small"
-    android:paddingBottom="@dimen/vertical_padding_small"
-    android:paddingLeft="@dimen/horizontal_padding"
-    android:paddingRight="@dimen/horizontal_padding"
-    android:paddingTop="@dimen/vertical_padding_small">
+    app:cardUseCompatPadding="true"
+    app:contentPaddingBottom="@dimen/vertical_padding_small"
+    app:contentPaddingTop="@dimen/vertical_padding_small">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/marketsImage"
@@ -79,14 +79,14 @@
                 style="@style/Base.TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
+                android:layout_gravity="end"
                 android:textColor="@color/material_green"
-                android:textSize="@dimen/list_secondary_text_size"
+                android:textSize="@dimen/list_primary_text_size"
                 tools:text="@string/default_trading_pair_percentage_change" />
 
             <TextView
                 android:id="@+id/marketsCurrentPriceLabel"
-                style="@style/Base.TextAppearance.AppCompat.Body1"
+                style="@style/Base.TextAppearance.AppCompat.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/vertical_margin_extra_small"
@@ -98,4 +98,4 @@
 
     </RelativeLayout>
 
-</FrameLayout>
+</android.support.v7.widget.CardView>

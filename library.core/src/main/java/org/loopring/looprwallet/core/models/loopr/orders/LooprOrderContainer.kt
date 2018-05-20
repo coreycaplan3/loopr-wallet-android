@@ -1,7 +1,9 @@
 package org.loopring.looprwallet.core.models.loopr.orders
 
+import io.realm.OrderedRealmCollection
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.annotations.Ignore
 import io.realm.annotations.PrimaryKey
 import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingContainer
 import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingItem
@@ -24,8 +26,11 @@ open class LooprOrderContainer(
         @PrimaryKey override var criteria: String = "",
         override var pageSize: Int = 50,
         override var pagingItems: RealmList<LooprPagingItem> = RealmList(),
-        override var data: RealmList<AppLooprOrder> = RealmList()
+        @Ignore var orderList: OrderedRealmCollection<AppLooprOrder> = RealmList()
 ) : RealmObject(), LooprPagingContainer<AppLooprOrder> {
+
+    override val data: OrderedRealmCollection<AppLooprOrder>
+        get() = orderList
 
     companion object {
 

@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import io.realm.Sort
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
@@ -41,7 +42,7 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     private var adapter: HomeOrderAdapter? = null
 
     private val homeOrdersViewModel: HomeOrdersViewModel by lazy {
-        LooprViewModelFactory.get<HomeOrdersViewModel>(this)
+        LooprViewModelFactory.get<HomeOrdersViewModel>(activity!!, "orders-$orderType")
     }
 
     override val currentStatusFilter: String
@@ -118,7 +119,6 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
         val adapter = adapter ?: return
 
         homeOrdersViewModel.getOrders(this, orderFilter) { orderContainer ->
-
             setupOfflineFirstDataObserverForAdapter(homeOrdersViewModel, adapter, orderContainer.data)
             (adapter.pager as? OrderSummaryPager)?.orderContainer = orderContainer
 

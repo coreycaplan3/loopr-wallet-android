@@ -1,7 +1,9 @@
 package org.loopring.looprwallet.core.models.loopr.paging
 
+import io.realm.OrderedRealmCollection
 import io.realm.RealmList
 import io.realm.RealmModel
+import io.realm.annotations.Ignore
 
 /**
  * Created by corey on 5/12/18
@@ -19,6 +21,6 @@ interface LooprPagingContainer<T : RealmModel>: RealmModel {
 
     var pagingItems: RealmList<LooprPagingItem>
 
-    var data: RealmList<T>
+    val data: OrderedRealmCollection<T>
 
 }

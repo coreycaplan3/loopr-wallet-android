@@ -19,6 +19,7 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.orderdetails.R
 import org.loopring.looprwallet.orderdetails.adapters.OrderDetailsAdapter
+import org.loopring.looprwallet.orderdetails.adapters.OrderDetailsAdapterPager
 import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
 import org.loopring.looprwallet.orderdetails.viewmodels.CancelOrderViewModel
 import org.loopring.looprwallet.orderdetails.viewmodels.OrderFillsViewModel
@@ -93,7 +94,7 @@ class OrderDetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         toolbar?.setTitle(R.string.order_details)
-        toolbar?.navigationIcon = drawable(R.drawable.ic_clear_white_24dp)
+        toolbar?.navigationIcon = drawable(R.drawable.ic_clear_white_24dp, view.context)
 
         cancelOrderViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
             view.context.longToast(R.string.your_orders_will_be_cancelled)
@@ -172,8 +173,8 @@ class OrderDetailsFragment : BaseFragment() {
 
         // We can now retrieve order fills, since we initialized the adapter with the order data
         orderFillsViewModel.getOrderFills(this, orderFilter) {
-            (adapter.pager as OrderFillLooprPager).orderFillContainer = it
-            setupOfflineFirstDataObserverForAdapter(orderFillsViewModel, adapter, it.data, LooprOrderFill::tradeDate, Sort.ASCENDING)
+            (adapter.pager as? OrderDetailsAdapterPager)?.orderFillContainer = it
+            setupOfflineFirstDataObserverForAdapter(orderFillsViewModel, adapter, it.data)
         }
         setupOfflineFirstStateAndErrorObserver(orderFillsViewModel, orderDetailsSwipeRefreshLayout)
     }

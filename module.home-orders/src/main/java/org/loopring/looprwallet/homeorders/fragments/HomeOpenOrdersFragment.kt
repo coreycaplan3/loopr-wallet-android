@@ -28,7 +28,7 @@ import org.loopring.looprwallet.orderdetails.viewmodels.CancelOrderViewModel
 class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
 
     override val layoutResource: Int
-        get() = R.layout.fragment_general_orders
+        get() = R.layout.fragment_home_orders
 
     override val swipeRefreshLayout: SwipeRefreshLayout?
         get() = findViewById(R.id.fragmentContainerSwipeRefresh)

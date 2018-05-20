@@ -40,6 +40,11 @@ open class TradingPair(
 
     var isFavorite: Boolean = false
 
+    var changeAsNumber: Double = looprTicker?.change?.let {
+        val index = it.indexOf('%')
+        StringBuilder(it).deleteCharAt(index).toString().toDouble()
+    } ?: 0.00
+
     val lastPrice: BigDecimal?
         get() = looprTicker?.last
 

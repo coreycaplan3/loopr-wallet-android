@@ -47,6 +47,8 @@ class MainActivity : BaseActivity(), BottomNavigation, OnSecurityConfirmedListen
 
     companion object {
 
+        private const val KEY_REMOVE_CURRENT_WALLET = "_REMOVE_CURRENT_WALLET"
+
         /**
          * Starts this activity (as normal), clearing any previous tasks which may have pointed to
          * here.
@@ -70,7 +72,6 @@ class MainActivity : BaseActivity(), BottomNavigation, OnSecurityConfirmedListen
             activity.startActivity(intent)
         }
 
-        private const val KEY_REMOVE_CURRENT_WALLET = "_REMOVE_CURRENT_WALLET"
     }
 
     override val contentViewRes: Int
@@ -153,7 +154,7 @@ class MainActivity : BaseActivity(), BottomNavigation, OnSecurityConfirmedListen
 
     override fun onSupportNavigateUp(): Boolean {
         val searchViewPresenter = (bottomNavigationPresenter.currentFragment as? SearchViewPresenter.SearchFragment)?.searchViewPresenter
-        if(searchViewPresenter?.isExpanded == true) {
+        if (searchViewPresenter?.isExpanded == true) {
             // We cannot do anything if it's currently in "search" mode
             return false
         }
@@ -270,8 +271,22 @@ class MainActivity : BaseActivity(), BottomNavigation, OnSecurityConfirmedListen
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, adapterItems)
 
         AlertDialog.Builder(this)
+                .setTitle(R.string.select_a_wallet)
                 .setAdapter(adapter) { dialog, position ->
-                    if (walletClient.getCurrentWallet() == allWallets[position]) {
+                    dialog.dismiss()
+                    onDeleteWalletClick(toolbar, allWallets[position])
+                }.show()
+    }
+
+    private fun onDeleteWalletClick(toolbar: Toolbar, selectedWallet: LooprWallet) {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.question_remove_wallet)
+                .setMessage(str(R.string.formatter_remove_wallet_message).format(selectedWallet.walletName))
+                .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .setPositiveButton(R.string.remove) { dialog, _ ->
+                    if (walletClient.getCurrentWallet() == selectedWallet) {
                         // We need to restart the activity and remove the wallet while there are NO
                         // realms open
                         onItemSelected = { MainActivity.routeClearOldTasksAndRemoveCurrentWallet(this) }
@@ -280,7 +295,7 @@ class MainActivity : BaseActivity(), BottomNavigation, OnSecurityConfirmedListen
                     } else {
                         // The wallet to delete is not the current one
                         // "It's not my wallet" - Patrick
-                        walletClient.removeWallet(allWallets[position].walletName)
+                        walletClient.removeWallet(selectedWallet.walletName)
 
                         // Reset the menu
                         setupNavigationDrawerMenu(toolbar)

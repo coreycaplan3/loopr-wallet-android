@@ -1,8 +1,8 @@
 package org.loopring.looprwallet.orderdetails.adapters
 
 import io.realm.OrderedRealmCollection
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
+import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFillContainer
 import org.loopring.looprwallet.core.models.loopr.orders.OrderFillFilter
 import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 
@@ -14,12 +14,12 @@ import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
  * Purpose of Class:
  *
  */
-class OrderDetailsAdapterPager(val orderFillFilter: OrderFillFilter) : LooprAdapterPager<LooprOrderFill> {
+class OrderDetailsAdapterPager(val filter: OrderFillFilter) : LooprAdapterPager<LooprOrderFill> {
 
-    var orderFillContainer: LooprOrderContainer? = null
+    var orderFillContainer: LooprOrderFillContainer? = null
 
     override val currentPage: Int
-        get() = orderFillFilter.pageNumber
+        get() = filter.pageNumber
 
     override val itemsPerPage: Int
         get() = OrderFillFilter.ITEMS_PER_PAGE
@@ -30,6 +30,6 @@ class OrderDetailsAdapterPager(val orderFillFilter: OrderFillFilter) : LooprAdap
         } ?: -1
 
     override var data: OrderedRealmCollection<LooprOrderFill>?
-        get() = orderFillContainer?.data as? OrderedRealmCollection<LooprOrderFill>
+        get() = orderFillContainer?.data
         set(value) {}
 }

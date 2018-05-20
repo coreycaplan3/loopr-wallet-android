@@ -2,6 +2,7 @@ package org.loopring.looprwallet.homeorders.viewmodels
 
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
+import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
@@ -46,7 +47,11 @@ class HomeOrdersViewModel : OfflineFirstViewModel<LooprOrderContainer, OrderSumm
     }
 
     override fun getLiveDataFromRepository(parameter: OrderSummaryFilter): LiveData<LooprOrderContainer> {
-        return repository.getOrders(parameter)
+        return repository.getOrderContainer(parameter)
+                .also {
+                    it.orderList = repository.getOrders(parameter)
+                }
+                .asLiveData()
     }
 
     override fun isRefreshNecessary(parameter: OrderSummaryFilter): Boolean {

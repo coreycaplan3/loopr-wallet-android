@@ -42,7 +42,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     private var adapter: HomeMarketsAdapter? = null
 
     private val homeMarketsViewModel by lazy {
-        LooprViewModelFactory.get<HomeMarketsViewModel>(this)
+        LooprViewModelFactory.get<HomeMarketsViewModel>(activity!!, "markets-$isFavorites")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,7 +78,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     }
 
     final override fun onSortByChange(newSortByFilter: String) {
-        setMarketsLiveData()
+        homeMarketsViewModel.onSortByChange(newSortByFilter)
     }
 
     final override fun onDateFilterChange(newDateFilter: String) {
@@ -109,7 +109,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         val adapter = adapter ?: return
 
         val marketsFilter = TradingPairFilter(isFavorites, adapter.dateFilter)
-        homeMarketsViewModel.getHomeMarkets(this, marketsFilter) { data ->
+        homeMarketsViewModel.getHomeMarkets(this, marketsFilter, adapter.sortBy) { data ->
             setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, data)
         }
     }

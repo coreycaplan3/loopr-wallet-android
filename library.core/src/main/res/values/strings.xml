@@ -347,4 +347,10 @@
     <string name="rationale_cancel_order">Are you sure you want to cancel this order? This action cannot be undone.</string>
     <string name="changing_theme">Changing theme…</string>
     <string name="formatter_convert_weth_to_eth">Are you sure you want to convert %1$s to %2$s?</string>
+    <string name="sort_by">Sort By</string>
+    <string name="select_a_wallet">Select a Wallet</string>
+    <string name="question_remove_wallet">Remove Wallet?</string>
+    <string name="remove">Remove</string>
+    <string name="your_eth_will_be_converted">Your ETH will be converted…</string>
+    <string name="your_weth_will_be_converted">Your WETH will be converted…</string>
 </resources>

@@ -19,7 +19,7 @@ interface InflatableAdapter {
     /**
      * Gets the layoutInflater and initializes it, if necessary
      */
-    fun getInflater(parent: ViewGroup): LayoutInflater {
+    fun getInflater(parent: ViewGroup): LayoutInflater = synchronized(this) {
         return this.layoutInflater ?: LayoutInflater.from(parent.context).also {
             this.layoutInflater = it
         }

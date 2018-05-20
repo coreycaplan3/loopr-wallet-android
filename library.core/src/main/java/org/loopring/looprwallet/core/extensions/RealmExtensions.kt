@@ -256,7 +256,7 @@ inline fun <E : RealmModel, reified T> RealmQuery<E>.notEqualTo(
  */
 inline fun <E : RealmModel, reified T> RealmQuery<E>.sort(
         orderedNestedFields: List<KProperty<*>>,
-        lastField: KProperty<T>,
+        lastField: KProperty<T?>,
         sortOrder: Sort = Sort.ASCENDING
 ): RealmQuery<E> {
     val formattedFields: String = RealmUtility.formatNestedFields(orderedNestedFields, lastField)
@@ -280,7 +280,7 @@ inline fun <E : RealmModel, reified T> RealmQuery<E>.sort(
  * @param sortOrder Either [Sort.DESCENDING] or [Sort.ASCENDING]
  */
 inline fun <E : RealmModel, reified T : Any> RealmQuery<E>.sort(
-        sortField: KProperty<T>,
+        sortField: KProperty<T?>,
         sortOrder: Sort = Sort.ASCENDING
 ): RealmQuery<E> {
     return this.sort(listOf(), sortField, sortOrder)

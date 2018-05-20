@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_general_order.*
+import kotlinx.android.synthetic.main.view_holder_home_order.*
 import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter

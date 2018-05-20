@@ -115,8 +115,8 @@ abstract class BaseSecurityFragment : BaseFragment(), NumberPadPresenter.NumberP
 
         fun setPinCircle(image: ImageView, minSize: Int) {
             val d = when {
-                currentPin.length >= minSize -> drawable(R.drawable.primary_color_circle_filled)
-                else -> drawable(R.drawable.primary_color_circle)
+                currentPin.length >= minSize -> drawable(R.drawable.primary_color_circle_filled, image.context)
+                else -> drawable(R.drawable.primary_color_circle, image.context)
             }
             DrawableCompat.setTint(d, col(image.context.theme.getResourceIdFromAttrId(R.attr.colorPrimary)))
 

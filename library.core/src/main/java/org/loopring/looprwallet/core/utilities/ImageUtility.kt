@@ -6,6 +6,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.logd
+import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 
 /**
@@ -29,10 +30,11 @@ object ImageUtility {
     fun getImageFromTicker(ticker: String, context: Context): Drawable {
         return try {
             val fieldName = "token_${ticker.toLowerCase().trim()}"
-            drawable(R.drawable::class.java.getField(fieldName).getInt(null))
+            val drawableClass = R.drawable::class.java
+            drawable(drawableClass.getField(fieldName).getInt(null), context)
         } catch (e: Throwable) {
-//            logd("Could not load image for $ticker: ", e)
-            drawable(R.drawable.ic_help_outline_white_24dp).apply {
+            logw("Could not load image for $ticker")
+            drawable(R.drawable.ic_help_outline_white_24dp, context).apply {
                 val textColor = context.theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary)
                 DrawableCompat.setTint(this, ApplicationUtility.col(textColor))
             }

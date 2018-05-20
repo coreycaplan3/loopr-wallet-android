@@ -4,17 +4,20 @@ import android.arch.lifecycle.LiveData
 import io.realm.Case
 import io.realm.OrderedRealmCollection
 import io.realm.RealmList
+import io.realm.Sort
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.sort
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
+import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprTicker
 
 /**
  * Created by Corey Caplan on 4/7/18.
@@ -74,10 +77,17 @@ class LooprMarketsRepository : BaseRealmRepository() {
         return tradingPair?.let { getRealmFromContext(context).copyFromRealm(it) }
     }
 
-    fun getMarkets(filter: TradingPairFilter, context: HandlerContext = UI): LiveData<OrderedRealmCollection<TradingPair>> {
+    fun getMarkets(filter: TradingPairFilter, sortBy: String, context: HandlerContext = UI): LiveData<OrderedRealmCollection<TradingPair>> {
         return getRealmFromContext(context)
                 .where<TradingPair>()
                 .equalTo(TradingPair::isFavorite, filter.isFavorites)
+                .apply {
+                    when (sortBy) {
+                        TradingPairFilter.SORT_BY_TICKER_ASC -> sort(TradingPair::market)
+                        TradingPairFilter.SORT_BY_PERCENTAGE_CHANGE_ASC -> sort(TradingPair::changeAsNumber)
+                        TradingPairFilter.SORT_BY_PERCENTAGE_CHANGE_DESC -> sort(TradingPair::changeAsNumber, Sort.DESCENDING)
+                    }
+                }
                 .findAllAsync()
                 .asLiveData()
     }

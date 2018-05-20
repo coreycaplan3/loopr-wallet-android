@@ -33,10 +33,10 @@ class OrderProgressView
             val colorAccent = col(context.theme.getResourceIdFromAttrId(R.attr.colorAccent))
             openOrderProgressLabel.text = "$value%"
             if (value == 0) {
-                openOrderProgress.progressDrawable = drawable(R.drawable.progress_circle_none)
+                openOrderProgress.progressDrawable = drawable(R.drawable.progress_circle_none, context)
                 openOrderProgress.progress = 100
             } else {
-                openOrderProgress.progressDrawable = drawable(R.drawable.progress_circle)
+                openOrderProgress.progressDrawable = drawable(R.drawable.progress_circle, context)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     openOrderProgress.setProgress(value, true)
                 } else {

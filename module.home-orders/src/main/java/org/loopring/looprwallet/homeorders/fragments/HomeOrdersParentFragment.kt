@@ -86,11 +86,11 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
         }
     }
 
-    override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
-        val drawable = drawable(R.drawable.ic_add_white_24dp)
+    override fun initializeFloatingActionButton(fab: FloatingActionButton) {
+        val drawable = drawable(R.drawable.ic_add_white_24dp, fab.context)
         DrawableCompat.setTint(drawable, Color.WHITE)
-        floatingActionButton.setImageDrawable(drawable)
-        floatingActionButton.setOnClickListener {
+        fab.setImageDrawable(drawable)
+        fab.setOnClickListener {
             activity?.let { CreateOrderActivity.route(it, null) }
         }
     }

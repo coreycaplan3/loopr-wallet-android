@@ -6,6 +6,7 @@ import android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.support.annotation.DrawableRes
+import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -14,6 +15,7 @@ import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.isJellybeanR1
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 
 
 /**
@@ -39,8 +41,8 @@ object ViewUtility {
         }
     }
 
-    fun getNavigationIcon(@DrawableRes drawableResource: Int, theme: Resources.Theme): Drawable {
-        val drawable = ApplicationUtility.drawable(drawableResource)
+    fun getNavigationIcon(@DrawableRes drawableRes: Int, theme: Resources.Theme): Drawable {
+        val drawable = drawable(drawableRes, CoreLooprWalletApp.context)
         DrawableCompat.setTint(drawable, col(theme.getResourceIdFromAttrId(R.attr.titleTextColor)))
         return drawable
     }

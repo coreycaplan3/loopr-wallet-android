@@ -9,7 +9,9 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_markets_filter.*
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
+import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.utilities.FilterButtonUtility
+import org.loopring.looprwallet.homemarkets.R
 
 /**
  * Created by Corey on 4/13/2018
@@ -30,6 +32,7 @@ class MarketsFilterViewHolder(itemView: View, private val listener: OnGeneralMar
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
         marketsSortBySpinner.adapter = sortByAdapter
+        marketsSortBySpinner.prompt = str(R.string.sort_by)
 
         marketsSortBySpinner.onItemSelectedListener = null
         marketsSortBySpinner.setSelection(0)

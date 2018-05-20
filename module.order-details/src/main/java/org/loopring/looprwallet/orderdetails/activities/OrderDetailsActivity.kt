@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.orderdetails.R
 import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
 
@@ -47,10 +48,13 @@ class OrderDetailsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            pushFragmentTransaction(
-                    OrderDetailsFragment.getInstance(orderHash),
-                    OrderDetailsFragment.TAG
-            )
+            val fragment = OrderDetailsFragment.getInstance(orderHash)
+            val tag = OrderDetailsFragment.TAG
+
+            FragmentTransactionController(R.id.activityContainer, fragment, tag).apply {
+                slideUpAndDownAnimation()
+                commitTransaction(supportFragmentManager)
+            }
         }
     }
 

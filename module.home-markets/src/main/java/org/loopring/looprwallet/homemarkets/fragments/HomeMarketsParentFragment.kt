@@ -85,9 +85,9 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         }
     }
 
-    override fun initializeFloatingActionButton(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.setImageResource(R.drawable.ic_card_giftcard_white_24dp)
-        floatingActionButton.setOnClickListener {
+    override fun initializeFloatingActionButton(fab: FloatingActionButton) {
+        fab.setImageResource(R.drawable.ic_card_giftcard_white_24dp)
+        fab.setOnClickListener {
             WrapEthActivity.route(activity!!)
         }
     }
