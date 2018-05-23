@@ -92,10 +92,17 @@ fun BigInteger.formatAsToken(settings: CurrencySettings, token: LooprToken): Str
 }
 
 /**
+ * Formats a [BigInteger] that has all padding, as a token for the UI. For example, "142.25 LRC"
+ */
+fun BigInteger.formatAsTokenNoTicker(settings: CurrencySettings, token: LooprToken): String {
+    return toBigDecimal(token).formatAsTokenNoTicker(settings)
+}
+
+/**
  * Formats a [BigDecimal] as a token for the UI. For example "132.29 LRC"
  */
 fun BigDecimal.formatAsTokenNoTicker(settings: CurrencySettings): String {
-    return settings.getNumberFormatter().format(this)
+    return settings.formatNumber(this)
 }
 
 /**
@@ -119,7 +126,8 @@ fun BigInteger.formatAsCurrency(settings: CurrencySettings): String {
  * 10000000000000000000 (equivalent of 10, with 18 decimals) becomes 10.000000000000000000
  */
 fun BigInteger.toBigDecimal(token: LooprToken): BigDecimal {
-    return BigDecimal(this, token.decimalPlaces) / (BigDecimal.TEN.pow(token.decimalPlaces))
+    val divisor = BigDecimal.TEN.pow(token.decimalPlaces).setScale(token.decimalPlaces, RoundingMode.HALF_EVEN)
+    return BigDecimal(this).divide(divisor)
 }
 
 /**
@@ -130,7 +138,7 @@ fun BigInteger.toBigDecimal(token: LooprToken): BigDecimal {
 fun BigDecimal.toBigInteger(token: LooprToken): BigInteger {
     val multiplier = BigDecimal.TEN.pow(token.decimalPlaces)
     return (this * multiplier) // this * 10^decimal
-            .setScale(token.decimalPlaces, RoundingMode.HALF_DOWN)
+            .setScale(0, RoundingMode.HALF_DOWN)
             .toBigInteger()
 }
 

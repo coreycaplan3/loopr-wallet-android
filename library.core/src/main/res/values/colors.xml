@@ -7,6 +7,9 @@
     <color name="red_400">#F44336</color>
     <color name="quantum_grey_600">#FF757575</color>
 
+    <color name="color_weth">#EC407A</color>
+    <color name="color_eth">#7986CB</color>
+
     <color name="materialRed">@color/red_400</color>
 
     <color name="materialGreen">#FF4CAF50</color>
@@ -52,6 +55,5 @@
     <color name="whiteTextPrimary">#FFFFFFFF</color>
     <color name="whiteTextSecondary">#B2FFFFFF</color>
     <color name="whiteTextDisabled">#7FFFFFFF</color>
-    <color name="color_weth">#EC407A</color>
 
 </resources>

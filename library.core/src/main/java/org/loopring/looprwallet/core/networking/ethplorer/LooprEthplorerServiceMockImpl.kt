@@ -42,12 +42,17 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
             setTokenPriceInfo(this)
         }
 
+        val zrx = LooprToken.ZRX.apply {
+            setTokenPriceInfo(this)
+        }
+
         private fun setTokenPriceInfo(token: CryptoToken) {
             token.priceInUsd = when (token.identifier) {
                 LooprToken.ETH.identifier -> BigInteger("500000")
                 LooprToken.LRC.identifier -> BigInteger("10000")
                 LooprToken.APPC.identifier -> BigInteger("50000")
                 LooprToken.REQ.identifier -> BigInteger("90000")
+                LooprToken.ZRX.identifier -> BigInteger("30000")
                 else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
             }
         }
@@ -61,7 +66,7 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
             blockNumber = BigInteger("4999998"),
             isSend = false,
             contactAddress = "0x0123456789abcdef0123456789abcdef01234567",
-            numberOfTokens = BigInteger("20"),
+            numberOfTokens = BigInteger("20000000000000000000"),
             usdValue = BigInteger("85493"),
             transactionFee = BigInteger("1"),
             transactionFeeUsdValue = BigInteger("24"),
@@ -73,7 +78,7 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
             blockNumber = BigInteger("49999"),
             isSend = false,
             contactAddress = "0x0123456789abcdef0123456789abcdef01234567",
-            numberOfTokens = BigInteger("30"),
+            numberOfTokens = BigInteger("3000000000000000000"),
             usdValue = BigInteger("63298"),
             transactionFee = BigInteger("1"),
             transactionFeeUsdValue = BigInteger("20"),
@@ -85,7 +90,7 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
             blockNumber = BigInteger("4999988"),
             isSend = true,
             contactAddress = "0x0123456789abcdef0123456789abcdef01234567",
-            numberOfTokens = BigInteger("5"),
+            numberOfTokens = BigInteger("525000000000000000"),
             usdValue = BigInteger("48726"),
             transactionFee = BigInteger("1"),
             transactionFeeUsdValue = BigInteger("25"),
@@ -97,9 +102,10 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
 
         if (NetworkUtility.isNetworkAvailable()) {
             setTokenBalanceInfo(address, eth)
-            setTokenBalanceInfo(address, lrc)
             setTokenBalanceInfo(address, appc)
+            setTokenBalanceInfo(address, lrc)
             setTokenBalanceInfo(address, req)
+            setTokenBalanceInfo(address, zrx)
 
             return@async RealmList<LooprToken>(eth, lrc, appc, req)
         } else {
@@ -133,10 +139,11 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
 
     private fun setTokenBalanceInfo(address: String, token: CryptoToken) {
         val balanceAmount = when (token.identifier) {
-            LooprToken.ETH.identifier -> BigInteger("10000")
-            LooprToken.LRC.identifier -> BigInteger("25000")
-            LooprToken.APPC.identifier -> BigInteger("000")
-            LooprToken.REQ.identifier -> BigInteger("25000")
+            LooprToken.ETH.identifier -> BigInteger("8230000000000000000")
+            LooprToken.LRC.identifier -> BigInteger("50000000000000000000000")
+            LooprToken.APPC.identifier -> BigInteger("78132890000000000000000")
+            LooprToken.REQ.identifier -> BigInteger("25000000000000000000000")
+            LooprToken.ZRX.identifier -> BigInteger("100000000000000000000")
             else -> throw IllegalArgumentException("Invalid token, found: ${token.identifier}")
         }
 

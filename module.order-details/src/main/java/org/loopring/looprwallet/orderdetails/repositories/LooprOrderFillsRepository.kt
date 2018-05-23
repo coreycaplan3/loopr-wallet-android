@@ -1,13 +1,13 @@
 package org.loopring.looprwallet.orderdetails.repositories
 
-import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import io.realm.RealmResults
+import io.realm.Sort
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
-import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
+import org.loopring.looprwallet.core.extensions.sort
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFillContainer
@@ -44,6 +44,7 @@ class LooprOrderFillsRepository : BaseRealmRepository() {
         return getRealmFromContext(context)
                 .where<LooprOrderFill>()
                 .equalTo(LooprOrderFill::orderHash, orderFillFilter.orderHash)
+                .sort(LooprOrderFill::tradeDate, Sort.ASCENDING)
                 .findAllAsync()
     }
 

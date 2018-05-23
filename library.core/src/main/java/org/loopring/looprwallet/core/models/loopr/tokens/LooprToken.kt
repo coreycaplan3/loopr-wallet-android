@@ -5,6 +5,8 @@ import io.realm.RealmObject
 import io.realm.annotations.Ignore
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
+import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
@@ -36,7 +38,7 @@ open class LooprToken(
 
         override var name: String = ETH.name,
 
-        totalSupply: BigInteger = BigInteger.ONE,
+        totalSupply: BigInteger = BigInteger.ZERO,
 
         override var decimalPlaces: Int = ETH.decimalPlaces,
 
@@ -79,7 +81,7 @@ open class LooprToken(
         val WETH = LooprToken(
                 "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
                 "WETH",
-                "Wrapped Ether",
+                "Wrapped ETH",
                 BigInteger("120000000000000000000000000"),
                 18
         )
@@ -137,6 +139,13 @@ open class LooprToken(
         }
 
     private var mPriceInUsd: String?
+
+    /**
+     * Finds a given address's [TokenAllowanceInfo] or null if it cannot be found
+     */
+    fun findAddressAllowance(address: String): BigInteger? {
+        return tokenAllowances.find { it?.address == address }?.allowance
+    }
 
     init {
         // Needed to set backing fields initially. They will be overwritten by the two calls below

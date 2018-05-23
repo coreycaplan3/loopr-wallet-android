@@ -50,7 +50,7 @@ class LoopringFeeSettingsFragment : BaseSettingsFragment() {
     override fun onPreferenceValueChange(preference: Preference, value: String) = true
 
     override fun getSummaryValue(preference: Preference, value: String): String = when (preference.key) {
-        KEY_LRC_FEE -> currencySettings.getNumberFormatter().format(value.toDouble())
+        KEY_LRC_FEE -> currencySettings.formatNumber(value.toDouble())
         KEY_MARGIN_SPLIT -> "" // We don't bind a summary value for this SeekBar
         else -> throw IllegalArgumentException("Invalid preference key, found: ${preference.key}")
     }

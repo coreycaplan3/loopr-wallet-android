@@ -3,7 +3,6 @@ package org.loopring.looprwallet.core.models.loopr.markets
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
-import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprTicker
 import java.math.BigDecimal
 
 /**
@@ -27,7 +26,6 @@ import java.math.BigDecimal
  */
 open class TradingPair(
         @PrimaryKey var market: String = "",
-        var looprTicker: LooprTicker? = null,
         primaryToken: LooprToken? = null,
         secondaryToken: LooprToken? = null
 ) : RealmObject() {
@@ -36,32 +34,64 @@ open class TradingPair(
 
         fun isValidMarket(market: String) = Regex("[A-Z]{2,7}-[A-Z]{2,7}").matches(market)
 
+        private fun convertPercentageChangeToNumber(change: String) = StringBuilder(change)
+                .deleteCharAt(change.indexOf('%'))
+                .toString()
+                .trim()
+                .toDouble()
+
     }
 
     var isFavorite: Boolean = false
 
-    var changeAsNumber: Double = looprTicker?.change?.let {
-        val index = it.indexOf('%')
-        StringBuilder(it).deleteCharAt(index).toString().toDouble()
-    } ?: 0.00
+    private var mLastPrice: String = BigDecimal.ZERO.toPlainString()
 
-    val lastPrice: BigDecimal?
-        get() = looprTicker?.last
+    var lastPrice: BigDecimal
+        get() = BigDecimal(mLastPrice)
+        set(value) {
+            mLastPrice = value.toPlainString()
+        }
 
-    val change24h: String?
-        get() = looprTicker?.change
+    private var mHighPrice: String = BigDecimal.ZERO.toPlainString()
 
-    val highPrice: BigDecimal?
-        get() = looprTicker?.high
+    var highPrice: BigDecimal
+        get() = BigDecimal(mHighPrice)
+        set(value) {
+            mHighPrice = value.toPlainString()
+        }
 
-    val lowPrice: BigDecimal?
-        get() = looprTicker?.low
+    private var mLowPrice: String = BigDecimal.ZERO.toPlainString()
 
-    val amountOfPrimary: BigDecimal?
-        get() = looprTicker?.amount
+    var lowPrice: BigDecimal
+        get() = BigDecimal(mLowPrice)
+        set(value) {
+            mLowPrice = value.toPlainString()
+        }
 
-    val volumeOfSecondary: BigDecimal?
-        get() = looprTicker?.vol
+    private var mAmountOfPrimary: String = BigDecimal.ZERO.toPlainString()
+
+    var amountOfPrimary: BigDecimal
+        get() = BigDecimal(mAmountOfPrimary)
+        set(value) {
+            mAmountOfPrimary = value.toPlainString()
+        }
+
+    private var mVolumeOfSecondary: String = BigDecimal.ZERO.toPlainString()
+
+    var volumeOfSecondary: BigDecimal
+        get() = BigDecimal(mVolumeOfSecondary)
+        set(value) {
+            mAmountOfPrimary = value.toPlainString()
+        }
+
+    var change24h: String = "0.00%"
+        set(value) {
+            field = value
+            change24hAsNumber = convertPercentageChangeToNumber(value)
+        }
+
+    var change24hAsNumber: Double = convertPercentageChangeToNumber(change24h)
+        private set
 
     val primaryTicker: String
         get() = market.split("-")[0]
@@ -74,7 +104,7 @@ open class TradingPair(
     var primaryToken: LooprToken
         get() = mPrimaryToken!!
         set(value) {
-            mPrimaryToken = primaryToken
+            mPrimaryToken = value
         }
 
     private var mSecondaryToken = secondaryToken
@@ -82,7 +112,7 @@ open class TradingPair(
     var secondaryToken: LooprToken
         get() = mSecondaryToken!!
         set(value) {
-            mSecondaryToken = secondaryToken
+            mSecondaryToken = value
         }
 
     init {

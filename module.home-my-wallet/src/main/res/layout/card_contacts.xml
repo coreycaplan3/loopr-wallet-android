@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/contactsPrimaryContainer"
             style="@style/App.Card.PrimaryContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:layout_constraintBottom_toTopOf="@id/cardContactsSecondaryContainer"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 style="@style/Base.TextAppearance.AppCompat.Headline"
@@ -20,22 +24,25 @@
                 android:layout_height="wrap_content"
                 android:text="@string/contacts" />
 
-        </LinearLayout>
+        </FrameLayout>
 
         <include
             layout="@layout/divider"
             android:layout_width="match_parent"
             android:layout_height="@dimen/divider_height"
-            android:layout_above="@id/cardContactsSecondaryContainer" />
+            app:layout_constraintBottom_toTopOf="@id/cardContactsSecondaryContainer"
+            app:layout_constraintTop_toTopOf="@id/cardContactsSecondaryContainer" />
 
         <LinearLayout
             android:id="@+id/cardContactsSecondaryContainer"
             style="@style/App.Card.ActionContainer"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:orientation="horizontal">
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/contactsPrimaryContainer">
 
             <ImageButton
                 android:id="@+id/viewAllContactsButton"
@@ -51,6 +58,6 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

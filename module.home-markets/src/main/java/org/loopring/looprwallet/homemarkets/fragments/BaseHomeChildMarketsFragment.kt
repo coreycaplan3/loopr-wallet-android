@@ -5,9 +5,8 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import org.loopring.looprwallet.core.extensions.ifNotNull
+import io.realm.Sort
+import org.loopring.looprwallet.core.extensions.sort
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
@@ -45,10 +44,15 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
         LooprViewModelFactory.get<HomeMarketsViewModel>(activity!!, "markets-$isFavorites")
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        adapter = provideAdapter(savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = provideAdapter(savedInstanceState)
         recyclerView?.adapter = adapter
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
 
@@ -79,6 +83,16 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
 
     final override fun onSortByChange(newSortByFilter: String) {
         homeMarketsViewModel.onSortByChange(newSortByFilter)
+        adapter?.apply {
+            val newData = data?.where()?.apply {
+                when (newSortByFilter) {
+                    TradingPairFilter.SORT_BY_TICKER_ASC -> sort(TradingPair::market)
+                    TradingPairFilter.SORT_BY_GAINERS -> sort(TradingPair::change24hAsNumber, Sort.DESCENDING)
+                    TradingPairFilter.SORT_BY_LOSERS -> sort(TradingPair::change24hAsNumber)
+                }
+            }?.findAllAsync()
+            updateData(newData)
+        }
     }
 
     final override fun onDateFilterChange(newDateFilter: String) {

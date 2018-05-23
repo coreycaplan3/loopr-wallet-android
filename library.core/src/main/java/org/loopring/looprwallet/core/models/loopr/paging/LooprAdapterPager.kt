@@ -24,9 +24,10 @@ interface LooprAdapterPager<T : RealmModel> {
     val itemsPerPage: Int
 
     /**
-     * The total number of [data] items there are to load
+     * The total number of [data] items there are to load. This value should be **null** if the
+     * number of items is returned all in one request (so *loading more* isn't used)
      */
-    val totalNumberOfItems: Int
+    val totalNumberOfItems: Int?
 
     /**
      * The data in this collection wrapper, backed by realm.
@@ -34,12 +35,15 @@ interface LooprAdapterPager<T : RealmModel> {
     var data: OrderedRealmCollection<T>?
 
     /**
-     * True if more data can be loaded from the network or false if the app already loaded all the
-     * data.
+     * Possible Values:
+     * - True if more data can be loaded from the network
+     * - False if the app already loaded all the data
+     * - Null if all of the data can be retrieved in one request and *loading more* isn't necessary
      */
-    val containsMoreData: Boolean
+    val containsMoreData: Boolean?
         get() {
-            val data = data ?: return false
+            val data = data ?: return null
+            val totalNumberOfItems = totalNumberOfItems ?: return null
 
             return data.size < totalNumberOfItems
         }

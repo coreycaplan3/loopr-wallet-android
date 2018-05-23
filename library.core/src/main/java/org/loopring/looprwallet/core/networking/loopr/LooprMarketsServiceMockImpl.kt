@@ -1,7 +1,6 @@
 package org.loopring.looprwallet.core.networking.loopr
 
 import io.realm.RealmList
-import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.models.android.architecture.NET
@@ -12,8 +11,6 @@ import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService.Companion.SYNC_CONTEXT
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 import org.loopring.looprwallet.core.utilities.NetworkUtility
-import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprMarketPairs
-import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprTicker
 import java.io.IOException
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -31,43 +28,53 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
 
     companion object {
 
-        private fun getRandomLooprTicker(market: String) = LooprTicker().apply {
-            this.market = market
-            this.buy = BigDecimal(Math.random())
-            this.sell = BigDecimal(Math.random())
-            this.vol = BigDecimal(Math.random() * 1000.0)
-            this.amount = BigDecimal(Math.random() * 10.0)
-            this.last = (buy!! + sell!!) / BigDecimal("2.0")
+        private fun getTradingPair(primaryToken: LooprToken, secondaryToken: LooprToken) = TradingPair().apply {
+            this.market = "${primaryToken.ticker}-${secondaryToken.ticker}"
+            this.primaryToken = primaryToken
+            this.secondaryToken = secondaryToken
+            this.highPrice = BigDecimal(Math.random())
+            this.lowPrice = BigDecimal(Math.random())
+            this.amountOfPrimary = BigDecimal(Math.random() * 1000.0)
+            this.volumeOfSecondary = BigDecimal(Math.random() * 10.0)
+            this.lastPrice = (highPrice + lowPrice) / BigDecimal("2.0")
 
             val amount = BigDecimal(Math.random()).setScale(2, RoundingMode.HALF_EVEN)
             if (Math.random() >= 0.5) {
-                this.change = "-${amount.toPlainString()}%"
+                this.change24h = "-${amount.toPlainString()}%"
             } else {
-                this.change = "${amount.toPlainString()}%"
+                this.change24h = "${amount.toPlainString()}%"
             }
         }
 
-        val lrcTradingPair = TradingPair("LRC-WETH", getRandomLooprTicker("LRC-WETH"), LooprToken.LRC, LooprToken.WETH)
+        val appcTradingPair by lazy {
+            getTradingPair(LooprToken.APPC, LooprToken.WETH)
+        }
 
-        val appcTradingPair = TradingPair("LRC-WETH", getRandomLooprTicker("APPC-WETH"), LooprToken.APPC, LooprToken.WETH)
+        val lrcTradingPair by lazy {
+            getTradingPair(LooprToken.LRC, LooprToken.WETH)
+        }
 
-        val reqTradingPair = TradingPair("REQ-WETH", getRandomLooprTicker("REQ-WETH"), LooprToken.REQ, LooprToken.WETH)
+        val reqTradingPair by lazy {
+            getTradingPair(LooprToken.REQ, LooprToken.WETH)
+        }
 
-        val zrxTradingPair = TradingPair("ZRX-WETH", getRandomLooprTicker("ZRX-WETH"), LooprToken.ZRX, LooprToken.WETH)
+        val zrxTradingPair by lazy {
+            getTradingPair(LooprToken.ZRX, LooprToken.WETH)
+        }
 
     }
 
-    override fun getMarkets(): Deferred<RealmList<TradingPair>> = async(NET) {
+    override fun getMarkets() = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            return@async RealmList(lrcTradingPair, reqTradingPair, zrxTradingPair)
+            return@async RealmList(appcTradingPair, lrcTradingPair, reqTradingPair, zrxTradingPair)
         } else {
             throw IOException("No connection")
         }
     }
 
-    override fun syncSupportedMarkets(): Deferred<Unit> = async(SYNC_CONTEXT) {
+    override fun syncSupportedMarkets() = async(SYNC_CONTEXT) {
         delay(3000L) // purposely make this take a long time
 
         if (NetworkUtility.isNetworkAvailable()) {
@@ -76,19 +83,12 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
             val tokens = RealmList<LooprToken>(LooprToken.APPC, LooprToken.ETH, LooprToken.LRC, LooprToken.REQ, LooprToken.WETH, LooprToken.ZRX)
             repository.addList(tokens, NET)
 
-            val tradingPairList = RealmList<TradingPair>()
-
-            val appcMarket = "APPC-WETH"
-            tradingPairList.add(TradingPair(appcMarket, getRandomLooprTicker(appcMarket), LooprToken.APPC, LooprToken.WETH))
-
-            val lrcMarket = "LRC-WETH"
-            tradingPairList.add(TradingPair(lrcMarket, getRandomLooprTicker(lrcMarket), LooprToken.LRC, LooprToken.WETH))
-
-            val reqMarket = "REQ-WETH"
-            tradingPairList.add(TradingPair(reqMarket, getRandomLooprTicker(reqMarket), LooprToken.REQ, LooprToken.WETH))
-
-            val zrxMarket = "ZRX-WETH"
-            tradingPairList.add(TradingPair(zrxMarket, getRandomLooprTicker(zrxMarket), LooprToken.ZRX, LooprToken.WETH))
+            val tradingPairList = RealmList<TradingPair>().apply {
+                add(appcTradingPair)
+                add(lrcTradingPair)
+                add(reqTradingPair)
+                add(zrxTradingPair)
+            }
 
             repository.addList(tradingPairList, NET)
         } else {
@@ -96,17 +96,17 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
         }
     }
 
-    override fun getMarketDetails(tradingPairMarket: String): Deferred<TradingPair> = async(NET) {
+    override fun getMarketDetails(tradingPairMarket: String) = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            return@async listOf(lrcTradingPair, reqTradingPair, zrxTradingPair).first { it.market == tradingPairMarket }
+            return@async listOf(appcTradingPair, lrcTradingPair, reqTradingPair, zrxTradingPair).first { it.market == tradingPairMarket }
         } else {
             throw IOException("No connection")
         }
     }
 
-    override fun getMarketTrends(tradingPairGraphFilter: TradingPairGraphFilter): Deferred<RealmList<TradingPairTrend>> = async(NET) {
+    override fun getMarketTrends(tradingPairGraphFilter: TradingPairGraphFilter) = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {

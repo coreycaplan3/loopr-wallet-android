@@ -29,10 +29,10 @@ class TradingPairDetailsRepository : BaseRealmRepository() {
                 .findFirst() != null
     }
 
-    fun getTradingPairByMarket(primaryTicker: String, secondaryTicker: String, context: HandlerContext = UI): LiveData<TradingPair> {
+    fun getTradingPairByMarket(market: String, context: HandlerContext = UI): LiveData<TradingPair> {
         return getRealmFromContext(context)
                 .where<TradingPair>()
-                .equalTo(TradingPair::market, "$primaryTicker-$secondaryTicker", Case.INSENSITIVE)
+                .equalTo(TradingPair::market, market, Case.INSENSITIVE)
                 .findFirstAsync()
                 .asLiveData()
     }

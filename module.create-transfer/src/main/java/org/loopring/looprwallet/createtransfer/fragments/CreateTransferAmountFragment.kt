@@ -217,8 +217,8 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             } else {
                 // Calculate max based on token amount
                 // MAX is just the balance
-                val tenPowEight = BigDecimal(10).pow(8)
-                tokenAmount = (BigDecimal(balance.toString(10)) / tenPowEight)
+                val divisor = BigDecimal(10).pow(8)
+                tokenAmount = (BigDecimal(balance.toString(10)) / divisor)
                         .setScale(8, RoundingMode.HALF_EVEN)
                         .toPlainString()
             }
@@ -297,16 +297,16 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
      */
     override fun onNumberClick(number: String) {
         var amount = getAmountBasedOnCurrencyMainLabel()
-        val amountBefore = amount.getAmountBeforeDecimal()
-        val amountAfter = amount.getAmountAfterDecimal()
+        val amountBeforeDecimal = amount.getAmountBeforeDecimal()
+        val amountAfterDecimal = amount.getAmountAfterDecimal()
         val hasDecimal = amount.contains(".")
 
         amount = when (number) {
             "0" -> when {
-                hasDecimal && amountAfter < maxDecimalPlaces ->
+                hasDecimal && amountAfterDecimal < maxDecimalPlaces ->
                     // Decimal that isn't using all possible decimal places
                     "${amount}0"
-                !hasDecimal && amount != "0" && amountBefore < CurrencyExchangeRate.MAX_INTEGER_DIGITS ->
+                !hasDecimal && amount != "0" && amountBeforeDecimal < CurrencyExchangeRate.MAX_INTEGER_DIGITS ->
                     // Whole number, the number isn't 0, and there's less than the number of fractional digits
                     "${amount}0"
                 else ->
@@ -315,15 +315,15 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
             }
             else -> when {
                 amount == "0" -> number
-                !hasDecimal && amountBefore < CurrencyExchangeRate.MAX_INTEGER_DIGITS ->
+                !hasDecimal && amountBeforeDecimal < CurrencyExchangeRate.MAX_INTEGER_DIGITS ->
                     // Whole number and there's less than the number of integer digits
                     "$amount$number"
                 hasDecimal ->
                     when {
-                        isCurrencyMainLabel && amountAfter < MAX_CURRENCY_FRACTION_DIGITS ->
+                        isCurrencyMainLabel && amountAfterDecimal < MAX_CURRENCY_FRACTION_DIGITS ->
                             // Currency decimal with less than the max currency digits
                             "$amount$number"
-                        !isCurrencyMainLabel && amountAfter < MAX_EXCHANGE_RATE_FRACTION_DIGITS ->
+                        !isCurrencyMainLabel && amountAfterDecimal < MAX_EXCHANGE_RATE_FRACTION_DIGITS ->
                             // Token decimal with less than the max token digits
                             "$amount$number"
                         else ->
@@ -504,9 +504,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
                 // We're setting the secondary label in terms of the token
                 // IE --> $500 / $1,000 (per ETH) = 0.5 tokens
-                val bdTokenAmount = (BigDecimal(currencyAmount).setScale(8)) / (BigDecimal(priceInNativeCurrency.toString(10)).setScale(8))
+                val bdTokenAmount = BigDecimal(currencyAmount) / BigDecimal(priceInNativeCurrency)
                 tokenAmount = bdTokenAmount.setScale(8, RoundingMode.HALF_DOWN).toPlainString()
-                createTransferSecondaryLabel.text = BigInteger((bdTokenAmount * (BigDecimal.TEN.pow(currentToken.decimalPlaces))).toString()).formatAsToken(currencySettings, currentToken)
+
+                createTransferSecondaryLabel.text = bdTokenAmount.toBigInteger(currentToken).formatAsToken(currencySettings, currentToken)
             }
             else -> {
                 createTransferMainLabel.text = tokenAmount.formatAsCustomToken(currencySettings, ticker)

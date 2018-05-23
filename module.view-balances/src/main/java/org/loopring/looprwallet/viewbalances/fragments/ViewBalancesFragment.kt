@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.fragment_view_balances.*
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.extensions.snackbar
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -89,6 +89,8 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
             tokenBalanceViewModel.getAllTokensWithBalances(this, address) {
                 setupOfflineFirstDataObserverForAdapter(tokenBalanceViewModel, adapter, it)
             }
+        } else {
+            logi("Address was null in ViewBalancesFragment…")
         }
 
         viewBalancesRecycler.layoutManager = LinearLayoutManager(view.context)
@@ -102,27 +104,21 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
 
         AlertDialog.Builder(context)
                 .setTitle(getString(R.string.formatter_unlock_or_lock_token).format(token.name))
-                .setAdapter(adapter) { dialog, _ ->
+                .setAdapter(adapter) { dialog, index ->
+                    // Index (0 --> Unlock); Index (1 --> Lock)
+
+                    val wallet = walletClient.getCurrentWallet() ?: return@setAdapter
+                    val loopringSmartContractDelegate = LooprToken.LRC.identifier // TODO
+                    val amount = token.totalSupply
+                    val gasPrice = ethereumFeeSettings.gasPriceInGwei
+                    val gasLimit = ethereumFeeSettings.wethDepositGasLimit
+                    when (index) {
+                        0 -> approveTransactionViewModel.approveToken(token, wallet, loopringSmartContractDelegate, amount, gasLimit, gasPrice)
+                        1 -> disapproveTransactionViewModel.approveToken(token, wallet, loopringSmartContractDelegate, BigInteger.ZERO, gasLimit, gasPrice)
+                    }
+
                     dialog.dismiss()
                 }
-                .setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        // Index 0 --> Unlock; Index 1 --> Lock
-
-                        val wallet = walletClient.getCurrentWallet() ?: return
-                        val loopringSmartContractDelegate = LooprToken.LRC.identifier
-                        val amount = token.totalSupply
-                        val gasPrice = ethereumFeeSettings.gasPriceInGwei
-                        val gasLimit = ethereumFeeSettings.wethDepositGasLimit
-                        when (position) {
-                            0 -> approveTransactionViewModel.approveToken(token, wallet, loopringSmartContractDelegate, amount, gasLimit, gasPrice)
-                            1 -> disapproveTransactionViewModel.approveToken(token, wallet, loopringSmartContractDelegate, BigInteger.ZERO, gasLimit, gasPrice)
-                        }
-                        TODO("You need to to add the transferDelegate information!")
-                    }
-                })
                 .setNegativeButton(android.R.string.cancel) { dialog, _ ->
                     dialog.cancel()
                 }
@@ -131,8 +127,8 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
 
     // MARK - Private Methods
 
-    private fun setupLockAndUnlockTransactionViewModel(viewModel: EthereumTokenTransactionViewModel?) {
-        viewModel?.isTransactionRunning?.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
+    private fun setupLockAndUnlockTransactionViewModel(viewModel: EthereumTokenTransactionViewModel) {
+        viewModel.isTransactionRunning.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
             val progress = (activity as? BaseActivity)?.progressDialog
             if (it) {
                 progress?.show()
@@ -141,8 +137,9 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
             }
         }
 
-        viewModel?.error?.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
+        viewModel.error.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
             // TODO
+            view?.snackbar(R.string.error_unknown)
         }
     }
 

@@ -20,8 +20,7 @@ class DefaultLooprPagerAdapter<T : RealmModel> : LooprAdapterPager<T> {
     override val itemsPerPage: Int
         get() = -1
 
-    override val totalNumberOfItems: Int
-        get() = -1
+    override val totalNumberOfItems: Int? = null
 
     override var data: OrderedRealmCollection<T>? = null
 

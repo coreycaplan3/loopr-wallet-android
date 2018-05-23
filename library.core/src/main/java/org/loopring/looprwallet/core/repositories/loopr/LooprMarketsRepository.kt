@@ -17,7 +17,6 @@ import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
-import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprTicker
 
 /**
  * Created by Corey Caplan on 4/7/18.
@@ -80,12 +79,14 @@ class LooprMarketsRepository : BaseRealmRepository() {
     fun getMarkets(filter: TradingPairFilter, sortBy: String, context: HandlerContext = UI): LiveData<OrderedRealmCollection<TradingPair>> {
         return getRealmFromContext(context)
                 .where<TradingPair>()
-                .equalTo(TradingPair::isFavorite, filter.isFavorites)
                 .apply {
+                    if(filter.isFavorites) {
+                        equalTo(TradingPair::isFavorite, true)
+                    }
                     when (sortBy) {
                         TradingPairFilter.SORT_BY_TICKER_ASC -> sort(TradingPair::market)
-                        TradingPairFilter.SORT_BY_PERCENTAGE_CHANGE_ASC -> sort(TradingPair::changeAsNumber)
-                        TradingPairFilter.SORT_BY_PERCENTAGE_CHANGE_DESC -> sort(TradingPair::changeAsNumber, Sort.DESCENDING)
+                        TradingPairFilter.SORT_BY_GAINERS -> sort(TradingPair::change24hAsNumber, Sort.DESCENDING)
+                        TradingPairFilter.SORT_BY_LOSERS -> sort(TradingPair::change24hAsNumber, Sort.ASCENDING)
                     }
                 }
                 .findAllAsync()

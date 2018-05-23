@@ -1,9 +1,6 @@
-package org.loopring.looprwallet.orderdetails.adapters
+package org.loopring.looprwallet.core.models.loopr.orders
 
 import io.realm.OrderedRealmCollection
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
-import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFillContainer
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFillFilter
 import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 
 /**
@@ -14,7 +11,7 @@ import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
  * Purpose of Class:
  *
  */
-class OrderDetailsAdapterPager(val filter: OrderFillFilter) : LooprAdapterPager<LooprOrderFill> {
+class OrderFillsLooprPager(val filter: OrderFillFilter) : LooprAdapterPager<LooprOrderFill> {
 
     var orderFillContainer: LooprOrderFillContainer? = null
 

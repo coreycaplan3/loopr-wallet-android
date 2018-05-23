@@ -51,27 +51,11 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
         return DecimalFormat.getCurrencyInstance(getCurrentLocale())
     }
 
-    /**
-     * @return A [DecimalFormat] that can format tokens and numbers appropriately, using separators
-     * as appropriate.
-     */
-    fun getNumberFormatter(): NumberFormat {
-        // Use the currency as a means to know how users format their decimal places and large
-        // numbers. IE - 1,000,000.00 vs. 1.000.000,00
-        return (DecimalFormat.getInstance(getCurrentLocale()) as DecimalFormat)
-                .apply {
-                    isDecimalSeparatorAlwaysShown = true
-
-                    roundingMode = RoundingMode.HALF_UP
-
-                    minimumIntegerDigits = 1
-                    maximumIntegerDigits = 10
-
-                    minimumFractionDigits = 0
-                    maximumFractionDigits = 8
-
-                    isGroupingUsed = true
-                }
+    fun formatNumber(number: Any): String = getNumberFormatter().format(number).let {
+        return@let when {
+            it.endsWith(getDecimalSeparator(), ignoreCase = true) -> it.substring(0, it.length - 1)
+            else -> it
+        }
     }
 
     /**
@@ -105,6 +89,31 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
             CNY -> Locale.CHINESE
             else -> throw IllegalArgumentException("Invalid currency, found: $currency")
         }
+    }
+
+    // MARK - Private Methods
+
+    /**
+     * @return A [DecimalFormat] that can format tokens and numbers appropriately, using separators
+     * as appropriate.
+     */
+    private fun getNumberFormatter(): NumberFormat {
+        // Use the currency as a means to know how users format their decimal places and large
+        // numbers. IE - 1,000,000.00 vs. 1.000.000,00
+        return (DecimalFormat.getInstance(getCurrentLocale()) as DecimalFormat)
+                .apply {
+                    isDecimalSeparatorAlwaysShown = true
+
+                    roundingMode = RoundingMode.HALF_UP
+
+                    minimumIntegerDigits = 1
+                    maximumIntegerDigits = 10
+
+                    minimumFractionDigits = 0
+                    maximumFractionDigits = 8
+
+                    isGroupingUsed = true
+                }
     }
 
 }

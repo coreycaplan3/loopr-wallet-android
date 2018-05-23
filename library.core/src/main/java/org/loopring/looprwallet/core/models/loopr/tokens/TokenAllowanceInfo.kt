@@ -34,7 +34,7 @@ open class TokenAllowanceInfo(
             }
         }
 
-    var _allowance: String
+    private var _allowance: String
 
     init {
         // Needed to set backing fields initially. They will be overwritten by the call below to balance

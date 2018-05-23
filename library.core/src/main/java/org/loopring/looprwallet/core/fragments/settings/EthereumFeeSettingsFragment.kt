@@ -75,7 +75,7 @@ class EthereumFeeSettingsFragment : BaseSettingsFragment() {
     // MARK -
 
     private fun formatStringValueAsNumber(value: String): String {
-        return currencySettings.getNumberFormatter().format(value.toDouble())
+        return currencySettings.formatNumber(value.toDouble())
     }
 
     private fun getSummaryForGasPrice(value: Int) = when {

@@ -37,14 +37,9 @@ class OrderProgressView
                 openOrderProgress.progress = 100
             } else {
                 openOrderProgress.progressDrawable = drawable(R.drawable.progress_circle, context)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    openOrderProgress.setProgress(value, true)
-                } else {
-                    openOrderProgress.progress = value
-                }
+                DrawableCompat.setTint(openOrderProgress.progressDrawable, colorAccent)
+                openOrderProgress.progress = value
             }
-
-            DrawableCompat.setTint(openOrderProgress.progressDrawable, colorAccent)
         }
 
     init {

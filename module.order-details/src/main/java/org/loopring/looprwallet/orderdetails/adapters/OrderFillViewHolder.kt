@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_order_details_fill.*
+import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.extensions.formatAsTokenNoTicker
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -38,8 +40,7 @@ class OrderFillViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), 
     fun bind(index: Int, orderFill: LooprOrderFill) {
         orderDetailsTradeCounterLabel.text = str(R.string.formatter_trade_number).format(index)
 
-        val formatter = currencySettings.getNumberFormatter()
-        orderDetailsTradeFillAmountLabel.text = formatter.format(orderFill.fillAmount)
+        orderDetailsTradeFillAmountLabel.text = orderFill.fillAmount.formatAsTokenNoTicker(currencySettings, orderFill.token)
 
         orderDetailsTradeIdLabel.text = orderFill.orderHash
     }

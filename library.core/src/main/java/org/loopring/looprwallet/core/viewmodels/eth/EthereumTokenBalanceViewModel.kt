@@ -57,8 +57,8 @@ class EthereumTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollecti
         val address = mParameter ?: return
 
         repository.runTransaction { realm ->
-            data.map { mapTokenToExistingOneIfPossible(it, address) }
-                    .forEach(realm::upsert)
+            val list = data.map { mapTokenToExistingOneIfPossible(it, address) }
+            realm.upsert(list)
         }
     }
 

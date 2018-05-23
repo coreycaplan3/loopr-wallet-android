@@ -65,13 +65,13 @@ object RealmUtility {
                     oldContainer.pagingItems.add(pagingItem)
                 }
 
-                newContainer.data.forEach { newOrder ->
-                    val didUpdateOrder = oldContainer.data.update(newOrder) { oldOrder ->
-                        diffPredicate(oldOrder, newOrder)
+                newContainer.data.forEach { newData ->
+                    val didUpdateOrder = oldContainer.data.update(newData) { oldData ->
+                        diffPredicate(oldData, newData)
                     }
                     if (!didUpdateOrder) {
                         // It's not in the list, so we can just add it
-                        oldContainer.data.add(newOrder)
+                        oldContainer.data.add(newData)
                     }
                 }
 
@@ -79,7 +79,6 @@ object RealmUtility {
                     it.upsert(oldContainer.data)
                     it.upsert(oldContainer)
                 }
-                repository.add(oldContainer)
             }
 
             else ->

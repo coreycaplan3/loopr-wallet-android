@@ -21,9 +21,12 @@ import io.realm.OrderedRealmCollection
 import kotlinx.android.synthetic.main.fragment_trading_pair_details.*
 import kotlinx.android.synthetic.main.trading_pair_graph.*
 import kotlinx.android.synthetic.main.trading_pair_statistics_card.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairTrend
@@ -117,22 +120,25 @@ class TradingPairDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        runBlocking {
+        async(IO) {
             if (!tradingPairDetailsViewModel.doesTradingPairExist(filter.market).await()) {
-                loge("Market does not exist: ${filter.market}!", IllegalArgumentException())
-                view.context.longToast(R.string.error_trading_pair_does_not_exist)
-                activity?.finish()
+                async(UI) {
+                    loge("Market does not exist: ${filter.market}!", IllegalArgumentException())
+                    view.context.longToast(R.string.error_trading_pair_does_not_exist)
+                    activity?.finish()
+                }
             }
         }
 
         setupOfflineFirstStateAndErrorObserver(tradingPairDetailsViewModel, tradingPairDetailsSwipeRefresh)
         tradingPairDetailsViewModel.getTradingPair(this, filter, ::bindTradingPair)
 
+        setupChart()
         setupOfflineFirstStateAndErrorObserver(tradingPairTrendViewModel, tradingPairDetailsSwipeRefresh)
         tradingPairTrendViewModel.getTradingPairTrends(this, filter, ::bindTrendChange)
         tradingPairTrendViewModel.addCurrentStateObserver(fragmentViewLifecycleFragment!!) {
             if (tradingPairTrendViewModel.isIdle()) {
-                lineData ?: return@addCurrentStateObserver
+                val lineData = lineData ?: return@addCurrentStateObserver
 
                 // We update the observer after the currentState has been changed, since the state
                 // is always updated after the data is updated
@@ -146,8 +152,6 @@ class TradingPairDetailsFragment : BaseFragment() {
                 tradingPairDetailsChart.animateY(ApplicationUtility.int(R.integer.animation_duration))
             }
         }
-
-        setupChart()
     }
 
     override fun initializeFloatingActionButton(fab: FloatingActionButton) {
@@ -272,7 +276,7 @@ class TradingPairDetailsFragment : BaseFragment() {
         // TODO check if these numbers are formatted as native currency or tokens
         currencySettings.getCurrencyFormatter()
 
-        currencySettings.getNumberFormatter().apply {
+        currencySettings::formatNumber.also { format ->
             val secondaryTicker = tradingPair.secondaryTicker
 
             tradingPairStatsCurrentLabel.text = "${format(tradingPair.lastPrice)} $secondaryTicker"
@@ -282,7 +286,7 @@ class TradingPairDetailsFragment : BaseFragment() {
         }
 
         tradingPairStats24hChangeLabel.text = tradingPair.change24h
-        if (tradingPair.change24h?.startsWith("-") == true) {
+        if (tradingPair.change24h.startsWith("-")) {
             tradingPairStats24hChangeLabel.setTextColor(col(R.color.red_400))
         } else {
             tradingPairStats24hChangeLabel.setTextColor(col(R.color.green_400))
@@ -291,6 +295,7 @@ class TradingPairDetailsFragment : BaseFragment() {
 
     private fun bindTrendChange(trends: OrderedRealmCollection<TradingPairTrend>) {
         if (trends.size == 0) {
+            logi("Trends was empty...")
             return
         }
 

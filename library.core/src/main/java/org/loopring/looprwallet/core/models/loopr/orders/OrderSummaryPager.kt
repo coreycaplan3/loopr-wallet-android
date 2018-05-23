@@ -16,7 +16,7 @@ class OrderSummaryPager(private val orderFilter: OrderSummaryFilter) : LooprAdap
     var orderContainer: LooprOrderContainer? = null
 
     override val currentPage: Int
-        get() = TODO("check the home order")
+        get() = orderFilter.pageNumber
 
     override val itemsPerPage: Int
         get() = OrderSummaryFilter.ITEMS_PER_PAGE

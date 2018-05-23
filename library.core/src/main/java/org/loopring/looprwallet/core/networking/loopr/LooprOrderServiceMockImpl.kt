@@ -11,6 +11,8 @@ import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImp
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImpl.Companion.lrcTradingPair
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImpl.Companion.reqTradingPair
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImpl.Companion.zrxTradingPair
+import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
+import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.web3j.crypto.Credentials
 import java.io.IOException
@@ -75,9 +77,9 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
 
     }
 
-    private val fill1 = LooprOrderFill(createHash(), order1.orderHash, 143.00, Date(Date().time - 100000L))
-    private val fill2 = LooprOrderFill(createHash(), order1.orderHash, 2045.00, Date(Date().time - 70000L))
-    private val fill3 = LooprOrderFill(createHash(), order1.orderHash, 1043.00, Date(Date().time - 30000L))
+    private val fill1 = LooprOrderFill(createHash(), order1.orderHash, null, BigInteger("143000000000000000000"), Date(Date().time - 100000L))
+    private val fill2 = LooprOrderFill(createHash(), order1.orderHash, null, BigInteger("25500000000000000000"), Date(Date().time - 70000L))
+    private val fill3 = LooprOrderFill(createHash(), order1.orderHash, null, BigInteger("1043500000000000000000"), Date(Date().time - 30000L))
 
     override fun submitOrder(looprOrder: AppLooprOrder): Deferred<Unit> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
@@ -121,22 +123,29 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         }
     }
 
-    override fun getOrderFillsByOrderHash(orderFillFilter: OrderFillFilter): Deferred<LooprOrderFillContainer> = async(NET) {
+    override fun getOrderFillsByOrderHash(filter: OrderFillFilter): Deferred<LooprOrderFillContainer> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            val list = when (orderFillFilter.pageNumber) {
+            val list = when (filter.pageNumber) {
                 1 -> listOf(fill1, fill2)
                 2 -> listOf(fill3)
-                else -> throw IllegalArgumentException("This should not happen")
-            }.apply {
-                forEach { it.orderHash = orderFillFilter.orderHash }
+                else -> throw IllegalArgumentException("Page 3+ should never be reached. Page: ${filter.pageNumber}")
+            }.also {
+                val order = LooprOrderRepository().getOrderByHashNow(filter.orderHash, NET)
+                val primaryToken = order?.tradingPair?.primaryToken
+                it.forEach {
+                    if (primaryToken != null) {
+                        it.token = primaryToken
+                    }
+                    it.orderHash = filter.orderHash
+                }
             }
 
             val data = RealmList<LooprOrderFill>().apply { addAll(list) }
 
-            val criteria = LooprOrderFillContainer.createCriteria(orderFillFilter)
-            val pagingItems = RealmList<LooprPagingItem>(LooprPagingItem(criteria, orderFillFilter.pageNumber, 3))
+            val criteria = LooprOrderFillContainer.createCriteria(filter)
+            val pagingItems = RealmList<LooprPagingItem>(LooprPagingItem(criteria, filter.pageNumber, 3))
             return@async LooprOrderFillContainer(criteria = criteria, pagingItems = pagingItems, orderFillList = data)
         } else {
             throw IOException("No connection")

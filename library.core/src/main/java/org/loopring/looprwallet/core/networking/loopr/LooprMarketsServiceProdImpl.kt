@@ -37,7 +37,12 @@ class LooprMarketsServiceProdImpl : LooprMarketsService {
             val market = ticker.market ?: return@mapNotNull null
 
             return@mapNotNull repository.getMarketNow(market)?.apply {
-                this.looprTicker = ticker
+                this.highPrice = ticker.high ?: return@apply
+                this.lowPrice = ticker.low ?: return@apply
+                this.lastPrice = ticker.last ?: return@apply
+                this.change24h = ticker.change ?: return@apply
+                this.amountOfPrimary = ticker.amount ?: return@apply
+                this.volumeOfSecondary = ticker.vol ?: return@apply
             }
         }
 
@@ -78,7 +83,7 @@ class LooprMarketsServiceProdImpl : LooprMarketsService {
             val secondaryToken = getTokenFromList(mappedTokens, splitMarket[1], secondaryTokenCache)
                     ?: return@forEach
 
-            TradingPair(market, null, primaryToken, secondaryToken)
+            TradingPair(market, primaryToken, secondaryToken)
         }
 
         repository.addList(mappedTokens, NET)

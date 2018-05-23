@@ -20,30 +20,16 @@ class RealmListLiveData<T : RealmModel>(private val results: OrderedRealmCollect
 
     override fun onActive() {
         when (results) {
-            is RealmResults<*> -> {
-                (results as RealmResults<T>).addChangeListener { realmResults: RealmResults<T>? ->
-                    value = realmResults
-                }
-            }
-            is RealmList<*> -> {
-                (results as RealmList<T>).addChangeListener { list: RealmList<T>? ->
-                    value = list
-                }
-            }
+            is RealmResults<*> -> results.addChangeListener { _: RealmResults<*>? -> value = results }
+            is RealmList<*> -> results.addChangeListener { _: RealmList<*>? -> value = results }
             else -> throw IllegalArgumentException("RealmCollection not supported: " + results.javaClass.simpleName)
         }
     }
 
     override fun onInactive() {
         when (results) {
-            is RealmResults<*> -> {
-                val results = results as RealmResults<T>
-                results.removeAllChangeListeners()
-            }
-            is RealmList<*> -> {
-                val list = results as RealmList<T>
-                list.removeAllChangeListeners()
-            }
+            is RealmResults<*> -> results.removeAllChangeListeners()
+            is RealmList<*> -> results.removeAllChangeListeners()
             else -> throw IllegalArgumentException("RealmCollection not supported: " + results.javaClass.simpleName)
         }
 

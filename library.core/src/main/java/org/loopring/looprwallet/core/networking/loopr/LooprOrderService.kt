@@ -36,6 +36,6 @@ interface LooprOrderService {
 
     fun getOrderByHash(orderHash: String): Deferred<AppLooprOrder>
 
-    fun getOrderFillsByOrderHash(orderFillFilter: OrderFillFilter): Deferred<LooprOrderFillContainer>
+    fun getOrderFillsByOrderHash(filter: OrderFillFilter): Deferred<LooprOrderFillContainer>
 
 }

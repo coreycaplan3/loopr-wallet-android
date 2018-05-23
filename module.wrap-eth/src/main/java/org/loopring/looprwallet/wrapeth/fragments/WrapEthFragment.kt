@@ -1,7 +1,6 @@
 package org.loopring.looprwallet.wrapeth.fragments
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.constraint.ConstraintLayout
@@ -23,6 +22,7 @@ import org.loopring.looprwallet.core.viewmodels.eth.EthereumTokenBalanceViewMode
 import org.loopring.looprwallet.wrapeth.R
 import org.loopring.looprwallet.wrapeth.dagger.wrapEthLooprComponent
 import org.loopring.looprwallet.wrapeth.viewmodels.WrapEthViewModel
+import java.math.BigInteger
 import javax.inject.Inject
 
 /**
@@ -192,7 +192,7 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
     override fun onFormChanged() {
         val text = wrapEtherInputEditText.text.toString()
         val number = text.toBigDecimalOrNull()
-        wrapEtherConvertButton.isEnabled = !text.isEmpty() && number != null
+        wrapEtherConvertButton.isEnabled = number != null && number.unscaledValue() != BigInteger.ZERO
     }
 
     private fun onMaxButtonClick() {
@@ -204,7 +204,7 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
         address?.ifNotNull { address ->
             bindTokenBalanceToAvailableLabel(address, token)
 
-            val balance = token.findAddressBalance(address)?.balance?.formatAsToken(currencySettings, token)
+            val balance = token.findAddressBalance(address)?.balance?.formatAsTokenNoTicker(currencySettings, token)
             balance?.let { wrapEtherInputEditText.setText(it) }
         }
     }
@@ -265,15 +265,21 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
             }
         }
 
+        val amount = wrapEtherInputEditText.text.toString()
+                .toBigDecimalOrNull()
+                ?.toBigInteger(ethToken) ?: return
+
+        val token = when(isSwappingToWrapped) {
+            true -> ethToken
+            false -> wethToken
+        }
+        val formattedAmount = amount.formatAsTokenNoTicker(currencySettings, token)
+
         AlertDialog.Builder(view.context)
                 .setTitle(str(R.string.formatter_convert_to).format(primaryTicker))
-                .setMessage(str(R.string.formatter_convert_weth_to_eth).format(primaryTicker, secondaryTicker))
+                .setMessage(str(R.string.formatter_convert_weth_to_eth).format(formattedAmount, primaryTicker, secondaryTicker))
                 .setPositiveButton(R.string.convert) setPositiveButton@{ dialog, _ ->
                     dialog.dismiss()
-
-                    val amount = wrapEtherInputEditText.text.toString()
-                            .toBigDecimalOrNull()
-                            ?.toBigInteger(ethToken) ?: return@setPositiveButton
 
                     (activity as? BaseActivity)?.progressDialog?.let {
                         it.setMessage(getString(R.string.converting))
@@ -286,18 +292,18 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
                         else -> withdrawEthViewModel.convertToEther(amount, wallet)
                     }
                 }
-                .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss() }
+                .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
                 .show()
     }
 
     private fun onSuccess(isDepositEth: Boolean) = activity?.let {
-        it.finish()
-
         if (isDepositEth) {
             it.longToast(R.string.your_eth_will_be_converted)
         } else {
             it.longToast(R.string.your_weth_will_be_converted)
         }
+
+        it.finish()
     }
 
     @SuppressLint("SetTextI18n")

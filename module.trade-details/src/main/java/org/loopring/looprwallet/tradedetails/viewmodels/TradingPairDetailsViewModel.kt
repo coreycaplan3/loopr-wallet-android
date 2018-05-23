@@ -35,7 +35,9 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
 
     override val repository = TradingPairDetailsRepository()
 
-    private val service = LooprMarketsService.getInstance()
+    private val service by lazy {
+        LooprMarketsService.getInstance()
+    }
 
     fun doesTradingPairExist(market: String) = repository.doesTradingPairExist(market)
 
@@ -47,7 +49,7 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
     }
 
     override fun getLiveDataFromRepository(parameter: TradingPairGraphFilter): LiveData<TradingPair> {
-        return repository.getTradingPairByMarket(parameter.primaryTicker, parameter.secondaryTicker)
+        return repository.getTradingPairByMarket(parameter.market)
     }
 
     override fun getDataFromNetwork(parameter: TradingPairGraphFilter): Deferred<TradingPair> {
@@ -59,13 +61,11 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
     }
 
     override fun isRefreshNecessary(parameter: TradingPairGraphFilter): Boolean {
-        // DO NOT CHANGE - Doing so will mess up the sync ID for all backwards-compatible version
-        val syncId = "${parameter.market}-${parameter.graphDateFilter}"
-        return defaultIsRefreshNecessary(syncId)
+        return defaultIsRefreshNecessary(getSyncId(parameter))
     }
 
     override fun addSyncDataToRepository(parameter: TradingPairGraphFilter) {
-        syncRepository.add(SyncData(parameter.market, parameter.graphDateFilter, Date()))
+        syncRepository.add(SyncData(syncType, getSyncId(parameter), Date()))
     }
 
     override val syncType: String

@@ -302,6 +302,7 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
             data: OrderedRealmCollection<E>
     ) {
         viewModel?.removeDataObserver(this)
+        adapter.pager.data = data
         adapter.updateData(data)
     }
 

@@ -31,8 +31,8 @@ data class TradingPairFilter(val isFavorites: Boolean, val changePeriod: String)
         val SORT_BY_ARRAY_VALUES: Array<String> = strArray(R.array.sort_markets_values)
 
         val SORT_BY_TICKER_ASC: String = str(R.string.sort_ticker_asc)
-        val SORT_BY_PERCENTAGE_CHANGE_ASC: String = str(R.string.sort_percentage_change_asc)
-        val SORT_BY_PERCENTAGE_CHANGE_DESC: String = str(R.string.sort_percentage_change_desc)
+        val SORT_BY_GAINERS: String = str(R.string.sort_percentage_change_asc)
+        val SORT_BY_LOSERS: String = str(R.string.sort_percentage_change_desc)
 
         /**
          * Change period over 1 day

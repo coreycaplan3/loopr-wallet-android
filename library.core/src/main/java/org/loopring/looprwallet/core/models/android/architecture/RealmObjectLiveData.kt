@@ -31,7 +31,9 @@ class RealmObjectLiveData<T : RealmModel>(private val result: T) : LiveData<T>()
         value = result
     }
 
-    private val listener = RealmChangeListener<T> { results -> value = results }
+    private val listener = RealmChangeListener<T> { _ ->
+        value = result
+    }
 
     override fun onActive() {
         result.addChangeListener(listener)

@@ -68,7 +68,7 @@ class HomeOrdersViewModel : OfflineFirstViewModel<LooprOrderContainer, OrderSumm
         val result = service.getOrdersByAddress(parameter)
 
         if (parameter.pageNumber == 1) {
-            // Clear all old ones since our paging is "messed up"
+            // Clear all old ones since our paging may be in an inconsistent state
             val list = repository.getOrdersByFilterNow(parameter, IO)
             repository.remove(list, IO)
         }

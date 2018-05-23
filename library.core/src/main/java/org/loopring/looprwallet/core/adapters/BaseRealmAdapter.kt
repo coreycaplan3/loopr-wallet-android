@@ -1,14 +1,10 @@
 package org.loopring.looprwallet.core.adapters
 
-import android.support.annotation.VisibleForTesting
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.realm.OrderedRealmCollection
-import io.realm.RealmList
-import io.realm.RealmModel
-import io.realm.RealmResults
+import io.realm.*
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.like
 import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
@@ -45,8 +41,16 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     abstract var pager: LooprAdapterPager<T>
         protected set
 
-    @VisibleForTesting
-    var data: OrderedRealmCollection<T>? = null
+    private var mData: OrderedRealmCollection<T>? = null
+
+    val data: OrderedRealmCollection<T>?
+        get() {
+            val data = mData
+            return when {
+                data != null && data.isValid -> data
+                else -> null
+            }
+        }
 
     override var layoutInflater: LayoutInflater? = null
 
@@ -63,11 +67,16 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      */
     fun filterData(propertyList: List<KProperty<*>> = listOf(), property: KProperty<String>, value: String) {
         isFiltering = true
-        data = data?.where()
-                ?.like(propertyList, property, value)
-                ?.findAllAsync()
+        val data = pager.data
+        if (data == null || !data.isValid) {
+            return
+        }
 
-        updateData(data)
+        mData = data.where()
+                .like(propertyList, property, value)
+                .findAllAsync()
+
+        updateData(mData)
     }
 
     /**
@@ -81,15 +90,16 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
 
     final override fun getItemViewType(position: Int): Int {
         val data = data
+        val containsMoreData = pager.containsMoreData
 
         return when {
             data == null -> TYPE_LOADING_INITIAL
             data.size == 0 -> TYPE_EMPTY
             position == 0 && containsHeader -> TYPE_HEADER
-            position == itemCount - 1 && pager.containsMoreData ->
+            position == itemCount - 1 && containsMoreData == true ->
                 // We are at the last position (after the data), but there's still more to load
                 TYPE_LOADING_END
-            position == itemCount - 1 && !pager.containsMoreData ->
+            position == itemCount - 1 && containsMoreData != null && !containsMoreData ->
                 // We are at the last position (after the data), and there's no data to load
                 TYPE_PAGING_END
             else -> TYPE_DATA
@@ -114,6 +124,17 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     open fun onCreateHeaderViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         throw NotImplementedError("This exception is only thrown if this function was forgotten and should be implemented!")
     }
+
+    final override fun getItemCount(): Int = data?.let {
+        val containsMoreData = pager.containsMoreData
+        val addition = when {
+            it.size == 0 -> 1
+            containsMoreData != null && containsHeader -> 2
+            containsMoreData != null || containsHeader -> 1
+            else -> 0
+        }
+        return@let it.size + addition
+    } ?: 1
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is LoadingEndViewHolder) {
@@ -156,15 +177,6 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      */
     abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, index: Int, item: T?)
 
-    final override fun getItemCount(): Int = data?.let {
-        val addition = when {
-            it.size == 0 -> 1
-            pager.containsMoreData && containsHeader -> 2
-            else -> 1
-        }
-        return@let it.size + addition
-    } ?: 1
-
     // MARK - Private Methods
 
     /**
@@ -174,9 +186,7 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      * @param index index of the item.
      * @return the item at the specified position, `null` if adapter data is not valid.
      */
-    fun getItem(index: Int): T? {
-        return if (isDataValid()) data?.get(index) else null
-    }
+    fun getItem(index: Int): T? = data?.get(index)
 
     /**
      * Updates the data associated to the Adapter. Useful when the query has been changed.
@@ -185,49 +195,53 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      * @param data the new [OrderedRealmCollection] to display.
      */
     fun updateData(data: OrderedRealmCollection<T>?) = synchronized(this) {
-        removeChangeListener(data)
-        this.data = data
-        addChangeListener(data)
+        removeChangeListener()
+        this.mData = data
+        notifyDataSetChanged()
+        addChangeListener()
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
 
-        addChangeListener(data)
+        addChangeListener()
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
 
-        removeChangeListener(data)
+        removeChangeListener()
     }
 
-    private fun isDataValid(): Boolean {
-        val data = data
-        return data != null && data.isValid
-    }
-
-    private fun addChangeListener(data: OrderedRealmCollection<T>?) {
-        when (data) {
-            is RealmList -> data.addChangeListener { data: RealmList<T> ->
-                if (!isFiltering) {
-                    this.data = data
-                }
-                notifyDataSetChanged()
+    private val changeListener by lazy {
+        OrderedRealmCollectionChangeListener { data: RealmResults<T>, _: OrderedCollectionChangeSet ->
+            if (!isFiltering) {
+                this.mData = data
             }
-            is RealmResults -> data.addChangeListener { data: RealmResults<T> ->
-                if (!isFiltering) {
-                    this.data = data
-                }
-                notifyDataSetChanged()
-            }
+            notifyDataSetChanged()
         }
     }
 
-    private fun removeChangeListener(data: OrderedRealmCollection<T>?) {
-        when (data) {
-            is RealmList -> data.removeAllChangeListeners()
-            is RealmResults -> data.removeAllChangeListeners()
+    private fun addChangeListener() {
+        val data = mData
+        when {
+            data is RealmResults -> data.addChangeListener { _: RealmResults<T> ->
+                if (!isFiltering) {
+                    this.mData = data
+                }
+                notifyDataSetChanged()
+            }
+            data != null -> throw IllegalArgumentException("Invalid type, found: ${data::class.simpleName}")
+            else -> Unit
+        }
+    }
+
+    private fun removeChangeListener() {
+        val data = mData
+        when {
+            data is RealmResults -> data.removeChangeListener(changeListener)
+            data != null -> throw IllegalArgumentException("Invalid type, found: ${data::class.simpleName}")
+            else -> Unit
         }
     }
 

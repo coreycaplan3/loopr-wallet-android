@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import androidx.os.bundleOf
-import io.realm.Sort
 import kotlinx.android.synthetic.main.fragment_order_details.*
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -19,7 +18,7 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.orderdetails.R
 import org.loopring.looprwallet.orderdetails.adapters.OrderDetailsAdapter
-import org.loopring.looprwallet.orderdetails.adapters.OrderDetailsAdapterPager
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFillsLooprPager
 import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
 import org.loopring.looprwallet.orderdetails.viewmodels.CancelOrderViewModel
 import org.loopring.looprwallet.orderdetails.viewmodels.OrderFillsViewModel
@@ -173,7 +172,7 @@ class OrderDetailsFragment : BaseFragment() {
 
         // We can now retrieve order fills, since we initialized the adapter with the order data
         orderFillsViewModel.getOrderFills(this, orderFilter) {
-            (adapter.pager as? OrderDetailsAdapterPager)?.orderFillContainer = it
+            (adapter.pager as? OrderFillsLooprPager)?.orderFillContainer = it
             setupOfflineFirstDataObserverForAdapter(orderFillsViewModel, adapter, it.data)
         }
         setupOfflineFirstStateAndErrorObserver(orderFillsViewModel, orderDetailsSwipeRefreshLayout)

@@ -41,7 +41,7 @@
                     <include
                         layout="@layout/card_contacts"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/horizontal_margin_small"
                         android:layout_marginStart="@dimen/horizontal_margin_small"
                         android:layout_weight="0.5" />
@@ -51,7 +51,6 @@
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
-
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

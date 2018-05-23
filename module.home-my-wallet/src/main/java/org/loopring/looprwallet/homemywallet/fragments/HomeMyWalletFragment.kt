@@ -19,6 +19,7 @@ import org.loopring.looprwallet.barcode.utilities.BarcodeUtility
 import org.loopring.looprwallet.contacts.activities.ViewContactsActivity
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.loge
@@ -27,6 +28,7 @@ import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragme
 import org.loopring.looprwallet.core.fragments.security.ConfirmOldSecurityFragment.OnSecurityConfirmedListener
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
+import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.settings.SecuritySettings
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -64,6 +66,9 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
     @Inject
     lateinit var securitySettings: SecuritySettings
+
+    @Inject
+    lateinit var currencySettings: CurrencySettings
 
     private val tokenBalanceViewModel: EthereumTokenBalanceViewModel by lazy {
         LooprViewModelFactory.get<EthereumTokenBalanceViewModel>(activity!!, "balance")
@@ -248,40 +253,32 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     private fun onTokenBalancesChange(tokenBalances: OrderedRealmCollection<LooprToken>) {
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
-        tokenBalances.firstOrNull { it.identifier == LooprToken.ETH.identifier }?.let {
-            val balance = it.findAddressBalance(address)?.balance?.toString(10)
+        tokenBalances.firstOrNull { it.identifier == LooprToken.ETH.identifier }?.let { token ->
+            val balance = token.findAddressBalance(address)?.balance
             if (balance != null) {
-                @SuppressLint("SetTextI18n")
-                ethereumBalanceLabel.text = "$balance ${it.ticker}"
+                ethereumBalanceLabel.text = balance.formatAsToken(currencySettings, token)
             }
         }
 
         val builder = StringBuilder()
         val onlyTokenBalances = tokenBalances.filter { it.identifier != LooprToken.ETH.identifier }
 
-        var totalItems = 0
-        onlyTokenBalances.forEachIndexed { index, item ->
-            if (index < 5) {
-                val balance = item.findAddressBalance(address)
+        onlyTokenBalances.forEachIndexed { index, token ->
+            when {
+                index <= 2 -> {
+                    val balance = token.findAddressBalance(address)?.balance
+                            ?: return@forEachIndexed
 
-                balance?.let {
-                    builder.append(it.balance.toString(10))
-                            .append(" ")
-                            .append(item.ticker)
+                    builder.append(balance.formatAsToken(currencySettings, token))
 
-                    // We're before the 5th position (4th index) and before the second-to-last item
-                    if (index < 4 && index < onlyTokenBalances.size - 1) builder.append("\n")
-
-                    totalItems += 1
+                    // We're before the last index and before the second-to-last item
+                    if (index < onlyTokenBalances.size - 1) builder.append("\n")
                 }
-            }
-
-            if (totalItems >= 5) {
-                builder.append("\n")
-                        .append(str(R.string.ellipsis))
-                return@forEachIndexed
+                index == 3 -> builder.append("\n").append(str(R.string.ellipsis))
             }
         }
+
+        tokenBalanceLabel.text = builder.toString()
     }
 
     private fun onShowPrivateKeyClick() = when {

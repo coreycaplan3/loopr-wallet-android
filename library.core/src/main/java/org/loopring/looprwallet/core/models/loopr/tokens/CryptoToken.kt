@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.models.loopr.tokens
 import org.loopring.looprwallet.core.models.realm.TrackedRealmObject
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import io.realm.RealmList
+import org.loopring.looprwallet.core.extensions.formatAsToken
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -28,8 +29,8 @@ interface CryptoToken : TrackedRealmObject {
     val identifier: String
 
     /**
-     * The token's total supply, represented as a BigInteger. It has the format of
-     * 250,000,000,000,000,000. To convert it to a number for the UI, use [formatTotalSupply].
+     * The token's total supply, represented as a BigInteger. It has the padding of all decimal
+     * places in [decimalPlaces] (10^*decimalPlaces*).
      */
     var totalSupply: BigInteger
 
@@ -64,23 +65,6 @@ interface CryptoToken : TrackedRealmObject {
     var priceInNativeCurrency: BigInteger?
 
     fun getBalanceOf(address: String) = tokenBalances.find { it.address == address }?.balance
-
-    /**
-     * Formats the total supply so it can be presented to the user.
-     *
-     * @param currencySettings An instance of [CurrencySettings] used to format the total supply
-     * with the user's settings.s
-     * @return A string representing the total supply of the [CryptoToken] that
-     */
-    fun formatTotalSupply(currencySettings: CurrencySettings): String {
-        val format = currencySettings.getNumberFormatter()
-
-        val totalSupplyBd = totalSupply.toBigDecimal().setScale(decimalPlaces)
-        val divisor = BigDecimal(10).pow(decimalPlaces)
-
-        val formattedTotalSupply = totalSupplyBd / divisor
-        return format.format(formattedTotalSupply)
-    }
 
     /**
      * Finds a given address's [TokenBalanceInfo] or null if it cannot be found

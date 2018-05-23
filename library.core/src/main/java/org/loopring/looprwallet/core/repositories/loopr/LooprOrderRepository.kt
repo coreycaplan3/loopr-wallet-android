@@ -36,6 +36,18 @@ class LooprOrderRepository : BaseRealmRepository() {
         return item?.let { getRealmFromContext(context).copyFromRealm(it) }
     }
 
+    /**
+     * @return An **UN-MANAGED** [AppLooprOrder] that is a deep copy from realm
+     */
+    fun getOrderByHashNow(orderHash: String, context: HandlerContext = UI): AppLooprOrder? {
+        val order = getRealmFromContext(context)
+                .where<AppLooprOrder>()
+                .equalTo(AppLooprOrder::orderHash, orderHash)
+                .findFirst()
+
+        return order?.let { getRealmFromContext(context).copyFromRealm(it) }
+    }
+
     fun getOrderByHash(orderHash: String, context: HandlerContext = UI): LiveData<AppLooprOrder> {
         return getRealmFromContext(context)
                 .where<AppLooprOrder>()

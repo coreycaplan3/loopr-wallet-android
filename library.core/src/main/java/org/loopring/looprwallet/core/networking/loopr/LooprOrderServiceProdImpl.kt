@@ -58,7 +58,7 @@ class LooprOrderServiceProdImpl : LooprOrderService {
 //        return CompletableDeferred<AppLooprOrder>(order)
     }
 
-    override fun getOrderFillsByOrderHash(orderFillFilter: OrderFillFilter): Deferred<LooprOrderFillContainer> {
+    override fun getOrderFillsByOrderHash(filter: OrderFillFilter): Deferred<LooprOrderFillContainer> {
         TODO("not implemented")
     }
 }
