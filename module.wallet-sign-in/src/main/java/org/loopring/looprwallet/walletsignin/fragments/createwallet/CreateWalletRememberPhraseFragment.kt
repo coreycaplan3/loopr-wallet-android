@@ -7,6 +7,7 @@ import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_create_wallet_phrase_remember.*
 import org.loopring.looprwallet.core.BuildConfig.DEFAULT_READ_TIMEOUT
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.walletsignin.fragments.signin.SignInEnterPhraseFragment
 import org.loopring.looprwallet.walletsignin.models.WalletCreationPhrase
@@ -27,10 +28,9 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
 
         private const val KEY_TIME_LEFT = "_TIME_LEFT"
 
-        fun getInstance(walletCreationPhrase: WalletCreationPhrase) =
-                CreateWalletRememberPhraseFragment().apply {
-                    arguments = bundleOf(KEY_WALLET_PHRASE to walletCreationPhrase)
-                }
+        fun getInstance(walletCreationPhrase: WalletCreationPhrase) = CreateWalletRememberPhraseFragment().apply {
+            arguments = bundleOf(KEY_WALLET_PHRASE to walletCreationPhrase)
+        }
     }
 
     private var timeLeft: Long = 0
@@ -66,10 +66,9 @@ class CreateWalletRememberPhraseFragment : BaseFragment() {
         setupTimer(savedInstanceState)
 
         rememberGeneratePhraseButton.setOnClickListener {
-            pushFragmentTransaction(
-                    SignInEnterPhraseFragment.createConfirmPhraseInstance(walletCreationPhrase),
-                    SignInEnterPhraseFragment.TAG
-            )
+            val fragment = SignInEnterPhraseFragment.createConfirmPhraseInstance(walletCreationPhrase)
+            val tag = SignInEnterPhraseFragment.TAG
+            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_HORIZONTAL)
         }
     }
 

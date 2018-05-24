@@ -42,6 +42,8 @@ import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivi
 import org.loopring.looprwallet.viewbalances.activities.ViewBalancesActivity
 import javax.inject.Inject
 import kotlin.math.roundToInt
+import android.text.Html
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 
 
 /**
@@ -205,6 +207,16 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
             }
         }
 
+        // Setup the Share button
+        shareAddressButton.setOnClickListener {
+            val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, wallet.credentials.address)
+            }
+
+            startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_address)))
+        }
+
         // Setup the Address Barcode
         try {
             val address = wallet.credentials.address
@@ -284,7 +296,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     private fun onShowPrivateKeyClick() = when {
         securitySettings.isSecurityActive() -> {
             val fragment = ConfirmOldSecurityFragment.getViewPrivateKeyInstance(TYPE_VIEW_PRIVATE_KEY)
-            pushFragmentTransaction(fragment, ConfirmOldSecurityFragment.TAG)
+            pushFragmentTransaction(fragment, ConfirmOldSecurityFragment.TAG, FragmentTransactionController.ANIMATION_VERTICAL)
         }
         else -> onSecurityConfirmed(TYPE_VIEW_PRIVATE_KEY)
     }
@@ -301,7 +313,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
 
         if (securitySettings.isSecurityActive()) {
             val fragment = ConfirmOldSecurityFragment.createViewWalletUnlockMechanismInstance(parameter)
-            pushFragmentTransaction(fragment, ConfirmOldSecurityFragment.TAG)
+            pushFragmentTransaction(fragment, ConfirmOldSecurityFragment.TAG, FragmentTransactionController.ANIMATION_VERTICAL)
         } else {
             onSecurityConfirmed(parameter)
         }

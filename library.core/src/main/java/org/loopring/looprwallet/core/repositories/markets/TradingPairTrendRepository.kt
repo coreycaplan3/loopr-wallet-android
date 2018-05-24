@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.tradedetails.repositories
+package org.loopring.looprwallet.core.repositories.markets
 
 import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection

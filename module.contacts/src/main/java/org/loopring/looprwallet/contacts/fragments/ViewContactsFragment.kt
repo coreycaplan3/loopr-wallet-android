@@ -84,12 +84,12 @@ class ViewContactsFragment : BaseFragment() {
         adapter = ContactsAdapter(selectedContactAddress, this::onContactSelected)
         viewContactsRecyclerView.adapter = adapter
 
+        contactViewModel.getAllContactsByName(this, "*") {
+            adapter?.updateData(it)
+        }
+
         when (fragmentType) {
             KEY_VIEW_ALL -> {
-                contactViewModel.getAllContactsByName(this, "*") {
-                    adapter?.updateData(it)
-                }
-
                 onContactClickedListener = object : OnContactClickedListener {
                     override fun onContactSelected(contact: Contact) {
                         showDeleteContactDialog(view, contact)
@@ -188,7 +188,7 @@ class ViewContactsFragment : BaseFragment() {
     private fun queryRealmForContactsByAddress(address: String) {
         val addressToSearch = when {
             address.trim().isEmpty() -> "*"
-            else -> address
+            else -> "$address*"
         }
 
         contactViewModel.getAllContactsByAddress(this, addressToSearch) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,7 +12,9 @@
         android:id="@+id/transferDetailsImageContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
         <ImageView
             android:id="@+id/transferDetailsReceiveImage"
@@ -39,10 +41,11 @@
         android:id="@+id/transferDetailsQuantityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/transferDetailsImageContainer"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/vertical_margin"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsImageContainer"
         tools:text="@string/default_receive_lrc_quantity" />
 
     <TextView
@@ -50,133 +53,144 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/transferDetailsQuantityLabel"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/vertical_margin_small"
         android:gravity="end"
         android:textAppearance="@style/TextAppearance.AppCompat.Subtitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsQuantityLabel"
         tools:text="@string/default_total_price" />
+
+    <LinearLayout
+        android:id="@+id/transferDetailsContactContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/vertical_margin_small"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsPriceLabel">
+
+        <TextView
+            android:id="@+id/transferDetailsContactFromLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/horizontal_margin_small"
+            android:layout_marginRight="@dimen/horizontal_margin_small"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subtitle"
+            tools:text="From:" />
+
+        <TextView
+            android:id="@+id/transferDetailsContactLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_effect_accent_flat"
+            android:clickable="true"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:gravity="start"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subtitle"
+            android:textColor="?attr/colorPrimary"
+            tools:text="Daniel Wang" />
+
+    </LinearLayout>
 
     <include
         android:id="@+id/transferDetailsDivider"
         layout="@layout/divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
-        android:layout_below="@id/transferDetailsPriceLabel"
         android:layout_marginBottom="@dimen/vertical_margin"
-        android:layout_marginTop="@dimen/vertical_margin" />
+        android:layout_marginTop="@dimen/vertical_margin"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsContactContainer" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/transferDetailsDivider"
-        android:orientation="vertical">
+    <TextView
+        android:id="@+id/transferDetailsDateDefaultLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/lineHeight"
+        android:layout_marginLeft="@dimen/horizontal_margin_small"
+        android:layout_marginStart="@dimen/horizontal_margin_small"
+        android:gravity="center_vertical"
+        android:text="@string/date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsDivider" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
+    <TextView
+        android:id="@+id/transferDetailsDateLabel"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/lineHeight"
+        android:layout_marginEnd="@dimen/horizontal_margin_small"
+        android:layout_marginLeft="@dimen/horizontal_margin_small"
+        android:layout_marginRight="@dimen/horizontal_margin_small"
+        android:layout_marginStart="@dimen/horizontal_margin_small"
+        android:gravity="center_vertical|end"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintLeft_toRightOf="@id/transferDetailsDateDefaultLabel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsDivider"
+        tools:text="@string/default_date" />
 
-            <TextView
-                android:id="@+id/transferDetailsDateDefaultLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/horizontal_margin_small"
-                android:layout_marginStart="@dimen/horizontal_margin_small"
-                android:text="@string/date"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <TextView
+        android:id="@+id/transferDetailsTransactionDefaultLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/lineHeight"
+        android:layout_marginLeft="@dimen/horizontal_margin_small"
+        android:layout_marginStart="@dimen/horizontal_margin_small"
+        android:gravity="center_vertical|end"
+        android:text="@string/transaction"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsDateDefaultLabel" />
 
-            <TextView
-                android:id="@+id/transferDetailsDateLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/horizontal_margin_small"
-                android:layout_marginLeft="@dimen/horizontal_margin_small"
-                android:layout_marginRight="@dimen/horizontal_margin_small"
-                android:layout_marginStart="@dimen/horizontal_margin_small"
-                android:layout_toEndOf="@id/transferDetailsDateDefaultLabel"
-                android:layout_toRightOf="@id/transferDetailsDateDefaultLabel"
-                android:gravity="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="@string/default_date" />
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="@dimen/lineHeight"
+        android:layout_marginLeft="@dimen/horizontal_margin_small"
+        android:layout_marginStart="@dimen/horizontal_margin_small"
+        app:layout_constraintLeft_toRightOf="@id/transferDetailsTransactionDefaultLabel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsDateDefaultLabel">
 
-        </RelativeLayout>
+        <Button
+            android:id="@+id/transferDetailsViewTransactionButton"
+            style="@style/App.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/lineHeight"
+            android:layout_gravity="center_vertical|end"
+            android:text="@string/view_in_explorer" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
+    </FrameLayout>
 
-            <TextView
-                android:id="@+id/transferDetailsTransactionDefaultLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/horizontal_margin_small"
-                android:layout_marginStart="@dimen/horizontal_margin_small"
-                android:layout_toEndOf="@id/transferDetailsTransactionDefaultLabel"
-                android:layout_toRightOf="@id/transferDetailsTransactionDefaultLabel"
-                android:text="@string/transaction"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <TextView
+        android:id="@+id/transferDetailsStatusDefaultLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/lineHeight"
+        android:layout_marginLeft="@dimen/horizontal_margin_small"
+        android:layout_marginStart="@dimen/horizontal_margin_small"
+        android:gravity="center_vertical"
+        android:text="@string/status"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsTransactionDefaultLabel" />
 
-            <Button
-                android:id="@+id/transferDetailsViewTransactionButton"
-                style="@style/App.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginEnd="@dimen/horizontal_margin_small"
-                android:layout_marginLeft="@dimen/horizontal_margin_small"
-                android:layout_marginRight="@dimen/horizontal_margin_small"
-                android:layout_marginStart="@dimen/horizontal_margin_small"
-                android:text="@string/view_in_explorer" />
+    <TextView
+        android:id="@+id/transferDetailsStatusLabel"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/lineHeight"
+        android:layout_marginEnd="@dimen/horizontal_margin_small"
+        android:layout_marginLeft="@dimen/horizontal_margin_small"
+        android:layout_marginRight="@dimen/horizontal_margin_small"
+        android:layout_marginStart="@dimen/horizontal_margin_small"
+        android:gravity="center_vertical|end"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintLeft_toRightOf="@id/transferDetailsStatusDefaultLabel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transferDetailsTransactionDefaultLabel"
+        tools:text="@string/pending"
+        tools:textColor="@color/amber_500" />
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <TextView
-                android:id="@+id/transferDetailsStatusDefaultLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/horizontal_margin_small"
-                android:layout_marginStart="@dimen/horizontal_margin_small"
-                android:text="@string/status"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-            <TextView
-                android:id="@+id/transferDetailsStatusLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/transferDetailsStatusDefaultLabel"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/horizontal_margin_small"
-                android:layout_marginLeft="@dimen/horizontal_margin_small"
-                android:layout_marginRight="@dimen/horizontal_margin_small"
-                android:layout_marginStart="@dimen/horizontal_margin_small"
-                android:layout_toEndOf="@id/transferDetailsStatusDefaultLabel"
-                android:layout_toRightOf="@id/transferDetailsStatusDefaultLabel"
-                android:gravity="end"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textIsSelectable="true"
-                tools:text="@string/pending"
-                tools:textColor="@color/amber_500" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

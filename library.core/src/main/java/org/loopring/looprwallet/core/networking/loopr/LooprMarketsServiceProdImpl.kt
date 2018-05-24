@@ -71,22 +71,27 @@ class LooprMarketsServiceProdImpl : LooprMarketsService {
 
         // MARKETS
         val secondaryTokenCache = mutableListOf<LooprToken>()
-        marketsJob.await().pairs?.forEach { market ->
+        val tradingPairs = marketsJob.await().pairs?.mapNotNull { market ->
             val splitMarket = market.split(Regex("-+"))
 
             if (splitMarket.size != 2) {
-                return@forEach
+                return@mapNotNull null
             }
 
-            val primaryToken = getTokenFromList(mappedTokens, splitMarket[0]) ?: return@forEach
+            val primaryToken = getTokenFromList(mappedTokens, splitMarket[0])
+                    ?: return@mapNotNull null
 
             val secondaryToken = getTokenFromList(mappedTokens, splitMarket[1], secondaryTokenCache)
-                    ?: return@forEach
+                    ?: return@mapNotNull null
 
-            TradingPair(market, primaryToken, secondaryToken)
+            return@mapNotNull TradingPair(market).apply {
+                this.primaryToken = primaryToken
+                this.secondaryToken = secondaryToken
+            }
         }
 
         repository.addList(mappedTokens, NET)
+        tradingPairs?.let { repository.addList(it, NET) }
     }
 
     override fun getMarketDetails(tradingPairMarket: String): Deferred<TradingPair> {

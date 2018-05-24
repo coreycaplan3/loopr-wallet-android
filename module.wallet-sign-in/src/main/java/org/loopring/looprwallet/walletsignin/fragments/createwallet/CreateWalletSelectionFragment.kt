@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_create_wallet_selection.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
 
@@ -30,7 +31,8 @@ class CreateWalletSelectionFragment : BaseFragment() {
         createFromKeystoreButton.setOnClickListener {
             pushFragmentTransaction(
                     CreateWalletKeystoreFragment(),
-                    CreateWalletKeystoreFragment.TAG
+                    CreateWalletKeystoreFragment.TAG,
+                    FragmentTransactionController.ANIMATION_HORIZONTAL
             )
         }
 
@@ -41,7 +43,8 @@ class CreateWalletSelectionFragment : BaseFragment() {
         createFromPhraseButton.setOnClickListener {
             pushFragmentTransaction(
                     EnterPasswordForPhraseFragment.getCreationInstance(),
-                    EnterPasswordForPhraseFragment.TAG
+                    EnterPasswordForPhraseFragment.TAG,
+                    FragmentTransactionController.ANIMATION_HORIZONTAL
             )
         }
 

@@ -76,6 +76,7 @@ object RealmUtility {
                 }
 
                 repository.runTransaction {
+                    it.upsert(oldContainer.pagingItems)
                     it.upsert(oldContainer.data)
                     it.upsert(oldContainer)
                 }

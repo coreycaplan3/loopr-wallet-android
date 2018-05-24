@@ -28,6 +28,8 @@ import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.delegates.BaseFragmentToolbarDelegate
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController.FragmentAnimation
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -213,8 +215,8 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * Executes the given fragment transaction, pushing the given fragment to the front and saving
      * the old one (if present)
      */
-    fun pushFragmentTransaction(fragment: BaseFragment, tag: String) {
-        (activity as? BaseActivity)?.pushFragmentTransaction(fragment, tag)
+    fun pushFragmentTransaction(fragment: Fragment, tag: String, @FragmentAnimation animation: Int) {
+        (activity as? BaseActivity)?.pushFragmentTransaction(fragment, tag, animation)
     }
 
     private val viewModelList = arrayListOf<OfflineFirstViewModel<*, *>>()

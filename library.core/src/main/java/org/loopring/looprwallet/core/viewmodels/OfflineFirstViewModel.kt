@@ -514,13 +514,11 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
         }
 
         // Reinitialize data, observers, and notify via the call to onLiveDataInitialized
-        launch(UI) {
-            mParameter = parameter
-            val liveData = async(UI) { getLiveDataFromRepository(parameter) }.await()
-            mLiveData = liveData
-            addObserver(liveData)
-            onLiveDataInitialized(liveData)
-        }
+        mParameter = parameter
+        val liveData = getLiveDataFromRepository(parameter)
+        mLiveData = liveData
+        addObserver(liveData)
+        onLiveDataInitialized(liveData)
 
         launch(IO) {
             if (mIsNetworkOperationRunning) {

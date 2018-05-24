@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.wrapeth.R
 import org.loopring.looprwallet.wrapeth.fragments.WrapEthFragment
 
@@ -35,7 +36,9 @@ class WrapEthActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            pushFragmentTransaction(WrapEthFragment(), WrapEthFragment.TAG)
+            val fragment = WrapEthFragment()
+            val tag = WrapEthFragment.TAG
+            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
         }
     }
 

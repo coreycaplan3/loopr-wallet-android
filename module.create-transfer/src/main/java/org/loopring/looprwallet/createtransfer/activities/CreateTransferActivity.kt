@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.createtransfer.R
 import org.loopring.looprwallet.createtransfer.fragments.SelectTransferContactFragment
 
@@ -48,10 +49,9 @@ class CreateTransferActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             val address = intent.getStringExtra(KEY_DEFAULT_ADDRESS)
-            pushFragmentTransaction(
-                    SelectTransferContactFragment.getInstance(address),
-                    SelectTransferContactFragment.TAG
-            )
+            val fragment = SelectTransferContactFragment.getInstance(address)
+            val tag = SelectTransferContactFragment.TAG
+            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
         }
     }
 

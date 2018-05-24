@@ -14,6 +14,7 @@ import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.walletsignin.activities.SignInActivity
 import org.loopring.looprwallet.walletsignin.fragments.createwallet.CreateWalletSelectionFragment
 import org.loopring.looprwallet.walletsignin.fragments.restorewallet.RestoreWalletSelectionFragment
@@ -48,11 +49,19 @@ class SignInSelectionFragment : BaseFragment() {
                 .into(signInBackgroundImage)
 
         createNewWalletButton.setOnClickListener {
-            pushFragmentTransaction(EnterPasswordForPhraseFragment.getCreationInstance(), EnterPasswordForPhraseFragment.TAG)
+            pushFragmentTransaction(
+                    EnterPasswordForPhraseFragment.getCreationInstance(),
+                    EnterPasswordForPhraseFragment.TAG,
+                    FragmentTransactionController.ANIMATION_HORIZONTAL
+            )
         }
 
         restoreWalletButton.setOnClickListener {
-            pushFragmentTransaction(RestoreWalletSelectionFragment(), RestoreWalletSelectionFragment.TAG)
+            pushFragmentTransaction(
+                    RestoreWalletSelectionFragment(),
+                    RestoreWalletSelectionFragment.TAG,
+                    FragmentTransactionController.ANIMATION_HORIZONTAL
+            )
         }
     }
 

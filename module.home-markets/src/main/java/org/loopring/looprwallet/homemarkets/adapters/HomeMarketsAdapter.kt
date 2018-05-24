@@ -2,6 +2,7 @@ package org.loopring.looprwallet.homemarkets.adapters
 
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.weakReference
@@ -11,6 +12,7 @@ import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.homemarkets.R
+import org.loopring.looprwallet.homemarkets.fragments.HomeFavoriteMarketsFragment
 import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivity
 
 /**
@@ -56,7 +58,11 @@ class HomeMarketsAdapter(
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val inflater = getInflater(parent)
-        val view = inflater.inflate(R.layout.view_holder_markets_empty, parent, false)
+        val isFavorites = fragment is HomeFavoriteMarketsFragment
+        val view = when (isFavorites) {
+            true -> inflater.inflate(R.layout.view_holder_favorite_markets_empty, parent, false)
+            false -> inflater.inflate(R.layout.view_holder_markets_empty, parent, false)
+        }
         return MarketsEmptyViewHolder(view) {
             onRefresh?.invoke()
         }

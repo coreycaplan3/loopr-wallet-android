@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.trading_pair_graph.*
 import kotlinx.android.synthetic.main.trading_pair_statistics_card.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.experimental.launch
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.android.architecture.IO
@@ -105,10 +105,17 @@ class TradingPairDetailsFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_trading_pair_details
 
+    init {
+        tradeDetailsLooprComponent.inject(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        tradeDetailsLooprComponent.inject(this)
+        /**
+         * We need to initialize this before the call to [launch]
+         */
+        tradingPairDetailsViewModel
 
         toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
         toolbarDelegate?.onOptionsItemSelected = optionsItemSelected
@@ -120,9 +127,10 @@ class TradingPairDetailsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        async(IO) {
-            if (!tradingPairDetailsViewModel.doesTradingPairExist(filter.market).await()) {
-                async(UI) {
+        launch(IO) {
+            val doesTradingPairExist = tradingPairDetailsViewModel.doesTradingPairExist(filter.market, IO).await()
+            if (!doesTradingPairExist) {
+                launch(UI) {
                     loge("Market does not exist: ${filter.market}!", IllegalArgumentException())
                     view.context.longToast(R.string.error_trading_pair_does_not_exist)
                     activity?.finish()
@@ -168,7 +176,7 @@ class TradingPairDetailsFragment : BaseFragment() {
     private val createOptionsMenu: (Toolbar?) -> Unit = {
         it?.menu?.clear()
         it?.inflateMenu(R.menu.menu_trading_pair_details)
-        it?.menu?.findItem(R.id.menuTradingPairFavorite)?.ifNotNull {
+        it?.menu?.findItem(R.id.menuTradingPairFavorite)?.let<MenuItem, Unit> {
             when {
                 tradingPair?.isFavorite == true -> it.setIcon(R.drawable.ic_favorite_white_24dp)
                 else -> it.setIcon(R.drawable.ic_favorite_border_white_24dp)
@@ -179,23 +187,20 @@ class TradingPairDetailsFragment : BaseFragment() {
     private val optionsItemSelected: (MenuItem?) -> Boolean = { item ->
         when (item?.itemId) {
             R.id.menuTradingPairFavorite -> {
-                tradingPair?.let<TradingPair, Unit> {
+                tradingPair?.let<TradingPair, Unit> { tradingPair ->
 
-                    runBlocking {
-                        looprMarketsRepository.toggleIsFavorite(it.market).await()
-                    }
+                    val market = tradingPair.market // For passing the value across threads
+                    launch(IO) {
+                        looprMarketsRepository.toggleIsFavorite(market).await()
 
-                    when {
-                        it.isFavorite -> {
-                            view?.snackbar(str(R.string.formatter_is_favorite).format(it.primaryTicker))
-                            item.setIcon(R.drawable.ic_favorite_white_24dp)
-                        }
-                        else -> {
-                            view?.snackbar(str(R.string.formatter_is_not_favorite).format(it.primaryTicker))
-                            item.setIcon(R.drawable.ic_favorite_border_white_24dp)
+                        launch(UI) {
+                            val snackbarText = when {
+                                tradingPair.isFavorite -> str(R.string.formatter_is_favorite).format(tradingPair.primaryTicker)
+                                else -> str(R.string.formatter_is_not_favorite).format(tradingPair.primaryTicker)
+                            }
+                            view?.snackbar(snackbarText)
                         }
                     }
-
                 }
                 true
             }
@@ -215,13 +220,16 @@ class TradingPairDetailsFragment : BaseFragment() {
 
     // MARK - Private Methods
 
-    private fun setupChart() {
+    /**
+     * This function takes time to execute and can block for ~350ms
+     */
+    private fun setupChart() = async(IO) {
         var currentButton = tradingPairDetails1hButton
 
         fun onButtonClick(view: View) {
             val newButton = view as Button
             if (currentButton != newButton) {
-                val theme = context?.theme ?: return
+                val theme = view.context?.theme ?: return
                 currentButton.setTextColor(col(theme.getResourceIdFromAttrId(R.attr.colorPrimary)))
                 currentButton.setBackgroundResource(R.drawable.ripple_effect_accent)
                 currentButton = newButton
@@ -229,7 +237,8 @@ class TradingPairDetailsFragment : BaseFragment() {
                 newButton.setTextColor(col(theme.getResourceIdFromAttrId(android.R.attr.textColorPrimaryInverseDisableOnly)))
                 newButton.setBackgroundResource(R.drawable.button_background_material)
 
-                tradingPairTrendViewModel.getTradingPairTrends(this, filter, ::bindTrendChange)
+                val owner = this@TradingPairDetailsFragment
+                tradingPairTrendViewModel.getTradingPairTrends(owner, filter, ::bindTrendChange)
             }
         }
 
@@ -252,7 +261,7 @@ class TradingPairDetailsFragment : BaseFragment() {
                 }
             }
 
-            marker = ChartMarkerView(context, R.layout.custom_marker)
+            marker = ChartMarkerView(this@apply.context, R.layout.custom_marker)
 
             setDrawGridBackground(false)
 
@@ -272,6 +281,10 @@ class TradingPairDetailsFragment : BaseFragment() {
     @SuppressLint("SetTextI18n")
     private fun bindTradingPair(tradingPair: TradingPair) {
         this.tradingPair = tradingPair
+
+        toolbarDelegate?.resetOptionsMenu()
+
+        toolbar?.title = tradingPair.market
 
         // TODO check if these numbers are formatted as native currency or tokens
         currencySettings.getCurrencyFormatter()

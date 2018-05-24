@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="empty_general_open_orders">You have no open orders. Go make some trades to get started!</string>
-    <string name="empty_general_filled_orders">You have no filled orders. Go make some trades to fill up this screen!</string>
-    <string name="empty_general_cancelled_orders">You have no cancelled orders. Any orders that expire or you cancel will show here</string>
+    <string name="empty_general_open_orders">You have no open orders.\nGo make some trades to get started!</string>
+    <string name="empty_general_filled_orders">Your filled orders will appear here</string>
+    <string name="empty_general_cancelled_orders">Your cancelled or expired orders will appear here</string>
 
     <string name="trade_id">Trade ID</string>
     <string name="order_details">Order Details</string>

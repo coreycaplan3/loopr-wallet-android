@@ -2,13 +2,15 @@ package org.loopring.looprwallet.tradedetails.viewmodels
 
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.android.HandlerContext
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
-import org.loopring.looprwallet.tradedetails.repositories.TradingPairDetailsRepository
+import org.loopring.looprwallet.core.repositories.markets.TradingPairDetailsRepository
 import java.util.*
 
 /**
@@ -39,7 +41,9 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
         LooprMarketsService.getInstance()
     }
 
-    fun doesTradingPairExist(market: String) = repository.doesTradingPairExist(market)
+    fun doesTradingPairExist(market: String, context: HandlerContext = IO): Deferred<Boolean> {
+        return repository.doesTradingPairExist(market, context)
+    }
 
     /**
      * Gets the trading pair based on the provided [filter].
@@ -57,6 +61,9 @@ class TradingPairDetailsViewModel : OfflineFirstViewModel<TradingPair, TradingPa
     }
 
     override fun addNetworkDataToRepository(data: TradingPair, parameter: TradingPairGraphFilter) {
+        repository.getTradingPairByMarketNow(data.market, IO)?.let { oldTradingPair ->
+            data.isFavorite = oldTradingPair.isFavorite
+        }
         repository.add(data)
     }
 

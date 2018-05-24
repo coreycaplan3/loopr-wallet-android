@@ -9,7 +9,7 @@ import org.loopring.looprwallet.core.models.loopr.markets.TradingPairTrend
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService
 import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
-import org.loopring.looprwallet.tradedetails.repositories.TradingPairTrendRepository
+import org.loopring.looprwallet.core.repositories.markets.TradingPairTrendRepository
 
 /**
  * Created by Corey on 4/24/2018

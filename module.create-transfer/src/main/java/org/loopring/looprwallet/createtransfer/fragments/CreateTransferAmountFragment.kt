@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_create_transfer_amount.*
-import org.loopring.looprwallet.contacts.repositories.ContactsRepository
+import org.loopring.looprwallet.core.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -185,8 +185,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
         ethToken = ethereumTokenBalanceViewModel.getEthBalanceNow()
         currentToken = ethTokenPriceCheckerViewModel.currentCryptoToken ?: ethToken
 
-        toolbar?.title = null
-        toolbar?.subtitle = contact?.name ?: recipientAddress
+        when {
+            contact?.name != null -> toolbar?.title = contact?.name
+            else -> toolbar?.subtitle = recipientAddress
+        }
 
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
         ethereumTokenBalanceViewModel.getAllTokensWithBalances(this, address) {
@@ -446,11 +448,7 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
                             val fragment = EthereumFeeSettingsFragment()
                             val tag = EthereumFeeSettingsFragment.TAG
 
-                            FragmentTransactionController(R.id.activityContainer, fragment, tag)
-                                    .apply {
-                                        slideUpAndDownAnimation()
-                                        commitTransaction(requireFragmentManager())
-                                    }
+                            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
                         }
                         .setNegativeButton(android.R.string.cancel) { dialog, _ ->
                             dialog.cancel()

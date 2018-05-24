@@ -214,11 +214,36 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     }
 
     private val changeListener by lazy {
-        OrderedRealmCollectionChangeListener { data: RealmResults<T>, _: OrderedCollectionChangeSet ->
-            if (!isFiltering) {
-                this.mData = data
+        OrderedRealmCollectionChangeListener { _: RealmResults<T>, changeSet: OrderedCollectionChangeSet? ->
+
+            // Null Changes means an async query returns for the first time
+            if (changeSet == null) {
+                notifyDataSetChanged()
+                return@OrderedRealmCollectionChangeListener
             }
-            notifyDataSetChanged()
+
+            /**
+             * We need to push the index forward, so we negate [dataOffsetPosition]
+             */
+            val offset = -dataOffsetPosition
+
+            // For deletions, the adapter has to be notified in reverse order.
+            val deletions = changeSet.deletionRanges
+            for (i in deletions.indices.reversed()) {
+                val range = deletions[i]
+                notifyItemRangeRemoved(range.startIndex + offset, range.length)
+            }
+
+            val insertions = changeSet.insertionRanges
+            for (range in insertions) {
+                notifyItemRangeInserted(range.startIndex + offset, range.length)
+            }
+
+            val modifications = changeSet.changeRanges
+            for (range in modifications) {
+                notifyItemRangeChanged(range.startIndex + offset, range.length)
+            }
+
         }
     }
 

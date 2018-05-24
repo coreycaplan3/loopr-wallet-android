@@ -6,6 +6,7 @@ import android.os.Bundle
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.loge
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.walletsignin.dialogs.ConfirmPasswordDialog
 import org.loopring.looprwallet.walletsignin.fragments.signin.SignInSelectionFragment
 
@@ -44,7 +45,7 @@ class SignInActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            pushFragmentTransaction(SignInSelectionFragment(), SignInSelectionFragment.TAG)
+            pushFragmentTransaction(SignInSelectionFragment(), SignInSelectionFragment.TAG, FragmentTransactionController.ANIMATION_VERTICAL)
         }
     }
 

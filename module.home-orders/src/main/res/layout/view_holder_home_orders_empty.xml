@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    android:padding="@dimen/standard_padding"
     tools:ignore="UseCompoundDrawables">
 
     <LinearLayout
@@ -27,6 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="@dimen/standard_padding"
             android:text="@string/empty_general_open_orders"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textSize="@dimen/empty_title_text_size" />

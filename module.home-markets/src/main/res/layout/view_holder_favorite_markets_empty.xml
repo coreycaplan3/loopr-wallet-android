@@ -12,8 +12,8 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:contentDescription="@string/content_description_no_connection"
-        android:src="@drawable/baseline_cloud_off_black_48"
-        android:tint="?attr/textColorSecondaryOnly" />
+        android:src="@drawable/baseline_favorite_border_white_48"
+        android:tint="@color/materialRed" />
 
     <TextView
         android:id="@+id/noConnectionRetryLabel"
@@ -23,7 +23,8 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="@string/no_connection_tap_to_retry"
+        android:padding="@dimen/standard_padding"
+        android:text="@string/rationale_empty_favorites"
         android:textSize="24sp" />
 
 </RelativeLayout>

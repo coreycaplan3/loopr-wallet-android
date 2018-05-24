@@ -16,9 +16,10 @@ import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.contacts.fragments.ViewContactsFragment
-import org.loopring.looprwallet.contacts.repositories.ContactsRepository
+import org.loopring.looprwallet.core.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.core.extensions.findFragmentByTagOrCreate
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
@@ -85,6 +86,8 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar?.title = getString(R.string.enter_a_recipient)
+
         val barcodeScannerButton = view.findViewById<ImageButton>(R.id.barcodeScannerButton)
         BarcodeCaptureActivity.setupBarcodeScanner(this, barcodeScannerButton, arrayOf(TYPE_PUBLIC_KEY))
 
@@ -115,7 +118,8 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
             val currentAddress = recipientAddressEditText.text.toString()
             pushFragmentTransaction(
                     CreateTransferAmountFragment.getInstance(currentAddress),
-                    CreateTransferAmountFragment.TAG
+                    CreateTransferAmountFragment.TAG,
+                    FragmentTransactionController.ANIMATION_HORIZONTAL
             )
         }
 

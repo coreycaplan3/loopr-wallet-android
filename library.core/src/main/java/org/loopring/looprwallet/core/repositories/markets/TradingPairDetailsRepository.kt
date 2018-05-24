@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.tradedetails.repositories
+package org.loopring.looprwallet.core.repositories.markets
 
 import android.arch.lifecycle.LiveData
 import io.realm.Case
@@ -27,6 +27,15 @@ class TradingPairDetailsRepository : BaseRealmRepository() {
                 .where<TradingPair>()
                 .equalTo(TradingPair::market, market)
                 .findFirst() != null
+    }
+
+    fun getTradingPairByMarketNow(market: String, context: HandlerContext = IO): TradingPair? {
+        return getRealmFromContext(context)
+                .where<TradingPair>()
+                .equalTo(TradingPair::market, market, Case.INSENSITIVE)
+                .findFirst()?.let {
+                    getRealmFromContext(context).copyFromRealm(it)
+                }
     }
 
     fun getTradingPairByMarket(market: String, context: HandlerContext = UI): LiveData<TradingPair> {

@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.createorder.R
+import org.loopring.looprwallet.createorder.fragments.CreateOrderFragment
 
 /**
  * Created by Corey Caplan on 2/18/18.
@@ -40,8 +42,18 @@ class CreateOrderActivity : BaseActivity() {
 
     override val isSignInRequired = true
 
+    private val market: String by lazy {
+        intent.getStringExtra(KEY_MARKET)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState == null) {
+            val fragment = CreateOrderFragment.getInstance(market)
+            val tag = CreateOrderFragment.TAG
+            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
+        }
     }
 
 }

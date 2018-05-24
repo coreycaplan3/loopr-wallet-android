@@ -137,6 +137,8 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
                 wethToken = tokens.where().equalTo(LooprToken::identifier, LooprToken.WETH.identifier).findFirst()
             }
         }
+
+        onFormChanged()
     }
 
     override fun onNumberClick(number: String) {
@@ -145,14 +147,15 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
         val decimalPoint = currencySettings.getDecimalSeparator().first()
         val decimalIndex = text.indexOfFirst { it == decimalPoint }
 
-        if (decimalIndex > -1 && text.getAmountAfterDecimal() < CurrencyExchangeRate.MAX_EXCHANGE_RATE_FRACTION_DIGITS) {
-            // We can append after a decimal if we haven't surpassed the number of digits usable
-            appendCharacterToEditText(number)
-        }
-
-        if (decimalIndex == -1 && text.getAmountBeforeDecimal() < CurrencyExchangeRate.MAX_INTEGER_DIGITS) {
-            // We can append before a decimal if we haven't surpassed the number of digits usable
-            appendCharacterToEditText(number)
+        when {
+            number == "0" && text == "0" -> return
+            text == "0" -> wrapEtherInputEditText.setText(number)
+            decimalIndex > -1 && text.getAmountAfterDecimal() < CurrencyExchangeRate.MAX_EXCHANGE_RATE_FRACTION_DIGITS ->
+                // We can append after a decimal if we haven't surpassed the number of digits usable
+                appendCharacterToEditText(number)
+            decimalIndex == -1 && text.getAmountBeforeDecimal() < CurrencyExchangeRate.MAX_INTEGER_DIGITS ->
+                // We can append before a decimal if we haven't surpassed the number of digits usable
+                appendCharacterToEditText(number)
         }
 
         onFormChanged()
@@ -161,7 +164,9 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
     override fun onDecimalClick() {
         val text = wrapEtherInputEditText.text.toString()
         val decimalPoint = currencySettings.getDecimalSeparator()
-        if (!text.contains(decimalPoint)) {
+        if (text.isEmpty()) {
+            appendCharacterToEditText("0$decimalPoint")
+        } else if (!text.contains(decimalPoint)) {
             appendCharacterToEditText(decimalPoint)
         }
 
@@ -269,7 +274,7 @@ class WrapEthFragment : BaseFragment(), NumberPadActionListener {
                 .toBigDecimalOrNull()
                 ?.toBigInteger(ethToken) ?: return
 
-        val token = when(isSwappingToWrapped) {
+        val token = when (isSwappingToWrapped) {
             true -> ethToken
             false -> wethToken
         }

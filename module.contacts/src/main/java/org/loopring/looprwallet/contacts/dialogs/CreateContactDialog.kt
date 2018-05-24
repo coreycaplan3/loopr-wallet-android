@@ -10,7 +10,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.contacts.R
-import org.loopring.looprwallet.contacts.repositories.ContactsRepository
+import org.loopring.looprwallet.core.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.contact.Contact
@@ -62,10 +62,10 @@ class CreateContactDialog : BaseBottomSheetDialog() {
         createContactButton.setOnClickListener {
             val contactName = contactNameEditText.text.toString()
             val address = contactAddressEditText.text.toString()
-            val contact = Contact(address, contactName)
 
             async(UI) {
                 async(IO) {
+                    val contact = Contact(address, contactName)
                     repository.add(contact)
                 }.await()
 

@@ -24,27 +24,11 @@ import java.math.BigDecimal
  * @property volumeOfSecondary The volume of [primaryTicker] in relationship with [secondaryTicker]
  * that was traded in the past 24h. IE 10,000 LRC was traded which equated to 100 WETH (secondary)
  */
-open class TradingPair(
-        @PrimaryKey var market: String = "",
-        primaryToken: LooprToken? = null,
-        secondaryToken: LooprToken? = null
-) : RealmObject() {
-
-    companion object {
-
-        fun isValidMarket(market: String) = Regex("[A-Z]{2,7}-[A-Z]{2,7}").matches(market)
-
-        private fun convertPercentageChangeToNumber(change: String) = StringBuilder(change)
-                .deleteCharAt(change.indexOf('%'))
-                .toString()
-                .trim()
-                .toDouble()
-
-    }
+open class TradingPair(@PrimaryKey var market: String = "") : RealmObject() {
 
     var isFavorite: Boolean = false
 
-    private var mLastPrice: String = BigDecimal.ZERO.toPlainString()
+    private var mLastPrice: String = "0"
 
     var lastPrice: BigDecimal
         get() = BigDecimal(mLastPrice)
@@ -52,7 +36,7 @@ open class TradingPair(
             mLastPrice = value.toPlainString()
         }
 
-    private var mHighPrice: String = BigDecimal.ZERO.toPlainString()
+    private var mHighPrice: String = "0"
 
     var highPrice: BigDecimal
         get() = BigDecimal(mHighPrice)
@@ -60,7 +44,7 @@ open class TradingPair(
             mHighPrice = value.toPlainString()
         }
 
-    private var mLowPrice: String = BigDecimal.ZERO.toPlainString()
+    private var mLowPrice: String = "0"
 
     var lowPrice: BigDecimal
         get() = BigDecimal(mLowPrice)
@@ -68,7 +52,7 @@ open class TradingPair(
             mLowPrice = value.toPlainString()
         }
 
-    private var mAmountOfPrimary: String = BigDecimal.ZERO.toPlainString()
+    private var mAmountOfPrimary: String = "0"
 
     var amountOfPrimary: BigDecimal
         get() = BigDecimal(mAmountOfPrimary)
@@ -76,7 +60,7 @@ open class TradingPair(
             mAmountOfPrimary = value.toPlainString()
         }
 
-    private var mVolumeOfSecondary: String = BigDecimal.ZERO.toPlainString()
+    private var mVolumeOfSecondary: String = "0"
 
     var volumeOfSecondary: BigDecimal
         get() = BigDecimal(mVolumeOfSecondary)
@@ -90,8 +74,8 @@ open class TradingPair(
             change24hAsNumber = convertPercentageChangeToNumber(value)
         }
 
-    var change24hAsNumber: Double = convertPercentageChangeToNumber(change24h)
-        private set
+    var change24hAsNumber: Double = convertPercentageChangeToNumber("0.00%")
+        protected set
 
     val primaryTicker: String
         get() = market.split("-")[0]
@@ -99,7 +83,7 @@ open class TradingPair(
     val secondaryTicker: String
         get() = market.split("-")[1]
 
-    private var mPrimaryToken = primaryToken
+    private var mPrimaryToken: LooprToken? = null
 
     var primaryToken: LooprToken
         get() = mPrimaryToken!!
@@ -107,7 +91,7 @@ open class TradingPair(
             mPrimaryToken = value
         }
 
-    private var mSecondaryToken = secondaryToken
+    private var mSecondaryToken: LooprToken? = null
 
     var secondaryToken: LooprToken
         get() = mSecondaryToken!!
@@ -115,8 +99,19 @@ open class TradingPair(
             mSecondaryToken = value
         }
 
-    init {
-        market = market.toUpperCase()
+    // MARK - Private Methods
+
+    private fun convertPercentageChangeToNumber(change: String): Double {
+        val index = change.indexOf("%")
+        if (index == -1) {
+            return 0.00
+        }
+
+        return StringBuilder(change)
+                .deleteCharAt(index)
+                .toString()
+                .trim()
+                .toDouble()
     }
 
 }

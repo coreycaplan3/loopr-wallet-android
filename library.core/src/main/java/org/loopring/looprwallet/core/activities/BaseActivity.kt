@@ -6,7 +6,7 @@ import android.app.ProgressDialog
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.StrictMode
-import android.support.v4.app.FragmentTransaction
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +20,7 @@ import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController.FragmentAnimation
 import org.loopring.looprwallet.core.models.settings.ThemeSettings
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
@@ -200,10 +201,14 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * Pushes the given fragment onto the stack and saves the old one
      */
-    open fun pushFragmentTransaction(fragment: BaseFragment, fragmentTag: String) {
+    open fun pushFragmentTransaction(fragment: Fragment, fragmentTag: String, @FragmentAnimation animation: Int) {
         FragmentTransactionController(R.id.activityContainer, fragment, fragmentTag)
-                .apply {
-                    transition = FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+                .also {
+                    when (animation) {
+                        FragmentTransactionController.ANIMATION_NONE -> Unit
+                        FragmentTransactionController.ANIMATION_HORIZONTAL -> it.slideHorizontalAnimation()
+                        FragmentTransactionController.ANIMATION_VERTICAL -> it.slideVerticalAnimation()
+                    }
                 }
                 .commitTransaction(supportFragmentManager)
     }

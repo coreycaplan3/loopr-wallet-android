@@ -33,7 +33,7 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
             this.primaryToken = primaryToken
             this.secondaryToken = secondaryToken
             this.highPrice = BigDecimal(Math.random())
-            this.lowPrice = BigDecimal(Math.random())
+            this.lowPrice = this.highPrice - BigDecimal("0.1")
             this.amountOfPrimary = BigDecimal(Math.random() * 1000.0)
             this.volumeOfSecondary = BigDecimal(Math.random() * 10.0)
             this.lastPrice = (highPrice + lowPrice) / BigDecimal("2.0")
@@ -81,7 +81,6 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
             val repository = BaseRealmRepository()
 
             val tokens = RealmList<LooprToken>(LooprToken.APPC, LooprToken.ETH, LooprToken.LRC, LooprToken.REQ, LooprToken.WETH, LooprToken.ZRX)
-            repository.addList(tokens, NET)
 
             val tradingPairList = RealmList<TradingPair>().apply {
                 add(appcTradingPair)
@@ -90,7 +89,10 @@ class LooprMarketsServiceMockImpl : LooprMarketsService {
                 add(zrxTradingPair)
             }
 
-            repository.addList(tradingPairList, NET)
+            repository.runTransaction(NET) {
+                it.copyToRealmOrUpdate(tokens)
+                it.copyToRealmOrUpdate(tradingPairList)
+            }
         } else {
             throw IOException("No connection")
         }

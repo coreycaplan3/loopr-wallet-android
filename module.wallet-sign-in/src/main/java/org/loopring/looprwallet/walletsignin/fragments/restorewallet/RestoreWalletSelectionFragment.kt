@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_restore_wallet_selection.*
 import org.loopring.looprwallet.walletsignin.R
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.walletsignin.fragments.signin.EnterPasswordForPhraseFragment
 
 /**
@@ -42,21 +43,24 @@ class RestoreWalletSelectionFragment : BaseFragment() {
         restoreWalletKeystoreButton.setOnClickListener {
             pushFragmentTransaction(
                     RestoreWalletKeystoreFragment(),
-                    RestoreWalletKeystoreFragment.TAG
+                    RestoreWalletKeystoreFragment.TAG,
+                    FragmentTransactionController.ANIMATION_HORIZONTAL
             )
         }
 
         restoreWalletPhraseButton.setOnClickListener {
             pushFragmentTransaction(
                     EnterPasswordForPhraseFragment.getRestorationInstance(),
-                    EnterPasswordForPhraseFragment.TAG
+                    EnterPasswordForPhraseFragment.TAG,
+                    FragmentTransactionController.ANIMATION_HORIZONTAL
             )
         }
 
         restoreWalletPrivateKeyButton.setOnClickListener {
             pushFragmentTransaction(
                     RestoreWalletPrivateKeyFragment(),
-                    RestoreWalletPrivateKeyFragment.TAG
+                    RestoreWalletPrivateKeyFragment.TAG,
+                    FragmentTransactionController.ANIMATION_HORIZONTAL
             )
         }
 

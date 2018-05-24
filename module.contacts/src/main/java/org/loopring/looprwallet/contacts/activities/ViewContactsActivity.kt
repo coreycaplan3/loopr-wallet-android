@@ -6,6 +6,7 @@ import android.os.Bundle
 import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.fragments.ViewContactsFragment
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 
 /**
  * Created by Corey on 4/30/2018
@@ -35,7 +36,9 @@ class ViewContactsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            pushFragmentTransaction(ViewContactsFragment.getViewAllInstance(), ViewContactsFragment.TAG)
+            val fragment = ViewContactsFragment.getViewAllInstance()
+            val tag = ViewContactsFragment.TAG
+            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
         }
     }
 

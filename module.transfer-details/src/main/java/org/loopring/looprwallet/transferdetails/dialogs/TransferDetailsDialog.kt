@@ -4,11 +4,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.view.View
+import androidx.net.toUri
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.dialog_transfer_details.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.loopring.looprwallet.core.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.core.dialogs.BaseBottomSheetDialog
 import org.loopring.looprwallet.core.extensions.formatAsCurrency
 import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.models.loopr.transfers.LooprTransfer
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
@@ -99,12 +104,37 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
             transferDetailsSendImage.visibility = View.VISIBLE
             transferDetailsReceiveImage.visibility = View.GONE
 
-            quantityFormatterText = str(R.string.formatter_received)
+            quantityFormatterText = str(R.string.formatter_sent)
         } else {
             transferDetailsReceiveImage.visibility = View.VISIBLE
             transferDetailsSendImage.visibility = View.GONE
 
-            quantityFormatterText = str(R.string.formatter_sent)
+            quantityFormatterText = str(R.string.formatter_received)
+        }
+
+        val contactText = when (transfer.isSend) {
+            true -> getString(R.string.from)
+            false -> getString(R.string.to)
+        }
+
+        val contactAddress = transfer.contactAddress
+        transferDetailsContactFromLabel.text = contactText
+        transferDetailsContactLabel.text = contactAddress
+
+        transferDetailsContactLabel.setOnClickListener {
+            val uri = "https://etherscan.io/address/${transfer.contactAddress}".toUri()
+            ChromeCustomTabsUtility.getInstance(it.context)
+                    .launchUrl(it.context, uri)
+        }
+
+        async(IO) {
+            val contactName = ContactsRepository().getContactByAddressNow(contactAddress, IO)?.name
+
+            if (contactName != null) {
+                async(UI) {
+                    transferDetailsContactLabel.text = contactText.format(contactName)
+                }
+            }
         }
 
         // Quantity

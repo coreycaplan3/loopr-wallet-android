@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.tradedetails.R
 import org.loopring.looprwallet.tradedetails.fragments.TradingPairDetailsFragment
@@ -38,10 +39,9 @@ class TradingPairDetailsActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             val tradingPair = TradingPair(market)
-            pushFragmentTransaction(
-                    TradingPairDetailsFragment.getInstance(tradingPair),
-                    TradingPairDetailsFragment.TAG
-            )
+            val fragment = TradingPairDetailsFragment.getInstance(tradingPair)
+            val tag = TradingPairDetailsFragment.TAG
+            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
         }
     }
 

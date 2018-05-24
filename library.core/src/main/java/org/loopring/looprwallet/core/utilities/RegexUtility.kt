@@ -18,6 +18,8 @@ object RegexUtility {
 
     val TOKEN_TICKER_REGEX = Regex("[a-zA-Z]+")
 
+    val MARKET_REGEX = Regex("[A-Z]{2,7}-[A-Z]{2,7}")
+
     val TOKEN_DECIMAL_REGEX = Regex("[0-9]+")
 
     val PUBLIC_KEY_REGEX = Regex("0x[a-f0-9]+")

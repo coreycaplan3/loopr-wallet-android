@@ -266,7 +266,7 @@
     <string name="filled_amount">Filled/Amount</string>
     <string name="total">Total</string>
     <string name="expired">Expired</string>
-    <string name="no_connection_tap_to_retry">No connection, tap to retry</string>
+    <string name="no_connection_tap_to_retry">No connection\nTap to retry</string>
     <string name="toggle_currency">Toggle Currency</string>
     <string name="view_your_passphrase">View your passphrase</string>
     <string name="copy_keystore_content">Copy your keystore content</string>
@@ -289,7 +289,7 @@
     <string name="add_new_wallet">Add New Wallet</string>
     <string name="watch_only">Watch Only</string>
     <string name="remove_wallet">Remove a Wallet</string>
-    <string name="empty_state_view_transfers">You have no transfers. Send or receive some tokens to populate this page!</string>
+    <string name="empty_state_view_transfers">Tokens you send or receive will appear here</string>
     <string name="waiting_to_be_mined">Waiting to be mined</string>
     <string name="_24h_change">24h Change</string>
     <string name="unlock_token">Unlock Token</string>
@@ -353,4 +353,9 @@
     <string name="remove">Remove</string>
     <string name="your_eth_will_be_converted">Your ETH will be converted…</string>
     <string name="your_weth_will_be_converted">Your WETH will be converted…</string>
+    <string name="rationale_empty_favorites">Markets you favorite will show up here</string>
+    <string name="share_address">Share Address</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="enter_a_recipient">Enter a Recipient</string>
 </resources>

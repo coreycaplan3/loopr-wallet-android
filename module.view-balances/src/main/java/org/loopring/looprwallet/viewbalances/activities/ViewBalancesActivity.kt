@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.viewbalances.R
 import org.loopring.looprwallet.viewbalances.fragments.ViewBalancesFragment
 
@@ -36,7 +37,7 @@ class ViewBalancesActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            pushFragmentTransaction(ViewBalancesFragment(), ViewBalancesFragment.TAG)
+            pushFragmentTransaction(ViewBalancesFragment(), ViewBalancesFragment.TAG, FragmentTransactionController.ANIMATION_VERTICAL)
         }
     }
 

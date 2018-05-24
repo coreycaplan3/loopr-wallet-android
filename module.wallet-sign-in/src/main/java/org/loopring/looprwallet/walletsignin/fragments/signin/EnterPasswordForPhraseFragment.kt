@@ -12,6 +12,7 @@ import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.utilities.ViewUtility
 import org.loopring.looprwallet.core.validators.PasswordValidator
 import org.loopring.looprwallet.core.validators.WalletNameValidator
@@ -127,7 +128,8 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnP
             (it as? WalletCreationPhrase)?.let {
                 pushFragmentTransaction(
                         CreateWalletRememberPhraseFragment.getInstance(it),
-                        CreateWalletRememberPhraseFragment.TAG
+                        CreateWalletRememberPhraseFragment.TAG,
+                        FragmentTransactionController.ANIMATION_HORIZONTAL
                 )
             }
         }
@@ -154,7 +156,8 @@ class EnterPasswordForPhraseFragment : BaseFragment(), ConfirmPasswordDialog.OnP
             TYPE_RESTORE_WALLET -> {
                 pushFragmentTransaction(
                         SignInEnterPhraseFragment.createEnterPhraseInstance(wallet),
-                        SignInEnterPhraseFragment.TAG
+                        SignInEnterPhraseFragment.TAG,
+                        FragmentTransactionController.ANIMATION_HORIZONTAL
                 )
             }
 

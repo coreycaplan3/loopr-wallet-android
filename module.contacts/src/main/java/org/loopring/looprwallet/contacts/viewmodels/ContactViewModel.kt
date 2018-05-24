@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData
 import io.realm.OrderedRealmCollection
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.contacts.models.ContactFilter
-import org.loopring.looprwallet.contacts.repositories.ContactsRepository
+import org.loopring.looprwallet.core.repositories.contacts.ContactsRepository
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.contact.Contact
 import org.loopring.looprwallet.core.viewmodels.OfflineOnlyViewModel

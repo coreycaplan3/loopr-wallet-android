@@ -75,6 +75,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
 
     final override fun onSearchItemCollapsed() {
         adapter?.clearFilter()
+        adapter?.sortBy?.let { onSortByChange(it) }
     }
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
@@ -83,15 +84,15 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
 
     final override fun onSortByChange(newSortByFilter: String) {
         homeMarketsViewModel.onSortByChange(newSortByFilter)
-        adapter?.apply {
-            val newData = data?.where()?.apply {
+        adapter?.let {
+            val newData = it.data?.where()?.apply {
                 when (newSortByFilter) {
                     TradingPairFilter.SORT_BY_TICKER_ASC -> sort(TradingPair::market)
                     TradingPairFilter.SORT_BY_GAINERS -> sort(TradingPair::change24hAsNumber, Sort.DESCENDING)
                     TradingPairFilter.SORT_BY_LOSERS -> sort(TradingPair::change24hAsNumber)
                 }
             }?.findAllAsync()
-            updateData(newData)
+            it.updateData(newData)
         }
     }
 

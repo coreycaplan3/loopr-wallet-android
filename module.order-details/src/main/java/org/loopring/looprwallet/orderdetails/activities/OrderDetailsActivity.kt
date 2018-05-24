@@ -50,11 +50,7 @@ class OrderDetailsActivity : BaseActivity() {
         if (savedInstanceState == null) {
             val fragment = OrderDetailsFragment.getInstance(orderHash)
             val tag = OrderDetailsFragment.TAG
-
-            FragmentTransactionController(R.id.activityContainer, fragment, tag).apply {
-                slideUpAndDownAnimation()
-                commitTransaction(supportFragmentManager)
-            }
+            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
         }
     }
 

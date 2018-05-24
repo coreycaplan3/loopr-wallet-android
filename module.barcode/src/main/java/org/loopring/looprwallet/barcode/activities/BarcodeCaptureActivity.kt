@@ -46,8 +46,8 @@ import org.loopring.looprwallet.core.delegates.PermissionDelegate
 import org.loopring.looprwallet.core.extensions.loge
 import org.loopring.looprwallet.core.extensions.logw
 import org.loopring.looprwallet.core.extensions.snackbar
-import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.RegexUtility
 import org.web3j.crypto.WalletUtils
 import java.io.IOException
 
@@ -197,7 +197,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
             isPrivateKeyAllowed && WalletUtils.isValidPrivateKey(value) ->
                 putActivityResultAndFinish(this, TYPE_PRIVATE_KEY, value)
 
-            isAddressAccepted && TradingPair.isValidMarket(value) ->
+            isAddressAccepted && RegexUtility.MARKET_REGEX.matches(value) ->
                 putActivityResultAndFinish(this, TYPE_TRADING_PAIR, value)
             else -> {
                 val message = String.format(str(R.string.error_invalid_qr_code), value)

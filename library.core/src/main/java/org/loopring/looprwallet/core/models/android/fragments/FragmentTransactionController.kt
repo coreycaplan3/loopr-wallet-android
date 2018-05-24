@@ -16,9 +16,17 @@ import org.loopring.looprwallet.core.extensions.logv
  *
  * Purpose of Class: A controller used to standardize fragment transactions.
  */
-class FragmentTransactionController(@IdRes private val container: Int,
-                                    private val newFragment: Fragment,
-                                    private val newFragmentTag: String) {
+class FragmentTransactionController internal constructor(@IdRes private val container: Int,
+                                                         private val newFragment: Fragment,
+                                                         private val newFragmentTag: String) {
+
+    companion object {
+
+        const val ANIMATION_NONE = 1
+        const val ANIMATION_HORIZONTAL = 2
+        const val ANIMATION_VERTICAL = 3
+
+    }
 
     @IntDef(
             FragmentTransaction.TRANSIT_NONE,
@@ -27,6 +35,9 @@ class FragmentTransactionController(@IdRes private val container: Int,
             FragmentTransaction.TRANSIT_FRAGMENT_FADE)
     @Retention(AnnotationRetention.SOURCE)
     internal annotation class FragmentTransition
+
+    @IntDef
+    internal annotation class FragmentAnimation
 
     var sharedElements: List<Pair<View, String>>? = null
 
@@ -56,9 +67,21 @@ class FragmentTransactionController(@IdRes private val container: Int,
      * Creates an animation for sliding the entering fragment up and sliding it down when it's
      * popped. The other animations are nullified.
      */
-    fun slideUpAndDownAnimation() {
+    fun slideVerticalAnimation() {
         enterAnimation = R.anim.slide_up
         popExitAnimation = R.anim.slide_down
+
+        popEnterAnimation = 0
+        exitAnimation = 0
+    }
+
+    /**
+     * Creates an animation for sliding the entering fragment in from the right and sliding out to
+     * the right when it's popped. The other animations are nullified.
+     */
+    fun slideHorizontalAnimation() {
+        enterAnimation = R.anim.slide_right_to_center
+        popExitAnimation = R.anim.slide_center_to_right
 
         popEnterAnimation = 0
         exitAnimation = 0
