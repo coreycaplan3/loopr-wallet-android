@@ -70,7 +70,7 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar?.title = str(R.string.my_balances)
+        toolbar?.title = str(R.string.wallet_balances)
 
         setupLockAndUnlockTransactionViewModel(approveTransactionViewModel)
         approveTransactionViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {

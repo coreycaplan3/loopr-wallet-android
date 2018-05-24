@@ -24,8 +24,7 @@ import java.util.*
  */
 class HomeOrdersViewModel : OfflineFirstViewModel<LooprOrderContainer, OrderSummaryFilter>() {
 
-    // 5 seconds in ms
-    override val waitTime = 5 * 1000L
+    override val waitTime = 5 * 1000L // 5 seconds in ms
 
     override val repository = LooprOrderRepository()
 

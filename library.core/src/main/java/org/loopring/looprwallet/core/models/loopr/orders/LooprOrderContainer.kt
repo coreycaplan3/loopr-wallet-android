@@ -37,11 +37,11 @@ open class LooprOrderContainer(
         /**
          * Creates the criteria key to be used with [pagingItems].
          */
-        fun createCriteria(filter: OrderSummaryFilter): String = filter.run {
-            val address = address?.toUpperCase()
-            val market = market?.toUpperCase()
-            val status = status.toUpperCase()
-            return@run "$address-$market-$status"
+        fun createCriteria(filter: OrderSummaryFilter): String = filter.let {
+            val address = it.address?.toUpperCase()
+            val market = it.market?.toUpperCase()
+            val status = it.status.toUpperCase()
+            "$address-$market-$status"
         }
     }
 

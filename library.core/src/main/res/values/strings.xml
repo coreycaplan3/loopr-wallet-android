@@ -302,7 +302,7 @@
     <string name="restore_your_wallet">Restore your Wallet</string>
     <string name="my_wallets">My Wallets</string>
     <string name="content_description_view_token_balances">Tap to see all of your token balances</string>
-    <string name="my_balances">My Balances</string>
+    <string name="wallet_balances">Wallet Balances</string>
     <string name="view_all_your_balances">View all of your balances</string>
     <string name="view_all_your_contacts">View all of your contacts</string>
     <string name="add_a_new_contact">Add a new contact</string>

@@ -46,6 +46,10 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/horizontal_margin_small"
                     android:layout_marginStart="@dimen/horizontal_margin_small"
+                    android:background="@drawable/ripple_effect_accent_flat"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="?attr/colorPrimary"
                     android:textIsSelectable="true"
                     tools:text="@string/default_address" />
 

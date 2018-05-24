@@ -122,9 +122,9 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
         transferDetailsContactLabel.text = contactAddress
 
         transferDetailsContactLabel.setOnClickListener {
-            val uri = "https://etherscan.io/address/${transfer.contactAddress}".toUri()
+            val url = ChromeCustomTabsUtility.ETHERSCAN_ADDRESS_URI + transfer.contactAddress
             ChromeCustomTabsUtility.getInstance(it.context)
-                    .launchUrl(it.context, uri)
+                    .launchUrl(it.context, url.toUri())
         }
 
         async(IO) {
@@ -151,8 +151,9 @@ class TransferDetailsDialog : BaseBottomSheetDialog() {
 
         // Explorer
         transferDetailsViewTransactionButton.setOnClickListener {
+            val url = ChromeCustomTabsUtility.ETHERSCAN_TX_URI + transfer.transactionHash
             ChromeCustomTabsUtility.getInstance(it.context)
-                    .launchUrl(it.context, Uri.parse("https://etherscan.io/tx/${transfer.transactionHash}"))
+                    .launchUrl(it.context, url.toUri())
         }
 
         // Status

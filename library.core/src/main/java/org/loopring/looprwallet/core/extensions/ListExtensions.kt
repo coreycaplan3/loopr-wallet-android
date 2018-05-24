@@ -53,6 +53,27 @@ inline fun <T> List<T>.indexOfFirstOrNull(predicate: (T) -> Boolean): Int? {
  * Finds an element based on the supplied predicate and updates the index with [data]. If the
  * element is not found, nothing occurs.
  *
+ * @return True if an update (in place) occurred or false if it one did not and instead the element
+ * was added to the list.
+ */
+inline fun <T> MutableList<T>.insertOrUpdate(data: T, predicate: (T) -> Boolean): Boolean {
+    val index = indexOfFirstOrNull(predicate)
+    return when {
+        index != null -> {
+            this[index] = data
+            true
+        }
+        else -> {
+            this.add(data)
+            false
+        }
+    }
+}
+
+/**
+ * Finds an element based on the supplied predicate and updates the index with [data]. If the
+ * element is not found, nothing occurs.
+ *
  * @return True if an update occurred or false if it one did not.
  */
 inline fun <T> MutableList<T>.update(data: T, predicate: (T) -> Boolean): Boolean {

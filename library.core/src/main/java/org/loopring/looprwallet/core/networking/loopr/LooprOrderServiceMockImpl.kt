@@ -11,7 +11,6 @@ import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImp
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImpl.Companion.lrcTradingPair
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImpl.Companion.reqTradingPair
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsServiceMockImpl.Companion.zrxTradingPair
-import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
 import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository
 import org.loopring.looprwallet.core.utilities.NetworkUtility
 import org.web3j.crypto.Credentials

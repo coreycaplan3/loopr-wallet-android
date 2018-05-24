@@ -2,6 +2,7 @@ package org.loopring.looprwallet.core.utilities
 
 import io.realm.RealmConfiguration.KEY_LENGTH
 import io.realm.RealmModel
+import org.loopring.looprwallet.core.extensions.insertOrUpdate
 import org.loopring.looprwallet.core.extensions.update
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingContainer
@@ -57,21 +58,13 @@ object RealmUtility {
         when {
             oldContainer != null -> {
                 val pagingItem = newContainer.pagingItems.first()
-                val didUpdatePagingItem = oldContainer.pagingItems.update(pagingItem) {
+                oldContainer.pagingItems.insertOrUpdate(pagingItem) {
                     it.criteria == newContainer.criteria
-                }
-                if (!didUpdatePagingItem) {
-                    // It's not in the list, so we can just add it
-                    oldContainer.pagingItems.add(pagingItem)
                 }
 
                 newContainer.data.forEach { newData ->
-                    val didUpdateOrder = oldContainer.data.update(newData) { oldData ->
+                    oldContainer.data.insertOrUpdate(newData) { oldData ->
                         diffPredicate(oldData, newData)
-                    }
-                    if (!didUpdateOrder) {
-                        // It's not in the list, so we can just add it
-                        oldContainer.data.add(newData)
                     }
                 }
 
@@ -85,6 +78,7 @@ object RealmUtility {
             else ->
                 // The container doesn't exist yet
                 repository.runTransaction {
+                    it.upsert(newContainer.pagingItems)
                     it.upsert(newContainer.data)
                     it.upsert(newContainer)
                 }

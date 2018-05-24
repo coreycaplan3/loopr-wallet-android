@@ -42,7 +42,7 @@ class CreateOrderActivity : BaseActivity() {
 
     override val isSignInRequired = true
 
-    private val market: String by lazy {
+    private val market: String? by lazy {
         intent.getStringExtra(KEY_MARKET)
     }
 

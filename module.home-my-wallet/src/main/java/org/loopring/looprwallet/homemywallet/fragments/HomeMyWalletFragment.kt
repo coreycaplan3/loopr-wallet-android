@@ -43,7 +43,9 @@ import org.loopring.looprwallet.viewbalances.activities.ViewBalancesActivity
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import android.text.Html
+import androidx.net.toUri
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
+import org.loopring.looprwallet.core.utilities.ChromeCustomTabsUtility
 
 
 /**
@@ -113,7 +115,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     override fun onBottomNavigationReselected() {
         logd("Wallet Reselected!")
         // Scroll to the top of the NestedScrollView
-        fragmentContainer.scrollTo(0, 0)
+        homeMyWalletScrollContainer.scrollTo(0, 0)
     }
 
     private val createOptionsMenu: (Toolbar?) -> Unit = {
@@ -187,6 +189,12 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     // MARK - Private Methods
 
     private fun setupWalletInformation() = walletClient.getCurrentWallet()?.let { wallet ->
+
+        addressLabel.setOnClickListener {
+            val url = ChromeCustomTabsUtility.ETHERSCAN_ADDRESS_URI + wallet.credentials.address
+            ChromeCustomTabsUtility.getInstance(it.context)
+                    .launchUrl(it.context, url.toUri())
+        }
 
         // Setup Tooltips
         TooltipCompat.setTooltipText(shareAddressButton, str(R.string.share_your_address))

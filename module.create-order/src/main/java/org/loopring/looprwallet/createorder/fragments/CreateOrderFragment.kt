@@ -20,7 +20,7 @@ class CreateOrderFragment : BaseFragment() {
 
         private const val KEY_TRADING_PAIR = "TRADING_PAIR"
 
-        fun getInstance(market: String) = CreateOrderFragment().apply {
+        fun getInstance(market: String?) = CreateOrderFragment().apply {
             arguments = bundleOf(KEY_TRADING_PAIR to market)
         }
 
@@ -29,8 +29,8 @@ class CreateOrderFragment : BaseFragment() {
     override val layoutResource: Int
         get() = R.layout.fragment_create_order
 
-    private val market: String by lazy {
-        arguments?.getString(KEY_TRADING_PAIR)!!
+    private val market: String? by lazy {
+        arguments?.getString(KEY_TRADING_PAIR)
     }
 
 }
