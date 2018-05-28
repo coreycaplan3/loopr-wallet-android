@@ -247,4 +247,10 @@
         <item name="android:foreground">@drawable/view_group_ripple_background</item>
     </style>
 
+    <!-- Custom -->
+
+    <declare-styleable name="OrderProgressView">
+        <attr name="textColor" />
+    </declare-styleable>
+
 </resources>

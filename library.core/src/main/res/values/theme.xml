@@ -85,7 +85,7 @@
         <item name="android:windowBackground">@color/darkBackground</item>
         <item name="android:colorBackground">@color/cardview_dark_background</item>
 
-        <item name="circleBackgroundColor">@color/darkShadowColor</item>
+        <item name="circleBackgroundColor">@color/lightShadowColor</item>
 
         <!-- Actionbar -->
         <item name="titleTextColor">@color/full_white_text_primary</item>

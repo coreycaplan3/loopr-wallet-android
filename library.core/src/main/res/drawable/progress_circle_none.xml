@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="ring"
-    android:thicknessRatio="27"
+    android:thicknessRatio="18"
     android:useLevel="false">
 
     <gradient

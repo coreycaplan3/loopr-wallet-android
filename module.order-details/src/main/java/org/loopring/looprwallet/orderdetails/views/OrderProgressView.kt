@@ -11,6 +11,9 @@ import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.col
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
 import org.loopring.looprwallet.orderdetails.R
+import android.content.res.TypedArray
+
+
 
 
 /**
@@ -49,6 +52,16 @@ class OrderProgressView
 
     init {
         inflate(context, R.layout.order_progress, this)
+
+        attrs?.let {
+            val a = context.obtainStyledAttributes(it, R.styleable.OrderProgressView, defStyleAttr, 0)
+
+            val defaultColor = col(context.theme.getResourceIdFromAttrId(android.R.attr.textColorPrimary))
+            val textColor = a.getColor(R.styleable.OrderProgressView_textColor, defaultColor)
+            openOrderProgressLabel.setTextColor(textColor)
+
+            a.recycle()
+        }
     }
 
 }

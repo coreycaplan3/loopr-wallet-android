@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_order_details.*
 import kotlinx.android.synthetic.main.view_holder_home_order.*
 import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
-import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.homeorders.R

@@ -41,16 +41,18 @@
                     <org.loopring.looprwallet.orderdetails.views.OrderProgressView
                         android:id="@+id/orderDetailsOrderProgressView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        app:textColor="@color/whiteTextPrimary" />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/orderDetailsOrderCompleteImage"
                         style="@style/App.Image.Bordered"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:contentDescription="@string/content_description_completed_order"
                         android:src="@drawable/ic_swap_horiz_white_24dp"
-                        android:tint="?attr/textColorSecondaryOnly"
+                        android:tint="@color/whiteTextPrimary"
+                        app:backgroundTint="@color/whiteTextPrimary"
                         tools:visibility="gone" />
 
                 </FrameLayout>
@@ -61,6 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/vertical_margin"
+                    android:textColor="@color/whiteTextPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/orderDetailsProgressContainer"
@@ -72,6 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/vertical_margin"
+                    android:textColor="@color/whiteTextPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/orderDetailsTokenAmountLabel"
@@ -102,6 +106,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                        android:textColor="@color/whiteTextPrimary"
                         tools:text="LRC / WETH" />
 
                     <TextView

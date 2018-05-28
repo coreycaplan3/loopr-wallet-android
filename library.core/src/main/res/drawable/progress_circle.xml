@@ -11,8 +11,7 @@
 
             <shape
                 android:shape="ring"
-                android:innerRadiusRatio="3"
-                android:thicknessRatio="27"
+                android:thicknessRatio="18"
                 android:useLevel="true">
 
                 <solid android:color="@android:color/darker_gray" />
