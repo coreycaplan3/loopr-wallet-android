@@ -1,10 +1,12 @@
 package org.loopring.looprwallet.orderdetails.viewmodels
 
 import android.arch.lifecycle.LiveData
-import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.extensions.asLiveData
+import io.realm.OrderedRealmCollection
+import io.realm.RealmList
+import kotlinx.coroutines.experimental.async
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.android.architecture.IO
+import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFillContainer
 import org.loopring.looprwallet.core.models.loopr.orders.OrderFillFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -23,7 +25,7 @@ import java.util.*
  * Purpose of Class: An [OfflineFirstViewModel] that retrieves the details of an order (order fills)
  * by using the order's unique hash as the parameter.
  */
-class OrderFillsViewModel : OfflineFirstViewModel<LooprOrderFillContainer, OrderFillFilter>() {
+class OrderFillsViewModel : OfflineFirstViewModel<OrderedRealmCollection<LooprOrderFillContainer>, OrderFillFilter>() {
 
     override val repository = LooprOrderFillsRepository()
 
@@ -31,59 +33,47 @@ class OrderFillsViewModel : OfflineFirstViewModel<LooprOrderFillContainer, Order
         LooprOrderService.getInstance()
     }
 
-    private var oldParameter: OrderFillFilter? = null
-
     fun getOrderFills(
             owner: ViewLifecycleFragment,
-            orderHash: OrderFillFilter,
+            filter: OrderFillFilter,
             onChange: (LooprOrderFillContainer) -> Unit
     ) {
-        initializeData(owner, orderHash, onChange)
+        initializeData(owner, filter) {
+            it.firstOrNull()?.let { container ->
+                container.orderFillList = repository.getOrderFills(filter)
+                onChange(container)
+            }
+        }
     }
 
-    override fun getLiveDataFromRepository(parameter: OrderFillFilter): LiveData<LooprOrderFillContainer> {
+    override fun getLiveDataFromRepository(parameter: OrderFillFilter): LiveData<OrderedRealmCollection<LooprOrderFillContainer>> {
         return repository.getOrderFillContainer(parameter)
-                .also {
-                    it.orderFillList = repository.getOrderFills(parameter)
-                }
-                .asLiveData()
     }
 
     override fun isPredicatesEqual(oldParameter: OrderFillFilter?, newParameter: OrderFillFilter): Boolean {
-        this.oldParameter = oldParameter
-
         return oldParameter?.orderHash == newParameter.orderHash
     }
 
     override fun isRefreshNecessary(parameter: OrderFillFilter): Boolean {
-        val oldParameter = oldParameter
-        if (oldParameter != null && parameter.pageNumber != oldParameter.pageNumber) {
-            // We're working with different pages
+        if (parameter.pageNumber != 1) {
+            // We're loading a new page
             return true
         }
 
         return defaultIsRefreshNecessary(parameter.orderHash)
     }
 
-    override fun getDataFromNetwork(parameter: OrderFillFilter): Deferred<LooprOrderFillContainer> {
-        val result = service.getOrderFillsByOrderHash(parameter)
-
-        if (parameter.pageNumber == 1) {
-            // Clear all old ones since our paging is "messed up"
-            val list = repository.getOrderFillsNow(parameter, IO)
-            repository.remove(list, IO)
-        }
-
-        return result
+    override fun getDataFromNetwork(parameter: OrderFillFilter) = async(NET) {
+        val container = service.getOrderFillsByOrderHash(parameter).await()
+        RealmList(container)
     }
 
-    override fun addNetworkDataToRepository(data: LooprOrderFillContainer, parameter: OrderFillFilter) {
-        val criteria = LooprOrderFillContainer.createCriteria(parameter)
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprOrderFillContainer>, parameter: OrderFillFilter) {
         val repository = LooprOrderFillsRepository()
-        val oldContainer = repository.getOrderFillContainerByKeyNow(criteria, IO)
-        RealmUtility.diffContainerAndAddToRepository(repository, oldContainer, data) { oldFill, newFill ->
-            oldFill.transactionHash == newFill.transactionHash
-        }
+        val newContainer = data.first()!!
+        val oldContainer = repository.getOrderFillContainerNow(parameter, IO)
+
+        RealmUtility.updatePagingContainer(repository, parameter.pageNumber, oldContainer, newContainer)
     }
 
     override fun addSyncDataToRepository(parameter: OrderFillFilter) {

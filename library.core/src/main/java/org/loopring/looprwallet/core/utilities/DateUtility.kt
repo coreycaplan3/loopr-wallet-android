@@ -1,5 +1,8 @@
 package org.loopring.looprwallet.core.utilities
 
+import android.annotation.SuppressLint
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -22,6 +25,20 @@ object DateUtility {
         val current = Date()
 
         return date.time + offsetMillis > current.time
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun formatDateTime(date: Date): String {
+        val isSameYear = Calendar.getInstance()
+                .also { it.time = date }
+                .get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+
+        val formatter = when {
+            isSameYear -> SimpleDateFormat("MMM d h:MM a")
+            else -> SimpleDateFormat("d MMM yyyy, h:MM a")
+        }
+
+        return formatter.format(date)
     }
 
 }

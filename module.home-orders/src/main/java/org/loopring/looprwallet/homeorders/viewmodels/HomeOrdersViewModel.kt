@@ -1,10 +1,14 @@
 package org.loopring.looprwallet.homeorders.viewmodels
 
 import android.arch.lifecycle.LiveData
+import io.realm.OrderedRealmCollection
+import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
-import org.loopring.looprwallet.core.extensions.asLiveData
+import kotlinx.coroutines.experimental.async
+import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.android.architecture.IO
+import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
@@ -22,7 +26,7 @@ import java.util.*
  * Purpose of Class:
  *
  */
-class HomeOrdersViewModel : OfflineFirstViewModel<LooprOrderContainer, OrderSummaryFilter>() {
+class HomeOrdersViewModel : OfflineFirstViewModel<OrderedRealmCollection<LooprOrderContainer>, OrderSummaryFilter>() {
 
     override val waitTime = 5 * 1000L // 5 seconds in ms
 
@@ -36,7 +40,12 @@ class HomeOrdersViewModel : OfflineFirstViewModel<LooprOrderContainer, OrderSumm
      * Gets the user's orders based on the provided [filter].
      */
     fun getOrders(owner: ViewLifecycleFragment, filter: OrderSummaryFilter, onChange: (LooprOrderContainer) -> Unit) {
-        initializeData(owner, filter, onChange)
+        initializeData(owner, filter) {
+            it.firstOrNull()?.let { container ->
+                container.orderList = repository.getOrders(filter)
+                onChange(container)
+            }
+        }
     }
 
     override fun isPredicatesEqual(oldParameter: OrderSummaryFilter?, newParameter: OrderSummaryFilter): Boolean {
@@ -45,17 +54,12 @@ class HomeOrdersViewModel : OfflineFirstViewModel<LooprOrderContainer, OrderSumm
                 oldParameter?.status == newParameter.status
     }
 
-    override fun getLiveDataFromRepository(parameter: OrderSummaryFilter): LiveData<LooprOrderContainer> {
+    override fun getLiveDataFromRepository(parameter: OrderSummaryFilter): LiveData<OrderedRealmCollection<LooprOrderContainer>> {
         return repository.getOrderContainer(parameter)
-                .also {
-                    it.orderList = repository.getOrders(parameter)
-                }
-                .asLiveData()
     }
 
     override fun isRefreshNecessary(parameter: OrderSummaryFilter): Boolean {
-        val oldParameter = mParameter
-        if (oldParameter != null && oldParameter.pageNumber != parameter.pageNumber) {
+        if (parameter.pageNumber != 1) {
             // We're loading a new page
             return true
         }
@@ -63,25 +67,17 @@ class HomeOrdersViewModel : OfflineFirstViewModel<LooprOrderContainer, OrderSumm
         return defaultIsRefreshNecessary(parameter.address!!)
     }
 
-    override fun getDataFromNetwork(parameter: OrderSummaryFilter): Deferred<LooprOrderContainer> {
-        val result = service.getOrdersByAddress(parameter)
-
-        if (parameter.pageNumber == 1) {
-            // Clear all old ones since our paging may be in an inconsistent state
-            val list = repository.getOrdersByFilterNow(parameter, IO)
-            repository.remove(list, IO)
-        }
-
-        return result
+    override fun getDataFromNetwork(parameter: OrderSummaryFilter) = async(NET) {
+        val container = service.getOrdersByAddress(parameter).await()
+        RealmList(container)
     }
 
-    override fun addNetworkDataToRepository(data: LooprOrderContainer, parameter: OrderSummaryFilter) {
-        val criteria = LooprOrderContainer.createCriteria(parameter)
+    override fun addNetworkDataToRepository(data: OrderedRealmCollection<LooprOrderContainer>, parameter: OrderSummaryFilter) {
         val repository = LooprOrderRepository()
-        val oldContainer = repository.getOrderContainerByKeyNow(criteria, IO)
-        RealmUtility.diffContainerAndAddToRepository(repository, oldContainer, data) { oldOrder, newOrder ->
-            oldOrder.orderHash == newOrder.orderHash
-        }
+        val oldContainer = repository.getOrderContainerNow(parameter, IO)
+        val newContainer = data.first()!!
+
+        RealmUtility.updatePagingContainer(repository, parameter.pageNumber, oldContainer, newContainer)
     }
 
     override fun addSyncDataToRepository(parameter: OrderSummaryFilter) {

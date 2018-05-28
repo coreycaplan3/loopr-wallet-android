@@ -17,7 +17,7 @@
         <item name="circleBackgroundColor">@color/lightShadowColor</item>
 
         <!-- Actionbar -->
-        <item name="titleTextColor">@color/whiteTextPrimary</item>
+        <item name="titleTextColor">@color/full_white_text_primary</item>
         <item name="actionOverflowButtonStyle">@style/App.LightCustomOverflow</item>
 
         <!-- Button Style -->
@@ -25,6 +25,7 @@
         <item name="buttonStyle">@style/App.Button</item>
         <item name="borderlessButtonColor">@color/lightPrimary</item>
         <item name="borderlessButtonStyle">@style/App.Button.Borderless</item>
+        <item name="buttonBarButtonStyle">@style/App.Button.Borderless</item>
 
         <!-- Cards -->
         <item name="cardBackgroundColor">@color/cardview_light_background</item>
@@ -87,7 +88,7 @@
         <item name="circleBackgroundColor">@color/darkShadowColor</item>
 
         <!-- Actionbar -->
-        <item name="titleTextColor">@color/whiteTextPrimary</item>
+        <item name="titleTextColor">@color/full_white_text_primary</item>
         <item name="actionOverflowButtonStyle">@style/App.DarkCustomOverflow</item>
 
         <!-- Button Style -->

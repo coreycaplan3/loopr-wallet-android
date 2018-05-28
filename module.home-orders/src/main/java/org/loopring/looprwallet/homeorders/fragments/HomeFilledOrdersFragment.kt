@@ -31,10 +31,4 @@ class HomeFilledOrdersFragment : BaseHomeChildOrdersFragment() {
     override val orderType: String
         get() = FILTER_FILLED
 
-    override fun provideAdapter(orderFilter: OrderSummaryFilter): HomeOrderAdapter {
-        val activity = activity as? BaseActivity
-                ?: throw IllegalStateException("Cannot cast activity")
-        return HomeOrderAdapter(orderFilter, orderType, activity, this)
-    }
-
 }

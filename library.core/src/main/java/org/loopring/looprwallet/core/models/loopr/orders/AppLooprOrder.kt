@@ -36,27 +36,7 @@ import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprOrde
  * @property priceInSecondaryTicker The price of the order in terms of *secondaryTicker*, IE WETH
  * @property expirationDate The expiration date of the order
  */
-open class AppLooprOrder(
-        @PrimaryKey var orderHash: String = "",
-        var address: String = "",
-        @Index var orderDate: Date = Date(),
-        var isSell: Boolean = false,
-        tradingPair: TradingPair? = null,
-        var percentageFilled: Int = 100,
-        var status: String = FILTER_OPEN_NEW,
-        amount: BigInteger = BigInteger.ONE,
-        priceInSecondaryTicker: BigDecimal = BigDecimal.ZERO,
-        var expirationDate: Date = Date(),
-        var buyNoMoreThanBuyAmount: Boolean = true,
-        var protocol: String = "",
-        var delegateAddress: String = "",
-        lrcFee: BigInteger = BigInteger.ZERO,
-        var marginSplitPercentage: Int = 50,
-        var v: String = "",
-        var r: String = "",
-        var s: String = "",
-        override var lastUpdated: Date = Date()
-) : RealmObject(), TrackedRealmObject {
+open class AppLooprOrder(@PrimaryKey var orderHash: String = "") : RealmObject(), TrackedRealmObject {
 
     companion object {
 
@@ -138,9 +118,45 @@ open class AppLooprOrder(
         }
     }
 
-    private var mTradingPair: TradingPair? = null
+    var address: String = ""
 
-    private var mAmount: String = amount.toString(10)
+    @Index
+    var orderDate: Date = Date()
+
+    var isSell: Boolean = false
+
+    var percentageFilled: Int = 100
+
+    var status: String = FILTER_OPEN_NEW
+
+    var expirationDate: Date = Date()
+
+    var buyNoMoreThanBuyAmount: Boolean = true
+
+    var protocol: String = ""
+
+    var delegateAddress: String = ""
+
+    var marginSplitPercentage: Int = 50
+
+    var v: String = ""
+
+    var r: String = ""
+
+    var s: String = ""
+
+    override var lastUpdated: Date = Date()
+
+    var mTradingPair: TradingPair? = null
+        private set
+
+    var tradingPair: TradingPair
+        get() = mTradingPair!!
+        set(value) {
+            mTradingPair = value
+        }
+
+    private var mAmount: String = BigInteger.ZERO.toString(10)
 
     var amount: BigInteger
         get() = BigInteger(mAmount)
@@ -151,7 +167,7 @@ open class AppLooprOrder(
     val totalPrice: BigDecimal
         get() = priceInSecondaryTicker * amount.toBigDecimal(tradingPair.primaryToken)
 
-    private var mPriceInSecondaryTicker: String = priceInSecondaryTicker.toPlainString()
+    private var mPriceInSecondaryTicker: String = BigDecimal.ZERO.toPlainString()
 
     /**
      * The price of the ticker in terms of the secondary ticker. For example in LRC-WETH, the price
@@ -179,22 +195,12 @@ open class AppLooprOrder(
             return status != FILTER_OPEN_PARTIAL && status != FILTER_OPEN_NEW
         }
 
-    var tradingPair: TradingPair
-        get() = mTradingPair!!
-        set(value) {
-            mTradingPair = value
-        }
-
-    private var mLrcFee: String = lrcFee.toString(10)
+    private var mLrcFee: String = BigInteger.ZERO.toString(10)
 
     var lrcFee: BigInteger
         get() = BigInteger(mLrcFee)
         set(value) {
             mLrcFee = value.toString(10)
         }
-
-    init {
-        mTradingPair = tradingPair
-    }
 
 }

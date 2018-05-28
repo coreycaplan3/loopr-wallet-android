@@ -76,8 +76,7 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
                 containsOverflowMenu = false,
                 numberOfVisibleMenuItems = 1,
                 baseFragment = this,
-                savedInstanceState = savedInstanceState,
-                listener = this
+                savedInstanceState = savedInstanceState
         )
 
         toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
@@ -85,6 +84,8 @@ class SelectTransferContactFragment : BaseFragment(), ViewContactsFragment.OnCon
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        searchViewPresenter.listener = this
 
         toolbar?.title = getString(R.string.enter_a_recipient)
 

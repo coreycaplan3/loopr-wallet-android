@@ -62,6 +62,8 @@ class CancelOrderViewModel : TransactionViewModel<TransactionReceipt>() {
             val receipt = block(gasPrice)
                     .await()
 
+            // TODO cancel orers
+
             mResult.postValue(receipt)
         } catch (e: Exception) {
             mError.postValue(e)

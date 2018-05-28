@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.homemarkets.fragments
 
-import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import org.loopring.looprwallet.core.extensions.findViewById
@@ -13,7 +12,6 @@ import org.loopring.looprwallet.homemarkets.adapters.HomeMarketsAdapter
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
  */
 class HomeAllMarketsFragment : BaseHomeChildMarketsFragment() {
 
@@ -28,7 +26,4 @@ class HomeAllMarketsFragment : BaseHomeChildMarketsFragment() {
 
     override val isFavorites: Boolean = false
 
-    override fun provideAdapter(savedInstanceState: Bundle?): HomeMarketsAdapter {
-        return HomeMarketsAdapter(savedInstanceState, this, this, ::refreshAllOfflineFirstViewModels)
-    }
 }

@@ -40,7 +40,7 @@ open class LooprToken(
 
         totalSupply: BigInteger = BigInteger.ZERO,
 
-        override var decimalPlaces: Int = ETH.decimalPlaces,
+        override var decimalPlaces: Int = 18,
 
         /**
          * The list of balances mapping to an address owning the balance. If this object was
@@ -157,7 +157,7 @@ open class LooprToken(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        return identifier == (other as? CryptoToken)?.identifier
+        return identifier == (other as? LooprToken)?.identifier
     }
 
     override fun hashCode(): Int {

@@ -12,6 +12,7 @@ import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
+import org.loopring.looprwallet.core.repositories.loopr.LooprMarketsRepository
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.homemarkets.adapters.HomeMarketsAdapter
 import org.loopring.looprwallet.homemarkets.adapters.OnGeneralMarketsFilterChangeListener
@@ -38,7 +39,9 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
      */
     abstract val isFavorites: Boolean
 
-    private var adapter: HomeMarketsAdapter? = null
+    private val adapter: HomeMarketsAdapter by lazy {
+        HomeMarketsAdapter(this, this, isFavorites)
+    }
 
     private val homeMarketsViewModel by lazy {
         LooprViewModelFactory.get<HomeMarketsViewModel>(activity!!, "markets-$isFavorites")
@@ -47,20 +50,19 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = provideAdapter(savedInstanceState)
+        adapter.onRestoreInstance(savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView?.adapter = adapter
+
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
 
         setupOfflineFirstStateAndErrorObserver(homeMarketsViewModel, swipeRefreshLayout)
         setMarketsLiveData()
     }
-
-    abstract fun provideAdapter(savedInstanceState: Bundle?): HomeMarketsAdapter
 
     final override fun onBottomNavigationReselected() {
         recyclerView?.smoothScrollToPosition(0)
@@ -74,26 +76,27 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     }
 
     final override fun onSearchItemCollapsed() {
-        adapter?.clearFilter()
-        adapter?.sortBy?.let { onSortByChange(it) }
+        adapter.clearFilter()
+        adapter.sortBy.let { onSortByChange(it) }
     }
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
-        adapter?.filterData(listOf(), TradingPair::market, "*$searchQuery*")
+        val repository = LooprMarketsRepository()
+        adapter.data?.let {
+            adapter.filterData(repository.filterMarketsByQuery(searchQuery, it))
+        }
     }
 
     final override fun onSortByChange(newSortByFilter: String) {
         homeMarketsViewModel.onSortByChange(newSortByFilter)
-        adapter?.let {
-            val newData = it.data?.where()?.apply {
-                when (newSortByFilter) {
-                    TradingPairFilter.SORT_BY_TICKER_ASC -> sort(TradingPair::market)
-                    TradingPairFilter.SORT_BY_GAINERS -> sort(TradingPair::change24hAsNumber, Sort.DESCENDING)
-                    TradingPairFilter.SORT_BY_LOSERS -> sort(TradingPair::change24hAsNumber)
-                }
-            }?.findAllAsync()
-            it.updateData(newData)
-        }
+        val newData = adapter.data?.where()?.apply {
+            when (newSortByFilter) {
+                TradingPairFilter.SORT_BY_TICKER_ASC -> sort(TradingPair::market)
+                TradingPairFilter.SORT_BY_GAINERS -> sort(TradingPair::change24hAsNumber, Sort.DESCENDING)
+                TradingPairFilter.SORT_BY_LOSERS -> sort(TradingPair::change24hAsNumber)
+            }
+        }?.findAllAsync()
+        adapter.updateData(newData)
     }
 
     final override fun onDateFilterChange(newDateFilter: String) {
@@ -101,17 +104,17 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     }
 
     final override fun getCurrentDateFilter(): String {
-        return adapter?.dateFilter ?: throw IllegalArgumentException("Adapter was not initialized!")
+        return adapter.dateFilter
     }
 
     final override fun getCurrentSortByFilter(): String {
-        return adapter?.sortBy ?: throw IllegalArgumentException("Adapter was not initialized!")
+        return adapter.sortBy
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        adapter?.onSaveInstanceState(outState)
+        adapter.onSaveInstanceState(outState)
     }
 
     // MARK - Protected Methods
@@ -121,8 +124,6 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
      * provided by the [adapter].
      */
     private fun setMarketsLiveData() {
-        val adapter = adapter ?: return
-
         val marketsFilter = TradingPairFilter(isFavorites, adapter.dateFilter)
         homeMarketsViewModel.getHomeMarkets(this, marketsFilter, adapter.sortBy) { data ->
             setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, data)

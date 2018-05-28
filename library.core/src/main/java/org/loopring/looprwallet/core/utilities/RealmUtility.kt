@@ -3,10 +3,13 @@ package org.loopring.looprwallet.core.utilities
 import io.realm.RealmConfiguration.KEY_LENGTH
 import io.realm.RealmModel
 import org.loopring.looprwallet.core.extensions.insertOrUpdate
-import org.loopring.looprwallet.core.extensions.update
 import org.loopring.looprwallet.core.extensions.upsert
+import org.loopring.looprwallet.core.models.android.architecture.IO
+import org.loopring.looprwallet.core.models.loopr.filters.PagingFilter
+import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingContainer
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
+import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.security.SecureRandom
 import javax.crypto.KeyGenerator
 import kotlin.reflect.KProperty
@@ -49,39 +52,40 @@ object RealmUtility {
                 .joinToString(".") { it.name }
     }
 
-    inline fun <T : RealmModel> diffContainerAndAddToRepository(
+    fun loadMorePaging(pager: LooprAdapterPager<*>, filter: PagingFilter, viewModel: OfflineFirstViewModel<*, *>) {
+        pager.currentPage.let {
+            filter.pageNumber = it + 1
+            viewModel.refresh()
+        }
+    }
+
+    fun <T : RealmModel> updatePagingContainer(
             repository: BaseRealmRepository,
+            pageNumber: Int,
             oldContainer: LooprPagingContainer<T>?,
-            newContainer: LooprPagingContainer<T>,
-            diffPredicate: (T, T) -> Boolean
+            newContainer: LooprPagingContainer<T>
     ) {
         when {
             oldContainer != null -> {
-                val pagingItem = newContainer.pagingItems.first()
-                oldContainer.pagingItems.insertOrUpdate(pagingItem) {
-                    it.criteria == newContainer.criteria
+                oldContainer.pagingItem = newContainer.pagingItem
+
+                if (pageNumber == 1) {
+                    oldContainer.requirePagingItem.pageIndex = 1
                 }
 
-                newContainer.data.forEach { newData ->
-                    oldContainer.data.insertOrUpdate(newData) { oldData ->
-                        diffPredicate(oldData, newData)
-                    }
-                }
-
-                repository.runTransaction {
-                    it.upsert(oldContainer.pagingItems)
-                    it.upsert(oldContainer.data)
+                repository.runTransaction(IO) {
+                    it.upsert(newContainer.data)
+                    it.upsert(oldContainer.requirePagingItem)
                     it.upsert(oldContainer)
                 }
             }
-
-            else ->
-                // The container doesn't exist yet
-                repository.runTransaction {
-                    it.upsert(newContainer.pagingItems)
+            else -> {
+                repository.runTransaction(IO) {
                     it.upsert(newContainer.data)
+                    it.upsert(newContainer.requirePagingItem)
                     it.upsert(newContainer)
                 }
+            }
         }
     }
 

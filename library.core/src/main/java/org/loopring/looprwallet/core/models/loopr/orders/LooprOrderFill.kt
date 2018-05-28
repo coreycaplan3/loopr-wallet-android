@@ -15,28 +15,29 @@ import java.util.*
  * Purpose of Class:
  *
  */
-open class LooprOrderFill(
-        @PrimaryKey var transactionHash: String = "",
-        @Index var orderHash: String = "",
-        token: LooprToken? = null,
-        fillAmount: BigInteger = BigInteger.ZERO,
-        var tradeDate: Date = Date()
-) : RealmObject() {
+open class LooprOrderFill : RealmObject() {
 
-    private var _token: LooprToken? = token
+    @PrimaryKey var transactionHash: String = ""
+
+    @Index
+    var orderHash: String = ""
+
+    var tradeDate: Date = Date()
+
+    private var mToken: LooprToken? = null
 
     var token: LooprToken
-        get() = _token!!
+        get() = mToken!!
         set(value) {
-            _token = value
+            mToken = value
         }
 
-    private var _fillAmount: String = fillAmount.toString(10)
+    private var mFillAmount: String = BigInteger.ZERO.toString(10)
 
     var fillAmount: BigInteger
-        get() = BigInteger(_fillAmount)
+        get() = BigInteger(mFillAmount)
         set(value) {
-            _fillAmount = value.toString(10)
+            mFillAmount = value.toString(10)
         }
 
 }

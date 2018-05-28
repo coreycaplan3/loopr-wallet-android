@@ -50,7 +50,6 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:textColor="?attr/colorPrimary"
-                    android:textIsSelectable="true"
                     tools:text="@string/default_address" />
 
             </LinearLayout>

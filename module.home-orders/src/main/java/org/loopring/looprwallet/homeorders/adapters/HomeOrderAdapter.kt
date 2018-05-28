@@ -29,39 +29,42 @@ import org.loopring.looprwallet.orderdetails.fragments.OrderDetailsFragment
  * to it for starting an instance of [OrderDetailsFragment] when necessary.
  * @param listener An instance of [OnHomeOrderFilterChangeListener] for passing filter change
  * events to the caller.
- * @param cancelAllClickListener A listener for passing a click event to *cancel all orders* back
- * to the caller. This parameter should be **NOT** be null if the *orderType* is [FILTER_OPEN_ALL].
  *
  * @see OrderSummaryFilter.FILTER_OPEN_ALL
  * @see OrderSummaryFilter.FILTER_FILLED
  * @see OrderSummaryFilter.FILTER_CANCELLED
  */
 class HomeOrderAdapter(
-        orderFilter: OrderSummaryFilter,
         private val orderType: String,
         private val activity: BaseActivity,
-        private val listener: OnHomeOrderFilterChangeListener,
-        private val cancelAllClickListener: (() -> Unit)? = null
+        private val listener: OnHomeOrderFilterChangeListener
 ) : BaseRealmAdapter<AppLooprOrder>(),
         OnHomeOrderFilterChangeListener {
 
     override val currentStatusFilter: String
         get() = orderType
 
-    override var pager: LooprAdapterPager<AppLooprOrder> = OrderSummaryPager(orderFilter)
+    override var pager: LooprAdapterPager<AppLooprOrder> = OrderSummaryPager()
 
-    init {
-
-        when (orderType) {
-            FILTER_OPEN_ALL -> {
-                if (cancelAllClickListener == null) {
-                    throw IllegalStateException("cancelAllClickListener cannot be null for FILTER_OPEN_ALL order type")
+    /**
+     * A listener for passing a click event to *cancel all orders* back to the caller. This
+     * parameter should be **NOT** be null if the *orderType* is [FILTER_OPEN_ALL].
+     */
+    var cancelAllClickListener: (() -> Unit)? = null
+        set(value) {
+            field = value
+            when (orderType) {
+                FILTER_OPEN_ALL -> {
+                    if (cancelAllClickListener == null) {
+                        throw IllegalStateException("cancelAllClickListener cannot be null for FILTER_OPEN_ALL order type")
+                    }
                 }
+                FILTER_FILLED, FILTER_CANCELLED -> Unit
+                else -> throw IllegalArgumentException("Invalid orderType, found: $orderType")
             }
-            FILTER_FILLED, FILTER_CANCELLED -> Unit
-            else -> throw IllegalArgumentException("Invalid orderType, found: $orderType")
         }
 
+    init {
         containsHeader = true
     }
 

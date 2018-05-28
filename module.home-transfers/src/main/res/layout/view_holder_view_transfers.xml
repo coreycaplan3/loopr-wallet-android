@@ -15,15 +15,15 @@
 
         <FrameLayout
             android:id="@+id/viewTransfersImageContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_centerVertical="true">
 
             <ImageView
                 android:id="@+id/viewTransfersReceiveImage"
                 style="@style/App.Image.Bordered"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/content_description_receive"
                 android:src="@drawable/transfer_receive"
                 android:tint="@color/materialGreen" />
@@ -31,8 +31,8 @@
             <ImageView
                 android:id="@+id/viewTransfersSendImage"
                 style="@style/App.Image.Bordered"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/content_description_receive"
                 android:src="@drawable/transfer_send"
                 android:tint="@color/materialRed"

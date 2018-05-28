@@ -6,7 +6,6 @@ import android.widget.LinearLayout
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFillFilter
 import org.loopring.looprwallet.core.models.loopr.orders.OrderFillsLooprPager
 import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
 import org.loopring.looprwallet.orderdetails.R
@@ -22,7 +21,7 @@ import org.loopring.looprwallet.orderdetails.R
  */
 class OrderDetailsAdapter(orderSummary: AppLooprOrder) : BaseRealmAdapter<LooprOrderFill>() {
 
-    override var pager: LooprAdapterPager<LooprOrderFill> = OrderFillsLooprPager(OrderFillFilter(orderSummary.orderHash, 1))
+    override var pager: LooprAdapterPager<LooprOrderFill> = OrderFillsLooprPager()
 
     var orderSummary: AppLooprOrder = orderSummary
         set(value) {

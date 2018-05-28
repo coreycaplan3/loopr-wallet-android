@@ -11,11 +11,13 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_TRADING_PAIR
 import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.extensions.findViewById
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -62,8 +64,7 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
                 containsOverflowMenu = true,
                 numberOfVisibleMenuItems = 1,
                 baseFragment = this,
-                savedInstanceState = savedInstanceState,
-                listener = this
+                savedInstanceState = savedInstanceState
         )
     }
 
@@ -95,11 +96,29 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        searchViewPresenter.listener = this
+    }
+
+    private val openFragment by lazy {
+        HomeOpenOrdersFragment()
+    }
+
+    private val filledFragment by lazy {
+        HomeFilledOrdersFragment()
+    }
+
+    private val cancelledFragment by lazy {
+        HomeCancelledOrdersFragment()
+    }
+
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {
         return listOf(
-                Pair(str(R.string.open), HomeOpenOrdersFragment()),
-                Pair(str(R.string.filled), HomeFilledOrdersFragment()),
-                Pair(str(R.string.cancelled), HomeCancelledOrdersFragment())
+                str(R.string.open) to openFragment,
+                str(R.string.filled) to filledFragment,
+                str(R.string.cancelled) to cancelledFragment
         )
     }
 
@@ -120,8 +139,9 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
 
     override fun onBottomNavigationReselected() {
         logd("Orders reselected")
-        val fragment = adapter.getItem(viewPager.currentItem)
-        (fragment as BottomNavigationReselectedLister).onBottomNavigationReselected()
+        val container = findViewById<ViewGroup>(R.id.fragmentContainer)!!
+        val fragment = adapter.getItemFromContainer(container, viewPager.currentItem)
+        (fragment as? BottomNavigationReselectedLister)?.onBottomNavigationReselected()
     }
 
     private val createOptionsMenu: (Toolbar?) -> Unit = {
@@ -161,22 +181,28 @@ class HomeOrdersParentFragment : BaseTabFragment(), BottomNavigationReselectedLi
      */
 
     override fun onQueryTextChangeListener(searchQuery: String) {
+        val container = findViewById<ViewGroup>(R.id.fragmentContainer)!!
         for (i in 0 until adapter.count) {
-            (adapter.getItem(i) as OnSearchViewChangeListener).onQueryTextChangeListener(searchQuery)
+            val fragment = adapter.getItemFromContainer(container, i)
+            (fragment as? OnSearchViewChangeListener)?.onQueryTextChangeListener(searchQuery)
         }
     }
 
     override fun onSearchItemExpanded() {
         toolbarDelegate?.removeAllOptionsMenuExceptSearch()
 
+        val container = findViewById<ViewGroup>(R.id.fragmentContainer)!!
         for (i in 0 until adapter.count) {
-            (adapter.getItem(i) as OnSearchViewChangeListener).onSearchItemExpanded()
+            val fragment = adapter.getItemFromContainer(container, i)
+            (fragment as? OnSearchViewChangeListener)?.onSearchItemExpanded()
         }
     }
 
     override fun onSearchItemCollapsed() {
+        val container = findViewById<ViewGroup>(R.id.fragmentContainer)!!
         for (i in 0 until adapter.count) {
-            (adapter.getItem(i) as OnSearchViewChangeListener).onSearchItemCollapsed()
+            val fragment = adapter.getItemFromContainer(container, i)
+            (fragment as? OnSearchViewChangeListener)?.onSearchItemCollapsed()
         }
     }
 

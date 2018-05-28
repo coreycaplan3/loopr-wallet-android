@@ -139,13 +139,23 @@
     <style name="App.Dialog" />
 
     <style name="App.Dialog.Alert" parent="Theme.AppCompat.Dialog.Alert">
-        <!-- To tint EditText and TimePicker -->
+        <item name="android:windowTitleStyle">@style/App.Dialog.Title</item>
         <item name="colorAccent">@color/darkAccent</item>
     </style>
 
-    <style name="App.Dialog.Alert.Light" parent="ThemeOverlay.AppCompat.Dialog.Alert">
-        <!-- To tint EditText and TimePicker -->
-        <item name="colorAccent">?attr/colorAccent</item>
+    <style name="App.Dialog.Alert.Light" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowTitleStyle">@style/App.Dialog.Title.Light</item>
+        <item name="colorAccent">@color/lightAccent</item>
+    </style>
+
+    <style name="App.Dialog.Title">
+        <item name="android:textColor">@color/full_white_text_primary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
+    <style name="App.Dialog.Title.Light">
+        <item name="android:textColor">@color/full_black_text_primary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
     </style>
 
     <style name="App.Dialog.BottomSheet" parent="ThemeOverlay.AppCompat.Dialog">
@@ -162,10 +172,11 @@
     <style name="App.Image" />
 
     <style name="App.Image.Bordered">
-        <item name="background">@drawable/border</item>
+        <item name="android:background">@drawable/border</item>
         <item name="backgroundTint">?attr/circleBackgroundColor</item>
         <item name="android:padding">@dimen/standard_margin_small</item>
     </style>
+
 
     <!-- Input -->
 
@@ -212,12 +223,6 @@
         <item name="android:textSize">@dimen/subtitle</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
-
-    <!--
-    android:background="@drawable/ripple_effect_accent"
-                android:textAllCaps="true"
-                android:textColor="?attr/colorPrimary"
-                -->
 
     <style name="TextAppearance.AppCompat.Small.Button" parent="TextAppearance.AppCompat.Small">
         <item name="android:textAllCaps">true</item>

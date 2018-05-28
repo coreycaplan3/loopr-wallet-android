@@ -83,7 +83,8 @@ open class TradingPair(@PrimaryKey var market: String = "") : RealmObject() {
     val secondaryTicker: String
         get() = market.split("-")[1]
 
-    private var mPrimaryToken: LooprToken? = null
+    var mPrimaryToken: LooprToken? = null
+        private set
 
     var primaryToken: LooprToken
         get() = mPrimaryToken!!
@@ -91,7 +92,8 @@ open class TradingPair(@PrimaryKey var market: String = "") : RealmObject() {
             mPrimaryToken = value
         }
 
-    private var mSecondaryToken: LooprToken? = null
+    var mSecondaryToken: LooprToken? = null
+        private set
 
     var secondaryToken: LooprToken
         get() = mSecondaryToken!!

@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.view.ViewGroup
+import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.extensions.logv
 import org.loopring.looprwallet.core.extensions.logw
@@ -133,13 +134,13 @@ class LooprFragmentSwitcherPagerAdapter(
         }
 
         // Add the fragments
-        val pair = fragmentList.first()
+        val tagToFragmentPair = fragmentList.first()
         fragmentManager.beginTransaction()
-                .add(container.id, pair.second, pair.first)
+                .add(container.id, tagToFragmentPair.second, tagToFragmentPair.first)
                 .disallowAddToBackStack()
                 .commitNow()
 
-        mFragments[0] = pair.second
+        mFragments[0] = tagToFragmentPair.second
     }
 
     private fun restoreAdapter(savedInstanceState: Parcelable, classLoader: ClassLoader) {

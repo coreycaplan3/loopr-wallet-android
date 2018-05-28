@@ -9,11 +9,13 @@ import android.support.design.widget.TabLayout
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_PUBLIC_KEY
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity.Companion.TYPE_TRADING_PAIR
 import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.extensions.findViewById
 import org.loopring.looprwallet.core.extensions.getResourceIdFromAttrId
 import org.loopring.looprwallet.core.extensions.logd
 import org.loopring.looprwallet.core.fragments.BaseFragment
@@ -54,16 +56,21 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
-        toolbarDelegate?.onOptionsItemSelected = optionsItemSelected
-
         searchViewPresenter = SearchViewPresenter(
                 containsOverflowMenu = true,
                 numberOfVisibleMenuItems = 1,
                 baseFragment = this,
-                savedInstanceState = savedInstanceState,
-                listener = this
+                savedInstanceState = savedInstanceState
         )
+
+        toolbarDelegate?.onCreateOptionsMenu = createOptionsMenu
+        toolbarDelegate?.onOptionsItemSelected = optionsItemSelected
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        searchViewPresenter.listener = this
     }
 
     override fun createAppbarLayout(fragmentView: ViewGroup): AppBarLayout {
@@ -92,10 +99,18 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
         }
     }
 
+    private val marketsFragment by lazy {
+        HomeAllMarketsFragment()
+    }
+
+    private val favoritesFragment by lazy {
+        HomeFavoriteMarketsFragment()
+    }
+
     override fun getAdapterContent(): List<Pair<String, BaseFragment>> {
         return listOf(
-                Pair(str(R.string.all), HomeAllMarketsFragment()),
-                Pair(str(R.string.favorites), HomeFavoriteMarketsFragment())
+                str(R.string.all) to marketsFragment,
+                str(R.string.favorites) to favoritesFragment
         )
     }
 
@@ -142,7 +157,8 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
 
     override fun onBottomNavigationReselected() {
         logd("Markets reselected")
-        val fragment = adapter.getItem(viewPager.currentItem)
+        val container = findViewById<ViewGroup>(R.id.fragmentContainer)!!
+        val fragment = adapter.getItemFromContainer(container, viewPager.currentItem)
         (fragment as? BottomNavigationReselectedLister)?.onBottomNavigationReselected()
     }
 
@@ -157,22 +173,28 @@ class HomeMarketsParentFragment : BaseTabFragment(), BottomNavigationReselectedL
      */
 
     override fun onQueryTextChangeListener(searchQuery: String) {
+        val container = findViewById<ViewGroup>(R.id.fragmentContainer)!!
         for (i in 0 until adapter.count) {
-            (adapter.getItem(i) as? OnSearchViewChangeListener)?.onQueryTextChangeListener(searchQuery)
+            val fragment = adapter.getItemFromContainer(container, i)
+            (fragment as? OnSearchViewChangeListener)?.onQueryTextChangeListener(searchQuery)
         }
     }
 
     override fun onSearchItemExpanded() {
         toolbarDelegate?.removeAllOptionsMenuExceptSearch()
 
+        val container = findViewById<ViewGroup>(R.id.fragmentContainer)!!
         for (i in 0 until adapter.count) {
-            (adapter.getItem(i) as? OnSearchViewChangeListener)?.onSearchItemExpanded()
+            val fragment = adapter.getItemFromContainer(container, i)
+            (fragment as? OnSearchViewChangeListener)?.onSearchItemExpanded()
         }
     }
 
     override fun onSearchItemCollapsed() {
+        val container = findViewById<ViewGroup>(R.id.fragmentContainer)!!
         for (i in 0 until adapter.count) {
-            (adapter.getItem(i) as? OnSearchViewChangeListener)?.onSearchItemCollapsed()
+            val fragment = adapter.getItemFromContainer(container, i)
+            (fragment as? OnSearchViewChangeListener)?.onSearchItemCollapsed()
         }
     }
 

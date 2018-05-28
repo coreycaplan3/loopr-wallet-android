@@ -9,13 +9,11 @@ import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import org.loopring.looprwallet.core.extensions.asLiveData
-import org.loopring.looprwallet.core.extensions.equalTo
-import org.loopring.looprwallet.core.extensions.sort
-import org.loopring.looprwallet.core.extensions.upsert
+import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
 /**
@@ -76,11 +74,23 @@ class LooprMarketsRepository : BaseRealmRepository() {
         return tradingPair?.let { getRealmFromContext(context).copyFromRealm(it) }
     }
 
+    /**
+     * @return A new list of items that are backed by a realm async query for filtering the existing
+     * data-set
+     */
+    fun filterMarketsByQuery(query: String, data: OrderedRealmCollection<TradingPair>): OrderedRealmCollection<TradingPair> {
+        return data.where()
+                .like(TradingPair::market.name, "*$query*")
+                .or()
+                .like(listOf(TradingPair::mPrimaryToken), LooprToken::name, "*$query*")
+                .findAllAsync()
+    }
+
     fun getMarkets(filter: TradingPairFilter, sortBy: String, context: HandlerContext = UI): LiveData<OrderedRealmCollection<TradingPair>> {
         return getRealmFromContext(context)
                 .where<TradingPair>()
                 .apply {
-                    if(filter.isFavorites) {
+                    if (filter.isFavorites) {
                         equalTo(TradingPair::isFavorite, true)
                     }
                     when (sortBy) {

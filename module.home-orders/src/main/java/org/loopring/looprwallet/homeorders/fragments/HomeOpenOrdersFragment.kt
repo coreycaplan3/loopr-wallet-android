@@ -44,15 +44,10 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
     override val orderType: String
         get() = FILTER_OPEN_ALL
 
-    override fun provideAdapter(orderFilter: OrderSummaryFilter): HomeOrderAdapter {
-        val activity = activity as? BaseActivity
-                ?: throw IllegalStateException("Activity cannot be cast!")
-
-        return HomeOrderAdapter(orderFilter, orderType, activity, this, ::onCancelAllClick)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter.cancelAllClickListener = ::onCancelAllClick
 
         cancelOrderViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
             view.context.longToast(R.string.your_orders_will_be_cancelled)

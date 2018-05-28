@@ -13,7 +13,6 @@ import kotlinx.coroutines.experimental.delay
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.animations.ToolbarToSearchAnimation
 import org.loopring.looprwallet.core.extensions.logd
-import org.loopring.looprwallet.core.extensions.weakReference
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.utilities.ViewUtility
 import java.lang.ref.WeakReference
@@ -32,15 +31,12 @@ import java.lang.ref.WeakReference
  * overflow (the three vertical dots). This is only used for animation purposes.
  * @param baseFragment The fragment in which this presenter resides
  * @param savedInstanceState The saved instance state that's used to restore this presenter
- * @param listener The listener used for forward changes with the [SearchView] and menu to the
- * implementor
  */
 class SearchViewPresenter(
         val containsOverflowMenu: Boolean,
         val numberOfVisibleMenuItems: Int,
         baseFragment: BaseFragment,
-        savedInstanceState: Bundle?,
-        listener: OnSearchViewChangeListener
+        savedInstanceState: Bundle?
 ) {
 
     /**
@@ -91,8 +87,7 @@ class SearchViewPresenter(
     var searchQuery: String? = null
         private set
 
-    private val baseFragment by weakReference(baseFragment)
-    private val listener by weakReference(listener)
+    var listener: OnSearchViewChangeListener? = null
 
     private var searchItem = WeakReference<MenuItem>(null)
 
@@ -136,8 +131,8 @@ class SearchViewPresenter(
 
     // MARK - Private Methods
 
-    private val queryTextChangeListener
-        get() = object : SearchView.OnQueryTextListener {
+    private val queryTextChangeListener by lazy {
+        object : SearchView.OnQueryTextListener {
 
             private var wasInitialized = false
 
@@ -156,59 +151,62 @@ class SearchViewPresenter(
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                baseFragment?.view?.let { ViewUtility.closeKeyboard(it) }
+                baseFragment.view?.let { ViewUtility.closeKeyboard(it) }
                 return true
             }
         }
-
-    private var isCollapsing: Boolean = false
-    private val expandListener = object : MenuItem.OnActionExpandListener {
-
-        override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-            logd("Collapsing MenuItem...")
-
-            isCollapsing = true
-            searchQuery = null
-
-            (baseFragment.activity as? BottomNavigationPresenter.BottomNavigation)
-                    ?.bottomNavigationPresenter
-                    ?.showBottomNavigation()
-
-            listener.onSearchItemCollapsed()
-
-            if (item.isActionViewExpanded) {
-                ToolbarToSearchAnimation.animateToToolbar(baseFragment, numberOfVisibleMenuItems, containsOverflowMenu)
-            }
-
-            async<Unit>(UI) {
-                delay(300)
-
-                // Reset it after the collapse animation finishes
-                baseFragment.toolbarDelegate?.resetOptionsMenu()
-            }
-
-            return true
-        }
-
-        override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-            // Called when SearchView is expanding
-            logd("Expanding MenuItem...")
-            isCollapsing = false
-            searchQuery = ""
-
-            (baseFragment.activity as? BottomNavigationPresenter.BottomNavigation)
-                    ?.bottomNavigationPresenter
-                    ?.hideBottomNavigation()
-
-            item.actionView.findViewById<ImageView>(R.id.search_button).drawable?.let {
-                DrawableCompat.setTint(it, Color.BLACK)
-            }
-
-            listener.onSearchItemExpanded()
-
-            ToolbarToSearchAnimation.animateToSearch(baseFragment, numberOfVisibleMenuItems, containsOverflowMenu)
-            return true
-        }
     }
 
+    private var isCollapsing: Boolean = false
+
+    private val expandListener by lazy {
+        object : MenuItem.OnActionExpandListener {
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                logd("Collapsing MenuItem...")
+
+                isCollapsing = true
+                searchQuery = null
+
+                (baseFragment.activity as? BottomNavigationPresenter.BottomNavigation)
+                        ?.bottomNavigationPresenter
+                        ?.showBottomNavigation()
+
+                listener?.onSearchItemCollapsed()
+
+                if (item.isActionViewExpanded) {
+                    ToolbarToSearchAnimation.animateToToolbar(baseFragment, numberOfVisibleMenuItems, containsOverflowMenu)
+                }
+
+                async<Unit>(UI) {
+                    delay(300)
+
+                    // Reset it after the collapse animation finishes
+                    baseFragment.toolbarDelegate?.resetOptionsMenu()
+                }
+
+                return true
+            }
+
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                // Called when SearchView is expanding
+                logd("Expanding MenuItem...")
+                isCollapsing = false
+                searchQuery = ""
+
+                (baseFragment.activity as? BottomNavigationPresenter.BottomNavigation)
+                        ?.bottomNavigationPresenter
+                        ?.hideBottomNavigation()
+
+                item.actionView.findViewById<ImageView>(R.id.search_button).drawable?.let {
+                    DrawableCompat.setTint(it, Color.BLACK)
+                }
+
+                listener?.onSearchItemExpanded()
+
+                ToolbarToSearchAnimation.animateToSearch(baseFragment, numberOfVisibleMenuItems, containsOverflowMenu)
+                return true
+            }
+        }
+    }
 }

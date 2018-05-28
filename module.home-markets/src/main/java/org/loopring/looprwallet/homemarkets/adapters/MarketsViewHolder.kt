@@ -49,14 +49,14 @@ class MarketsViewHolder(itemView: View, onTradingPairClick: (Int) -> Unit)
         marketsTokenNameLabel.text = tradingPair.primaryToken.name
         marketsTickerLabel.text = tradingPair.primaryTicker
 
-        if (tradingPair.change24h?.startsWith("-") == true) {
+        if (tradingPair.change24h.startsWith("-")) {
             marketsPercentageChangeLabel.setTextColor(col(R.color.red_400))
         } else {
             marketsPercentageChangeLabel.setTextColor(col(R.color.green_400))
         }
         marketsPercentageChangeLabel.text = tradingPair.change24h
 
-        marketsCurrentPriceLabel.text = tradingPair.lastPrice?.formatAsToken(currencySettings, tradingPair.secondaryToken)
+        marketsCurrentPriceLabel.text = tradingPair.lastPrice.formatAsToken(currencySettings, tradingPair.secondaryToken)
     }
 
 }

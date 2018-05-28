@@ -1,11 +1,14 @@
 package org.loopring.looprwallet.orderdetails.repositories
 
+import android.arch.lifecycle.LiveData
+import io.realm.Case
 import io.realm.OrderedRealmCollection
 import io.realm.RealmResults
 import io.realm.Sort
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
+import org.loopring.looprwallet.core.extensions.asLiveData
 import org.loopring.looprwallet.core.extensions.equalTo
 import org.loopring.looprwallet.core.extensions.sort
 import org.loopring.looprwallet.core.models.android.architecture.IO
@@ -24,10 +27,10 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class LooprOrderFillsRepository : BaseRealmRepository() {
 
-    fun getOrderFillContainerByKeyNow(criteria: String, context: HandlerContext = UI): LooprOrderFillContainer? {
+    fun getOrderFillContainerNow(filter: OrderFillFilter, context: HandlerContext = UI): LooprOrderFillContainer? {
         val container = getRealmFromContext(context)
                 .where<LooprOrderFillContainer>()
-                .equalTo(listOf(LooprOrderFillContainer::pagingItems), LooprPagingItem::criteria, criteria)
+                .equalTo(LooprOrderFillContainer::criteria, LooprOrderFillContainer.createCriteria(filter), Case.INSENSITIVE)
                 .findFirst()
 
         return container?.let { getRealmFromContext(context).copyFromRealm(it) }
@@ -48,11 +51,12 @@ class LooprOrderFillsRepository : BaseRealmRepository() {
                 .findAllAsync()
     }
 
-    fun getOrderFillContainer(filter: OrderFillFilter, context: HandlerContext = UI): LooprOrderFillContainer {
+    fun getOrderFillContainer(filter: OrderFillFilter, context: HandlerContext = UI): LiveData<OrderedRealmCollection<LooprOrderFillContainer>> {
         return getRealmFromContext(context)
                 .where<LooprOrderFillContainer>()
                 .equalTo(LooprOrderFillContainer::criteria, LooprOrderFillContainer.createCriteria(filter))
-                .findFirstAsync()
+                .findAllAsync()
+                .asLiveData()
     }
 
 }

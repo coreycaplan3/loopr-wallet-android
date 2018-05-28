@@ -75,9 +75,7 @@ class ViewContactsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val layoutManager = LinearLayoutManager(context)
-        viewContactsRecyclerView.layoutManager = layoutManager
-        viewContactsRecyclerView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
+        viewContactsRecyclerView.layoutManager = LinearLayoutManager(context)
 
         toolbar?.title = getString(R.string.my_contact)
 

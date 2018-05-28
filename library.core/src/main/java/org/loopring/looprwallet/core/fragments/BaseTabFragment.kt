@@ -20,7 +20,7 @@ import org.loopring.looprwallet.core.models.android.fragments.LooprFragmentPager
  */
 abstract class BaseTabFragment : BaseFragment() {
 
-    val tabLayoutTransitionName
+    private val tabLayoutTransitionName
         get() = "tab-transition-$tag"
 
     abstract val tabLayoutId: Int
@@ -35,12 +35,12 @@ abstract class BaseTabFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         toolbarDelegate?.isToolbarCollapseEnabled = true
-        adapter = LooprFragmentPagerAdapter(childFragmentManager, getAdapterContent())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter = LooprFragmentPagerAdapter(childFragmentManager, getAdapterContent())
         viewPager = view.findViewById(R.id.fragmentContainer)
         viewPager.offscreenPageLimit = 4
         viewPager.adapter = adapter
@@ -55,5 +55,11 @@ abstract class BaseTabFragment : BaseFragment() {
     }
 
     abstract fun getAdapterContent(): List<Pair<String, BaseFragment>>
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        tabLayout?.setupWithViewPager(null)
+    }
 
 }

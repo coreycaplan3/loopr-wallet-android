@@ -2,6 +2,7 @@ package org.loopring.looprwallet.core.models.loopr.orders
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import org.loopring.looprwallet.core.models.loopr.filters.PagingFilter
 
 /**
  * Created by corey on 5/12/18
@@ -12,7 +13,7 @@ import kotlinx.android.parcel.Parcelize
  *
  */
 @Parcelize
-data class OrderFillFilter(val orderHash: String, var pageNumber: Int) : Parcelable {
+data class OrderFillFilter(val orderHash: String, override var pageNumber: Int) : Parcelable, PagingFilter {
 
     companion object {
 

@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.models.android.architecture
 import android.arch.lifecycle.LiveData
 import io.realm.RealmChangeListener
 import io.realm.RealmModel
+import io.realm.RealmObjectChangeListener
 import io.realm.kotlin.addChangeListener
 import io.realm.kotlin.removeChangeListener
 
@@ -31,7 +32,7 @@ class RealmObjectLiveData<T : RealmModel>(private val result: T) : LiveData<T>()
         value = result
     }
 
-    private val listener = RealmChangeListener<T> { _ ->
+    private val listener = RealmObjectChangeListener<T> { _, _ ->
         value = result
     }
 

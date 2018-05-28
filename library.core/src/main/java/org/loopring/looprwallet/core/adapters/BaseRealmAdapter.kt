@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.realm.*
 import org.loopring.looprwallet.core.R
-import org.loopring.looprwallet.core.extensions.like
 import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
-import kotlin.reflect.KProperty
 
 /**
  * Created by Corey Caplan on 3/14/18.
@@ -60,22 +58,16 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      */
     var onLoadMore: () -> Unit = {}
 
-    private var isFiltering: Boolean = false
+    var isFiltering: Boolean = false
+        private set
 
     /**
-     * Filters the data using a like query, based on the given [property] and [value].
+     * Filters the data using the new data-set defined by [filteredData], which should be backed by
+     * a realm async query.
      */
-    fun filterData(propertyList: List<KProperty<*>> = listOf(), property: KProperty<String>, value: String) {
+    fun filterData(filteredData: OrderedRealmCollection<T>) {
         isFiltering = true
-        val data = pager.data
-        if (data == null || !data.isValid) {
-            return
-        }
-
-        mData = data.where()
-                .like(propertyList, property, value)
-                .findAllAsync()
-
+        mData = filteredData
         updateData(mData)
     }
 
@@ -194,11 +186,11 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
      *
      * @param data the new [OrderedRealmCollection] to display.
      */
-    fun updateData(data: OrderedRealmCollection<T>?) = synchronized(this) {
+    fun updateData(data: OrderedRealmCollection<T>?) {
         removeChangeListener()
         this.mData = data
-        notifyDataSetChanged()
         addChangeListener()
+        notifyDataSetChanged()
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -214,7 +206,8 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     }
 
     private val changeListener by lazy {
-        OrderedRealmCollectionChangeListener { _: RealmResults<T>, changeSet: OrderedCollectionChangeSet? ->
+        OrderedRealmCollectionChangeListener { data: RealmResults<T>, changeSet: OrderedCollectionChangeSet? ->
+            mData = data
 
             // Null Changes means an async query returns for the first time
             if (changeSet == null) {
@@ -250,19 +243,14 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
     private fun addChangeListener() {
         val data = mData
         when {
-            data is RealmResults -> data.addChangeListener { _: RealmResults<T> ->
-                if (!isFiltering) {
-                    this.mData = data
-                }
-                notifyDataSetChanged()
-            }
+            data is RealmResults -> data.addChangeListener(changeListener)
             data != null -> throw IllegalArgumentException("Invalid type, found: ${data::class.simpleName}")
             else -> Unit
         }
     }
 
     private fun removeChangeListener() {
-        val data = mData
+        val data = data
         when {
             data is RealmResults -> data.removeChangeListener(changeListener)
             data != null -> throw IllegalArgumentException("Invalid type, found: ${data::class.simpleName}")

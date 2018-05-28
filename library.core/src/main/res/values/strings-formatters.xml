@@ -24,5 +24,5 @@
     <string name="formatter_locked_token">You successfully locked %s</string>
     <string name="formatter_unlocked_token">You successfully unlocked %s</string>
     <string name="formatter_unlock_or_lock_token">Unlock or Lock %s</string>
-    <string name="formatter_remove_wallet_message">Are you sure you want to remove ? This action cannot be undone, and your credentials will be lost if you have not backed them up.</string>
+    <string name="formatter_remove_wallet_message">Are you sure you want to remove %s? This action cannot be undone, and your credentials will be lost if you have not backed them up.</string>
 </resources>

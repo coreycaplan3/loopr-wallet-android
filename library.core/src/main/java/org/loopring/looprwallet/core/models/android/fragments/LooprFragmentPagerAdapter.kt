@@ -14,12 +14,17 @@ import org.loopring.looprwallet.core.fragments.BaseFragment
  * Purpose of Class:
  *
  */
-class LooprFragmentPagerAdapter(fragmentManager: FragmentManager,
+class LooprFragmentPagerAdapter(private val fragmentManager: FragmentManager,
                                 private val fragmentList: List<Pair<String, BaseFragment>>)
     : FragmentPagerAdapter(fragmentManager) {
 
     var currentFragment: Fragment? = null
         private set
+
+    fun getItemFromContainer(container: ViewGroup, position: Int): Fragment? {
+        val tag = makeFragmentName(container.id, getItemId(position))
+        return fragmentManager.findFragmentByTag(tag)
+    }
 
     override fun getItem(position: Int): BaseFragment = fragmentList[position].second
 
@@ -33,5 +38,9 @@ class LooprFragmentPagerAdapter(fragmentManager: FragmentManager,
     override fun getCount(): Int = fragmentList.size
 
     override fun getPageTitle(position: Int): CharSequence? = fragmentList[position].first
+
+    private fun makeFragmentName(viewId: Int, id: Long): String {
+        return "android:switcher:$viewId:$id"
+    }
 
 }

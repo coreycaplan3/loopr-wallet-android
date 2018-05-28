@@ -187,7 +187,10 @@ class CreateTransferAmountFragment : BaseFragment(), NumberPadPresenter.NumberPa
 
         when {
             contact?.name != null -> toolbar?.title = contact?.name
-            else -> toolbar?.subtitle = recipientAddress
+            else -> {
+                toolbar?.title = null
+                toolbar?.subtitle = recipientAddress
+            }
         }
 
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return

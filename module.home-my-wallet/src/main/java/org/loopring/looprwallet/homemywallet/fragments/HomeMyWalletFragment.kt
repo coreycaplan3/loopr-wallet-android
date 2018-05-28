@@ -1,6 +1,5 @@
 package org.loopring.looprwallet.homemywallet.fragments
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -42,7 +41,6 @@ import org.loopring.looprwallet.tradedetails.activities.TradingPairDetailsActivi
 import org.loopring.looprwallet.viewbalances.activities.ViewBalancesActivity
 import javax.inject.Inject
 import kotlin.math.roundToInt
-import android.text.Html
 import androidx.net.toUri
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.utilities.ChromeCustomTabsUtility
@@ -115,7 +113,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
     override fun onBottomNavigationReselected() {
         logd("Wallet Reselected!")
         // Scroll to the top of the NestedScrollView
-        homeMyWalletScrollContainer.scrollTo(0, 0)
+        homeMyWalletScrollContainer.smoothScrollTo(0, 0)
     }
 
     private val createOptionsMenu: (Toolbar?) -> Unit = {
@@ -222,7 +220,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
                 putExtra(Intent.EXTRA_TEXT, wallet.credentials.address)
             }
 
-            startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_address)))
+            startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_my_address)))
         }
 
         // Setup the Address Barcode

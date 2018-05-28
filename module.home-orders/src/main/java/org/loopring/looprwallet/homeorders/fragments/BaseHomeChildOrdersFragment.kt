@@ -2,19 +2,18 @@ package org.loopring.looprwallet.homeorders.fragments
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import io.realm.Sort
+import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
-import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryPager
 import org.loopring.looprwallet.core.presenters.BottomNavigationPresenter.BottomNavigationReselectedLister
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.OnSearchViewChangeListener
 import org.loopring.looprwallet.core.presenters.SearchViewPresenter.SearchFragment
+import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository
+import org.loopring.looprwallet.core.utilities.RealmUtility
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.homeorders.adapters.HomeOrderAdapter
 import org.loopring.looprwallet.homeorders.adapters.OnHomeOrderFilterChangeListener
@@ -28,7 +27,7 @@ import org.loopring.looprwallet.homeorders.viewmodels.HomeOrdersViewModel
  * Purpose of Class: To provide *base* behavior for the **open** and **closed** orders fragments.
  */
 abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationReselectedLister,
-        OnSearchViewChangeListener, OnHomeOrderFilterChangeListener, OnRefreshListener {
+        OnSearchViewChangeListener, OnHomeOrderFilterChangeListener {
 
     companion object {
 
@@ -39,14 +38,16 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     abstract val swipeRefreshLayout: SwipeRefreshLayout?
     abstract val recyclerView: RecyclerView?
 
-    private var adapter: HomeOrderAdapter? = null
+    val adapter: HomeOrderAdapter by lazy {
+        HomeOrderAdapter(orderType, activity as BaseActivity, this)
+    }
 
     private val homeOrdersViewModel: HomeOrdersViewModel by lazy {
         LooprViewModelFactory.get<HomeOrdersViewModel>(activity!!, "orders-$orderType")
     }
 
     override val currentStatusFilter: String
-        get() = adapter?.currentStatusFilter ?: throw IllegalStateException("Adapter is null!")
+        get() = adapter.currentStatusFilter
 
     private lateinit var orderFilter: OrderSummaryFilter
 
@@ -57,26 +58,16 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
 
         val defaultFilter = OrderSummaryFilter(address, null, orderType, 1)
         orderFilter = savedInstanceState?.getParcelable(KEY_ORDER_FILTER) ?: defaultFilter
-        if (address != null) {
-            adapter = provideAdapter(orderFilter).apply {
-                this.onLoadMore = ::onLoadMoreHomeOrders
-            }
-        }
 
+        adapter.onLoadMore = ::onLoadMoreHomeOrders
         recyclerView?.adapter = adapter
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
 
         setupOfflineFirstStateAndErrorObserver(homeOrdersViewModel, swipeRefreshLayout)
-        setOrderLiveData()
+        setupOrderLiveData()
     }
 
     abstract val orderType: String
-
-    abstract fun provideAdapter(orderFilter: OrderSummaryFilter): HomeOrderAdapter
-
-    override fun onRefresh() {
-        homeOrdersViewModel.refresh()
-    }
 
     final override fun onBottomNavigationReselected() {
         recyclerView?.smoothScrollToPosition(0)
@@ -91,11 +82,14 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     }
 
     final override fun onSearchItemCollapsed() {
-        adapter?.clearFilter()
+        adapter.clearFilter()
     }
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
-        adapter?.filterData(listOf(AppLooprOrder::tradingPair), TradingPair::market, "*$searchQuery*")
+        val repository = LooprOrderRepository()
+        adapter.data?.let {
+            adapter.filterData(repository.filterOrdersByQuery(searchQuery, it))
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -107,17 +101,10 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
     // MARK - Private Methods
 
     private fun onLoadMoreHomeOrders() {
-        orderFilter.pageNumber += 1
-        homeOrdersViewModel.refresh()
+        RealmUtility.loadMorePaging(adapter.pager, orderFilter, homeOrdersViewModel)
     }
 
-    /**
-     * Resets the [adapter] to its initial set of data, based on the filter criteria that was
-     * provided by the [adapter].
-     */
-    private fun setOrderLiveData() {
-        val adapter = adapter ?: return
-
+    private fun setupOrderLiveData() {
         homeOrdersViewModel.getOrders(this, orderFilter) { orderContainer ->
             setupOfflineFirstDataObserverForAdapter(homeOrdersViewModel, adapter, orderContainer.data)
             (adapter.pager as? OrderSummaryPager)?.orderContainer = orderContainer

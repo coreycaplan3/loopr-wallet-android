@@ -41,7 +41,7 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
             this.tradingPair = lrcTradingPair
             this.percentageFilled = 0
             this.status = OrderSummaryFilter.FILTER_OPEN_NEW
-            this.amount = BigInteger("343289") * (BigInteger.TEN.pow(tradingPair.primaryToken.decimalPlaces))
+            this.amount = BigInteger("343289") * (BigInteger.TEN.pow(18))
             this.priceInSecondaryTicker = BigDecimal("0.0015912")
             this.isSell = false // You only buy LRC and never sell --> HODL!
         }
@@ -50,35 +50,56 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
             this.tradingPair = reqTradingPair
             this.percentageFilled = 78
             this.status = OrderSummaryFilter.FILTER_OPEN_PARTIAL
-            this.amount = BigInteger("7013") * (BigInteger.TEN.pow(tradingPair.primaryToken.decimalPlaces))
+            this.amount = BigInteger("7013") * (BigInteger.TEN.pow(18))
             this.priceInSecondaryTicker = BigDecimal("0.0010132")
             this.isSell = false
         }
         private val order3 = AppLooprOrder().apply {
-            AppLooprOrder(orderHash = createHash(), tradingPair = zrxTradingPair, percentageFilled = 45, status = OrderSummaryFilter.FILTER_OPEN_PARTIAL, isSell = true)
             this.orderHash = createHash()
             this.tradingPair = zrxTradingPair
             this.percentageFilled = 45
             this.status = OrderSummaryFilter.FILTER_OPEN_PARTIAL
-            this.amount = BigInteger("25783") * (BigInteger.TEN.pow(tradingPair.primaryToken.decimalPlaces))
+            this.amount = BigInteger("25783") * (BigInteger.TEN.pow(18))
             this.priceInSecondaryTicker = BigDecimal("0.0000132123") // The price dropped :-)
             this.isSell = true // Get rid of this ZRX token; we only need LRC
         }
         private val order4 = AppLooprOrder().apply {
             this.orderHash = createHash()
             this.tradingPair = appcTradingPair
-            this.percentageFilled = 100
-            this.status = OrderSummaryFilter.FILTER_FILLED
-            this.amount = BigInteger("7013") * (BigInteger.TEN.pow(tradingPair.primaryToken.decimalPlaces))
+            this.percentageFilled = 97
+            this.status = OrderSummaryFilter.FILTER_OPEN_PARTIAL
+            this.amount = BigInteger("7013") * (BigInteger.TEN.pow(18))
             this.priceInSecondaryTicker = BigDecimal("0.0259458")
             this.isSell = true
+        }
+        private val order5 = AppLooprOrder().apply {
+            this.orderHash = createHash()
+            this.tradingPair = appcTradingPair
+            this.percentageFilled = 100
+            this.status = OrderSummaryFilter.FILTER_FILLED
+            this.amount = BigInteger("7013") * (BigInteger.TEN.pow(18))
+            this.priceInSecondaryTicker = BigDecimal("0.0259458")
+            this.isSell = false
         }
 
     }
 
-    private val fill1 = LooprOrderFill(createHash(), order1.orderHash, null, BigInteger("143000000000000000000"), Date(Date().time - 100000L))
-    private val fill2 = LooprOrderFill(createHash(), order1.orderHash, null, BigInteger("25500000000000000000"), Date(Date().time - 70000L))
-    private val fill3 = LooprOrderFill(createHash(), order1.orderHash, null, BigInteger("1043500000000000000000"), Date(Date().time - 30000L))
+    private val fill1 = LooprOrderFill().apply {
+        transactionHash = createHash()
+        fillAmount = BigInteger("143000000000000000000")
+        tradeDate = Date(Date().time - 100000L)
+    }
+    private val fill2 = LooprOrderFill().apply {
+        transactionHash = createHash()
+        fillAmount = BigInteger("25500000000000000000")
+        tradeDate = Date(Date().time - 70000L)
+    }
+    private val fill3 = LooprOrderFill().apply {
+        transactionHash = createHash()
+        orderHash = order1.orderHash
+        fillAmount = BigInteger("143000000000000000000")
+        tradeDate = Date(Date().time - 30000L)
+    }
 
     override fun submitOrder(looprOrder: AppLooprOrder): Deferred<Unit> = async(NET) {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
@@ -96,17 +117,30 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         if (NetworkUtility.isNetworkAvailable()) {
             val criteria = LooprOrderContainer.createCriteria(orderFilter)
 
-            val list = when (orderFilter.pageNumber) {
-                1 -> RealmList(order1, order2)
-                2 -> RealmList(order3, order4)
-                else -> throw IllegalStateException("Max page number is 2, found: ${orderFilter.pageNumber}")
+            val list = when (orderFilter.status) {
+                OrderSummaryFilter.FILTER_OPEN_ALL -> when (orderFilter.pageNumber) {
+                    1 -> RealmList(order1, order2)
+                    2 -> RealmList(order3, order4)
+                    else -> throw IllegalStateException("Max page number is 2, found: ${orderFilter.pageNumber}")
+                }
+                OrderSummaryFilter.FILTER_FILLED -> RealmList(order5)
+                OrderSummaryFilter.FILTER_CANCELLED -> RealmList()
+                else -> throw IllegalArgumentException("Invalid status, found: ${orderFilter.status}")
             }
 
             val data = list.apply {
                 forEach { it.address = orderFilter.address!! }
             }
-            val pagingItems = RealmList<LooprPagingItem>(LooprPagingItem(criteria, orderFilter.pageNumber, 4))
-            return@async LooprOrderContainer(criteria = criteria, pagingItems = pagingItems, orderList = data)
+
+            val totalNumberOfItems = when (orderFilter.status) {
+                OrderSummaryFilter.FILTER_OPEN_ALL -> 4
+                OrderSummaryFilter.FILTER_FILLED -> 1
+                OrderSummaryFilter.FILTER_CANCELLED -> 0
+                else -> throw IllegalArgumentException("Invalid status, found: ${orderFilter.status}")
+            }
+
+            val pagingItem = LooprPagingItem(criteria, orderFilter.pageNumber, totalNumberOfItems)
+            return@async LooprOrderContainer(criteria = criteria, pagingItem = pagingItem, orderList = data)
         } else {
             throw IOException("No connection")
         }
@@ -116,7 +150,7 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            return@async RealmList(order1, order2, order3, order4).find { it.orderHash == orderHash }!!
+            return@async RealmList(order1, order2, order3, order4, order5).find { it.orderHash == orderHash }!!
         } else {
             throw IOException("No connection")
         }
@@ -144,8 +178,8 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
             val data = RealmList<LooprOrderFill>().apply { addAll(list) }
 
             val criteria = LooprOrderFillContainer.createCriteria(filter)
-            val pagingItems = RealmList<LooprPagingItem>(LooprPagingItem(criteria, filter.pageNumber, 3))
-            return@async LooprOrderFillContainer(criteria = criteria, pagingItems = pagingItems, orderFillList = data)
+            val pagingItem = LooprPagingItem(criteria, filter.pageNumber, 3)
+            return@async LooprOrderFillContainer(criteria = criteria, pagingItem = pagingItem, orderFillList = data)
         } else {
             throw IOException("No connection")
         }

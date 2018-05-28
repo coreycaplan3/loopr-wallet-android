@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/cardBackgroundColor"
-        android:padding="@dimen/standard_padding">
+        android:paddingTop="@dimen/vertical_padding">
 
         <LinearLayout
             android:id="@+id/orderDetailsTitleContainer"
@@ -73,7 +73,8 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/content_description_completed_order"
                 android:src="@drawable/ic_swap_horiz_white_24dp"
-                android:tint="?attr/textColorSecondaryOnly" />
+                android:tint="?attr/textColorSecondaryOnly"
+                tools:visibility="gone" />
 
         </FrameLayout>
 

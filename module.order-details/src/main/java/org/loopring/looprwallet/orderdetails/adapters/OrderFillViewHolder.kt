@@ -9,8 +9,10 @@ import org.loopring.looprwallet.core.extensions.formatAsTokenNoTicker
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderFill
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
+import org.loopring.looprwallet.core.utilities.DateUtility
 import org.loopring.looprwallet.orderdetails.R
 import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
+import java.text.DateFormat
 import javax.inject.Inject
 
 /**
@@ -39,10 +41,9 @@ class OrderFillViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), 
      */
     fun bind(index: Int, orderFill: LooprOrderFill) {
         orderDetailsTradeCounterLabel.text = str(R.string.formatter_trade_number).format(index)
-
-        orderDetailsTradeFillAmountLabel.text = orderFill.fillAmount.formatAsTokenNoTicker(currencySettings, orderFill.token)
-
+        orderDetailsTradeFillAmountLabel.text = orderFill.fillAmount.formatAsToken(currencySettings, orderFill.token)
         orderDetailsTradeIdLabel.text = orderFill.orderHash
+        orderDetailsTradeDateLabel.text = DateUtility.formatDateTime(orderFill.tradeDate)
     }
 
 }

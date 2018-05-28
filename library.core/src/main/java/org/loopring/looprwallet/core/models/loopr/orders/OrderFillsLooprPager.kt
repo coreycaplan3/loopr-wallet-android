@@ -11,22 +11,26 @@ import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
  * Purpose of Class:
  *
  */
-class OrderFillsLooprPager(val filter: OrderFillFilter) : LooprAdapterPager<LooprOrderFill> {
+class OrderFillsLooprPager : LooprAdapterPager<LooprOrderFill> {
 
     var orderFillContainer: LooprOrderFillContainer? = null
 
     override val currentPage: Int
-        get() = filter.pageNumber
+        get() {
+            val container = orderFillContainer ?: return -1
+            return container.requirePagingItem.pageIndex
+        }
 
     override val itemsPerPage: Int
         get() = OrderFillFilter.ITEMS_PER_PAGE
 
     override val totalNumberOfItems: Int
-        get() = orderFillContainer?.let { container ->
-            container.pagingItems.find { it.criteria == container.criteria }?.totalNumberOfItems
-        } ?: -1
+        get() {
+            val container = orderFillContainer ?: return -1
+            return container.requirePagingItem.totalNumberOfItems
+        }
 
-    override var data: OrderedRealmCollection<LooprOrderFill>?
+    override var data: OrderedRealmCollection<LooprOrderFill>? = null
         get() = orderFillContainer?.data
-        set(value) {}
+
 }

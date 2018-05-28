@@ -266,7 +266,7 @@
     <string name="filled_amount">Filled/Amount</string>
     <string name="total">Total</string>
     <string name="expired">Expired</string>
-    <string name="no_connection_tap_to_retry">No connection\nTap to retry</string>
+    <string name="no_connection_swipe_to_retry">No connection\nSwipe to retry</string>
     <string name="toggle_currency">Toggle Currency</string>
     <string name="view_your_passphrase">View your passphrase</string>
     <string name="copy_keystore_content">Copy your keystore content</string>
@@ -354,8 +354,9 @@
     <string name="your_eth_will_be_converted">Your ETH will be converted…</string>
     <string name="your_weth_will_be_converted">Your WETH will be converted…</string>
     <string name="rationale_empty_favorites">Markets you favorite will show up here</string>
-    <string name="share_address">Share Address</string>
+    <string name="share_my_address">Share My Address</string>
     <string name="from">From:</string>
     <string name="to">To:</string>
     <string name="enter_a_recipient">Enter a Recipient</string>
+    <string name="no_results_found">No Results Found</string>
 </resources>

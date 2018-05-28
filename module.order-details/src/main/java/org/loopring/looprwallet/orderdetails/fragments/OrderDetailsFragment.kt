@@ -19,6 +19,7 @@ import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.orderdetails.R
 import org.loopring.looprwallet.orderdetails.adapters.OrderDetailsAdapter
 import org.loopring.looprwallet.core.models.loopr.orders.OrderFillsLooprPager
+import org.loopring.looprwallet.core.utilities.RealmUtility
 import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
 import org.loopring.looprwallet.orderdetails.viewmodels.CancelOrderViewModel
 import org.loopring.looprwallet.orderdetails.viewmodels.OrderFillsViewModel
@@ -119,8 +120,9 @@ class OrderDetailsFragment : BaseFragment() {
     // MARK - Private Methods
 
     private fun onLoadMore() {
-        orderFilter.pageNumber += 1
-        orderFillsViewModel.refresh()
+        adapter?.pager?.let { pager ->
+            RealmUtility.loadMorePaging(pager, orderFilter, orderFillsViewModel)
+        }
     }
 
     private fun createOptionsMenu(toolbar: Toolbar?) {
@@ -235,7 +237,9 @@ class OrderDetailsFragment : BaseFragment() {
 
         // Price
         order.tradingPair.secondaryToken.let { token ->
-            orderDetailsFiatAmountLabel.text = order.priceInSecondaryTicker.formatAsToken(currencySettings, token)
+            val priceInSecondary = order.priceInSecondaryTicker.formatAsToken(currencySettings, token)
+            val primaryTokenTicker = order.tradingPair.primaryToken.ticker
+            orderDetailsFiatAmountLabel.text = "@ $priceInSecondary / $primaryTokenTicker"
         }
 
         orderDetailsSwipeRefreshLayout.isEnabled = !order.isComplete

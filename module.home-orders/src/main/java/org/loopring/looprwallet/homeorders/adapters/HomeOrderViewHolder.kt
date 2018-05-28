@@ -96,8 +96,6 @@ class HomeOrderViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), 
             }
         }
 
-        viewHolderHomeOrderProgress.visibility = View.GONE
-
         viewHolderHomeOrderTradePairLabel.text = order.tradingPair.market
 
         if (order.isSell) {

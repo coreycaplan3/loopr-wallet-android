@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -7,22 +8,26 @@
     <!-- Filled Amount -->
 
     <TextView
+        android:id="@+id/orderDetailsFilledDefaultAmountLabel"
         style="@style/TextAppearance.AppCompat.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@id/orderDetailsFilledAmountLabel"
-        android:layout_toStartOf="@id/orderDetailsFilledAmountLabel"
-        android:text="@string/filled_amount" />
+        android:padding="@dimen/standard_padding"
+        android:text="@string/filled_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/orderDetailsFilledAmountLabel"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:gravity="end"
+        android:lines="1"
+        android:padding="@dimen/standard_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/orderDetailsFilledDefaultAmountLabel"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="300/400 LRC" />
 
     <include
@@ -31,33 +36,32 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
         android:layout_below="@id/orderDetailsFilledAmountLabel"
-        android:layout_marginBottom="@dimen/vertical_margin_small"
-        android:layout_marginTop="@dimen/vertical_margin_small" />
+        app:layout_constraintTop_toBottomOf="@id/orderDetailsFilledDefaultAmountLabel" />
 
     <!-- Status -->
 
     <TextView
+        android:id="@+id/orderDetailsFilledDefaultStatusLabel"
         style="@style/TextAppearance.AppCompat.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/orderDetailsFilledAmountDivider"
-        android:layout_marginTop="@dimen/vertical_margin"
-        android:layout_toLeftOf="@id/orderDetailsFilledAmountLabel"
-        android:layout_toStartOf="@id/orderDetailsFilledAmountLabel"
-        android:text="@string/order_status" />
+        android:padding="@dimen/standard_padding"
+        android:text="@string/order_status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/orderDetailsFilledAmountDivider" />
 
     <TextView
         android:id="@+id/orderDetailsStatusLabel"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/orderDetailsFilledAmountDivider"
-        android:layout_marginTop="@dimen/vertical_margin"
+        android:gravity="end"
+        android:lines="1"
+        android:padding="@dimen/standard_padding"
         android:textColor="@color/amber_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/orderDetailsFilledDefaultStatusLabel"
+        app:layout_constraintTop_toBottomOf="@id/orderDetailsFilledAmountDivider"
         tools:text="Partial" />
 
     <include
@@ -65,33 +69,31 @@
         layout="@layout/divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
-        android:layout_below="@id/orderDetailsStatusLabel"
-        android:layout_marginBottom="@dimen/vertical_margin_small"
-        android:layout_marginTop="@dimen/vertical_margin_small" />
+        app:layout_constraintTop_toBottomOf="@id/orderDetailsStatusLabel" />
 
     <!-- Total -->
 
     <TextView
+        android:id="@+id/orderDetailsTotalDefaultLabel"
         style="@style/TextAppearance.AppCompat.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/orderDetailsStatusDivider"
-        android:layout_marginTop="@dimen/vertical_margin"
-        android:layout_toLeftOf="@id/orderDetailsTotalLabel"
-        android:layout_toStartOf="@id/orderDetailsTotalLabel"
-        android:text="@string/total" />
+        android:padding="@dimen/standard_padding"
+        android:text="@string/total"
+        app:layout_constraintTop_toBottomOf="@id/orderDetailsStatusDivider" />
 
     <TextView
         android:id="@+id/orderDetailsTotalLabel"
         style="@style/TextAppearance.AppCompat.Body1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/orderDetailsStatusDivider"
-        android:layout_marginTop="@dimen/vertical_margin"
+        android:ellipsize="middle"
+        android:gravity="end"
+        android:padding="@dimen/standard_padding"
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/orderDetailsTotalDefaultLabel"
+        app:layout_constraintTop_toBottomOf="@id/orderDetailsStatusDivider"
         tools:text="10 WETH" />
 
     <include
@@ -99,8 +101,6 @@
         layout="@layout/divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
-        android:layout_below="@id/orderDetailsTotalLabel"
-        android:layout_marginBottom="@dimen/vertical_margin_small"
-        android:layout_marginTop="@dimen/vertical_margin_small" />
+        app:layout_constraintTop_toBottomOf="@id/orderDetailsTotalLabel" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

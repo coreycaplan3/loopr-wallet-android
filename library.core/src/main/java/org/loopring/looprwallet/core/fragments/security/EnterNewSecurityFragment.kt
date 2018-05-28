@@ -105,7 +105,9 @@ class EnterNewSecurityFragment : BaseSecurityFragment() {
                     resetPins()
                 }
             }
-            else -> resetPins()
+            else -> {
+                enteredPin = currentPin
+            }
         }
 
         bindPinTitleText()

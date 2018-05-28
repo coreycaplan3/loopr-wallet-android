@@ -17,7 +17,7 @@ import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingItem
  * network's result set.
  *
  * @property criteria A key created by calling [createCriteria] using an [OrderSummaryFilter].
- * @property pagingItems A mapping of the criteria used to produce this container
+ * @property pagingItem A mapping of the criteria used to produce this container
  * to the page index and total number of items for that criteria. Useful for distinguishing between
  * getting total number of orders by address and total by trading pair, etc. Created by calling
  * [createCriteria]
@@ -25,7 +25,7 @@ import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingItem
 open class LooprOrderContainer(
         @PrimaryKey override var criteria: String = "",
         override var pageSize: Int = 50,
-        override var pagingItems: RealmList<LooprPagingItem> = RealmList(),
+        override var pagingItem: LooprPagingItem? = LooprPagingItem(),
         @Ignore var orderList: OrderedRealmCollection<AppLooprOrder> = RealmList()
 ) : RealmObject(), LooprPagingContainer<AppLooprOrder> {
 
@@ -35,7 +35,7 @@ open class LooprOrderContainer(
     companion object {
 
         /**
-         * Creates the criteria key to be used with [pagingItems].
+         * Creates the criteria key to be used with [pagingItem].
          */
         fun createCriteria(filter: OrderSummaryFilter): String = filter.let {
             val address = it.address?.toUpperCase()

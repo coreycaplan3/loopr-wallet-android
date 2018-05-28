@@ -2,11 +2,9 @@ package org.loopring.looprwallet.homeorders.fragments
 
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
-import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.findViewById
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.homeorders.R
-import org.loopring.looprwallet.homeorders.adapters.HomeOrderAdapter
 
 /**
  * Created by Corey on 4/11/2018
@@ -28,11 +26,5 @@ class HomeCancelledOrdersFragment : BaseHomeChildOrdersFragment() {
 
     override val orderType: String
         get() = OrderSummaryFilter.FILTER_CANCELLED
-
-    override fun provideAdapter(orderFilter: OrderSummaryFilter): HomeOrderAdapter {
-        val activity = activity as? BaseActivity
-                ?: throw IllegalStateException("Activity cannot be cast!")
-        return HomeOrderAdapter(orderFilter, orderType, activity, this)
-    }
 
 }

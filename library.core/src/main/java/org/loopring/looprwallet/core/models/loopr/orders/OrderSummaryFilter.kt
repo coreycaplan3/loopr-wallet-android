@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.models.loopr.orders
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import org.loopring.looprwallet.core.R
+import org.loopring.looprwallet.core.models.loopr.filters.PagingFilter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 
 /**
@@ -31,8 +32,8 @@ data class OrderSummaryFilter(
         val address: String?,
         val market: String?,
         val status: String,
-        var pageNumber: Int
-) : Parcelable {
+        override var pageNumber: Int
+) : Parcelable, PagingFilter {
 
     companion object {
 
