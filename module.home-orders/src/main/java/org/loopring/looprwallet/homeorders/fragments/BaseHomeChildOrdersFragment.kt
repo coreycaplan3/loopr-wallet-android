@@ -87,7 +87,7 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
         val repository = LooprOrderRepository()
-        adapter.data?.let {
+        adapter.pager.data?.let {
             adapter.filterData(repository.filterOrdersByQuery(searchQuery, it))
         }
     }
