@@ -17,19 +17,6 @@ import java.util.*
  * Project: loopr-wallet-android
  *
  * Purpose of Class:
- *
- * @property identifier The identifier used to uniquely identify this token. For Ethereum-based
- * tokens, this can be the contract address.
- * @property ticker The ticker for this token. A value of "ETH" means the token is actually ethereum.
- * @property totalSupply The total supply of the crypto. To get the [BigDecimal] version, we must
- * assign this string value to a big decimal and divide it by (10^decimalPlaces). Said differently,
- * this variable should have **NO** decimal places in it.
- * @property priceInUsd The price of the token currently in USD. This number always has a radix of
- * size 10. To get the decimal representation of this number, divide it by 100.
- * @property priceInNativeCurrency The price of the token currently in the user's native currency.
- * This number always has a radix of size 10. To get the decimal representation of this number,
- * divide it by 100.
- * This [BigDecimal] should have a scale of exactly 2.
  */
 open class LooprToken(
         @PrimaryKey override var identifier: String = ETH.identifier,

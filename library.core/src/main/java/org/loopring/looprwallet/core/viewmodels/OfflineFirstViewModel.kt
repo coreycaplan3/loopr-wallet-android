@@ -15,6 +15,7 @@ import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.error.ErrorTypes
 import org.loopring.looprwallet.core.models.error.LooprError
+import org.loopring.looprwallet.core.models.loopr.filters.PagingFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.repositories.BaseRepository
 import org.loopring.looprwallet.core.repositories.sync.SyncRepository

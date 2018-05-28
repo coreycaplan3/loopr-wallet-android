@@ -6,15 +6,12 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.extensions.findViewById
 import org.loopring.looprwallet.core.extensions.longToast
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
-import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_OPEN_ALL
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.homeorders.R
-import org.loopring.looprwallet.homeorders.adapters.HomeOrderAdapter
 import org.loopring.looprwallet.orderdetails.viewmodels.CancelOrderViewModel
 
 /**
@@ -47,6 +44,7 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter.cancelClickListener = ::onCancelOrderClick
         adapter.cancelAllClickListener = ::onCancelAllClick
 
         cancelOrderViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
@@ -57,11 +55,30 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
 
     // MARK - Private Methods
 
+    private fun onCancelOrderClick(orderHash: String) {
+        val context = context ?: return
+        AlertDialog.Builder(context)
+                .setTitle(R.string.question_cancel_order)
+                .setMessage(R.string.cancel_order_rationale)
+                .setPositiveButton(R.string.cancel_all) { dialog, _ ->
+                    dialog.dismiss()
+
+                    val wallet = walletClient.getCurrentWallet()
+                    if (wallet != null) {
+                        cancelOrderViewModel.cancelOrder(wallet, orderHash)
+                    }
+                }
+                .setNegativeButton(R.string.exit) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+    }
+
     private fun onCancelAllClick() {
         val context = context ?: return
         AlertDialog.Builder(context)
                 .setTitle(R.string.cancel_all_orders)
-                .setMessage(R.string.cancel_all_rationale)
+                .setMessage(R.string.cancel_all_orders_rationale)
                 .setPositiveButton(R.string.cancel_all) { dialog, _ ->
                     dialog.dismiss()
 

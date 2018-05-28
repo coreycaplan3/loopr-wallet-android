@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.fragment_order_details.*
 import kotlinx.android.synthetic.main.view_holder_home_order.*
 import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
@@ -12,6 +13,7 @@ import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.homeorders.R
 import org.loopring.looprwallet.homeorders.dagger.homeOrdersLooprComponent
+import org.loopring.looprwallet.orderdetails.presenters.OrderStatusPresenter
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -43,7 +45,7 @@ class HomeOrderViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), 
      * @param onOrderClick A click handler that is fired when a user clicks on an order
      */
     @SuppressLint("SetTextI18n")
-    inline fun bind(order: AppLooprOrder, showDateHeader: Boolean, crossinline onOrderClick: (AppLooprOrder) -> Unit) {
+    inline fun bind(order: AppLooprOrder, showDateHeader: Boolean, crossinline onOrderClick: (AppLooprOrder) -> Unit, noinline onOrderLongClick: ((String) -> Unit)?) {
 
         // Date Title
         when (showDateHeader) {
@@ -63,38 +65,14 @@ class HomeOrderViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView), 
             onOrderClick(order)
         }
 
-        when (order.status) {
-            OrderSummaryFilter.FILTER_OPEN_NEW -> {
-                viewHolderHomeOrderProgress.visibility = View.VISIBLE
-                viewHolderHomeOrderProgress.progress = 0
-
-                viewHolderHomeOrderCompleteImage.visibility = View.GONE
-            }
-            OrderSummaryFilter.FILTER_OPEN_PARTIAL -> {
-                viewHolderHomeOrderProgress.visibility = View.VISIBLE
-                viewHolderHomeOrderProgress.progress = order.percentageFilled
-
-                viewHolderHomeOrderCompleteImage.visibility = View.GONE
-            }
-            OrderSummaryFilter.FILTER_FILLED -> {
-                viewHolderHomeOrderCompleteImage.visibility = View.VISIBLE
-                viewHolderHomeOrderCompleteImage.setImageResource(R.drawable.ic_swap_horiz_white_24dp)
-
-                viewHolderHomeOrderProgress.visibility = View.GONE
-            }
-            OrderSummaryFilter.FILTER_CANCELLED -> {
-                viewHolderHomeOrderCompleteImage.visibility = View.VISIBLE
-                viewHolderHomeOrderCompleteImage.setImageResource(R.drawable.ic_cancel_white_24dp)
-
-                viewHolderHomeOrderProgress.visibility = View.GONE
-            }
-            OrderSummaryFilter.FILTER_EXPIRED -> {
-                viewHolderHomeOrderCompleteImage.visibility = View.VISIBLE
-                viewHolderHomeOrderCompleteImage.setImageResource(R.drawable.ic_alarm_white_24dp)
-
-                viewHolderHomeOrderProgress.visibility = View.GONE
+        onOrderLongClick?.let {listener ->
+            viewHolderHomeOrderContainer.setOnLongClickListener {
+                listener.invoke(order.orderHash)
+                true
             }
         }
+
+        OrderStatusPresenter.bind(viewHolderHomeOrderCompleteImage, viewHolderHomeOrderProgress, order)
 
         viewHolderHomeOrderTradePairLabel.text = order.tradingPair.market
 

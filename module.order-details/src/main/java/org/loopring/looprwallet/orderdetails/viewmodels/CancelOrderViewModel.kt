@@ -7,6 +7,7 @@ import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 import org.loopring.looprwallet.core.models.settings.EthereumFeeSettings
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.networking.eth.LoopringSmartContractService
+import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
 import org.web3j.protocol.core.methods.response.TransactionReceipt
@@ -34,19 +35,39 @@ class CancelOrderViewModel : TransactionViewModel<TransactionReceipt>() {
         orderDetailsLooprComponent.inject(this)
     }
 
-    fun cancelOrder(wallet: LooprWallet, order: AppLooprOrder) = runTaskAsync { gasPrice ->
+    fun cancelOrder(wallet: LooprWallet, orderHash: String) = runTaskAsync { gasPrice ->
         val gasLimit = ethereumFeeSettings.cancelOrderGasLimit
-        return@runTaskAsync service.cancelOrder(AppLooprOrder.convertToLibraryLooprOrder(order), wallet, gasLimit, gasPrice)
+
+        val repository = LooprOrderRepository()
+
+        val order = repository.getOrderByHashNow(orderHash, IO)
+                ?: throw IllegalStateException("Order was null!")
+
+        val result = service.cancelOrder(AppLooprOrder.convertToLibraryLooprOrder(order), wallet, gasLimit, gasPrice)
+
+        repository.cancelOrder(orderHash, IO)
+
+        return@runTaskAsync result
     }
 
     fun cancelOrderByTradingPair(wallet: LooprWallet, market: String) = runTaskAsync { gasPrice ->
         val gasLimit = ethereumFeeSettings.cancelOrdersByTradingPair
-        return@runTaskAsync service.cancelAllOrdersByTradingPair(market, wallet, gasLimit, gasPrice)
+        val result = service.cancelAllOrdersByTradingPair(market, wallet, gasLimit, gasPrice)
+
+        val repository = LooprOrderRepository()
+        repository.cancelOrdersByTradingPair(wallet.credentials.address, market, IO)
+
+        return@runTaskAsync result
     }
 
     fun cancelAllOrders(wallet: LooprWallet) = runTaskAsync { gasPrice ->
         val gasLimit = ethereumFeeSettings.cancelAllOrdersGasLimit
-        return@runTaskAsync service.cancelAllOrders(wallet, gasLimit, gasPrice)
+        val result = service.cancelAllOrders(wallet, gasLimit, gasPrice)
+
+        val repository = LooprOrderRepository()
+        repository.cancelAllOpenOrders(wallet.credentials.address, IO)
+
+        return@runTaskAsync result
     }
 
     // MARK - Private Methods
@@ -61,8 +82,6 @@ class CancelOrderViewModel : TransactionViewModel<TransactionReceipt>() {
 
             val receipt = block(gasPrice)
                     .await()
-
-            // TODO cancel orers
 
             mResult.postValue(receipt)
         } catch (e: Exception) {

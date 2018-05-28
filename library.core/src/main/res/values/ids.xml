@@ -4,6 +4,7 @@
     <item name="orderProgressView" type="id" />
     <item name="floatingActionButton" type="id" />
     <item name="appbarLayout" type="id" />
+    <item name="collapsingToolbarLayout" type="id" />
     <item name="toolbar" type="id" />
     <item name="menuMainSettings" type="id" />
     <item name="activityContainer" type="id" />

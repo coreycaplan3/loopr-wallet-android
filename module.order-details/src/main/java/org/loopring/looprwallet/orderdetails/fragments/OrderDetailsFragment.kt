@@ -3,24 +3,31 @@ package org.loopring.looprwallet.orderdetails.fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
+import android.support.design.widget.AppBarLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_order_details.*
-import org.loopring.looprwallet.core.extensions.*
+import org.loopring.looprwallet.core.extensions.formatAsToken
+import org.loopring.looprwallet.core.extensions.ifNotNull
+import org.loopring.looprwallet.core.extensions.longToast
+import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.fragments.BaseFragment
-import org.loopring.looprwallet.core.models.loopr.orders.*
+import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFillFilter
+import org.loopring.looprwallet.core.models.loopr.orders.OrderFillsLooprPager
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.drawable
+import org.loopring.looprwallet.core.utilities.RealmUtility
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.orderdetails.R
 import org.loopring.looprwallet.orderdetails.adapters.OrderDetailsAdapter
-import org.loopring.looprwallet.core.models.loopr.orders.OrderFillsLooprPager
-import org.loopring.looprwallet.core.utilities.RealmUtility
 import org.loopring.looprwallet.orderdetails.dagger.orderDetailsLooprComponent
+import org.loopring.looprwallet.orderdetails.presenters.OrderStatusPresenter
 import org.loopring.looprwallet.orderdetails.viewmodels.CancelOrderViewModel
 import org.loopring.looprwallet.orderdetails.viewmodels.OrderFillsViewModel
 import org.loopring.looprwallet.orderdetails.viewmodels.OrderSummaryViewModel
@@ -86,14 +93,23 @@ class OrderDetailsFragment : BaseFragment() {
 
         orderDetailsLooprComponent.inject(this)
 
+        toolbarDelegate?.isToolbarCollapseEnabled = true
         toolbarDelegate?.onCreateOptionsMenu = ::createOptionsMenu
         toolbarDelegate?.onOptionsItemSelected = ::optionsItemSelected
+    }
+
+    override fun createAppbarLayout(fragmentView: ViewGroup): AppBarLayout {
+        val appbarLayout = fragmentView.findViewById<AppBarLayout>(R.id.appbarLayout)
+        fragmentView.removeView(appbarLayout)
+        return appbarLayout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar?.setTitle(R.string.order_details)
+        collapsingToolbarLayout?.isTitleEnabled = false
+
+        toolbar?.title = null
         toolbar?.navigationIcon = drawable(R.drawable.ic_clear_white_24dp, view.context)
 
         cancelOrderViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
@@ -108,7 +124,7 @@ class OrderDetailsFragment : BaseFragment() {
             }
             bindLooprOrder(it)
         }
-        setupOfflineFirstStateAndErrorObserver(orderSummaryViewModel, orderDetailsSwipeRefreshLayout)
+        setupOfflineFirstStateAndErrorObserver(orderSummaryViewModel, fragmentContainer)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -149,7 +165,7 @@ class OrderDetailsFragment : BaseFragment() {
 
                             val wallet = walletClient.getCurrentWallet()
                             if (wallet != null) {
-                                cancelOrderViewModel.cancelOrder(wallet, order)
+                                cancelOrderViewModel.cancelOrder(wallet, order.orderHash)
                             }
                         }.setNegativeButton(R.string.exit) { dialog, _ ->
                             dialog.cancel()
@@ -177,11 +193,12 @@ class OrderDetailsFragment : BaseFragment() {
             (adapter.pager as? OrderFillsLooprPager)?.orderFillContainer = it
             setupOfflineFirstDataObserverForAdapter(orderFillsViewModel, adapter, it.data)
         }
-        setupOfflineFirstStateAndErrorObserver(orderFillsViewModel, orderDetailsSwipeRefreshLayout)
+        setupOfflineFirstStateAndErrorObserver(orderFillsViewModel, fragmentContainer)
     }
 
     @SuppressLint("SetTextI18n")
     private fun bindLooprOrder(order: AppLooprOrder) {
+        toolbarDelegate?.resetOptionsMenu()
 
         // Title
         val primaryTicker = order.tradingPair.primaryTicker
@@ -198,39 +215,7 @@ class OrderDetailsFragment : BaseFragment() {
         }
 
         // Order Progress
-        // TODO standardize this binding between order details and the home orders fragment
-        when (order.status) {
-            OrderSummaryFilter.FILTER_OPEN_NEW -> {
-                orderDetailsOrderProgressView.visibility = View.VISIBLE
-                orderDetailsOrderProgressView.progress = 0
-
-                orderDetailsOrderCompleteImage.visibility = View.GONE
-            }
-            OrderSummaryFilter.FILTER_OPEN_PARTIAL -> {
-                orderDetailsOrderProgressView.visibility = View.VISIBLE
-                orderDetailsOrderProgressView.progress = order.percentageFilled
-
-                orderDetailsOrderCompleteImage.visibility = View.GONE
-            }
-            OrderSummaryFilter.FILTER_FILLED -> {
-                orderDetailsOrderCompleteImage.visibility = View.VISIBLE
-                orderDetailsOrderCompleteImage.setImageResource(R.drawable.ic_swap_horiz_white_24dp)
-
-                orderDetailsOrderProgressView.visibility = View.GONE
-            }
-            OrderSummaryFilter.FILTER_CANCELLED -> {
-                orderDetailsOrderCompleteImage.visibility = View.VISIBLE
-                orderDetailsOrderCompleteImage.setImageResource(R.drawable.ic_cancel_white_24dp)
-
-                orderDetailsOrderProgressView.visibility = View.GONE
-            }
-            OrderSummaryFilter.FILTER_EXPIRED -> {
-                orderDetailsOrderCompleteImage.visibility = View.VISIBLE
-                orderDetailsOrderCompleteImage.setImageResource(R.drawable.ic_alarm_white_24dp)
-
-                orderDetailsOrderProgressView.visibility = View.GONE
-            }
-        }
+        OrderStatusPresenter.bind(orderDetailsOrderCompleteImage, orderDetailsOrderProgressView, order)
 
         // Token Amount
         orderDetailsTokenAmountLabel.text = order.amount.formatAsToken(currencySettings, order.tradingPair.primaryToken)
@@ -242,7 +227,7 @@ class OrderDetailsFragment : BaseFragment() {
             orderDetailsFiatAmountLabel.text = "@ $priceInSecondary / $primaryTokenTicker"
         }
 
-        orderDetailsSwipeRefreshLayout.isEnabled = !order.isComplete
+        fragmentContainer.isEnabled = !order.isComplete
     }
 
 }

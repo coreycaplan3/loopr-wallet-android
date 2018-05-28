@@ -5,10 +5,8 @@ import io.realm.*
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
-import org.loopring.looprwallet.core.extensions.asLiveData
-import org.loopring.looprwallet.core.extensions.equalTo
-import org.loopring.looprwallet.core.extensions.like
-import org.loopring.looprwallet.core.extensions.sort
+import org.loopring.looprwallet.core.extensions.*
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
@@ -25,6 +23,35 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  *
  */
 class LooprOrderRepository : BaseRealmRepository() {
+
+    fun cancelOrder(orderHash: String, context: HandlerContext = IO) = runTransaction(context) { realm ->
+        getOrderByHashNow(orderHash, context)?.let { order ->
+            order.status = OrderSummaryFilter.FILTER_CANCELLED
+            realm.upsert(order)
+        }
+    }
+
+    fun cancelOrdersByTradingPair(address: String, market: String, context: HandlerContext = IO) = runTransaction(context) {
+        val filter = OrderSummaryFilter(address, market, OrderSummaryFilter.FILTER_OPEN_ALL, -1)
+        val orders = getOrdersByFilterNow(filter, context).also {
+            it.forEach {
+                it.status = OrderSummaryFilter.FILTER_CANCELLED
+            }
+        }
+
+        it.upsert(orders)
+    }
+
+    fun cancelAllOpenOrders(address: String, context: HandlerContext = IO) = runTransaction(context) {
+        val filter = OrderSummaryFilter(address, null, OrderSummaryFilter.FILTER_OPEN_ALL, -1)
+        val orders = getOrdersByFilterNow(filter, context).also {
+            it.forEach {
+                it.status = OrderSummaryFilter.FILTER_CANCELLED
+            }
+        }
+
+        it.upsert(orders)
+    }
 
     fun getOrderContainerNow(filter: OrderSummaryFilter, context: HandlerContext = UI): LooprOrderContainer? {
         val item = getRealmFromContext(context)

@@ -19,7 +19,6 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import io.realm.OrderedRealmCollection
 import io.realm.RealmModel
-import io.realm.Sort
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
@@ -28,8 +27,8 @@ import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.delegates.BaseFragmentToolbarDelegate
 import org.loopring.looprwallet.core.extensions.*
 import org.loopring.looprwallet.core.models.android.architecture.FragmentViewLifecycleOwner
-import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController.FragmentAnimation
+import org.loopring.looprwallet.core.models.loopr.filters.PagingFilter
 import org.loopring.looprwallet.core.transitions.FloatingActionButtonTransition
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.dimen
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
@@ -40,7 +39,6 @@ import org.loopring.looprwallet.core.views.LooprAppBarLayout
 import org.loopring.looprwallet.core.wallet.WalletClient
 import javax.inject.Inject
 import kotlin.math.roundToInt
-import kotlin.reflect.KProperty
 
 
 /**
@@ -394,7 +392,13 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
      * [setupOfflineFirstDataObserverForAdapter].
      */
     protected fun refreshAllOfflineFirstViewModels() {
-        viewModelList.forEach(OfflineFirstViewModel<*, *>::refresh)
+        viewModelList.forEach {
+            val parameter = it.mParameter
+            when (parameter) {
+                is PagingFilter -> parameter.pageNumber = 1
+            }
+            it.refresh()
+        }
     }
 
     /**

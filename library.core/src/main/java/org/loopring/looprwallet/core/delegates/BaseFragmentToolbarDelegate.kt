@@ -3,6 +3,7 @@ package org.loopring.looprwallet.core.delegates
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
@@ -42,7 +43,8 @@ open class BaseFragmentToolbarDelegate(
      * Set to the opposite of the initial so it can be set in the beginning (the IF statement
      * doesn't fire if the condition is already set)
      */
-    var isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled) ?: isToolbarCollapseEnabled
+    var isToolbarCollapseEnabled = savedInstanceState?.getBoolean(KEY_IS_TOOLBAR_COLLAPSED, isToolbarCollapseEnabled)
+            ?: isToolbarCollapseEnabled
 
     private val activity = fragment.activity
 
@@ -140,8 +142,11 @@ open class BaseFragmentToolbarDelegate(
             return
         }
 
-        (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
-            it.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+        if (appbarLayout?.findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbarLayout) == null) {
+            // Collapsing toolbars are custom views
+            (toolbar?.layoutParams as? AppBarLayout.LayoutParams)?.let {
+                it.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+            }
         }
 
         val container = fragment.view?.findViewById<View>(R.id.fragmentContainer)

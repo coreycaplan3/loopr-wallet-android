@@ -105,7 +105,8 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
         AlertDialog.Builder(context)
                 .setTitle(getString(R.string.formatter_unlock_or_lock_token).format(token.name))
                 .setAdapter(adapter) { dialog, index ->
-                    // Index (0 --> Unlock); Index (1 --> Lock)
+                    // Index (0 --> Unlock)
+                    // Index (1 --> Lock)
 
                     val wallet = walletClient.getCurrentWallet() ?: return@setAdapter
                     val loopringSmartContractDelegate = LooprToken.LRC.identifier // TODO

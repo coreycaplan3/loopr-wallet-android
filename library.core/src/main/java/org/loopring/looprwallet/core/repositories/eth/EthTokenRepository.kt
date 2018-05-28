@@ -6,13 +6,13 @@ import io.realm.OrderedRealmCollection
 import io.realm.kotlin.where
 import kotlinx.coroutines.experimental.android.HandlerContext
 import kotlinx.coroutines.experimental.android.UI
-import org.loopring.looprwallet.core.extensions.asLiveData
-import org.loopring.looprwallet.core.extensions.equalTo
-import org.loopring.looprwallet.core.extensions.notEqualTo
-import org.loopring.looprwallet.core.extensions.sort
+import org.loopring.looprwallet.core.extensions.*
+import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
+import org.loopring.looprwallet.core.models.loopr.tokens.TokenAllowanceInfo
 import org.loopring.looprwallet.core.models.loopr.tokens.TokenBalanceInfo
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
+import java.math.BigInteger
 
 /**
  * Created by Corey Caplan on 3/17/18.
@@ -23,6 +23,18 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  *
  */
 class EthTokenRepository : BaseRealmRepository() {
+
+    fun approveToken(address: String, token: LooprToken, allowanceAmount: BigInteger, context: HandlerContext = IO) = runTransaction(context) {
+        val allowanceInfo = TokenAllowanceInfo(address, allowanceAmount)
+
+        val isUpdated = token.tokenAllowances.update(allowanceInfo) { it.address == address }
+        if (!isUpdated) {
+            it.insertOrUpdate(allowanceInfo)
+            token.tokenAllowances.add(allowanceInfo)
+        }
+
+        it.insertOrUpdate(token)
+    }
 
     /**
      * Finds [LooprToken.ETH] synchronously. If not found, it is inserted and returned from realm.

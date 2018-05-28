@@ -47,6 +47,24 @@ class HomeOrderAdapter(
     override var pager: LooprAdapterPager<AppLooprOrder> = OrderSummaryPager()
 
     /**
+     * A listener for passing a click event to *cancel an order* back to the caller. This
+     * parameter should be **NOT** be null if the *orderType* is [FILTER_OPEN_ALL].
+     */
+    var cancelClickListener: ((String) -> Unit)? = null
+        set(value) {
+            field = value
+            when (orderType) {
+                FILTER_OPEN_ALL -> {
+                    if (value == null) {
+                        throw IllegalStateException("cancelClickListener cannot be null for FILTER_OPEN_ALL order type")
+                    }
+                }
+                FILTER_FILLED, FILTER_CANCELLED -> throw IllegalArgumentException("Cancelling is only for FILTER_OPEN_ALL")
+                else -> throw IllegalArgumentException("Invalid orderType, found: $orderType")
+            }
+        }
+
+    /**
      * A listener for passing a click event to *cancel all orders* back to the caller. This
      * parameter should be **NOT** be null if the *orderType* is [FILTER_OPEN_ALL].
      */
@@ -55,7 +73,7 @@ class HomeOrderAdapter(
             field = value
             when (orderType) {
                 FILTER_OPEN_ALL -> {
-                    if (cancelAllClickListener == null) {
+                    if (value == null) {
                         throw IllegalStateException("cancelAllClickListener cannot be null for FILTER_OPEN_ALL order type")
                     }
                 }
@@ -131,9 +149,11 @@ class HomeOrderAdapter(
             else -> false
         }
 
-        (holder as? HomeOrderViewHolder)?.bind(item, showDateHeader) {
-            OrderDetailsActivity.route(activity, it.orderHash)
-        }
+        (holder as? HomeOrderViewHolder)?.bind(item, showDateHeader, ::onOrderClick, cancelClickListener)
+    }
+
+    private fun onOrderClick(order: AppLooprOrder) {
+        OrderDetailsActivity.route(activity, order.orderHash)
     }
 
     @Suppress("UNUSED_PARAMETER")

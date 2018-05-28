@@ -336,7 +336,8 @@
     <string name="wrapping_eth_into_weth">Wrapping ETH into WETH…</string>
     <string name="unwrapping_weth_into_eth">Unwrapping WETH into ETH…</string>
     <string name="cancel_all_orders">Cancel All Orders?</string>
-    <string name="cancel_all_rationale">Are you sure you want to cancel all of your open orders? This action cannot be undone.</string>
+    <string name="cancel_all_orders_rationale">Are you sure you want to cancel all of your open orders? This action cannot be undone.</string>
+    <string name="cancel_order_rationale">Are you sure you want to cancel this open order? This action cannot be undone.</string>
     <string name="cancel_all">Cancel All</string>
     <string name="exit">Exit</string>
     <string name="dot">•</string>

@@ -5,6 +5,7 @@ import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.wallet.LooprWallet
 import org.loopring.looprwallet.core.networking.eth.EthereumService
+import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
 import org.loopring.looprwallet.core.viewmodels.TransactionViewModel
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.math.BigInteger
@@ -78,6 +79,9 @@ class EthereumTokenTransactionViewModel : TransactionViewModel<Pair<LooprToken, 
             val result = EthereumService.getInstance(wallet.credentials)
                     .approveToken(token.identifier, wallet.credentials, spender, amount, gasLimit, gasPrice)
                     .await()
+
+            val repository = EthTokenRepository()
+            repository.approveToken(wallet.credentials.address, token, amount, IO)
 
             mResult.postValue(token to result)
         } catch (e: Throwable) {
