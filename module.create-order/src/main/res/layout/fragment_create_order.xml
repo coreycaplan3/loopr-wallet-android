@@ -16,56 +16,90 @@
 
             <TextView
                 android:id="@+id/createOrderQuantityLabel"
-                style="@style/TextAppearance.AppCompat.Small"
+                style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/standard_padding"
+                android:textStyle="bold"
                 tools:text="Amount of LRC" />
 
             <EditText
                 android:id="@+id/createOrderQuantityEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/horizontal_margin"
-                android:layout_marginRight="@dimen/horizontal_margin"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:editable="false"
                 android:hint="@string/_0"
                 android:inputType="none"
                 android:lines="1"
-                app:layout_constraintRight_toRightOf="parent">
-
-                <requestFocus />
-
-            </EditText>
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/createOrderQuantityLabel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/createOrderQuantityLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="Deprecated" />
 
             <TextView
                 android:id="@+id/createOrderPriceTitleLabel"
+                style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/standard_padding"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/createOrderQuantityLabel"
                 tools:text="Price" />
 
             <TextView
                 android:id="@+id/createOrderPriceLabel"
+                style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:background="@drawable/ripple_effect_accent"
                 android:padding="@dimen/standard_padding"
                 android:textAllCaps="true"
                 android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/createOrderPriceTitleLabel"
+                app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/createOrderQuantityLabel"
+                app:layout_constraintStart_toEndOf="@id/createOrderPriceLabel"
+                app:layout_constraintTop_toTopOf="@id/createOrderPriceTitleLabel"
                 tools:text="0.0025 WETH" />
+
+            <TextView
+                android:id="@+id/createOrderEstimatedPriceTitleLabel"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:text="@string/estimated_price"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/createOrderPriceTitleLabel" />
+
+            <TextView
+                android:id="@+id/createOrderPriceFiatLabel"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="@dimen/standard_padding"
+                android:layout_marginRight="@dimen/standard_padding"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@id/createOrderPriceLabel"
+                app:layout_constraintTop_toBottomOf="@id/createOrderPriceLabel"
+                tools:text="~ $0.4862" />
 
             <include
                 android:id="@+id/estimatedTotalPriceDivider"
                 layout="@layout/divider"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/divider_height"
-                app:layout_constraintTop_toBottomOf="@id/createOrderPriceLabel" />
+                app:layout_constraintTop_toBottomOf="@id/createOrderPriceFiatLabel" />
 
             <TextView
                 android:id="@+id/createOrderTotalPriceTitleLabel"
+                style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/standard_padding"
@@ -75,15 +109,38 @@
 
             <TextView
                 android:id="@+id/createOrderTotalPriceLabel"
+                style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/standard_padding"
+                android:textStyle="bold"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/estimatedTotalPriceDivider"
                 tools:text="0 WETH" />
 
             <TextView
-                android:id="@+id/createTransferBalanceLabel"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:text="@string/estimated_total_price"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/createOrderTotalPriceLabel" />
+
+            <TextView
+                android:id="@+id/createOrderEstimatedTotalPriceLabel"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/horizontal_margin"
+                android:layout_marginRight="@dimen/horizontal_margin"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/createOrderTotalPriceLabel"
+                tools:text="~ $0.0000" />
+
+            <TextView
+                android:id="@+id/createOrderBalanceLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -93,13 +150,15 @@
                 app:layout_constraintBottom_toTopOf="@id/createOrderMaxButton"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/createOrderEstimatedTotalPriceLabel"
+                app:layout_constraintVertical_bias="1"
                 tools:text="@string/default_token_balance" />
 
-            <TextView
+            <Button
                 android:id="@+id/createOrderMaxButton"
-                style="@style/TextAppearance.AppCompat.Small.Button"
+                style="@style/App.Button.Borderless"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginBottom="@dimen/vertical_margin_small"
                 android:padding="@dimen/standard_margin_small"
                 android:text="@string/max"

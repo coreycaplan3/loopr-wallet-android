@@ -4,6 +4,9 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.crash.FirebaseCrash
 import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
+import org.loopring.looprwallet.createorder.dagger.CreateOrderLooprComponent
+import org.loopring.looprwallet.createorder.dagger.CreateOrderLooprComponentProvider
+import org.loopring.looprwallet.createorder.dagger.DaggerCreateOrderLooprComponent
 import org.loopring.looprwallet.createtransfer.dagger.CreateTransferLooprComponent
 import org.loopring.looprwallet.createtransfer.dagger.CreateTransferLooprComponentProvider
 import org.loopring.looprwallet.createtransfer.dagger.DaggerCreateTransferLooprComponent
@@ -48,14 +51,19 @@ import org.loopring.looprwallet.wrapeth.dagger.WrapEthLooprComponentProvider
  * Purpose of Class:
  *
  */
-open class LooprWalletApp : CoreLooprWalletApp(), CreateTransferLooprComponentProvider,
-        HomeMarketsLooprComponentProvider, HomeMyWalletLooprComponentProvider,
-        HomeOrdersLooprComponentProvider, HomeTransfersLooprComponentProvider,
-        OrderDetailsLooprComponentProvider, TradeDetailsLooprComponentProvider,
-        TransferDetailsLooprComponentProvider, ViewBalancesLooprComponentProvider,
-        WalletLooprComponentProvider, WrapEthLooprComponentProvider {
+open class LooprWalletApp : CoreLooprWalletApp(), CreateOrderLooprComponentProvider,
+        CreateTransferLooprComponentProvider, HomeMarketsLooprComponentProvider,
+        HomeMyWalletLooprComponentProvider, HomeOrdersLooprComponentProvider,
+        HomeTransfersLooprComponentProvider, OrderDetailsLooprComponentProvider,
+        TradeDetailsLooprComponentProvider, TransferDetailsLooprComponentProvider,
+        ViewBalancesLooprComponentProvider, WalletLooprComponentProvider,
+        WrapEthLooprComponentProvider {
 
     companion object {
+
+        val createOrderLooprComponent: CreateOrderLooprComponent by lazy {
+            DaggerCreateOrderLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
+        }
 
         val createTransferLooprComponent: CreateTransferLooprComponent by lazy {
             DaggerCreateTransferLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
@@ -102,6 +110,8 @@ open class LooprWalletApp : CoreLooprWalletApp(), CreateTransferLooprComponentPr
         }
 
     }
+
+    override fun provideCreateOrderLooprComponent() = createOrderLooprComponent
 
     override fun provideCreateTransferLooprComponent() = createTransferLooprComponent
 

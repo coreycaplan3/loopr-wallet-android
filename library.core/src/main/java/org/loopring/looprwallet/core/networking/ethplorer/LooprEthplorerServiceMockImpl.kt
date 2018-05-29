@@ -69,9 +69,8 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
             numberOfTokens = BigInteger("20000000000000000000"),
             usdValue = BigInteger("85493"),
             transactionFee = BigInteger("1"),
-            transactionFeeUsdValue = BigInteger("24"),
-            token = lrc
-    )
+            transactionFeeUsdValue = BigInteger("24")
+            ).apply { this.token = lrc }
 
     private val transfer2 = LooprTransfer(
             transactionHash = "abcdef4321",
@@ -81,9 +80,8 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
             numberOfTokens = BigInteger("3000000000000000000"),
             usdValue = BigInteger("63298"),
             transactionFee = BigInteger("1"),
-            transactionFeeUsdValue = BigInteger("20"),
-            token = appc
-    )
+            transactionFeeUsdValue = BigInteger("20")
+            ).apply { this.token = appc }
 
     private val transfer3 = LooprTransfer(
             transactionHash = "abcdef4213",
@@ -93,9 +91,8 @@ class LooprEthplorerServiceMockImpl : LooprEthplorerService {
             numberOfTokens = BigInteger("525000000000000000"),
             usdValue = BigInteger("48726"),
             transactionFee = BigInteger("1"),
-            transactionFeeUsdValue = BigInteger("25"),
-            token = req
-    )
+            transactionFeeUsdValue = BigInteger("25")
+            ).apply { this.token = req }
 
     override fun getAddressBalances(address: String): Deferred<RealmList<LooprToken>> = async(NET) {
         delay(MOCK_SERVICE_CALL_DURATION)

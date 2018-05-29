@@ -1,76 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    android:background="?attr/cardBackgroundColor"
-    android:orientation="vertical">
+    android:layout_gravity="bottom">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/standard_padding">
+        android:background="?attr/cardBackgroundColor"
+        android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/contactNameInputLayout"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/barcodeScannerButton"
-            android:layout_toStartOf="@id/barcodeScannerButton"
-            app:errorEnabled="true">
+            android:padding="@dimen/standard_padding">
 
-            <EditText
-                android:id="@+id/contactNameEditText"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/contactNameInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/contact_name"
-                android:inputType="textCapWords"
-                tools:text="@string/default_contact_name" />
+                android:layout_toLeftOf="@id/barcodeScannerButton"
+                android:layout_toStartOf="@id/barcodeScannerButton"
+                app:errorEnabled="true">
 
-        </android.support.design.widget.TextInputLayout>
+                <EditText
+                    android:id="@+id/contactNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/contact_name"
+                    android:inputType="textCapWords"
+                    tools:text="@string/default_contact_name" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/contactAddressInputLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/contactNameInputLayout"
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/contactAddressInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/contactNameInputLayout"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_toLeftOf="@id/barcodeScannerButton"
+                android:layout_toStartOf="@id/barcodeScannerButton"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/public_key_length"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/contactAddressEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/contact_address"
+                    android:imeOptions="actionDone"
+                    android:inputType="text|textMultiLine"
+                    tools:text="@string/default_address" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <include
+                layout="@layout/qr_code_button"
+                android:layout_width="@dimen/card_action_icon_size"
+                android:layout_height="@dimen/card_action_icon_size"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/contactAddressInputLayout"
+                android:layout_below="@id/contactNameInputLayout"
+                android:layout_marginTop="@dimen/vertical_margin" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/createContactButton"
+            style="@style/App.Button.NoClipping"
             android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_toLeftOf="@id/barcodeScannerButton"
-            android:layout_toStartOf="@id/barcodeScannerButton"
-            app:counterEnabled="true"
-            app:counterMaxLength="@integer/public_key_length"
-            app:errorEnabled="true">
+            android:enabled="false"
+            android:text="@string/create_contact" />
 
-            <EditText
-                android:id="@+id/contactAddressEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/contact_address"
-                android:imeOptions="actionDone"
-                android:inputType="text|textMultiLine"
-                tools:text="@string/default_address" />
+    </LinearLayout>
 
-        </android.support.design.widget.TextInputLayout>
-
-        <include
-            layout="@layout/qr_code_button"
-            android:layout_width="@dimen/card_action_icon_size"
-            android:layout_height="@dimen/card_action_icon_size"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/contactAddressInputLayout"
-            android:layout_below="@id/contactNameInputLayout"
-            android:layout_marginTop="@dimen/vertical_margin" />
-
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/createContactButton"
-        style="@style/App.Button.NoClipping"
-        android:layout_marginTop="@dimen/vertical_margin"
-        android:enabled="false"
-        android:text="@string/create_contact" />
-
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -1,5 +1,7 @@
 package org.loopring.looprwallet.core.extensions
 
+import android.annotation.SuppressLint
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -17,12 +19,10 @@ import java.util.*
  * @param other The other date to be compared with this one, to see if they fall on the same day
  * @return true if the two dates fall on the same day or false otherwise
  */
+@SuppressLint("SimpleDateFormat")
 fun Date.isSameDay(other: Date): Boolean {
-    val c1 = Calendar.getInstance(TimeZone.getDefault()).apply { time = this@isSameDay }
-    val c2 = Calendar.getInstance(TimeZone.getDefault()).apply { time = other }
-
-    return c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR) &&
-            c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+    val format = SimpleDateFormat("yyyyMMdd")
+    return format.format(this) == format.format(other)
 }
 
 /**

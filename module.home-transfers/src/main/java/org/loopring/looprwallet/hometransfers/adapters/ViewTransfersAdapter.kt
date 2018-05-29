@@ -17,11 +17,13 @@ import org.loopring.looprwallet.hometransfers.R
  * Purpose of Class:
  *
  */
-class ViewTransfersAdapter(listener: OnTransferClickListener) : BaseRealmAdapter<LooprTransfer>() {
-
-    private val listener by weakReference(listener)
+class ViewTransfersAdapter(private val listener: OnTransferClickListener) : BaseRealmAdapter<LooprTransfer>() {
 
     override var pager: LooprAdapterPager<LooprTransfer> = DefaultLooprPagerAdapter()
+
+    init {
+        containsHeader = false
+    }
 
     override fun onCreateEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val inflater = getInflater(parent)
@@ -45,7 +47,7 @@ class ViewTransfersAdapter(listener: OnTransferClickListener) : BaseRealmAdapter
         val position = index + dataOffsetPosition
         val transfer = data?.get(position) ?: return
 
-        listener?.onTransferClick(transfer)
+        listener.onTransferClick(transfer)
     }
 
 }

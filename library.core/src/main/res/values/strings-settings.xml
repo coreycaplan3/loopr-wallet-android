@@ -115,6 +115,8 @@
     <string name="settings_currency_current_fiat_key">loopr_currency_current_fiat_key</string>
     <string name="settings_currency_refresh_frequency_key">loopr_currency_refresh_frequency_key</string>
 
+    <string name="settings_currency_values_eth">ETH</string>
+    <string name="settings_currency_values_lrc">LRC</string>
     <string name="settings_currency_values_usd">USD</string>
     <string name="settings_currency_values_gbp">GBP</string>
     <string name="settings_currency_values_eur">EUR</string>
@@ -125,10 +127,6 @@
     <string name="settings_currency_currencies_entries_values_default">@string/settings_currency_values_usd</string>
     <string-array name="settings_currency_currencies_entries_values">
         <item>@string/settings_currency_currencies_entries_values_default</item>
-        <item>@string/settings_currency_values_gbp</item>
-        <item>@string/settings_currency_values_eur</item>
-        <item>@string/settings_currency_values_jpy</item>
-        <item>@string/settings_currency_values_krw</item>
         <item>@string/settings_currency_values_cny</item>
     </string-array>
 

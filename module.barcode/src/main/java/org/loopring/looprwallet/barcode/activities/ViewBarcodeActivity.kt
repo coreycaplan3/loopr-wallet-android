@@ -31,6 +31,7 @@ class ViewBarcodeActivity : BaseActivity() {
             val intent = Intent(activity, ViewBarcodeActivity::class.java)
                     .putExtra(KEY_TITLE_TEXT, titleText)
                     .putExtra(KEY_BARCODE_TEXT, barcodeText)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
             activity.startActivity(intent)
         }

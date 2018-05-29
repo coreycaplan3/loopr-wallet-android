@@ -131,6 +131,7 @@ class BarcodeCaptureActivity : BaseActivity(), BarcodeGraphicTracker.BarcodeUpda
         private fun getIntent(allowedTypes: Array<out String>): Intent {
             return Intent(CoreLooprWalletApp.application, BarcodeCaptureActivity::class.java)
                     .putExtra(KEY_ALLOWED_TYPES, allowedTypes)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
         private fun putActivityResultAndFinish(activity: BaseActivity, type: String, barcodeResult: String) {

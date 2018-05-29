@@ -117,7 +117,7 @@ fun BigDecimal.formatAsToken(settings: CurrencySettings, token: LooprToken): Str
  */
 fun BigInteger.formatAsCurrency(settings: CurrencySettings): String {
     val formatter = settings.getCurrencyFormatter()
-    val result = BigDecimal(this, 2) / BigDecimal(100)
+    val result = BigDecimal(this, 4) / BigDecimal(10000) // 10^4
     return formatter.format(result)
 }
 

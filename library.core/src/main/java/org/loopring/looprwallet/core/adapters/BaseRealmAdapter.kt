@@ -205,6 +205,13 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
         removeChangeListener()
     }
 
+    /**
+     * Called after the [OrderedRealmCollectionChangeListener] is invoked in this adapter
+     */
+    open fun onDataChange(changeSet: OrderedCollectionChangeSet?) {
+        // Defaults to no op
+    }
+
     private val changeListener by lazy {
         OrderedRealmCollectionChangeListener { data: RealmResults<T>, changeSet: OrderedCollectionChangeSet? ->
             mData = data
@@ -216,27 +223,38 @@ abstract class BaseRealmAdapter<T : RealmModel> : RecyclerView.Adapter<RecyclerV
             }
 
             /**
+             * Used to keep track of whether or not any changes occurred
+             */
+            var isCalled = false
+
+            /**
              * We need to push the index forward, so we negate [dataOffsetPosition]
              */
             val offset = -dataOffsetPosition
 
             // For deletions, the adapter has to be notified in reverse order.
-            val deletions = changeSet.deletionRanges
-            for (i in deletions.indices.reversed()) {
-                val range = deletions[i]
+            for (i in changeSet.deletionRanges.indices.reversed()) {
+                val range = changeSet.deletionRanges[i]
                 notifyItemRangeRemoved(range.startIndex + offset, range.length)
+                isCalled = true
             }
 
-            val insertions = changeSet.insertionRanges
-            for (range in insertions) {
+            for (range in changeSet.insertionRanges) {
                 notifyItemRangeInserted(range.startIndex + offset, range.length)
+                isCalled = true
             }
 
-            val modifications = changeSet.changeRanges
-            for (range in modifications) {
+            for (range in changeSet.changeRanges) {
                 notifyItemRangeChanged(range.startIndex + offset, range.length)
+                isCalled = true
             }
 
+            if (!isCalled) {
+                // We could have updated the data so no changes were detected in the changeSet
+                notifyDataSetChanged()
+            }
+
+            onDataChange(changeSet)
         }
     }
 

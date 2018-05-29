@@ -2,10 +2,10 @@ package org.loopring.looprwallet.homemarkets.fragments
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import io.realm.Sort
+import org.loopring.looprwallet.core.adapters.LooprLayoutManager
 import org.loopring.looprwallet.core.extensions.sort
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
@@ -16,7 +16,7 @@ import org.loopring.looprwallet.core.repositories.loopr.LooprMarketsRepository
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.homemarkets.adapters.HomeMarketsAdapter
 import org.loopring.looprwallet.homemarkets.adapters.OnGeneralMarketsFilterChangeListener
-import org.loopring.looprwallet.homemarkets.viewmodels.HomeMarketsViewModel
+import org.loopring.looprwallet.core.viewmodels.loopr.MarketsViewModel
 
 /**
  * Created by Corey Caplan on 4/13/18.
@@ -44,7 +44,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
     }
 
     private val homeMarketsViewModel by lazy {
-        LooprViewModelFactory.get<HomeMarketsViewModel>(activity!!, "markets-$isFavorites")
+        LooprViewModelFactory.get<MarketsViewModel>(activity!!, "markets-$isFavorites")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
 
         recyclerView?.adapter = adapter
 
-        recyclerView?.layoutManager = LinearLayoutManager(view.context)
+        recyclerView?.layoutManager = LooprLayoutManager(view.context)
 
         setupOfflineFirstStateAndErrorObserver(homeMarketsViewModel, swipeRefreshLayout)
         setMarketsLiveData()
@@ -82,18 +82,18 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
 
     final override fun onQueryTextChangeListener(searchQuery: String) {
         val repository = LooprMarketsRepository()
-        adapter.data?.let {
+        adapter.pager.data?.let {
             adapter.filterData(repository.filterMarketsByQuery(searchQuery, it))
         }
     }
 
     final override fun onSortByChange(newSortByFilter: String) {
         homeMarketsViewModel.onSortByChange(newSortByFilter)
-        val newData = adapter.data?.where()?.apply {
+        val newData = adapter.pager.data?.where()?.apply {
             when (newSortByFilter) {
                 TradingPairFilter.SORT_BY_TICKER_ASC -> sort(TradingPair::market)
                 TradingPairFilter.SORT_BY_GAINERS -> sort(TradingPair::change24hAsNumber, Sort.DESCENDING)
-                TradingPairFilter.SORT_BY_LOSERS -> sort(TradingPair::change24hAsNumber)
+                TradingPairFilter.SORT_BY_LOSERS -> sort(TradingPair::change24hAsNumber, Sort.ASCENDING)
             }
         }?.findAllAsync()
         adapter.updateData(newData)

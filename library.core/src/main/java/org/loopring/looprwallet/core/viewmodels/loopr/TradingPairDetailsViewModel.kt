@@ -1,4 +1,4 @@
-package org.loopring.looprwallet.tradedetails.viewmodels
+package org.loopring.looprwallet.core.viewmodels.loopr
 
 import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
@@ -9,8 +9,8 @@ import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.loopr.LooprMarketsService
-import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import org.loopring.looprwallet.core.repositories.markets.TradingPairDetailsRepository
+import org.loopring.looprwallet.core.viewmodels.OfflineFirstViewModel
 import java.util.*
 
 /**

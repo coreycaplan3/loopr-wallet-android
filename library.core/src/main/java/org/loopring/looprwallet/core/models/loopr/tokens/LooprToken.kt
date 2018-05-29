@@ -29,23 +29,11 @@ open class LooprToken(
 
         override var decimalPlaces: Int = 18,
 
-        /**
-         * The list of balances mapping to an address owning the balance. If this object was
-         * retrieved from the network, the first index is the newly retrieved balance for that
-         * user.
-         */
         override var tokenBalances: RealmList<TokenBalanceInfo> = RealmList(),
 
-        /**
-         * The list of allowances mapping to a wallet address owning having that allowance. If this
-         * object was retrieved from the network, the first index is the newly retrieved balance
-         * for that user.
-         */
-        var tokenAllowances: RealmList<TokenAllowanceInfo> = RealmList(),
+        override var tokenAllowances: RealmList<TokenAllowanceInfo> = RealmList(),
 
-        priceInUsd: BigInteger? = null,
-
-        @Ignore override var priceInNativeCurrency: BigInteger? = null,
+        override var tokenPrices: RealmList<TokenPriceInfo> = RealmList(),
 
         override var lastUpdated: Date = Date()
 ) : RealmObject(), CryptoToken {
@@ -112,35 +100,31 @@ open class LooprToken(
             mTotalSupply = value.toString(10)
         }
 
+    /**
+     * The price of this token in terms of ETH
+     */
+    val ethPrice: TokenPriceInfo?
+        get() = findCurrencyPrice(CurrencySettings.ETH)
+
+    /**
+     * The price of this token in terms of LRC
+     */
+    val lrcPrice: TokenPriceInfo?
+        get() = findCurrencyPrice(CurrencySettings.LRC)
+
+    /**
+     * The price of this token in terms of USD
+     */
+    val usdPrice: TokenPriceInfo?
+        get() = findCurrencyPrice(CurrencySettings.USD)
+
+    /**
+     * The price of this token in terms of CNY
+     */
+    val cnyPrice: TokenPriceInfo?
+        get() = findCurrencyPrice(CurrencySettings.CNY)
+
     private var mTotalSupply: String = totalSupply.toString(10)
-
-    /**
-     * This is a backing field.
-     *
-     * The price of this token, in USD. This allows for standard conversions to occur later.
-     */
-    final override var priceInUsd: BigInteger?
-        get() = mPriceInUsd?.let { BigInteger(it) }
-        set(value) {
-            mPriceInUsd = value?.toString(10)
-        }
-
-    private var mPriceInUsd: String?
-
-    /**
-     * Finds a given address's [TokenAllowanceInfo] or null if it cannot be found
-     */
-    fun findAddressAllowance(address: String): BigInteger? {
-        return tokenAllowances.find { it?.address == address }?.allowance
-    }
-
-    init {
-        // Needed to set backing fields initially. They will be overwritten by the two calls below
-        this.mPriceInUsd = null
-
-        // This will set mPriceInUsd
-        this.priceInUsd = priceInUsd
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

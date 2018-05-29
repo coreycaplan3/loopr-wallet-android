@@ -132,11 +132,23 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
                 forEach { it.address = orderFilter.address!! }
             }
 
+            val repository = LooprOrderRepository()
+
             val totalNumberOfItems = when (orderFilter.status) {
-                OrderSummaryFilter.FILTER_OPEN_ALL -> 4
+                OrderSummaryFilter.FILTER_OPEN_ALL -> {
+                    val cancelledFilter = OrderSummaryFilter(address = orderFilter.address, status = OrderSummaryFilter.FILTER_CANCELLED)
+                    repository.getOrderContainerNow(cancelledFilter, NET).let {
+                        4 - (it?.pagingItem?.totalNumberOfItems ?: 0)
+                    }
+                }
                 OrderSummaryFilter.FILTER_FILLED -> 1
                 OrderSummaryFilter.FILTER_CANCELLED -> 0
                 else -> throw IllegalArgumentException("Invalid status, found: ${orderFilter.status}")
+            }
+
+            val currentOrders = repository.getOrdersByFilterNow(orderFilter, NET)
+            if(currentOrders.size == totalNumberOfItems) {
+                data.clear()
             }
 
             val pagingItem = LooprPagingItem(criteria, orderFilter.pageNumber, totalNumberOfItems)
@@ -160,17 +172,19 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
         delay(NetworkUtility.MOCK_SERVICE_CALL_DURATION)
 
         if (NetworkUtility.isNetworkAvailable()) {
-            val list = when (filter.pageNumber) {
-                1 -> listOf(fill1, fill2)
-                2 -> listOf(fill3)
+
+            val order = LooprOrderRepository().getOrderByHashNow(filter.orderHash, NET)
+                    ?: throw IllegalStateException("Could not get order with hash: ${filter.orderHash}")
+
+            val list = when {
+                order.percentageFilled == 0 -> listOf()
+                filter.pageNumber == 1 -> listOf(fill1, fill2)
+                filter.pageNumber == 2 -> listOf(fill3)
                 else -> throw IllegalArgumentException("Page 3+ should never be reached. Page: ${filter.pageNumber}")
             }.also {
-                val order = LooprOrderRepository().getOrderByHashNow(filter.orderHash, NET)
-                val primaryToken = order?.tradingPair?.primaryToken
+                val primaryToken = order.tradingPair.primaryToken
                 it.forEach {
-                    if (primaryToken != null) {
-                        it.token = primaryToken
-                    }
+                    it.token = primaryToken
                     it.orderHash = filter.orderHash
                 }
             }
@@ -178,7 +192,13 @@ internal class LooprOrderServiceMockImpl : LooprOrderService {
             val data = RealmList<LooprOrderFill>().apply { addAll(list) }
 
             val criteria = LooprOrderFillContainer.createCriteria(filter)
-            val pagingItem = LooprPagingItem(criteria, filter.pageNumber, 3)
+
+            val totalNumberOfItems = when {
+                order.percentageFilled == 0 -> 0
+                else -> 3
+            }
+
+            val pagingItem = LooprPagingItem(criteria, filter.pageNumber, totalNumberOfItems)
             return@async LooprOrderFillContainer(criteria = criteria, pagingItem = pagingItem, orderFillList = data)
         } else {
             throw IOException("No connection")

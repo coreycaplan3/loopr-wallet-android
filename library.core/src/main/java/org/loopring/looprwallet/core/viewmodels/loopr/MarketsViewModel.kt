@@ -1,11 +1,9 @@
-package org.loopring.looprwallet.homemarkets.viewmodels
+package org.loopring.looprwallet.core.viewmodels.loopr
 
 import android.arch.lifecycle.LiveData
-import android.os.Handler
 import io.realm.OrderedRealmCollection
 import io.realm.RealmList
 import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.android.asCoroutineDispatcher
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
@@ -31,7 +29,7 @@ import java.util.*
  * Purpose of Class:
  *
  */
-class HomeMarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<TradingPair>, TradingPairFilter>() {
+class MarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<TradingPair>, TradingPairFilter>() {
 
     override val repository = LooprMarketsRepository()
 

@@ -25,7 +25,10 @@ import java.math.BigInteger
 class EthTokenRepository : BaseRealmRepository() {
 
     fun approveToken(address: String, token: LooprToken, allowanceAmount: BigInteger, context: HandlerContext = IO) = runTransaction(context) {
-        val allowanceInfo = TokenAllowanceInfo(address, allowanceAmount)
+        val allowanceInfo = TokenAllowanceInfo().apply {
+            this.address = address
+            this.allowance = allowanceAmount
+        }
 
         val isUpdated = token.tokenAllowances.update(allowanceInfo) { it.address == address }
         if (!isUpdated) {

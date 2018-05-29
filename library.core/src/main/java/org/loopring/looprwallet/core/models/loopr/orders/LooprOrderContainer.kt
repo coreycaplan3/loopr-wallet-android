@@ -40,7 +40,7 @@ open class LooprOrderContainer(
         fun createCriteria(filter: OrderSummaryFilter): String = filter.let {
             val address = it.address?.toUpperCase()
             val market = it.market?.toUpperCase()
-            val status = it.status.toUpperCase()
+            val status = it.status?.toUpperCase()
             "$address-$market-$status"
         }
     }

@@ -28,6 +28,7 @@ class OrderDetailsActivity : BaseActivity() {
         fun route(activity: Activity, orderHash: String) {
             val intent = Intent(activity, OrderDetailsActivity::class.java)
                     .putExtra(KEY_ORDER_HASH, orderHash)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
             activity.startActivity(intent)
         }

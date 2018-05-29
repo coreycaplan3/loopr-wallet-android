@@ -35,6 +35,11 @@ data class TradingPairGraphFilter(
 
     companion object {
 
+        fun parseMarket(market: String): Pair<String, String> {
+            val markets = market.split(Regex("-+"))
+            return markets[0] to markets[1]
+        }
+
         val GRAPH_DATE_FILTER_1H = str(R.string._1h)
         val GRAPH_DATE_FILTER_2H = str(R.string._2h)
         val GRAPH_DATE_FILTER_4H = str(R.string._4h)

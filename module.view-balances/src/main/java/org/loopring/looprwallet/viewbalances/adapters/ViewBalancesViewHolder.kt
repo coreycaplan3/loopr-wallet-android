@@ -61,16 +61,16 @@ class ViewBalancesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
         }
 
         val allowance = token.findAddressAllowance(address)
-        val lockIcon = if (allowance == null || allowance == BigInteger.ZERO) {
+        val allowanceIcon = if (allowance == null || allowance == BigInteger.ZERO) {
             ApplicationUtility.drawable(R.drawable.ic_lock_outline_white_24dp, itemView.context)
         } else {
-            ApplicationUtility.drawable(R.drawable.ic_lock_open_white_24dp, itemView.context)
+            ApplicationUtility.drawable(R.drawable.sharp_done_white_24, itemView.context)
         }
 
         val theme = itemView.context.theme
-        DrawableCompat.setTint(lockIcon, col(theme.getResourceIdFromAttrId(R.attr.textColorPrimaryOnly)))
+        DrawableCompat.setTint(allowanceIcon, col(theme.getResourceIdFromAttrId(R.attr.textColorPrimaryOnly)))
 
-        tokenBalanceUnlockButton.setImageDrawable(lockIcon)
+        tokenBalanceUnlockButton.setImageDrawable(allowanceIcon)
     }
 
 }

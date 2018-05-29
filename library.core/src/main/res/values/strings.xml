@@ -342,7 +342,9 @@
     <string name="exit">Exit</string>
     <string name="dot">•</string>
     <string name="cancelling_all_open_orders">Cancelling all open orders…</string>
+    <string name="cancelling_order">Cancelling order…</string>
     <string name="your_orders_will_be_cancelled">Your orders will be cancelled</string>
+    <string name="this_order_will_be_cancelled">This order will be cancelled</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="question_cancel_order">Cancel Order?</string>
     <string name="rationale_cancel_order">Are you sure you want to cancel this order? This action cannot be undone.</string>
@@ -360,4 +362,8 @@
     <string name="to">To:</string>
     <string name="enter_a_recipient">Enter a Recipient</string>
     <string name="no_results_found">No Results Found</string>
+    <string name="fills_empty_open">Your trade fills will appear here</string>
+    <string name="fills_empty_cancelled">This order has no trade fills</string>
+    <string name="estimated_price">Estimated Price</string>
+    <string name="estimated_total_price">Estimated Total Price</string>
 </resources>

@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.Deferred
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
+import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.sync.SyncData
 import org.loopring.looprwallet.core.networking.loopr.LooprOrderService
 import org.loopring.looprwallet.core.repositories.loopr.LooprOrderRepository
@@ -21,6 +22,9 @@ class OrderSummaryViewModel : OfflineFirstViewModel<AppLooprOrder, String>() {
 
     override val repository = LooprOrderRepository()
 
+    override val waitTime: Long
+        get() = 5 * 1000L
+
     private val service by lazy {
         LooprOrderService.getInstance()
     }
@@ -30,7 +34,7 @@ class OrderSummaryViewModel : OfflineFirstViewModel<AppLooprOrder, String>() {
     }
 
     override fun getLiveDataFromRepository(parameter: String): LiveData<AppLooprOrder> {
-        return repository.getOrderByHash(parameter)
+        return repository.getOrderByHash(OrderSummaryFilter(orderHash = parameter))
     }
 
     override fun getDataFromNetwork(parameter: String): Deferred<AppLooprOrder> {

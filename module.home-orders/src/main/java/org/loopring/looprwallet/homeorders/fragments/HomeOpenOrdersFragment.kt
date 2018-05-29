@@ -35,7 +35,12 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
 
     @VisibleForTesting
     val cancelOrderViewModel: CancelOrderViewModel by lazy {
-        LooprViewModelFactory.get<CancelOrderViewModel>(this)
+        LooprViewModelFactory.get<CancelOrderViewModel>(this, "cancel-order")
+    }
+
+    @VisibleForTesting
+    val cancelAllOrdersViewModel: CancelOrderViewModel by lazy {
+        LooprViewModelFactory.get<CancelOrderViewModel>(this, "cancel-all-orders")
     }
 
     override val orderType: String
@@ -48,9 +53,14 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
         adapter.cancelAllClickListener = ::onCancelAllClick
 
         cancelOrderViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
+            view.context.longToast(R.string.this_order_will_be_cancelled)
+        }
+        setupTransactionViewModel(cancelOrderViewModel, R.string.cancelling_order, false, null)
+
+        cancelAllOrdersViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
             view.context.longToast(R.string.your_orders_will_be_cancelled)
         }
-        setupTransactionViewModel(cancelOrderViewModel, R.string.cancelling_all_open_orders, false, null)
+        setupTransactionViewModel(cancelAllOrdersViewModel, R.string.cancelling_all_open_orders, false, null)
     }
 
     // MARK - Private Methods
@@ -60,7 +70,7 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
         AlertDialog.Builder(context)
                 .setTitle(R.string.question_cancel_order)
                 .setMessage(R.string.cancel_order_rationale)
-                .setPositiveButton(R.string.cancel_all) { dialog, _ ->
+                .setPositiveButton(R.string.cancel_order) { dialog, _ ->
                     dialog.dismiss()
 
                     val wallet = walletClient.getCurrentWallet()
@@ -84,7 +94,7 @@ class HomeOpenOrdersFragment : BaseHomeChildOrdersFragment() {
 
                     val wallet = walletClient.getCurrentWallet()
                     if (wallet != null) {
-                        cancelOrderViewModel.cancelAllOrders(wallet)
+                        cancelAllOrdersViewModel.cancelAllOrders(wallet)
                     }
                 }
                 .setNegativeButton(R.string.exit) { dialog, _ ->

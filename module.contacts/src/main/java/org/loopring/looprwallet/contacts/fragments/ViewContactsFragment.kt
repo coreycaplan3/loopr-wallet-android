@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.View
 import androidx.os.bundleOf
@@ -16,6 +14,7 @@ import org.loopring.looprwallet.contacts.R
 import org.loopring.looprwallet.contacts.adapters.ContactsAdapter
 import org.loopring.looprwallet.contacts.dialogs.CreateContactDialog
 import org.loopring.looprwallet.contacts.viewmodels.ContactViewModel
+import org.loopring.looprwallet.core.adapters.LooprLayoutManager
 import org.loopring.looprwallet.core.extensions.indexOfFirstOrNull
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.contact.Contact
@@ -75,7 +74,7 @@ class ViewContactsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewContactsRecyclerView.layoutManager = LinearLayoutManager(context)
+        viewContactsRecyclerView.layoutManager = LooprLayoutManager(context)
 
         toolbar?.title = getString(R.string.my_contact)
 

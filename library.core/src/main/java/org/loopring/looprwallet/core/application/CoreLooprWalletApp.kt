@@ -125,7 +125,7 @@ open class CoreLooprWalletApp : MultiDexApplication(), ActivityLifecycleCallback
                     .await()
         }
 
-        async(UI) { uiGlobalRealm = realmClient.getInstance() }
+        uiGlobalRealm = realmClient.getInstance()
 
         async(IO) { ioGlobalRealm = realmClient.getInstance() }
 

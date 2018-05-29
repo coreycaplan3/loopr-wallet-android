@@ -4,13 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView.OnNavigationItemReselectedListener
 import android.support.design.widget.FloatingActionButton
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_view_transfers.*
 import org.loopring.looprwallet.barcode.activities.BarcodeCaptureActivity
 import org.loopring.looprwallet.core.activities.SettingsActivity
+import org.loopring.looprwallet.core.adapters.LooprLayoutManager
 import org.loopring.looprwallet.core.extensions.setupWithFab
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
@@ -64,7 +64,7 @@ class HomeViewTransfersFragment : BaseFragment(), OnNavigationItemReselectedList
 
         toolbarDelegate?.isToolbarCollapseEnabled = true
 
-        viewTransfersRecyclerView.layoutManager = LinearLayoutManager(view.context)
+        viewTransfersRecyclerView.layoutManager = LooprLayoutManager(view.context)
         viewTransfersRecyclerView.adapter = adapter
     }
 

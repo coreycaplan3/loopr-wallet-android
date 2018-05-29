@@ -1,10 +1,8 @@
 package org.loopring.looprwallet.core.models.loopr.tokens
 
+import io.realm.RealmList
 import org.loopring.looprwallet.core.models.realm.TrackedRealmObject
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
-import io.realm.RealmList
-import org.loopring.looprwallet.core.extensions.formatAsToken
-import java.math.BigDecimal
 import java.math.BigInteger
 
 /**
@@ -48,21 +46,25 @@ interface CryptoToken : TrackedRealmObject {
     var ticker: String
 
     /**
-     * One token can have many balances from different wallets
+     * The list of balances mapping to an address owning the balance. If this object was
+     * retrieved from the network, the first index is the newly retrieved balance for that
+     * address.
      */
     var tokenBalances: RealmList<TokenBalanceInfo>
 
     /**
-     * The price of the token currently in USD. This number always has a radix of size 10. To get
-     * the decimal representation of this number, divide it by 100.
+     * The list of allowances mapping to a wallet address owning having that allowance. If this
+     * object was retrieved from the network, the first index is the newly retrieved allowance
+     * for that address.
      */
-    var priceInUsd: BigInteger?
+    var tokenAllowances: RealmList<TokenAllowanceInfo>
 
     /**
-     * The price of the token currently in the user's native currency. This number always has a
-     * radix of size 10. To get the decimal representation of this number, divide it by 100.
+     * The list of prices mapping to a currency having that price. If this object was retrieved
+     * from the network, the first index is the newly retrieved price for that currency. All prices
+     * are formatted using **4** decimal places
      */
-    var priceInNativeCurrency: BigInteger?
+    var tokenPrices: RealmList<TokenPriceInfo>
 
     fun getBalanceOf(address: String) = tokenBalances.find { it.address == address }?.balance
 
@@ -70,7 +72,23 @@ interface CryptoToken : TrackedRealmObject {
      * Finds a given address's [TokenBalanceInfo] or null if it cannot be found
      */
     fun findAddressBalance(address: String): TokenBalanceInfo? {
-        return tokenBalances.find { it?.address == address }
+        return tokenBalances.find { it.address == address }
+    }
+
+    /**
+     * Finds a given address's [TokenAllowanceInfo] or null if it cannot be found
+     */
+    fun findAddressAllowance(address: String): TokenAllowanceInfo? {
+        return tokenAllowances.find { it.address == address }
+    }
+
+    /**
+     * Finds a given currency's [TokenPriceInfo] or null if it cannot be found
+     *
+     * @see CurrencySettings
+     */
+    fun findCurrencyPrice(currency: String): TokenPriceInfo? {
+        return tokenPrices.find { it.currency == currency }
     }
 
 }

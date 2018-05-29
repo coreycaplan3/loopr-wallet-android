@@ -41,7 +41,7 @@ import org.loopring.looprwallet.createorder.activities.CreateOrderActivity
 import org.loopring.looprwallet.tradedetails.R
 import org.loopring.looprwallet.tradedetails.dagger.tradeDetailsLooprComponent
 import org.loopring.looprwallet.tradedetails.view.ChartMarkerView
-import org.loopring.looprwallet.tradedetails.viewmodels.TradingPairDetailsViewModel
+import org.loopring.looprwallet.core.viewmodels.loopr.TradingPairDetailsViewModel
 import org.loopring.looprwallet.tradedetails.viewmodels.TradingPairTrendViewModel
 import javax.inject.Inject
 
@@ -285,9 +285,6 @@ class TradingPairDetailsFragment : BaseFragment() {
         toolbarDelegate?.resetOptionsMenu()
 
         toolbar?.title = tradingPair.market
-
-        // TODO check if these numbers are formatted as native currency or tokens
-        currencySettings.getCurrencyFormatter()
 
         currencySettings::formatNumber.also { format ->
             val secondaryTicker = tradingPair.secondaryTicker

@@ -6,15 +6,9 @@
     android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <android.support.constraint.Guideline
-            android:id="@+id/horizontalGuideline1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.1" />
 
         <LinearLayout
             android:id="@+id/confirmOrderYouSendContainer"
@@ -25,7 +19,7 @@
             android:layout_marginTop="@dimen/vertical_margin"
             android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/horizontalGuideline1">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Small"
@@ -80,7 +74,7 @@
             android:layout_marginTop="@dimen/vertical_margin"
             android:orientation="vertical"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/horizontalGuideline1">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Small"

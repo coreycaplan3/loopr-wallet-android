@@ -2,10 +2,10 @@ package org.loopring.looprwallet.homeorders.fragments
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.adapters.LooprLayoutManager
 import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryPager
@@ -56,12 +56,12 @@ abstract class BaseHomeChildOrdersFragment : BaseFragment(), BottomNavigationRes
 
         val address = walletClient.getCurrentWallet()?.credentials?.address
 
-        val defaultFilter = OrderSummaryFilter(address, null, orderType, 1)
+        val defaultFilter = OrderSummaryFilter(address = address, status = orderType, pageNumber = 1)
         orderFilter = savedInstanceState?.getParcelable(KEY_ORDER_FILTER) ?: defaultFilter
 
         adapter.onLoadMore = ::onLoadMoreHomeOrders
         recyclerView?.adapter = adapter
-        recyclerView?.layoutManager = LinearLayoutManager(view.context)
+        recyclerView?.layoutManager = LooprLayoutManager(view.context)
 
         setupOfflineFirstStateAndErrorObserver(homeOrdersViewModel, swipeRefreshLayout)
         setupOrderLiveData()

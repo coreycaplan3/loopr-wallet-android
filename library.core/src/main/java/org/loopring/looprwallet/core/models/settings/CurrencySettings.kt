@@ -28,6 +28,8 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
 
         val ARRAY_REFRESH_FREQUENCY = strArray(R.array.settings_currency_refresh_frequency_entries_values)
 
+        val ETH = str(R.string.settings_currency_values_eth)
+        val LRC = str(R.string.settings_currency_values_lrc)
         val USD = str(R.string.settings_currency_values_usd)
         val GBP = str(R.string.settings_currency_values_gbp)
         val EUR = str(R.string.settings_currency_values_eur)
@@ -39,7 +41,7 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
     /**
      * @return The currency symbol that the user currently has selected for themselves
      */
-    fun getCurrentCurrency(): String {
+    fun getCurrency(): String {
         return looprSettings.getString(KEY_CURRENT_CURRENCY) ?: DEFAULT_VALUE_CURRENCY
     }
 
@@ -78,7 +80,7 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
      * @return The [Locale] in which the user would like to view their currency information.
      */
     fun getCurrentLocale(): Locale {
-        val currency = getCurrentCurrency()
+        val currency = getCurrency()
 
         return when (currency) {
             USD -> Locale.US

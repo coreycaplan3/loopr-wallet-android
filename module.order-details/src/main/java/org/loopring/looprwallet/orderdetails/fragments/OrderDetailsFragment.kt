@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.design.widget.AppBarLayout
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_order_details.*
+import org.loopring.looprwallet.core.adapters.LooprLayoutManager
 import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.extensions.ifNotNull
 import org.loopring.looprwallet.core.extensions.longToast
@@ -113,9 +113,9 @@ class OrderDetailsFragment : BaseFragment() {
         toolbar?.navigationIcon = drawable(R.drawable.ic_clear_white_24dp, view.context)
 
         cancelOrderViewModel.result.observeForDoubleSpend(fragmentViewLifecycleFragment!!) {
-            view.context.longToast(R.string.your_orders_will_be_cancelled)
+            view.context.longToast(R.string.this_order_will_be_cancelled)
         }
-        setupTransactionViewModel(cancelOrderViewModel, R.string.cancelling_all_open_orders, false, null)
+        setupTransactionViewModel(cancelOrderViewModel, R.string.cancelling_order, false, null)
 
         orderSummaryViewModel.getOrderByHash(this, orderHash) {
             when {
@@ -185,7 +185,7 @@ class OrderDetailsFragment : BaseFragment() {
             onLoadMore = ::onLoadMore
         }
 
-        orderDetailsRecyclerView.layoutManager = LinearLayoutManager(view.context)
+        orderDetailsRecyclerView.layoutManager = LooprLayoutManager(view.context)
         orderDetailsRecyclerView.adapter = adapter
 
         // We can now retrieve order fills, since we initialized the adapter with the order data

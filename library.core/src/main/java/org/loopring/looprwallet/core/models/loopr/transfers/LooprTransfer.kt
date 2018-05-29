@@ -21,34 +21,25 @@ import java.util.*
 open class LooprTransfer(
         @PrimaryKey
         var transactionHash: String = "",
-
         @Index
         var timestamp: Date = Date(),
-
         var isSend: Boolean = false,
-
         blockNumber: BigInteger? = null,
-
         var contactAddress: String = "",
-
         numberOfTokens: BigInteger = BigInteger.ZERO,
-
         usdValue: BigInteger = BigInteger.ZERO,
-
         transactionFee: BigInteger = BigInteger.ZERO,
-
-        transactionFeeUsdValue: BigInteger = BigInteger.ZERO,
-
-        token: LooprToken? = null
+        transactionFeeUsdValue: BigInteger = BigInteger.ZERO
 ) : RealmObject() {
 
     private var mBlockNumber: String? = null
-    private var mNumberOfTokens: String = ""
-    private var mUsdValue: String = ""
-    private var mTransactionFee: String = ""
-    private var mTransactionFeeUsdValue: String = ""
+    private var mNumberOfTokens: String = "0"
+    private var mUsdValue: String = "0"
+    private var mTransactionFee: String = "0"
+    private var mTransactionFeeUsdValue: String = "0"
 
-    var mToken: LooprToken? = token
+    var mToken: LooprToken? = null
+        private set
 
     // TODO better way of handling this
     var token: LooprToken

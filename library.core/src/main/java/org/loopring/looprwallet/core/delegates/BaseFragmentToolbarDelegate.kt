@@ -109,6 +109,7 @@ open class BaseFragmentToolbarDelegate(
         toolbar?.let { toolbar ->
             onCreateOptionsMenu?.invoke(toolbar)
             (activity as? BaseFragment.OnToolbarSetupListener)?.onToolbarSetup(toolbar)
+            toolbar.setOnMenuItemClickListener(null)
             toolbar.setOnMenuItemClickListener(onOptionsItemSelected)
         }
     }

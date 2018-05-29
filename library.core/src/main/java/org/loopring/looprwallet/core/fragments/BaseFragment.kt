@@ -96,6 +96,9 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
     var isUpNavigationEnabled = true
         protected set
 
+    val currentWalletAddress: String?
+        get() = walletClient.getCurrentWallet()?.credentials?.address
+
     override var fragmentViewLifecycleFragment: FragmentViewLifecycleOwner? = null
 
     init {

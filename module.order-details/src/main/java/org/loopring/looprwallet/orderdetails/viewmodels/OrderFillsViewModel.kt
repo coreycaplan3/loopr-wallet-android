@@ -29,6 +29,9 @@ class OrderFillsViewModel : OfflineFirstViewModel<OrderedRealmCollection<LooprOr
 
     override val repository = LooprOrderFillsRepository()
 
+    override val waitTime: Long
+        get() = 5 * 1000L
+
     private val service by lazy {
         LooprOrderService.getInstance()
     }

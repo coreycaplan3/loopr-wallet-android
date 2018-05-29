@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.transition.TransitionManager
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
@@ -14,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.os.bundleOf
 import kotlinx.android.synthetic.main.fragment_enter_phrase_confirm.*
+import org.loopring.looprwallet.core.adapters.LooprLayoutManager
 import org.loopring.looprwallet.core.adapters.OnStartDragListener
 import org.loopring.looprwallet.core.delegates.SimpleItemTouchDelegate
 import org.loopring.looprwallet.core.extensions.allEqual
@@ -126,7 +126,7 @@ class SignInEnterPhraseFragment : BaseFragment() {
         setupForm()
 
         fragmentContainer.apply {
-            this.layoutManager = LinearLayoutManager(context)
+            this.layoutManager = LooprLayoutManager(context)
 
             val adapter = PhraseAdapter(
                     phrase,

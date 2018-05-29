@@ -21,7 +21,10 @@ class ViewContactsActivity : BaseActivity() {
     companion object {
 
         fun route(activity: Activity) {
-            activity.startActivity(Intent(activity, ViewContactsActivity::class.java))
+            val intent = Intent(activity, ViewContactsActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
+            activity.startActivity(intent)
         }
 
     }

@@ -2,11 +2,11 @@ package org.loopring.looprwallet.viewbalances.fragments
 
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.fragment_view_balances.*
 import org.loopring.looprwallet.core.activities.BaseActivity
+import org.loopring.looprwallet.core.adapters.LooprLayoutManager
 import org.loopring.looprwallet.core.extensions.logi
 import org.loopring.looprwallet.core.extensions.observeForDoubleSpend
 import org.loopring.looprwallet.core.extensions.snackbar
@@ -93,7 +93,7 @@ class ViewBalancesFragment : BaseFragment(), OnTokenLockClickListener {
             logi("Address was null in ViewBalancesFragment…")
         }
 
-        viewBalancesRecycler.layoutManager = LinearLayoutManager(view.context)
+        viewBalancesRecycler.layoutManager = LooprLayoutManager(view.context)
         viewBalancesRecycler.adapter = adapter
     }
 

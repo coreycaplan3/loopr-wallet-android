@@ -29,10 +29,11 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
  */
 @Parcelize
 data class OrderSummaryFilter(
-        val address: String?,
-        val market: String?,
-        val status: String,
-        override var pageNumber: Int
+        val address: String? = null,
+        val market: String? = null,
+        val status: String? = null,
+        val orderHash: String? = null,
+        override var pageNumber: Int = 1
 ) : Parcelable, PagingFilter {
 
     companion object {

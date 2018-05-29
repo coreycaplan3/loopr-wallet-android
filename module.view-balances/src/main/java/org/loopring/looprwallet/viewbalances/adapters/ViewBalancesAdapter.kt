@@ -3,10 +3,9 @@ package org.loopring.looprwallet.viewbalances.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
-import org.loopring.looprwallet.core.extensions.weakReference
-import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.loopr.paging.DefaultLooprPagerAdapter
 import org.loopring.looprwallet.core.models.loopr.paging.LooprAdapterPager
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.wallet.WalletClient
 import org.loopring.looprwallet.viewbalances.R
 import org.loopring.looprwallet.viewbalances.dagger.viewBalancesLooprComponent
@@ -21,12 +20,10 @@ import javax.inject.Inject
  *
  *
  */
-class ViewBalancesAdapter(listener: OnTokenLockClickListener) : BaseRealmAdapter<LooprToken>() {
+class ViewBalancesAdapter(private val listener: OnTokenLockClickListener) : BaseRealmAdapter<LooprToken>() {
 
     @Inject
     lateinit var walletClient: WalletClient
-
-    private val listener by weakReference(listener)
 
     override var pager: LooprAdapterPager<LooprToken> = DefaultLooprPagerAdapter()
 
@@ -49,7 +46,7 @@ class ViewBalancesAdapter(listener: OnTokenLockClickListener) : BaseRealmAdapter
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
         (holder as? ViewBalancesViewHolder)?.bind(address, item) {
-            listener?.onTokenLockClick(item)
+            listener.onTokenLockClick(item)
         }
     }
 

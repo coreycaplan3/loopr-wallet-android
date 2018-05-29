@@ -13,17 +13,14 @@ import java.util.*
  *
  * Purpose of Class:
  *
- * @param address The owner of the token.
- * @param balance The amount of this token that the user has.
+ * @property address The owner of the token
+ * @property balance The amount of this token that the user has, padded out with zeroes
  */
-open class TokenBalanceInfo(
+open class TokenBalanceInfo : RealmObject(), TrackedRealmObject {
 
-        @Index var address: String = "",
+    @Index var address: String = ""
 
-        balance: BigInteger = BigInteger.ZERO,
-
-        override var lastUpdated: Date = Date()
-) : RealmObject(), TrackedRealmObject {
+    override var lastUpdated: Date = Date()
 
     var balance: BigInteger
         get() = BigInteger(mBalance)
@@ -34,14 +31,6 @@ open class TokenBalanceInfo(
             }
         }
 
-    var mBalance: String
-
-    init {
-        // Needed to set backing fields initially. They will be overwritten by the call below to balance
-        this.mBalance = ""
-
-        // This will set mBalance and override the initial empty-string value
-        this.balance = balance
-    }
-
+    var mBalance: String = BigInteger.ZERO.toString(10)
+        private set
 }

@@ -35,6 +35,8 @@ class CancelOrderViewModel : TransactionViewModel<TransactionReceipt>() {
         orderDetailsLooprComponent.inject(this)
     }
 
+    var operation: Int = -1
+
     fun cancelOrder(wallet: LooprWallet, orderHash: String) = runTaskAsync { gasPrice ->
         val gasLimit = ethereumFeeSettings.cancelOrderGasLimit
 

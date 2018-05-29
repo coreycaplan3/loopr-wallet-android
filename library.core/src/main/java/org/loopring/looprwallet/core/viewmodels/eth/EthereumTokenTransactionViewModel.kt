@@ -73,22 +73,28 @@ class EthereumTokenTransactionViewModel : TransactionViewModel<Pair<LooprToken, 
             amount: BigInteger,
             gasLimit: BigInteger,
             gasPrice: BigInteger
-    ) = async(IO) {
-        mIsTransactionRunning.postValue(true)
-        try {
-            val result = EthereumService.getInstance(wallet.credentials)
-                    .approveToken(token.identifier, wallet.credentials, spender, amount, gasLimit, gasPrice)
-                    .await()
+    ) {
+        val ticker = token.ticker
+        async(IO) {
+            mIsTransactionRunning.postValue(true)
 
             val repository = EthTokenRepository()
-            repository.approveToken(wallet.credentials.address, token, amount, IO)
 
-            mResult.postValue(token to result)
-        } catch (e: Throwable) {
-            mError.postValue(e)
-        } finally {
-            mIsTransactionRunning.postValue(false)
+            val ioToken = repository.getTokenByTickerNow(ticker, IO) ?: throw IllegalStateException("Could not get token with ticker: $ticker")
+
+            try {
+                val result = EthereumService.getInstance(wallet.credentials)
+                        .approveToken(ioToken.identifier, wallet.credentials, spender, amount, gasLimit, gasPrice)
+                        .await()
+
+                repository.approveToken(wallet.credentials.address, ioToken, amount, IO)
+
+                mResult.postValue(ioToken to result)
+            } catch (e: Throwable) {
+                mError.postValue(e)
+            } finally {
+                mIsTransactionRunning.postValue(false)
+            }
         }
     }
-
 }

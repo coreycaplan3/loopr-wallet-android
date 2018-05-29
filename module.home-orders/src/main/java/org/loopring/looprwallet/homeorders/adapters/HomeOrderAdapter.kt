@@ -3,6 +3,7 @@ package org.loopring.looprwallet.homeorders.adapters
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import io.realm.OrderedCollectionChangeSet
 import org.loopring.looprwallet.core.activities.BaseActivity
 import org.loopring.looprwallet.core.adapters.BaseRealmAdapter
 import org.loopring.looprwallet.core.extensions.isSameDay
@@ -150,6 +151,29 @@ class HomeOrderAdapter(
         }
 
         (holder as? HomeOrderViewHolder)?.bind(item, showDateHeader, ::onOrderClick, cancelClickListener)
+    }
+
+    override fun onDataChange(changeSet: OrderedCollectionChangeSet?) {
+        changeSet ?: return
+
+        val offset = -dataOffsetPosition
+
+        // For deletions, the adapter has to be notified in reverse order.
+        val deletions = changeSet.deletionRanges
+        for (i in deletions.indices.reversed()) {
+            val position = deletions[i].startIndex + offset
+            if (position in 0..(itemCount - 1)) {
+                notifyItemChanged(position)
+            }
+        }
+
+        val insertions = changeSet.insertionRanges
+        for (range in insertions) {
+            val position = range.startIndex + offset + range.length
+            if (position in 0..(itemCount - 1)) {
+                notifyItemChanged(position)
+            }
+        }
     }
 
     private fun onOrderClick(order: AppLooprOrder) {

@@ -19,6 +19,7 @@ class TradingPairDetailsActivity : BaseActivity() {
         fun route(tradingPair: TradingPair, fragment: Fragment) {
             val intent = Intent(CoreLooprWalletApp.application, TradingPairDetailsActivity::class.java)
                     .putExtra(KEY_MARKET, tradingPair.market)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
             fragment.startActivity(intent)
         }

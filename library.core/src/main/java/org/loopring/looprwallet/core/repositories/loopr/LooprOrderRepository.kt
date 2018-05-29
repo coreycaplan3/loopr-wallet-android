@@ -11,6 +11,7 @@ import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.orders.AppLooprOrder
 import org.loopring.looprwallet.core.models.loopr.orders.LooprOrderContainer
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter
+import org.loopring.looprwallet.core.models.loopr.paging.LooprPagingItem
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.repositories.BaseRealmRepository
 
@@ -24,33 +25,19 @@ import org.loopring.looprwallet.core.repositories.BaseRealmRepository
  */
 class LooprOrderRepository : BaseRealmRepository() {
 
-    fun cancelOrder(orderHash: String, context: HandlerContext = IO) = runTransaction(context) { realm ->
-        getOrderByHashNow(orderHash, context)?.let { order ->
-            order.status = OrderSummaryFilter.FILTER_CANCELLED
-            realm.upsert(order)
-        }
+    fun cancelOrder(orderHash: String, context: HandlerContext = IO) = runTransaction(context) {
+        val filter = OrderSummaryFilter(status = OrderSummaryFilter.FILTER_OPEN_ALL, orderHash = orderHash)
+        cancelOrdersAndUpdateDatabase(filter, it, context)
     }
 
     fun cancelOrdersByTradingPair(address: String, market: String, context: HandlerContext = IO) = runTransaction(context) {
-        val filter = OrderSummaryFilter(address, market, OrderSummaryFilter.FILTER_OPEN_ALL, -1)
-        val orders = getOrdersByFilterNow(filter, context).also {
-            it.forEach {
-                it.status = OrderSummaryFilter.FILTER_CANCELLED
-            }
-        }
-
-        it.upsert(orders)
+        val filter = OrderSummaryFilter(address = address, market = market, status = OrderSummaryFilter.FILTER_OPEN_ALL)
+        cancelOrdersAndUpdateDatabase(filter, it, context)
     }
 
     fun cancelAllOpenOrders(address: String, context: HandlerContext = IO) = runTransaction(context) {
-        val filter = OrderSummaryFilter(address, null, OrderSummaryFilter.FILTER_OPEN_ALL, -1)
-        val orders = getOrdersByFilterNow(filter, context).also {
-            it.forEach {
-                it.status = OrderSummaryFilter.FILTER_CANCELLED
-            }
-        }
-
-        it.upsert(orders)
+        val filter = OrderSummaryFilter(address = address, status = OrderSummaryFilter.FILTER_OPEN_ALL)
+        cancelOrdersAndUpdateDatabase(filter, it, context)
     }
 
     fun getOrderContainerNow(filter: OrderSummaryFilter, context: HandlerContext = UI): LooprOrderContainer? {
@@ -80,10 +67,10 @@ class LooprOrderRepository : BaseRealmRepository() {
         return order?.let { getRealmFromContext(context).copyFromRealm(it) }
     }
 
-    fun getOrderByHash(orderHash: String, context: HandlerContext = UI): LiveData<AppLooprOrder> {
+    fun getOrderByHash(filter: OrderSummaryFilter, context: HandlerContext = UI): LiveData<AppLooprOrder> {
         return getRealmFromContext(context)
                 .where<AppLooprOrder>()
-                .equalTo(AppLooprOrder::orderHash, orderHash, Case.INSENSITIVE)
+                .also { applyFilterToQuery(it, filter) }
                 .findFirstAsync()
                 .asLiveData()
     }
@@ -140,16 +127,63 @@ class LooprOrderRepository : BaseRealmRepository() {
         }
 
         // Status
-        when (filter.status) {
-            OrderSummaryFilter.FILTER_OPEN_ALL -> {
+        when {
+            filter.status == OrderSummaryFilter.FILTER_OPEN_ALL -> {
                 val statuses = arrayOf(OrderSummaryFilter.FILTER_OPEN_PARTIAL, OrderSummaryFilter.FILTER_OPEN_NEW)
                 query.`in`(AppLooprOrder::status.name, statuses, Case.INSENSITIVE)
             }
-            else -> query.equalTo(AppLooprOrder::status, filter.status, Case.INSENSITIVE)
+            filter.status != null -> query.equalTo(AppLooprOrder::status, filter.status, Case.INSENSITIVE)
+        }
+
+        // Order Hash
+        if (filter.orderHash != null) {
+            query.equalTo(AppLooprOrder::orderHash, filter.orderHash, Case.INSENSITIVE)
         }
 
         // Sort
         query.sort(AppLooprOrder::orderDate, Sort.DESCENDING)
+    }
+
+    // MARK - Private Methods
+
+    private fun cancelOrdersAndUpdateDatabase(filter: OrderSummaryFilter, realm: Realm, context: HandlerContext) {
+        val orders = getOrdersByFilterNow(filter, context).createSnapshot().also {
+            it.forEach {
+                it.status = OrderSummaryFilter.FILTER_CANCELLED
+            }
+        }
+
+        val order = orders.first()
+        val addressFilter = OrderSummaryFilter(address = order?.address, status = OrderSummaryFilter.FILTER_OPEN_ALL)
+        val addressContainer = getOrderContainerNow(addressFilter, context)?.also {
+            it.requirePagingItem.totalNumberOfItems -= orders.size
+        }
+
+        val marketsAddressFilter = OrderSummaryFilter(address = order?.address, market = order?.tradingPair?.market, status = OrderSummaryFilter.FILTER_OPEN_ALL)
+        val marketAddressContainer = getOrderContainerNow(marketsAddressFilter, context)?.also {
+            it.requirePagingItem.totalNumberOfItems -= orders.size
+        }
+
+        val cancelledFilter = OrderSummaryFilter(filter.address, filter.market, OrderSummaryFilter.FILTER_CANCELLED, filter.orderHash)
+        val cancelledContainer = getOrderContainerNow(cancelledFilter, context).let {
+            when (it) {
+                null -> {
+                    val criteria = LooprOrderContainer.createCriteria(cancelledFilter)
+                    val pagingItem = LooprPagingItem(criteria, 1, orders.size)
+                    realm.upsert(pagingItem)
+                    LooprOrderContainer(criteria = criteria, pagingItem = pagingItem)
+                }
+                else -> {
+                    it.requirePagingItem.totalNumberOfItems += orders.size
+                    it
+                }
+            }
+        }
+
+        realm.upsert(orders)
+        addressContainer?.let { realm.upsert(it) }
+        marketAddressContainer?.let { realm.upsert(it) }
+        realm.upsert(cancelledContainer)
     }
 
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.extensions.*
+import org.loopring.looprwallet.core.fragments.BaseFragment
 import org.loopring.looprwallet.core.fragments.ViewLifecycleFragment
 import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.error.ErrorTypes
@@ -138,7 +139,11 @@ abstract class OfflineFirstViewModel<T, U> : ViewModel() {
      * @param owner The [LifecycleOwner] whose [LiveData] should be removed
      */
     fun removeDataObserver(owner: LifecycleOwner) {
-        mLiveData?.removeObservers(owner)
+        if (owner is BaseFragment) {
+            owner.fragmentViewLifecycleFragment?.let { mLiveData?.removeObservers(it) }
+        } else {
+            mLiveData?.removeObservers(owner)
+        }
     }
 
     /**

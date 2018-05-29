@@ -22,7 +22,10 @@ class ViewBalancesActivity: BaseActivity() {
     companion object {
 
         fun route(activity: Activity) {
-            activity.startActivity(Intent(activity, ViewBalancesActivity::class.java))
+            val intent = Intent(activity, ViewBalancesActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
+            activity.startActivity(intent)
         }
 
     }
