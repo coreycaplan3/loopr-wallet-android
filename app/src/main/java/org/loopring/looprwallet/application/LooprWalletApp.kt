@@ -61,9 +61,9 @@ open class LooprWalletApp : CoreLooprWalletApp(), CreateOrderLooprComponentProvi
 
     companion object {
 
-        val createOrderLooprComponent: CreateOrderLooprComponent by lazy {
-            DaggerCreateOrderLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
-        }
+            val createOrderLooprComponent: CreateOrderLooprComponent by lazy {
+                DaggerCreateOrderLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()
+            }
 
         val createTransferLooprComponent: CreateTransferLooprComponent by lazy {
             DaggerCreateTransferLooprComponent.builder().coreLooprComponent(coreLooprComponent).build()

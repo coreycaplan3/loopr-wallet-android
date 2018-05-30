@@ -8,6 +8,7 @@ import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactio
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.createorder.R
 import org.loopring.looprwallet.createorder.fragments.CreateOrderFragment
+import org.loopring.looprwallet.createorder.fragments.OrderPlacedFragment
 
 /**
  * Created by Corey Caplan on 2/18/18.
@@ -53,6 +54,16 @@ class CreateOrderActivity : BaseActivity() {
             val fragment = CreateOrderFragment.getInstance(market)
             val tag = CreateOrderFragment.TAG
             pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
+        }
+    }
+
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.findFragmentByTag(OrderPlacedFragment.TAG)
+        if (fragment is OrderPlacedFragment) {
+            // You cannot go back after placing an order
+            finish()
+        } else {
+            super.onBackPressed()
         }
     }
 

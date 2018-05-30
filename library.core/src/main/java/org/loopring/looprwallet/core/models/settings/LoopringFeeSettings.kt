@@ -27,6 +27,9 @@ class LoopringFeeSettings(private val looprSettings: LooprSettings) {
     val currentLrcFee: BigDecimal
         get() = getValue(KEY_LRC_FEE, DEFAULT_VALUE_LRC_FEE)
 
+    /**
+     * The current margin split, expressed as a decimal number (dividing the percentage by 100)
+     */
     val currentMarginSplit: BigDecimal
         get() = getValue(KEY_MARGIN_SPLIT, DEFAULT_VALUE_MARGIN_SPLIT) / BigDecimal(100)
 

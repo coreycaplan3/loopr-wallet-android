@@ -71,8 +71,8 @@ class FragmentTransactionController internal constructor(@IdRes private val cont
         enterAnimation = R.anim.slide_up
         popExitAnimation = R.anim.slide_down
 
-        popEnterAnimation = 0
-        exitAnimation = 0
+        popEnterAnimation = R.anim.fade_in
+        exitAnimation = R.anim.fade_out
     }
 
     /**
@@ -83,8 +83,8 @@ class FragmentTransactionController internal constructor(@IdRes private val cont
         enterAnimation = R.anim.slide_right_to_center
         popExitAnimation = R.anim.slide_center_to_right
 
-        popEnterAnimation = 0
-        exitAnimation = 0
+        popEnterAnimation = R.anim.fade_in
+        exitAnimation = R.anim.fade_out
     }
 
     /**

@@ -314,7 +314,7 @@
     <string name="_1_eth_1_weth">1 ETH = 1 WETH</string>
     <string name="_1_weth_1_eth">1 WETH = 1 ETH</string>
     <string name="weth">WETH</string>
-    <string name="convert">Convert</string>
+    <string name="convert_eth">Convert ETH</string>
     <string name="total_price">Total Price</string>
     <string name="place_order">Place Order</string>
     <string name="confirm_price">Confirm Price</string>
@@ -325,6 +325,7 @@
     <string name="price">Price</string>
     <string name="margin_split">Margin Split</string>
     <string name="lrc_fee">LRC Fee</string>
+    <string name="estimated_lrc_fee">Estimated LRC Fee</string>
     <string name="placed_exclamation">Placed!</string>
     <string name="order_placed_body">Congratulations! Your order has been submitted!</string>
     <string name="done">Done</string>
@@ -366,4 +367,7 @@
     <string name="fills_empty_cancelled">This order has no trade fills</string>
     <string name="estimated_price">Estimated Price</string>
     <string name="estimated_total_price">Estimated Total Price</string>
+    <string name="error_parse_price">There was an error parsing the price</string>
+    <string name="slippage_warning">Slippage Warning</string>
+    <string name="formatter_explain_slippage">The price you entered is more than %s outside the last trade price. Are you sure you want to submit this trade price?</string>
 </resources>

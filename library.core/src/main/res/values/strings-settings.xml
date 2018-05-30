@@ -99,7 +99,7 @@
     <string name="settings_loopring_fees_margin_split_key">loopr_settings_loopring_fees_margin_split_key</string>
 
     <string name="settings_loopring_fees_lrc_fee_default_value">3</string>
-    <integer name="settings_loopring_fees_margin_split_default_value">25</integer>
+    <integer name="settings_loopring_fees_margin_split_default_value">50</integer>
 
     <!-- General Wallet -->
 

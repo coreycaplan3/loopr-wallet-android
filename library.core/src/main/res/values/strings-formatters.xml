@@ -25,4 +25,9 @@
     <string name="formatter_unlocked_token">You successfully unlocked %s</string>
     <string name="formatter_unlock_or_lock_token">Unlock or Lock %s</string>
     <string name="formatter_remove_wallet_message">Are you sure you want to remove %s? This action cannot be undone, and your credentials will be lost if you have not backed them up.</string>
+    <string name="formatter_ticker_price">%s Price</string>
+    <string name="formatter_amount_willing_to_pay_ticker">Enter the amount you\'re willing to pay per %s</string>
+    <string name="formatter_current_price">Current Price: %s</string>
+    <string name="formatter_estimated_current_price">Estimated Current Price: %s</string>
+    <string name="formatter_estimated_price">Estimated Price: %s</string>
 </resources>

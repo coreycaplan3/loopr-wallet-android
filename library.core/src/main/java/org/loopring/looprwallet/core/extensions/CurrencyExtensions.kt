@@ -113,6 +113,15 @@ fun BigDecimal.formatAsToken(settings: CurrencySettings, token: LooprToken): Str
 }
 
 /**
+ * Formats a [BigDecimal] as a percentage by multiplying it by 100 and stripping all trailing
+ * zeroes.
+ */
+fun BigDecimal.formatAsPercentage(settings: CurrencySettings): String {
+    val percentage = (this * BigDecimal(100)).stripTrailingZeros()
+    return settings.formatNumber(percentage) + "%"
+}
+
+/**
  * Formats a [BigDecimal] as the user's national currency for the UI. For example "$132.24"
  */
 fun BigInteger.formatAsCurrency(settings: CurrencySettings): String {

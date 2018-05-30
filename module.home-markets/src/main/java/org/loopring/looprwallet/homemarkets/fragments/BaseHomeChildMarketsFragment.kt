@@ -125,7 +125,7 @@ abstract class BaseHomeChildMarketsFragment : BaseFragment(), BottomNavigationRe
      */
     private fun setMarketsLiveData() {
         val marketsFilter = TradingPairFilter(isFavorites, adapter.dateFilter)
-        homeMarketsViewModel.getHomeMarkets(this, marketsFilter, adapter.sortBy) { data ->
+        homeMarketsViewModel.getMarkets(this, marketsFilter, adapter.sortBy) { data ->
             setupOfflineFirstDataObserverForAdapter(homeMarketsViewModel, adapter, data)
         }
     }

@@ -220,6 +220,13 @@ abstract class BaseFragment : Fragment(), ViewLifecycleFragment {
         (activity as? BaseActivity)?.pushFragmentTransaction(fragment, tag, animation)
     }
 
+    /**
+     * Pops the current fragment via transaction. This method calls through to the [BaseActivity]
+     */
+    fun popFragmentTransaction() {
+        (activity as? BaseActivity)?.popFragmentTransaction()
+    }
+
     private val viewModelList = arrayListOf<OfflineFirstViewModel<*, *>>()
 
     /**

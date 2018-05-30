@@ -229,7 +229,7 @@
             <Button
                 android:id="@+id/wrapEtherConvertButton"
                 style="@style/App.Button.ConstrainBottom"
-                android:text="@string/convert"
+                android:text="@string/convert_eth"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />

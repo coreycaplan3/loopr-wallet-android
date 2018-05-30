@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.fragment_create_order.*
 import org.loopring.looprwallet.core.extensions.formatAsCurrency
 import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.fragments.BaseFragment
+import org.loopring.looprwallet.core.models.android.fragments.FragmentTransactionController
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairFilter
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPairGraphFilter
@@ -20,7 +21,7 @@ import org.loopring.looprwallet.core.viewmodels.loopr.MarketsViewModel
 import org.loopring.looprwallet.core.viewmodels.price.EthTokenPriceCheckerViewModel
 import org.loopring.looprwallet.createorder.R
 import org.loopring.looprwallet.createorder.dagger.createOrderLooprComponent
-import org.loopring.looprwallet.createorder.viewmodels.CreateOrderPriceViewModel
+import org.loopring.looprwallet.createorder.viewmodels.CreateOrderViewModel
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -64,7 +65,7 @@ class CreateOrderFragment : BaseFragment() {
     }
 
     private val customTokenPriceViewModel by lazy {
-        LooprViewModelFactory.get<CreateOrderPriceViewModel>(activity!!)
+        LooprViewModelFactory.get<CreateOrderViewModel>(activity!!)
     }
 
     private var tradingPair: TradingPair? = null
@@ -86,12 +87,24 @@ class CreateOrderFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        customTokenPriceViewModel.priceLiveData.observe(fragmentViewLifecycleFragment!!, Observer {
+        customTokenPriceViewModel.priceLiveData.observe(activity!!, Observer {
             if (it != null) {
                 hasSetPriceManually = true
                 setCurrentPrice()
             }
         })
+
+        createOrderPriceLabel.setOnClickListener {
+            val fragment = EnterPriceFragment()
+            val tag = EnterPriceFragment.TAG
+            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
+        }
+
+        createOrderReviewOrderButton.setOnClickListener {
+            val fragment = ConfirmOrderFragment()
+            val tag = ConfirmOrderFragment.TAG
+            pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_HORIZONTAL)
+        }
 
         setupBalanceViewModel()
         setupPriceViewModel()
@@ -120,6 +133,8 @@ class CreateOrderFragment : BaseFragment() {
                 createOrderBalanceLabel.text = balance.formatAsToken(currencySettings, token)
             }
         }
+
+        setupOfflineFirstStateAndErrorObserver(balanceViewModel, fragmentContainer)
     }
 
     private fun setupPriceViewModel() {
@@ -140,24 +155,27 @@ class CreateOrderFragment : BaseFragment() {
                 createOrderEstimatedTotalPriceLabel.text = totalPrice
             }
         }
+
+        setupOfflineFirstStateAndErrorObserver(priceViewModel, fragmentContainer)
     }
 
     private fun setupMarketViewModel() {
         val filter = TradingPairFilter(false, TradingPairFilter.CHANGE_PERIOD_1D)
-        marketsViewModel.getHomeMarkets(this, filter, TradingPairFilter.SORT_BY_TICKER_ASC) {
+        marketsViewModel.getMarkets(this, filter, TradingPairFilter.SORT_BY_TICKER_ASC) {
             tradingPair = it.find { it.market == market }
             setCurrentPrice()
         }
+
+        setupOfflineFirstStateAndErrorObserver(marketsViewModel, fragmentContainer)
     }
 
     private fun setCurrentPrice() {
         val tradingPair = tradingPair ?: return
         val secondaryToken = tradingPair.secondaryToken
 
-        val price = if (!hasSetPriceManually) {
-            tradingPair.lastPrice
-        } else {
-            customTokenPriceViewModel.priceLiveData.value
+        val price = when {
+            !hasSetPriceManually -> tradingPair.lastPrice
+            else -> customTokenPriceViewModel.priceLiveData.value
         }
 
         createOrderPriceLabel.text = price?.formatAsToken(currencySettings, secondaryToken)

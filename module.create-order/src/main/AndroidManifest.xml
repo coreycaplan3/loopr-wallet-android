@@ -2,8 +2,8 @@
     package="org.loopring.looprwallet.createorder">
 
     <application
-        android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp"
-        android:theme="@style/AppTheme.Dark">
+        android:name=".application.CreateOrderApp"
+        android:theme="@style/AppTheme.Light">
 
         <activity
             android:name=".activities.CreateOrderActivity"

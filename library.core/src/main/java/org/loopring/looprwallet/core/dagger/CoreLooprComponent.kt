@@ -13,8 +13,8 @@ import org.loopring.looprwallet.core.fragments.settings.LoopringFeeSettingsFragm
 import org.loopring.looprwallet.core.fragments.settings.SecuritySettingsFragment
 import org.loopring.looprwallet.core.models.settings.*
 import org.loopring.looprwallet.core.networking.eth.EthereumService
+import org.loopring.looprwallet.core.presenters.TokenNumberPadPresenter
 import org.loopring.looprwallet.core.realm.RealmClient
-import org.loopring.looprwallet.core.viewmodels.price.EthTokenPriceCheckerViewModel
 import org.loopring.looprwallet.core.wallet.WalletClient
 import org.web3j.protocol.Web3j
 import javax.inject.Singleton
@@ -57,6 +57,10 @@ interface CoreLooprComponent {
     // Services
 
     fun inject(ethereumService: EthereumService)
+
+    // Other
+
+    fun inject(tokenNumberPadPresenter: TokenNumberPadPresenter)
 
     // Values - Settings
     val userWalletSettings: UserWalletSettings

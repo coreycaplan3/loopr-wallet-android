@@ -4,6 +4,7 @@ import dagger.Component
 import org.loopring.looprwallet.core.application.CoreLooprWalletApp
 import org.loopring.looprwallet.core.dagger.CoreLooprComponent
 import org.loopring.looprwallet.core.dagger.LooprComponentScope
+import org.loopring.looprwallet.createorder.fragments.ConfirmOrderFragment
 import org.loopring.looprwallet.createorder.fragments.CreateOrderFragment
 
 /**
@@ -19,6 +20,8 @@ import org.loopring.looprwallet.createorder.fragments.CreateOrderFragment
 interface CreateOrderLooprComponent {
 
     fun inject(createOrderFragment: CreateOrderFragment)
+    fun inject(confirmOrderFragment: ConfirmOrderFragment)
+
 }
 
 interface CreateOrderLooprComponentProvider {

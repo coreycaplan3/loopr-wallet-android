@@ -45,7 +45,7 @@ class MarketsViewModel : OfflineFirstViewModel<OrderedRealmCollection<TradingPai
 
     private var newSortBy: String? = null
 
-    fun getHomeMarkets(
+    fun getMarkets(
             owner: ViewLifecycleFragment,
             filter: TradingPairFilter,
             sortBy: String,
