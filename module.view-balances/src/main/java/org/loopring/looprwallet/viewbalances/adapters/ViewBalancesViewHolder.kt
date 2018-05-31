@@ -45,7 +45,7 @@ class ViewBalancesViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView
         tokenBalanceNameLabel.text = token.name
         tokenBalanceTickerLabel.text = token.ticker
 
-        val balance = token.findAddressBalance(address)?.balance
+        val balance = token.findAddressBalance(address)
         if (balance != null) {
             tokenBalanceLabel.text = str(R.string.formatter_bal).format(balance.formatAsToken(currencySettings, token))
         } else {

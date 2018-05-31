@@ -30,4 +30,5 @@
     <string name="formatter_current_price">Current Price: %s</string>
     <string name="formatter_estimated_current_price">Estimated Current Price: %s</string>
     <string name="formatter_estimated_price">Estimated Price: %s</string>
+    <string name="formatter_error_insufficient_balance">Your %s balance is not high enough to create this order</string>
 </resources>

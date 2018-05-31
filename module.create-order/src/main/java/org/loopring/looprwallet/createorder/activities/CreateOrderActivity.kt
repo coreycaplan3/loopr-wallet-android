@@ -23,15 +23,17 @@ class CreateOrderActivity : BaseActivity() {
     companion object {
 
         private const val KEY_MARKET = "MARKET"
+        private const val KEY_IS_SELL = "IS_SELL"
 
         /**
          * Routes this activity to the [CreateOrderActivity].
          *
          * @param tradingPair The [TradingPair] that will be selected by default
          */
-        fun route(activity: Activity, tradingPair: TradingPair? = null) {
+        fun route(activity: Activity, tradingPair: TradingPair? = null, isSell: Boolean = false) {
             val intent = Intent(activity, CreateOrderActivity::class.java)
                     .putExtra(KEY_MARKET, tradingPair?.market)
+                    .putExtra(KEY_IS_SELL, isSell)
 
             activity.startActivity(intent)
         }
@@ -47,11 +49,15 @@ class CreateOrderActivity : BaseActivity() {
         intent.getStringExtra(KEY_MARKET)
     }
 
+    private val isSell: Boolean by lazy {
+        intent.getBooleanExtra(KEY_IS_SELL, false)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            val fragment = CreateOrderFragment.getInstance(market)
+            val fragment = CreateOrderFragment.getInstance(isSell, market)
             val tag = CreateOrderFragment.TAG
             pushFragmentTransaction(fragment, tag, FragmentTransactionController.ANIMATION_VERTICAL)
         }

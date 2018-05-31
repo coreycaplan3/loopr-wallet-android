@@ -32,7 +32,6 @@ class EthereumTokenBalanceViewModel : OfflineFirstViewModel<OrderedRealmCollecti
         LooprEthplorerService.getInstance()
     }
 
-    fun getEthBalanceNow() = repository.getEthNow()
 
     fun getAllTokensWithBalances(
             owner: ViewLifecycleFragment,

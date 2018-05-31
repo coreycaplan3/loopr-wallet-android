@@ -32,6 +32,15 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
  *
  * @param stringRes A string resource that is used for the message of the toast
  */
+fun Context.shortToast(@StringRes stringRes: Int) {
+    Toast.makeText(this, stringRes, Toast.LENGTH_SHORT).show()
+}
+
+/**
+ * A utility function for creating and showing a long toast
+ *
+ * @param stringRes A string resource that is used for the message of the toast
+ */
 fun Context.longToast(@StringRes stringRes: Int) {
     Toast.makeText(this, stringRes, Toast.LENGTH_LONG).show()
 }

@@ -5,10 +5,10 @@ import android.support.v7.preference.Preference
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.dagger.coreLooprComponent
 import org.loopring.looprwallet.core.models.settings.CurrencySettings
-import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.DEFAULT_VALUE_LRC_FEE
-import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.DEFAULT_VALUE_MARGIN_SPLIT
-import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.KEY_LRC_FEE
-import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.KEY_MARGIN_SPLIT
+import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.DEFAULT_VALUE_LRC_FEE_PERCENTAGE
+import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.DEFAULT_VALUE_MARGIN_SPLIT_PERCENTAGE
+import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.KEY_LRC_FEE_PERCENTAGE
+import org.loopring.looprwallet.core.models.settings.LoopringFeeSettings.Companion.KEY_MARGIN_SPLIT_PERCENTAGE
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import javax.inject.Inject
 
@@ -43,15 +43,15 @@ class LoopringFeeSettingsFragment : BaseSettingsFragment() {
     }
 
     override fun getPreferenceKeysAndDefaultValues() = listOf(
-            KEY_LRC_FEE to DEFAULT_VALUE_LRC_FEE,
-            KEY_MARGIN_SPLIT to DEFAULT_VALUE_MARGIN_SPLIT
+            KEY_LRC_FEE_PERCENTAGE to DEFAULT_VALUE_LRC_FEE_PERCENTAGE,
+            KEY_MARGIN_SPLIT_PERCENTAGE to DEFAULT_VALUE_MARGIN_SPLIT_PERCENTAGE
     )
 
     override fun onPreferenceValueChange(preference: Preference, value: String) = true
 
     override fun getSummaryValue(preference: Preference, value: String): String = when (preference.key) {
-        KEY_LRC_FEE -> currencySettings.formatNumber(value.toDouble())
-        KEY_MARGIN_SPLIT -> "" // We don't bind a summary value for this SeekBar
+        KEY_LRC_FEE_PERCENTAGE -> currencySettings.formatNumber(value.toDouble())
+        KEY_MARGIN_SPLIT_PERCENTAGE -> "" // We don't bind a summary value for this SeekBar
         else -> throw IllegalArgumentException("Invalid preference key, found: ${preference.key}")
     }
 

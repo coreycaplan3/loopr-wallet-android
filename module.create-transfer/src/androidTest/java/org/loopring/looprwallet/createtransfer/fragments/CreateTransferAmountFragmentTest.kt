@@ -22,8 +22,6 @@ import org.loopring.looprwallet.core.BuildConfig
 import org.loopring.looprwallet.core.R
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.dagger.BaseDaggerFragmentTest
-import org.loopring.looprwallet.core.extensions.formatAsCurrency
-import org.loopring.looprwallet.core.extensions.formatAsToken
 import org.loopring.looprwallet.core.extensions.upsert
 import org.loopring.looprwallet.core.presenters.NumberPadPresenter
 import org.loopring.looprwallet.core.models.contact.Contact
@@ -178,7 +176,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
         Espresso.onView(`is`(fragment.createTransferSendButton))
                 .perform(click())
 
-        checkSnackbarDisplayedWithText(R.string.error_insufficient_token_balance)
+        checkSnackbarDisplayedWithText(R.string.error_send_insufficient_token_balance)
     }
 
     /**
@@ -251,7 +249,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
         Espresso.onView(`is`(fragment.createTransferSendButton))
                 .perform(click())
 
-        checkSnackbarDisplayedWithText(R.string.error_insufficient_token_balance)
+        checkSnackbarDisplayedWithText(R.string.error_send_insufficient_token_balance)
 
         assertFalse(fragment.isCurrencyMainLabel)
     }
@@ -348,7 +346,7 @@ class CreateTransferAmountFragmentTest : BaseDaggerFragmentTest<CreateTransferAm
 
     private fun waitForPriceToLoad() = runBlockingUiCode {
         val deferred = CompletableDeferred<Boolean>()
-        fragment.ethTokenPriceCheckerViewModel!!.addCurrentStateObserver(fragment) {
+        fragment.looprTokenPriceCheckerViewModel!!.addCurrentStateObserver(fragment) {
             val viewModel = fragment.ethereumTokenBalanceViewModel!!
             if (!viewModel.isLoading() && viewModel.hasValidData()) {
                 deferred.complete(true)

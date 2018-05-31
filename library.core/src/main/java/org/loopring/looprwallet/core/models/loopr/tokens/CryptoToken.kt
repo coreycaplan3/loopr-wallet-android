@@ -66,20 +66,18 @@ interface CryptoToken : TrackedRealmObject {
      */
     var tokenPrices: RealmList<TokenPriceInfo>
 
-    fun getBalanceOf(address: String) = tokenBalances.find { it.address == address }?.balance
-
     /**
      * Finds a given address's [TokenBalanceInfo] or null if it cannot be found
      */
-    fun findAddressBalance(address: String): TokenBalanceInfo? {
-        return tokenBalances.find { it.address == address }
+    fun findAddressBalance(address: String): BigInteger? {
+        return tokenBalances.find { it.address == address }?.balance
     }
 
     /**
      * Finds a given address's [TokenAllowanceInfo] or null if it cannot be found
      */
-    fun findAddressAllowance(address: String): TokenAllowanceInfo? {
-        return tokenAllowances.find { it.address == address }
+    fun findAddressAllowance(address: String): BigInteger? {
+        return tokenAllowances.find { it.address == address }?.allowance
     }
 
     /**
@@ -87,8 +85,8 @@ interface CryptoToken : TrackedRealmObject {
      *
      * @see CurrencySettings
      */
-    fun findCurrencyPrice(currency: String): TokenPriceInfo? {
-        return tokenPrices.find { it.currency == currency }
+    fun findCurrencyPrice(currency: String): BigInteger? {
+        return tokenPrices.find { it.currency == currency }?.price
     }
 
 }

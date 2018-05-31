@@ -5,6 +5,6 @@
         android:id="@+id/createTransferAmountSpinner"
         android:background="#f00"
         android:title="@string/ticker_eth"
-        app:actionViewClass="android.widget.Spinner"
+        app:actionLayout="@layout/action_view_spinner"
         app:showAsAction="always" />
 </menu>

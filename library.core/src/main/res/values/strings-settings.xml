@@ -95,11 +95,11 @@
 
     <string name="settings_loopring_fees_screen_key">loopr_loopring_fees_screen_key</string>
 
-    <string name="settings_loopring_fees_lrc_fee_key">loopr_settings_loopring_fees_lrc_fee_key</string>
-    <string name="settings_loopring_fees_margin_split_key">loopr_settings_loopring_fees_margin_split_key</string>
+    <string name="settings_loopring_fees_lrc_fee_percentage_key">loopr_settings_loopring_fees_lrc_fee_percentage_key</string>
+    <string name="settings_loopring_fees_margin_split_percentage_key">loopr_settings_loopring_fees_margin_split_percentage_key</string>
 
-    <string name="settings_loopring_fees_lrc_fee_default_value">3</string>
-    <integer name="settings_loopring_fees_margin_split_default_value">50</integer>
+    <string name="settings_loopring_fees_lrc_fee_percentage_default_value">0.002</string>
+    <integer name="settings_loopring_fees_margin_split_percentage_default_value">50</integer>
 
     <!-- General Wallet -->
 

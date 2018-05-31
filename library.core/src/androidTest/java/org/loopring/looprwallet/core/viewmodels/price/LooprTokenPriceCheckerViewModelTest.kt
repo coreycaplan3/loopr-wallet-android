@@ -23,31 +23,31 @@ import java.util.*
 @RunWith(AndroidJUnit4::class)
 class LooprTokenPriceCheckerViewModelTest : BaseDaggerTest() {
 
-    private lateinit var ethTokenPriceCheckerViewModel: EthTokenPriceCheckerViewModel
+    private lateinit var looprTokenPriceCheckerViewModel: LooprTokenPriceCheckerViewModel
 
     @Before
     fun setup() = runBlockingUiCode {
-        ethTokenPriceCheckerViewModel = EthTokenPriceCheckerViewModel()
+        looprTokenPriceCheckerViewModel = LooprTokenPriceCheckerViewModel()
     }
 
     @After
     fun tearDown() = runBlockingUiCode {
-        ethTokenPriceCheckerViewModel.clear()
+        looprTokenPriceCheckerViewModel.clear()
     }
 
     @Test
     fun getLiveDataFromRepository() = runBlockingUiCode {
-        val liveData = ethTokenPriceCheckerViewModel.getLiveDataFromRepository(LooprToken.LRC.contractAddress)
+        val liveData = looprTokenPriceCheckerViewModel.getLiveDataFromRepository(LooprToken.LRC.contractAddress)
         val data = liveData.value!!
 
         assertTrue(data.load())
-        assertTrue(ethTokenPriceCheckerViewModel.isDataValid(data))
+        assertTrue(looprTokenPriceCheckerViewModel.isDataValid(data))
     }
 
     @Test
     fun getDataFromNetwork() = runBlockingUiCode {
         val lrc = LooprToken.LRC
-        val data = ethTokenPriceCheckerViewModel.getDataFromNetwork(lrc.contractAddress).await()
+        val data = looprTokenPriceCheckerViewModel.getDataFromNetwork(lrc.contractAddress).await()
 
         assertEquals(lrc.contractAddress, data.identifier)
         assertEquals(lrc.ticker, data.ticker)
@@ -61,11 +61,11 @@ class LooprTokenPriceCheckerViewModelTest : BaseDaggerTest() {
         val priceInUsd = BigDecimal("104.25")
         val date = Date()
         val data = LooprToken(lrc.contractAddress, lrc.ticker, priceInUsd = priceInUsd, lastUpdated = date)
-        ethTokenPriceCheckerViewModel.addNetworkDataToRepository(data)
+        looprTokenPriceCheckerViewModel.addNetworkDataToRepository(data)
 
         delay(100)
 
-        val insertedData = ethTokenPriceCheckerViewModel.repository.getToken(data.contractAddress).value!!
+        val insertedData = looprTokenPriceCheckerViewModel.repository.getToken(data.contractAddress).value!!
 
         assertTrue(insertedData.load())
 
@@ -76,7 +76,7 @@ class LooprTokenPriceCheckerViewModelTest : BaseDaggerTest() {
 
     @Test
     fun getSyncType() {
-        assertEquals(SyncData.SYNC_TYPE_TOKEN_PRICE, ethTokenPriceCheckerViewModel.syncType)
+        assertEquals(SyncData.SYNC_TYPE_TOKEN_PRICE, looprTokenPriceCheckerViewModel.syncType)
     }
 
 }

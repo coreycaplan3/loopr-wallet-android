@@ -17,7 +17,7 @@ import org.loopring.looprwallet.core.presenters.TokenNumberPadPresenter
 import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
 import org.loopring.looprwallet.core.viewmodels.LooprViewModelFactory
 import org.loopring.looprwallet.core.viewmodels.loopr.MarketsViewModel
-import org.loopring.looprwallet.core.viewmodels.price.EthTokenPriceCheckerViewModel
+import org.loopring.looprwallet.core.viewmodels.price.LooprTokenPriceCheckerViewModel
 import org.loopring.looprwallet.createorder.R
 import org.loopring.looprwallet.createorder.viewmodels.CreateOrderViewModel
 import java.math.BigDecimal
@@ -50,7 +50,7 @@ class EnterPriceFragment : BaseFragment() {
     }
 
     private val tokenPriceViewModel by lazy {
-        LooprViewModelFactory.get<EthTokenPriceCheckerViewModel>(activity!!)
+        LooprViewModelFactory.get<LooprTokenPriceCheckerViewModel>(activity!!)
     }
 
     private lateinit var numberPadPresenter: TokenNumberPadPresenter
@@ -110,7 +110,7 @@ class EnterPriceFragment : BaseFragment() {
         val currency = currencySettings.getCurrency()
         tokenPriceViewModel.getTokenPrice(this, currency) {
             val identifier = tradingPair.primaryToken.identifier
-            val currentFiatPrice = it.find { it.identifier == identifier }?.findCurrencyPrice(currency)?.price
+            val currentFiatPrice = it.find { it.identifier == identifier }?.findCurrencyPrice(currency)
 
             if (currentFiatPrice != null) {
                 val text = str(R.string.formatter_estimated_current_price)
@@ -141,7 +141,7 @@ class EnterPriceFragment : BaseFragment() {
         }
 
         val currency = currencySettings.getCurrency()
-        val price = tradingPair.secondaryToken.findCurrencyPrice(currency)?.price
+        val price = tradingPair.secondaryToken.findCurrencyPrice(currency)
         if (price != null) {
             val priceInFiat = (price.toBigDecimal() * enteredPriceInTokens).formatAsCurrency(currencySettings)
             enterPriceFiatLabel.text = estimatedPriceFormatter.format(priceInFiat)

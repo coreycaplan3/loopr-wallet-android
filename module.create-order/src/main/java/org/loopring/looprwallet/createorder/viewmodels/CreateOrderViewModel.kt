@@ -31,18 +31,20 @@ class CreateOrderViewModel : ViewModel() {
      * The currently selected [TradingPair] for passing data between the *CreateOrderFragment*,
      * *EnterPriceFragment*, and *ConfirmOrderFragment*
      */
-    val tradingPair: LiveData<TradingPair> = MutableLiveData()
+    val tradingPair: MutableLiveData<TradingPair> = MutableLiveData()
 
     /**
      * The [LooprToken] that represents the LRC token and its price information
      */
     val lrcWethTradingPair: LiveData<TradingPair> = MutableLiveData()
 
+    val allTradingPairs: LiveData<OrderedRealmCollection<TradingPair>> = MutableLiveData()
+
     /**
      * The [AppLooprOrder] for passing between thee *CreateOrderFragment*, *ConfirmOrderFragment*,
      * and the *OrderPlacedFragment*.
      */
-    val order: LiveData<AppLooprOrder> = MutableLiveData()
+    val order: MutableLiveData<AppLooprOrder> = MutableLiveData()
 
     private val marketsLiveData: LiveData<OrderedRealmCollection<TradingPair>>
 
@@ -53,6 +55,8 @@ class CreateOrderViewModel : ViewModel() {
             if (it == null) {
                 return@Observer
             }
+
+            (allTradingPairs as MutableLiveData).value = it
 
             val list = it.createSnapshot()
             val lrcWethMarket = "${LooprToken.LRC.ticker}-${LooprToken.WETH.ticker}"
@@ -69,6 +73,10 @@ class CreateOrderViewModel : ViewModel() {
     }
 
     init {
+        order.value = AppLooprOrder().apply {
+            this.isSell = false
+        }
+
         val filter = TradingPairFilter(false, TradingPairFilter.CHANGE_PERIOD_1D)
         marketsLiveData = repository.getMarkets(filter, TradingPairFilter.SORT_BY_TICKER_ASC)
     }

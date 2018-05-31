@@ -13,6 +13,8 @@
     <color name="materialRed">@color/red_400</color>
 
     <color name="materialGreen">#FF4CAF50</color>
+    <!-- TODO change color -->
+    <color name="sellRed">#FFFF0000</color>
     <color name="materialGreenDisabled">#704CAF50</color>
 
     <color name="textColorError">@color/red_400</color>

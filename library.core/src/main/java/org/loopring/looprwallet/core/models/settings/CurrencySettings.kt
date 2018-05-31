@@ -28,8 +28,6 @@ open class CurrencySettings(private val looprSettings: LooprSettings) {
 
         val ARRAY_REFRESH_FREQUENCY = strArray(R.array.settings_currency_refresh_frequency_entries_values)
 
-        val ETH = str(R.string.settings_currency_values_eth)
-        val LRC = str(R.string.settings_currency_values_lrc)
         val USD = str(R.string.settings_currency_values_usd)
         val GBP = str(R.string.settings_currency_values_gbp)
         val EUR = str(R.string.settings_currency_values_eur)

@@ -195,7 +195,8 @@
     <string name="retry">retry</string>
     <string name="error_insufficient_gas">You need more ETH to send this transaction, or you can try lowering your gas settings</string>
     <string name="settings">Settings</string>
-    <string name="error_insufficient_token_balance">You cannot send more tokens than you currently have</string>
+    <string name="error_send_insufficient_token_balance">You cannot send more tokens than you currently have</string>
+    <string name="error_order_insufficient_token_balance">You cannot send more tokens than you currently have</string>
     <string name="theme">Theme</string>
     <string name="title_activity_my_settings">Settings</string>
     <string name="security">Security</string>
@@ -320,7 +321,6 @@
     <string name="confirm_price">Confirm Price</string>
     <string name="_0_00">0.00</string>
     <string name="you_send">You Send</string>
-    <string name="you_get">You Get</string>
     <string name="review">Review</string>
     <string name="price">Price</string>
     <string name="margin_split">Margin Split</string>
@@ -370,4 +370,15 @@
     <string name="error_parse_price">There was an error parsing the price</string>
     <string name="slippage_warning">Slippage Warning</string>
     <string name="formatter_explain_slippage">The price you entered is more than %s outside the last trade price. Are you sure you want to submit this trade price?</string>
+    <string name="you_sell">You Sell</string>
+    <string name="you_buy">You Buy</string>
+    <string name="you_get">You Get</string>
+    <string name="default_trading_pair">LRC-WETH</string>
+    <string name="select_a_trading_pair">Select a Trading Pair</string>
+    <string name="limit_buy">Limit Buy</string>
+    <string name="limit_sell">Limit Sell</string>
+    <string name="loading">Loading…</string>
+    <string name="error_loading_balance">Could not load balance. Swipe to retry</string>
+    <string name="error_current_price_loading">The current price is still loading</string>
+    <string name="prompt_send_tokens">Select a Token to Send</string>
 </resources>

@@ -23,7 +23,7 @@ class LoopringFeeSettingsFragmentTest : BaseDaggerFragmentTest<LoopringFeeSettin
 
     @Test
     fun changeLrcTradeFee() = runBlockingUiCode {
-        val key = LoopringFeeSettings.KEY_LRC_FEE
+        val key = LoopringFeeSettings.KEY_LRC_FEE_PERCENTAGE
         val preference = fragment.findPreference(key) as EditTextPreference
         preference.text = "5.5"
 
@@ -32,7 +32,7 @@ class LoopringFeeSettingsFragmentTest : BaseDaggerFragmentTest<LoopringFeeSettin
 
     @Test
     fun changeMarginSplitFee() = runBlockingUiCode {
-        val key = LoopringFeeSettings.KEY_MARGIN_SPLIT
+        val key = LoopringFeeSettings.KEY_MARGIN_SPLIT_PERCENTAGE
         val preference = fragment.findPreference(key) as SeekBarPreference
         preference.value = 50
 

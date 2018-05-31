@@ -11,10 +11,10 @@ import org.loopring.looprwallet.core.models.android.architecture.NET
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.loopr.tokens.TokenPriceInfo
 import org.loopring.looprwallet.core.models.sync.SyncData
+import org.loopring.looprwallet.core.networking.loopr.LooprPriceService
 import org.loopring.looprwallet.core.repositories.eth.EthTokenRepository
 import org.loopring.looprwallet.core.viewmodels.StreamingViewModel
 import org.loopring.looprwalletnetwork.models.loopring.responseObjects.LooprTokenPriceQuote
-import org.loopring.looprwalletnetwork.services.LoopringService
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -27,13 +27,15 @@ import java.util.*
  * Purpose of Class: A [StreamingViewModel] that periodically checks the token price and sends the
  * result via a channel to a *LiveData* instance.
  */
-class EthTokenPriceCheckerViewModel : StreamingViewModel<OrderedRealmCollection<LooprToken>, String>() {
+class LooprTokenPriceCheckerViewModel : StreamingViewModel<OrderedRealmCollection<LooprToken>, String>() {
 
     override val repository = EthTokenRepository()
 
     override val syncType: String = SyncData.SYNC_TYPE_TOKEN_PRICE
 
-    private val service = LoopringService()
+    private val service by lazy {
+        LooprPriceService.getInstance()
+    }
 
     /**
      * Gets the current price of the provided ticker by hitting the database first, followed by
@@ -56,10 +58,10 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<OrderedRealmCollection<
     }
 
     override fun getDataFromNetwork(parameter: String) = async(NET) {
-        val tokenList = service.getPriceQuote(parameter).await().tokens
+        val priceQuoteList = service.getPriceQuote(parameter).await().tokens
                 ?: throw IllegalStateException("Could not load tokens!")
 
-        mapTokenListToRealmList(parameter, tokenList)
+        mapTokenListToRealmList(parameter, priceQuoteList)
     }
 
     private fun mapTokenListToRealmList(currency: String, priceList: List<LooprTokenPriceQuote>): RealmList<LooprToken> {
@@ -74,7 +76,7 @@ class EthTokenPriceCheckerViewModel : StreamingViewModel<OrderedRealmCollection<
 
             val tokenPriceInfo = TokenPriceInfo(currency).apply { this.price = priceInfoBigInteger }
 
-            val token = repository.getTokenByTickerNow(ticker) ?: return@mapNotNull null
+            val token = repository.getTokenByTickerNow(ticker, NET) ?: return@mapNotNull null
             token.tokenPrices.insertOrUpdate(tokenPriceInfo) {
                 it.currency == currency
             }

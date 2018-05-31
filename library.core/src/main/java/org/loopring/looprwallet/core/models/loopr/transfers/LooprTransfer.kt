@@ -32,21 +32,17 @@ open class LooprTransfer(
         transactionFeeUsdValue: BigInteger = BigInteger.ZERO
 ) : RealmObject() {
 
-    private var mBlockNumber: String? = null
-    private var mNumberOfTokens: String = "0"
-    private var mUsdValue: String = "0"
-    private var mTransactionFee: String = "0"
-    private var mTransactionFeeUsdValue: String = "0"
-
     var mToken: LooprToken? = null
         private set
 
     // TODO better way of handling this
     var token: LooprToken
-        get() = mToken ?: LooprToken.ETH
+        get() = mToken!!
         set(value) {
             mToken = value
         }
+
+    private var mBlockNumber: String? = null
 
     /**
      * The block number at which the transfer was mined
@@ -56,6 +52,8 @@ open class LooprTransfer(
         set(value) {
             mBlockNumber = value?.toString(10)
         }
+
+    private var mNumberOfTokens: String = "0"
 
     /**
      * The number of tokens that were sent in this transaction. To get the decimal representation,
@@ -68,6 +66,8 @@ open class LooprTransfer(
             mNumberOfTokens = value.toString(10)
         }
 
+    private var mUsdValue: String = "0"
+
     /**
      * The value of the currency at the time of the transaction. To get the decimal representation
      * of this number, divide the transaction fee by (100). The radix for this number is **ALWAYS**
@@ -79,6 +79,8 @@ open class LooprTransfer(
             mUsdValue = value.toString(10)
         }
 
+    private var mTransactionFee: String = "0"
+
     /**
      * The amount paid by the sender (in gas) to execute this transfer. To get the decimal
      * representation of this number, divide the transaction fee by (10^18). The radix for this
@@ -89,6 +91,8 @@ open class LooprTransfer(
         set(value) {
             mTransactionFee = value.toString(10)
         }
+
+    private var mTransactionFeeUsdValue: String = "0"
 
     /**
      * The amount paid by the sender (in USD) to execute this transfer. To get the decimal

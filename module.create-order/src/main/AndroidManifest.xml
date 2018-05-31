@@ -1,14 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.loopring.looprwallet.createorder">
 
-    <application
-        android:name=".application.CreateOrderApp"
-        android:theme="@style/AppTheme.Light">
-
-        <activity
-            android:name=".activities.CreateOrderActivity"
-            android:screenOrientation="portrait" />
-
-    </application>
+    <application android:name="org.loopring.looprwallet.core.application.CoreLooprWalletApp" />
 
 </manifest>

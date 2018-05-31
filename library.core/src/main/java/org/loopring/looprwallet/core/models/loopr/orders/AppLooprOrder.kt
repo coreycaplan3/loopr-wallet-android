@@ -10,6 +10,7 @@ import org.loopring.looprwallet.core.models.android.architecture.IO
 import org.loopring.looprwallet.core.models.loopr.markets.TradingPair
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_OPEN_NEW
 import org.loopring.looprwallet.core.models.loopr.orders.OrderSummaryFilter.Companion.FILTER_OPEN_PARTIAL
+import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.realm.TrackedRealmObject
 import org.loopring.looprwallet.core.repositories.loopr.LooprMarketsRepository
 import java.math.BigDecimal
@@ -156,6 +157,17 @@ open class AppLooprOrder(@PrimaryKey var orderHash: String = "") : RealmObject()
             mTradingPair = value
         }
 
+    /**
+     * The token that was used when buying or selling. Using LRC-WETH as an example:
+     * - Buying LRC-WETH - the dealtToken is WETH, since you're selling it to buy LRC
+     * - Selling LRC-WETH - the dealtToken is LRC, since you're selling it to buy WETH
+     */
+    val dealtToken: LooprToken
+        get() = when {
+            isSell -> tradingPair.primaryToken
+            else -> tradingPair.secondaryToken
+        }
+
     private var mAmount: String = BigInteger.ZERO.toString(10)
 
     var amount: BigInteger
@@ -164,6 +176,9 @@ open class AppLooprOrder(@PrimaryKey var orderHash: String = "") : RealmObject()
             mAmount = value.toString(10)
         }
 
+    /**
+     * The total price of the order, in terms of [priceInSecondaryTicker]
+     */
     val totalPrice: BigDecimal
         get() = priceInSecondaryTicker * amount.toBigDecimal(tradingPair.primaryToken)
 

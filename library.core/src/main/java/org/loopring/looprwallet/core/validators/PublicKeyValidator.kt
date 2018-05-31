@@ -28,7 +28,7 @@ open class PublicKeyValidator(
                 error = getTextFromResource(R.string.error_public_key_format)
                 false
             }
-            !WalletUtils.isValidAddress(text) -> {
+            text.length != 42 -> {
                 error = getTextFromResource(R.string.error_public_key_length)
                 false
             }

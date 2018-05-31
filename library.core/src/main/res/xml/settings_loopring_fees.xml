@@ -10,10 +10,10 @@
             android:summary="@string/explain_lrc_trade_fee" />
 
         <EditTextPreference
-            android:defaultValue="@string/settings_loopring_fees_lrc_fee_default_value"
+            android:defaultValue="@string/settings_loopring_fees_lrc_fee_percentage_default_value"
             android:inputType="numberDecimal"
-            android:key="@string/settings_loopring_fees_lrc_fee_key"
-            android:summary="@string/settings_loopring_fees_lrc_fee_default_value"
+            android:key="@string/settings_loopring_fees_lrc_fee_percentage_key"
+            android:summary="@string/settings_loopring_fees_lrc_fee_percentage_default_value"
             android:title="@string/lrc_order_fee" />
 
     </PreferenceCategory>
@@ -25,9 +25,9 @@
             android:summary="@string/explain_margin_split" />
 
         <!--suppress AndroidElementNotAllowed -->
-        <android.support.v7.preference.SeekBarPreference
-            android:defaultValue="@integer/settings_loopring_fees_margin_split_default_value"
-            android:key="@string/settings_loopring_fees_margin_split_key"
+        <SeekBarPreference
+            android:defaultValue="@integer/settings_loopring_fees_margin_split_percentage_default_value"
+            android:key="@string/settings_loopring_fees_margin_split_percentage_key"
             android:max="100"
             android:min="0"
             android:title="@string/order_margin_split_percentage"

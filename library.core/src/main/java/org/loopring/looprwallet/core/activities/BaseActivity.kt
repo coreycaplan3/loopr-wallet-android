@@ -4,6 +4,7 @@ package org.loopring.looprwallet.core.activities
 
 import android.app.ProgressDialog
 import android.graphics.Rect
+import android.net.TrafficStats
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.app.Fragment
@@ -82,6 +83,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     .detectAll()
                     .penaltyLog()
                     .build())
+
             StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder()
                     .detectAll()
                     .penaltyLog()

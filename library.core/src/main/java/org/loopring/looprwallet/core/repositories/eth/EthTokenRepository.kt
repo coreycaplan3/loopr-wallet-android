@@ -40,23 +40,6 @@ class EthTokenRepository : BaseRealmRepository() {
     }
 
     /**
-     * Finds [LooprToken.ETH] synchronously. If not found, it is inserted and returned from realm.
-     *
-     * @return An **UN-MANAGED** [LooprToken] that represents ETH.
-     */
-    fun getEthNow(context: HandlerContext = UI): LooprToken {
-        val token = getRealmFromContext(context)
-                .where<LooprToken>()
-                .equalTo(LooprToken::ticker, LooprToken.ETH.ticker)
-                .findFirst()
-
-        return when {
-            token != null -> getRealmFromContext(context).copyFromRealm(token)
-            else -> LooprToken.ETH
-        }
-    }
-
-    /**
      * @return An **UN-MANAGED** [LooprToken] that represents the token with the provided contract
      * address.
      */
@@ -87,7 +70,7 @@ class EthTokenRepository : BaseRealmRepository() {
     fun getAllTokens(context: HandlerContext = UI): LiveData<OrderedRealmCollection<LooprToken>> {
         return getRealmFromContext(context)
                 .where<LooprToken>()
-                .sort(LooprToken::name)
+                .sort(LooprToken::ticker)
                 .findAllAsync()
                 .asLiveData()
     }

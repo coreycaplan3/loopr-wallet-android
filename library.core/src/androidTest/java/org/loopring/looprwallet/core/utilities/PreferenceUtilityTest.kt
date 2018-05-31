@@ -30,7 +30,7 @@ class PreferenceUtilityTest : BaseDaggerTest() {
         assertNotNull(settings.getString(SecuritySettings.KEY_SECURITY_TYPE))
 
         assertNotNull(settings.getString(EthereumFeeSettings.KEY_TRANSFER_ETHER_GAS_LIMIT))
-        assertNotNull(settings.getString(LoopringFeeSettings.KEY_LRC_FEE))
+        assertNotNull(settings.getString(LoopringFeeSettings.KEY_LRC_FEE_PERCENTAGE))
 
         // Use a default value of TRUE to see if it was indeed set before (since the default value
         // for the preference is FALSE)

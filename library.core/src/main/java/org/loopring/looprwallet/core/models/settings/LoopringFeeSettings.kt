@@ -17,21 +17,25 @@ class LoopringFeeSettings(private val looprSettings: LooprSettings) {
 
     companion object {
 
-        val KEY_LRC_FEE = str(R.string.settings_loopring_fees_lrc_fee_key)
-        val KEY_MARGIN_SPLIT = str(R.string.settings_loopring_fees_margin_split_key)
+        val KEY_LRC_FEE_PERCENTAGE = str(R.string.settings_loopring_fees_lrc_fee_percentage_key)
+        val KEY_MARGIN_SPLIT_PERCENTAGE = str(R.string.settings_loopring_fees_margin_split_percentage_key)
 
-        val DEFAULT_VALUE_LRC_FEE = str(R.string.settings_loopring_fees_lrc_fee_default_value)
-        val DEFAULT_VALUE_MARGIN_SPLIT = int(R.integer.settings_loopring_fees_margin_split_default_value).toString()
+        val DEFAULT_VALUE_LRC_FEE_PERCENTAGE = str(R.string.settings_loopring_fees_lrc_fee_percentage_default_value)
+        val DEFAULT_VALUE_MARGIN_SPLIT_PERCENTAGE = int(R.integer.settings_loopring_fees_margin_split_percentage_default_value).toString()
     }
 
-    val currentLrcFee: BigDecimal
-        get() = getValue(KEY_LRC_FEE, DEFAULT_VALUE_LRC_FEE)
+    /**
+     * The current LRC fee percentage. The default and min value is 0.002 or 0.2%
+     */
+    val currentLrcFeePercentage: BigDecimal
+        get() = getValue(KEY_LRC_FEE_PERCENTAGE, DEFAULT_VALUE_LRC_FEE_PERCENTAGE)
 
     /**
-     * The current margin split, expressed as a decimal number (dividing the percentage by 100)
+     * The current margin split, expressed as a decimal number (dividing the percentage by 100).
+     * An example value is 0.50
      */
     val currentMarginSplit: BigDecimal
-        get() = getValue(KEY_MARGIN_SPLIT, DEFAULT_VALUE_MARGIN_SPLIT) / BigDecimal(100)
+        get() = getValue(KEY_MARGIN_SPLIT_PERCENTAGE, DEFAULT_VALUE_MARGIN_SPLIT_PERCENTAGE) / BigDecimal(100)
 
     // MARK - Private Methods
 

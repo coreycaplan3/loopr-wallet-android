@@ -272,7 +272,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         val address = walletClient.getCurrentWallet()?.credentials?.address ?: return
 
         tokenBalances.firstOrNull { it.identifier == LooprToken.ETH.identifier }?.let { token ->
-            val balance = token.findAddressBalance(address)?.balance
+            val balance = token.findAddressBalance(address)
             if (balance != null) {
                 ethereumBalanceLabel.text = balance.formatAsToken(currencySettings, token)
             }
@@ -284,7 +284,7 @@ class HomeMyWalletFragment : BaseFragment(), BottomNavigationReselectedLister,
         onlyTokenBalances.forEachIndexed { index, token ->
             when {
                 index <= 2 -> {
-                    val balance = token.findAddressBalance(address)?.balance
+                    val balance = token.findAddressBalance(address)
                             ?: return@forEachIndexed
 
                     builder.append(balance.formatAsToken(currencySettings, token))

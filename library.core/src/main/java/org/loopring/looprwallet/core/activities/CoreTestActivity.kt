@@ -1,5 +1,6 @@
 package org.loopring.looprwallet.core.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.RestrictTo
 import android.support.annotation.VisibleForTesting

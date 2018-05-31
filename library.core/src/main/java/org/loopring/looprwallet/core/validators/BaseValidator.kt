@@ -17,7 +17,6 @@ import org.loopring.looprwallet.core.utilities.ApplicationUtility.str
  * @param textInputLayout The [TextInputLayout] whose text will be monitored
  * @param onChangeListener A listener that will be invoked whenever the content of [TextInputLayout]
  * changes. Typically, this will be used to enable/disable the submit button.
- * @param isRequired True if the field is required (cannot be empty) or false otherwise.
  */
 abstract class BaseValidator(
         private val textInputLayout: TextInputLayout,
@@ -38,10 +37,14 @@ abstract class BaseValidator(
     var error: String? = null
 
     init {
-        textInputLayout.editText?.addTextChangedListener(this)
+        bindListener()
 
         textInputLayout.isErrorEnabled = true
         textInputLayout.isHintEnabled = true
+    }
+
+    private fun bindListener() {
+        textInputLayout.editText?.addTextChangedListener(this)
     }
 
     final override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

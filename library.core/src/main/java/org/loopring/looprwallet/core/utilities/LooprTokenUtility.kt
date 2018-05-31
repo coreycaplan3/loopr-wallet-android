@@ -1,8 +1,10 @@
 package org.loopring.looprwallet.core.utilities
 
+import org.loopring.looprwallet.core.extensions.insertOrUpdate
 import org.loopring.looprwallet.core.extensions.update
 import org.loopring.looprwallet.core.models.loopr.tokens.LooprToken
 import org.loopring.looprwallet.core.models.loopr.tokens.TokenBalanceInfo
+import java.math.BigInteger
 
 object LooprTokenUtility {
 
@@ -16,20 +18,17 @@ object LooprTokenUtility {
 
         val tokenBalance = when {
             newToken.tokenBalances.isNotEmpty() -> newToken.tokenBalances[0]
-            address != null -> TokenBalanceInfo(address)
+            address != null -> TokenBalanceInfo().apply {
+                this.address = address
+                this.balance = BigInteger.ZERO
+            }
             else -> null
         }
 
         return when {
             oldToken != null -> {
-                val doesTokenHaveAddressBalanceAlready = oldToken.tokenBalances.any { it.address == address }
-                when {
-                    tokenBalance != null && doesTokenHaveAddressBalanceAlready ->
-                        // The token is in Realm and has a balance associated with it; update it in place
-                        oldToken.tokenBalances.update(tokenBalance) { it.address == address }
-                    tokenBalance != null ->
-                        // The token is in Realm but DOES NOT have a balance associated with it; insert it
-                        oldToken.tokenBalances.add(tokenBalance)
+                oldToken.tokenBalances.insertOrUpdate(tokenBalance) {
+                    it.address == address
                 }
                 oldToken
             }

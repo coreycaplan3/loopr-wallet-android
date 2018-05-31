@@ -162,7 +162,7 @@ class WrapEthFragment : BaseFragment() {
         address?.ifNotNull { address ->
             bindTokenBalanceToAvailableLabel(address, token)
 
-            val balance = token.findAddressBalance(address)?.balance?.formatAsTokenNoTicker(currencySettings, token)
+            val balance = token.findAddressBalance(address)?.formatAsTokenNoTicker(currencySettings, token)
             balance?.let {
                 wrapEtherInputEditText.setText(it)
                 onFormChanged()
@@ -268,7 +268,7 @@ class WrapEthFragment : BaseFragment() {
     }
 
     private fun bindTokenBalanceToAvailableLabel(address: String, token: LooprToken) {
-        val balance = token.findAddressBalance(address)?.balance?.formatAsToken(currencySettings, token)
+        val balance = token.findAddressBalance(address)?.formatAsToken(currencySettings, token)
         if (balance != null) {
             wrapEtherQuantityAvailableLabel.text = str(R.string.formatter_available).format(balance)
         }
