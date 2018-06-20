@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/library.core/library.core.iml" filepath="$PROJECT_DIR$/library.core/library.core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/loopr-android.iml" filepath="$PROJECT_DIR$/loopr-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/loopr-wallet-android.iml" filepath="$PROJECT_DIR$/loopr-wallet-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/module.add-token/module.add-token.iml" filepath="$PROJECT_DIR$/module.add-token/module.add-token.iml" />
       <module fileurl="file://$PROJECT_DIR$/module.barcode/module.barcode.iml" filepath="$PROJECT_DIR$/module.barcode/module.barcode.iml" />
       <module fileurl="file://$PROJECT_DIR$/module.contacts/module.contacts.iml" filepath="$PROJECT_DIR$/module.contacts/module.contacts.iml" />

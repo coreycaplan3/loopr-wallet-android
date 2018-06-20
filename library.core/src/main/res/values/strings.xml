@@ -115,7 +115,7 @@
     <string name="your_12_word_phrase">Your 12-Word Phrase</string>
     <string name="about_this_step">About this Step</string>
     <string name="about_remember_phrase">This 12-word phrase is used to recover and unlock your wallet. It must be used with the password you provided earlier. By pressing \"Confirm Phrase\" you will be taken to the next screen to reenter these 12 words.</string>
-    <string name="help_recycler_empty_phrase">To enter a word type a word in the box below and press \"Add\". You will be able to submit them after entering all 12 words.\n\nTo reorder a word, hold the reorder icon on the right and drag it. To delete a word, swipe it to the right.</string>
+    <string name="help_recycler_empty_phrase">To enter a word type a word in the box below and press Add. You will be able to submit them after entering all 12 words.  To reorder a word, hold the reorder icon on the right and drag it. To delete a word, swipe it to the right.</string>
     <string name="error_password_required">You must enter a password</string>
     <string name="error_wallet_name_required">You must enter a wallet name</string>
     <string name="error_token_ticker_required">You must enter a token symbol</string>
@@ -381,4 +381,5 @@
     <string name="error_loading_balance">Could not load balance. Swipe to retry</string>
     <string name="error_current_price_loading">The current price is still loading</string>
     <string name="prompt_send_tokens">Select a Token to Send</string>
+    <string name="formatter_remove_wallet_message">A</string>
 </resources>
